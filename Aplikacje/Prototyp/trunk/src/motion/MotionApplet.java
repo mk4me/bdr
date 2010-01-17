@@ -6,13 +6,13 @@ import javax.swing.JApplet;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import motion.dialogs.LoginDialog;
 import motion.panels.LeftSplitPanel;
 import motion.panels.RightSplitPanel;
 import motion.toolbars.AppletToolBar;
+import motion.webservice.client.MotionWebServiceClient;
 
 public class MotionApplet extends JApplet {
 	public static String APPLET_NAME = "Motion";
@@ -26,6 +26,9 @@ public class MotionApplet extends JApplet {
 		
 		//Connector connectorTest = new Connector();
 		//connectorTest.displayDatabaseProperties();
+		
+		MotionWebServiceClient wsClient = new MotionWebServiceClient();
+		wsClient.callWebService();
 	}
 	
 	private void initUserInterface() {
