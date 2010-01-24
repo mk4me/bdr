@@ -13,10 +13,10 @@ import java.util.logging.SimpleFormatter;
 
 import javax.xml.ws.BindingProvider;
 
-import org.tempuri.TestWs;
-import org.tempuri.TestWsSoap;
+import motion.database.ws.TestWs;
+import motion.database.ws.TestWsSoap;
 
-import com.microsoft.schemas.sqlserver._2004.soap.types.sqlresultstream.SqlResultStream;
+import motion.database.ws.SqlResultStream;
 import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
