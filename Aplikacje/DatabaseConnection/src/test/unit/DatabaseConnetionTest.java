@@ -37,7 +37,7 @@ public class DatabaseConnetionTest {
 	public void setUp() throws Exception {
 		
 		database = DatabaseConnection.getInstance();
-		database.setWSCredentials("kaczmarski", "Etiopia10", "pjwstk");
+		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 
