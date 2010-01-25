@@ -5,10 +5,10 @@ GO
 CREATE ENDPOINT basic_queries
  STATE = STARTED 
 AS HTTP
-( PATH = '/BasicQueries',
+( PATH = '/NXWS/BasicQueries',
  AUTHENTICATION = (NTLM ),
  PORTS = ( CLEAR ),
- SITE = 'localhost',
+ SITE = 'dbpawell',
  CLEAR_PORT = 2000 )
 FOR SOAP 
 ( WEBMETHOD 'ListPerformerSessions' (name='Motion.dbo.list_sessions', SCHEMA=STANDARD ),
@@ -18,3 +18,30 @@ FOR SOAP
  NAMESPACE = 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/NXWS' );
  
  GO
+ 
+ -- nizej starszy przyklad od Pawla:
+ 
+ DROP ENDPOINT test_ws
+
+GO
+ 
+CREATE ENDPOINT test_ws
+STATE = STARTED
+AS HTTP
+(
+SITE = 'dbpawell',
+PATH = '/test',
+AUTHENTICATION = ( INTEGRATED ),
+PORTS = ( CLEAR )
+)
+FOR SOAP
+(
+WEBMETHOD 'test_wm'
+( NAME = '[motion].[dbo].[test_ws]',
+SCHEMA = STANDARD
+),
+WSDL = DEFAULT,
+BATCHES = DISABLED,
+DATABASE = 'Motion'
+);
+GO
