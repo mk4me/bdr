@@ -8,12 +8,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 
-namespace MotionDBHelper
+namespace MotionDBWebServices
 {
     /// <summary>
     /// Summary description for FileStoremanService
     /// </summary>
-    [WebService(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/DBStoremanService")]
+    [WebService(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
@@ -39,13 +39,13 @@ namespace MotionDBHelper
         }
 
         [WebMethod]
-        public void StorePerformerFiles(int performerId, string path)
+        public void StorePerformerFiles(int performerID, string path)
         {
             return;
         }
 
         [WebMethod]
-        public void StoreSessionFiles(int sessionId, string path)
+        public void StoreSessionFiles(int sessionID, string path)
         {
 
 

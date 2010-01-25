@@ -1,1 +1,1 @@
-﻿<%@ WebService Language="C#" CodeBehind="FileStoremanService.asmx.cs" Class="MotionDBHelper.FileStoremanService" %>
+﻿<%@ WebService Language="C#" CodeBehind="FileStoremanService.asmx.cs" Class="MotionDBWebServices.FileStoremanService" %>
