@@ -1,1 +1,1 @@
-﻿<%@ WebService Language="C#" CodeBehind="BasicQueriesService.asmx.cs" Class="MotionDBHelper.BasicQueriesService" %>
+﻿<%@ WebService Language="C#" CodeBehind="BasicQueriesService.asmx.cs" Class="MotionDBWebServices.BasicQueriesService" %>

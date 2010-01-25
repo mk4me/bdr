@@ -6,7 +6,7 @@ using System.Web.Services;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace MotionDBHelper
+namespace MotionDBWebServices
 {
     /// <summary>
     /// Summary description for Service1
@@ -41,11 +41,11 @@ namespace MotionDBHelper
                 while (dr.Read())
                 {
                     SessionDetails sd = new SessionDetails();
-                    sd.SessionId = int.Parse( dr[0].ToString());
-                    sd.UserId = int.Parse( dr[1].ToString());
-                    sd.LabId = int.Parse( dr[2].ToString());
-                    sd.MotionKindId = int.Parse( dr[3].ToString());
-                    sd.PerformerId = int.Parse( dr[4].ToString());
+                    sd.SessionID = int.Parse( dr[0].ToString());
+                    sd.UserID = int.Parse( dr[1].ToString());
+                    sd.LabID = int.Parse( dr[2].ToString());
+                    sd.MotionKindID = int.Parse( dr[3].ToString());
+                    sd.PerformerID = int.Parse( dr[4].ToString());
                     sd.SessionDate = DateTime.Parse( dr[5].ToString());
                     sd.SessionDescription = dr[6].ToString();
 
@@ -89,7 +89,7 @@ namespace MotionDBHelper
                 while (dr.Read())
                 {
                     FileDetails fd = new FileDetails();
-                    fd.FileId = int.Parse(dr[0].ToString());
+                    fd.FileID = int.Parse(dr[0].ToString());
                     fd.FileName = dr[1].ToString();
 
                     fdl.Add(fd);
