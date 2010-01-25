@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MotionDBHelper
+namespace MotionDBWebServices
 {
     public struct SessionDetails
     {
-        public int SessionId;
-        public int UserId;
-        public int LabId;
-        public int MotionKindId;
-        public int PerformerId;
+        public int SessionID;
+        public int UserID;
+        public int LabID;
+        public int MotionKindID;
+        public int PerformerID;
         public DateTime SessionDate;
         public string SessionDescription;
     }
