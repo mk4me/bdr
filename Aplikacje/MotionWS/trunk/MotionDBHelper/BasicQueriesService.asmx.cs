@@ -16,7 +16,7 @@ namespace MotionDBWebServices
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
-    public class BasicQueriesService : System.Web.Services.WebService
+    public class BasicQueriesService : DatabaseAccessService
     {
 
 
@@ -25,12 +25,10 @@ namespace MotionDBWebServices
         public SessionDetails[] ListPerformerSessions(int performerID)
         {
             List<SessionDetails> sdl = new List<SessionDetails>();
-            // server = DBPAWELL
-            SqlConnection conn = new SqlConnection(@"server = DBPAWELL; integrated security = true; database = Motion");
+
             try
             {
-                conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "list_sessions";
                 SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
@@ -59,7 +57,7 @@ namespace MotionDBWebServices
                 x.SessionDescription = ex.ToString();
                 sdl.Add(x);
             }
-            conn.Close();
+            CloseConnection();
             //if(sdl.Count==0){
             //    SessionDetails x = new SessionDetails();
             //    x.SessionDescription = "pusto";
@@ -73,10 +71,9 @@ namespace MotionDBWebServices
         {
             List<FileDetails> fdl = new List<FileDetails>();
             // server = DBPAWELL
-            SqlConnection conn = new SqlConnection(@"server = DBPAWELL; integrated security = true; database = Motion");
             try
             {
-                conn.Open();
+                OpenConnection();
 
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -100,7 +97,7 @@ namespace MotionDBWebServices
             {
                 // report exception
             }
-            conn.Close();
+            CloseConnection();
             //if(sdl.Count==0){
             //    SessionDetails x = new SessionDetails();
             //    x.SessionDescription = "pusto";

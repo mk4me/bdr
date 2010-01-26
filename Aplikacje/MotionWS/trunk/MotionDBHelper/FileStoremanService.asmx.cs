@@ -6,6 +6,8 @@ using System.Web.Services;
 
 using System.Data;
 using System.Data.SqlClient;
+
+
 using System.IO;
 
 namespace MotionDBWebServices
@@ -18,25 +20,13 @@ namespace MotionDBWebServices
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
-    public class FileStoremanService : System.Web.Services.WebService
+    public class FileStoremanService : DatabaseAccessService
     {
+        string baseLocalFilePath = @"C:\FTPShare\";
         int maxFileSize = 10000000;
         byte[] fileData = null;
-        SqlConnection conn = null;
-        SqlCommand cmd = null;
 
-        private void OpenConnection()
-        {
-            // server = DBPAWELL
-            conn = new SqlConnection(@"server = DBPAWELL; integrated security = true; database = Motion");
-            conn.Open();
-            cmd = conn.CreateCommand();
-        }
-
-        private void CloseConnection()
-        {
-            conn.Close();
-        }
+        SqlDataReader fileReader = null;
 
         [WebMethod]
         public void StorePerformerFiles(int performerID, string path)
@@ -55,7 +45,7 @@ namespace MotionDBWebServices
         [WebMethod]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
-            string fileLocation = @"C:\FTPShare\"+path+@"\"+filename;
+            string fileLocation = baseLocalFilePath+path+@"\"+filename;
 
 
             int newFileId = 0;
@@ -112,31 +102,85 @@ namespace MotionDBWebServices
         }
 
         [WebMethod]
-        public void DownloadComplete(string path)
+        public void DownloadComplete(int fileID)
         {
-            return;
-        }
+            string relativePath = "sample_path";
+            string fileLocation = "NOT_FOUND";
 
-        [WebMethod]
-        public string RetrieveFile(int fileId)
-        {
-            SqlDataReader fileReader = null;
-            string relativePath = "";
             try
             {
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku)
-                                        values (@sess_id, @file_desc, @file_data, @file_name)
-                                        set @file_id = SCOPE_IDENTITY()";
-                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
-                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
-                SqlParameter fileIdParameter =
-                    new SqlParameter("@file_id", SqlDbType.Int);
-                fileIdParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(fileIdParameter);
+                cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where IdPlik_udostepniony = @file_id";
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                cmd.Parameters["@file_id"].Value = fileID;
+                fileReader = cmd.ExecuteReader();
 
+                while (fileReader.Read())
+                {
+                    fileLocation = (string)fileReader.GetValue(0);
+                }
+                fileReader.Close();
+
+                cmd.CommandText = @"delete from Plik_udostepniony 
+                                        where IdPlik_udostepniony = @file_id";
+                cmd.ExecuteNonQuery();
+                if(Directory.Exists(baseLocalFilePath + relativePath))
+                    Directory.Delete(baseLocalFilePath + relativePath,true);
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        [WebMethod]
+        public string RetrieveFile(int fileID)
+        {
+            string relativePath = "sample_path";
+            string fileName = "NOT_FOUND";
+            string fileLocation = "";
+
+            fileData = null;
+            fileName = "";
+            try
+            {
+                // TO DO: generowanie losowej nazwy katalogu
+                // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
+
+                OpenConnection();
+                cmd.CommandText = @"select Plik, Nazwa_pliku from Plik where IdPlik = @file_id";
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                cmd.Parameters["@file_id"].Value = fileID;
+                fileReader = cmd.ExecuteReader();
+
+                while (fileReader.Read())
+                {
+                    fileData = (byte[])fileReader.GetValue(0);
+                    fileName = (string)fileReader.GetValue(1);
+                }
+                if(!Directory.Exists(baseLocalFilePath + relativePath))
+                    Directory.CreateDirectory(baseLocalFilePath + relativePath);
+                FileStream fs = File.Create(baseLocalFilePath + relativePath + @"\" + fileName);
+                BinaryWriter sw = new BinaryWriter(fs);
+                sw.Write(fileData);
+                fileLocation = baseLocalFilePath + relativePath + @"\" + fileName;
+                fileReader.Close();
+                cmd.Parameters.Clear();
+                cmd.CommandText = @"insert into Plik_udostepniony ( IdPlik_udostepniony, Data_udostepnienia, Lokalizacja )
+                                        values ( @file_id, getdate(), @relative_path)";
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                cmd.Parameters.Add("@relative_path", SqlDbType.VarChar, 80);
+
+                // can be used for recoring of several files
+                cmd.Parameters["@file_id"].Value = fileID;
+                cmd.Parameters["@relative_path"].Value = relativePath;
+                cmd.ExecuteNonQuery();
+                sw.Close();
+                fs.Close();
 
             }
             catch (SqlException ex)

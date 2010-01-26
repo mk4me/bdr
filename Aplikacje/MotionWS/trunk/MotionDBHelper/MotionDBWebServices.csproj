@@ -67,6 +67,9 @@
       <DependentUpon>BasicQueriesService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DatabaseAccessService.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
