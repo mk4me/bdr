@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService">
+      <s:element name="StorePerformerFiles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int"/>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StorePerformerFilesResponse">
+        <s:complexType/>
+      </s:element>
+      <s:element name="StoreSessionFiles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int"/>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StoreSessionFilesResponse">
+        <s:complexType/>
+      </s:element>
+      <s:element name="StoreSessionFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sessionId" type="s:int"/>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="filename" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StoreSessionFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="StoreSessionFileResult" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StoreTrialFiles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="trialId" type="s:int"/>
+            <s:element minOccurs="0" maxOccurs="1" name="path" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="StoreTrialFilesResponse">
+        <s:complexType/>
+      </s:element>
+      <s:element name="DownloadComplete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="fileID" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DownloadCompleteResponse">
+        <s:complexType/>
+      </s:element>
+      <s:element name="RetrieveFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="fileID" type="s:int"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RetrieveFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RetrieveFileResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="StorePerformerFilesSoapIn">
+    <wsdl:part name="parameters" element="tns:StorePerformerFiles"/>
+  </wsdl:message>
+  <wsdl:message name="StorePerformerFilesSoapOut">
+    <wsdl:part name="parameters" element="tns:StorePerformerFilesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="StoreSessionFilesSoapIn">
+    <wsdl:part name="parameters" element="tns:StoreSessionFiles"/>
+  </wsdl:message>
+  <wsdl:message name="StoreSessionFilesSoapOut">
+    <wsdl:part name="parameters" element="tns:StoreSessionFilesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="StoreSessionFileSoapIn">
+    <wsdl:part name="parameters" element="tns:StoreSessionFile"/>
+  </wsdl:message>
+  <wsdl:message name="StoreSessionFileSoapOut">
+    <wsdl:part name="parameters" element="tns:StoreSessionFileResponse"/>
+  </wsdl:message>
+  <wsdl:message name="StoreTrialFilesSoapIn">
+    <wsdl:part name="parameters" element="tns:StoreTrialFiles"/>
+  </wsdl:message>
+  <wsdl:message name="StoreTrialFilesSoapOut">
+    <wsdl:part name="parameters" element="tns:StoreTrialFilesResponse"/>
+  </wsdl:message>
+  <wsdl:message name="DownloadCompleteSoapIn">
+    <wsdl:part name="parameters" element="tns:DownloadComplete"/>
+  </wsdl:message>
+  <wsdl:message name="DownloadCompleteSoapOut">
+    <wsdl:part name="parameters" element="tns:DownloadCompleteResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFileSoapIn">
+    <wsdl:part name="parameters" element="tns:RetrieveFile"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveFileSoapOut">
+    <wsdl:part name="parameters" element="tns:RetrieveFileResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="FileStoremanServiceSoap">
+    <wsdl:operation name="StorePerformerFiles">
+      <wsdl:input message="tns:StorePerformerFilesSoapIn"/>
+      <wsdl:output message="tns:StorePerformerFilesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFiles">
+      <wsdl:input message="tns:StoreSessionFilesSoapIn"/>
+      <wsdl:output message="tns:StoreSessionFilesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFile">
+      <wsdl:input message="tns:StoreSessionFileSoapIn"/>
+      <wsdl:output message="tns:StoreSessionFileSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="StoreTrialFiles">
+      <wsdl:input message="tns:StoreTrialFilesSoapIn"/>
+      <wsdl:output message="tns:StoreTrialFilesSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadComplete">
+      <wsdl:input message="tns:DownloadCompleteSoapIn"/>
+      <wsdl:output message="tns:DownloadCompleteSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFile">
+      <wsdl:input message="tns:RetrieveFileSoapIn"/>
+      <wsdl:output message="tns:RetrieveFileSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FileStoremanServiceSoap" type="tns:FileStoremanServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="StorePerformerFiles">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StorePerformerFiles" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFiles">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFiles" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFile">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFile" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreTrialFiles">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreTrialFiles" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadComplete">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/DownloadComplete" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFile">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/RetrieveFile" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FileStoremanServiceSoap12" type="tns:FileStoremanServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="StorePerformerFiles">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StorePerformerFiles" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFiles">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFiles" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreSessionFile">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFile" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StoreTrialFiles">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreTrialFiles" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadComplete">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/DownloadComplete" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveFile">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/RetrieveFile" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FileStoremanService">
+    <wsdl:port name="FileStoremanServiceSoap" binding="tns:FileStoremanServiceSoap">
+      <soap:address location="http://dbpawell/Motion/FileStoremanService.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="FileStoremanServiceSoap12" binding="tns:FileStoremanServiceSoap12">
+      <soap12:address location="http://dbpawell/Motion/FileStoremanService.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
