@@ -193,7 +193,7 @@ namespace MotionDBWebServices
             {
                 CloseConnection();
             }
-            return relativePath;
+            return relativePath+"/"+fileName;
         }
 
 
