@@ -238,7 +238,7 @@ public class DatabaseConnection {
 
 		String file = port.retrieveFile(fileID);
 		
-		file="sample_path/Trial01.c3d";
+//		file="sample_path/Trial01.c3d";
 		
 		File remoteFile = new File ( file );
 		

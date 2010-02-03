@@ -103,7 +103,7 @@ public class DatabaseConnetionTest {
 	@Test
 	public void testDownloadFile() throws Exception {
 		
-		int fileID = 2;
+		int fileID = 3;
 		String result = database.downloadFile(fileID, "");
 		
 		System.out.println( "Downloaded local file name:" + result ); 
