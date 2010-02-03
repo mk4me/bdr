@@ -8,11 +8,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 
+import motion.database.ConnectorInstance;
 import motion.dialogs.LoginDialog;
 import motion.panels.LeftSplitPanel;
 import motion.panels.RightSplitPanel;
 import motion.toolbars.AppletToolBar;
-import motion.webservice.client.MotionWebServiceClient;
 
 public class MotionApplet extends JApplet {
 	public static String APPLET_NAME = "Motion";
@@ -29,6 +29,8 @@ public class MotionApplet extends JApplet {
 		
 		//MotionWebServiceClient wsClient = new MotionWebServiceClient();
 		//wsClient.callWebService();
+		
+		ConnectorInstance connectorInstance = new ConnectorInstance();
 	}
 	
 	private void initUserInterface() {

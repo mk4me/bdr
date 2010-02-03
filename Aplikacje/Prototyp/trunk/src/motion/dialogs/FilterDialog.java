@@ -6,13 +6,23 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.DatabaseMetaData;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import motion.database.Connector;
+import motion.database.ConnectorInstance;
 
 public class FilterDialog extends JDialog {
 	private static String LOGIN_TITLE = "Add filter";
@@ -32,7 +42,7 @@ public class FilterDialog extends JDialog {
 	
 	public FilterDialog() {
 		super((JFrame) null, LOGIN_TITLE, true);
-		this.setSize(250, 200);
+		this.setSize(300, 200);
 		this.setLocation(200, 200);
 		
 		constructUserInterface();
@@ -52,7 +62,7 @@ public class FilterDialog extends JDialog {
 		messagePanel.add(this.messageLabel);
 		this.add(messagePanel, BorderLayout.PAGE_START);
 		
-		
+		JPanel centerPanel = new JPanel();
 		// Form area
 		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
@@ -72,8 +82,17 @@ public class FilterDialog extends JDialog {
 		nameLabel.setLabelFor(nameText);
 		formPanel.add(nameText, gridBagConstraints);
 		
-		this.add(formPanel, BorderLayout.CENTER);
+		centerPanel.add(formPanel);
 		
+		// Column condition area
+		try {
+			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer");
+			centerPanel.add(columnCondition, BorderLayout.SOUTH);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		this.add(centerPanel, BorderLayout.CENTER);
 		
 		// Button area
 		JPanel buttonPanel = new JPanel();
@@ -135,5 +154,82 @@ public class FilterDialog extends JDialog {
 	public int getResult() {
 		
 		return this.result;
+	}
+	
+	private class ColumnCondition extends JPanel {
+		private JComboBox columnComboBox;
+		private JComboBox operatorComboBox;
+		private JTextField conditionText = new JTextField(10);
+		private java.sql.Connection connection;
+		private String databaseName;
+		private String tableName;
+		private ArrayList<String> columnNameList;
+		ArrayList<Object> columnClassList;
+		
+		private String[] integerOperators = {"=", "<>", ">", "<"};
+		private String[] stringOperators = {"=", "<>"};
+		
+		public ColumnCondition(Connector connector, String tableName) throws SQLException {
+			super();
+			this.tableName = tableName;
+			this.databaseName = connector.getDatabaseName();
+			
+			this.connection = connector.openConnection();
+			fillColumns();
+			fillOperators(1);
+			connector.closeConnection();
+			
+			this.add(columnComboBox);
+			this.add(operatorComboBox);
+			this.add(conditionText);
+			
+		}
+		
+		private void fillColumns() throws SQLException {
+			DatabaseMetaData databaseMetaData = this.connection.getMetaData();
+			ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName, null);
+			this.columnNameList = new ArrayList<String>();
+			this.columnClassList = new ArrayList<Object>();
+			
+			while (resultSet.next()) {
+				columnNameList.add(resultSet.getString("COLUMN_NAME"));
+				int dataType = resultSet.getInt("DATA_TYPE");
+				
+				switch (dataType) {
+				case Types.INTEGER:
+					columnClassList.add(Integer.class);
+					break;
+				case Types.FLOAT:
+					columnClassList.add(Float.class);
+					break;
+				case Types.DOUBLE:
+				case Types.REAL:
+					columnClassList.add(String.class);
+					break;
+				case Types.DATE:
+				case Types.TIME:
+				case Types.TIMESTAMP:
+					columnClassList.add(Date.class);
+					break;
+				default:
+					columnClassList.add(String.class);
+					break;
+				}
+			}
+			
+			this.columnComboBox = new JComboBox(columnNameList.toArray());
+			
+			resultSet.close();
+		}
+		
+		private void fillOperators(int columnNumber) throws SQLException {
+			Object columnClass = this.columnClassList.get(columnNumber);
+			String[] operators = {""};
+			if (columnClass == String.class) {
+				operators = this.stringOperators;
+			}
+			
+			this.operatorComboBox = new JComboBox(operators);
+		}
 	}
 }
