@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -30,9 +31,11 @@ public class FilterDialog extends JDialog {
 	private static String ADD_FILTER = "Add";
 	private static String CANCEL_FILTER = "Cancel";
 	private static String EDIT_FILTER = "Edit";
+	private static String ADD_CONDITION = "+";
 	private JTextField nameText;
 	private JButton addButton;
 	private JButton cancelButton;
+	private JButton addConditionButton;
 	public static int ADD_PRESSED = 1;
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
@@ -40,9 +43,11 @@ public class FilterDialog extends JDialog {
 	private static String WELCOME_MESSAGE = "Add new filter.";
 	private static String MISSIN_NAME_MESSAGE = "Please type the name of the filter.";
 	
+	private JPanel conditionPanel;
+	
 	public FilterDialog() {
 		super((JFrame) null, LOGIN_TITLE, true);
-		this.setSize(300, 200);
+		this.setSize(350, 400);
 		this.setLocation(200, 200);
 		
 		constructUserInterface();
@@ -82,16 +87,20 @@ public class FilterDialog extends JDialog {
 		nameLabel.setLabelFor(nameText);
 		formPanel.add(nameText, gridBagConstraints);
 		
-		centerPanel.add(formPanel);
+		centerPanel.add(formPanel, BorderLayout.CENTER);
 		
 		// Column condition area
+		conditionPanel = new JPanel();
+		conditionPanel.setLayout(new BoxLayout(conditionPanel, BoxLayout.Y_AXIS));
+		
 		try {
-			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer");
-			centerPanel.add(columnCondition, BorderLayout.SOUTH);
+			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", true);
+			conditionPanel.add(columnCondition);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
+		centerPanel.add(conditionPanel, BorderLayout.SOUTH);
 		this.add(centerPanel, BorderLayout.CENTER);
 		
 		// Button area
@@ -100,11 +109,12 @@ public class FilterDialog extends JDialog {
 		buttonPanelLayout.setAlignment(FlowLayout.TRAILING);
 		buttonPanel.setLayout(buttonPanelLayout);
 		
-		addButton = new JButton();
+		addConditionButton = new JButton(ADD_CONDITION);
+		buttonPanel.add(addConditionButton);
+		
 		addButton = new JButton(ADD_FILTER);
 		buttonPanel.add(addButton);
 		
-		cancelButton = new JButton();
 		cancelButton = new JButton(CANCEL_FILTER);
 		buttonPanel.add(cancelButton);
 		
@@ -112,6 +122,18 @@ public class FilterDialog extends JDialog {
 	}
 	
 	private void addListeners() {
+		this.addConditionButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", false);
+					conditionPanel.add(columnCondition);
+					conditionPanel.revalidate();
+				} catch(SQLException e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
+		
 		this.addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (FilterDialog.this.validateResult() == true) {
@@ -164,20 +186,30 @@ public class FilterDialog extends JDialog {
 		private String databaseName;
 		private String tableName;
 		private ArrayList<String> columnNameList;
-		ArrayList<Object> columnClassList;
+		private ArrayList<Object> columnClassList;
 		
 		private String[] integerOperators = {"=", "<>", ">", "<"};
 		private String[] stringOperators = {"=", "<>"};
 		
-		public ColumnCondition(Connector connector, String tableName) throws SQLException {
+		private boolean firstCondition;
+		
+		
+		
+		public ColumnCondition(Connector connector, String tableName, boolean firstCondition) throws SQLException {
 			super();
 			this.tableName = tableName;
 			this.databaseName = connector.getDatabaseName();
+			this.firstCondition = firstCondition;
 			
 			this.connection = connector.openConnection();
 			fillColumns();
 			fillOperators(1);
 			connector.closeConnection();
+			
+			if (firstCondition == false) {
+				String[] andOr = {"AND", "OR"};
+				this.add(new JComboBox(andOr));
+			}
 			
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
