@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Data;
 using System.Data.SqlClient;
+using System.Xml;
 
 namespace MotionDBWebServices
 {
@@ -30,7 +31,7 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_sessions";
+                cmd.CommandText = "list_performer_sessions";
                 SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
                 perfId.Direction = ParameterDirection.Input;
                 perfId.Value = performerID;
@@ -105,6 +106,68 @@ namespace MotionDBWebServices
             //}
             return fdl.ToArray();
         }
+
+
+        [WebMethod]
+        public XmlDocument ListPerformerSessionsXML(int performerID)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performer_sessions_xml";
+                SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = performerID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument ListSessionFilesXML(int sessionID)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_session_files_xml";
+                SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = sessionID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
+
+
 
     }
 }
