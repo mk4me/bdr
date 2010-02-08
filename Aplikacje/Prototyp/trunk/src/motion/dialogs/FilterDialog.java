@@ -26,7 +26,7 @@ import motion.database.Connector;
 import motion.database.ConnectorInstance;
 
 public class FilterDialog extends JDialog {
-	private static String LOGIN_TITLE = "Add filter";
+	private static String FILTER_TITLE = "Add filter";
 	private static String FILTER_NAME = "Name:";
 	private static String ADD_FILTER = "Add";
 	private static String CANCEL_FILTER = "Cancel";
@@ -41,12 +41,12 @@ public class FilterDialog extends JDialog {
 	private int result = CANCEL_PRESSED;
 	private JLabel messageLabel;
 	private static String WELCOME_MESSAGE = "Add new filter.";
-	private static String MISSIN_NAME_MESSAGE = "Please type the name of the filter.";
+	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
 	
 	private JPanel conditionPanel;
 	
 	public FilterDialog() {
-		super((JFrame) null, LOGIN_TITLE, true);
+		super((JFrame) null, FILTER_TITLE, true);
 		this.setSize(350, 400);
 		this.setLocation(200, 200);
 		
@@ -160,7 +160,7 @@ public class FilterDialog extends JDialog {
 	
 	private boolean validateResult() {
 		if (this.getName().equals("")) {
-			this.messageLabel.setText(MISSIN_NAME_MESSAGE);
+			this.messageLabel.setText(MISSING_NAME_MESSAGE);
 			
 			return false;
 		}
