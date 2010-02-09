@@ -1,4 +1,4 @@
-package motion.dialogs;
+package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -22,8 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import motion.database.Connector;
-import motion.database.ConnectorInstance;
+import motion.applet.database.Connector;
+import motion.applet.database.ConnectorInstance;
 
 public class FilterDialog extends JDialog {
 	private static String FILTER_TITLE = "Add filter";

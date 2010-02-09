@@ -1,4 +1,4 @@
-package motion;
+package motion.applet;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -10,12 +10,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 
-import motion.database.ConnectorInstance;
-import motion.dialogs.LoginDialog;
-import motion.dialogs.UploadDialog;
-import motion.panels.LeftSplitPanel;
-import motion.panels.RightSplitPanel;
-import motion.toolbars.AppletToolBar;
+import motion.applet.database.ConnectorInstance;
+import motion.applet.dialogs.LoginDialog;
+import motion.applet.dialogs.UploadDialog;
+import motion.applet.panels.LeftSplitPanel;
+import motion.applet.panels.RightSplitPanel;
+import motion.applet.toolbars.AppletToolBar;
 
 public class MotionApplet extends JApplet {
 	public static String APPLET_NAME = "Motion";

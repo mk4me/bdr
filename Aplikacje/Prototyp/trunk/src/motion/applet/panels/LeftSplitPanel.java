@@ -1,4 +1,4 @@
-package motion.panels;
+package motion.applet.panels;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -18,11 +18,11 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import motion.MotionApplet;
-import motion.database.Filter;
-import motion.dialogs.FilterDialog;
-import motion.trees.CheckBoxNodeEditor;
-import motion.trees.CheckBoxNodeRenderer;
+import motion.applet.MotionApplet;
+import motion.applet.database.Filter;
+import motion.applet.dialogs.FilterDialog;
+import motion.applet.trees.CheckBoxNodeEditor;
+import motion.applet.trees.CheckBoxNodeRenderer;
 
 public class LeftSplitPanel extends JPanel {
 	private DefaultMutableTreeNode rootNode;

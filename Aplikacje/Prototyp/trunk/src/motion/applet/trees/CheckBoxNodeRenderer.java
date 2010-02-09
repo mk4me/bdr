@@ -1,4 +1,4 @@
-package motion.trees;
+package motion.applet.trees;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import motion.database.Filter;
+import motion.applet.database.Filter;
 
 public class CheckBoxNodeRenderer implements TreeCellRenderer {
 	private JCheckBox leafRenderer = new JCheckBox();

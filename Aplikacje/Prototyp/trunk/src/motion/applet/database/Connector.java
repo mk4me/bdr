@@ -1,4 +1,4 @@
-package motion.database;
+package motion.applet.database;
 
 public class Connector {
 	private java.sql.Connection connection = null;

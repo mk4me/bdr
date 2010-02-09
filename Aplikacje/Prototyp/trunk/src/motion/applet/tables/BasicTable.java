@@ -1,4 +1,4 @@
-package motion.tables;
+package motion.applet.tables;
 
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import motion.database.Connector;
+import motion.applet.database.Connector;
 
 public class BasicTable extends AbstractTableModel {
 	private Object[][] contents;

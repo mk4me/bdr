@@ -1,4 +1,4 @@
-package motion.webservice.client;
+package motion.applet.webservice.client;
 
 import pl.edu.pjwstk.bytom.ruch.motiondb.basicqueriesservice.ArrayOfFileDetails;
 import pl.edu.pjwstk.bytom.ruch.motiondb.basicqueriesservice.ArrayOfSessionDetails;

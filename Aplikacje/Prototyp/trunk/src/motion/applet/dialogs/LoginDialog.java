@@ -1,4 +1,4 @@
-package motion.dialogs;
+package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

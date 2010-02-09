@@ -1,4 +1,4 @@
-package motion.database;
+package motion.applet.database;
 
 public class ConnectorInstance {
 	private static Connector connector;

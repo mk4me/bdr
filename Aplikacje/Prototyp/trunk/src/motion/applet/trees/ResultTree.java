@@ -1,4 +1,4 @@
-package motion.trees;
+package motion.applet.trees;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import motion.database.Connector;
+import motion.applet.database.Connector;
 
 public class ResultTree {
 	private java.sql.Connection connection;

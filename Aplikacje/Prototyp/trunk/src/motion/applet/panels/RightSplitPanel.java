@@ -1,4 +1,4 @@
-package motion.panels;
+package motion.applet.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,9 +13,9 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.table.TableModel;
 
-import motion.database.Connector;
-import motion.tables.BasicTable;
-import motion.trees.ResultTree;
+import motion.applet.database.Connector;
+import motion.applet.tables.BasicTable;
+import motion.applet.trees.ResultTree;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
 	private JTable table;

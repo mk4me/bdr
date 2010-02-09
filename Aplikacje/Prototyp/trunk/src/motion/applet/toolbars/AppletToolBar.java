@@ -1,4 +1,4 @@
-package motion.toolbars;
+package motion.applet.toolbars;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
-import motion.MotionApplet;
+import motion.applet.MotionApplet;
 
 public class AppletToolBar extends JToolBar {
 	private String[] tableNames = {"Performer", "Sesja", "Obserwacja", "Pacjent"};
