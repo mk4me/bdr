@@ -25,7 +25,7 @@ public class TestWs
     static {
         URL url = null;
         try {
-            url = new URL("file:/C:/Documents and Settings/kk/workspace/DatabaseConnection/wsdl/test-corrected.wsdl");
+            url = new URL("file://wsdl/test-corrected.wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

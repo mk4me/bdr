@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the motion.ws.fileStoremanService package. 
+ * generated in the motion.database.ws.fileStoremanService package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -23,26 +23,10 @@ public class ObjectFactory {
 
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.ws.fileStoremanService
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.database.ws.fileStoremanService
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFilesResponse }
-     * 
-     */
-    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
-        return new StorePerformerFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFiles }
-     * 
-     */
-    public StorePerformerFiles createStorePerformerFiles() {
-        return new StorePerformerFiles();
     }
 
     /**
@@ -54,11 +38,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadComplete }
+     * Create an instance of {@link RetrieveFileResponse }
      * 
      */
-    public DownloadComplete createDownloadComplete() {
-        return new DownloadComplete();
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFilesResponse }
+     * 
+     */
+    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
+        return new StoreSessionFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFiles }
+     * 
+     */
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
     }
 
     /**
@@ -78,27 +78,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RetrieveFileResponse }
+     * Create an instance of {@link StorePerformerFilesResponse }
      * 
      */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFile }
-     * 
-     */
-    public RetrieveFile createRetrieveFile() {
-        return new RetrieveFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFiles }
-     * 
-     */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
+    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
+        return new StorePerformerFilesResponse();
     }
 
     /**
@@ -110,6 +94,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RetrieveFile }
+     * 
+     */
+    public RetrieveFile createRetrieveFile() {
+        return new RetrieveFile();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFiles }
+     * 
+     */
+    public StorePerformerFiles createStorePerformerFiles() {
+        return new StorePerformerFiles();
+    }
+
+    /**
      * Create an instance of {@link StoreTrialFiles }
      * 
      */
@@ -118,11 +118,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreSessionFilesResponse }
+     * Create an instance of {@link DownloadComplete }
      * 
      */
-    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
-        return new StoreSessionFilesResponse();
+    public DownloadComplete createDownloadComplete() {
+        return new DownloadComplete();
     }
 
 }

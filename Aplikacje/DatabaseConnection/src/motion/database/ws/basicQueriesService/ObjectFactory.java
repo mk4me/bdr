@@ -2,6 +2,8 @@
 package motion.database.ws.basicQueriesService;
 
 import javax.xml.bind.annotation.XmlRegistry;
+import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult;
+import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult;
 
 
 /**
@@ -30,19 +32,59 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ListSessionFilesXML }
+     * 
+     */
+    public ListSessionFilesXML createListSessionFilesXML() {
+        return new ListSessionFilesXML();
+    }
+
+    /**
+     * Create an instance of {@link FileDetails }
+     * 
+     */
+    public FileDetails createFileDetails() {
+        return new FileDetails();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXMLResult }
+     * 
+     */
+    public ListPerformerSessionsXMLResult createListPerformerSessionsXMLResponseListPerformerSessionsXMLResult() {
+        return new ListPerformerSessionsXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXMLResponse }
+     * 
+     */
+    public ListPerformerSessionsXMLResponse createListPerformerSessionsXMLResponse() {
+        return new ListPerformerSessionsXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesXMLResponse }
+     * 
+     */
+    public ListSessionFilesXMLResponse createListSessionFilesXMLResponse() {
+        return new ListSessionFilesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesResponse }
+     * 
+     */
+    public ListSessionFilesResponse createListSessionFilesResponse() {
+        return new ListSessionFilesResponse();
+    }
+
+    /**
      * Create an instance of {@link ListPerformerSessions }
      * 
      */
     public ListPerformerSessions createListPerformerSessions() {
         return new ListPerformerSessions();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsResponse }
-     * 
-     */
-    public ListPerformerSessionsResponse createListPerformerSessionsResponse() {
-        return new ListPerformerSessionsResponse();
     }
 
     /**
@@ -54,11 +96,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListSessionFilesResponse }
+     * Create an instance of {@link ArrayOfSessionDetails }
      * 
      */
-    public ListSessionFilesResponse createListSessionFilesResponse() {
-        return new ListSessionFilesResponse();
+    public ArrayOfSessionDetails createArrayOfSessionDetails() {
+        return new ArrayOfSessionDetails();
     }
 
     /**
@@ -78,19 +120,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FileDetails }
+     * Create an instance of {@link ListSessionFilesXMLResult }
      * 
      */
-    public FileDetails createFileDetails() {
-        return new FileDetails();
+    public ListSessionFilesXMLResult createListSessionFilesXMLResponseListSessionFilesXMLResult() {
+        return new ListSessionFilesXMLResult();
     }
 
     /**
-     * Create an instance of {@link ArrayOfSessionDetails }
+     * Create an instance of {@link ListPerformerSessionsResponse }
      * 
      */
-    public ArrayOfSessionDetails createArrayOfSessionDetails() {
-        return new ArrayOfSessionDetails();
+    public ListPerformerSessionsResponse createListPerformerSessionsResponse() {
+        return new ListPerformerSessionsResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXML }
+     * 
+     */
+    public ListPerformerSessionsXML createListPerformerSessionsXML() {
+        return new ListPerformerSessionsXML();
     }
 
 }

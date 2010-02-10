@@ -7,6 +7,8 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult;
+import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult;
 
 
 /**
@@ -44,6 +46,34 @@ public interface BasicQueriesServiceSoap {
     @RequestWrapper(localName = "ListSessionFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListSessionFiles")
     @ResponseWrapper(localName = "ListSessionFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListSessionFilesResponse")
     public ArrayOfFileDetails listSessionFiles(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int sessionID);
+
+    /**
+     * 
+     * @param performerID
+     * @return
+     *     returns motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult
+     */
+    @WebMethod(operationName = "ListPerformerSessionsXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML")
+    @WebResult(name = "ListPerformerSessionsXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListPerformerSessionsXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListPerformerSessionsXML")
+    @ResponseWrapper(localName = "ListPerformerSessionsXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse")
+    public ListPerformerSessionsXMLResult listPerformerSessionsXML(
+        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int performerID);
+
+    /**
+     * 
+     * @param sessionID
+     * @return
+     *     returns motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult
+     */
+    @WebMethod(operationName = "ListSessionFilesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFilesXML")
+    @WebResult(name = "ListSessionFilesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListSessionFilesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListSessionFilesXML")
+    @ResponseWrapper(localName = "ListSessionFilesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse")
+    public ListSessionFilesXMLResult listSessionFilesXML(
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         int sessionID);
 
