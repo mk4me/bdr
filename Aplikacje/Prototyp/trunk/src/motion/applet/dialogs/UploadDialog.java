@@ -23,16 +23,22 @@ public class UploadDialog extends JDialog {
 	private static String UPLOAD_TITLE = "Upload session file";
 	private static String UPLOAD_FILE = "Upload";
 	private static String FILE_PATH = "File:";
+	private static String DESCRIPTION = "Description:";
+	private static String SESSION = "Session:";
 	private static String CANCEL_UPLOAD = "Cancel";
 	private static String WELCOME_MESSAGE = "Choose a file to upload.";
 	private static String MISSING_FILE_PATH_MESSAGE = "No file selected.";
+	private static String MISSING_SESSION_MESSAGE = "No session number entered.";
 	private static String PRESS_UPLOAD_MESSAGE = "Press Upload to send file.";
 	private static String BROWSE = "Browse";
+	
 	private JButton browseButton;
 	private JButton uploadButton;
 	private JButton cancelButton;
 	private JLabel messageLabel;
 	private JTextField filePathText;
+	private JTextField sessionNumber;
+	private JTextField descriptionText;
 	
 	private DatabaseConnection databaseConnection;
 	
@@ -43,7 +49,7 @@ public class UploadDialog extends JDialog {
 		databaseConnection.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 		databaseConnection.setFTPSCredentials("dbpawell", "testUser", "testUser");
 		
-		this.setSize(380, 200);
+		this.setSize(420, 200);
 		this.setLocation(200, 200);
 		
 		this.constructUserInterface();
@@ -62,9 +68,10 @@ public class UploadDialog extends JDialog {
 		formPanel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		gridBagConstraints.ipadx = 10;
 		
+		// File path
 		JLabel filePathLabel = new JLabel(FILE_PATH);
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
@@ -75,6 +82,32 @@ public class UploadDialog extends JDialog {
 		gridBagConstraints.gridy = 0;
 		this.filePathText = new JTextField(20);
 		formPanel.add(filePathText, gridBagConstraints);
+		
+		// Description
+		JLabel descriptionLabel = new JLabel(DESCRIPTION);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		formPanel.add(descriptionLabel, gridBagConstraints);
+		descriptionLabel.setLabelFor(descriptionText);
+		
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 1;
+		this.descriptionText = new JTextField(20);
+		formPanel.add(descriptionText, gridBagConstraints);
+		
+		// Session number
+		JLabel sessionLabel = new JLabel(SESSION);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		formPanel.add(sessionLabel, gridBagConstraints);
+		sessionLabel.setLabelFor(sessionNumber);
+		
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 2;
+		this.sessionNumber = new JTextField(3);
+		formPanel.add(sessionNumber, gridBagConstraints);
+		
+		
 		
 		this.browseButton = new JButton(BROWSE);
 		gridBagConstraints.gridx = 2;
@@ -116,7 +149,10 @@ public class UploadDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.validateResult() == true) {
 					try {
-						UploadDialog.this.databaseConnection.uploadFile(1, "Plik wgrany przez applet", UploadDialog.this.filePathText.getText());
+						UploadDialog.this.databaseConnection.uploadFile(
+								UploadDialog.this.getSession(),
+								UploadDialog.this.getDescription(),
+								UploadDialog.this.getFilePath());
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -142,9 +178,29 @@ public class UploadDialog extends JDialog {
 		return this.filePathText.getText();
 	}
 	
+	private String getDescription() {
+		
+		return this.descriptionText.getText();
+	}
+	
+	private int getSession() {
+		int session = -1;
+		try {
+			session = Integer.parseInt(this.sessionNumber.getText());
+		} catch (NumberFormatException e) {
+			this.messageLabel.setText(MISSING_SESSION_MESSAGE);
+		}
+		
+		return session;
+	}
+	
 	private boolean validateResult() {
 		if (this.getFilePath().equals("")) {
 			this.messageLabel.setText(MISSING_FILE_PATH_MESSAGE);
+			
+			return false;
+		} else if (this.getSession() < 0) {
+			this.messageLabel.setText(MISSING_SESSION_MESSAGE);
 			
 			return false;
 		}
