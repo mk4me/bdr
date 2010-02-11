@@ -126,6 +126,7 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
+                if(xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerSessionList"));
                 dr.Close();
             }
             catch (SqlException ex)
@@ -136,6 +137,39 @@ namespace MotionDBWebServices
 
             return xd;
         }
+
+
+        [WebMethod]
+        public XmlDocument ListPerformerSessionsWithAttributesXML(int performerID)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performer_sessions_attributes_xml";
+                SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = performerID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerSessionList"));
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
+
+
 
         [WebMethod]
         public XmlDocument ListSessionFilesXML(int sessionID)
@@ -166,7 +200,6 @@ namespace MotionDBWebServices
 
             return xd;
         }
-
 
 
     }
