@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+      <s:include schemaLocation="PerformerSessionList.xsd" />
+      <s:include schemaLocation="PerformerSessionWithAttributesList.xsd" />
+      <s:element name="ListPerformerSessions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListPerformerSessionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsResult" type="tns:ArrayOfSessionDetails" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSessionDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SessionDetails" type="tns:SessionDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SessionDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SessionID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="LabID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="MotionKindID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PerformerID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="SessionDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="SessionDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ListSessionFiles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListSessionFilesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesResult" type="tns:ArrayOfFileDetails" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfFileDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FileDetails" type="tns:FileDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FileDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="FileID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ListPerformerSessionsXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListPerformerSessionsXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsXMLResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:element ref="tns:PerformerSessionList" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListPerformerSessionsWithAttributesXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListPerformerSessionsWithAttributesXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsWithAttributesXMLResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:element ref="tns:PerformerSessionWithAttributesList" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListSessionFilesXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ListSessionFilesXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesXMLResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ListPerformerSessionsSoapIn">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessions" />
+  </wsdl:message>
+  <wsdl:message name="ListPerformerSessionsSoapOut">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListSessionFilesSoapIn">
+    <wsdl:part name="parameters" element="tns:ListSessionFiles" />
+  </wsdl:message>
+  <wsdl:message name="ListSessionFilesSoapOut">
+    <wsdl:part name="parameters" element="tns:ListSessionFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListPerformerSessionsXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessionsXML" />
+  </wsdl:message>
+  <wsdl:message name="ListPerformerSessionsXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessionsXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListPerformerSessionsWithAttributesXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessionsWithAttributesXML" />
+  </wsdl:message>
+  <wsdl:message name="ListPerformerSessionsWithAttributesXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:ListPerformerSessionsWithAttributesXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="ListSessionFilesXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:ListSessionFilesXML" />
+  </wsdl:message>
+  <wsdl:message name="ListSessionFilesXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:ListSessionFilesXMLResponse" />
+  </wsdl:message>
+  <wsdl:portType name="BasicQueriesServiceSoap">
+    <wsdl:operation name="ListPerformerSessions">
+      <wsdl:input message="tns:ListPerformerSessionsSoapIn" />
+      <wsdl:output message="tns:ListPerformerSessionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFiles">
+      <wsdl:input message="tns:ListSessionFilesSoapIn" />
+      <wsdl:output message="tns:ListSessionFilesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsXML">
+      <wsdl:input message="tns:ListPerformerSessionsXMLSoapIn" />
+      <wsdl:output message="tns:ListPerformerSessionsXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+      <wsdl:input message="tns:ListPerformerSessionsWithAttributesXMLSoapIn" />
+      <wsdl:output message="tns:ListPerformerSessionsWithAttributesXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFilesXML">
+      <wsdl:input message="tns:ListSessionFilesXMLSoapIn" />
+      <wsdl:output message="tns:ListSessionFilesXMLSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicQueriesServiceSoap" type="tns:BasicQueriesServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListPerformerSessions">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFiles">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsXML">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFilesXML">
+      <soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFilesXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicQueriesServiceSoap12" type="tns:BasicQueriesServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListPerformerSessions">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFiles">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsXML">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListSessionFilesXML">
+      <soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFilesXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BasicQueriesService">
+    <wsdl:port name="BasicQueriesServiceSoap" binding="tns:BasicQueriesServiceSoap">
+      <soap:address location="http://dbpawell/Motion/BasicQueriesService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BasicQueriesServiceSoap12" binding="tns:BasicQueriesServiceSoap12">
+      <soap12:address location="http://dbpawell/Motion/BasicQueriesService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -127,6 +127,7 @@ namespace MotionDBWebServices
                     xd.Load(dr);
                 }
                 if(xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerSessionList"));
+                
                 dr.Close();
             }
             catch (SqlException ex)
@@ -134,7 +135,7 @@ namespace MotionDBWebServices
                 // report exception
             }
             CloseConnection();
-
+            xd.DocumentElement.SetAttribute("xmlns","http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
             return xd;
         }
 
@@ -157,7 +158,8 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerSessionList"));
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerSessionWithAttributesList"));
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
                 dr.Close();
             }
             catch (SqlException ex)

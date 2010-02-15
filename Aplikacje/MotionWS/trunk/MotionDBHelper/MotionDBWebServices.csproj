@@ -89,6 +89,11 @@
     <Compile Include="SessionData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\PerformerSessionList.xsd" />
+    <None Include="res\PerformerSessionWithAttributesList.xsd" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

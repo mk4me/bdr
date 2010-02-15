@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace MotionDBWebServices
 {
@@ -42,20 +44,110 @@ namespace MotionDBWebServices
             return false;
         }
 
+        /*
+        The result value code meaning:
+        0 - attribute value set successfully
+        1 - attribute of this name is not applicable to session
+        2 - the value provided is not valid for this enum-type attribute
+        3 - session of given session id does not exist
+        4 - (not assigned)
+        5 - value of this attribute for this session exists, whille you called this operation in "no overwrite" mode
+        6 - the value provided is not valid for this numeric-type attribute
+        */
         [WebMethod]
-        public bool SetPerformerAttribute(int performerID, int attributeID, string attributeValue)
+        public int SetPerformerAttribute(int performerID, string attributeName, string attributeValue, bool update)
         {
-            /* Type checking based on attr type declared in the database - to be performed here.
-             Respectively: string, integer or float needs to be provided. */
-            return false;
 
-        } 
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "set_performer_attribute";
+                cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@update", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+
+                cmd.Parameters["@perf_id"].Value = performerID;
+                cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@attr_value"].Value = attributeValue;
+                cmd.Parameters["@update"].Value = update ? 1 : 0;
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                return 6;
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return resultCode;
+
+        }
+
+
+        /*
+        The result value code meaning:
+        0 - attribute value set successfully
+        1 - attribute of this name is not applicable to session
+        2 - the value provided is not valid for this enum-type attribute
+        3 - session of given session id does not exist
+        4 - (not assigned)
+        5 - value of this attribute for this session exists, whille you called this operation in "no overwrite" mode
+        6 - the value provided is not valid for this numeric-type attribute
+        */
         [WebMethod]
-        public bool SetSessionAttribute(int sessionID, int attributeID, string attributeValue)
+        public int SetSessionAttribute(int sessionID, string attributeName, string attributeValue, bool update)
         {
-            /* Type checking based on attr type declared in the database - to be performed here.
-             Respectively: string, integer or float needs to be provided. */
-            return false;
+
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "set_session_attribute";
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@update", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+
+                cmd.Parameters["@sess_id"].Value = sessionID;
+                cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@attr_value"].Value = attributeValue;
+                cmd.Parameters["@update"].Value = update ? 1 : 0; 
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                return 6;
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return resultCode;
 
         }        
 
