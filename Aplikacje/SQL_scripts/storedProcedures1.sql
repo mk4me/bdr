@@ -25,7 +25,7 @@ as
 create procedure list_performer_sessions_attributes_xml @perf_id int
 as
 	select
-		IdSesja as SessonID,
+		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
 		IdRodzaj_ruchu as MotionKindID,
