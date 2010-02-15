@@ -44,10 +44,11 @@ public class FilterDialog extends JDialog {
 	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
 	
 	private JPanel conditionPanel;
+	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
 	
 	public FilterDialog() {
 		super((JFrame) null, FILTER_TITLE, true);
-		this.setSize(350, 400);
+		this.setSize(400, 400);
 		this.setLocation(200, 200);
 		
 		constructUserInterface();
@@ -93,12 +94,7 @@ public class FilterDialog extends JDialog {
 		conditionPanel = new JPanel();
 		conditionPanel.setLayout(new BoxLayout(conditionPanel, BoxLayout.Y_AXIS));
 		
-		try {
-			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", true);
-			conditionPanel.add(columnCondition);
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+		this.addColumnCondition(true);
 		
 		centerPanel.add(conditionPanel, BorderLayout.SOUTH);
 		this.add(centerPanel, BorderLayout.CENTER);
@@ -121,16 +117,27 @@ public class FilterDialog extends JDialog {
 		this.add(buttonPanel, BorderLayout.PAGE_END);
 	}
 	
+	private void addColumnCondition(boolean firstCondition) {
+		try {
+			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", firstCondition);
+			conditionPanel.add(columnCondition);
+			columnConditions.add(columnCondition);
+			conditionPanel.revalidate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void removeColumnCondition(ColumnCondition columnCondition) {
+		this.columnConditions.remove(columnCondition);
+		this.conditionPanel.remove(columnCondition);
+		this.conditionPanel.revalidate();
+	}
+	
 	private void addListeners() {
 		this.addConditionButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", false);
-					conditionPanel.add(columnCondition);
-					conditionPanel.revalidate();
-				} catch(SQLException e2) {
-					e2.printStackTrace();
-				}
+				FilterDialog.this.addColumnCondition(false);
 			}
 		});
 		
@@ -190,10 +197,10 @@ public class FilterDialog extends JDialog {
 		
 		private String[] integerOperators = {"=", "<>", ">", "<"};
 		private String[] stringOperators = {"=", "<>"};
-		
+		private String REMOVE_CONDITION = "X";
 		private boolean firstCondition;
 		
-		
+		private JButton removeButton;
 		
 		public ColumnCondition(Connector connector, String tableName, boolean firstCondition) throws SQLException {
 			super();
@@ -214,6 +221,16 @@ public class FilterDialog extends JDialog {
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
 			this.add(conditionText);
+			
+			if (firstCondition == false) {
+				this.removeButton = new JButton(REMOVE_CONDITION);
+				this.add(removeButton);
+				this.removeButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						FilterDialog.this.removeColumnCondition(ColumnCondition.this);
+					}
+				});
+			}
 			
 		}
 		
