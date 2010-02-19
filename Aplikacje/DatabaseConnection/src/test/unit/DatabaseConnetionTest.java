@@ -88,8 +88,11 @@ public class DatabaseConnetionTest {
 		List<Session> results = database.listPerformerSessionsWithAttributes(performerID);
 		
 		for (Session s : results)
+		{
+			System.out.println("Session ID: " + s.get( SessionStaticAttributes.sessionID ));			
 			for ( String key : s.keySet() )
-				System.out.println( key + " = " + s.get(key) ); 
+				System.out.println( key + " = " + s.get(key) );
+		}
 	}
 
 	/**
