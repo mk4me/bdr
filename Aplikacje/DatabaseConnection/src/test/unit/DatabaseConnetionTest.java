@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import motion.database.DatabaseConnection;
+import motion.database.Session;
+import motion.database.SessionStaticAttributes;
 import motion.database.ws.basicQueriesService.FileDetails;
 import motion.database.ws.basicQueriesService.SessionDetails;
 
@@ -48,7 +50,7 @@ public class DatabaseConnetionTest {
 	 * Test method for {@link motion.database.DatabaseConnection#testConnection()}.
 	 * @throws Exception 
 	 */
-	@Test
+	//@Test
 	public void testTestConnection() throws Exception {
 		
 		database.testConnection();
@@ -58,7 +60,7 @@ public class DatabaseConnetionTest {
 	 * Test method for {@link motion.database.DatabaseConnection#uploadFile()}.
 	 * @throws Exception 
 	 */
-	@Test
+	//@Test
 	public void testUploadFile() throws Exception {
 		
 		database.uploadFile( 1, "Druga próba wgrania pliku", "data/Combo_1.c3d" );
@@ -72,12 +74,22 @@ public class DatabaseConnetionTest {
 	public void testListPerformerSessions() throws Exception {
 		
 		int performerID = 1;
-		List<SessionDetails> results = database.listPerformerSessions( performerID );
+		List<Session> results = database.listPerformerSessions( performerID );
 		
-		for (SessionDetails s : results)
-		{
-			System.out.println( "Session ID:" + s.getSessionID() ); 
-		}
+		for (Session s : results)
+			for ( String key : s.keySet() )
+				System.out.println( key + " = " + s.get(key) ); 
+	}
+
+	@Test
+	public void testListPerformerSessionsWithAttributes() throws Exception {
+		
+		int performerID = 1;
+		List<Session> results = database.listPerformerSessionsWithAttributes(performerID);
+		
+		for (Session s : results)
+			for ( String key : s.keySet() )
+				System.out.println( key + " = " + s.get(key) ); 
 	}
 
 	/**
@@ -100,7 +112,7 @@ public class DatabaseConnetionTest {
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 
 	 */
-	@Test
+	//@Test
 	public void testDownloadFile() throws Exception {
 		
 		int fileID = 3;

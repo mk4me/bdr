@@ -10,26 +10,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult;
+import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
 
 
 /**
- * <p>Java class for ListPerformerSessionsXMLResponse element declaration.
+ * <p>Java class for ListPerformerSessionsWithAttributesXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListPerformerSessionsXMLResponse">
+ * &lt;element name="ListPerformerSessionsWithAttributesXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListPerformerSessionsXMLResult" minOccurs="0">
+ *           &lt;element name="ListPerformerSessionsWithAttributesXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerSessionList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerSessionWithAttributesList"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -46,36 +46,36 @@ import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.L
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listPerformerSessionsXMLResult"
+    "listPerformerSessionsWithAttributesXMLResult"
 })
-@XmlRootElement(name = "ListPerformerSessionsXMLResponse")
-public class ListPerformerSessionsXMLResponse {
+@XmlRootElement(name = "ListPerformerSessionsWithAttributesXMLResponse")
+public class ListPerformerSessionsWithAttributesXMLResponse {
 
-    @XmlElement(name = "ListPerformerSessionsXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListPerformerSessionsXMLResult listPerformerSessionsXMLResult;
+    @XmlElement(name = "ListPerformerSessionsWithAttributesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected ListPerformerSessionsWithAttributesXMLResult listPerformerSessionsWithAttributesXMLResult;
 
     /**
-     * Gets the value of the listPerformerSessionsXMLResult property.
+     * Gets the value of the listPerformerSessionsWithAttributesXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListPerformerSessionsXMLResult }
+     *     {@link ListPerformerSessionsWithAttributesXMLResult }
      *     
      */
-    public ListPerformerSessionsXMLResult getListPerformerSessionsXMLResult() {
-        return listPerformerSessionsXMLResult;
+    public ListPerformerSessionsWithAttributesXMLResult getListPerformerSessionsWithAttributesXMLResult() {
+        return listPerformerSessionsWithAttributesXMLResult;
     }
 
     /**
-     * Sets the value of the listPerformerSessionsXMLResult property.
+     * Sets the value of the listPerformerSessionsWithAttributesXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListPerformerSessionsXMLResult }
+     *     {@link ListPerformerSessionsWithAttributesXMLResult }
      *     
      */
-    public void setListPerformerSessionsXMLResult(ListPerformerSessionsXMLResult value) {
-        this.listPerformerSessionsXMLResult = value;
+    public void setListPerformerSessionsWithAttributesXMLResult(ListPerformerSessionsWithAttributesXMLResult value) {
+        this.listPerformerSessionsWithAttributesXMLResult = value;
     }
 
 
@@ -89,7 +89,7 @@ public class ListPerformerSessionsXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerSessionList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerSessionWithAttributesList"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -102,9 +102,9 @@ public class ListPerformerSessionsXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListPerformerSessionsXMLResult {
+    public static class ListPerformerSessionsWithAttributesXMLResult {
 
-        @XmlElementRef(name = "PerformerSessionList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = PerformerSessionList.class)
+        @XmlElementRef(name = "PerformerSessionWithAttributesList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = PerformerSessionWithAttributesList.class)
         @XmlMixed
         protected List<Object> content;
 
@@ -127,7 +127,7 @@ public class ListPerformerSessionsXMLResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link String }
-         * {@link PerformerSessionList }
+         * {@link PerformerSessionWithAttributesList }
          * 
          * 
          */

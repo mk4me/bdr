@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -13,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.print.attribute.HashAttributeSet;
 import javax.xml.ws.BindingProvider;
 
 
@@ -21,7 +25,11 @@ import motion.database.ws.basicQueriesService.ArrayOfSessionDetails;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileDetails;
+import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList;
 import motion.database.ws.basicQueriesService.SessionDetails;
+import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
 import motion.database.ws.fileStoremanService.StoreSessionFile;
@@ -33,8 +41,38 @@ import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
 
+//class AttributeCollection<T extends Enum<T>> extends EnumMap<T, String>
+//{
+//	T names;
+//	
+//	public AttributeCollection()
+//	{
+//		super((Class<T>) names.getClass());
+//	}
+//	
+//	Enum getEnumeration()
+//	{
+//		return names;
+//	}
+//	
+//	EnumMap m;
+//}
+
+
+//class GenericAttributeClass<T extends EnumMap>extends HashMap<String, Object>{
+//
+//	private static final long serialVersionUID = -2737946494107015373L;
+//
+//	
+//	public Object get(Enum K)
+//	{
+//		return super.get( K.keys..getEnumeration() );
+//	}
+//}
 
 public class DatabaseConnection {
+
+	
 
 	public static class Credentials {
 		public String userName;
@@ -196,68 +234,149 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 	
-	public  List<SessionDetails> listPerformerSessions(int performerID) throws Exception
+	@Deprecated
+	public  List<Session> listPerformerSessions(int performerID) throws Exception
 	{
-		log.entering( "DatabaseConnection", "listPerformerSessions" );
-
-		BasicQueriesService service = new BasicQueriesService();
-		BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
-		
-		prepareCall( (BindingProvider)port);
-
-		ArrayOfSessionDetails result = port.listPerformerSessions(performerID);
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessions" );
 	
-		log.exiting( "DatabaseConnection", "listPerformerSessions", result.getSessionDetails() );
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ArrayOfSessionDetails result = port.listPerformerSessions(performerID);
 		
-		return result.getSessionDetails();
+			ArrayList<Session> output = new ArrayList<Session>();
+			
+			for (SessionDetails s : result.getSessionDetails())
+			{
+				Session session = new Session();
+				session.put( SessionStaticAttributes.labID, s.getLabID() );
+				session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
+				session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
+				session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
+				session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
+				session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
+				session.put( SessionStaticAttributes.userID, s.getUserID() );
+				output.add( session );
+			}
+			
+			
+			log.exiting( "DatabaseConnection", "listPerformerSessions", result.getSessionDetails() );
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	public  List<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessionsWithAttributes" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ListPerformerSessionsWithAttributesXMLResult result = port.listPerformerSessionsWithAttributesXML(performerID);
+			ArrayList<Session> output = new ArrayList<Session>();
+			
+			for (Object o : result.getContent())
+			{
+				Session session = new Session();
+				PerformerSessionWithAttributesList ss = (PerformerSessionWithAttributesList) o;
+				for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+				{
+				session.put( SessionStaticAttributes.labID, s.getLabID() );
+				session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
+				session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
+				session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
+				session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
+				session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
+				session.put( SessionStaticAttributes.userID, s.getUserID() );
+				if (s.getAttributes() != null)
+					if (s.getAttributes().getAttribute() != null)
+						for (  motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute att : s.getAttributes().getAttribute() )
+						{
+							Object value = att.getValue();
+						
+							session.put(att.getName(), value );
+						}
+				output.add( session );
+				}
+			}
+			
+			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
+			
+			//System.out.println( result );
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
 	public  List<FileDetails> listSessionFiles(int sessionID) throws Exception
 	{
-		log.entering( "DatabaseConnection", "listSessionFiles" );
-
-		BasicQueriesService service = new BasicQueriesService();
-		BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
-		
-		prepareCall( (BindingProvider)port);
-
-		ArrayOfFileDetails result = port.listSessionFiles(sessionID);
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listSessionFiles" );
 	
-		log.exiting( "DatabaseConnection", "listSessionFiles", result.getFileDetails() );
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ArrayOfFileDetails result = port.listSessionFiles(sessionID);
 		
-		return result.getFileDetails();
+			log.exiting( "DatabaseConnection", "listSessionFiles", result.getFileDetails() );
+			
+			return result.getFileDetails();
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
 	public  String downloadFile(int fileID, String destLocalFolder) throws Exception
 	{
-		log.entering( "DatabaseConnection", "listSessionFiles" );
-
-	    FileStoremanService service = new FileStoremanService();
-		FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
-		prepareCall( (BindingProvider)port);
-
-		String file = port.retrieveFile(fileID);
-		
-//		file="sample_path/Trial01.c3d";
-		
-		File remoteFile = new File ( file );
-		
-		try {
-			int status = FTPs.getFile( remoteFile.getName(), remoteFile.getParent(), 
-					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
-					destLocalFolder );
-			if(FileTransferStatus.SUCCESS == status){
-				log.info(" got ftps-ed successfully to file"+ remoteFile );
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listSessionFiles" );
+	
+		    FileStoremanService service = new FileStoremanService();
+			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
+			prepareCall( (BindingProvider)port);
+	
+			String file = port.retrieveFile(fileID);
+			
+	//		file="sample_path/Trial01.c3d";
+			
+			File remoteFile = new File ( file );
+			
+			try {
+				int status = FTPs.getFile( remoteFile.getName(), remoteFile.getParent(), 
+						this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
+						destLocalFolder );
+				if(FileTransferStatus.SUCCESS == status){
+					log.info(" got ftps-ed successfully to file"+ remoteFile );
+				}
+				else if(FileTransferStatus.FAILURE == status){
+					log.severe("Fail to ftps  to  folder "+destLocalFolder);
+				}
+			} catch (FileTransferException e) {
+				e.printStackTrace();
 			}
-			else if(FileTransferStatus.FAILURE == status){
-				log.severe("Fail to ftps  to  folder "+destLocalFolder);
-			}
-		} catch (FileTransferException e) {
-			e.printStackTrace();
+			
+			port.downloadComplete(fileID);
+			
+			return destLocalFolder + remoteFile.getName();
 		}
-		
-		port.downloadComplete(fileID);
-		
-		return destLocalFolder + remoteFile.getName();
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 }
