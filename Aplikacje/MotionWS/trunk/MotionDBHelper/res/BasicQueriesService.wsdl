@@ -4,6 +4,7 @@
     <s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
       <s:include schemaLocation="PerformerSessionList.xsd" />
       <s:include schemaLocation="PerformerSessionWithAttributesList.xsd" />
+      <s:include schemaLocation="SessionFileList.xsd" />
       <s:element name="ListPerformerSessions">
         <s:complexType>
           <s:sequence>
@@ -112,7 +113,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesXMLResult">
               <s:complexType mixed="true">
                 <s:sequence>
-                  <s:any />
+                  <s:element ref="tns:SessionFileList" />
                 </s:sequence>
               </s:complexType>
             </s:element>

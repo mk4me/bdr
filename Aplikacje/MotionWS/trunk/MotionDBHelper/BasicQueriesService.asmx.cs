@@ -192,6 +192,8 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SessionFileList"));
+
                 dr.Close();
             }
             catch (SqlException ex)
@@ -199,7 +201,7 @@ namespace MotionDBWebServices
                 // report exception
             }
             CloseConnection();
-
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
             return xd;
         }
 

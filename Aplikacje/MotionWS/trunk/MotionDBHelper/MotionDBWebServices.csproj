@@ -92,6 +92,7 @@
     <None Include="res\BasicQueriesService.wsdl" />
     <None Include="res\PerformerSessionList.xsd" />
     <None Include="res\PerformerSessionWithAttributesList.xsd" />
+    <None Include="res\SessionFileList.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
