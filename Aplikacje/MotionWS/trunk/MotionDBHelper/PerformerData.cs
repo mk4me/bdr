@@ -7,6 +7,7 @@ namespace MotionDBWebServices
 {
     public struct PerformerData
     {
-        string Name;
+        public string Name;
+        public string Surname;
     }
 }

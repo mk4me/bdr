@@ -19,9 +19,6 @@ namespace MotionDBWebServices
     // [System.Web.Script.Services.ScriptService]
     public class BasicQueriesService : DatabaseAccessService
     {
-
-
-
         [WebMethod]
         public SessionDetails[] ListPerformerSessions(int performerID)
         {
@@ -202,6 +199,34 @@ namespace MotionDBWebServices
             }
             CloseConnection();
             xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument _PerformQuery(string query)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = query + " for XML AUTO, ELEMENTS, root ('Result')";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("Result"));
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
             return xd;
         }
 

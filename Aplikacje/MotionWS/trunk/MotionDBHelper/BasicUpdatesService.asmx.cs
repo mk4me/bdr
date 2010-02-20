@@ -22,9 +22,43 @@ namespace MotionDBWebServices
         [WebMethod]
         public int CreatePerformer(PerformerData performerData)
         {
-            return 0;
+            int newPerformerId = 0;
+           
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandText = @"insert into Performer ( Imie, Nazwisko)
+                                            values (@perf_name, @perf_surname)
+                                            set @perf_id = SCOPE_IDENTITY()";
+                cmd.Parameters.Add("@perf_name", SqlDbType.VarChar,30);
+                cmd.Parameters.Add("@perf_surname", SqlDbType.VarChar,50);
+                SqlParameter performerIdParameter =
+                    new SqlParameter("@perf_id", SqlDbType.Int);
+                performerIdParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(performerIdParameter);
+                cmd.Parameters["@perf_name"].Value = performerData.Name;
+                cmd.Parameters["@perf_surname"].Value = performerData.Surname;
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                newPerformerId = (int)performerIdParameter.Value;
+
+
+                }
+                catch (SqlException ex)
+                {
+                    // log the exception
+                    return 0;
+
+                }
+                finally
+                {
+                    CloseConnection();
+                }
+            return newPerformerId;
+
         }
-        // todo: update performerdata fields. Checki SQL - CS primitive type compliance
+ 
 
         [WebMethod]
         public int CreateSession(int performerID, int[] sessionGroupIDs, SessionData sessionData)
