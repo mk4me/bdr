@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -21,13 +22,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
+import motion.database.SessionStaticAttributes;
 
 public class FilterDialog extends JDialog {
 	private static String FILTER_TITLE = "Add filter";
 	private static String FILTER_NAME = "Name:";
+	private static String TABLE_LABEL = "Table:";
 	private static String ADD_FILTER = "Add";
 	private static String CANCEL_FILTER = "Cancel";
 	private static String EDIT_FILTER = "Edit";
@@ -45,6 +49,8 @@ public class FilterDialog extends JDialog {
 	
 	private JPanel conditionPanel;
 	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
+	
+	private String tableName = "Sesja";
 	
 	public FilterDialog() {
 		super((JFrame) null, FILTER_TITLE, true);
@@ -74,7 +80,7 @@ public class FilterDialog extends JDialog {
 		formPanel.setLayout(new GridBagLayout());
 		
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		gridBagConstraints.ipadx = 10;
 		
 		JLabel nameLabel = new JLabel(FILTER_NAME);
@@ -87,6 +93,16 @@ public class FilterDialog extends JDialog {
 		gridBagConstraints.gridy = 0;
 		nameLabel.setLabelFor(nameText);
 		formPanel.add(nameText, gridBagConstraints);
+		
+		JLabel tableLabel = new JLabel(TABLE_LABEL);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		formPanel.add(tableLabel, gridBagConstraints);
+		
+		JLabel tableNameLabel = new JLabel(this.tableName);
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 1;
+		formPanel.add(tableNameLabel, gridBagConstraints);
 		
 		centerPanel.add(formPanel, BorderLayout.CENTER);
 		
@@ -119,7 +135,7 @@ public class FilterDialog extends JDialog {
 	
 	private void addColumnCondition(boolean firstCondition) {
 		try {
-			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Performer", firstCondition);
+			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Sesja", firstCondition);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
 			conditionPanel.revalidate();
@@ -208,10 +224,13 @@ public class FilterDialog extends JDialog {
 			this.databaseName = connector.getDatabaseName();
 			this.firstCondition = firstCondition;
 			
-			this.connection = connector.openConnection();
-			fillColumns();
+			//this.connection = connector.openConnection();
+			//fillColumns();
+			//connector.closeConnection();
+			fillColumnsFromAttributes();
+			this.operatorComboBox = new JComboBox();
 			fillOperators(1);
-			connector.closeConnection();
+			
 			
 			if (firstCondition == false) {
 				String[] andOr = {"AND", "OR"};
@@ -232,6 +251,11 @@ public class FilterDialog extends JDialog {
 				});
 			}
 			
+			this.columnComboBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ColumnCondition.this.fillOperators(ColumnCondition.this.columnComboBox.getSelectedIndex());
+				}
+			});
 		}
 		
 		private void fillColumns() throws SQLException {
@@ -271,14 +295,43 @@ public class FilterDialog extends JDialog {
 			resultSet.close();
 		}
 		
-		private void fillOperators(int columnNumber) throws SQLException {
+		private void fillColumnsFromAttributes() {
+			this.columnNameList = new ArrayList<String>();
+			this.columnClassList = new ArrayList<Object>();
+			
+			if (this.tableName.equals("Sesja")) { // change to some superclass and use instanceOf?
+				columnNameList.add(SessionStaticAttributes.sessionID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(SessionStaticAttributes.userID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(SessionStaticAttributes.labID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(SessionStaticAttributes.motionKindID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(SessionStaticAttributes.performerID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(SessionStaticAttributes.sessionDate.toString());
+				columnClassList.add(XMLGregorianCalendar.class);
+				columnNameList.add(SessionStaticAttributes.sessionDescription.toString());
+				columnClassList.add(String.class);
+			}
+			
+			this.columnComboBox = new JComboBox(columnNameList.toArray());
+		}
+		
+		private void fillOperators(int columnNumber) {
 			Object columnClass = this.columnClassList.get(columnNumber);
 			String[] operators = {""};
 			if (columnClass == String.class) {
 				operators = this.stringOperators;
+			} else if (columnClass == Integer.class || columnClass == BigInteger.class) {
+				operators = this.integerOperators;
 			}
-			
-			this.operatorComboBox = new JComboBox(operators);
+			this.operatorComboBox.removeAllItems();
+			for (int i = 0; i < operators.length; i++) {
+				this.operatorComboBox.addItem(operators[i]);
+			}
+			//this.operatorComboBox = new JComboBox(operators);
 		}
 	}
 }
