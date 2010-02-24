@@ -52,17 +52,19 @@ public class FilterDialog extends JDialog {
 	
 	private String tableName = "Sesja";
 	
-	public FilterDialog() {
+	public FilterDialog(String tableName) {
 		super((JFrame) null, FILTER_TITLE, true);
 		this.setSize(400, 400);
 		this.setLocation(200, 200);
+		
+		this.tableName = tableName;
 		
 		constructUserInterface();
 		addListeners();
 	}
 	
-	public FilterDialog(String name) {
-		this();
+	public FilterDialog(String name, String tableName) {
+		this(tableName);
 		this.nameText.setText(name);
 		this.addButton.setText(EDIT_FILTER);
 	}
@@ -135,7 +137,7 @@ public class FilterDialog extends JDialog {
 	
 	private void addColumnCondition(boolean firstCondition) {
 		try {
-			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), "Sesja", firstCondition);
+			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), tableName, firstCondition);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
 			conditionPanel.revalidate();
@@ -224,13 +226,17 @@ public class FilterDialog extends JDialog {
 			this.databaseName = connector.getDatabaseName();
 			this.firstCondition = firstCondition;
 			
-			//this.connection = connector.openConnection();
-			//fillColumns();
-			//connector.closeConnection();
-			fillColumnsFromAttributes();
+			// Change to fillColumnsFromAttributes
+			if (this.tableName.equals("Performer")) {
+				this.connection = connector.openConnection();
+				fillColumns();
+				connector.closeConnection();
+			} else if (this.tableName.equals("Sesja")) {
+				fillColumnsFromAttributes();
+			}
+			
 			this.operatorComboBox = new JComboBox();
 			fillOperators(1);
-			
 			
 			if (firstCondition == false) {
 				String[] andOr = {"AND", "OR"};

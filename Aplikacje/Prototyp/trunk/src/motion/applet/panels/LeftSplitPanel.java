@@ -32,9 +32,13 @@ public class LeftSplitPanel extends JPanel {
 	private static String REMOVE_FILTER = "Remove";
 	private static String EDIT_FILTER = "Edit";
 	private static String START_FILTER = "Start";
+	private static String TREE_TITLE = " filters";
+	private String tableName;
 	
-	public LeftSplitPanel() {
+	public LeftSplitPanel(String tableName) {
 		super();
+		this.tableName = tableName;
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		// Create the tool bar
@@ -45,7 +49,7 @@ public class LeftSplitPanel extends JPanel {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FilterDialog filterDialog = new FilterDialog();
+				FilterDialog filterDialog = new FilterDialog(LeftSplitPanel.this.tableName);
 				filterDialog.setVisible(true);
 				if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
 					Filter filter = new Filter(filterDialog.getName());
@@ -70,7 +74,7 @@ public class LeftSplitPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (tree.getSelectionPath() != null) {
 					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
-					FilterDialog filterDialog = new FilterDialog(selectedNode.toString());
+					FilterDialog filterDialog = new FilterDialog(selectedNode.toString(), LeftSplitPanel.this.tableName);
 					filterDialog.setVisible(true);
 					if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
 						Filter filter = new Filter(filterDialog.getName());
@@ -87,7 +91,7 @@ public class LeftSplitPanel extends JPanel {
 		add(toolBar);
 		
 		// Create the tree
-		rootNode = new DefaultMutableTreeNode("Filter tree");
+		rootNode = new DefaultMutableTreeNode(this.tableName + TREE_TITLE);
 		treeModel = new DefaultTreeModel(rootNode);
 		treeModel.addTreeModelListener(new TreeModelListener() {
 			@Override

@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import motion.applet.database.ConnectorInstance;
@@ -64,7 +66,15 @@ public class MotionApplet extends JApplet {
 		
 		
 		// Create the horizontal split panels
-		LeftSplitPanel leftPanel = new LeftSplitPanel();
+		// Left panel with tool bars
+		JPanel leftPanel = new JPanel();
+		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		LeftSplitPanel performerPanel = new LeftSplitPanel("Performer");
+		LeftSplitPanel sessionPanel = new LeftSplitPanel("Sesja");
+		leftPanel.add(performerPanel);
+		leftPanel.add(sessionPanel);
+		
+		// Right panel with a tree
 		RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		this.getContentPane().add(leftRightSplitPane);
