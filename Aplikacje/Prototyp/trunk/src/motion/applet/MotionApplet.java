@@ -71,8 +71,10 @@ public class MotionApplet extends JApplet {
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		LeftSplitPanel performerPanel = new LeftSplitPanel("Performer");
 		LeftSplitPanel sessionPanel = new LeftSplitPanel("Sesja");
+		LeftSplitPanel observationPanel = new LeftSplitPanel("Obserwacja");
 		leftPanel.add(performerPanel);
 		leftPanel.add(sessionPanel);
+		leftPanel.add(observationPanel);
 		
 		// Right panel with a tree
 		RightSplitPanel rightPanel = new RightSplitPanel();

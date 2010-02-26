@@ -11,6 +11,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Types;
 import java.util.ArrayList;
 
@@ -213,8 +214,9 @@ public class FilterDialog extends JDialog {
 		private ArrayList<String> columnNameList;
 		private ArrayList<Object> columnClassList;
 		
-		private String[] integerOperators = {"=", "<>", ">", "<"};
-		private String[] stringOperators = {"=", "<>"};
+		private String[] integerOperators = {"=", "<>", ">", "<", ">=", "<="};
+		private String[] stringOperators = {"=", "<>", ">", "<", ">=", "<=", "LIKE", "NOT LIKE"};
+		private String[] dateOperators = {"=", "<>", ">", "<", ">=", "<=", "LIKE", "NOT LIKE"};
 		private String REMOVE_CONDITION = "X";
 		private boolean firstCondition;
 		
@@ -227,7 +229,7 @@ public class FilterDialog extends JDialog {
 			this.firstCondition = firstCondition;
 			
 			// Change to fillColumnsFromAttributes
-			if (this.tableName.equals("Performer")) {
+			if (this.tableName.equals("Performer") || this.tableName.equals("Obserwacja")) {
 				this.connection = connector.openConnection();
 				fillColumns();
 				connector.closeConnection();
@@ -236,7 +238,7 @@ public class FilterDialog extends JDialog {
 			}
 			
 			this.operatorComboBox = new JComboBox();
-			fillOperators(1);
+			fillOperators(0);
 			
 			if (firstCondition == false) {
 				String[] andOr = {"AND", "OR"};
@@ -328,7 +330,7 @@ public class FilterDialog extends JDialog {
 		private void fillOperators(int columnNumber) {
 			Object columnClass = this.columnClassList.get(columnNumber);
 			String[] operators = {""};
-			if (columnClass == String.class) {
+			if (columnClass == String.class || columnClass == Date.class || columnClass == XMLGregorianCalendar.class) {
 				operators = this.stringOperators;
 			} else if (columnClass == Integer.class || columnClass == BigInteger.class) {
 				operators = this.integerOperators;
