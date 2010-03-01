@@ -5,6 +5,7 @@ package test.unit;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 import motion.database.DatabaseConnection;
@@ -95,6 +96,17 @@ public class DatabaseConnetionTest {
 		}
 	}
 
+	@Test
+	public void testListAttributesDefined() throws Exception {
+		
+		HashMap<String,String> results = database.listAttributesDefined( "_ALL", "performer" );
+		
+		for (String s : results.keySet() ) 
+			System.out.println("Attribute: "+ s + " type: " + results.get( s ));			
+	}
+
+	
+	
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 

@@ -2,50 +2,51 @@
 package motion.database.ws.basicQueriesService;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult;
-import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList;
-import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList.FileDetails;
+import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
+import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList;
+import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList.Attribute;
 
 
 /**
- * <p>Java class for ListSessionFilesXMLResponse element declaration.
+ * <p>Java class for ListAttributesDefinedResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListSessionFilesXMLResponse">
+ * &lt;element name="ListAttributesDefinedResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListSessionFilesXMLResult" minOccurs="0">
+ *           &lt;element name="ListAttributesDefinedResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="SessionFileList">
+ *                     &lt;element name="AttributeDefinitionList">
  *                       &lt;complexType>
  *                         &lt;complexContent>
  *                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                             &lt;sequence>
- *                               &lt;element name="FileDetails" maxOccurs="unbounded" minOccurs="0">
+ *                               &lt;element name="Attribute" maxOccurs="unbounded" minOccurs="0">
  *                                 &lt;complexType>
  *                                   &lt;complexContent>
  *                                     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                                       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                                       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                                       &lt;sequence>
+ *                                         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                                         &lt;element name="attributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                                         &lt;element name="attributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                                       &lt;/sequence>
  *                                     &lt;/restriction>
  *                                   &lt;/complexContent>
  *                                 &lt;/complexType>
@@ -71,36 +72,36 @@ import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSe
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listSessionFilesXMLResult"
+    "listAttributesDefinedResult"
 })
-@XmlRootElement(name = "ListSessionFilesXMLResponse")
-public class ListSessionFilesXMLResponse {
+@XmlRootElement(name = "ListAttributesDefinedResponse")
+public class ListAttributesDefinedResponse {
 
-    @XmlElement(name = "ListSessionFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListSessionFilesXMLResult listSessionFilesXMLResult;
+    @XmlElement(name = "ListAttributesDefinedResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected ListAttributesDefinedResult listAttributesDefinedResult;
 
     /**
-     * Gets the value of the listSessionFilesXMLResult property.
+     * Gets the value of the listAttributesDefinedResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListSessionFilesXMLResult }
+     *     {@link ListAttributesDefinedResult }
      *     
      */
-    public ListSessionFilesXMLResult getListSessionFilesXMLResult() {
-        return listSessionFilesXMLResult;
+    public ListAttributesDefinedResult getListAttributesDefinedResult() {
+        return listAttributesDefinedResult;
     }
 
     /**
-     * Sets the value of the listSessionFilesXMLResult property.
+     * Sets the value of the listAttributesDefinedResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListSessionFilesXMLResult }
+     *     {@link ListAttributesDefinedResult }
      *     
      */
-    public void setListSessionFilesXMLResult(ListSessionFilesXMLResult value) {
-        this.listSessionFilesXMLResult = value;
+    public void setListAttributesDefinedResult(ListAttributesDefinedResult value) {
+        this.listAttributesDefinedResult = value;
     }
 
 
@@ -114,17 +115,20 @@ public class ListSessionFilesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="SessionFileList">
+     *         &lt;element name="AttributeDefinitionList">
      *           &lt;complexType>
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                 &lt;sequence>
-     *                   &lt;element name="FileDetails" maxOccurs="unbounded" minOccurs="0">
+     *                   &lt;element name="Attribute" maxOccurs="unbounded" minOccurs="0">
      *                     &lt;complexType>
      *                       &lt;complexContent>
      *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *                           &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *                           &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *                           &lt;sequence>
+     *                             &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *                             &lt;element name="attributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *                             &lt;element name="attributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *                           &lt;/sequence>
      *                         &lt;/restriction>
      *                       &lt;/complexContent>
      *                     &lt;/complexType>
@@ -146,9 +150,9 @@ public class ListSessionFilesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListSessionFilesXMLResult {
+    public static class ListAttributesDefinedResult {
 
-        @XmlElementRef(name = "SessionFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
+        @XmlElementRef(name = "AttributeDefinitionList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
         @XmlMixed
         protected List<Serializable> content;
 
@@ -170,8 +174,8 @@ public class ListSessionFilesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
+         * {@link JAXBElement }{@code <}{@link AttributeDefinitionList }{@code >}
          * {@link String }
-         * {@link JAXBElement }{@code <}{@link SessionFileList }{@code >}
          * 
          * 
          */
@@ -193,12 +197,15 @@ public class ListSessionFilesXMLResponse {
          *   &lt;complexContent>
          *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *       &lt;sequence>
-         *         &lt;element name="FileDetails" maxOccurs="unbounded" minOccurs="0">
+         *         &lt;element name="Attribute" maxOccurs="unbounded" minOccurs="0">
          *           &lt;complexType>
          *             &lt;complexContent>
          *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-         *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-         *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+         *                 &lt;sequence>
+         *                   &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+         *                   &lt;element name="attributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+         *                   &lt;element name="attributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+         *                 &lt;/sequence>
          *               &lt;/restriction>
          *             &lt;/complexContent>
          *           &lt;/complexType>
@@ -213,40 +220,40 @@ public class ListSessionFilesXMLResponse {
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "fileDetails"
+            "attribute"
         })
-        public static class SessionFileList {
+        public static class AttributeDefinitionList {
 
-            @XmlElement(name = "FileDetails", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-            protected List<FileDetails> fileDetails;
+            @XmlElement(name = "Attribute", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+            protected List<Attribute> attribute;
 
             /**
-             * Gets the value of the fileDetails property.
+             * Gets the value of the attribute property.
              * 
              * <p>
              * This accessor method returns a reference to the live list,
              * not a snapshot. Therefore any modification you make to the
              * returned list will be present inside the JAXB object.
-             * This is why there is not a <CODE>set</CODE> method for the fileDetails property.
+             * This is why there is not a <CODE>set</CODE> method for the attribute property.
              * 
              * <p>
              * For example, to add a new item, do as follows:
              * <pre>
-             *    getFileDetails().add(newItem);
+             *    getAttribute().add(newItem);
              * </pre>
              * 
              * 
              * <p>
              * Objects of the following type(s) are allowed in the list
-             * {@link FileDetails }
+             * {@link Attribute }
              * 
              * 
              */
-            public List<FileDetails> getFileDetails() {
-                if (fileDetails == null) {
-                    fileDetails = new ArrayList<FileDetails>();
+            public List<Attribute> getAttribute() {
+                if (attribute == null) {
+                    attribute = new ArrayList<Attribute>();
                 }
-                return this.fileDetails;
+                return this.attribute;
             }
 
 
@@ -259,8 +266,11 @@ public class ListSessionFilesXMLResponse {
              * &lt;complexType>
              *   &lt;complexContent>
              *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-             *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-             *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+             *       &lt;sequence>
+             *         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+             *         &lt;element name="attributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+             *         &lt;element name="attributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+             *       &lt;/sequence>
              *     &lt;/restriction>
              *   &lt;/complexContent>
              * &lt;/complexType>
@@ -269,60 +279,90 @@ public class ListSessionFilesXMLResponse {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "")
-            public static class FileDetails {
+            @XmlType(name = "", propOrder = {
+                "attributeName",
+                "attributeType",
+                "attributeGroupName"
+            })
+            public static class Attribute {
 
-                @XmlAttribute(name = "FileID")
-                protected BigInteger fileID;
-                @XmlAttribute(name = "FileName")
-                protected String fileName;
-
-                /**
-                 * Gets the value of the fileID property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link BigInteger }
-                 *     
-                 */
-                public BigInteger getFileID() {
-                    return fileID;
-                }
+                @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+                protected String attributeName;
+                @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+                protected String attributeType;
+                @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+                protected String attributeGroupName;
 
                 /**
-                 * Sets the value of the fileID property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link BigInteger }
-                 *     
-                 */
-                public void setFileID(BigInteger value) {
-                    this.fileID = value;
-                }
-
-                /**
-                 * Gets the value of the fileName property.
+                 * Gets the value of the attributeName property.
                  * 
                  * @return
                  *     possible object is
                  *     {@link String }
                  *     
                  */
-                public String getFileName() {
-                    return fileName;
+                public String getAttributeName() {
+                    return attributeName;
                 }
 
                 /**
-                 * Sets the value of the fileName property.
+                 * Sets the value of the attributeName property.
                  * 
                  * @param value
                  *     allowed object is
                  *     {@link String }
                  *     
                  */
-                public void setFileName(String value) {
-                    this.fileName = value;
+                public void setAttributeName(String value) {
+                    this.attributeName = value;
+                }
+
+                /**
+                 * Gets the value of the attributeType property.
+                 * 
+                 * @return
+                 *     possible object is
+                 *     {@link String }
+                 *     
+                 */
+                public String getAttributeType() {
+                    return attributeType;
+                }
+
+                /**
+                 * Sets the value of the attributeType property.
+                 * 
+                 * @param value
+                 *     allowed object is
+                 *     {@link String }
+                 *     
+                 */
+                public void setAttributeType(String value) {
+                    this.attributeType = value;
+                }
+
+                /**
+                 * Gets the value of the attributeGroupName property.
+                 * 
+                 * @return
+                 *     possible object is
+                 *     {@link String }
+                 *     
+                 */
+                public String getAttributeGroupName() {
+                    return attributeGroupName;
+                }
+
+                /**
+                 * Sets the value of the attributeGroupName property.
+                 * 
+                 * @param value
+                 *     allowed object is
+                 *     {@link String }
+                 *     
+                 */
+                public void setAttributeGroupName(String value) {
+                    this.attributeGroupName = value;
                 }
 
             }
