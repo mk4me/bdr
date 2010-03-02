@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="AttributeDefinitionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:element name="AttributeDefinitionList">
+    <s:complexType>
+      <s:sequence>
+        <s:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
+          <s:complexType>
+            <s:sequence>
+              <s:element name="attributeName" type="s:string" />
+              <s:element name="attributeType" type="s:string" />
+              <s:element name="attributeGroupName" type="s:string" />
+            </s:sequence>
+          </s:complexType>
+        </s:element>
+      </s:sequence>
+    </s:complexType>
+  </s:element>
+</s:schema>

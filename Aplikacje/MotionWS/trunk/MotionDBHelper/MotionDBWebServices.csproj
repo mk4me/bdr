@@ -64,6 +64,7 @@
     <Content Include="BasicQueriesService.asmx" />
     <Content Include="BasicUpdatesService.asmx" />
     <Content Include="FileStoremanService.asmx" />
+    <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +80,7 @@
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PerformerSessionListXML.cs" />
     <Compile Include="SessionDetails.cs" />
     <Compile Include="TrialData.cs" />
     <Compile Include="BasicUpdatesService.asmx.cs">
@@ -89,10 +91,22 @@
     <Compile Include="SessionData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\BasicQueriesService.wsdl" />
-    <None Include="res\PerformerSessionList.xsd" />
-    <None Include="res\PerformerSessionWithAttributesList.xsd" />
-    <None Include="res\SessionFileList.xsd" />
+    <None Include="res\AttributesElement.xsd" />
+    <None Include="res\BasicQueriesService.wsdl">
+    </None>
+    <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
+    <None Include="res\ListTrialFilesXML.xsd" />
+    <None Include="res\ListSessionFilesWithAttributesXML.xsd" />
+    <None Include="res\ListTrialSegmentsWithAttributesXML.xsd" />
+    <None Include="res\ListTrialSegmentsXML.xsd" />
+    <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
+    <None Include="res\ListSessionTrialsXML.xsd" />
+    <None Include="res\ListAttributesDefined.xsd">
+    </None>
+    <None Include="res\_PerformQuery.xsd" />
+    <None Include="res\ListPerformerSessionsXML.xsd" />
+    <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
+    <None Include="res\ListSessionFilesXML.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

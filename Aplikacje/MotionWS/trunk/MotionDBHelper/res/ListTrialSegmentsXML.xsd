@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="ListTrialSegmentsXML" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:element name="TrailSegmentList">
+    <s:complexType>
+      <s:sequence>
+        <s:element name="SegmentDetails" minOccurs="0" maxOccurs="unbounded">
+          <s:complexType>
+            <s:attribute name="SegmentID" type="s:integer" />
+            <s:attribute name="TrialID" type="s:integer" />
+            <s:attribute name="SegmentName" type="s:string" />
+            <s:attribute name="StartTime" type="s:integer" />
+            <s:attribute name="EndTime" type="s:integer" />
+          </s:complexType>
+        </s:element>
+      </s:sequence>
+    </s:complexType>
+  </s:element>
+</s:schema>

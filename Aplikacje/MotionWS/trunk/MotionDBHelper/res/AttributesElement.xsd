@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:element name="Attributes" >
+    <s:complexType>
+      <s:sequence>
+        <s:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
+          <s:complexType>
+            <s:attribute name="Name" type="s:string" use="required" />
+            <s:attribute name="Value" type="s:string" use="required" />
+          </s:complexType>
+        </s:element>
+      </s:sequence>
+    </s:complexType>
+  </s:element>
+</s:schema>

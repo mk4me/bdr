@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerSessionWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+<s:schema id="PerformerSessionWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <s:include schemaLocation="AttributesElement.xsd" />
   <s:element name="PerformerSessionWithAttributesList">
     <s:complexType>
       <s:sequence>
@@ -13,20 +14,8 @@
               <s:element name="PerformerID" type="s:integer" />
               <s:element name="SessionDate" type="s:dateTime" />
               <s:element name="SessionDescription" type="s:string" />
-              <s:element name="Attributes" minOccurs="0" maxOccurs="1">
-                <s:complexType>
-                  <s:sequence>
-                    <s:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
-                      <s:complexType>
-                        <s:attribute name="Name" type="s:string" use="required" />
-                        <s:attribute name="Value" type="s:string" use="required" />
-                      </s:complexType>
-                    </s:element>
-                  </s:sequence>
-                </s:complexType>
-              </s:element>
+              <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
             </s:sequence>
-
           </s:complexType>
         </s:element>
       </s:sequence>
