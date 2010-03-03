@@ -691,6 +691,7 @@ go
 go
  
  
+ 
  ALTER TABLE Uprawnienia_sesja
         ADD FOREIGN KEY (IdSesja)
                               REFERENCES Sesja

@@ -189,6 +189,10 @@ go
 go
 
 
+ALTER TABLE Atrybut
+        ADD FOREIGN KEY (IdGrupa_atrybutow)
+                              REFERENCES Grupa_atrybutow
+go
 
 
 ALTER TABLE Wartosc_atrybutu_obserwacji

@@ -1,19 +1,39 @@
 use Motion;
 
+-- non-XML queries
+-- ==================================
+
 create procedure list_performer_sessions @perf_id int
 as
 	select IdSesja as SessonID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
       Opis_sesji as SessionDescription  from Sesja where IdPerformer=@perf_id
-
+go
 
 create procedure list_session_files @sess_id int
 as
 	select IdPlik as FileID, Nazwa_pliku as FileName from Plik where IdSesja=@sess_id
+go
 
-drop procedure list_performer_sessions_xml
+-- Session queries
+-- =======================
 
 
+create function list_session_attributes ( @sess_id int )
+returns TABLE as
+return 
+select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+from Atrybut a 
+inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
+inner join Sesja s on was.IdSesja=s.IdSesja
+where s.IdSesja = @sess_id
+
+go
 
 create procedure list_performer_sessions_xml @perf_id int
 as
@@ -35,14 +55,55 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdPerformer=@perf_id
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
-      
-create procedure list_session_files_xml @sess_id int
+
+go
+
+-- Trial queries
+-- ===============
+
+create function list_trial_attributes ( @trial_id int )
+returns TABLE as
+return 
+select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+from Atrybut a 
+inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
+inner join Obserwacja o on wao.IdObserwacja=o.IdObserwacja
+where o.IdObserwacja = @trial_id
+
+go
+
+create procedure list_session_trials_xml @sess_id int
 as
-	select IdPlik as FileID, Nazwa_pliku as FileName from Plik FileDetails where IdSesja=@sess_id
-	for XML AUTO, root ('SessionFileList')
+select
+	IdObserwacja as TrialID,
+	IdSesja as SessionID,
+	Opis_obserwacji as TrialDescription,
+	Czas_trwania as Duration
+from Obserwacja TrialDetails where IdSesja=@sess_id
+      for XML AUTO, root ('SessionTrialList')
+go
 
+create procedure list_session_trials_attributes_xml @sess_id int
+as
+select 
+	IdObserwacja as TrialID, 
+	IdSesja as SessionID, 
+	Opis_obserwacji as TrialDescription, 
+	Czas_trwania as Duration,
+	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Obserwacja TrialDetailsWithAttributes where IdSesja=@sess_id
+    for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
+go
 
-create function list_session_attributes ( @sess_id int )
+-- Segment queries
+-- ==================
+
+create function list_segment_attributes ( @segment_id int )
 returns TABLE as
 return 
 select 
@@ -52,9 +113,92 @@ select
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
 from Atrybut a 
-inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
-inner join Sesja s on was.IdSesja=s.IdSesja
-where s.IdSesja = @sess_id
+inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
+inner join Segment s on was.IdSegment=s.IdSegment
+where s.IdSegment = @segment_id
+
+create procedure list_trial_segments_xml @trial_id int
+as
+select
+	IdSegment as SegmentID,
+	IdObserwacja as TrialID,
+	Nazwa as SegmentName,
+	Czas_poczatku as StartTime,
+	Czas_konca as EndTime
+from Segment SegmentDetails where IdObserwacja=@trial_id
+      for XML AUTO, root ('TrailSegmentList')
+go
+
+create procedure list_trial_segments_attributes_xml @trial_id int
+as
+select 
+	IdSegment as SegmentID,
+	IdObserwacja as TrialID,
+	Nazwa as SegmentName,
+	Czas_poczatku as StartTime,
+	Czas_konca as EndTime,
+	(select * from list_segment_attributes ( IdSegment ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Segment SegmentDetailsWithAttributes where IdObserwacja=@trial_id
+    for XML AUTO, ELEMENTS, root ('TrailSegmentWithAttributesList')
+go
+
+-- File queries TODO
+-- ===================
+
+create procedure list_session_files_xml @sess_id int
+as
+	select IdPlik as FileID, Nazwa_pliku as FileName from Plik FileDetails where IdSesja=@sess_id
+	for XML AUTO, root ('SessionFileList')
+go
+
+create procedure list_trial_files_xml @trial_id int
+as
+	select IdPlik as FileID, Nazwa_pliku as FileName from Plik FileDetails where IdObserwacja=@trial_id
+	for XML AUTO, root ('TrialFileList')
+go
+
+create procedure list_session_files_attributes_xml @sess_id int
+as
+	select
+	IdPlik as FileID,
+	Nazwa_pliku as FileName, 
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Plik FileDetailsWithAttributes where IdSesja=@sess_id
+	for XML AUTO, root ('SessionFileWithAttributesList')
+go
+
+create procedure list_trial_files_attributes_xml @trial_id int
+as
+	select
+		IdPlik as FileID,
+		Nazwa_pliku as FileName,
+		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Plik FileDetailsWithAttributes
+		where IdObserwacja=@trial_id
+	for XML AUTO, root ('TrialFileWithAttributesList')
+go
+
+
+
+
+-- Metadata queries
+-- ===================
+
+create procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
+as
+select
+	a.Nazwa as attributeName, a.Typ_danych as attributeType, a.Wyliczeniowy as attributeEnum, ga.Nazwa as attributeGroupName
+from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+where @entity_kind=a.Opisywana_encja and ( @att_group = '_ALL' or ga.Nazwa = @att_group )
+for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
+
+go
+
+execute list_attributes_defined  'General_session_attributes', 'session';
+
+
+-- Attribute setting operations
+-- ============================
 
 /*
 Output parameter "result" meaning:
@@ -67,8 +211,7 @@ Output parameter "result" meaning:
 6 - the value provided is not valid for this numeric-type attribute
 
 */
-
-alter procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+create procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -130,7 +273,7 @@ begin
 		end;
 end;
 
-alter procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -191,6 +334,12 @@ begin
 			set @result = 0;
 		end;
 end;
+
+
+
+
+
+
 
 
 DECLARE @result int
