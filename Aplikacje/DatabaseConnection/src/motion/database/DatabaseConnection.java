@@ -1,43 +1,32 @@
 package motion.database;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import javax.print.attribute.HashAttributeSet;
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.BindingProvider;
 
-
-import motion.database.ws.basicQueriesService.ArrayOfFileDetails;
-import motion.database.ws.basicQueriesService.ArrayOfSessionDetails;
+import motion.database.ws.basicQueriesService.ArrayOfPlainFileDetails;
+import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
-import motion.database.ws.basicQueriesService.FileDetails;
-import motion.database.ws.basicQueriesService.ListAttributesDefined;
-import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse;
-import motion.database.ws.basicQueriesService.SessionDetails;
+import motion.database.ws.basicQueriesService.PlainFileDetails;
+import motion.database.ws.basicQueriesService.PlainSessionDetails;
+import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
-import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList;
 import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
-import motion.database.ws.fileStoremanService.StoreSessionFile;
 import motion.database.ws.test.SqlResultStream;
 import motion.database.ws.test.TestWs;
 import motion.database.ws.test.TestWsSoap;
@@ -251,11 +240,11 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ArrayOfSessionDetails result = port.listPerformerSessions(performerID);
+			ArrayOfPlainSessionDetails result = port.listPerformerSessions(performerID);
 		
 			ArrayList<Session> output = new ArrayList<Session>();
 			
-			for (SessionDetails s : result.getSessionDetails())
+			for (PlainSessionDetails s : result.getPlainSessionDetails())
 			{
 				Session session = new Session();
 				session.put( SessionStaticAttributes.labID, s.getLabID() );
@@ -269,7 +258,7 @@ public class DatabaseConnection {
 			}
 			
 			
-			log.exiting( "DatabaseConnection", "listPerformerSessions", result.getSessionDetails() );
+			log.exiting( "DatabaseConnection", "listPerformerSessions", result.getPlainSessionDetails() );
 			
 			return output;
 		}
@@ -294,8 +283,8 @@ public class DatabaseConnection {
 			HashMap<String, String> output = new HashMap<String, String>();
 			for( Object o : result.getContent() )
 			{
-				AttributeDefinitionList attr = (AttributeDefinitionList)(((JAXBElement<?>)o).getValue());
-				for (motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList.Attribute a : attr.getAttribute() )
+				motion.database.ws.basicQueriesService.AttributeDefinitionList attr = (motion.database.ws.basicQueriesService.AttributeDefinitionList)o;//(((JAXBElement<?>)o).getValue());
+				for (AttributeDefinition a : attr.getAttributeDefinition() )
 					output.put( a.getAttributeName(), a.getAttributeType() );
 			}
 			
@@ -323,8 +312,8 @@ public class DatabaseConnection {
 			for (Object o : result.getContent())
 			{
 				Session session = new Session();
-				PerformerSessionWithAttributesList ss = (PerformerSessionWithAttributesList)(((JAXBElement<?>)o).getValue());
-				for ( motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+				motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList ss = (motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
+				for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
 				{
 					session.put( SessionStaticAttributes.labID, s.getLabID() );
 					session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
@@ -335,7 +324,7 @@ public class DatabaseConnection {
 					session.put( SessionStaticAttributes.userID, s.getUserID() );
 					if (s.getAttributes() != null)
 						if (s.getAttributes().getAttribute() != null)
-							for (  motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute att : s.getAttributes().getAttribute() )
+							for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : s.getAttributes().getAttribute() )
 							{
 								Object value = att.getValue();
 								session.put(att.getName(), value );
@@ -354,7 +343,7 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	public  List<FileDetails> listSessionFiles(int sessionID) throws Exception
+	public  List<PlainFileDetails> listSessionFiles(int sessionID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -365,11 +354,11 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ArrayOfFileDetails result = port.listSessionFiles(sessionID);
+			ArrayOfPlainFileDetails result = port.listSessionFiles(sessionID);
 		
-			log.exiting( "DatabaseConnection", "listSessionFiles", result.getFileDetails() );
+			log.exiting( "DatabaseConnection", "listSessionFiles", result.getPlainFileDetails() );
 			
-			return result.getFileDetails();
+			return result.getPlainFileDetails();
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");

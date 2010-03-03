@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListSessionFilesResult" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}ArrayOfFileDetails" minOccurs="0"/>
+ *           &lt;element name="ListSessionFilesResult" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}ArrayOfPlainFileDetails" minOccurs="0"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -37,17 +37,17 @@ import javax.xml.bind.annotation.XmlType;
 public class ListSessionFilesResponse {
 
     @XmlElement(name = "ListSessionFilesResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ArrayOfFileDetails listSessionFilesResult;
+    protected ArrayOfPlainFileDetails listSessionFilesResult;
 
     /**
      * Gets the value of the listSessionFilesResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ArrayOfFileDetails }
+     *     {@link ArrayOfPlainFileDetails }
      *     
      */
-    public ArrayOfFileDetails getListSessionFilesResult() {
+    public ArrayOfPlainFileDetails getListSessionFilesResult() {
         return listSessionFilesResult;
     }
 
@@ -56,10 +56,10 @@ public class ListSessionFilesResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link ArrayOfFileDetails }
+     *     {@link ArrayOfPlainFileDetails }
      *     
      */
-    public void setListSessionFilesResult(ArrayOfFileDetails value) {
+    public void setListSessionFilesResult(ArrayOfPlainFileDetails value) {
         this.listSessionFilesResult = value;
     }
 

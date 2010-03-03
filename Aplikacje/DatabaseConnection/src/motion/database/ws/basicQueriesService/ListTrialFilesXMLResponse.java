@@ -10,26 +10,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
 
 
 /**
- * <p>Java class for ListSessionFilesXMLResponse element declaration.
+ * <p>Java class for ListTrialFilesXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListSessionFilesXMLResponse">
+ * &lt;element name="ListTrialFilesXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListSessionFilesXMLResult" minOccurs="0">
+ *           &lt;element name="ListTrialFilesXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionFileList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -46,36 +46,36 @@ import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSe
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listSessionFilesXMLResult"
+    "listTrialFilesXMLResult"
 })
-@XmlRootElement(name = "ListSessionFilesXMLResponse")
-public class ListSessionFilesXMLResponse {
+@XmlRootElement(name = "ListTrialFilesXMLResponse")
+public class ListTrialFilesXMLResponse {
 
-    @XmlElement(name = "ListSessionFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListSessionFilesXMLResult listSessionFilesXMLResult;
+    @XmlElement(name = "ListTrialFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected ListTrialFilesXMLResult listTrialFilesXMLResult;
 
     /**
-     * Gets the value of the listSessionFilesXMLResult property.
+     * Gets the value of the listTrialFilesXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListSessionFilesXMLResult }
+     *     {@link ListTrialFilesXMLResult }
      *     
      */
-    public ListSessionFilesXMLResult getListSessionFilesXMLResult() {
-        return listSessionFilesXMLResult;
+    public ListTrialFilesXMLResult getListTrialFilesXMLResult() {
+        return listTrialFilesXMLResult;
     }
 
     /**
-     * Sets the value of the listSessionFilesXMLResult property.
+     * Sets the value of the listTrialFilesXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListSessionFilesXMLResult }
+     *     {@link ListTrialFilesXMLResult }
      *     
      */
-    public void setListSessionFilesXMLResult(ListSessionFilesXMLResult value) {
-        this.listSessionFilesXMLResult = value;
+    public void setListTrialFilesXMLResult(ListTrialFilesXMLResult value) {
+        this.listTrialFilesXMLResult = value;
     }
 
 
@@ -89,7 +89,7 @@ public class ListSessionFilesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionFileList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -102,9 +102,9 @@ public class ListSessionFilesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListSessionFilesXMLResult {
+    public static class ListTrialFilesXMLResult {
 
-        @XmlElementRef(name = "SessionFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = SessionFileList.class)
+        @XmlElementRef(name = "TrialFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = TrialFileList.class)
         @XmlMixed
         protected List<Object> content;
 
@@ -126,8 +126,8 @@ public class ListSessionFilesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SessionFileList }
          * {@link String }
+         * {@link TrialFileList }
          * 
          * 
          */

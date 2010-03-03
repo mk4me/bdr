@@ -1,22 +1,27 @@
 
 package motion.database.ws.basicQueriesService;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
-import javax.xml.namespace.QName;
+import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
+import motion.database.ws.basicQueriesService.Attributes.Attribute;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
-import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult;
-import motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult.PerformerSessionList;
+import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLResponse.ListSessionFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult;
-import motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList;
+import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialFilesWithAttributesXMLResponse.ListTrialFilesWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialSegmentsXMLResponse.ListTrialSegmentsXMLResult;
 import motion.database.ws.basicQueriesService.PerformQueryResponse.PerformQueryResult;
-import motion.database.ws.basicQueriesService.PerformQueryResponse.PerformQueryResult.Result;
+import motion.database.ws.basicQueriesService.PerformerSessionList.SessionDetails;
+import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.SessionTrialList.TrialDetails;
+import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.TrialDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.TrailSegmentList.SegmentDetails;
+import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList.SegmentDetailsWithAttributes;
 
 
 /**
@@ -36,11 +41,6 @@ import motion.database.ws.basicQueriesService.PerformQueryResponse.PerformQueryR
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _ListPerformerSessionsXMLResponseListPerformerSessionsXMLResultPerformerSessionList_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", "PerformerSessionList");
-    private final static QName _ListSessionFilesXMLResponseListSessionFilesXMLResultSessionFileList_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", "SessionFileList");
-    private final static QName _ListAttributesDefinedResponseListAttributesDefinedResultAttributeDefinitionList_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", "AttributeDefinitionList");
-    private final static QName _PerformQueryResponsePerformQueryResultResult_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", "Result");
-    private final static QName _ListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesList_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", "PerformerSessionWithAttributesList");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.database.ws.basicQueriesService
@@ -50,91 +50,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList.Attribute }
+     * Create an instance of {@link ListPerformerSessionsXMLResult }
      * 
      */
-    public motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList.Attribute createListAttributesDefinedResponseListAttributesDefinedResultAttributeDefinitionListAttribute() {
-        return new motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult.AttributeDefinitionList.Attribute();
+    public ListPerformerSessionsXMLResult createListPerformerSessionsXMLResponseListPerformerSessionsXMLResult() {
+        return new ListPerformerSessionsXMLResult();
     }
 
     /**
-     * Create an instance of {@link ListPerformerSessions }
+     * Create an instance of {@link ListTrialSegmentsXMLResponse }
      * 
      */
-    public ListPerformerSessions createListPerformerSessions() {
-        return new ListPerformerSessions();
+    public ListTrialSegmentsXMLResponse createListTrialSegmentsXMLResponse() {
+        return new ListTrialSegmentsXMLResponse();
     }
 
     /**
-     * Create an instance of {@link ListPerformerSessionsResponse }
+     * Create an instance of {@link ListSessionTrialsXML }
      * 
      */
-    public ListPerformerSessionsResponse createListPerformerSessionsResponse() {
-        return new ListPerformerSessionsResponse();
+    public ListSessionTrialsXML createListSessionTrialsXML() {
+        return new ListSessionTrialsXML();
     }
 
     /**
-     * Create an instance of {@link ListSessionFilesXML }
+     * Create an instance of {@link ListTrialFilesWithAttributesXMLResponse }
      * 
      */
-    public ListSessionFilesXML createListSessionFilesXML() {
-        return new ListSessionFilesXML();
+    public ListTrialFilesWithAttributesXMLResponse createListTrialFilesWithAttributesXMLResponse() {
+        return new ListTrialFilesWithAttributesXMLResponse();
     }
 
     /**
-     * Create an instance of {@link PerformQuery }
+     * Create an instance of {@link SessionFileWithAttributesList }
      * 
      */
-    public PerformQuery createPerformQuery() {
-        return new PerformQuery();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsXML }
-     * 
-     */
-    public ListPerformerSessionsXML createListPerformerSessionsXML() {
-        return new ListPerformerSessionsXML();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributesDefinedResult }
-     * 
-     */
-    public ListAttributesDefinedResult createListAttributesDefinedResponseListAttributesDefinedResult() {
-        return new ListAttributesDefinedResult();
-    }
-
-    /**
-     * Create an instance of {@link PerformerSessionWithAttributesList }
-     * 
-     */
-    public PerformerSessionWithAttributesList createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesList() {
-        return new PerformerSessionWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.SessionDetails }
-     * 
-     */
-    public motion.database.ws.basicQueriesService.SessionDetails createSessionDetails() {
-        return new motion.database.ws.basicQueriesService.SessionDetails();
-    }
-
-    /**
-     * Create an instance of {@link PerformQueryResponse }
-     * 
-     */
-    public PerformQueryResponse createPerformQueryResponse() {
-        return new PerformQueryResponse();
-    }
-
-    /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult.PerformerSessionList.SessionDetails }
-     * 
-     */
-    public motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult.PerformerSessionList.SessionDetails createListPerformerSessionsXMLResponseListPerformerSessionsXMLResultPerformerSessionListSessionDetails() {
-        return new motion.database.ws.basicQueriesService.ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult.PerformerSessionList.SessionDetails();
+    public SessionFileWithAttributesList createSessionFileWithAttributesList() {
+        return new SessionFileWithAttributesList();
     }
 
     /**
@@ -146,19 +98,195 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ListTrialFilesXMLResponse }
+     * 
+     */
+    public ListTrialFilesXMLResponse createListTrialFilesXMLResponse() {
+        return new ListTrialFilesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialSegmentsWithAttributesXMLResult }
+     * 
+     */
+    public ListTrialSegmentsWithAttributesXMLResult createListTrialSegmentsWithAttributesXMLResponseListTrialSegmentsWithAttributesXMLResult() {
+        return new ListTrialSegmentsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link motion.database.ws.basicQueriesService.SessionFileWithAttributesList.FileDetailsWithAttributes }
+     * 
+     */
+    public motion.database.ws.basicQueriesService.SessionFileWithAttributesList.FileDetailsWithAttributes createSessionFileWithAttributesListFileDetailsWithAttributes() {
+        return new motion.database.ws.basicQueriesService.SessionFileWithAttributesList.FileDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributesDefinedResult }
+     * 
+     */
+    public ListAttributesDefinedResult createListAttributesDefinedResponseListAttributesDefinedResult() {
+        return new ListAttributesDefinedResult();
+    }
+
+    /**
+     * Create an instance of {@link TrailSegmentList }
+     * 
+     */
+    public TrailSegmentList createTrailSegmentList() {
+        return new TrailSegmentList();
+    }
+
+    /**
+     * Create an instance of {@link Attribute }
+     * 
+     */
+    public Attribute createAttributesAttribute() {
+        return new Attribute();
+    }
+
+    /**
+     * Create an instance of {@link TrialFileWithAttributesList }
+     * 
+     */
+    public TrialFileWithAttributesList createTrialFileWithAttributesList() {
+        return new TrialFileWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link motion.database.ws.basicQueriesService.SessionFileList.FileDetails }
+     * 
+     */
+    public motion.database.ws.basicQueriesService.SessionFileList.FileDetails createSessionFileListFileDetails() {
+        return new motion.database.ws.basicQueriesService.SessionFileList.FileDetails();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXMLResponse }
+     * 
+     */
+    public ListPerformerSessionsXMLResponse createListPerformerSessionsXMLResponse() {
+        return new ListPerformerSessionsXMLResponse();
+    }
+
+    /**
      * Create an instance of {@link PerformerSessionList }
      * 
      */
-    public PerformerSessionList createListPerformerSessionsXMLResponseListPerformerSessionsXMLResultPerformerSessionList() {
+    public PerformerSessionList createPerformerSessionList() {
         return new PerformerSessionList();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesWithAttributesXMLResult }
+     * 
+     */
+    public ListSessionFilesWithAttributesXMLResult createListSessionFilesWithAttributesXMLResponseListSessionFilesWithAttributesXMLResult() {
+        return new ListSessionFilesWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributesDefined }
+     * 
+     */
+    public ListAttributesDefined createListAttributesDefined() {
+        return new ListAttributesDefined();
     }
 
     /**
      * Create an instance of {@link Attributes }
      * 
      */
-    public Attributes createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesListSessionDetailsWithAttributesAttributes() {
+    public Attributes createAttributes() {
         return new Attributes();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialSegmentsXML }
+     * 
+     */
+    public ListTrialSegmentsXML createListTrialSegmentsXML() {
+        return new ListTrialSegmentsXML();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialFilesWithAttributesXMLResult }
+     * 
+     */
+    public ListTrialFilesWithAttributesXMLResult createListTrialFilesWithAttributesXMLResponseListTrialFilesWithAttributesXMLResult() {
+        return new ListTrialFilesWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesWithAttributesXMLResponse }
+     * 
+     */
+    public ListSessionFilesWithAttributesXMLResponse createListSessionFilesWithAttributesXMLResponse() {
+        return new ListSessionFilesWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link motion.database.ws.basicQueriesService.TrialFileList.FileDetails }
+     * 
+     */
+    public motion.database.ws.basicQueriesService.TrialFileList.FileDetails createTrialFileListFileDetails() {
+        return new motion.database.ws.basicQueriesService.TrialFileList.FileDetails();
+    }
+
+    /**
+     * Create an instance of {@link PlainSessionDetails }
+     * 
+     */
+    public PlainSessionDetails createPlainSessionDetails() {
+        return new PlainSessionDetails();
+    }
+
+    /**
+     * Create an instance of {@link motion.database.ws.basicQueriesService.TrialFileWithAttributesList.FileDetailsWithAttributes }
+     * 
+     */
+    public motion.database.ws.basicQueriesService.TrialFileWithAttributesList.FileDetailsWithAttributes createTrialFileWithAttributesListFileDetailsWithAttributes() {
+        return new motion.database.ws.basicQueriesService.TrialFileWithAttributesList.FileDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesXML }
+     * 
+     */
+    public ListSessionFilesXML createListSessionFilesXML() {
+        return new ListSessionFilesXML();
+    }
+
+    /**
+     * Create an instance of {@link TrialDetailsWithAttributes }
+     * 
+     */
+    public TrialDetailsWithAttributes createSessionTrialWithAttributesListTrialDetailsWithAttributes() {
+        return new TrialDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link SessionFileList }
+     * 
+     */
+    public SessionFileList createSessionFileList() {
+        return new SessionFileList();
+    }
+
+    /**
+     * Create an instance of {@link Result }
+     * 
+     */
+    public Result createResult() {
+        return new Result();
+    }
+
+    /**
+     * Create an instance of {@link TrailSegmentWithAttributesList }
+     * 
+     */
+    public TrailSegmentWithAttributesList createTrailSegmentWithAttributesList() {
+        return new TrailSegmentWithAttributesList();
     }
 
     /**
@@ -178,131 +306,131 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListPerformerSessionsXMLResult }
+     * Create an instance of {@link AttributeDefinition }
      * 
      */
-    public ListPerformerSessionsXMLResult createListPerformerSessionsXMLResponseListPerformerSessionsXMLResult() {
-        return new ListPerformerSessionsXMLResult();
+    public AttributeDefinition createAttributeDefinitionListAttributeDefinition() {
+        return new AttributeDefinition();
     }
 
     /**
-     * Create an instance of {@link ArrayOfSessionDetails }
+     * Create an instance of {@link ListTrialSegmentsXMLResult }
      * 
      */
-    public ArrayOfSessionDetails createArrayOfSessionDetails() {
-        return new ArrayOfSessionDetails();
+    public ListTrialSegmentsXMLResult createListTrialSegmentsXMLResponseListTrialSegmentsXMLResult() {
+        return new ListTrialSegmentsXMLResult();
     }
 
     /**
-     * Create an instance of {@link ListSessionFilesXMLResult }
+     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResult }
      * 
      */
-    public ListSessionFilesXMLResult createListSessionFilesXMLResponseListSessionFilesXMLResult() {
-        return new ListSessionFilesXMLResult();
+    public ListSessionTrialsWithAttributesXMLResult createListSessionTrialsWithAttributesXMLResponseListSessionTrialsWithAttributesXMLResult() {
+        return new ListSessionTrialsWithAttributesXMLResult();
     }
 
     /**
-     * Create an instance of {@link SessionFileList }
+     * Create an instance of {@link ListTrialSegmentsWithAttributesXMLResponse }
      * 
      */
-    public SessionFileList createListSessionFilesXMLResponseListSessionFilesXMLResultSessionFileList() {
-        return new SessionFileList();
+    public ListTrialSegmentsWithAttributesXMLResponse createListTrialSegmentsWithAttributesXMLResponse() {
+        return new ListTrialSegmentsWithAttributesXMLResponse();
     }
 
     /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute }
+     * Create an instance of {@link ListTrialFilesXMLResult }
      * 
      */
-    public motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesListSessionDetailsWithAttributesAttributesAttribute() {
-        return new motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult.PerformerSessionWithAttributesList.SessionDetailsWithAttributes.Attributes.Attribute();
+    public ListTrialFilesXMLResult createListTrialFilesXMLResponseListTrialFilesXMLResult() {
+        return new ListTrialFilesXMLResult();
     }
 
     /**
-     * Create an instance of {@link ListPerformerSessionsXMLResponse }
+     * Create an instance of {@link SessionDetails }
      * 
      */
-    public ListPerformerSessionsXMLResponse createListPerformerSessionsXMLResponse() {
-        return new ListPerformerSessionsXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributesDefinedResponse }
-     * 
-     */
-    public ListAttributesDefinedResponse createListAttributesDefinedResponse() {
-        return new ListAttributesDefinedResponse();
-    }
-
-    /**
-     * Create an instance of {@link PerformQueryResult }
-     * 
-     */
-    public PerformQueryResult createPerformQueryResponsePerformQueryResult() {
-        return new PerformQueryResult();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionFilesResponse }
-     * 
-     */
-    public ListSessionFilesResponse createListSessionFilesResponse() {
-        return new ListSessionFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeDefinitionList }
-     * 
-     */
-    public AttributeDefinitionList createListAttributesDefinedResponseListAttributesDefinedResultAttributeDefinitionList() {
-        return new AttributeDefinitionList();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse }
-     * 
-     */
-    public ListPerformerSessionsWithAttributesXMLResponse createListPerformerSessionsWithAttributesXMLResponse() {
-        return new ListPerformerSessionsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList.FileDetails }
-     * 
-     */
-    public motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList.FileDetails createListSessionFilesXMLResponseListSessionFilesXMLResultSessionFileListFileDetails() {
-        return new motion.database.ws.basicQueriesService.ListSessionFilesXMLResponse.ListSessionFilesXMLResult.SessionFileList.FileDetails();
+    public SessionDetails createPerformerSessionListSessionDetails() {
+        return new SessionDetails();
     }
 
     /**
      * Create an instance of {@link SessionDetailsWithAttributes }
      * 
      */
-    public SessionDetailsWithAttributes createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesListSessionDetailsWithAttributes() {
+    public SessionDetailsWithAttributes createPerformerSessionWithAttributesListSessionDetailsWithAttributes() {
         return new SessionDetailsWithAttributes();
     }
 
     /**
-     * Create an instance of {@link Result }
+     * Create an instance of {@link SegmentDetails }
      * 
      */
-    public Result createPerformQueryResponsePerformQueryResultResult() {
-        return new Result();
+    public SegmentDetails createTrailSegmentListSegmentDetails() {
+        return new SegmentDetails();
     }
 
     /**
-     * Create an instance of {@link ArrayOfFileDetails }
+     * Create an instance of {@link SessionTrialWithAttributesList }
      * 
      */
-    public ArrayOfFileDetails createArrayOfFileDetails() {
-        return new ArrayOfFileDetails();
+    public SessionTrialWithAttributesList createSessionTrialWithAttributesList() {
+        return new SessionTrialWithAttributesList();
     }
 
     /**
-     * Create an instance of {@link ListAttributesDefined }
+     * Create an instance of {@link PerformerSessionWithAttributesList }
      * 
      */
-    public ListAttributesDefined createListAttributesDefined() {
-        return new ListAttributesDefined();
+    public PerformerSessionWithAttributesList createPerformerSessionWithAttributesList() {
+        return new PerformerSessionWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link SegmentDetailsWithAttributes }
+     * 
+     */
+    public SegmentDetailsWithAttributes createTrailSegmentWithAttributesListSegmentDetailsWithAttributes() {
+        return new SegmentDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsWithAttributesXML }
+     * 
+     */
+    public ListSessionTrialsWithAttributesXML createListSessionTrialsWithAttributesXML() {
+        return new ListSessionTrialsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsResponse }
+     * 
+     */
+    public ListPerformerSessionsResponse createListPerformerSessionsResponse() {
+        return new ListPerformerSessionsResponse();
+    }
+
+    /**
+     * Create an instance of {@link TrialFileList }
+     * 
+     */
+    public TrialFileList createTrialFileList() {
+        return new TrialFileList();
+    }
+
+    /**
+     * Create an instance of {@link PlainFileDetails }
+     * 
+     */
+    public PlainFileDetails createPlainFileDetails() {
+        return new PlainFileDetails();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialSegmentsWithAttributesXML }
+     * 
+     */
+    public ListTrialSegmentsWithAttributesXML createListTrialSegmentsWithAttributesXML() {
+        return new ListTrialSegmentsWithAttributesXML();
     }
 
     /**
@@ -314,56 +442,163 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link motion.database.ws.basicQueriesService.FileDetails }
+     * Create an instance of {@link ArrayOfPlainFileDetails }
      * 
      */
-    public motion.database.ws.basicQueriesService.FileDetails createFileDetails() {
-        return new motion.database.ws.basicQueriesService.FileDetails();
+    public ArrayOfPlainFileDetails createArrayOfPlainFileDetails() {
+        return new ArrayOfPlainFileDetails();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PerformerSessionList }{@code >}}
+     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", name = "PerformerSessionList", scope = ListPerformerSessionsXMLResult.class)
-    public JAXBElement<PerformerSessionList> createListPerformerSessionsXMLResponseListPerformerSessionsXMLResultPerformerSessionList(PerformerSessionList value) {
-        return new JAXBElement<PerformerSessionList>(_ListPerformerSessionsXMLResponseListPerformerSessionsXMLResultPerformerSessionList_QNAME, PerformerSessionList.class, ListPerformerSessionsXMLResult.class, value);
+    public ListPerformerSessionsWithAttributesXMLResponse createListPerformerSessionsWithAttributesXMLResponse() {
+        return new ListPerformerSessionsWithAttributesXMLResponse();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SessionFileList }{@code >}}
+     * Create an instance of {@link SessionTrialList }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", name = "SessionFileList", scope = ListSessionFilesXMLResult.class)
-    public JAXBElement<SessionFileList> createListSessionFilesXMLResponseListSessionFilesXMLResultSessionFileList(SessionFileList value) {
-        return new JAXBElement<SessionFileList>(_ListSessionFilesXMLResponseListSessionFilesXMLResultSessionFileList_QNAME, SessionFileList.class, ListSessionFilesXMLResult.class, value);
+    public SessionTrialList createSessionTrialList() {
+        return new SessionTrialList();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AttributeDefinitionList }{@code >}}
+     * Create an instance of {@link ListPerformerSessions }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", name = "AttributeDefinitionList", scope = ListAttributesDefinedResult.class)
-    public JAXBElement<AttributeDefinitionList> createListAttributesDefinedResponseListAttributesDefinedResultAttributeDefinitionList(AttributeDefinitionList value) {
-        return new JAXBElement<AttributeDefinitionList>(_ListAttributesDefinedResponseListAttributesDefinedResultAttributeDefinitionList_QNAME, AttributeDefinitionList.class, ListAttributesDefinedResult.class, value);
+    public ListPerformerSessions createListPerformerSessions() {
+        return new ListPerformerSessions();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Result }{@code >}}
+     * Create an instance of {@link ListSessionFilesXMLResult }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", name = "Result", scope = PerformQueryResult.class)
-    public JAXBElement<Result> createPerformQueryResponsePerformQueryResultResult(Result value) {
-        return new JAXBElement<Result>(_PerformQueryResponsePerformQueryResultResult_QNAME, Result.class, PerformQueryResult.class, value);
+    public ListSessionFilesXMLResult createListSessionFilesXMLResponseListSessionFilesXMLResult() {
+        return new ListSessionFilesXMLResult();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PerformerSessionWithAttributesList }{@code >}}
+     * Create an instance of {@link ListAttributesDefinedResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", name = "PerformerSessionWithAttributesList", scope = ListPerformerSessionsWithAttributesXMLResult.class)
-    public JAXBElement<PerformerSessionWithAttributesList> createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesList(PerformerSessionWithAttributesList value) {
-        return new JAXBElement<PerformerSessionWithAttributesList>(_ListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResultPerformerSessionWithAttributesList_QNAME, PerformerSessionWithAttributesList.class, ListPerformerSessionsWithAttributesXMLResult.class, value);
+    public ListAttributesDefinedResponse createListAttributesDefinedResponse() {
+        return new ListAttributesDefinedResponse();
+    }
+
+    /**
+     * Create an instance of {@link TrialDetails }
+     * 
+     */
+    public TrialDetails createSessionTrialListTrialDetails() {
+        return new TrialDetails();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialFilesXML }
+     * 
+     */
+    public ListTrialFilesXML createListTrialFilesXML() {
+        return new ListTrialFilesXML();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXML }
+     * 
+     */
+    public ListPerformerSessionsXML createListPerformerSessionsXML() {
+        return new ListPerformerSessionsXML();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialFilesWithAttributesXML }
+     * 
+     */
+    public ListTrialFilesWithAttributesXML createListTrialFilesWithAttributesXML() {
+        return new ListTrialFilesWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link AttributeDefinitionList }
+     * 
+     */
+    public AttributeDefinitionList createAttributeDefinitionList() {
+        return new AttributeDefinitionList();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsXMLResponse }
+     * 
+     */
+    public ListSessionTrialsXMLResponse createListSessionTrialsXMLResponse() {
+        return new ListSessionTrialsXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesResponse }
+     * 
+     */
+    public ListSessionFilesResponse createListSessionFilesResponse() {
+        return new ListSessionFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsXMLResult }
+     * 
+     */
+    public ListSessionTrialsXMLResult createListSessionTrialsXMLResponseListSessionTrialsXMLResult() {
+        return new ListSessionTrialsXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfPlainSessionDetails }
+     * 
+     */
+    public ArrayOfPlainSessionDetails createArrayOfPlainSessionDetails() {
+        return new ArrayOfPlainSessionDetails();
+    }
+
+    /**
+     * Create an instance of {@link PerformQueryResult }
+     * 
+     */
+    public PerformQueryResult createPerformQueryResponsePerformQueryResult() {
+        return new PerformQueryResult();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResponse }
+     * 
+     */
+    public ListSessionTrialsWithAttributesXMLResponse createListSessionTrialsWithAttributesXMLResponse() {
+        return new ListSessionTrialsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link PerformQuery }
+     * 
+     */
+    public PerformQuery createPerformQuery() {
+        return new PerformQuery();
+    }
+
+    /**
+     * Create an instance of {@link PerformQueryResponse }
+     * 
+     */
+    public PerformQueryResponse createPerformQueryResponse() {
+        return new PerformQueryResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionFilesWithAttributesXML }
+     * 
+     */
+    public ListSessionFilesWithAttributesXML createListSessionFilesWithAttributesXML() {
+        return new ListSessionFilesWithAttributesXML();
     }
 
 }

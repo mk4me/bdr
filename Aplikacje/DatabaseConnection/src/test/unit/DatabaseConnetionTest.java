@@ -3,16 +3,13 @@
  */
 package test.unit;
 
-import static org.junit.Assert.*;
-
 import java.util.HashMap;
 import java.util.List;
 
 import motion.database.DatabaseConnection;
 import motion.database.Session;
 import motion.database.SessionStaticAttributes;
-import motion.database.ws.basicQueriesService.FileDetails;
-import motion.database.ws.basicQueriesService.SessionDetails;
+import motion.database.ws.basicQueriesService.PlainFileDetails;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -115,9 +112,9 @@ public class DatabaseConnetionTest {
 	public void testListSessionFiles() throws Exception {
 		
 		int sessionID = 1;
-		List<FileDetails> results = database.listSessionFiles(sessionID);
+		List<PlainFileDetails> results = database.listSessionFiles(sessionID);
 		
-		for (FileDetails s : results)
+		for (PlainFileDetails s : results)
 		{
 			System.out.println( "File Name:" + s.getFileName() + " File ID:" + s.getFileID() ); 
 		}

@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListPerformerSessionsResult" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}ArrayOfSessionDetails" minOccurs="0"/>
+ *           &lt;element name="ListPerformerSessionsResult" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}ArrayOfPlainSessionDetails" minOccurs="0"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -37,17 +37,17 @@ import javax.xml.bind.annotation.XmlType;
 public class ListPerformerSessionsResponse {
 
     @XmlElement(name = "ListPerformerSessionsResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ArrayOfSessionDetails listPerformerSessionsResult;
+    protected ArrayOfPlainSessionDetails listPerformerSessionsResult;
 
     /**
      * Gets the value of the listPerformerSessionsResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ArrayOfSessionDetails }
+     *     {@link ArrayOfPlainSessionDetails }
      *     
      */
-    public ArrayOfSessionDetails getListPerformerSessionsResult() {
+    public ArrayOfPlainSessionDetails getListPerformerSessionsResult() {
         return listPerformerSessionsResult;
     }
 
@@ -56,10 +56,10 @@ public class ListPerformerSessionsResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link ArrayOfSessionDetails }
+     *     {@link ArrayOfPlainSessionDetails }
      *     
      */
-    public void setListPerformerSessionsResult(ArrayOfSessionDetails value) {
+    public void setListPerformerSessionsResult(ArrayOfPlainSessionDetails value) {
         this.listPerformerSessionsResult = value;
     }
 
