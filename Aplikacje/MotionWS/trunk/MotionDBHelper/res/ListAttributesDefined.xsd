@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <s:schema id="AttributeDefinitionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:element name="AttributeDefinitionList">
+  <s:element name="AttributeDefinitionList" >
     <s:complexType>
       <s:sequence>
-        <s:element name="Attribute" minOccurs="0" maxOccurs="unbounded">
+        <s:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
           <s:complexType>
             <s:sequence>
               <s:element name="attributeName" type="s:string" />

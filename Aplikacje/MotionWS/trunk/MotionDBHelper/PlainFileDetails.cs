@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MotionDBWebServices
 {
-    public struct FileDetails
+    public struct PlainFileDetails
     {
         public int FileID;
         public string FileName;

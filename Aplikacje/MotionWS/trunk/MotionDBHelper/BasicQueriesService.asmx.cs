@@ -23,9 +23,9 @@ namespace MotionDBWebServices
         // non-XML sample queries
 
         [WebMethod]
-        public SessionDetails[] ListPerformerSessions(int performerID)
+        public PlainSessionDetails[] ListPerformerSessions(int performerID)
         {
-            List<SessionDetails> sdl = new List<SessionDetails>();
+            List<PlainSessionDetails> sdl = new List<PlainSessionDetails>();
 
             try
             {
@@ -39,7 +39,7 @@ namespace MotionDBWebServices
                 
                 while (dr.Read())
                 {
-                    SessionDetails sd = new SessionDetails();
+                    PlainSessionDetails sd = new PlainSessionDetails();
                     sd.SessionID = int.Parse( dr[0].ToString());
                     sd.UserID = int.Parse( dr[1].ToString());
                     sd.LabID = int.Parse( dr[2].ToString());
@@ -54,9 +54,7 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                SessionDetails x = new SessionDetails();
-                x.SessionDescription = ex.ToString();
-                sdl.Add(x);
+                // report problem
             }
             CloseConnection();
             //if(sdl.Count==0){
@@ -68,9 +66,9 @@ namespace MotionDBWebServices
         }
 
         [WebMethod]
-        public FileDetails[] ListSessionFiles(int sessionID)
+        public PlainFileDetails[] ListSessionFiles(int sessionID)
         {
-            List<FileDetails> fdl = new List<FileDetails>();
+            List<PlainFileDetails> fdl = new List<PlainFileDetails>();
             // server = DBPAWELL
             try
             {
@@ -86,7 +84,7 @@ namespace MotionDBWebServices
 
                 while (dr.Read())
                 {
-                    FileDetails fd = new FileDetails();
+                    PlainFileDetails fd = new PlainFileDetails();
                     fd.FileID = int.Parse(dr[0].ToString());
                     fd.FileName = dr[1].ToString();
 

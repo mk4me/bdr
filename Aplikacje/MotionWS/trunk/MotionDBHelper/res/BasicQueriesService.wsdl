@@ -24,16 +24,16 @@
 			<s:element name="ListPerformerSessionsResponse">
 				<s:complexType>
 					<s:sequence>
-						<s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsResult" type="tns:ArrayOfSessionDetails"/>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsResult" type="tns:ArrayOfPlainSessionDetails"/>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
-			<s:complexType name="ArrayOfSessionDetails">
+			<s:complexType name="ArrayOfPlainSessionDetails">
 				<s:sequence>
-					<s:element minOccurs="0" maxOccurs="unbounded" name="SessionDetails" type="tns:SessionDetails"/>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PlainSessionDetails" type="tns:PlainSessionDetails"/>
 				</s:sequence>
 			</s:complexType>
-			<s:complexType name="SessionDetails">
+			<s:complexType name="PlainSessionDetails">
 				<s:sequence>
 					<s:element minOccurs="1" maxOccurs="1" name="SessionID" type="s:int"/>
 					<s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int"/>
@@ -54,16 +54,16 @@
 			<s:element name="ListSessionFilesResponse">
 				<s:complexType>
 					<s:sequence>
-						<s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesResult" type="tns:ArrayOfFileDetails"/>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesResult" type="tns:ArrayOfPlainFileDetails"/>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
-			<s:complexType name="ArrayOfFileDetails">
+			<s:complexType name="ArrayOfPlainFileDetails">
 				<s:sequence>
-					<s:element minOccurs="0" maxOccurs="unbounded" name="FileDetails" type="tns:FileDetails"/>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PlainFileDetails" type="tns:PlainFileDetails"/>
 				</s:sequence>
 			</s:complexType>
-			<s:complexType name="FileDetails">
+			<s:complexType name="PlainFileDetails">
 				<s:sequence>
 					<s:element minOccurs="1" maxOccurs="1" name="FileID" type="s:int"/>
 					<s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string"/>

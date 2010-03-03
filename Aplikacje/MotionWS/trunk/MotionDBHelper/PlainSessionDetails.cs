@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MotionDBWebServices
 {
-    public struct SessionDetails
+    public struct PlainSessionDetails
     {
         public int SessionID;
         public int UserID;

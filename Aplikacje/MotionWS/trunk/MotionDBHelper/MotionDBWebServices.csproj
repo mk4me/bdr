@@ -75,13 +75,13 @@
     <Compile Include="DatabaseAccessService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FileDetails.cs" />
+    <Compile Include="PlainFileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PerformerSessionListXML.cs" />
-    <Compile Include="SessionDetails.cs" />
+    <Compile Include="PlainSessionDetails.cs" />
     <Compile Include="TrialData.cs" />
     <Compile Include="BasicUpdatesService.asmx.cs">
       <SubType>Component</SubType>
@@ -92,8 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\AttributesElement.xsd" />
-    <None Include="res\BasicQueriesService.wsdl">
-    </None>
+    <None Include="res\BasicQueriesService.wsdl" />
     <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
     <None Include="res\ListTrialFilesXML.xsd" />
     <None Include="res\ListSessionFilesWithAttributesXML.xsd" />

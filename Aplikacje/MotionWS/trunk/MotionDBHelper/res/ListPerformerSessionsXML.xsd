@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerSessionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  >
+<s:schema id="PerformerSessionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
 
       <s:element name="PerformerSessionList">
         <s:complexType>
