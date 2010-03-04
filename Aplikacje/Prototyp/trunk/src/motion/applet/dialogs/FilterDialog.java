@@ -11,9 +11,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,6 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.SessionStaticAttributes;
 
 public class FilterDialog extends JDialog {
@@ -55,7 +56,7 @@ public class FilterDialog extends JDialog {
 	
 	public FilterDialog(String tableName) {
 		super((JFrame) null, FILTER_TITLE, true);
-		this.setSize(400, 400);
+		this.setSize(440, 400);
 		this.setLocation(200, 200);
 		
 		this.tableName = tableName;
@@ -78,6 +79,7 @@ public class FilterDialog extends JDialog {
 		this.add(messagePanel, BorderLayout.PAGE_START);
 		
 		JPanel centerPanel = new JPanel();
+		
 		// Form area
 		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
@@ -107,7 +109,7 @@ public class FilterDialog extends JDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableNameLabel, gridBagConstraints);
 		
-		centerPanel.add(formPanel, BorderLayout.CENTER);
+		centerPanel.add(formPanel);
 		
 		// Column condition area
 		conditionPanel = new JPanel();
@@ -115,7 +117,7 @@ public class FilterDialog extends JDialog {
 		
 		this.addColumnCondition(true);
 		
-		centerPanel.add(conditionPanel, BorderLayout.SOUTH);
+		centerPanel.add(conditionPanel);
 		this.add(centerPanel, BorderLayout.CENTER);
 		
 		// Button area
@@ -139,6 +141,7 @@ public class FilterDialog extends JDialog {
 	private void addColumnCondition(boolean firstCondition) {
 		try {
 			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), tableName, firstCondition);
+			//columnCondition.setAlignmentX(Component.LEFT_ALIGNMENT);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
 			conditionPanel.revalidate();
@@ -228,6 +231,8 @@ public class FilterDialog extends JDialog {
 			this.databaseName = connector.getDatabaseName();
 			this.firstCondition = firstCondition;
 			
+			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+			
 			// Change to fillColumnsFromAttributes
 			if (this.tableName.equals("Performer") || this.tableName.equals("Obserwacja")) {
 				this.connection = connector.openConnection();
@@ -292,11 +297,13 @@ public class FilterDialog extends JDialog {
 				case Types.TIMESTAMP:
 					columnClassList.add(Date.class);
 					break;
-				default:
+				default: // Unknown type.
 					columnClassList.add(String.class);
 					break;
 				}
 			}
+			
+			fillColumnsFromAttributesDefined();
 			
 			this.columnComboBox = new JComboBox(columnNameList.toArray());
 			
@@ -322,19 +329,49 @@ public class FilterDialog extends JDialog {
 				columnClassList.add(XMLGregorianCalendar.class);
 				columnNameList.add(SessionStaticAttributes.sessionDescription.toString());
 				columnClassList.add(String.class);
+				
 			}
 			
+			fillColumnsFromAttributesDefined();
+			
 			this.columnComboBox = new JComboBox(columnNameList.toArray());
+		}
+		
+		private void fillColumnsFromAttributesDefined(){
+			HashMap<String, String> results;
+			try {
+				results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", this.tableName);
+				for (String s : results.keySet()) { 
+					columnNameList.add(s);
+					String type = results.get(s);
+					if (type.equals("string")) {
+						columnClassList.add(String.class);
+					} else if (type.equals("integer")) {
+						columnClassList.add(Integer.class);
+					} else if (type.equals("date")) {
+						columnClassList.add(Date.class);
+					} else { // Unknown type.
+						columnClassList.add(String.class);
+					}
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		private void fillOperators(int columnNumber) {
 			Object columnClass = this.columnClassList.get(columnNumber);
 			String[] operators = {""};
-			if (columnClass == String.class || columnClass == Date.class || columnClass == XMLGregorianCalendar.class) {
+			
+			if (columnClass == String.class) {
 				operators = this.stringOperators;
 			} else if (columnClass == Integer.class || columnClass == BigInteger.class) {
 				operators = this.integerOperators;
+			} else if (columnClass == Date.class || columnClass == XMLGregorianCalendar.class) {
+				operators = this.dateOperators;
 			}
+			
 			this.operatorComboBox.removeAllItems();
 			for (int i = 0; i < operators.length; i++) {
 				this.operatorComboBox.addItem(operators[i]);

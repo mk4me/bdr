@@ -35,7 +35,7 @@ public class MotionApplet extends JApplet {
 		//MotionWebServiceClient wsClient = new MotionWebServiceClient();
 		//wsClient.callWebService();
 		
-		ConnectorInstance connectorInstance = new ConnectorInstance();
+		//ConnectorInstance connectorInstance = new ConnectorInstance();
 	}
 	
 	private void initUserInterface() {

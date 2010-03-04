@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 
 public class UploadDialog extends JDialog {
@@ -149,7 +150,7 @@ public class UploadDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.validateResult() == true) {
 					try {
-						UploadDialog.this.databaseConnection.uploadFile(
+						WebServiceInstance.getDatabaseConnection().uploadFile(
 								UploadDialog.this.getSession(),
 								UploadDialog.this.getDescription(),
 								UploadDialog.this.getFilePath());
