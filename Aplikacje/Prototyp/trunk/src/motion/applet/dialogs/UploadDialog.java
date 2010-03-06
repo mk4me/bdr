@@ -150,7 +150,7 @@ public class UploadDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.validateResult() == true) {
 					try {
-						WebServiceInstance.getDatabaseConnection().uploadFile(
+						WebServiceInstance.getDatabaseConnection().uploadSessionFile(
 								UploadDialog.this.getSession(),
 								UploadDialog.this.getDescription(),
 								UploadDialog.this.getFilePath());
