@@ -1,10 +1,8 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -12,26 +10,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
+import motion.database.ws.basicQueriesService.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
 
 
 /**
- * <p>Java class for ListTrialFilesXMLResponse element declaration.
+ * <p>Java class for ListPerformersWithAttributesXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListTrialFilesXMLResponse">
+ * &lt;element name="ListPerformersWithAttributesXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListTrialFilesXMLResult" minOccurs="0">
+ *           &lt;element name="ListPerformersWithAttributesXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerWithAttributesList"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -48,36 +46,36 @@ import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTria
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listTrialFilesXMLResult"
+    "listPerformersWithAttributesXMLResult"
 })
-@XmlRootElement(name = "ListTrialFilesXMLResponse")
-public class ListTrialFilesXMLResponse {
+@XmlRootElement(name = "ListPerformersWithAttributesXMLResponse")
+public class ListPerformersWithAttributesXMLResponse {
 
-    @XmlElement(name = "ListTrialFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListTrialFilesXMLResult listTrialFilesXMLResult;
+    @XmlElement(name = "ListPerformersWithAttributesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected ListPerformersWithAttributesXMLResult listPerformersWithAttributesXMLResult;
 
     /**
-     * Gets the value of the listTrialFilesXMLResult property.
+     * Gets the value of the listPerformersWithAttributesXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListTrialFilesXMLResult }
+     *     {@link ListPerformersWithAttributesXMLResult }
      *     
      */
-    public ListTrialFilesXMLResult getListTrialFilesXMLResult() {
-        return listTrialFilesXMLResult;
+    public ListPerformersWithAttributesXMLResult getListPerformersWithAttributesXMLResult() {
+        return listPerformersWithAttributesXMLResult;
     }
 
     /**
-     * Sets the value of the listTrialFilesXMLResult property.
+     * Sets the value of the listPerformersWithAttributesXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListTrialFilesXMLResult }
+     *     {@link ListPerformersWithAttributesXMLResult }
      *     
      */
-    public void setListTrialFilesXMLResult(ListTrialFilesXMLResult value) {
-        this.listTrialFilesXMLResult = value;
+    public void setListPerformersWithAttributesXMLResult(ListPerformersWithAttributesXMLResult value) {
+        this.listPerformersWithAttributesXMLResult = value;
     }
 
 
@@ -91,7 +89,7 @@ public class ListTrialFilesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}PerformerWithAttributesList"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -104,11 +102,11 @@ public class ListTrialFilesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListTrialFilesXMLResult {
+    public static class ListPerformersWithAttributesXMLResult {
 
-        @XmlElementRef(name = "TrialFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
+        @XmlElementRef(name = "PerformerWithAttributesList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = PerformerWithAttributesList.class)
         @XmlMixed
-        protected List<Serializable> content;
+        protected List<Object> content;
 
         /**
          * Gets the value of the content property.
@@ -128,14 +126,14 @@ public class ListTrialFilesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link JAXBElement }{@code <}{@link FileListType }{@code >}
          * {@link String }
+         * {@link PerformerWithAttributesList }
          * 
          * 
          */
-        public List<Serializable> getContent() {
+        public List<Object> getContent() {
             if (content == null) {
-                content = new ArrayList<Serializable>();
+                content = new ArrayList<Object>();
             }
             return this.content;
         }

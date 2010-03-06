@@ -1,5 +1,5 @@
 
-package motion.database.ws.basicQueriesService;
+package motion.database.ws.basicUpdateService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for ArrayOfSessionDetails complex type.
+ * <p>Java class for ArrayOfInt complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ArrayOfSessionDetails">
+ * &lt;complexType name="ArrayOfInt">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SessionDetails" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionDetails" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="int" type="{http://www.w3.org/2001/XMLSchema}int" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,41 +29,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ArrayOfSessionDetails", propOrder = {
-    "sessionDetails"
+@XmlType(name = "ArrayOfInt", propOrder = {
+    "_int"
 })
-public class ArrayOfSessionDetails {
+public class ArrayOfInt {
 
-    @XmlElement(name = "SessionDetails", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-    protected List<SessionDetails> sessionDetails;
+    @XmlElement(name = "int", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", type = Integer.class)
+    protected List<Integer> _int;
 
     /**
-     * Gets the value of the sessionDetails property.
+     * Gets the value of the int property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the sessionDetails property.
+     * This is why there is not a <CODE>set</CODE> method for the int property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getSessionDetails().add(newItem);
+     *    getInt().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SessionDetails }
+     * {@link Integer }
      * 
      * 
      */
-    public List<SessionDetails> getSessionDetails() {
-        if (sessionDetails == null) {
-            sessionDetails = new ArrayList<SessionDetails>();
+    public List<Integer> getInt() {
+        if (_int == null) {
+            _int = new ArrayList<Integer>();
         }
-        return this.sessionDetails;
+        return this._int;
     }
 
 }

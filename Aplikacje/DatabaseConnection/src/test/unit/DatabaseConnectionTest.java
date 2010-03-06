@@ -19,7 +19,7 @@ import org.junit.Test;
  * @author Administrator
  *
  */
-public class DatabaseConnetionTest {
+public class DatabaseConnectionTest {
 
 	/**
 	 * @throws java.lang.Exception
@@ -61,7 +61,7 @@ public class DatabaseConnetionTest {
 	//@Test
 	public void testUploadFile() throws Exception {
 		
-		database.uploadFile( 1, "Druga próba wgrania pliku", "data/Combo_1.c3d" );
+		database.uploadSessionFile( 1, "Druga próba wgrania pliku", "data/Combo_1.c3d" );
 	}
 
 	/**

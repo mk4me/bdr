@@ -126,8 +126,8 @@ public class ListPerformerSessionsXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link PerformerSessionList }
          * {@link String }
+         * {@link PerformerSessionList }
          * 
          * 
          */

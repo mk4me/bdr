@@ -1,8 +1,10 @@
 
 package motion.database.ws.basicQueriesService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -104,9 +106,9 @@ public class ListSessionFilesXMLResponse {
     })
     public static class ListSessionFilesXMLResult {
 
-        @XmlElementRef(name = "SessionFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = SessionFileList.class)
+        @XmlElementRef(name = "SessionFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
         @XmlMixed
-        protected List<Object> content;
+        protected List<Serializable> content;
 
         /**
          * Gets the value of the content property.
@@ -126,14 +128,14 @@ public class ListSessionFilesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SessionFileList }
+         * {@link JAXBElement }{@code <}{@link FileListType }{@code >}
          * {@link String }
          * 
          * 
          */
-        public List<Object> getContent() {
+        public List<Serializable> getContent() {
             if (content == null) {
-                content = new ArrayList<Object>();
+                content = new ArrayList<Serializable>();
             }
             return this.content;
         }

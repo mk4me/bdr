@@ -126,8 +126,8 @@ public class ListTrialSegmentsWithAttributesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link TrailSegmentWithAttributesList }
          * {@link String }
+         * {@link TrailSegmentWithAttributesList }
          * 
          * 
          */
