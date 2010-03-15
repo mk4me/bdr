@@ -93,6 +93,9 @@
   <ItemGroup>
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\FileListType.xsd" />
+    <None Include="res\ListPerformersWithAttributesXML.xsd" />
+    <None Include="res\ListPerformersXML.xsd" />
     <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
     <None Include="res\ListTrialFilesXML.xsd" />
     <None Include="res\ListSessionFilesWithAttributesXML.xsd" />

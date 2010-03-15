@@ -97,14 +97,71 @@ namespace MotionDBWebServices
                 // report exception
             }
             CloseConnection();
-            //if(sdl.Count==0){
-            //    SessionDetails x = new SessionDetails();
-            //    x.SessionDescription = "pusto";
-            //    sdl.Add(x);
-            //}
+
             return fdl.ToArray();
         }
 
+    // Performer queries
+
+        [WebMethod]
+        public XmlDocument ListPerformersXML()
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performers_xml";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerList"));
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+            //            return (PerformerSessionListXML) xd;
+        }
+
+
+        [WebMethod]
+        public XmlDocument ListPerformersWithAttributesXML()
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performers_attributes_xml";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerWithAttributesList"));
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
+
+        
     // Session queries
 
         [WebMethod]

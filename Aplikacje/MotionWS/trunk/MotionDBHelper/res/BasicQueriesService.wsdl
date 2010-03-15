@@ -2,6 +2,8 @@
 <wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
 	<wsdl:types>
 		<s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+			<s:include schemaLocation="ListPerformersXML.xsd"/>
+			<s:include schemaLocation="ListPerformersWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListPerformerSessionsXML.xsd"/>
 			<s:include schemaLocation="ListPerformerSessionsWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListSessionTrialsXML.xsd"/>
@@ -69,6 +71,38 @@
 					<s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string"/>
 				</s:sequence>
 			</s:complexType>
+			<s:element name="ListPerformersXML">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListPerformersXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformersXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformersWithAttributesXML">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListPerformersWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformersWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
 			<s:element name="ListPerformerSessionsXML">
 				<s:complexType>
 					<s:sequence>
@@ -324,6 +358,18 @@
 	<wsdl:message name="ListSessionFilesSoapOut">
 		<wsdl:part name="parameters" element="tns:ListSessionFilesResponse"/>
 	</wsdl:message>
+	<wsdl:message name="ListPerformersXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformersXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformersXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
 	<wsdl:message name="ListPerformerSessionsXMLSoapIn">
 		<wsdl:part name="parameters" element="tns:ListPerformerSessionsXML"/>
 	</wsdl:message>
@@ -405,6 +451,14 @@
 			<wsdl:input message="tns:ListSessionFilesSoapIn"/>
 			<wsdl:output message="tns:ListSessionFilesSoapOut"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<wsdl:input message="tns:ListPerformersXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformersXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<wsdl:input message="tns:ListPerformersWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformersWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsXML">
 			<wsdl:input message="tns:ListPerformerSessionsXMLSoapIn"/>
 			<wsdl:output message="tns:ListPerformerSessionsXMLSoapOut"/>
@@ -467,6 +521,24 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListSessionFiles">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -596,6 +668,24 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListSessionFiles">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap12:body use="literal"/>
 			</wsdl:input>
