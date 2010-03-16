@@ -78,8 +78,6 @@ public class FilterDialog extends JDialog {
 		messagePanel.add(this.messageLabel);
 		this.add(messagePanel, BorderLayout.PAGE_START);
 		
-		JPanel centerPanel = new JPanel();
-		
 		// Form area
 		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
@@ -109,7 +107,14 @@ public class FilterDialog extends JDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableNameLabel, gridBagConstraints);
 		
-		centerPanel.add(formPanel);
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+		JPanel centerPanel2 = new JPanel();
+		centerPanel2.setLayout(new FlowLayout());
+		
+		JPanel formPanel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		formPanel2.add(formPanel);
+		centerPanel.add(formPanel2);
 		
 		// Column condition area
 		conditionPanel = new JPanel();
@@ -118,7 +123,8 @@ public class FilterDialog extends JDialog {
 		this.addColumnCondition(true);
 		
 		centerPanel.add(conditionPanel);
-		this.add(centerPanel, BorderLayout.CENTER);
+		centerPanel2.add(centerPanel);
+		this.add(centerPanel2, BorderLayout.WEST);
 		
 		// Button area
 		JPanel buttonPanel = new JPanel();
