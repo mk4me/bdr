@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import motion.database.DatabaseConnection;
+import motion.database.FileTransferListener;
 import motion.database.Session;
 import motion.database.SessionStaticAttributes;
 import motion.database.ws.basicQueriesService.PlainFileDetails;
@@ -59,9 +60,10 @@ public class DatabaseConnectionTest {
 	 * @throws Exception 
 	 */
 	//@Test
-	public void testUploadFile() throws Exception {
+	public void testUploadSessionFile() throws Exception {
 		
-		database.uploadSessionFile( 1, "Druga próba wgrania pliku", "data/Combo_1.c3d" );
+		database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/Combo_1.c3d", new ConsoleTransferListener() );
+		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	}
 
 	/**
@@ -121,15 +123,71 @@ public class DatabaseConnectionTest {
 	}
 
 	/**
+	 * Test method for {@link motion.database.DatabaseConnection#listTrialFiles()}.
+	 * @throws Exception 
+	 */
+	@Test
+	public void testListTrialFiles() throws Exception {
+		
+		int trialID = 1;
+		List<PlainFileDetails> results = database.listTrialFiles(trialID);
+		
+		for (PlainFileDetails s : results)
+		{
+			System.out.println( "File Name:" + s.getFileName() + " File ID:" + s.getFileID() ); 
+		}
+	}
+
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#listPerformerFiles()}.
+	 * @throws Exception 
+	 */
+/*	@Test
+	public void testListPerformerFiles() throws Exception {
+		
+		int trialID = 1;
+		List<PlainFileDetails> results = database.listTrialFiles(trialID);
+		
+		for (PlainFileDetails s : results)
+		{
+			System.out.println( "File Name:" + s.getFileName() + " File ID:" + s.getFileID() ); 
+		}
+	}
+*/
+	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 
 	 */
-	//@Test
+	@Test
 	public void testDownloadFile() throws Exception {
 		
 		int fileID = 3;
-		String result = database.downloadFile(fileID, "");
+		String result = database.downloadFile(fileID, "./data/", new ConsoleTransferListener());
 		
 		System.out.println( "Downloaded local file name:" + result ); 
+	}
+	
+	class ConsoleTransferListener implements FileTransferListener
+	{
+
+		@Override
+		public void transferStepPercent(int percent) {
+
+			System.out.println( "-------->" + percent + "%" );	
+			System.out.flush();
+		}
+		
+		@Override
+		public int getDesiredStepPercent()
+		{
+			return 5; // bêdzie informowany co 5%
+		}
+
+		@Override
+		public void transferStep() {
+			System.out.println( "--------> tick" );	
+			System.out.flush();
+		}
+		
 	}
 }

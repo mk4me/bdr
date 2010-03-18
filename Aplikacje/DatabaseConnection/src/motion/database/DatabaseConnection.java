@@ -72,6 +72,7 @@ public class DatabaseConnection {
 	private Credentials wsCredentials = new Credentials();
 	private Credentials ftpsCredentials = new Credentials();
 	private Authenticator authenticator;
+	private FileTransferSupport fileTransferSupport = new FileTransferSupport();
 
 	private static DatabaseConnection instance;
 	private static Logger log;
@@ -179,15 +180,22 @@ public class DatabaseConnection {
 		return true;
 	}
 	
-	private void putFile(String localFilePath, String destRemoteFolder ) throws FileTransferException
+	public void registerFileUploadListener( FileTransferListener listener )
 	{
-		int status = FTPs.sendFile(localFilePath, destRemoteFolder, 
-				this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password);
-		if(FileTransferStatus.SUCCESS == status){
-			log.info(localFilePath + " got ftps-ed successfully to  folder "+destRemoteFolder);
-		}
-		else if(FileTransferStatus.FAILURE == status){
-			log.severe("Fail to ftps  to  folder "+destRemoteFolder);
+		this.fileTransferSupport.registerUploadListener(listener);
+	}
+	
+	private void putFile(String localFilePath, String destRemoteFolder, FileTransferListener listener) throws FileTransferException
+	{
+		fileTransferSupport.resetUploadListeners();
+		if (listener != null)
+			fileTransferSupport.registerUploadListener(listener);
+		
+		try {
+			fileTransferSupport.putFile(localFilePath, destRemoteFolder, ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+		} catch (Exception e) {
+			log.severe( e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	
@@ -204,12 +212,12 @@ public class DatabaseConnection {
 	}
 	
 	// TODO: Kasowanie pliku po sobie na serwerze
-	public void uploadSessionFile(int sessionId, String description, String localFilePath) throws Exception
+	public void uploadSessionFile(int sessionId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
 			String destRemoteFolder = "";
-			putFile(localFilePath, destRemoteFolder);			
+			putFile(localFilePath, destRemoteFolder, listener);			
 		    FileStoremanService service = new FileStoremanService();
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
@@ -222,12 +230,12 @@ public class DatabaseConnection {
 
 	// TODO: Modify to call trial upload file service 
 	// TODO: Kasowanie pliku po sobie na serwerze
-	public void uploadTrialFile(int trialId, String description, String localFilePath) throws Exception
+	public void uploadTrialFile(int trialId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
 			String destRemoteFolder = "";
-			putFile(localFilePath, destRemoteFolder);			
+			putFile(localFilePath, destRemoteFolder, listener);			
 		    FileStoremanService service = new FileStoremanService();
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
@@ -240,7 +248,7 @@ public class DatabaseConnection {
 
 	
 	// TODO: testing 
-	public void uploadSessionFiles(int sessionId, String filesPath) throws Exception
+	public void uploadSessionFiles(int sessionId, String filesPath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -253,7 +261,7 @@ public class DatabaseConnection {
 				destRemoteFolder += dir.getName();
 				for( String singleFile : dir.list() )
 				{
-					putFile( singleFile, destRemoteFolder );			
+					putFile( singleFile, destRemoteFolder, listener );			
 					FileStoremanService service = new FileStoremanService();
 					FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 					prepareCall( (BindingProvider)port );
@@ -580,8 +588,15 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	
-	public  String downloadFile(int fileID, String destLocalFolder) throws Exception
+	/**
+	 * 
+	 * @param fileID
+	 * @param destLocalFolder must end with "/"
+	 * @param transferListener 
+	 * @return
+	 * @throws Exception
+	 */
+	public  String downloadFile(int fileID, String destLocalFolder, FileTransferListener transferListener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -594,26 +609,31 @@ public class DatabaseConnection {
 			String file = port.retrieveFile(fileID);
 			
 			File remoteFile = new File ( file );
-			
-			try {
-				int status = FTPs.getFile( remoteFile.getName(), remoteFile.getParent(), 
-						this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
-						destLocalFolder );
-				if(FileTransferStatus.SUCCESS == status){
-					log.info(" got ftps-ed successfully to file"+ remoteFile );
-				}
-				else if(FileTransferStatus.FAILURE == status){
-					log.severe("Fail to ftps  to  folder "+destLocalFolder);
-				}
-			} catch (FileTransferException e) {
-				e.printStackTrace();
-			}
-			
+
+			getFile( remoteFile.getName(), remoteFile.getParent(), 
+					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
+					destLocalFolder, transferListener );
+
 			port.downloadComplete(fileID);
 			
 			return destLocalFolder + remoteFile.getName();
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	private void getFile(String remoteFileName, String remoteFilePath, String address,
+			String userName, String password, String destLocalFolder,
+			FileTransferListener transferListener) {
+
+		fileTransferSupport.resetDownloadListeners();
+		fileTransferSupport.registerDownloadListener(transferListener);
+		
+		try {
+			fileTransferSupport.getFile(remoteFileName, remoteFilePath, remoteFileName, destLocalFolder, address, userName, password );
+		} catch (Exception e) {
+			log.severe( e.getMessage() );
+			e.printStackTrace();
+		}
 	}
 }
