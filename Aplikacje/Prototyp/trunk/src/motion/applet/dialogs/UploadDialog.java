@@ -14,11 +14,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
+import motion.database.FileTransferListener;
 
 public class UploadDialog extends JDialog {
 	private static String UPLOAD_TITLE = "Upload session file";
@@ -40,6 +43,8 @@ public class UploadDialog extends JDialog {
 	private JTextField filePathText;
 	private JTextField sessionNumber;
 	private JTextField descriptionText;
+	
+	private JProgressBar progressBar;
 	
 	private DatabaseConnection databaseConnection;
 	
@@ -123,6 +128,11 @@ public class UploadDialog extends JDialog {
 		buttonPanelLayout.setAlignment(FlowLayout.TRAILING);
 		buttonPanel.setLayout(buttonPanelLayout);
 		
+		progressBar = new JProgressBar(0, 100);
+		progressBar.setStringPainted(true);
+		buttonPanel.add(progressBar);
+		progressBar.setVisible(false);
+		
 		uploadButton = new JButton(UPLOAD_FILE);
 		buttonPanel.add(uploadButton);
 		
@@ -149,18 +159,32 @@ public class UploadDialog extends JDialog {
 		this.uploadButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.validateResult() == true) {
-					try {
-						WebServiceInstance.getDatabaseConnection().uploadSessionFile(
-								UploadDialog.this.getSession(),
-								UploadDialog.this.getDescription(),
-								UploadDialog.this.getFilePath());
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-					UploadDialog.this.setVisible(false);
-					UploadDialog.this.dispose();
+					UploadDialog.this.setProgressBarValue(0);
+					UploadDialog.this.showProgressBar();
+					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						
+						@Override
+						protected Void doInBackground() throws InterruptedException {
+							try {
+								WebServiceInstance.getDatabaseConnection().uploadSessionFile(
+										UploadDialog.this.getSession(),
+										UploadDialog.this.getDescription(),
+										UploadDialog.this.getFilePath(),
+										new UploadTransferListener());
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							return null;
+						}
+						
+						@Override
+						protected void done() {
+							UploadDialog.this.setVisible(false);
+							UploadDialog.this.dispose();
+						}
+					};
+					worker.execute();
 				}
 			}
 		});
@@ -209,5 +233,33 @@ public class UploadDialog extends JDialog {
 		this.messageLabel.setText(PRESS_UPLOAD_MESSAGE);
 		
 		return true;
+	}
+	
+	private void setProgressBarValue(int value) {
+		this.progressBar.setValue(value);
+	}
+	
+	private void showProgressBar() {
+		this.progressBar.setVisible(true);
+	}
+	
+	private class UploadTransferListener implements FileTransferListener {
+	
+		@Override
+		public int getDesiredStepPercent() {
+			// TODO Auto-generated method stub
+			return 5;
+		}
+	
+		@Override
+		public void transferStep() {
+			// TODO Auto-generated method stub
+			
+		}
+	
+		@Override
+		public void transferStepPercent(final int percent) {
+			UploadDialog.this.setProgressBarValue(percent);
+		}
 	}
 }
