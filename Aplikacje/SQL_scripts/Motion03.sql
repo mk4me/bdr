@@ -166,6 +166,7 @@ go
  
  CREATE TABLE Plik (
         IdPlik               int NOT NULL,
+        IdPerformer          int NULL,
         IdSesja              int NULL,
         IdObserwacja         int NULL,
         Opis_pliku           varchar(100) NOT NULL,
@@ -188,7 +189,12 @@ go
         IdSesja
  )
 go
- 
+
+ CREATE INDEX XIF57Plik ON Plik
+ (
+        IdPerformer
+ )
+go 
  
  ALTER TABLE Plik
         ADD PRIMARY KEY (IdPlik)
@@ -553,7 +559,7 @@ go
  
  
  CREATE TABLE Wartosc_wyliczeniowa (
-        IdWartosc_wyliczeniowa int NOT NULL,
+        IdWartosc_wyliczeniowa int IDENTITY,
         IdAtrybut            int NOT NULL,
         Wartosc_wyliczeniowa varchar(100) NOT NULL
  )
@@ -636,6 +642,10 @@ go
                               REFERENCES Obserwacja
 go
  
+ ALTER TABLE Plik
+        ADD FOREIGN KEY (IdPerformer)
+                              REFERENCES Performer
+go 
  
  ALTER TABLE Segment
         ADD FOREIGN KEY (IdObserwacja)

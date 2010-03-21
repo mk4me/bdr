@@ -15,6 +15,42 @@ as
 	select IdPlik as FileID, Nazwa_pliku as FileName from Plik where IdSesja=@sess_id
 go
 
+-- Performer queries
+-- =======================
+create function list_performer_attributes ( @perf_id int )
+returns TABLE as
+return 
+select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+from Atrybut a 
+inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
+inner join Performer p on wap.IdPerformer=p.IdPerformer
+where p.IdPerformer = @perf_id
+go
+
+create procedure list_performers_xml
+as
+select IdPerformer as PerformerID, Imie as FirstName, Nazwisko as LastName
+	from Performer Performer
+    for XML AUTO, root ('PerformerList')
+go
+
+create procedure list_performers_attributes_xml
+as
+select
+	IdPerformer as PerformerID,
+	Imie as FirstName,
+	Nazwisko as LastName,
+	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Performer Performer
+    for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
+go
+
+
 -- Session queries
 -- =======================
 
@@ -142,26 +178,58 @@ from Segment SegmentDetailsWithAttributes where IdObserwacja=@trial_id
     for XML AUTO, ELEMENTS, root ('TrailSegmentWithAttributesList')
 go
 
--- File queries TODO
+-- File queries
 -- ===================
+
+create function list_file_attributes ( @file_id int )
+returns TABLE as
+return 
+select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+from Atrybut a 
+inner join Wartosc_atrybutu_pliku wap on a.IdAtrybut=wap.IdAtrybut
+where wap.IdPlik = @file_id
+go
+
+create procedure list_performer_files_xml @perf_id int
+as
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdPerformer=@perf_id
+	for XML AUTO, root ('PerformerFileList')
+go
 
 create procedure list_session_files_xml @sess_id int
 as
-	select IdPlik as FileID, Nazwa_pliku as FileName from Plik FileDetails where IdSesja=@sess_id
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdSesja=@sess_id
 	for XML AUTO, root ('SessionFileList')
 go
 
 create procedure list_trial_files_xml @trial_id int
 as
-	select IdPlik as FileID, Nazwa_pliku as FileName from Plik FileDetails where IdObserwacja=@trial_id
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdObserwacja=@trial_id
 	for XML AUTO, root ('TrialFileList')
+go
+
+create procedure list_performer_files_attributes_xml @perf_id int
+as
+	select
+	IdPlik as FileID,
+	Nazwa_pliku as FileName,
+	Opis_pliku as FileDescription, 
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Plik FileDetailsWithAttributes where IdPerformer=@perf_id
+	for XML AUTO, root ('PerformerFileWithAttributesList')
 go
 
 create procedure list_session_files_attributes_xml @sess_id int
 as
 	select
 	IdPlik as FileID,
-	Nazwa_pliku as FileName, 
+	Nazwa_pliku as FileName,
+	Opis_pliku as FileDescription, 
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes where IdSesja=@sess_id
 	for XML AUTO, root ('SessionFileWithAttributesList')
@@ -172,6 +240,7 @@ as
 	select
 		IdPlik as FileID,
 		Nazwa_pliku as FileName,
+		Opis_pliku as FileDescription,
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes
 		where IdObserwacja=@trial_id
@@ -337,9 +406,193 @@ end;
 
 
 
+create procedure set_trial_attribute (@trial_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+as
+begin
+	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
+	declare @integer_value numeric(10,2), @float_value float ;
+	declare @value_tuple_found as bit = 0;	
 
+	set @result = 6; -- result 3 = type casting error
+	
+	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
+		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'trial';
+	if @@rowcount = 0 
+	begin
+		set @result = 1 -- result 1 = attribute of this name not applicable here
+		return;
+	end;
+	if not exists ( select * from Obserwacja where IdObserwacja = @trial_id )
+		begin
+			set @result = 3;
+			return;
+		end;
+	else
+		begin
+			if exists ( select * from Wartosc_atrybutu_obserwacji where IdAtrybut = @attr_id and IdObserwacja = @trial_id ) set @value_tuple_found = 1;
+			if @update = 0 and @value_tuple_found = 1
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;
+			if(@attr_enum = 1) 
+			begin
+				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
+				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
+			end;
+			if @attr_type = 'integer'
+				begin
+					set @integer_value = cast ( @attr_value as numeric(10,2) );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_obserwacji set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					else
+					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_liczba) values (@attr_id, @trial_id, @integer_value);
+				end;
+			
+			else if @attr_type = 'float'
+				begin
+					set @float_value = cast ( @attr_value as float );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_obserwacji set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					else
+					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_zmiennoprzecinkowa) values (@attr_id, @trial_id, @float_value);
+				end;
+			else
+				begin
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_obserwacji set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					else
+					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_tekst) values (@attr_id, @trial_id, @attr_value);
+				end;
+			set @result = 0;
+		end;
+end;
+go
 
+create procedure set_segment_attribute (@segment_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+as
+begin
+	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
+	declare @integer_value numeric(10,2), @float_value float ;
+	declare @value_tuple_found as bit = 0;	
 
+	set @result = 6; -- result 3 = type casting error
+	
+	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
+		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'segment';
+	if @@rowcount = 0 
+	begin
+		set @result = 1 -- result 1 = attribute of this name not applicable here
+		return;
+	end;
+	if not exists ( select * from Segment where IdSegment = @segment_id )
+		begin
+			set @result = 3;
+			return;
+		end;
+	else
+		begin
+			if exists ( select * from Wartosc_atrybutu_segmentu where IdAtrybut = @attr_id and IdSegment = @segment_id ) set @value_tuple_found = 1;
+			if @update = 0 and @value_tuple_found = 1
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;
+			if(@attr_enum = 1) 
+			begin
+				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
+				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
+			end;
+			if @attr_type = 'integer'
+				begin
+					set @integer_value = cast ( @attr_value as numeric(10,2) );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_segmentu set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdSegment = @segment_id ;
+					else
+					insert into Wartosc_atrybutu_segmentu (IdAtrybut, IdSegment, Wartosc_liczba) values (@attr_id, @segment_id, @integer_value);
+				end;
+			
+			else if @attr_type = 'float'
+				begin
+					set @float_value = cast ( @attr_value as float );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_segmentu set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdSegment = @segment_id ;
+					else
+					insert into Wartosc_atrybutu_segmentu (IdAtrybut, IdSegment, Wartosc_zmiennoprzecinkowa) values (@attr_id, @segment_id, @float_value);
+				end;
+			else
+				begin
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_segmentu set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdSegment = @segment_id ;
+					else
+					insert into Wartosc_atrybutu_segmentu (IdAtrybut, IdSegment, Wartosc_tekst) values (@attr_id, @segment_id, @attr_value);
+				end;
+			set @result = 0;
+		end;
+end;
+go
+
+create procedure set_file_attribute (@file_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+as
+begin
+	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
+	declare @integer_value numeric(10,2), @float_value float ;
+	declare @value_tuple_found as bit = 0;	
+
+	set @result = 6; -- result 3 = type casting error
+	
+	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
+		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'file';
+	if @@rowcount = 0 
+	begin
+		set @result = 1 -- result 1 = attribute of this name not applicable here
+		return;
+	end;
+	if not exists ( select * from Plik where IdPlik = @file_id )
+		begin
+			set @result = 3;
+			return;
+		end;
+	else
+		begin
+			if exists ( select * from Wartosc_atrybutu_pliku where IdAtrybut = @attr_id and IdPlik = @file_id ) set @value_tuple_found = 1;
+			if @update = 0 and @value_tuple_found = 1
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;
+			if(@attr_enum = 1) 
+			begin
+				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
+				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
+			end;
+			if @attr_type = 'integer'
+				begin
+					set @integer_value = cast ( @attr_value as numeric(10,2) );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_pliku set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdPlik = @file_id ;
+					else
+					insert into Wartosc_atrybutu_pliku (IdAtrybut, IdPlik, Wartosc_liczba) values (@attr_id, @file_id, @integer_value);
+				end;
+			
+			else if @attr_type = 'float'
+				begin
+					set @float_value = cast ( @attr_value as float );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_pliku set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdPlik = @file_id ;
+					else
+					insert into Wartosc_atrybutu_pliku (IdAtrybut, IdPlik, Wartosc_zmiennoprzecinkowa) values (@attr_id, @file_id, @float_value);
+				end;
+			else
+				begin
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_pliku set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdPlik = @file_id ;
+					else
+					insert into Wartosc_atrybutu_pliku (IdAtrybut, IdPlik, Wartosc_tekst) values (@attr_id, @file_id, @attr_value);
+				end;
+			set @result = 0;
+		end;
+end;
 
 
 DECLARE @result int
