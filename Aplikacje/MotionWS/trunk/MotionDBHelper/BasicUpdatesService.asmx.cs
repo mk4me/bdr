@@ -50,7 +50,6 @@ namespace MotionDBWebServices
                 catch (SqlException ex)
                 {
                     // log the exception
-                    return 0;
 
                 }
                 finally
@@ -100,7 +99,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 0;
+
 
             }
             finally
@@ -141,7 +140,6 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 0;
 
             }
             finally
@@ -182,7 +180,6 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 0;
 
             }
             finally
@@ -199,7 +196,33 @@ namespace MotionDBWebServices
         [WebMethod]
         public bool AssignSessionToGroup(int sessionID, int groupID)
         {
-            return false;
+
+            bool result = false;
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandText = @"insert into Sesja_grupa_sesji ( IdSesja, IdGrupa_sesji)
+                                            values (@sess_id, @sess_group_id )";
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters.Add("@sess_group_id", SqlDbType.Int);
+                cmd.Parameters["@sess_id"].Value = sessionID;
+                cmd.Parameters["@sess_group_id"].Value = groupID;
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            result = true;
+            return result;
         }
 
         // Attribute update operations
@@ -247,7 +270,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 6;
+                resultCode = 7;
 
             }
             finally
@@ -301,7 +324,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 7;
+                resultCode = 7;
 
             }
             finally
@@ -343,7 +366,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 7;
+                resultCode = 7;
 
             }
             finally
@@ -385,7 +408,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 7;
+                resultCode = 7;
 
             }
             finally
@@ -427,7 +450,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 7;
+                resultCode = 7;
 
             }
             finally
