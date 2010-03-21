@@ -82,17 +82,17 @@
     </Compile>
     <Compile Include="PerformerSessionListXML.cs" />
     <Compile Include="PlainSessionDetails.cs" />
-    <Compile Include="TrialData.cs" />
     <Compile Include="BasicUpdatesService.asmx.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PerformerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\ListPerformerFilesWithAttributesXML.xsd" />
+    <None Include="res\ListPerformerFilesXML.xsd" />
     <None Include="res\FileListType.xsd" />
     <None Include="res\ListPerformersWithAttributesXML.xsd" />
     <None Include="res\ListPerformersXML.xsd" />

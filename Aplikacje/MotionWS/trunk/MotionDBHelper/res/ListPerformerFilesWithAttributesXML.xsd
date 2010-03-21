@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="PerformerFileWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+ 
+  <s:include schemaLocation="AttributesElement.xsd" />
+      <s:element name="PerformerFileWithAttributesList">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+              <s:complexType>
+                <s:sequence>
+                <s:element name="FileID" type="s:integer" />
+                <s:element name="FileName" type="s:string" />
+                <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+</s:schema>

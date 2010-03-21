@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="PerformerFileList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:include schemaLocation="FileListType.xsd" />
+  <s:element name="PerformerFileList" type="FileListType">
+  </s:element>
+</s:schema>

@@ -367,6 +367,72 @@ namespace MotionDBWebServices
 
 
         [WebMethod]
+        public XmlDocument ListPerformerFilesXML(int performerID)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performer_files_xml";
+                SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = performerID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerFileList"));
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument ListPerformerFilesWithAttributesXML(int performerID)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performer_files_attributes_xml";
+                SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = performerID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerFileWithAttributesList"));
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+
+
+        [WebMethod]
         public XmlDocument ListSessionFilesXML(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
