@@ -27,6 +27,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
+import motion.applet.filter.model.Predicate;
+import motion.applet.filter.model.PredicateComposition;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.SessionStaticAttributes;
 
@@ -223,9 +225,6 @@ public class FilterDialog extends JDialog {
 		private ArrayList<String> columnNameList;
 		private ArrayList<Object> columnClassList;
 		
-		private String[] integerOperators = {"=", "<>", ">", "<", ">=", "<="};
-		private String[] stringOperators = {"=", "<>", ">", "<", ">=", "<=", "LIKE", "NOT LIKE"};
-		private String[] dateOperators = {"=", "<>", ">", "<", ">=", "<=", "LIKE", "NOT LIKE"};
 		private String REMOVE_CONDITION = "X";
 		private boolean firstCondition;
 		
@@ -252,7 +251,7 @@ public class FilterDialog extends JDialog {
 			fillOperators(0);
 			
 			if (firstCondition == false) {
-				String[] andOr = {"AND", "OR"};
+				String[] andOr = PredicateComposition.logicalOperators;
 				this.add(new JComboBox(andOr));
 			}
 			
@@ -371,11 +370,11 @@ public class FilterDialog extends JDialog {
 			String[] operators = {""};
 			
 			if (columnClass == String.class) {
-				operators = this.stringOperators;
+				operators = Predicate.stringOperators;
 			} else if (columnClass == Integer.class || columnClass == BigInteger.class) {
-				operators = this.integerOperators;
+				operators = Predicate.integerOperators;
 			} else if (columnClass == Date.class || columnClass == XMLGregorianCalendar.class) {
-				operators = this.dateOperators;
+				operators = Predicate.dateOperators;
 			}
 			
 			this.operatorComboBox.removeAllItems();

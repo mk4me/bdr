@@ -19,8 +19,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import motion.applet.MotionApplet;
-import motion.applet.database.Filter;
 import motion.applet.dialogs.FilterDialog;
+import motion.applet.filter.Filter;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 

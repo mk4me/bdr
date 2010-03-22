@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
-import motion.applet.database.Filter;
+import motion.applet.filter.Filter;
 
 public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEditor {
 	private CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();

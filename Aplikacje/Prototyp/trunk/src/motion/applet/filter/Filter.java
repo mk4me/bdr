@@ -1,4 +1,4 @@
-package motion.applet.database;
+package motion.applet.filter;
 
 public class Filter {
 	private String name;
