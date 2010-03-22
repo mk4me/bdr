@@ -29,6 +29,7 @@ import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
 import motion.applet.filter.model.Predicate;
 import motion.applet.filter.model.PredicateComposition;
+import motion.applet.filter.model.SimplePredicate;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.SessionStaticAttributes;
 
@@ -52,8 +53,11 @@ public class FilterDialog extends JDialog {
 	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
 	
 	private JPanel conditionPanel;
+	
+	// Predicates
 	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
 	
+	// ContextEntity
 	private String tableName = "Sesja";
 	
 	public FilterDialog(String tableName) {
@@ -190,11 +194,41 @@ public class FilterDialog extends JDialog {
 		});
 	}
 	
+	// Get form contents.
 	public String getName() {
 		
 		return this.nameText.getText();
 	}
 	
+	public SimplePredicate getPredicate() {
+		ColumnCondition firstColumnCondition = columnConditions.get(0);
+		SimplePredicate firstPredicate = new SimplePredicate(
+				tableName,
+				firstColumnCondition.getFeature(),
+				firstColumnCondition.getOperator(),
+				firstColumnCondition.getValue());
+		
+		SimplePredicate previousPredicate = firstPredicate;
+		boolean first = true;
+		for (ColumnCondition cc : columnConditions) {
+			if (first) {
+				first = false;
+			} else {
+				SimplePredicate currentPredicate = new SimplePredicate(
+						tableName,
+						cc.getFeature(),
+						cc.getOperator(),
+						cc.getValue(),
+						cc.getLogicalOperator(),
+						previousPredicate);
+				previousPredicate = currentPredicate;
+			}
+		}
+		
+		return firstPredicate;
+	}
+	
+	// Check from contents.
 	private boolean validateResult() {
 		if (this.getName().equals("")) {
 			this.messageLabel.setText(MISSING_NAME_MESSAGE);
@@ -205,6 +239,7 @@ public class FilterDialog extends JDialog {
 		return true;
 	}
 	
+	// Button press result.
 	private int setResult() {
 		
 		return this.result;
@@ -215,9 +250,11 @@ public class FilterDialog extends JDialog {
 		return this.result;
 	}
 	
+	// Filter ColumnCondition, Predicate UI
 	private class ColumnCondition extends JPanel {
 		private JComboBox columnComboBox;
 		private JComboBox operatorComboBox;
+		private JComboBox logicalComboBox;
 		private JTextField conditionText = new JTextField(10);
 		private java.sql.Connection connection;
 		private String databaseName;
@@ -238,7 +275,7 @@ public class FilterDialog extends JDialog {
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
-			// Change to fillColumnsFromAttributes
+			// FIXME: Change to fillColumnsFromAttributes
 			if (this.tableName.equals("Performer") || this.tableName.equals("Obserwacja")) {
 				this.connection = connector.openConnection();
 				fillColumns();
@@ -251,8 +288,8 @@ public class FilterDialog extends JDialog {
 			fillOperators(0);
 			
 			if (firstCondition == false) {
-				String[] andOr = PredicateComposition.logicalOperators;
-				this.add(new JComboBox(andOr));
+				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
+				this.add(logicalComboBox);
 			}
 			
 			this.add(columnComboBox);
@@ -319,7 +356,7 @@ public class FilterDialog extends JDialog {
 			this.columnNameList = new ArrayList<String>();
 			this.columnClassList = new ArrayList<Object>();
 			
-			if (this.tableName.equals("Sesja")) { // change to some superclass and use instanceOf?
+			if (this.tableName.equals("Sesja")) { // FIXME: change to some superclass and use instanceOf?
 				columnNameList.add(SessionStaticAttributes.sessionID.toString());
 				columnClassList.add(BigInteger.class);
 				columnNameList.add(SessionStaticAttributes.userID.toString());
@@ -382,6 +419,27 @@ public class FilterDialog extends JDialog {
 				this.operatorComboBox.addItem(operators[i]);
 			}
 			//this.operatorComboBox = new JComboBox(operators);
+		}
+		
+		// Get ColumnCondition contents.
+		private String getFeature() {
+			
+			return (String) columnComboBox.getSelectedItem();
+		}
+		
+		private String getOperator() {
+			
+			return (String) operatorComboBox.getSelectedItem();
+		}
+		
+		private String getValue() {
+			
+			return conditionText.getText();
+		}
+		
+		private String getLogicalOperator() {
+			
+			return (String) logicalComboBox.getSelectedItem();
 		}
 	}
 }

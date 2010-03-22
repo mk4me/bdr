@@ -14,19 +14,18 @@ public class SimplePredicate extends Predicate {
 	
 	public SimplePredicate(String contextEntity, String feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
 		this(contextEntity, feature, operator, value);
-		PredicateComposition predicateComposition = new PredicateComposition(logicalOperator, previousPredicate);
-		this.previous = predicateComposition;
+		setPreviousPredicate(logicalOperator, previousPredicate);
 	}
 	
-	public void setNextPredicate(String logicalOperator, Predicate nextPredicate) {
+	protected void setNextPredicate(String logicalOperator, Predicate nextPredicate) {
 		PredicateComposition nextPredicateComposition = new PredicateComposition(logicalOperator, nextPredicate);
 		this.setNextPredicateComposition(nextPredicateComposition);
-		nextPredicate.setPreviousPredicate(logicalOperator, this);
 	}
 	
 	protected void setPreviousPredicate(String logicalOperator, Predicate previousPredicate) {
 		PredicateComposition previousPredicateComposition = new PredicateComposition(logicalOperator, previousPredicate);
 		this.setPreviousPredicateComposition(previousPredicateComposition);
+		previousPredicate.setNextPredicate(logicalOperator, this);
 	}
 	
 	private void setNextPredicateComposition(PredicateComposition nextPredicateComposition) {
@@ -35,5 +34,13 @@ public class SimplePredicate extends Predicate {
 	
 	private void setPreviousPredicateComposition(PredicateComposition previousPredicateComposition) {
 		this.previous = previousPredicateComposition;
+	}
+	
+	// FIXME: remove this method.
+	public void printPredicate() {
+		System.out.println(contextEntity + " " + feature + " " + operator + " " + value + " n: " + next + " p: " + previous);
+		if (next != null) {
+			((SimplePredicate) next.predicate).printPredicate();
+		}
 	}
 }

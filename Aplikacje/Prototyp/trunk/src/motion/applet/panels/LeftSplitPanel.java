@@ -21,6 +21,7 @@ import javax.swing.tree.TreeSelectionModel;
 import motion.applet.MotionApplet;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.filter.Filter;
+import motion.applet.filter.model.SimplePredicate;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 
@@ -52,7 +53,7 @@ public class LeftSplitPanel extends JPanel {
 				FilterDialog filterDialog = new FilterDialog(LeftSplitPanel.this.tableName);
 				filterDialog.setVisible(true);
 				if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
-					Filter filter = new Filter(filterDialog.getName());
+					Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
 					addObject(filter).setUserObject(filter);
 				}
 			}
@@ -74,10 +75,11 @@ public class LeftSplitPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (tree.getSelectionPath() != null) {
 					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
+					// FIXME: pass Predicate (selectedNode.getUserObject())
 					FilterDialog filterDialog = new FilterDialog(selectedNode.toString(), LeftSplitPanel.this.tableName);
 					filterDialog.setVisible(true);
 					if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
-						Filter filter = new Filter(filterDialog.getName());
+						Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
 						selectedNode.setUserObject(filter);
 						treeModel.reload();
 					}
