@@ -75,13 +75,14 @@ public class LeftSplitPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (tree.getSelectionPath() != null) {
 					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
-					// FIXME: pass Predicate (selectedNode.getUserObject())
-					FilterDialog filterDialog = new FilterDialog(selectedNode.toString(), LeftSplitPanel.this.tableName);
-					filterDialog.setVisible(true);
-					if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
-						Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
-						selectedNode.setUserObject(filter);
-						treeModel.reload();
+					if (!selectedNode.isRoot()) {
+						FilterDialog filterDialog = new FilterDialog((Filter) selectedNode.getUserObject());
+						filterDialog.setVisible(true);
+						if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
+							Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
+							selectedNode.setUserObject(filter);
+							treeModel.reload();
+						}
 					}
 				}
 			}

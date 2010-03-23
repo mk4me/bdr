@@ -11,23 +11,27 @@ public class Filter {
 		this.name = name;
 	}
 	
-	public Filter(String name, boolean selected) {
-		this.name = name;
-		this.selected = selected;
-	}
-	
 	public Filter(String name, SimplePredicate predicate) {
 		this.name = name;
 		this.predicate = predicate;
 	}
 	
-	public String toString() {
+	public String getName() {
 		
 		return this.name;
+	}
+	
+	public SimplePredicate getPredicate() {
+		
+		return this.predicate;
 	}
 	
 	public boolean isSelected() {
 		
 		return this.selected;
+	}
+	
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 }

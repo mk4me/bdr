@@ -36,6 +36,36 @@ public class SimplePredicate extends Predicate {
 		this.previous = previousPredicateComposition;
 	}
 	
+	public PredicateComposition getPreviousComposition() {
+		
+		return this.previous;
+	}
+	
+	public PredicateComposition getNextComposition() {
+		
+		return this.next;
+	}
+	
+	public String getFeature() {
+		
+		return this.feature;
+	}
+	
+	public String getOperator() {
+		
+		return this.operator;
+	}
+	
+	public String getValue() {
+		
+		return this.value;
+	}
+	
+	public String getContextEntity() {
+		
+		return this.contextEntity;
+	}
+	
 	// FIXME: remove this method.
 	public void printPredicate() {
 		System.out.println(contextEntity + " " + feature + " " + operator + " " + value + " n: " + next + " p: " + previous);

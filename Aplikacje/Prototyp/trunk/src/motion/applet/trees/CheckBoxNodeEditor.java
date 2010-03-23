@@ -27,9 +27,12 @@ public class CheckBoxNodeEditor extends AbstractCellEditor implements TreeCellEd
 	
 	public Object getCellEditorValue() {
 		JCheckBox checkbox = renderer.getLeafRenderer();
-		Filter checkBoxNode = new Filter(checkbox.getText(), checkbox.isSelected());
-		
-		return checkBoxNode;
+		//Filter checkBoxNode = new Filter(checkbox.getText(), checkbox.isSelected());
+		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent();
+		Filter filter = (Filter) treeNode.getUserObject();
+		filter.setSelected(checkbox.isSelected());
+		//return checkBoxNode;
+		return filter;
 	}
 	
 	public boolean isCellEditable(EventObject event) {

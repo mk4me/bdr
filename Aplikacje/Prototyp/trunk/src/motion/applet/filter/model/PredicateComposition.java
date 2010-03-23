@@ -11,4 +11,14 @@ public class PredicateComposition {
 		this.logicalOperator = logicalOperator;
 		this.predicate = predicate;
 	}
+	
+	public String getLogicalOperator() {
+		
+		return this.logicalOperator;
+	}
+	
+	public Predicate getPredicate() {
+		
+		return this.predicate;
+	}
 }

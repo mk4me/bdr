@@ -27,6 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
+import motion.applet.filter.Filter;
 import motion.applet.filter.model.Predicate;
 import motion.applet.filter.model.PredicateComposition;
 import motion.applet.filter.model.SimplePredicate;
@@ -54,6 +55,8 @@ public class FilterDialog extends JDialog {
 	
 	private JPanel conditionPanel;
 	
+	private SimplePredicate predicate;
+	
 	// Predicates
 	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
 	
@@ -71,10 +74,12 @@ public class FilterDialog extends JDialog {
 		addListeners();
 	}
 	
-	public FilterDialog(String name, String tableName) {
-		this(tableName);
-		this.nameText.setText(name);
+	public FilterDialog(Filter filter) {
+		this(filter.getPredicate().getContextEntity());
+		this.nameText.setText(filter.getName());
+		this.predicate = filter.getPredicate();
 		this.addButton.setText(EDIT_FILTER);
+		this.setPredicate(this.predicate);
 	}
 	
 	private void constructUserInterface() {
@@ -150,16 +155,30 @@ public class FilterDialog extends JDialog {
 		this.add(buttonPanel, BorderLayout.PAGE_END);
 	}
 	
-	private void addColumnCondition(boolean firstCondition) {
+	private void setPredicate(SimplePredicate predicate) {
+		columnConditions.get(0).setContentsFromPredicate(predicate);
+		if (predicate.getNextComposition() != null) {
+			do {
+				predicate = (SimplePredicate) predicate.getNextComposition().getPredicate();
+				addColumnCondition(false).setContentsFromPredicate(predicate);
+			} while (predicate.getNextComposition() != null);
+		}
+	}
+	
+	private ColumnCondition addColumnCondition(boolean firstCondition) {
 		try {
 			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), tableName, firstCondition);
 			//columnCondition.setAlignmentX(Component.LEFT_ALIGNMENT);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
 			conditionPanel.revalidate();
+			
+			return columnCondition;
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 	
 	private void removeColumnCondition(ColumnCondition columnCondition) {
@@ -440,6 +459,33 @@ public class FilterDialog extends JDialog {
 		private String getLogicalOperator() {
 			
 			return (String) logicalComboBox.getSelectedItem();
+		}
+		
+		// Set ColumnCondition contents.
+		private void setFeature(String feature) {
+			columnComboBox.setSelectedItem(feature);
+		}
+		
+		private void setOperator(String operator) {
+			operatorComboBox.setSelectedItem(operator);
+		}
+		
+		private void setValue(String value) {
+			conditionText.setText(value);
+		}
+		
+		private void setLogicalOperator(String logicalOperator) {
+			logicalComboBox.setSelectedItem(logicalOperator);
+		}
+		
+		protected void setContentsFromPredicate(SimplePredicate predicate) {
+			setFeature(predicate.getFeature());
+			setOperator(predicate.getOperator());
+			setValue(predicate.getValue());
+			PredicateComposition predicateComposition = predicate.getPreviousComposition();
+			if (predicateComposition != null) {
+				setLogicalOperator(predicateComposition.getLogicalOperator());
+			}
 		}
 	}
 }
