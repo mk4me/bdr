@@ -33,6 +33,7 @@ import motion.applet.filter.model.PredicateComposition;
 import motion.applet.filter.model.SimplePredicate;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.SessionStaticAttributes;
+import motion.database.TrialStaticAttributes;
 
 public class FilterDialog extends JDialog {
 	private static String FILTER_TITLE = "Add filter";
@@ -391,6 +392,15 @@ public class FilterDialog extends JDialog {
 				columnNameList.add(SessionStaticAttributes.sessionDescription.toString());
 				columnClassList.add(String.class);
 				
+			} else if (this.tableName.equals("Obserwacja")) {
+				columnNameList.add(TrialStaticAttributes.trialID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(TrialStaticAttributes.sessionID.toString());
+				columnClassList.add(BigInteger.class);
+				columnNameList.add(TrialStaticAttributes.duration.toString());
+				columnClassList.add(BigInteger.class); // FIXME: check
+				columnNameList.add(TrialStaticAttributes.trialDescription.toString());
+				columnClassList.add(String.class);
 			}
 			
 			fillColumnsFromAttributesDefined();

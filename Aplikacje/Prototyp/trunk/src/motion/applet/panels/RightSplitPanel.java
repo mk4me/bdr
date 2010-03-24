@@ -26,10 +26,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		super();
 		this.setLayout(new BorderLayout());
 		table = new JTable();
-		//showTable("Performer");
-		//JScrollPane scrollPane = new JScrollPane(table);
-		showTree("Performer");
-		JScrollPane scrollPane = new JScrollPane(tree);
+		showTable("Performer");
+		JScrollPane scrollPane = new JScrollPane(table);
+		//showTree("Performer");
+		//JScrollPane scrollPane = new JScrollPane(tree);
 		this.add(scrollPane, BorderLayout.CENTER);
 	}
 	
