@@ -365,27 +365,44 @@ namespace MotionDBWebServices
 
         // File queries
 
-
         [WebMethod]
-        public XmlDocument ListPerformerFilesXML(int performerID)
+        public XmlDocument ListFilesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
+
+            string operationName = "";
+            string paramName = "";
+
+            switch ( subjectType ){
+                case "performer": 
+                    operationName = "list_performer_files_xml";
+                    paramName = "@perf_id";
+                    break;
+                case "session":
+                    operationName = "list_session_files_xml";
+                    paramName = "@sess_id";
+                    break;
+                case "trial": 
+                    operationName = "list_trial_files_xml";
+                    paramName = "@trial_id";
+                    break;
+            }
             try
             {
                 OpenConnection();
 
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_performer_files_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                cmd.CommandText = operationName;
+                SqlParameter sessId = cmd.Parameters.Add(paramName, SqlDbType.Int);
                 sessId.Direction = ParameterDirection.Input;
-                sessId.Value = performerID;
+                sessId.Value = subjectID;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerFileList"));
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
 
                 dr.Close();
             }
@@ -399,25 +416,44 @@ namespace MotionDBWebServices
         }
 
         [WebMethod]
-        public XmlDocument ListPerformerFilesWithAttributesXML(int performerID)
+        public XmlDocument ListFilesWithAttributesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
+
+            string operationName = "";
+            string paramName = "";
+
+            switch (subjectType)
+            {
+                case "performer":
+                    operationName = "list_performer_files_attributes_xml";
+                    paramName = "@perf_id";
+                    break;
+                case "session":
+                    operationName = "list_session_files_attributes_xml";
+                    paramName = "@sess_id";
+                    break;
+                case "trial": 
+                    operationName = "list_trial_files_attributes_xml";
+                    paramName = "@trial_id";
+                    break;
+            }
             try
             {
                 OpenConnection();
 
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_performer_files_attributes_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                cmd.CommandText = operationName;
+                SqlParameter sessId = cmd.Parameters.Add(paramName, SqlDbType.Int);
                 sessId.Direction = ParameterDirection.Input;
-                sessId.Value = performerID;
+                sessId.Value = subjectID;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerFileWithAttributesList"));
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
 
                 dr.Close();
             }
@@ -430,139 +466,205 @@ namespace MotionDBWebServices
             return xd;
         }
 
+        /*
 
-
-        [WebMethod]
-        public XmlDocument ListSessionFilesXML(int sessionID)
-        {
-            XmlDocument xd = new XmlDocument();
-            try
-            {
-                OpenConnection();
-
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_session_files_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                sessId.Direction = ParameterDirection.Input;
-                sessId.Value = sessionID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
+                [WebMethod]
+                public XmlDocument ListPerformerFilesXML(int performerID)
                 {
-                    xd.Load(dr);
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
+
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_performer_files_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = performerID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
+
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SessionFileList"));
 
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-            return xd;
-        }
-
-        [WebMethod]
-        public XmlDocument ListSessionFilesWithAttributesXML(int sessionID)
-        {
-            XmlDocument xd = new XmlDocument();
-            try
-            {
-                OpenConnection();
-
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_session_files_attributes_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                sessId.Direction = ParameterDirection.Input;
-                sessId.Value = sessionID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
+                [WebMethod]
+                public XmlDocument ListPerformerFilesWithAttributesXML(int performerID)
                 {
-                    xd.Load(dr);
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
+
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_performer_files_attributes_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = performerID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileWithAttributesList"));
+
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SessionFileWithAttributesList"));
 
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-            return xd;
-        }
 
-        [WebMethod]
-        public XmlDocument ListTrialFilesXML(int trialID)
-        {
-            XmlDocument xd = new XmlDocument();
-            try
-            {
-                OpenConnection();
 
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_trial_files_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
-                sessId.Direction = ParameterDirection.Input;
-                sessId.Value = trialID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
+                [WebMethod]
+                public XmlDocument ListSessionFilesXML(int sessionID)
                 {
-                    xd.Load(dr);
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
+
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_session_files_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = sessionID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
+
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("TrialFileList"));
 
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-            return xd;
-        }
-
-        [WebMethod]
-        public XmlDocument ListTrialFilesWithAttributesXML(int trialID)
-        {
-            XmlDocument xd = new XmlDocument();
-            try
-            {
-                OpenConnection();
-
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_trial_files_attributes_xml";
-                SqlParameter sessId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
-                sessId.Direction = ParameterDirection.Input;
-                sessId.Value = trialID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
+                [WebMethod]
+                public XmlDocument ListSessionFilesWithAttributesXML(int sessionID)
                 {
-                    xd.Load(dr);
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
+
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_session_files_attributes_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = sessionID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileWithAttributesList"));
+
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("TrialFileWithAttributesList"));
 
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-            return xd;
-        }
+                [WebMethod]
+                public XmlDocument ListTrialFilesXML(int trialID)
+                {
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
 
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_trial_files_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = trialID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
 
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
+                }
 
-    // Provisional operations
+                [WebMethod]
+                public XmlDocument ListTrialFilesWithAttributesXML(int trialID)
+                {
+                    XmlDocument xd = new XmlDocument();
+                    try
+                    {
+                        OpenConnection();
+
+                        SqlCommand cmd = conn.CreateCommand();
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "list_trial_files_attributes_xml";
+                        SqlParameter sessId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
+                        sessId.Direction = ParameterDirection.Input;
+                        sessId.Value = trialID;
+                        XmlReader dr = cmd.ExecuteXmlReader();
+                        if (dr.Read())
+                        {
+                            xd.Load(dr);
+                        }
+                        if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileWithAttributesList"));
+
+                        dr.Close();
+                    }
+                    catch (SqlException ex)
+                    {
+                        // report exception
+                    }
+                    CloseConnection();
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                    return xd;
+                }
+
+        */
+
+        // Provisional operations
 
         [WebMethod]
         public XmlDocument _PerformQuery(string query)

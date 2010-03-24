@@ -2,7 +2,7 @@
 <s:schema id="TrialFileWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
  
   <s:include schemaLocation="AttributesElement.xsd" />
-      <s:element name="TrialFileWithAttributesList">
+      <s:element name="FileWithAttributesList">
         <s:complexType>
           <s:sequence>
             <s:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
