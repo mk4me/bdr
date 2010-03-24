@@ -75,6 +75,7 @@
     <Compile Include="DatabaseAccessService.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FilterPredicate.cs" />
     <Compile Include="PlainFileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
@@ -91,6 +92,7 @@
   <ItemGroup>
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\GenericQueryXML.xsd" />
     <None Include="res\ListFilesXML.xsd" />
     <None Include="res\ListFilesWithAttributesXML.xsd" />
     <None Include="res\ListPerformerFilesWithAttributesXML.xsd" />

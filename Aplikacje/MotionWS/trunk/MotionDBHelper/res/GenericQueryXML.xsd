@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="Result" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:include schemaLocation="AttributesElement.xsd" />
+  <s:element name="GenericQueryResult">
+    <s:complexType>
+    <s:sequence>
+      <s:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="PerformerID" type="s:integer" minOccurs="0" maxOccurs="1"/>
+            <s:element name="FirstName" type="s:string" minOccurs="0" maxOccurs="1" />
+            <s:element name="LastName" type="s:string"  minOccurs="0" maxOccurs="1"/>
+            <s:element name="SessionID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="UserID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="LabID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="MotionKindID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="SessionDate" type="s:dateTime" minOccurs="0" maxOccurs="1"  />
+            <s:element name="SessionDescription" type="s:string" minOccurs="0" maxOccurs="1"  />
+            <s:element name="TrialID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="TrialDescription" type="s:string" minOccurs="0" maxOccurs="1"  />
+            <s:element name="Duration" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="SegmentID" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="SegmentName" type="s:string" minOccurs="0" maxOccurs="1"  />
+            <s:element name="StartTime" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element name="EndTime" type="s:integer" minOccurs="0" maxOccurs="1"  />
+            <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:sequence>
+    </s:complexType>
+  </s:element>
+</s:schema>

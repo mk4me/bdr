@@ -7,6 +7,16 @@
           <s:complexType>
             <s:attribute name="Name" type="s:string" use="required" />
             <s:attribute name="Value" type="s:string" use="required" />
+            <s:attribute name="entity" use="optional">
+              <s:simpleType>
+                <s:restriction base="s:string">
+                  <s:enumeration value="performer" />
+                  <s:enumeration value="session" />
+                  <s:enumeration value="trial" />
+                  <s:enumeration value="segment" />
+                </s:restriction>
+              </s:simpleType>
+            </s:attribute>
           </s:complexType>
         </s:element>
       </s:sequence>

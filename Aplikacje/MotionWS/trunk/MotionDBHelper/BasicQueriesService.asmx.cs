@@ -101,7 +101,44 @@ namespace MotionDBWebServices
             return fdl.ToArray();
         }
 
-    // Performer queries
+        // Generic query
+
+        [WebMethod]
+        public XmlDocument GenericQueryXML(FilterPredicate[] filter, string[] entitiesToInclude)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_performer_sessions_xml";
+                SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = 999;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("GenericQueryResult"));
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+            //            return (PerformerSessionListXML) xd;
+        }
+
+  
+        
+        
+        // Performer queries
 
         [WebMethod]
         public XmlDocument ListPerformersXML()
