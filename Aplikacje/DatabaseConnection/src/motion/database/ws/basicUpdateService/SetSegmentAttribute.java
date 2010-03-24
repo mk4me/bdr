@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for SetTrialAttribute element declaration.
+ * <p>Java class for SetSegmentAttribute element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="SetTrialAttribute">
+ * &lt;element name="SetSegmentAttribute">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="trialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *           &lt;element name="segmentID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *           &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *           &lt;element name="attributeValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *           &lt;element name="update" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -34,16 +34,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "trialID",
+    "segmentID",
     "attributeName",
     "attributeValue",
     "update"
 })
-@XmlRootElement(name = "SetTrialAttribute")
-public class SetTrialAttribute {
+@XmlRootElement(name = "SetSegmentAttribute")
+public class SetSegmentAttribute {
 
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    protected int trialID;
+    protected int segmentID;
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     protected String attributeName;
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
@@ -52,19 +52,19 @@ public class SetTrialAttribute {
     protected boolean update;
 
     /**
-     * Gets the value of the trialID property.
+     * Gets the value of the segmentID property.
      * 
      */
-    public int getTrialID() {
-        return trialID;
+    public int getSegmentID() {
+        return segmentID;
     }
 
     /**
-     * Sets the value of the trialID property.
+     * Sets the value of the segmentID property.
      * 
      */
-    public void setTrialID(int value) {
-        this.trialID = value;
+    public void setSegmentID(int value) {
+        this.segmentID = value;
     }
 
     /**

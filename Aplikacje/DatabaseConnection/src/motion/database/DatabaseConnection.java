@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
 import motion.database.ws.basicQueriesService.ArrayOfPlainFileDetails;
@@ -25,21 +26,28 @@ import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLResponse.ListSessionFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListTrialFilesWithAttributesXMLResponse.ListTrialFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList.SegmentDetailsWithAttributes;
+import motion.database.ws.basicUpdateService.ArrayOfInt;
 import motion.database.ws.basicUpdateService.BasicUpdatesService;
 import motion.database.ws.basicUpdateService.BasicUpdatesServiceSoap;
 import motion.database.ws.basicUpdateService.PerformerData;
+import motion.database.ws.basicUpdateService.SessionData;
+import motion.database.ws.basicUpdateService.TrialData;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
 import motion.database.ws.test.SqlResultStream;
 import motion.database.ws.test.TestWs;
 import motion.database.ws.test.TestWsSoap;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import com.zehon.BatchTransferProgress;
 import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
@@ -218,6 +226,7 @@ public class DatabaseConnection {
 		{
 			String destRemoteFolder = "";
 			putFile(localFilePath, destRemoteFolder, listener);			
+			
 		    FileStoremanService service = new FileStoremanService();
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
@@ -228,7 +237,6 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	// TODO: Modify to call trial upload file service 
 	// TODO: Kasowanie pliku po sobie na serwerze
 	public void uploadTrialFile(int trialId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
@@ -236,16 +244,53 @@ public class DatabaseConnection {
 		{
 			String destRemoteFolder = "";
 			putFile(localFilePath, destRemoteFolder, listener);			
-		    FileStoremanService service = new FileStoremanService();
+		    
+			FileStoremanService service = new FileStoremanService();
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
 
-			port.storeSessionFile(trialId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+			port.storeTrialFile(trialId, "", description, destRemoteFolder+new File(localFilePath).getName() );
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	// TODO: Kasowanie pliku po sobie na serwerze
+	public void uploadPerformerFile(int performerId, String description, String localFilePath, FileTransferListener listener) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			String destRemoteFolder = "";
+			putFile(localFilePath, destRemoteFolder, listener);			
+		    
+			FileStoremanService service = new FileStoremanService();
+			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
+			prepareCall( (BindingProvider)port );
+
+			port.storePerformerFile( performerId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	class BatchTransferProgressObserver implements BatchTransferProgress
+	{
+
+		@Override
+		public void transferComplete(String arg0) {
+			System.out.println( "Transfer zakoñczono: " + arg0);
+		}
+
+		@Override
+		public void transferError(String arg0, Throwable arg1) {
+			System.out.println( "Transfer error: " + arg0);
+		}
+
+		@Override
+		public void transferStart(String arg0) {
+			System.out.println( "Transfer rozpoczêto: " + arg0);
+		}
+	}
 	
 	// TODO: testing 
 	public void uploadSessionFiles(int sessionId, String filesPath, FileTransferListener listener) throws Exception
@@ -258,16 +303,18 @@ public class DatabaseConnection {
 			if ( dir.isDirectory() )
 			{
 				createRemoteFolder( dir.getName(), destRemoteFolder );
-				destRemoteFolder += dir.getName();
+				FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+/*				destRemoteFolder += dir.getName();
 				for( String singleFile : dir.list() )
 				{
 					putFile( singleFile, destRemoteFolder, listener );			
-					FileStoremanService service = new FileStoremanService();
-					FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
-					prepareCall( (BindingProvider)port );
 	
-					port.storeSessionFiles( sessionId, destRemoteFolder+new File(singleFile).getName() );
 				}
+*/
+				FileStoremanService service = new FileStoremanService();
+				FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
+				prepareCall( (BindingProvider)port );
+				port.storeSessionFiles( sessionId, destRemoteFolder+dir.getName(), "TODO: add description" );
 			}
 		}
 		else
@@ -358,10 +405,10 @@ public class DatabaseConnection {
 			
 			for (Object o : result.getContent())
 			{
-				Session session = new Session();
 				motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList ss = (motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
 				for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
 				{
+					Session session = new Session();
 					session.put( SessionStaticAttributes.labID, s.getLabID() );
 					session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
 					session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
@@ -407,10 +454,10 @@ public class DatabaseConnection {
 			
 			for (Object o : result.getContent())
 			{
-				Trial trial = new Trial();
 				SessionTrialWithAttributesList ss = (motion.database.ws.basicQueriesService.SessionTrialWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
 				for ( TrialDetailsWithAttributes s : ss.getTrialDetailsWithAttributes() )
 				{
+					Trial trial = new Trial();
 					trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
 					trial.put( TrialStaticAttributes.duration, s.getDuration() );
 					trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
@@ -459,6 +506,73 @@ public class DatabaseConnection {
 		else
 			throw new Exception("Not Initialized. Cannot create performer.");
 	}
+
+	// TODO: sessionGroupID -- nie jest przekazywane 
+	public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "createSession" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ArrayOfInt sessionGroupIDs = new ArrayOfInt();
+			
+			int result = port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
+			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+	
+	public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "createTrial" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			TrialData trialData = new TrialData();
+			
+			int result = port.createTrial(sessionID, trialDescription, trialDuration);
+			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+	// TODO: not finished -- no service ?
+	public int defineTrialSegment(int trialID ) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "createTrial" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			TrialData trialData = new TrialData();
+			
+			//int result = port.createTrial(trialID, trialData);
+			
+			return 0;//result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
 	
 	public int setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
@@ -515,10 +629,10 @@ public class DatabaseConnection {
 			
 			for (Object o : result.getContent())
 			{
-				Segment segment = new Segment();
 				TrailSegmentWithAttributesList ss = (motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
 				for ( SegmentDetailsWithAttributes s : ss.getSegmentDetailsWithAttributes() )
 				{
+					Segment segment = new Segment();
 					segment.put( SegmentStaticAttributes.endTime, s.getEndTime() );
 					segment.put( SegmentStaticAttributes.segmentID, s.getSegmentID() );
 					segment.put( SegmentStaticAttributes.segmentName, s.getSegmentName() );
@@ -546,7 +660,7 @@ public class DatabaseConnection {
 	}
 
 	// TODO: Czy mo¿emy uznaæ, ¿ê PlainFileDetails to jest typ ogólno dostêpny -- poza fasad¹?
-	public  List<PlainFileDetails> listSessionFiles(int sessionID) throws Exception
+	public  List<DatabaseFile> listSessionFiles(int sessionID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -557,19 +671,24 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ArrayOfPlainFileDetails result = port.listSessionFiles(sessionID);
-		
-			log.exiting( "DatabaseConnection", "listSessionFiles", result.getPlainFileDetails() );
-			
-			return result.getPlainFileDetails();
+			ListSessionFilesWithAttributesXMLResult result = port.listSessionFilesWithAttributesXML(sessionID);
+
+			return transformListOfFiles(result);
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	private List<DatabaseFile> transformListOfFiles(Object result) {
+
+		
+		System.out.println( result );
+		return null;
+	}
+
 	// TODO: Czy ka¿da us³uga informuj¹ca o plikach nie mo¿e zwracaæ tego samego typu?
 	// TODO: Czy to nie mo¿e byæ ta sama us³uga rozró¿niajaca rodzaj pliku poprzez parametr: session, trial, performer ? 
-	public  List<PlainFileDetails> listTrialFiles(int trialID) throws Exception
+	public  List<DatabaseFile> listTrialFiles(int trialID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -580,9 +699,9 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListTrialFilesXMLResult result = port.listTrialFilesXML(trialID);
+			ListTrialFilesWithAttributesXMLResult result = port.listTrialFilesWithAttributesXML(trialID);
 		
-			return null;//(List<PlainFileDetails>)result.getContent();
+			return transformListOfFiles(result);
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");

@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="SetFileAttributeResult" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *           &lt;element name="SetFileAttributeResult" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -37,13 +37,13 @@ import javax.xml.bind.annotation.XmlType;
 public class SetFileAttributeResponse {
 
     @XmlElement(name = "SetFileAttributeResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    protected boolean setFileAttributeResult;
+    protected int setFileAttributeResult;
 
     /**
      * Gets the value of the setFileAttributeResult property.
      * 
      */
-    public boolean isSetFileAttributeResult() {
+    public int getSetFileAttributeResult() {
         return setFileAttributeResult;
     }
 
@@ -51,7 +51,7 @@ public class SetFileAttributeResponse {
      * Sets the value of the setFileAttributeResult property.
      * 
      */
-    public void setSetFileAttributeResult(boolean value) {
+    public void setSetFileAttributeResult(int value) {
         this.setFileAttributeResult = value;
     }
 

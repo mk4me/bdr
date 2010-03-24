@@ -20,8 +20,9 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
  *           &lt;element name="fileID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *           &lt;element name="attributeId" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *           &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *           &lt;element name="attributeValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *           &lt;element name="update" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -34,8 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "fileID",
-    "attributeId",
-    "attributeValue"
+    "attributeName",
+    "attributeValue",
+    "update"
 })
 @XmlRootElement(name = "SetFileAttribute")
 public class SetFileAttribute {
@@ -43,9 +45,11 @@ public class SetFileAttribute {
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     protected int fileID;
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    protected int attributeId;
+    protected String attributeName;
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     protected String attributeValue;
+    @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    protected boolean update;
 
     /**
      * Gets the value of the fileID property.
@@ -64,19 +68,27 @@ public class SetFileAttribute {
     }
 
     /**
-     * Gets the value of the attributeId property.
+     * Gets the value of the attributeName property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public int getAttributeId() {
-        return attributeId;
+    public String getAttributeName() {
+        return attributeName;
     }
 
     /**
-     * Sets the value of the attributeId property.
+     * Sets the value of the attributeName property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setAttributeId(int value) {
-        this.attributeId = value;
+    public void setAttributeName(String value) {
+        this.attributeName = value;
     }
 
     /**
@@ -101,6 +113,22 @@ public class SetFileAttribute {
      */
     public void setAttributeValue(String value) {
         this.attributeValue = value;
+    }
+
+    /**
+     * Gets the value of the update property.
+     * 
+     */
+    public boolean isUpdate() {
+        return update;
+    }
+
+    /**
+     * Sets the value of the update property.
+     * 
+     */
+    public void setUpdate(boolean value) {
+        this.update = value;
     }
 
 }

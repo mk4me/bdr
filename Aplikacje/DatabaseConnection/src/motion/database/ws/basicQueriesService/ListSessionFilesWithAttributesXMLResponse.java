@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import motion.database.DatabaseFile;
 import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLResponse.ListSessionFilesWithAttributesXMLResult;
 
 
@@ -137,6 +139,7 @@ public class ListSessionFilesWithAttributesXMLResponse {
             }
             return this.content;
         }
+
 
     }
 

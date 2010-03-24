@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.net.ftp.FTP;
+
 import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
@@ -47,7 +49,6 @@ class FileTransferSupport {
 		
 		while((counter =input.read( buffer )) != -1)
 		{
-			System.err.println( counter );
 			output.write( buffer, 0, counter );
 			for (FileTransferListener l : downloadListeners)
 				l.transferStep();

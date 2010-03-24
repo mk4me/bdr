@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for SetTrialAttributeResponse element declaration.
+ * <p>Java class for DefineTrialSegmentResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="SetTrialAttributeResponse">
+ * &lt;element name="DefineTrialSegmentResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="SetTrialAttributeResult" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *           &lt;element name="DefineTrialSegmentResult" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -31,28 +31,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "setTrialAttributeResult"
+    "defineTrialSegmentResult"
 })
-@XmlRootElement(name = "SetTrialAttributeResponse")
-public class SetTrialAttributeResponse {
+@XmlRootElement(name = "DefineTrialSegmentResponse")
+public class DefineTrialSegmentResponse {
 
-    @XmlElement(name = "SetTrialAttributeResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    protected int setTrialAttributeResult;
+    @XmlElement(name = "DefineTrialSegmentResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    protected int defineTrialSegmentResult;
 
     /**
-     * Gets the value of the setTrialAttributeResult property.
+     * Gets the value of the defineTrialSegmentResult property.
      * 
      */
-    public int getSetTrialAttributeResult() {
-        return setTrialAttributeResult;
+    public int getDefineTrialSegmentResult() {
+        return defineTrialSegmentResult;
     }
 
     /**
-     * Sets the value of the setTrialAttributeResult property.
+     * Sets the value of the defineTrialSegmentResult property.
      * 
      */
-    public void setSetTrialAttributeResult(int value) {
-        this.setTrialAttributeResult = value;
+    public void setDefineTrialSegmentResult(int value) {
+        this.defineTrialSegmentResult = value;
     }
 
 }

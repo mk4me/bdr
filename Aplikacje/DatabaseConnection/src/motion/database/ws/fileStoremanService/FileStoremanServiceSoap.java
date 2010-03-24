@@ -21,31 +21,26 @@ public interface FileStoremanServiceSoap {
 
     /**
      * 
+     * @param description
      * @param path
      * @param performerID
+     * @param filename
+     * @return
+     *     returns int
      */
-    @WebMethod(operationName = "StorePerformerFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StorePerformerFiles")
-    @RequestWrapper(localName = "StorePerformerFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFiles")
-    @ResponseWrapper(localName = "StorePerformerFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFilesResponse")
-    public void storePerformerFiles(
+    @WebMethod(operationName = "StorePerformerFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StorePerformerFile")
+    @WebResult(name = "StorePerformerFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StorePerformerFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFile")
+    @ResponseWrapper(localName = "StorePerformerFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFileResponse")
+    public int storePerformerFile(
         @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         int performerID,
         @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String path);
-
-    /**
-     * 
-     * @param sessionID
-     * @param path
-     */
-    @WebMethod(operationName = "StoreSessionFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFiles")
-    @RequestWrapper(localName = "StoreSessionFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreSessionFiles")
-    @ResponseWrapper(localName = "StoreSessionFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreSessionFilesResponse")
-    public void storeSessionFiles(
-        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        int sessionID,
-        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String path);
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description,
+        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String filename);
 
     /**
      * 
@@ -69,6 +64,63 @@ public interface FileStoremanServiceSoap {
         String description,
         @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         String filename);
+
+    /**
+     * 
+     * @param description
+     * @param path
+     * @param filename
+     * @param trialID
+     * @return
+     *     returns int
+     */
+    @WebMethod(operationName = "StoreTrialFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreTrialFile")
+    @WebResult(name = "StoreTrialFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StoreTrialFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreTrialFile")
+    @ResponseWrapper(localName = "StoreTrialFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreTrialFileResponse")
+    public int storeTrialFile(
+        @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int trialID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description,
+        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String filename);
+
+    /**
+     * 
+     * @param path
+     * @param performerID
+     */
+    @WebMethod(operationName = "StorePerformerFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StorePerformerFiles")
+    @RequestWrapper(localName = "StorePerformerFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFiles")
+    @ResponseWrapper(localName = "StorePerformerFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StorePerformerFilesResponse")
+    public void storePerformerFiles(
+        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int performerID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path);
+
+    /**
+     * 
+     * @param sessionID
+     * @param description
+     * @param path
+     * @return
+     *     returns int
+     */
+    @WebMethod(operationName = "StoreSessionFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/StoreSessionFiles")
+    @WebResult(name = "StoreSessionFilesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StoreSessionFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreSessionFiles")
+    @ResponseWrapper(localName = "StoreSessionFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.StoreSessionFilesResponse")
+    public int storeSessionFiles(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int sessionID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description);
 
     /**
      * 

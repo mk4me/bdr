@@ -30,19 +30,59 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link StorePerformerFiles }
+     * 
+     */
+    public StorePerformerFiles createStorePerformerFiles() {
+        return new StorePerformerFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFilesResponse }
+     * 
+     */
+    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
+        return new StoreTrialFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFile }
+     * 
+     */
+    public StorePerformerFile createStorePerformerFile() {
+        return new StorePerformerFile();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveFile }
+     * 
+     */
+    public RetrieveFile createRetrieveFile() {
+        return new RetrieveFile();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFileResponse }
+     * 
+     */
+    public StoreSessionFileResponse createStoreSessionFileResponse() {
+        return new StoreSessionFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link DownloadComplete }
+     * 
+     */
+    public DownloadComplete createDownloadComplete() {
+        return new DownloadComplete();
+    }
+
+    /**
      * Create an instance of {@link DownloadCompleteResponse }
      * 
      */
     public DownloadCompleteResponse createDownloadCompleteResponse() {
         return new DownloadCompleteResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFileResponse }
-     * 
-     */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
     }
 
     /**
@@ -62,51 +102,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFilesResponse }
+     * Create an instance of {@link StoreTrialFileResponse }
      * 
      */
-    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
-        return new StoreTrialFilesResponse();
+    public StoreTrialFileResponse createStoreTrialFileResponse() {
+        return new StoreTrialFileResponse();
     }
 
     /**
-     * Create an instance of {@link StoreSessionFileResponse }
+     * Create an instance of {@link RetrieveFileResponse }
      * 
      */
-    public StoreSessionFileResponse createStoreSessionFileResponse() {
-        return new StoreSessionFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFilesResponse }
-     * 
-     */
-    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
-        return new StorePerformerFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFile }
-     * 
-     */
-    public StoreSessionFile createStoreSessionFile() {
-        return new StoreSessionFile();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFile }
-     * 
-     */
-    public RetrieveFile createRetrieveFile() {
-        return new RetrieveFile();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFiles }
-     * 
-     */
-    public StorePerformerFiles createStorePerformerFiles() {
-        return new StorePerformerFiles();
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
     }
 
     /**
@@ -118,11 +126,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadComplete }
+     * Create an instance of {@link StorePerformerFileResponse }
      * 
      */
-    public DownloadComplete createDownloadComplete() {
-        return new DownloadComplete();
+    public StorePerformerFileResponse createStorePerformerFileResponse() {
+        return new StorePerformerFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFile }
+     * 
+     */
+    public StoreSessionFile createStoreSessionFile() {
+        return new StoreSessionFile();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFile }
+     * 
+     */
+    public StoreTrialFile createStoreTrialFile() {
+        return new StoreTrialFile();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFilesResponse }
+     * 
+     */
+    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
+        return new StorePerformerFilesResponse();
     }
 
 }

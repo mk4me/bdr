@@ -5,6 +5,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -35,8 +36,12 @@ public interface BasicUpdatesServiceSoap {
 
     /**
      * 
-     * @param sessionData
+     * @param sessionDate
+     * @param userID
+     * @param motionKindName
+     * @param labID
      * @param sessionGroupIDs
+     * @param sessionDescription
      * @param performerID
      * @return
      *     returns int
@@ -46,17 +51,26 @@ public interface BasicUpdatesServiceSoap {
     @RequestWrapper(localName = "CreateSession", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.CreateSession")
     @ResponseWrapper(localName = "CreateSessionResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.CreateSessionResponse")
     public int createSession(
+        @WebParam(name = "userID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int userID,
+        @WebParam(name = "labID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int labID,
+        @WebParam(name = "motionKindName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String motionKindName,
         @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int performerID,
+        @WebParam(name = "sessionDate", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        XMLGregorianCalendar sessionDate,
+        @WebParam(name = "sessionDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String sessionDescription,
         @WebParam(name = "sessionGroupIDs", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        ArrayOfInt sessionGroupIDs,
-        @WebParam(name = "sessionData", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        SessionData sessionData);
+        ArrayOfInt sessionGroupIDs);
 
     /**
      * 
+     * @param trialDescription
      * @param sessionID
-     * @param trialData
+     * @param trialDuration
      * @return
      *     returns int
      */
@@ -67,8 +81,33 @@ public interface BasicUpdatesServiceSoap {
     public int createTrial(
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int sessionID,
-        @WebParam(name = "trialData", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        TrialData trialData);
+        @WebParam(name = "trialDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String trialDescription,
+        @WebParam(name = "trialDuration", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int trialDuration);
+
+    /**
+     * 
+     * @param startTime
+     * @param segmentName
+     * @param trialID
+     * @param endTime
+     * @return
+     *     returns int
+     */
+    @WebMethod(operationName = "DefineTrialSegment", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/DefineTrialSegment")
+    @WebResult(name = "DefineTrialSegmentResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "DefineTrialSegment", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.DefineTrialSegment")
+    @ResponseWrapper(localName = "DefineTrialSegmentResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.DefineTrialSegmentResponse")
+    public int defineTrialSegment(
+        @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int trialID,
+        @WebParam(name = "segmentName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String segmentName,
+        @WebParam(name = "startTime", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int startTime,
+        @WebParam(name = "endTime", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int endTime);
 
     /**
      * 
@@ -135,42 +174,71 @@ public interface BasicUpdatesServiceSoap {
 
     /**
      * 
+     * @param update
+     * @param attributeName
      * @param attributeValue
      * @param trialID
-     * @param attributeID
      * @return
-     *     returns boolean
+     *     returns int
      */
     @WebMethod(operationName = "SetTrialAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/SetTrialAttribute")
     @WebResult(name = "SetTrialAttributeResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     @RequestWrapper(localName = "SetTrialAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetTrialAttribute")
     @ResponseWrapper(localName = "SetTrialAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetTrialAttributeResponse")
-    public boolean setTrialAttribute(
+    public int setTrialAttribute(
         @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int trialID,
-        @WebParam(name = "attributeID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int attributeID,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
         @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        String attributeValue);
+        String attributeValue,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update);
 
     /**
      * 
+     * @param update
+     * @param attributeName
+     * @param attributeValue
+     * @param segmentID
+     * @return
+     *     returns int
+     */
+    @WebMethod(operationName = "SetSegmentAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/SetSegmentAttribute")
+    @WebResult(name = "SetSegmentAttributeResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "SetSegmentAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetSegmentAttribute")
+    @ResponseWrapper(localName = "SetSegmentAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetSegmentAttributeResponse")
+    public int setSegmentAttribute(
+        @WebParam(name = "segmentID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int segmentID,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
+        @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeValue,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update);
+
+    /**
+     * 
+     * @param update
+     * @param attributeName
      * @param fileID
      * @param attributeValue
-     * @param attributeId
      * @return
-     *     returns boolean
+     *     returns int
      */
     @WebMethod(operationName = "SetFileAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/SetFileAttribute")
     @WebResult(name = "SetFileAttributeResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     @RequestWrapper(localName = "SetFileAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetFileAttribute")
     @ResponseWrapper(localName = "SetFileAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdateService.SetFileAttributeResponse")
-    public boolean setFileAttribute(
+    public int setFileAttribute(
         @WebParam(name = "fileID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int fileID,
-        @WebParam(name = "attributeId", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int attributeId,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
         @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        String attributeValue);
+        String attributeValue,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update);
 
 }

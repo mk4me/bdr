@@ -9,17 +9,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for StoreSessionFilesResponse element declaration.
+ * <p>Java class for StoreTrialFileResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="StoreSessionFilesResponse">
+ * &lt;element name="StoreTrialFileResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="StoreSessionFilesResult" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *           &lt;element name="StoreTrialFileResult" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -31,28 +31,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "storeSessionFilesResult"
+    "storeTrialFileResult"
 })
-@XmlRootElement(name = "StoreSessionFilesResponse")
-public class StoreSessionFilesResponse {
+@XmlRootElement(name = "StoreTrialFileResponse")
+public class StoreTrialFileResponse {
 
-    @XmlElement(name = "StoreSessionFilesResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-    protected int storeSessionFilesResult;
+    @XmlElement(name = "StoreTrialFileResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    protected int storeTrialFileResult;
 
     /**
-     * Gets the value of the storeSessionFilesResult property.
+     * Gets the value of the storeTrialFileResult property.
      * 
      */
-    public int getStoreSessionFilesResult() {
-        return storeSessionFilesResult;
+    public int getStoreTrialFileResult() {
+        return storeTrialFileResult;
     }
 
     /**
-     * Sets the value of the storeSessionFilesResult property.
+     * Sets the value of the storeTrialFileResult property.
      * 
      */
-    public void setStoreSessionFilesResult(int value) {
-        this.storeSessionFilesResult = value;
+    public void setStoreTrialFileResult(int value) {
+        this.storeTrialFileResult = value;
     }
 
 }

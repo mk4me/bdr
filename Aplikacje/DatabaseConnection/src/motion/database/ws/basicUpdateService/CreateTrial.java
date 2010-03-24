@@ -20,7 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
  *           &lt;element name="sessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *           &lt;element name="trialData" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService}TrialData"/>
+ *           &lt;element name="trialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *           &lt;element name="trialDuration" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;/sequence>
  *       &lt;/restriction>
  *     &lt;/complexContent>
@@ -33,15 +34,18 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "sessionID",
-    "trialData"
+    "trialDescription",
+    "trialDuration"
 })
 @XmlRootElement(name = "CreateTrial")
 public class CreateTrial {
 
     @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
     protected int sessionID;
-    @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", required = true)
-    protected TrialData trialData;
+    @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    protected String trialDescription;
+    @XmlElement(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    protected int trialDuration;
 
     /**
      * Gets the value of the sessionID property.
@@ -60,27 +64,43 @@ public class CreateTrial {
     }
 
     /**
-     * Gets the value of the trialData property.
+     * Gets the value of the trialDescription property.
      * 
      * @return
      *     possible object is
-     *     {@link TrialData }
+     *     {@link String }
      *     
      */
-    public TrialData getTrialData() {
-        return trialData;
+    public String getTrialDescription() {
+        return trialDescription;
     }
 
     /**
-     * Sets the value of the trialData property.
+     * Sets the value of the trialDescription property.
      * 
      * @param value
      *     allowed object is
-     *     {@link TrialData }
+     *     {@link String }
      *     
      */
-    public void setTrialData(TrialData value) {
-        this.trialData = value;
+    public void setTrialDescription(String value) {
+        this.trialDescription = value;
+    }
+
+    /**
+     * Gets the value of the trialDuration property.
+     * 
+     */
+    public int getTrialDuration() {
+        return trialDuration;
+    }
+
+    /**
+     * Sets the value of the trialDuration property.
+     * 
+     */
+    public void setTrialDuration(int value) {
+        this.trialDuration = value;
     }
 
 }
