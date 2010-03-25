@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.table.TableModel;
@@ -30,7 +31,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(table);
 		//showTree("Performer");
 		//JScrollPane scrollPane = new JScrollPane(tree);
-		this.add(scrollPane, BorderLayout.CENTER);
+		
+		////this.add(scrollPane, BorderLayout.CENTER);
+		
+		BottomSplitPanel bottomPanel = new BottomSplitPanel();
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, bottomPanel);
+		this.add(splitPane, BorderLayout.CENTER);
+		
 	}
 	
 	private void showTable(String tableName) {
