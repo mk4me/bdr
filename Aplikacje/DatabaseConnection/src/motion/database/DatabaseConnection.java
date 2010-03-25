@@ -25,11 +25,9 @@ import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
+import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLResponse.ListSessionFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.ListTrialFilesWithAttributesXMLResponse.ListTrialFilesWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.TrialDetailsWithAttributes;
@@ -483,6 +481,7 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+
 	
 	public int createPerformer(String name, String surname) throws Exception
 	{
@@ -551,23 +550,20 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot create performer.");
 	}
 
-	// TODO: not finished -- no service ?
-	public int defineTrialSegment(int trialID ) throws Exception
+	public int defineTrialSegment(int trialID, String segmentName, int startTime, int endTime ) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			log.entering( "DatabaseConnection", "createTrial" );
+			log.entering( "DatabaseConnection", "defineTrialSegment" );
 	
 			BasicUpdatesService service = new BasicUpdatesService();
 			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
 			
 			prepareCall( (BindingProvider)port);
 	
-			TrialData trialData = new TrialData();
+			int result = port.defineTrialSegment(trialID, segmentName, startTime, endTime);
 			
-			//int result = port.createTrial(trialID, trialData);
-			
-			return 0;//result;
+			return result;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot create performer.");
@@ -659,7 +655,6 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	// TODO: Czy mo¿emy uznaæ, ¿ê PlainFileDetails to jest typ ogólno dostêpny -- poza fasad¹?
 	public  List<DatabaseFile> listSessionFiles(int sessionID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -671,7 +666,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListSessionFilesWithAttributesXMLResult result = port.listSessionFilesWithAttributesXML(sessionID);
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, "session");
 
 			return transformListOfFiles(result);
 		}
@@ -686,8 +681,7 @@ public class DatabaseConnection {
 		return null;
 	}
 
-	// TODO: Czy ka¿da us³uga informuj¹ca o plikach nie mo¿e zwracaæ tego samego typu?
-	// TODO: Czy to nie mo¿e byæ ta sama us³uga rozró¿niajaca rodzaj pliku poprzez parametr: session, trial, performer ? 
+
 	public  List<DatabaseFile> listTrialFiles(int trialID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -699,7 +693,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListTrialFilesWithAttributesXMLResult result = port.listTrialFilesWithAttributesXML(trialID);
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, "trial");
 		
 			return transformListOfFiles(result);
 		}

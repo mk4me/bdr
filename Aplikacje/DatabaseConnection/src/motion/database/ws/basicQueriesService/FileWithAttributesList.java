@@ -6,19 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.SessionFileWithAttributesList.FileDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
 
 
 /**
- * <p>Java class for SessionFileWithAttributesList element declaration.
+ * <p>Java class for FileWithAttributesList element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="SessionFileWithAttributesList">
+ * &lt;element name="FileWithAttributesList">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -28,10 +29,10 @@ import motion.database.ws.basicQueriesService.SessionFileWithAttributesList.File
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="FileName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                   &lt;/sequence>
+ *                   &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -49,8 +50,8 @@ import motion.database.ws.basicQueriesService.SessionFileWithAttributesList.File
 @XmlType(name = "", propOrder = {
     "fileDetailsWithAttributes"
 })
-@XmlRootElement(name = "SessionFileWithAttributesList")
-public class SessionFileWithAttributesList {
+@XmlRootElement(name = "FileWithAttributesList")
+public class FileWithAttributesList {
 
     @XmlElement(name = "FileDetailsWithAttributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
     protected List<FileDetailsWithAttributes> fileDetailsWithAttributes;
@@ -95,10 +96,10 @@ public class SessionFileWithAttributesList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="FileName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
+     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -108,18 +109,40 @@ public class SessionFileWithAttributesList {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "fileID",
-        "fileName",
         "attributes"
     })
     public static class FileDetailsWithAttributes {
 
-        @XmlElement(name = "FileID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger fileID;
-        @XmlElement(name = "FileName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected String fileName;
         @XmlElement(name = "Attributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected Attributes attributes;
+        @XmlAttribute(name = "FileID")
+        protected BigInteger fileID;
+        @XmlAttribute(name = "FileName")
+        protected String fileName;
+
+        /**
+         * Gets the value of the attributes property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Attributes }
+         *     
+         */
+        public Attributes getAttributes() {
+            return attributes;
+        }
+
+        /**
+         * Sets the value of the attributes property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Attributes }
+         *     
+         */
+        public void setAttributes(Attributes value) {
+            this.attributes = value;
+        }
 
         /**
          * Gets the value of the fileID property.
@@ -167,30 +190,6 @@ public class SessionFileWithAttributesList {
          */
         public void setFileName(String value) {
             this.fileName = value;
-        }
-
-        /**
-         * Gets the value of the attributes property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Attributes }
-         *     
-         */
-        public Attributes getAttributes() {
-            return attributes;
-        }
-
-        /**
-         * Sets the value of the attributes property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Attributes }
-         *     
-         */
-        public void setAttributes(Attributes value) {
-            this.attributes = value;
         }
 
     }

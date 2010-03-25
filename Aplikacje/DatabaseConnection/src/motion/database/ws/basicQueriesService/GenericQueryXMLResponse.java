@@ -1,10 +1,8 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -12,26 +10,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTrialFilesXMLResult;
+import motion.database.ws.basicQueriesService.GenericQueryXMLResponse.GenericQueryXMLResult;
 
 
 /**
- * <p>Java class for ListTrialFilesXMLResponse element declaration.
+ * <p>Java class for GenericQueryXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListTrialFilesXMLResponse">
+ * &lt;element name="GenericQueryXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListTrialFilesXMLResult" minOccurs="0">
+ *           &lt;element name="GenericQueryXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}GenericQueryResult"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -48,36 +46,36 @@ import motion.database.ws.basicQueriesService.ListTrialFilesXMLResponse.ListTria
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listTrialFilesXMLResult"
+    "genericQueryXMLResult"
 })
-@XmlRootElement(name = "ListTrialFilesXMLResponse")
-public class ListTrialFilesXMLResponse {
+@XmlRootElement(name = "GenericQueryXMLResponse")
+public class GenericQueryXMLResponse {
 
-    @XmlElement(name = "ListTrialFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListTrialFilesXMLResult listTrialFilesXMLResult;
+    @XmlElement(name = "GenericQueryXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected GenericQueryXMLResult genericQueryXMLResult;
 
     /**
-     * Gets the value of the listTrialFilesXMLResult property.
+     * Gets the value of the genericQueryXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListTrialFilesXMLResult }
+     *     {@link GenericQueryXMLResult }
      *     
      */
-    public ListTrialFilesXMLResult getListTrialFilesXMLResult() {
-        return listTrialFilesXMLResult;
+    public GenericQueryXMLResult getGenericQueryXMLResult() {
+        return genericQueryXMLResult;
     }
 
     /**
-     * Sets the value of the listTrialFilesXMLResult property.
+     * Sets the value of the genericQueryXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListTrialFilesXMLResult }
+     *     {@link GenericQueryXMLResult }
      *     
      */
-    public void setListTrialFilesXMLResult(ListTrialFilesXMLResult value) {
-        this.listTrialFilesXMLResult = value;
+    public void setGenericQueryXMLResult(GenericQueryXMLResult value) {
+        this.genericQueryXMLResult = value;
     }
 
 
@@ -91,7 +89,7 @@ public class ListTrialFilesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}TrialFileList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}GenericQueryResult"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -104,11 +102,11 @@ public class ListTrialFilesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListTrialFilesXMLResult {
+    public static class GenericQueryXMLResult {
 
-        @XmlElementRef(name = "TrialFileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
+        @XmlElementRef(name = "GenericQueryResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = GenericQueryResult.class)
         @XmlMixed
-        protected List<Serializable> content;
+        protected List<Object> content;
 
         /**
          * Gets the value of the content property.
@@ -128,14 +126,14 @@ public class ListTrialFilesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link JAXBElement }{@code <}{@link FileListType }{@code >}
+         * {@link GenericQueryResult }
          * {@link String }
          * 
          * 
          */
-        public List<Serializable> getContent() {
+        public List<Object> getContent() {
             if (content == null) {
-                content = new ArrayList<Serializable>();
+                content = new ArrayList<Object>();
             }
             return this.content;
         }

@@ -266,6 +266,27 @@ public class DatabaseConnectionTest {
 		Assert.assertEquals( 1, found );
 	}
 
+	@Test
+	public void testDefineTrialSegment() throws Exception {
+		
+		beforeTest();
+
+		int id = 1;
+		database.defineTrialSegment( id, "zamach", 1, 2);
+		
+		System.out.println("Created segment: " + id );
+		
+		int found = 0;
+		List<Segment> segments = database.listTrialSegmentsWithAttributes(id);
+		for (Segment s : segments)
+		{
+			BigInteger idd = (BigInteger) s.get( SegmentStaticAttributes.segmentID );
+			if (idd.intValue() == id)
+				found++;
+		}
+		Assert.assertEquals( 1, found );
+	}
+
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 

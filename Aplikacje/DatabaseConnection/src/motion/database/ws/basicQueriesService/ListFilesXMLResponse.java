@@ -1,8 +1,10 @@
 
 package motion.database.ws.basicQueriesService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,28 +12,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-import motion.database.DatabaseFile;
-import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLResponse.ListSessionFilesWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListFilesXMLResponse.ListFilesXMLResult;
 
 
 /**
- * <p>Java class for ListSessionFilesWithAttributesXMLResponse element declaration.
+ * <p>Java class for ListFilesXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListSessionFilesWithAttributesXMLResponse">
+ * &lt;element name="ListFilesXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListSessionFilesWithAttributesXMLResult" minOccurs="0">
+ *           &lt;element name="ListFilesXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionFileWithAttributesList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}FileList"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -48,36 +48,36 @@ import motion.database.ws.basicQueriesService.ListSessionFilesWithAttributesXMLR
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listSessionFilesWithAttributesXMLResult"
+    "listFilesXMLResult"
 })
-@XmlRootElement(name = "ListSessionFilesWithAttributesXMLResponse")
-public class ListSessionFilesWithAttributesXMLResponse {
+@XmlRootElement(name = "ListFilesXMLResponse")
+public class ListFilesXMLResponse {
 
-    @XmlElement(name = "ListSessionFilesWithAttributesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListSessionFilesWithAttributesXMLResult listSessionFilesWithAttributesXMLResult;
+    @XmlElement(name = "ListFilesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected ListFilesXMLResult listFilesXMLResult;
 
     /**
-     * Gets the value of the listSessionFilesWithAttributesXMLResult property.
+     * Gets the value of the listFilesXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListSessionFilesWithAttributesXMLResult }
+     *     {@link ListFilesXMLResult }
      *     
      */
-    public ListSessionFilesWithAttributesXMLResult getListSessionFilesWithAttributesXMLResult() {
-        return listSessionFilesWithAttributesXMLResult;
+    public ListFilesXMLResult getListFilesXMLResult() {
+        return listFilesXMLResult;
     }
 
     /**
-     * Sets the value of the listSessionFilesWithAttributesXMLResult property.
+     * Sets the value of the listFilesXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListSessionFilesWithAttributesXMLResult }
+     *     {@link ListFilesXMLResult }
      *     
      */
-    public void setListSessionFilesWithAttributesXMLResult(ListSessionFilesWithAttributesXMLResult value) {
-        this.listSessionFilesWithAttributesXMLResult = value;
+    public void setListFilesXMLResult(ListFilesXMLResult value) {
+        this.listFilesXMLResult = value;
     }
 
 
@@ -91,7 +91,7 @@ public class ListSessionFilesWithAttributesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionFileWithAttributesList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}FileList"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -104,11 +104,11 @@ public class ListSessionFilesWithAttributesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListSessionFilesWithAttributesXMLResult {
+    public static class ListFilesXMLResult {
 
-        @XmlElementRef(name = "SessionFileWithAttributesList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = SessionFileWithAttributesList.class)
+        @XmlElementRef(name = "FileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
         @XmlMixed
-        protected List<Object> content;
+        protected List<Serializable> content;
 
         /**
          * Gets the value of the content property.
@@ -128,18 +128,17 @@ public class ListSessionFilesWithAttributesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SessionFileWithAttributesList }
          * {@link String }
+         * {@link JAXBElement }{@code <}{@link FileListType }{@code >}
          * 
          * 
          */
-        public List<Object> getContent() {
+        public List<Serializable> getContent() {
             if (content == null) {
-                content = new ArrayList<Object>();
+                content = new ArrayList<Serializable>();
             }
             return this.content;
         }
-
 
     }
 

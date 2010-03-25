@@ -26,6 +26,7 @@ import motion.database.ws.basicQueriesService.FileListType.FileDetails;
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
  *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
@@ -88,6 +89,7 @@ public class FileListType {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
      *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
@@ -101,10 +103,36 @@ public class FileListType {
     @XmlType(name = "")
     public static class FileDetails {
 
+        @XmlAttribute(name = "FileDescription")
+        protected String fileDescription;
         @XmlAttribute(name = "FileID")
         protected BigInteger fileID;
         @XmlAttribute(name = "FileName")
         protected String fileName;
+
+        /**
+         * Gets the value of the fileDescription property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getFileDescription() {
+            return fileDescription;
+        }
+
+        /**
+         * Sets the value of the fileDescription property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setFileDescription(String value) {
+            this.fileDescription = value;
+        }
 
         /**
          * Gets the value of the fileID property.

@@ -29,6 +29,16 @@ import motion.database.ws.basicQueriesService.Attributes.Attribute;
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                   &lt;attribute name="entity">
+ *                     &lt;simpleType>
+ *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *                         &lt;enumeration value="performer"/>
+ *                         &lt;enumeration value="session"/>
+ *                         &lt;enumeration value="trial"/>
+ *                         &lt;enumeration value="segment"/>
+ *                       &lt;/restriction>
+ *                     &lt;/simpleType>
+ *                   &lt;/attribute>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -93,6 +103,16 @@ public class Attributes {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="entity">
+     *         &lt;simpleType>
+     *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+     *             &lt;enumeration value="performer"/>
+     *             &lt;enumeration value="session"/>
+     *             &lt;enumeration value="trial"/>
+     *             &lt;enumeration value="segment"/>
+     *           &lt;/restriction>
+     *         &lt;/simpleType>
+     *       &lt;/attribute>
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -108,6 +128,8 @@ public class Attributes {
         protected String name;
         @XmlAttribute(name = "Value", required = true)
         protected String value;
+        @XmlAttribute
+        protected String entity;
 
         /**
          * Gets the value of the name property.
@@ -155,6 +177,30 @@ public class Attributes {
          */
         public void setValue(String value) {
             this.value = value;
+        }
+
+        /**
+         * Gets the value of the entity property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getEntity() {
+            return entity;
+        }
+
+        /**
+         * Sets the value of the entity property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setEntity(String value) {
+            this.entity = value;
         }
 
     }
