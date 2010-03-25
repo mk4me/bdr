@@ -15,15 +15,16 @@ import java.util.logging.SimpleFormatter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
-import motion.database.ws.basicQueriesService.ArrayOfPlainFileDetails;
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
+import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
-import motion.database.ws.basicQueriesService.PlainFileDetails;
+import motion.database.ws.basicQueriesService.FileWithAttributesList;
 import motion.database.ws.basicQueriesService.PlainSessionDetails;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
+import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
@@ -36,15 +37,12 @@ import motion.database.ws.basicUpdateService.ArrayOfInt;
 import motion.database.ws.basicUpdateService.BasicUpdatesService;
 import motion.database.ws.basicUpdateService.BasicUpdatesServiceSoap;
 import motion.database.ws.basicUpdateService.PerformerData;
-import motion.database.ws.basicUpdateService.SessionData;
-import motion.database.ws.basicUpdateService.TrialData;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
 import motion.database.ws.test.SqlResultStream;
 import motion.database.ws.test.TestWs;
 import motion.database.ws.test.TestWsSoap;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import com.zehon.BatchTransferProgress;
 import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
@@ -348,10 +346,6 @@ public class DatabaseConnection {
 				session.put( SessionStaticAttributes.userID, s.getUserID() );
 				output.add( session );
 			}
-			
-			
-			log.exiting( "DatabaseConnection", "listPerformerSessions", result.getPlainSessionDetails() );
-			
 			return output;
 		}
 		else
@@ -414,13 +408,7 @@ public class DatabaseConnection {
 					session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
 					session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
 					session.put( SessionStaticAttributes.userID, s.getUserID() );
-					if (s.getAttributes() != null)
-						if (s.getAttributes().getAttribute() != null)
-							for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : s.getAttributes().getAttribute() )
-							{
-								Object value = att.getValue();
-								session.put(att.getName(), value );
-							}
+					transformGenericAttributes( s.getAttributes(), session );
 					output.add( session );
 				}
 			}
@@ -460,13 +448,7 @@ public class DatabaseConnection {
 					trial.put( TrialStaticAttributes.duration, s.getDuration() );
 					trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
 					trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
-					if (s.getAttributes() != null)
-						if (s.getAttributes().getAttribute() != null)
-							for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : s.getAttributes().getAttribute() )
-							{
-								Object value = att.getValue();
-								trial.put(att.getName(), value );
-							}
+					transformGenericAttributes( s.getAttributes(), trial );
 					output.add( trial );
 				}
 			}
@@ -540,8 +522,6 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			TrialData trialData = new TrialData();
-			
 			int result = port.createTrial(sessionID, trialDescription, trialDuration);
 			
 			return result;
@@ -634,21 +614,10 @@ public class DatabaseConnection {
 					segment.put( SegmentStaticAttributes.segmentName, s.getSegmentName() );
 					segment.put( SegmentStaticAttributes.startTime, s.getStartTime() );
 					segment.put( SegmentStaticAttributes.trialID, s.getTrialID() );
-					if (s.getAttributes() != null)
-						if (s.getAttributes().getAttribute() != null)
-							for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : s.getAttributes().getAttribute() )
-							{
-								Object value = att.getValue();
-								segment.put(att.getName(), value );
-							}
+					transformGenericAttributes( s.getAttributes(), segment );
 					output.add( segment );
 				}
 			}
-			
-			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
-			
-			//System.out.println( result );
-			
 			return output;
 		}
 		else
@@ -676,9 +645,34 @@ public class DatabaseConnection {
 
 	private List<DatabaseFile> transformListOfFiles(Object result) {
 
-		
-		System.out.println( result );
-		return null;
+		List<DatabaseFile> list = new ArrayList<DatabaseFile>();
+		ListFilesWithAttributesXMLResult r = (ListFilesWithAttributesXMLResult) result;
+		List<Object> l = r.getContent();
+		List<FileDetailsWithAttributes> f = ((FileWithAttributesList)l.get(0)).getFileDetailsWithAttributes();
+		for (FileDetailsWithAttributes d: f)
+		{
+			DatabaseFile df = new DatabaseFile();
+			df.put( DatabaseFileStaticAttributes.fileID, d.getFileID() );
+			df.put( DatabaseFileStaticAttributes.fileName, d.getFileName() );
+			transformGenericAttributes( d.getAttributes(), df );
+			list.add( df );
+		}
+
+		return list;
+	}
+
+	/**
+	 * @param attributes
+	 * @param destinationObject
+	 */
+	private void transformGenericAttributes(Attributes attributes, GenericDescription<?> destinationObject) {
+		if (attributes != null)
+			if (attributes.getAttribute() != null)
+				for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : attributes.getAttribute() )
+				{
+					Object value = att.getValue();
+					destinationObject.put(att.getName(), value );
+				}
 	}
 
 

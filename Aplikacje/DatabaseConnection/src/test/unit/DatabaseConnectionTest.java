@@ -35,7 +35,9 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
  */
 public class DatabaseConnectionTest {
 
-
+	static final boolean testFileUploading = false;
+	
+	
 	public void beforeTest()
 	{
 		System.out.println("============================================================");
@@ -78,11 +80,14 @@ public class DatabaseConnectionTest {
 	 * Test method for {@link motion.database.DatabaseConnection#uploadSessionFile()}.
 	 * @throws Exception 
 	 */
-	//@Test
+	@Test
 	public void testUploadSessionFile() throws Exception {
 		
 		beforeTest();
 
+		if (!testFileUploading)
+			return;
+		
 		database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/Combo_1.c3d", new ConsoleTransferListener() );
 		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	}
@@ -91,10 +96,13 @@ public class DatabaseConnectionTest {
 	 * Test method for {@link motion.database.DatabaseConnection#uploadTrialFile()}.
 	 * @throws Exception 
 	 */
-	//@Test
+	@Test
 	public void testUploadTrialFile() throws Exception {
 		
 		beforeTest();
+
+		if (!testFileUploading)
+			return;
 
 		database.uploadTrialFile( 1, "A new trial file", "data/Combo_1.c3d", new ConsoleTransferListener() );
 		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
@@ -109,6 +117,9 @@ public class DatabaseConnectionTest {
 	public void testUploadPerformerFile() throws Exception {
 		
 		beforeTest();
+
+		if (!testFileUploading)
+			return;
 
 		database.uploadPerformerFile( 1, "A new performer file", "data/Combo_1.c3d", new ConsoleTransferListener() );
 	}
