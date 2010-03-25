@@ -12,7 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import motion.applet.database.ConnectorInstance;
+import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
@@ -69,9 +69,9 @@ public class MotionApplet extends JApplet {
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-		LeftSplitPanel performerPanel = new LeftSplitPanel("Performer");
-		LeftSplitPanel sessionPanel = new LeftSplitPanel("Sesja");
-		LeftSplitPanel observationPanel = new LeftSplitPanel("Obserwacja");
+		LeftSplitPanel performerPanel = new LeftSplitPanel(TableNamesInstance.PERFORMER);
+		LeftSplitPanel sessionPanel = new LeftSplitPanel(TableNamesInstance.SESSION);
+		LeftSplitPanel observationPanel = new LeftSplitPanel(TableNamesInstance.TRIAL);
 		leftPanel.add(performerPanel);
 		leftPanel.add(sessionPanel);
 		leftPanel.add(observationPanel);

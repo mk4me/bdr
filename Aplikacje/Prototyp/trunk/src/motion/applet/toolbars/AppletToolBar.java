@@ -1,17 +1,20 @@
 package motion.applet.toolbars;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
 import motion.applet.MotionApplet;
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
 
 public class AppletToolBar extends JToolBar {
-	private String[] tableNames = {"Performer", "Sesja", "Obserwacja", "Pacjent"};
+	private TableName[] tableNames = {TableNamesInstance.PERFORMER,
+			TableNamesInstance.SESSION,
+			TableNamesInstance.TRIAL,
+			TableNamesInstance.PATIENT};
 	private JComboBox tableComboBox = new JComboBox(tableNames);
 	
 	public AppletToolBar() {

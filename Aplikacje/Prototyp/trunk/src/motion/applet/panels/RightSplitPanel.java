@@ -1,8 +1,6 @@
 package motion.applet.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +12,8 @@ import javax.swing.JTree;
 import javax.swing.table.TableModel;
 
 import motion.applet.database.Connector;
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
 import motion.applet.tables.BasicTable;
 import motion.applet.trees.ResultTree;
 
@@ -26,7 +26,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		super();
 		this.setLayout(new BorderLayout());
 		table = new JTable();
-		showTable("Performer");
+		showTable(TableNamesInstance.PERFORMER.getTableName());
 		JScrollPane scrollPane = new JScrollPane(table);
 		//showTree("Performer");
 		//JScrollPane scrollPane = new JScrollPane(tree);
@@ -56,6 +56,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		JComboBox comboBox = (JComboBox) actionEvent.getSource();
-		showTable((String) comboBox.getSelectedItem());
+		showTable(((TableName) comboBox.getSelectedItem()).getTableName());
 	}
 }

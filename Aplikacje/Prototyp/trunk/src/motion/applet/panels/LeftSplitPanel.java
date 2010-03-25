@@ -19,9 +19,9 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import motion.applet.MotionApplet;
+import motion.applet.database.TableName;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.filter.Filter;
-import motion.applet.filter.model.SimplePredicate;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 
@@ -34,9 +34,9 @@ public class LeftSplitPanel extends JPanel {
 	private static String EDIT_FILTER = "Edit";
 	private static String START_FILTER = "Start";
 	private static String TREE_TITLE = " filters";
-	private String tableName;
+	private TableName tableName;
 	
-	public LeftSplitPanel(String tableName) {
+	public LeftSplitPanel(TableName tableName) {
 		super();
 		this.tableName = tableName;
 		

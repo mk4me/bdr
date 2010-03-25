@@ -27,6 +27,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.Connector;
 import motion.applet.database.ConnectorInstance;
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
 import motion.applet.filter.Filter;
 import motion.applet.filter.model.Predicate;
 import motion.applet.filter.model.PredicateComposition;
@@ -62,9 +64,9 @@ public class FilterDialog extends JDialog {
 	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
 	
 	// ContextEntity
-	private String tableName = "Sesja";
+	private TableName tableName;
 	
-	public FilterDialog(String tableName) {
+	public FilterDialog(TableName tableName) {
 		super((JFrame) null, FILTER_TITLE, true);
 		this.setSize(440, 400);
 		this.setLocation(200, 200);
@@ -76,7 +78,7 @@ public class FilterDialog extends JDialog {
 	}
 	
 	public FilterDialog(Filter filter) {
-		this(filter.getPredicate().getContextEntity());
+		this(TableNamesInstance.toTableName(filter.getPredicate().getContextEntity()));
 		this.nameText.setText(filter.getName());
 		this.predicate = filter.getPredicate();
 		this.addButton.setText(EDIT_FILTER);
@@ -114,7 +116,7 @@ public class FilterDialog extends JDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableLabel, gridBagConstraints);
 		
-		JLabel tableNameLabel = new JLabel(this.tableName);
+		JLabel tableNameLabel = new JLabel(this.tableName.toString());
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableNameLabel, gridBagConstraints);
@@ -198,7 +200,7 @@ public class FilterDialog extends JDialog {
 		this.addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (FilterDialog.this.validateResult() == true) {
-					FilterDialog.this.result = ADD_PRESSED;
+					FilterDialog.this.setResult(ADD_PRESSED);
 					FilterDialog.this.setVisible(false);
 					FilterDialog.this.dispose();
 				}
@@ -207,7 +209,7 @@ public class FilterDialog extends JDialog {
 		
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FilterDialog.this.result = CANCEL_PRESSED;
+				FilterDialog.this.setResult(CANCEL_PRESSED);
 				FilterDialog.this.setVisible(false);
 				FilterDialog.this.dispose();
 			}
@@ -223,7 +225,7 @@ public class FilterDialog extends JDialog {
 	public SimplePredicate getPredicate() {
 		ColumnCondition firstColumnCondition = columnConditions.get(0);
 		SimplePredicate firstPredicate = new SimplePredicate(
-				tableName,
+				tableName.getTableName(),
 				firstColumnCondition.getFeature(),
 				firstColumnCondition.getOperator(),
 				firstColumnCondition.getValue());
@@ -235,7 +237,7 @@ public class FilterDialog extends JDialog {
 				first = false;
 			} else {
 				SimplePredicate currentPredicate = new SimplePredicate(
-						tableName,
+						tableName.getTableName(),
 						cc.getFeature(),
 						cc.getOperator(),
 						cc.getValue(),
@@ -260,9 +262,9 @@ public class FilterDialog extends JDialog {
 	}
 	
 	// Button press result.
-	private int setResult() {
+	private void setResult(int result) {
 		
-		return this.result;
+		this.result = result;
 	}
 	
 	public int getResult() {
@@ -278,7 +280,7 @@ public class FilterDialog extends JDialog {
 		private JTextField conditionText = new JTextField(10);
 		private java.sql.Connection connection;
 		private String databaseName;
-		private String tableName;
+		private TableName tableName;
 		private ArrayList<String> columnNameList;
 		private ArrayList<Object> columnClassList;
 		
@@ -287,7 +289,7 @@ public class FilterDialog extends JDialog {
 		
 		private JButton removeButton;
 		
-		public ColumnCondition(Connector connector, String tableName, boolean firstCondition) throws SQLException {
+		public ColumnCondition(Connector connector, TableName tableName, boolean firstCondition) throws SQLException {
 			super();
 			this.tableName = tableName;
 			this.databaseName = connector.getDatabaseName();
@@ -296,18 +298,19 @@ public class FilterDialog extends JDialog {
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
 			// FIXME: Change to fillColumnsFromAttributes
-			if (this.tableName.equals("Performer") || this.tableName.equals("Obserwacja")) {
+			if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
 				this.connection = connector.openConnection();
 				fillColumns();
 				connector.closeConnection();
-			} else if (this.tableName.equals("Sesja")) {
+			} else if (this.tableName.equals(TableNamesInstance.SESSION) ||
+					this.tableName.equals(TableNamesInstance.TRIAL)) {
 				fillColumnsFromAttributes();
 			}
 			
 			this.operatorComboBox = new JComboBox();
 			fillOperators(0);
 			
-			if (firstCondition == false) {
+			if (this.firstCondition == false) {
 				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
 				this.add(logicalComboBox);
 			}
@@ -316,7 +319,7 @@ public class FilterDialog extends JDialog {
 			this.add(operatorComboBox);
 			this.add(conditionText);
 			
-			if (firstCondition == false) {
+			if (this.firstCondition == false) {
 				this.removeButton = new JButton(REMOVE_CONDITION);
 				this.add(removeButton);
 				this.removeButton.addActionListener(new ActionListener() {
@@ -335,7 +338,7 @@ public class FilterDialog extends JDialog {
 		
 		private void fillColumns() throws SQLException {
 			DatabaseMetaData databaseMetaData = this.connection.getMetaData();
-			ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName, null);
+			ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName.getTableName(), null);
 			this.columnNameList = new ArrayList<String>();
 			this.columnClassList = new ArrayList<Object>();
 			
@@ -376,7 +379,7 @@ public class FilterDialog extends JDialog {
 			this.columnNameList = new ArrayList<String>();
 			this.columnClassList = new ArrayList<Object>();
 			
-			if (this.tableName.equals("Sesja")) { // FIXME: change to some superclass and use instanceOf?
+			if (this.tableName.equals(TableNamesInstance.SESSION)) {
 				columnNameList.add(SessionStaticAttributes.sessionID.toString());
 				columnClassList.add(BigInteger.class);
 				columnNameList.add(SessionStaticAttributes.userID.toString());
@@ -392,13 +395,13 @@ public class FilterDialog extends JDialog {
 				columnNameList.add(SessionStaticAttributes.sessionDescription.toString());
 				columnClassList.add(String.class);
 				
-			} else if (this.tableName.equals("Obserwacja")) {
+			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
 				columnNameList.add(TrialStaticAttributes.trialID.toString());
 				columnClassList.add(BigInteger.class);
 				columnNameList.add(TrialStaticAttributes.sessionID.toString());
 				columnClassList.add(BigInteger.class);
 				columnNameList.add(TrialStaticAttributes.duration.toString());
-				columnClassList.add(BigInteger.class); // FIXME: check
+				columnClassList.add(BigInteger.class);
 				columnNameList.add(TrialStaticAttributes.trialDescription.toString());
 				columnClassList.add(String.class);
 			}
@@ -411,7 +414,7 @@ public class FilterDialog extends JDialog {
 		private void fillColumnsFromAttributesDefined(){
 			HashMap<String, String> results;
 			try {
-				results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", this.tableName);
+				results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", this.tableName.getTableName());
 				for (String s : results.keySet()) { 
 					columnNameList.add(s);
 					String type = results.get(s);
