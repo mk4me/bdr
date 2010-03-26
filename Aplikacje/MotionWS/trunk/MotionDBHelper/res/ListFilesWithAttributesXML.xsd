@@ -10,8 +10,9 @@
                 <s:sequence>
                   <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
                 </s:sequence>
-                <s:attribute name="FileID" type="s:integer" />
+                <s:attribute name="FileID" type="s:int" />
                 <s:attribute name="FileName" type="s:string" />
+                <s:attribute name="FileDescription" type="s:string" />
               </s:complexType>
             </s:element>
           </s:sequence>

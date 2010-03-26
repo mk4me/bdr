@@ -4,7 +4,7 @@
       <s:sequence>
         <s:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
           <s:complexType>
-            <s:attribute name="FileID" type="s:integer" />
+            <s:attribute name="FileID" type="s:int" />
             <s:attribute name="FileName" type="s:string" />
             <s:attribute name="FileDescription" type="s:string" />            
           </s:complexType>

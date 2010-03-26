@@ -7,11 +7,11 @@
         <s:element name="SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
           <s:complexType>
             <s:sequence>
-              <s:element name="SessionID" type="s:integer" />
-              <s:element name="UserID" type="s:integer" />
-              <s:element name="LabID" type="s:integer" />
-              <s:element name="MotionKindID" type="s:integer" />
-              <s:element name="PerformerID" type="s:integer" />
+              <s:element name="SessionID" type="s:int" />
+              <s:element name="UserID" type="s:int" />
+              <s:element name="LabID" type="s:int" />
+              <s:element name="MotionKindID" type="s:int" />
+              <s:element name="PerformerID" type="s:int" />
               <s:element name="SessionDate" type="s:dateTime" />
               <s:element name="SessionDescription" type="s:string" />
               <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />

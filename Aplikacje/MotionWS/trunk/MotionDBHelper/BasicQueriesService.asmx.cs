@@ -36,17 +36,17 @@ namespace MotionDBWebServices
                 perfId.Direction = ParameterDirection.Input;
                 perfId.Value = performerID;
                 SqlDataReader dr = cmd.ExecuteReader();
-                
+
                 while (dr.Read())
                 {
                     PlainSessionDetails sd = new PlainSessionDetails();
-                    sd.SessionID = int.Parse( dr[0].ToString());
-                    sd.UserID = int.Parse( dr[1].ToString());
-                    sd.LabID = int.Parse( dr[2].ToString());
-                    sd.MotionKindID = int.Parse( dr[3].ToString());
-                    sd.PerformerID = int.Parse( dr[4].ToString());
-                    sd.SessionDate = DateTime.Parse( dr[5].ToString());
-                    sd.SessionDescription = dr[6].ToString();
+                    sd.SessionID = int.Parse(dr["SessionID"].ToString());
+                    sd.UserID = int.Parse(dr["UserID"].ToString());
+                    sd.LabID = int.Parse(dr["LabID"].ToString());
+                    sd.MotionKindID = (dr["MotionKindID"] == DBNull.Value) ? 0 : int.Parse(dr["MotionKindID"].ToString());
+                    sd.PerformerID = int.Parse(dr["PerformerID"].ToString());
+                    sd.SessionDate = DateTime.Parse(dr["SessionDate"].ToString());
+                    sd.SessionDescription = (dr["SessionDescription"] == DBNull.Value) ? "" : dr["SessionDescription"].ToString();
 
                     sdl.Add(sd);
                 }
@@ -56,7 +56,10 @@ namespace MotionDBWebServices
             {
                 // report problem
             }
-            CloseConnection();
+            finally
+            {
+                CloseConnection();
+            }
             //if(sdl.Count==0){
             //    SessionDetails x = new SessionDetails();
             //    x.SessionDescription = "pusto";
@@ -96,8 +99,10 @@ namespace MotionDBWebServices
             {
                 // report exception
             }
-            CloseConnection();
-
+            finally
+            {
+                CloseConnection();
+            }
             return fdl.ToArray();
         }
 

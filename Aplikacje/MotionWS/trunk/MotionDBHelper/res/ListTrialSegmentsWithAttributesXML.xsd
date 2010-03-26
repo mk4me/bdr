@@ -7,11 +7,11 @@
             <s:element name="SegmentDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
               <s:complexType>
                 <s:sequence>
-                <s:element name="SegmentID" type="s:integer" />
-                <s:element name="TrialID" type="s:integer" />
+                <s:element name="SegmentID" type="s:int" />
+                <s:element name="TrialID" type="s:int" />
                 <s:element name="SegmentName" type="s:string" />
-                <s:element name="StartTime" type="s:integer" />
-                <s:element name="EndTime" type="s:integer" />
+                <s:element name="StartTime" type="s:int" />
+                <s:element name="EndTime" type="s:int" />
                 <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
                 </s:sequence>
               </s:complexType>

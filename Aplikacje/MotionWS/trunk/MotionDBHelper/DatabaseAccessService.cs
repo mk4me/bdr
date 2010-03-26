@@ -15,7 +15,7 @@ namespace MotionDBWebServices
         protected void OpenConnection()
         {
             // server = DBPAWELL
-            conn = new SqlConnection(@"server = DBPAWELL; integrated security = true; database = Motion");
+            conn = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             conn.Open();
             cmd = conn.CreateCommand();
         }

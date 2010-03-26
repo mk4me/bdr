@@ -6,10 +6,10 @@
           <s:sequence>
             <s:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
               <s:complexType>
-                <s:attribute name="TrialID" type="s:integer" />
-                <s:attribute name="SessionID" type="s:integer" />
+                <s:attribute name="TrialID" type="s:int" />
+                <s:attribute name="SessionID" type="s:int" />
                 <s:attribute name="TrialDescription" type="s:string" />
-                <s:attribute name="Duration" type="s:integer" />
+                <s:attribute name="Duration" type="s:int" />
               </s:complexType>
             </s:element>
           </s:sequence>
