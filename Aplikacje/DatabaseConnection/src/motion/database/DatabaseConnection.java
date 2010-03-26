@@ -290,7 +290,6 @@ public class DatabaseConnection {
 		}
 	}
 	
-	// TODO: testing 
 	public void uploadSessionFiles(int sessionId, String filesPath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -319,7 +318,50 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 	
+	public void uploadPerformerFiles(int performerId, String filesPath, FileTransferListener listener) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			String destRemoteFolder = "";
 
+			File dir = new File(filesPath);
+			if ( dir.isDirectory() )
+			{
+				createRemoteFolder( dir.getName(), destRemoteFolder );
+				FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+				FileStoremanService service = new FileStoremanService();
+				FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
+				prepareCall( (BindingProvider)port );
+				port.storePerformerFiles( performerId, destRemoteFolder+dir.getName() );
+			}
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	
+	public void uploadTrialFiles(int trialId, String filesPath, FileTransferListener listener) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			String destRemoteFolder = "";
+
+			File dir = new File(filesPath);
+			if ( dir.isDirectory() )
+			{
+				createRemoteFolder( dir.getName(), destRemoteFolder );
+				FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+				FileStoremanService service = new FileStoremanService();
+				FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
+				prepareCall( (BindingProvider)port );
+				port.storeTrialFiles( trialId, destRemoteFolder+dir.getName() );
+			}
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	
 	public  DbElementsList<Performer> listPerformersWithAttributes() throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -546,10 +588,10 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot create session.");
 	}
 
-	
+		
 	public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -589,25 +631,6 @@ public class DatabaseConnection {
 	}
 
 	
-	public int setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
-	{
-		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
-		{
-			log.entering( "DatabaseConnection", "setPerformerAttribute" );
-	
-			BasicUpdatesService service = new BasicUpdatesService();
-			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
-			
-			prepareCall( (BindingProvider)port);
-	
-			int result = port.setPerformerAttribute(performerID, attributeName, attributeValue, update);
-			
-			return result;
-		}
-		else
-			throw new Exception("Not Initialized. Cannot create performer.");
-	}
-
 	
 	public int setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
@@ -627,7 +650,79 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot create performer.");
 	}
 
+	public int setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "setPerformerAttribute" );
 	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			int result = port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+	public int setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			int result = port.setPerformerAttribute(performerID, attributeName, attributeValue, update);			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+	public int setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			int result = port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+	public int setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+	
+			BasicUpdatesService service = new BasicUpdatesService();
+			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			int result = port.setFileAttribute(fileID, attributeName, attributeValue, update);			
+			return result;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot create performer.");
+	}
+
+			
 	public  DbElementsList<Segment> listTrialSegmentsWithAttributes(int trialID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)

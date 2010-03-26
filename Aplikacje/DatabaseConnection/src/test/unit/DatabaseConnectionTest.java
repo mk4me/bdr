@@ -118,6 +118,27 @@ public class DatabaseConnectionTest {
 		database.uploadPerformerFile( 1, "A new performer file", "data/Combo_1.c3d", new ConsoleTransferListener() );
 	}
 
+
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#uploadSessionFiles()}.
+	 * @throws Exception 
+	 */
+	@Test
+	public void testUploadSessionFiles() throws Exception {
+		
+		beforeTest();
+
+		//if (!testFileUploading)
+		//	return;
+		int id = 2;
+		
+		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
+		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
+	
+		System.out.println( database.listSessionFiles( id ) );
+	}
+	
+	
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listPerformerSessionsWithAttributes()}.
 	 * @throws Exception 
@@ -293,6 +314,26 @@ public class DatabaseConnectionTest {
 	}
 
 	/**
+	 * Test method for {@link motion.database.DatabaseConnection#setPerformerAttribute}.
+	 * @throws Exception 
+	 */
+	@Test
+	public void testSetPerformerAttribute() throws Exception {
+		
+		beforeTest();
+
+		int id = 1;
+		int result = database.setPerformerAttribute( id, "kick_length", "10", true);
+
+		DbElementsList<Performer> list = database.listPerformersWithAttributes();
+		Performer x = list.findById(id);
+		System.out.println( x );
+		this.testListAttributesDefined();
+	}
+	
+	
+	
+	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 
 	 */
@@ -301,6 +342,9 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
+		if (!testFileUploading)
+			return;
+		
 		int fileID = 3;
 		String result = database.downloadFile(fileID, "./data/", new ConsoleTransferListener());
 		
