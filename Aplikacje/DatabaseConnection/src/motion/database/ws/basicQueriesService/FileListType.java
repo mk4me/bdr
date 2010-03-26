@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -27,7 +26,7 @@ import motion.database.ws.basicQueriesService.FileListType.FileDetails;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -90,7 +89,7 @@ public class FileListType {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -106,7 +105,7 @@ public class FileListType {
         @XmlAttribute(name = "FileDescription")
         protected String fileDescription;
         @XmlAttribute(name = "FileID")
-        protected BigInteger fileID;
+        protected Integer fileID;
         @XmlAttribute(name = "FileName")
         protected String fileName;
 
@@ -139,10 +138,10 @@ public class FileListType {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getFileID() {
+        public Integer getFileID() {
             return fileID;
         }
 
@@ -151,10 +150,10 @@ public class FileListType {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setFileID(BigInteger value) {
+        public void setFileID(Integer value) {
             this.fileID = value;
         }
 

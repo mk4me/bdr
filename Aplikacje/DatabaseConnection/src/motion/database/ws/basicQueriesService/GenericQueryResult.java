@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,22 +28,22 @@ import motion.database.ws.basicQueriesService.GenericQueryResult.GenericResultRo
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+ *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                     &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *                     &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *                     &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *                     &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+ *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                     &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                     &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                     &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *                     &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+ *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                     &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *                     &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+ *                     &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                     &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                     &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *                     &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+ *                     &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                     &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
@@ -110,22 +109,22 @@ public class GenericQueryResult {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
-     *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
-     *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
-     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
      *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
-     *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+     *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
-     *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
+     *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -158,37 +157,37 @@ public class GenericQueryResult {
     public static class GenericResultRow {
 
         @XmlElement(name = "PerformerID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger performerID;
+        protected Integer performerID;
         @XmlElement(name = "FirstName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected String firstName;
         @XmlElement(name = "LastName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected String lastName;
         @XmlElement(name = "SessionID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger sessionID;
+        protected Integer sessionID;
         @XmlElement(name = "UserID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger userID;
+        protected Integer userID;
         @XmlElement(name = "LabID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger labID;
+        protected Integer labID;
         @XmlElement(name = "MotionKindID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger motionKindID;
+        protected Integer motionKindID;
         @XmlElement(name = "SessionDate", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected XMLGregorianCalendar sessionDate;
         @XmlElement(name = "SessionDescription", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected String sessionDescription;
         @XmlElement(name = "TrialID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger trialID;
+        protected Integer trialID;
         @XmlElement(name = "TrialDescription", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected String trialDescription;
         @XmlElement(name = "Duration", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger duration;
+        protected Integer duration;
         @XmlElement(name = "SegmentID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger segmentID;
+        protected Integer segmentID;
         @XmlElement(name = "SegmentName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected String segmentName;
         @XmlElement(name = "StartTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger startTime;
+        protected Integer startTime;
         @XmlElement(name = "EndTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        protected BigInteger endTime;
+        protected Integer endTime;
         @XmlElement(name = "Attributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected Attributes attributes;
 
@@ -197,10 +196,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getPerformerID() {
+        public Integer getPerformerID() {
             return performerID;
         }
 
@@ -209,10 +208,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setPerformerID(BigInteger value) {
+        public void setPerformerID(Integer value) {
             this.performerID = value;
         }
 
@@ -269,10 +268,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getSessionID() {
+        public Integer getSessionID() {
             return sessionID;
         }
 
@@ -281,10 +280,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setSessionID(BigInteger value) {
+        public void setSessionID(Integer value) {
             this.sessionID = value;
         }
 
@@ -293,10 +292,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getUserID() {
+        public Integer getUserID() {
             return userID;
         }
 
@@ -305,10 +304,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setUserID(BigInteger value) {
+        public void setUserID(Integer value) {
             this.userID = value;
         }
 
@@ -317,10 +316,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getLabID() {
+        public Integer getLabID() {
             return labID;
         }
 
@@ -329,10 +328,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setLabID(BigInteger value) {
+        public void setLabID(Integer value) {
             this.labID = value;
         }
 
@@ -341,10 +340,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getMotionKindID() {
+        public Integer getMotionKindID() {
             return motionKindID;
         }
 
@@ -353,10 +352,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setMotionKindID(BigInteger value) {
+        public void setMotionKindID(Integer value) {
             this.motionKindID = value;
         }
 
@@ -413,10 +412,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getTrialID() {
+        public Integer getTrialID() {
             return trialID;
         }
 
@@ -425,10 +424,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setTrialID(BigInteger value) {
+        public void setTrialID(Integer value) {
             this.trialID = value;
         }
 
@@ -461,10 +460,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getDuration() {
+        public Integer getDuration() {
             return duration;
         }
 
@@ -473,10 +472,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setDuration(BigInteger value) {
+        public void setDuration(Integer value) {
             this.duration = value;
         }
 
@@ -485,10 +484,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getSegmentID() {
+        public Integer getSegmentID() {
             return segmentID;
         }
 
@@ -497,10 +496,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setSegmentID(BigInteger value) {
+        public void setSegmentID(Integer value) {
             this.segmentID = value;
         }
 
@@ -533,10 +532,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getStartTime() {
+        public Integer getStartTime() {
             return startTime;
         }
 
@@ -545,10 +544,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setStartTime(BigInteger value) {
+        public void setStartTime(Integer value) {
             this.startTime = value;
         }
 
@@ -557,10 +556,10 @@ public class GenericQueryResult {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getEndTime() {
+        public Integer getEndTime() {
             return endTime;
         }
 
@@ -569,10 +568,10 @@ public class GenericQueryResult {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setEndTime(BigInteger value) {
+        public void setEndTime(Integer value) {
             this.endTime = value;
         }
 

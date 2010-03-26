@@ -8,13 +8,9 @@ import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Vector;
 
-import org.apache.commons.net.ftp.FTP;
-
 import com.zehon.FileTransferStatus;
-import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
 
 class FileTransferSupport {

@@ -3,7 +3,6 @@
  */
 package motion.database;
 
-import java.util.Vector;
 
 class TransferNotifier extends Thread
 {

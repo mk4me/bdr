@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,11 +27,11 @@ import motion.database.ws.basicQueriesService.TrailSegmentList.SegmentDetails;
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                   &lt;attribute name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                   &lt;attribute name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -95,11 +94,11 @@ public class TrailSegmentList {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -112,25 +111,25 @@ public class TrailSegmentList {
     public static class SegmentDetails {
 
         @XmlAttribute(name = "EndTime")
-        protected BigInteger endTime;
+        protected Integer endTime;
         @XmlAttribute(name = "SegmentID")
-        protected BigInteger segmentID;
+        protected Integer segmentID;
         @XmlAttribute(name = "SegmentName")
         protected String segmentName;
         @XmlAttribute(name = "StartTime")
-        protected BigInteger startTime;
+        protected Integer startTime;
         @XmlAttribute(name = "TrialID")
-        protected BigInteger trialID;
+        protected Integer trialID;
 
         /**
          * Gets the value of the endTime property.
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getEndTime() {
+        public Integer getEndTime() {
             return endTime;
         }
 
@@ -139,10 +138,10 @@ public class TrailSegmentList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setEndTime(BigInteger value) {
+        public void setEndTime(Integer value) {
             this.endTime = value;
         }
 
@@ -151,10 +150,10 @@ public class TrailSegmentList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getSegmentID() {
+        public Integer getSegmentID() {
             return segmentID;
         }
 
@@ -163,10 +162,10 @@ public class TrailSegmentList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setSegmentID(BigInteger value) {
+        public void setSegmentID(Integer value) {
             this.segmentID = value;
         }
 
@@ -199,10 +198,10 @@ public class TrailSegmentList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getStartTime() {
+        public Integer getStartTime() {
             return startTime;
         }
 
@@ -211,10 +210,10 @@ public class TrailSegmentList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setStartTime(BigInteger value) {
+        public void setStartTime(Integer value) {
             this.startTime = value;
         }
 
@@ -223,10 +222,10 @@ public class TrailSegmentList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getTrialID() {
+        public Integer getTrialID() {
             return trialID;
         }
 
@@ -235,10 +234,10 @@ public class TrailSegmentList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setTrialID(BigInteger value) {
+        public void setTrialID(Integer value) {
             this.trialID = value;
         }
 

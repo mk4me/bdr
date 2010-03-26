@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,10 +27,10 @@ import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.Tri
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                     &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
@@ -97,10 +96,10 @@ public class SessionTrialWithAttributesList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
-     *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -120,62 +119,46 @@ public class SessionTrialWithAttributesList {
     })
     public static class TrialDetailsWithAttributes {
 
-        @XmlElement(name = "TrialID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger trialID;
-        @XmlElement(name = "SessionID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger sessionID;
+        @XmlElement(name = "TrialID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int trialID;
+        @XmlElement(name = "SessionID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int sessionID;
         @XmlElement(name = "TrialDescription", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String trialDescription;
-        @XmlElement(name = "Duration", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger duration;
+        @XmlElement(name = "Duration", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int duration;
         @XmlElement(name = "Attributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected Attributes attributes;
 
         /**
          * Gets the value of the trialID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getTrialID() {
+        public int getTrialID() {
             return trialID;
         }
 
         /**
          * Sets the value of the trialID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setTrialID(BigInteger value) {
+        public void setTrialID(int value) {
             this.trialID = value;
         }
 
         /**
          * Gets the value of the sessionID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getSessionID() {
+        public int getSessionID() {
             return sessionID;
         }
 
         /**
          * Sets the value of the sessionID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setSessionID(BigInteger value) {
+        public void setSessionID(int value) {
             this.sessionID = value;
         }
 
@@ -206,24 +189,16 @@ public class SessionTrialWithAttributesList {
         /**
          * Gets the value of the duration property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getDuration() {
+        public int getDuration() {
             return duration;
         }
 
         /**
          * Sets the value of the duration property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setDuration(BigInteger value) {
+        public void setDuration(int value) {
             this.duration = value;
         }
 

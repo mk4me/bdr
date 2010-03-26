@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -30,7 +29,7 @@ import motion.database.ws.basicQueriesService.PerformerList.PerformerDetails;
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;attribute name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -95,7 +94,7 @@ public class PerformerList {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -112,7 +111,7 @@ public class PerformerList {
         @XmlAttribute(name = "LastName")
         protected String lastName;
         @XmlAttribute(name = "PerformerID")
-        protected BigInteger performerID;
+        protected Integer performerID;
 
         /**
          * Gets the value of the firstName property.
@@ -167,10 +166,10 @@ public class PerformerList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getPerformerID() {
+        public Integer getPerformerID() {
             return performerID;
         }
 
@@ -179,10 +178,10 @@ public class PerformerList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setPerformerID(BigInteger value) {
+        public void setPerformerID(Integer value) {
             this.performerID = value;
         }
 

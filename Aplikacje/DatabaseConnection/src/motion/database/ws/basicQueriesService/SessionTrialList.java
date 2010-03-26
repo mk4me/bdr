@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,10 +27,10 @@ import motion.database.ws.basicQueriesService.SessionTrialList.TrialDetails;
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                   &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                   &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -94,10 +93,10 @@ public class SessionTrialList {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -110,23 +109,23 @@ public class SessionTrialList {
     public static class TrialDetails {
 
         @XmlAttribute(name = "Duration")
-        protected BigInteger duration;
+        protected Integer duration;
         @XmlAttribute(name = "SessionID")
-        protected BigInteger sessionID;
+        protected Integer sessionID;
         @XmlAttribute(name = "TrialDescription")
         protected String trialDescription;
         @XmlAttribute(name = "TrialID")
-        protected BigInteger trialID;
+        protected Integer trialID;
 
         /**
          * Gets the value of the duration property.
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getDuration() {
+        public Integer getDuration() {
             return duration;
         }
 
@@ -135,10 +134,10 @@ public class SessionTrialList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setDuration(BigInteger value) {
+        public void setDuration(Integer value) {
             this.duration = value;
         }
 
@@ -147,10 +146,10 @@ public class SessionTrialList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getSessionID() {
+        public Integer getSessionID() {
             return sessionID;
         }
 
@@ -159,10 +158,10 @@ public class SessionTrialList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setSessionID(BigInteger value) {
+        public void setSessionID(Integer value) {
             this.sessionID = value;
         }
 
@@ -195,10 +194,10 @@ public class SessionTrialList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getTrialID() {
+        public Integer getTrialID() {
             return trialID;
         }
 
@@ -207,10 +206,10 @@ public class SessionTrialList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setTrialID(BigInteger value) {
+        public void setTrialID(Integer value) {
             this.trialID = value;
         }
 

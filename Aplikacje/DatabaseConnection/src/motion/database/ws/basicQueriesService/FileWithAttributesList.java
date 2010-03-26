@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,7 +30,8 @@ import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetails
  *                   &lt;sequence>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                   &lt;/sequence>
- *                   &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                   &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                   &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -98,7 +98,8 @@ public class FileWithAttributesList {
      *       &lt;sequence>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
-     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -115,8 +116,10 @@ public class FileWithAttributesList {
 
         @XmlElement(name = "Attributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected Attributes attributes;
+        @XmlAttribute(name = "FileDescription")
+        protected String fileDescription;
         @XmlAttribute(name = "FileID")
-        protected BigInteger fileID;
+        protected Integer fileID;
         @XmlAttribute(name = "FileName")
         protected String fileName;
 
@@ -145,14 +148,38 @@ public class FileWithAttributesList {
         }
 
         /**
+         * Gets the value of the fileDescription property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getFileDescription() {
+            return fileDescription;
+        }
+
+        /**
+         * Sets the value of the fileDescription property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setFileDescription(String value) {
+            this.fileDescription = value;
+        }
+
+        /**
          * Gets the value of the fileID property.
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getFileID() {
+        public Integer getFileID() {
             return fileID;
         }
 
@@ -161,10 +188,10 @@ public class FileWithAttributesList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setFileID(BigInteger value) {
+        public void setFileID(Integer value) {
             this.fileID = value;
         }
 

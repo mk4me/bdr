@@ -3,7 +3,6 @@ package motion.database;
 import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -20,6 +19,7 @@ import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileWithAttributesList;
+import motion.database.ws.basicQueriesService.PerformerWithAttributesList;
 import motion.database.ws.basicQueriesService.PlainSessionDetails;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
@@ -28,9 +28,11 @@ import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetails
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.PerformerWithAttributesList.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList.SegmentDetailsWithAttributes;
 import motion.database.ws.basicUpdateService.ArrayOfInt;
@@ -317,9 +319,46 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 	
+
+	public  DbElementsList<Performer> listPerformersWithAttributes() throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessions" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ListPerformersWithAttributesXMLResult result = port.listPerformersWithAttributesXML();
+
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			for (Object o : result.getContent())
+			{
+				PerformerWithAttributesList ss = (motion.database.ws.basicQueriesService.PerformerWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
+				for ( PerformerDetailsWithAttributes s : ss.getPerformerDetailsWithAttributes() )
+				{
+					Performer performer = new Performer();
+					performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
+					performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
+					performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
+					
+					transformGenericAttributes( s.getAttributes(), performer );
+					output.add( performer );
+				}
+			}
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list performers.");
+	}
+	
 	
 	@Deprecated
-	public  List<Session> listPerformerSessions(int performerID) throws Exception
+	public  DbElementsList<Session> listPerformerSessions(int performerID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -332,7 +371,7 @@ public class DatabaseConnection {
 	
 			ArrayOfPlainSessionDetails result = port.listPerformerSessions(performerID);
 		
-			ArrayList<Session> output = new ArrayList<Session>();
+			DbElementsList<Session> output = new DbElementsList<Session>();
 			
 			for (PlainSessionDetails s : result.getPlainSessionDetails())
 			{
@@ -381,7 +420,7 @@ public class DatabaseConnection {
 	}
 	
 	
-	public  List<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
+	public  DbElementsList<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -393,7 +432,7 @@ public class DatabaseConnection {
 			prepareCall( (BindingProvider)port);
 	
 			ListPerformerSessionsWithAttributesXMLResult result = port.listPerformerSessionsWithAttributesXML(performerID);
-			ArrayList<Session> output = new ArrayList<Session>();
+			DbElementsList<Session> output = new DbElementsList<Session>();
 			
 			for (Object o : result.getContent())
 			{
@@ -424,7 +463,7 @@ public class DatabaseConnection {
 	}
 
 
-	public  List<Trial> listSessionTrialsWithAttributes(int sessionID) throws Exception
+	public  DbElementsList<Trial> listSessionTrialsWithAttributes(int sessionID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -436,7 +475,7 @@ public class DatabaseConnection {
 			prepareCall( (BindingProvider)port);
 	
 			ListSessionTrialsWithAttributesXMLResult result = port.listSessionTrialsWithAttributesXML(sessionID);
-			ArrayList<Trial> output = new ArrayList<Trial>();
+			DbElementsList<Trial> output = new DbElementsList<Trial>();
 			
 			for (Object o : result.getContent())
 			{
@@ -589,7 +628,7 @@ public class DatabaseConnection {
 	}
 
 	
-	public  List<Segment> listTrialSegmentsWithAttributes(int trialID) throws Exception
+	public  DbElementsList<Segment> listTrialSegmentsWithAttributes(int trialID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -599,9 +638,8 @@ public class DatabaseConnection {
 			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
 			
 			prepareCall( (BindingProvider)port);
-	
 			ListTrialSegmentsWithAttributesXMLResult result = port.listTrialSegmentsWithAttributesXML(trialID);
-			ArrayList<Segment> output = new ArrayList<Segment>();
+			DbElementsList<Segment> output = new DbElementsList<Segment>();
 			
 			for (Object o : result.getContent())
 			{
@@ -624,7 +662,7 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	public  List<DatabaseFile> listSessionFiles(int sessionID) throws Exception
+	public  DbElementsList<DatabaseFile> listSessionFiles(int sessionID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -640,12 +678,13 @@ public class DatabaseConnection {
 			return transformListOfFiles(result);
 		}
 		else
-			throw new Exception("Not Initialized. Cannot perform file uploading.");
+			throw new Exception("Not Initialized. Cannot perform file listing.");
 	}
 
-	private List<DatabaseFile> transformListOfFiles(Object result) {
+	
+	private DbElementsList<DatabaseFile> transformListOfFiles(Object result) {
 
-		List<DatabaseFile> list = new ArrayList<DatabaseFile>();
+		DbElementsList<DatabaseFile> list = new DbElementsList<DatabaseFile>();
 		ListFilesWithAttributesXMLResult r = (ListFilesWithAttributesXMLResult) result;
 		List<Object> l = r.getContent();
 		List<FileDetailsWithAttributes> f = ((FileWithAttributesList)l.get(0)).getFileDetailsWithAttributes();
@@ -654,6 +693,7 @@ public class DatabaseConnection {
 			DatabaseFile df = new DatabaseFile();
 			df.put( DatabaseFileStaticAttributes.fileID, d.getFileID() );
 			df.put( DatabaseFileStaticAttributes.fileName, d.getFileName() );
+			df.put( DatabaseFileStaticAttributes.fileDescription, d.getFileDescription() );
 			transformGenericAttributes( d.getAttributes(), df );
 			list.add( df );
 		}
@@ -676,7 +716,7 @@ public class DatabaseConnection {
 	}
 
 
-	public  List<DatabaseFile> listTrialFiles(int trialID) throws Exception
+	public  DbElementsList<DatabaseFile> listTrialFiles(int trialID) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -692,7 +732,26 @@ public class DatabaseConnection {
 			return transformListOfFiles(result);
 		}
 		else
-			throw new Exception("Not Initialized. Cannot perform file uploading.");
+			throw new Exception("Not Initialized. Cannot perform file listing.");
+	}
+
+	public  DbElementsList<DatabaseFile> listPerformerFiles(int performerID) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerFiles" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, "performer");
+		
+			return transformListOfFiles(result);
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file listing.");
 	}
 
 	/**

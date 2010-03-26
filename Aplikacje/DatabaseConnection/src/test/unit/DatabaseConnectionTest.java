@@ -3,25 +3,20 @@
  */
 package test.unit;
 
-import java.math.BigInteger;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.Assert;
-
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseFile;
+import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.Performer;
 import motion.database.Segment;
-import motion.database.SegmentStaticAttributes;
 import motion.database.Session;
-import motion.database.SessionStaticAttributes;
 import motion.database.Trial;
-import motion.database.TrialStaticAttributes;
-import motion.database.ws.basicQueriesService.PlainFileDetails;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -105,7 +100,6 @@ public class DatabaseConnectionTest {
 			return;
 
 		database.uploadTrialFile( 1, "A new trial file", "data/Combo_1.c3d", new ConsoleTransferListener() );
-		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	}
 
 	
@@ -125,23 +119,6 @@ public class DatabaseConnectionTest {
 	}
 
 	/**
-	 * Test method for {@link motion.database.DatabaseConnection#listPerformerSessions()}.
-	 * @throws Exception 
-	 */
-	//@Test
-	public void testListPerformerSessions() throws Exception {
-		
-		beforeTest();
-
-		int performerID = 1;
-		List<Session> results = database.listPerformerSessions( performerID );
-		
-		for (Session s : results)
-			for ( String key : s.keySet() )
-				System.out.println( key + " = " + s.get(key) ); 
-	}
-
-	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listPerformerSessionsWithAttributes()}.
 	 * @throws Exception 
 	 */
@@ -154,12 +131,8 @@ public class DatabaseConnectionTest {
 		List<Session> results = database.listPerformerSessionsWithAttributes(performerID);
 		
 		System.out.println("Sessions for performer: " + performerID);
-		for (Session s : results)
-		{
-			System.out.println("Session ID: " + s.get( SessionStaticAttributes.sessionID ));			
-			for ( String key : s.keySet() )
-				System.out.println( key + " = " + s.get(key) );
-		}
+		if (results != null)
+			System.out.println( results );			
 	}
 
 	/**
@@ -176,12 +149,7 @@ public class DatabaseConnectionTest {
 
 		System.out.println("Trials for session: " + sessionID);
 		if (results!=null)
-			for (Trial s : results)
-			{
-				System.out.println("Trial ID: " + s.get( TrialStaticAttributes.trialID ));			
-				for ( String key : s.keySet() )
-					System.out.println( key + " = " + s.get(key) );
-			}
+			System.out.println( results );			
 	}
 
 	/**
@@ -198,12 +166,7 @@ public class DatabaseConnectionTest {
 
 		System.out.println("Segments for trial: " + trialID);
 		if (results!=null)
-			for (Segment s : results)
-			{
-				System.out.println("Segment ID: " + s.get( SegmentStaticAttributes.segmentID ));			
-				for ( String key : s.keySet() )
-					System.out.println( key + " = " + s.get(key) );
-			}
+			System.out.println( results );			
 	}
 /**
 	 * Test method for {@link motion.database.DatabaseConnection#listAtributesDefined()}.
@@ -229,9 +192,10 @@ public class DatabaseConnectionTest {
 		beforeTest();
 
 		int id = database.createPerformer("Chuck", "Noris");
-		
-		//database.listPerformersWithAttributes();
-		
+		System.out.println("Created performer: " + id );
+
+		DbElementsList<Performer> performer = database.listPerformersWithAttributes();
+		Assert.assertNotNull( performer.findById( id ) );
 	}
 	
 	@Test
@@ -246,14 +210,9 @@ public class DatabaseConnectionTest {
 		
 		int id = database.createSession(1, null, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pó³obrotu");
 		System.out.println("Created session: " + id );
-		
-		int found = 0;
-		List<Session> sessions = database.listPerformerSessionsWithAttributes(1);
-		for (Session s : sessions)
-			if ( ((BigInteger)s.get( SessionStaticAttributes.sessionID)).intValue() == id )
-				found++;
-		
-		Assert.assertEquals( 1, found );
+
+		DbElementsList<Session> sessions = database.listPerformerSessionsWithAttributes(1);
+		Assert.assertNotNull( sessions.findById(id) );
 	}
 
 	@Test
@@ -264,17 +223,8 @@ public class DatabaseConnectionTest {
 		int id = database.createTrial( 1, "Kopniak lew¹ nog¹", 1 );
 		System.out.println("Created trial: " + id );
 		
-		int found = 0;
-		List<Trial> trials = database.listSessionTrialsWithAttributes(1);
-		for (Trial s : trials)
-		{
-			System.out.println("Trial: " + s);
-			BigInteger idd = (BigInteger) s.get( TrialStaticAttributes.trialID );
-			System.out.println("Trial idd" + idd.intValue());
-			if (idd.intValue() == id)
-				found++;
-		}
-		Assert.assertEquals( 1, found );
+		DbElementsList<Trial> trials = database.listSessionTrialsWithAttributes(1);
+		Assert.assertNotNull( trials.findById( id ) );
 	}
 
 	@Test
@@ -287,15 +237,8 @@ public class DatabaseConnectionTest {
 		
 		System.out.println("Created segment: " + id );
 		
-		int found = 0;
-		List<Segment> segments = database.listTrialSegmentsWithAttributes(id);
-		for (Segment s : segments)
-		{
-			BigInteger idd = (BigInteger) s.get( SegmentStaticAttributes.segmentID );
-			if (idd.intValue() == id)
-				found++;
-		}
-		Assert.assertEquals( 1, found );
+		DbElementsList<Segment> segments = database.listTrialSegmentsWithAttributes(id);
+		Assert.assertNotNull( segments.findById(id) );
 	}
 
 	/**
@@ -308,15 +251,11 @@ public class DatabaseConnectionTest {
 		beforeTest();
 
 		int sessionID = 1;
-		List<DatabaseFile> results = database.listSessionFiles(sessionID);
+		DbElementsList<DatabaseFile> results = database.listSessionFiles(sessionID);
 
 		System.out.println("Files for session: " + sessionID);
-
 		if (results != null)
-			for (DatabaseFile s : results)
-				for ( String key : s.keySet() )
-					System.out.println( key + " = " + s.get(key) );
-
+			System.out.println( results );
 	}
 
 	
@@ -334,29 +273,25 @@ public class DatabaseConnectionTest {
 		
 		System.out.println("Files for trial: " + trialID);
 		if (results != null)
-			for (DatabaseFile s : results)
-				for ( String key : s.keySet() )
-					System.out.println( key + " = " + s.get(key) );
+			System.out.println( results );
 	}
 
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listPerformerFiles()}.
 	 * @throws Exception 
 	 */
-/*	@Test
+	@Test
 	public void testListPerformerFiles() throws Exception {
 		
 		beforeTest();
 
-		int trialID = 1;
-		List<PlainFileDetails> results = database.listTrialFiles(trialID);
-		
-		for (PlainFileDetails s : results)
-		{
-			System.out.println( "File Name:" + s.getFileName() + " File ID:" + s.getFileID() ); 
-		}
+		int performerID = 1;
+		DbElementsList<DatabaseFile> results = database.listPerformerFiles(performerID);
+		System.out.println("Files for performer: " + performerID);
+		if (results != null)
+			System.out.println( results );
 	}
-*/
+
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.
 	 * @throws Exception 

@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,11 +27,11 @@ import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList.Seg
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                     &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
@@ -98,11 +97,11 @@ public class TrailSegmentWithAttributesList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string"/>
-     *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -123,64 +122,48 @@ public class TrailSegmentWithAttributesList {
     })
     public static class SegmentDetailsWithAttributes {
 
-        @XmlElement(name = "SegmentID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger segmentID;
-        @XmlElement(name = "TrialID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger trialID;
+        @XmlElement(name = "SegmentID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int segmentID;
+        @XmlElement(name = "TrialID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int trialID;
         @XmlElement(name = "SegmentName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String segmentName;
-        @XmlElement(name = "StartTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger startTime;
-        @XmlElement(name = "EndTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger endTime;
+        @XmlElement(name = "StartTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int startTime;
+        @XmlElement(name = "EndTime", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int endTime;
         @XmlElement(name = "Attributes", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         protected Attributes attributes;
 
         /**
          * Gets the value of the segmentID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getSegmentID() {
+        public int getSegmentID() {
             return segmentID;
         }
 
         /**
          * Sets the value of the segmentID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setSegmentID(BigInteger value) {
+        public void setSegmentID(int value) {
             this.segmentID = value;
         }
 
         /**
          * Gets the value of the trialID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getTrialID() {
+        public int getTrialID() {
             return trialID;
         }
 
         /**
          * Sets the value of the trialID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setTrialID(BigInteger value) {
+        public void setTrialID(int value) {
             this.trialID = value;
         }
 
@@ -211,48 +194,32 @@ public class TrailSegmentWithAttributesList {
         /**
          * Gets the value of the startTime property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getStartTime() {
+        public int getStartTime() {
             return startTime;
         }
 
         /**
          * Sets the value of the startTime property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setStartTime(BigInteger value) {
+        public void setStartTime(int value) {
             this.startTime = value;
         }
 
         /**
          * Gets the value of the endTime property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getEndTime() {
+        public int getEndTime() {
             return endTime;
         }
 
         /**
          * Sets the value of the endTime property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setEndTime(BigInteger value) {
+        public void setEndTime(int value) {
             this.endTime = value;
         }
 

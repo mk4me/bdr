@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,7 +27,7 @@ import motion.database.ws.basicQueriesService.PerformerWithAttributesList.Perfor
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
@@ -96,7 +95,7 @@ public class PerformerWithAttributesList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
@@ -117,8 +116,8 @@ public class PerformerWithAttributesList {
     })
     public static class PerformerDetailsWithAttributes {
 
-        @XmlElement(name = "PerformerID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger performerID;
+        @XmlElement(name = "PerformerID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int performerID;
         @XmlElement(name = "FirstName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String firstName;
         @XmlElement(name = "LastName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
@@ -129,24 +128,16 @@ public class PerformerWithAttributesList {
         /**
          * Gets the value of the performerID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getPerformerID() {
+        public int getPerformerID() {
             return performerID;
         }
 
         /**
          * Sets the value of the performerID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setPerformerID(BigInteger value) {
+        public void setPerformerID(int value) {
             this.performerID = value;
         }
 

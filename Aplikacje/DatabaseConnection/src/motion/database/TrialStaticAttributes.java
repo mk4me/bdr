@@ -3,9 +3,9 @@
  */
 package motion.database;
 
-public enum TrialStaticAttributes{
+public enum TrialStaticAttributes {
 	trialID,
     sessionID,
     duration,
-    trialDescription
+    trialDescription;
 }

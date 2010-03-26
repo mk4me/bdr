@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,13 +28,13 @@ import motion.database.ws.basicQueriesService.PerformerSessionList.SessionDetail
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                   &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                   &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
  *                   &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" />
- *                   &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+ *                   &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -98,13 +97,13 @@ public class PerformerSessionList {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
      *       &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer" />
-     *       &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer" />
+     *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -117,29 +116,29 @@ public class PerformerSessionList {
     public static class SessionDetails {
 
         @XmlAttribute(name = "LabID")
-        protected BigInteger labID;
+        protected Integer labID;
         @XmlAttribute(name = "MotionKindID")
-        protected BigInteger motionKindID;
+        protected Integer motionKindID;
         @XmlAttribute(name = "PerformerID")
-        protected BigInteger performerID;
+        protected Integer performerID;
         @XmlAttribute(name = "SessionDate")
         protected XMLGregorianCalendar sessionDate;
         @XmlAttribute(name = "SessionDescription")
         protected String sessionDescription;
         @XmlAttribute(name = "SessionID")
-        protected BigInteger sessionID;
+        protected Integer sessionID;
         @XmlAttribute(name = "UserID")
-        protected BigInteger userID;
+        protected Integer userID;
 
         /**
          * Gets the value of the labID property.
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getLabID() {
+        public Integer getLabID() {
             return labID;
         }
 
@@ -148,10 +147,10 @@ public class PerformerSessionList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setLabID(BigInteger value) {
+        public void setLabID(Integer value) {
             this.labID = value;
         }
 
@@ -160,10 +159,10 @@ public class PerformerSessionList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getMotionKindID() {
+        public Integer getMotionKindID() {
             return motionKindID;
         }
 
@@ -172,10 +171,10 @@ public class PerformerSessionList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setMotionKindID(BigInteger value) {
+        public void setMotionKindID(Integer value) {
             this.motionKindID = value;
         }
 
@@ -184,10 +183,10 @@ public class PerformerSessionList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getPerformerID() {
+        public Integer getPerformerID() {
             return performerID;
         }
 
@@ -196,10 +195,10 @@ public class PerformerSessionList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setPerformerID(BigInteger value) {
+        public void setPerformerID(Integer value) {
             this.performerID = value;
         }
 
@@ -256,10 +255,10 @@ public class PerformerSessionList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getSessionID() {
+        public Integer getSessionID() {
             return sessionID;
         }
 
@@ -268,10 +267,10 @@ public class PerformerSessionList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setSessionID(BigInteger value) {
+        public void setSessionID(Integer value) {
             this.sessionID = value;
         }
 
@@ -280,10 +279,10 @@ public class PerformerSessionList {
          * 
          * @return
          *     possible object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public BigInteger getUserID() {
+        public Integer getUserID() {
             return userID;
         }
 
@@ -292,10 +291,10 @@ public class PerformerSessionList {
          * 
          * @param value
          *     allowed object is
-         *     {@link BigInteger }
+         *     {@link Integer }
          *     
          */
-        public void setUserID(BigInteger value) {
+        public void setUserID(Integer value) {
             this.userID = value;
         }
 

@@ -1,7 +1,6 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,11 +28,11 @@ import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+ *                     &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                     &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                     &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *                     &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
@@ -101,11 +100,11 @@ public class PerformerSessionWithAttributesList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
-     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}integer"/>
+     *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
      *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
@@ -130,16 +129,16 @@ public class PerformerSessionWithAttributesList {
     })
     public static class SessionDetailsWithAttributes {
 
-        @XmlElement(name = "SessionID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger sessionID;
-        @XmlElement(name = "UserID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger userID;
-        @XmlElement(name = "LabID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger labID;
-        @XmlElement(name = "MotionKindID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger motionKindID;
-        @XmlElement(name = "PerformerID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected BigInteger performerID;
+        @XmlElement(name = "SessionID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int sessionID;
+        @XmlElement(name = "UserID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int userID;
+        @XmlElement(name = "LabID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int labID;
+        @XmlElement(name = "MotionKindID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int motionKindID;
+        @XmlElement(name = "PerformerID", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected int performerID;
         @XmlElement(name = "SessionDate", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected XMLGregorianCalendar sessionDate;
         @XmlElement(name = "SessionDescription", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
@@ -150,120 +149,80 @@ public class PerformerSessionWithAttributesList {
         /**
          * Gets the value of the sessionID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getSessionID() {
+        public int getSessionID() {
             return sessionID;
         }
 
         /**
          * Sets the value of the sessionID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setSessionID(BigInteger value) {
+        public void setSessionID(int value) {
             this.sessionID = value;
         }
 
         /**
          * Gets the value of the userID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getUserID() {
+        public int getUserID() {
             return userID;
         }
 
         /**
          * Sets the value of the userID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setUserID(BigInteger value) {
+        public void setUserID(int value) {
             this.userID = value;
         }
 
         /**
          * Gets the value of the labID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getLabID() {
+        public int getLabID() {
             return labID;
         }
 
         /**
          * Sets the value of the labID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setLabID(BigInteger value) {
+        public void setLabID(int value) {
             this.labID = value;
         }
 
         /**
          * Gets the value of the motionKindID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getMotionKindID() {
+        public int getMotionKindID() {
             return motionKindID;
         }
 
         /**
          * Sets the value of the motionKindID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setMotionKindID(BigInteger value) {
+        public void setMotionKindID(int value) {
             this.motionKindID = value;
         }
 
         /**
          * Gets the value of the performerID property.
          * 
-         * @return
-         *     possible object is
-         *     {@link BigInteger }
-         *     
          */
-        public BigInteger getPerformerID() {
+        public int getPerformerID() {
             return performerID;
         }
 
         /**
          * Sets the value of the performerID property.
          * 
-         * @param value
-         *     allowed object is
-         *     {@link BigInteger }
-         *     
          */
-        public void setPerformerID(BigInteger value) {
+        public void setPerformerID(int value) {
             this.performerID = value;
         }
 
