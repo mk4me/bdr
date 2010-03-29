@@ -36,6 +36,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 		BottomSplitPanel bottomPanel = new BottomSplitPanel();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, bottomPanel);
+		splitPane.setResizeWeight(0.8);
 		this.add(splitPane, BorderLayout.CENTER);
 		
 	}

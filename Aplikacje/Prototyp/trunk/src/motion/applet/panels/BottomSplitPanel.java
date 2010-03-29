@@ -6,9 +6,12 @@ import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import motion.applet.trees.ConfigurationTree;
 
 public class BottomSplitPanel extends JPanel {
 	private static final String BORDER_TITLE = "View configuration";
@@ -22,10 +25,11 @@ public class BottomSplitPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		// Configuration area
-		JPanel configurationPanel = new JPanel();
+		//JPanel configurationPanel = new JPanel();
+		ConfigurationTree configurationTree = new ConfigurationTree();
+		JScrollPane scrollPane = new JScrollPane(configurationTree.tree);
 		
-		
-		this.add(configurationPanel, BorderLayout.CENTER);
+		this.add(scrollPane, BorderLayout.CENTER);
 		
 		// Button area
 		JPanel buttonPanel = new JPanel();
