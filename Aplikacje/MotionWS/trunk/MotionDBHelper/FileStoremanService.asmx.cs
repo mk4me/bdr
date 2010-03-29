@@ -257,17 +257,20 @@ namespace MotionDBWebServices
         }
 
         [WebMethod]
-        public void DownloadComplete(int fileID)
+        public void DownloadComplete(int fileID, string path)
         {
-            string relativePath = "sample_path";
-            string fileLocation = "NOT_FOUND";
 
+            string fileLocation = "NOT_FOUND";
+            path = path.Substring(0, path.LastIndexOf('/'));
             try
             {
                 OpenConnection();
-                cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where IdPlik_udostepniony = @file_id";
+                cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where IdPlik_udostepniony = @file_id and Lokalizacja = @file_path";
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
                 cmd.Parameters["@file_id"].Value = fileID;
+                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 80);
+                cmd.Parameters["@file_path"].Value = path;
+
                 fileReader = cmd.ExecuteReader();
 
                 while (fileReader.Read())
@@ -277,7 +280,7 @@ namespace MotionDBWebServices
                 fileReader.Close();
 
                 cmd.CommandText = @"delete from Plik_udostepniony 
-                                        where IdPlik_udostepniony = @file_id";
+                                        where IdPlik_udostepniony = @file_id and Lokalizacja = @file_path";
                 cmd.ExecuteNonQuery();
                 if (Directory.Exists(baseLocalFilePath + fileLocation))
                     Directory.Delete(baseLocalFilePath + fileLocation, true);
@@ -295,12 +298,13 @@ namespace MotionDBWebServices
         [WebMethod]
         public string RetrieveFile(int fileID)
         {
-            string relativePath = "sample_path";
+            string relativePath = "";
             string fileName = "NOT_FOUND";
             string fileLocation = "";
 
             fileData = null;
             fileName = "";
+            relativePath = DateTime.Now.Ticks.ToString(); 
             try
             {
                 // TO DO: generowanie losowej nazwy katalogu
