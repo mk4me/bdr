@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,6 +12,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import motion.applet.database.TableNamesInstance;
 import motion.applet.trees.ConfigurationTree;
 
 public class BottomSplitPanel extends JPanel {
@@ -25,11 +27,21 @@ public class BottomSplitPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		// Configuration area
-		//JPanel configurationPanel = new JPanel();
-		ConfigurationTree configurationTree = new ConfigurationTree();
-		JScrollPane scrollPane = new JScrollPane(configurationTree.tree);
+		JPanel configurationPanel = new JPanel();
+		configurationPanel.setLayout(new BoxLayout(configurationPanel, BoxLayout.X_AXIS));
+		ConfigurationTree performerTree = new ConfigurationTree(TableNamesInstance.PERFORMER);
+		JScrollPane performerScrollPane = new JScrollPane(performerTree.tree);
+		configurationPanel.add(performerScrollPane);
 		
-		this.add(scrollPane, BorderLayout.CENTER);
+		ConfigurationTree sessionTree = new ConfigurationTree(TableNamesInstance.SESSION);
+		JScrollPane sessionScrollPane = new JScrollPane(sessionTree.tree);
+		configurationPanel.add(sessionScrollPane);
+		
+		ConfigurationTree trialTree = new ConfigurationTree(TableNamesInstance.TRIAL);
+		JScrollPane trialScrollPane = new JScrollPane(trialTree.tree);
+		configurationPanel.add(trialScrollPane);
+		
+		this.add(configurationPanel, BorderLayout.CENTER);
 		
 		// Button area
 		JPanel buttonPanel = new JPanel();

@@ -22,34 +22,42 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
+
 public class ConfigurationTree {
 	public JTree tree;
 	
-	public ConfigurationTree() {
+	public ConfigurationTree(TableName tableName) {
 		Vector groupVector = new Vector();
 		Vector group1 = new Vector();
-		group1.add("Attribute group 1");
-		group1.add("Defined attribute 1");
-		group1.add("Defined attribute 2");
-		group1.add("Defined attribute 3");
+		group1.add("Defined attribute group 1");
+		group1.addAll(tableName.getDefinedAttributes());
+		//group1.add("Defined attribute 1");
+		//group1.add("Defined attribute 2");
+		//group1.add("Defined attribute 3");
 		
 		Vector group2 = new Vector();
-		group2.add("Attribute group 2");
-		group2.add("Defined attribute 4");
-		group2.add("Defined attribute 5");
-		group2.add("Defined attribute 6");
+		//group2.add("Attribute group 2");
+		//group2.add("Defined attribute 4");
+		//group2.add("Defined attribute 5");
+		//group2.add("Defined attribute 6");
 		
 		
 		Vector noGroup = new Vector();
 		noGroup.add("No Group");
-		noGroup.add("Static attribute 1");
-		noGroup.add("Static attribute 2");
-		noGroup.add("Static attribute 3");
-		
+		noGroup.addAll(tableName.getStaticAttributes());
+		//noGroup.add("Static attribute 1");
+		//noGroup.add("Static attribute 2");
+		//noGroup.add("Static attribute 3");
 		
 		groupVector.add(noGroup);
-		groupVector.add(group1);
-		groupVector.add(group2);
+		if (group1.size() > 1) {
+			groupVector.add(group1);
+		}
+		//groupVector.add(group2);
+		
+		
 		
         
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");

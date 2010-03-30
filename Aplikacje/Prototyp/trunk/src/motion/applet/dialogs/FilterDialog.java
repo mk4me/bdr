@@ -6,14 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigInteger;
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,19 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.xml.datatype.XMLGregorianCalendar;
 
-import motion.applet.database.Connector;
-import motion.applet.database.ConnectorInstance;
+import motion.applet.database.AttributeName;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.filter.Filter;
-import motion.applet.filter.model.Predicate;
 import motion.applet.filter.model.PredicateComposition;
 import motion.applet.filter.model.SimplePredicate;
-import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.SessionStaticAttributes;
-import motion.database.TrialStaticAttributes;
 
 public class FilterDialog extends JDialog {
 	private static String FILTER_TITLE = "Add filter";
@@ -170,7 +158,7 @@ public class FilterDialog extends JDialog {
 	
 	private ColumnCondition addColumnCondition(boolean firstCondition) {
 		try {
-			ColumnCondition columnCondition = new ColumnCondition(ConnectorInstance.getConnector(), tableName, firstCondition);
+			ColumnCondition columnCondition = new ColumnCondition(tableName, firstCondition);
 			//columnCondition.setAlignmentX(Component.LEFT_ALIGNMENT);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
@@ -278,43 +266,31 @@ public class FilterDialog extends JDialog {
 		private JComboBox operatorComboBox;
 		private JComboBox logicalComboBox;
 		private JTextField conditionText = new JTextField(10);
-		private java.sql.Connection connection;
-		private String databaseName;
 		private TableName tableName;
-		private ArrayList<String> columnNameList;
-		private ArrayList<Object> columnClassList;
+		
+		
 		
 		private String REMOVE_CONDITION = "X";
 		private boolean firstCondition;
 		
 		private JButton removeButton;
 		
-		public ColumnCondition(Connector connector, TableName tableName, boolean firstCondition) throws SQLException {
+		public ColumnCondition(TableName tableName, boolean firstCondition) throws SQLException {
 			super();
 			this.tableName = tableName;
-			this.databaseName = connector.getDatabaseName();
 			this.firstCondition = firstCondition;
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
-			// FIXME: Change to fillColumnsFromAttributes
-			if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-				this.connection = connector.openConnection();
-				fillColumns();
-				connector.closeConnection();
-			} else if (this.tableName.equals(TableNamesInstance.SESSION) ||
-					this.tableName.equals(TableNamesInstance.TRIAL)) {
-				fillColumnsFromAttributes();
-			}
-			
 			this.operatorComboBox = new JComboBox();
-			fillOperators(0);
+			fillOperators(this.tableName.getAllAttributes().get(0));
 			
 			if (this.firstCondition == false) {
 				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
 				this.add(logicalComboBox);
 			}
 			
+			columnComboBox = new JComboBox(this.tableName.getAllAttributes().toArray());
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
 			this.add(conditionText);
@@ -331,132 +307,24 @@ public class FilterDialog extends JDialog {
 			
 			this.columnComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ColumnCondition.this.fillOperators(ColumnCondition.this.columnComboBox.getSelectedIndex());
+					ColumnCondition.this.fillOperators((AttributeName) ColumnCondition.this.columnComboBox.getSelectedItem());
 				}
 			});
 		}
 		
-		private void fillColumns() throws SQLException {
-			DatabaseMetaData databaseMetaData = this.connection.getMetaData();
-			ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName.getTableName(), null);
-			this.columnNameList = new ArrayList<String>();
-			this.columnClassList = new ArrayList<Object>();
-			
-			while (resultSet.next()) {
-				columnNameList.add(resultSet.getString("COLUMN_NAME"));
-				int dataType = resultSet.getInt("DATA_TYPE");
-				
-				switch (dataType) {
-				case Types.INTEGER:
-					columnClassList.add(Integer.class);
-					break;
-				case Types.FLOAT:
-					columnClassList.add(Float.class);
-					break;
-				case Types.DOUBLE:
-				case Types.REAL:
-					columnClassList.add(String.class);
-					break;
-				case Types.DATE:
-				case Types.TIME:
-				case Types.TIMESTAMP:
-					columnClassList.add(Date.class);
-					break;
-				default: // Unknown type.
-					columnClassList.add(String.class);
-					break;
-				}
-			}
-			
-			fillColumnsFromAttributesDefined();
-			
-			this.columnComboBox = new JComboBox(columnNameList.toArray());
-			
-			resultSet.close();
-		}
-		
-		private void fillColumnsFromAttributes() {
-			this.columnNameList = new ArrayList<String>();
-			this.columnClassList = new ArrayList<Object>();
-			
-			if (this.tableName.equals(TableNamesInstance.SESSION)) {
-				columnNameList.add(SessionStaticAttributes.sessionID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(SessionStaticAttributes.userID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(SessionStaticAttributes.labID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(SessionStaticAttributes.motionKindID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(SessionStaticAttributes.performerID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(SessionStaticAttributes.sessionDate.toString());
-				columnClassList.add(XMLGregorianCalendar.class);
-				columnNameList.add(SessionStaticAttributes.sessionDescription.toString());
-				columnClassList.add(String.class);
-				
-			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
-				columnNameList.add(TrialStaticAttributes.trialID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(TrialStaticAttributes.sessionID.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(TrialStaticAttributes.duration.toString());
-				columnClassList.add(BigInteger.class);
-				columnNameList.add(TrialStaticAttributes.trialDescription.toString());
-				columnClassList.add(String.class);
-			}
-			
-			fillColumnsFromAttributesDefined();
-			
-			this.columnComboBox = new JComboBox(columnNameList.toArray());
-		}
-		
-		private void fillColumnsFromAttributesDefined(){
-			HashMap<String, String> results;
-			try {
-				results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", this.tableName.getTableName());
-				for (String s : results.keySet()) { 
-					columnNameList.add(s);
-					String type = results.get(s);
-					if (type.equals("string")) {
-						columnClassList.add(String.class);
-					} else if (type.equals("integer")) {
-						columnClassList.add(Integer.class);
-					} else if (type.equals("date")) {
-						columnClassList.add(Date.class);
-					} else { // Unknown type.
-						columnClassList.add(String.class);
-					}
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		private void fillOperators(int columnNumber) {
-			Object columnClass = this.columnClassList.get(columnNumber);
-			String[] operators = {""};
-			
-			if (columnClass == String.class) {
-				operators = Predicate.stringOperators;
-			} else if (columnClass == Integer.class || columnClass == BigInteger.class) {
-				operators = Predicate.integerOperators;
-			} else if (columnClass == Date.class || columnClass == XMLGregorianCalendar.class) {
-				operators = Predicate.dateOperators;
-			}
+		private void fillOperators(AttributeName attributeName) {
+			String[] operators = attributeName.getOperators();
 			
 			this.operatorComboBox.removeAllItems();
 			for (int i = 0; i < operators.length; i++) {
 				this.operatorComboBox.addItem(operators[i]);
 			}
-			//this.operatorComboBox = new JComboBox(operators);
 		}
 		
 		// Get ColumnCondition contents.
-		private String getFeature() {
+		private AttributeName getFeature() {
 			
-			return (String) columnComboBox.getSelectedItem();
+			return (AttributeName) columnComboBox.getSelectedItem();
 		}
 		
 		private String getOperator() {
@@ -475,7 +343,7 @@ public class FilterDialog extends JDialog {
 		}
 		
 		// Set ColumnCondition contents.
-		private void setFeature(String feature) {
+		private void setFeature(AttributeName feature) {
 			columnComboBox.setSelectedItem(feature);
 		}
 		

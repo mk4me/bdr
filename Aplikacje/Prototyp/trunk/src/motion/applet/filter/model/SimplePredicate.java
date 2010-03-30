@@ -1,18 +1,20 @@
 package motion.applet.filter.model;
 
+import motion.applet.database.AttributeName;
+
 public class SimplePredicate extends Predicate {
-	private String feature;
+	private AttributeName feature;
 	private String operator;
 	private String value;
 	
-	public SimplePredicate(String contextEntity, String feature, String operator, String value) {
+	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value) {
 		this.contextEntity = contextEntity;
 		this.feature = feature;
 		this.operator = operator;
 		this.value = value;
 	}
 	
-	public SimplePredicate(String contextEntity, String feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
+	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
 		this(contextEntity, feature, operator, value);
 		setPreviousPredicate(logicalOperator, previousPredicate);
 	}
@@ -46,7 +48,7 @@ public class SimplePredicate extends Predicate {
 		return this.next;
 	}
 	
-	public String getFeature() {
+	public AttributeName getFeature() {
 		
 		return this.feature;
 	}
