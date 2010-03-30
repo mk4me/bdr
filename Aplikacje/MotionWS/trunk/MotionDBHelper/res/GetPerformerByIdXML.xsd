@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="PerformerDetailsWithAttributes" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd" /> 
+</s:schema>

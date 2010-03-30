@@ -140,9 +140,128 @@ namespace MotionDBWebServices
             //            return (PerformerSessionListXML) xd;
         }
 
-  
-        
-        
+        // By ID lookup
+
+        [WebMethod]
+        public XmlDocument GetPerformerByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_performer_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument GetSessionByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_session_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SessionDetailsWithAttributes"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+        [WebMethod]
+        public XmlDocument GetTrialByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_trial_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("TrialDetailsWithAttributes"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument GetSegmentByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_segment_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SegmentDetailsWithAttributes"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+
         // Performer queries
 
         [WebMethod]

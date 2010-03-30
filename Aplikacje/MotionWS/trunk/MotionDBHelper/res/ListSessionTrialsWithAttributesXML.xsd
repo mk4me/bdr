@@ -1,22 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <s:schema id="SessionTrialWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" >
- 
-  <s:include schemaLocation="AttributesElement.xsd" />
+  <s:include schemaLocation="TrialDetailsWithAttributesElement.xsd" />
       <s:element name="SessionTrialWithAttributesList">
         <s:complexType>
           <s:sequence>
-            <s:element name="TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-              <s:complexType>
-                <s:sequence>
-                <s:element name="TrialID" type="s:int" />
-                <s:element name="SessionID" type="s:int" />
-                <s:element name="TrialDescription" type="s:string" />
-                <s:element name="Duration" type="s:int" />
-                <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
-                </s:sequence>
-              </s:complexType>
+            <s:element ref="TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
             </s:element>
           </s:sequence>
         </s:complexType>
       </s:element>
 </s:schema>
+
+

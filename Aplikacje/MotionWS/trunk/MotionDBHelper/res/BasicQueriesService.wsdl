@@ -3,6 +3,10 @@
 	<wsdl:types>
 		<s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
 			<s:include schemaLocation="GenericQueryXML.xsd"/>
+			<s:include schemaLocation="GetPerformerByIdXML.xsd"/>
+			<s:include schemaLocation="GetSessionByIdXML.xsd"/>
+			<s:include schemaLocation="GetTrialByIdXML.xsd"/>
+			<s:include schemaLocation="GetSegmentByIdXML.xsd"/>
 			<s:include schemaLocation="ListPerformersXML.xsd"/>
 			<s:include schemaLocation="ListPerformersWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListPerformerSessionsXML.xsd"/>
@@ -108,6 +112,86 @@
 							<s:complexType mixed="true">
 								<s:sequence>
 									<s:element ref="tns:GenericQueryResult"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetPerformerByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetPerformerByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetPerformerByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSessionByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSessionByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetSessionByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetTrialByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetTrialByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetTrialByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:TrialDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSegmentByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSegmentByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetSegmentByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SegmentDetailsWithAttributes"/>
 								</s:sequence>
 							</s:complexType>
 						</s:element>
@@ -369,6 +453,30 @@
 	<wsdl:message name="GenericQueryXMLSoapOut">
 		<wsdl:part name="parameters" element="tns:GenericQueryXMLResponse"/>
 	</wsdl:message>
+	<wsdl:message name="GetPerformerByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetPerformerByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetPerformerByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetPerformerByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetSessionByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetSessionByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetSessionByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetSessionByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetTrialByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetTrialByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetTrialByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetTrialByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetSegmentByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetSegmentByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetSegmentByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetSegmentByIdXMLResponse"/>
+	</wsdl:message>
 	<wsdl:message name="ListPerformersXMLSoapIn">
 		<wsdl:part name="parameters" element="tns:ListPerformersXML"/>
 	</wsdl:message>
@@ -454,6 +562,22 @@
 			<wsdl:input message="tns:GenericQueryXMLSoapIn"/>
 			<wsdl:output message="tns:GenericQueryXMLSoapOut"/>
 		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<wsdl:input message="tns:GetPerformerByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetPerformerByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<wsdl:input message="tns:GetSessionByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetSessionByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<wsdl:input message="tns:GetTrialByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetTrialByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<wsdl:input message="tns:GetSegmentByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetSegmentByIdXMLSoapOut"/>
+		</wsdl:operation>
 		<wsdl:operation name="ListPerformersXML">
 			<wsdl:input message="tns:ListPerformersXMLSoapIn"/>
 			<wsdl:output message="tns:ListPerformersXMLSoapOut"/>
@@ -525,6 +649,42 @@
 		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetPerformerByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSessionByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetTrialByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSegmentByIdXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -663,6 +823,42 @@
 		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetPerformerByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSessionByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetTrialByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSegmentByIdXML" style="document"/>
 			<wsdl:input>
 				<soap12:body use="literal"/>
 			</wsdl:input>

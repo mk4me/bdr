@@ -63,6 +63,7 @@
   <ItemGroup>
     <Content Include="BasicQueriesService.asmx" />
     <Content Include="BasicUpdatesService.asmx" />
+    <Content Include="DataDictionaryMaintenanceService.asmx" />
     <Content Include="FileStoremanService.asmx" />
     <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="Web.config" />
@@ -73,6 +74,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DatabaseAccessService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataDictionaryMaintenanceService.asmx.cs">
+      <DependentUpon>DataDictionaryMaintenanceService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FilterPredicate.cs" />
@@ -90,8 +95,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\GetTrialByIdXML.xsd" />
+    <None Include="res\GetSegmentByIdXML.xsd" />
+    <None Include="res\GetSessionByIdXML.xsd" />
+    <None Include="res\SegmentDetailsWithAttributesElement.xsd" />
+    <None Include="res\TrialDetailsWithAttributesElement.xsd" />
+    <None Include="res\SessionDetailsWithAttributesElement.xsd" />
+    <None Include="res\GetPerformerByIdXML.xsd" />
+    <None Include="res\PerformerDetailsWithAttributesElement.xsd" />
     <None Include="res\GenericQueryXML.xsd" />
     <None Include="res\ListFilesXML.xsd" />
     <None Include="res\ListFilesWithAttributesXML.xsd" />

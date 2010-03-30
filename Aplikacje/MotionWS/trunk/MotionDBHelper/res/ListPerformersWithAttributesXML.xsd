@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <s:schema id="PerformerWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <s:include schemaLocation="AttributesElement.xsd" />
+  <s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd" />
   <s:element name="PerformerWithAttributesList">
     <s:complexType>
       <s:sequence>
-        <s:element name="PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-          <s:complexType>
+        <s:element ref="PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          <!--<s:complexType>
             <s:sequence>
               <s:element name="PerformerID" type="s:int" />
               <s:element name="FirstName" type="s:string" />
               <s:element name="LastName" type="s:string" />
               <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
             </s:sequence>
-          </s:complexType>
+          </s:complexType>-->
         </s:element>
       </s:sequence>
     </s:complexType>

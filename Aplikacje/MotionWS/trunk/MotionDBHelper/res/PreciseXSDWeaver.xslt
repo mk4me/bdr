@@ -18,7 +18,9 @@
   
   <xsl:template match="s:any">
    <xsl:variable name="fileName" select="concat(substring-before(ancestor-or-self::s:element[contains(@name,'Result')]/@name,'Result'),'.xsd')" />
-    <s:element ref="tns:{document($fileName)/s:schema/s:element/@name}" />
+    <xsl:variable name="elementName" select="document($fileName)/s:schema/s:element/@name | document($fileName)/s:schema/s:element/@name" />
+    <xsl:variable name="implicitElementName" select="substring-before(document($fileName)/s:schema[count(s:element)=0]/s:include/@schemaLocation,'Element')" />
+    <s:element ref="tns:{concat($elementName,$implicitElementName)}" />
     
     
     <!--<xsl:value-of select="concat(substring-before(ancestor-or-self::s:element[contains(@name,'Result')]/@name,'Result'),'.xsd')" />-->
