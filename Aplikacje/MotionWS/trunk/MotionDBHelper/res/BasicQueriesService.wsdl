@@ -9,8 +9,10 @@
 			<s:include schemaLocation="GetSegmentByIdXML.xsd"/>
 			<s:include schemaLocation="ListPerformersXML.xsd"/>
 			<s:include schemaLocation="ListPerformersWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListLabPerformersWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListPerformerSessionsXML.xsd"/>
 			<s:include schemaLocation="ListPerformerSessionsWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListLabSessionsWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListSessionTrialsXML.xsd"/>
 			<s:include schemaLocation="ListSessionTrialsWithAttributesXML.xsd"/>
 			<s:include schemaLocation="ListTrialSegmentsXML.xsd"/>
@@ -230,6 +232,26 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:element name="ListLabPerformersWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="labID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabPerformersWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListLabPerformersWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:LabPerformerWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
 			<s:element name="ListPerformerSessionsXML">
 				<s:complexType>
 					<s:sequence>
@@ -264,6 +286,26 @@
 							<s:complexType mixed="true">
 								<s:sequence>
 									<s:element ref="tns:PerformerSessionWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabSessionsWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="labID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabSessionsWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListLabSessionsWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:LabSessionWithAttributesList"/>
 								</s:sequence>
 							</s:complexType>
 						</s:element>
@@ -489,6 +531,12 @@
 	<wsdl:message name="ListPerformersWithAttributesXMLSoapOut">
 		<wsdl:part name="parameters" element="tns:ListPerformersWithAttributesXMLResponse"/>
 	</wsdl:message>
+	<wsdl:message name="ListLabPerformersWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabPerformersWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
 	<wsdl:message name="ListPerformerSessionsXMLSoapIn">
 		<wsdl:part name="parameters" element="tns:ListPerformerSessionsXML"/>
 	</wsdl:message>
@@ -500,6 +548,12 @@
 	</wsdl:message>
 	<wsdl:message name="ListPerformerSessionsWithAttributesXMLSoapOut">
 		<wsdl:part name="parameters" element="tns:ListPerformerSessionsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabSessionsWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListLabSessionsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabSessionsWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListLabSessionsWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="ListSessionTrialsXMLSoapIn">
 		<wsdl:part name="parameters" element="tns:ListSessionTrialsXML"/>
@@ -586,6 +640,10 @@
 			<wsdl:input message="tns:ListPerformersWithAttributesXMLSoapIn"/>
 			<wsdl:output message="tns:ListPerformersWithAttributesXMLSoapOut"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<wsdl:input message="tns:ListLabPerformersWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListLabPerformersWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsXML">
 			<wsdl:input message="tns:ListPerformerSessionsXMLSoapIn"/>
 			<wsdl:output message="tns:ListPerformerSessionsXMLSoapOut"/>
@@ -593,6 +651,10 @@
 		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
 			<wsdl:input message="tns:ListPerformerSessionsWithAttributesXMLSoapIn"/>
 			<wsdl:output message="tns:ListPerformerSessionsWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<wsdl:input message="tns:ListLabSessionsWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListLabSessionsWithAttributesXMLSoapOut"/>
 		</wsdl:operation>
 		<wsdl:operation name="ListSessionTrialsXML">
 			<wsdl:input message="tns:ListSessionTrialsXMLSoapIn"/>
@@ -710,6 +772,15 @@
 				<soap:body use="literal"/>
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document"/>
 			<wsdl:input>
@@ -721,6 +792,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabSessionsWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -884,6 +964,15 @@
 				<soap12:body use="literal"/>
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsXML">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document"/>
 			<wsdl:input>
@@ -895,6 +984,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabSessionsWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap12:body use="literal"/>
 			</wsdl:input>

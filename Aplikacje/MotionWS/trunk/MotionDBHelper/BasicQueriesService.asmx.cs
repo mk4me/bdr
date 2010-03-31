@@ -322,7 +322,39 @@ namespace MotionDBWebServices
             return xd;
         }
 
+
+        [WebMethod]
+        public XmlDocument ListLabPerformersWithAttributesXML(int labID)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_lab_performers_attributes_xml";
+                SqlParameter labId = cmd.Parameters.Add("@lab_id", SqlDbType.Int);
+                labId.Direction = ParameterDirection.Input;
+                labId.Value = labID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("LabPerformerWithAttributesList"));
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
         
+
     // Session queries
 
         [WebMethod]
@@ -389,6 +421,36 @@ namespace MotionDBWebServices
             return xd;
         }
 
+        [WebMethod]
+        public XmlDocument ListLabSessionsWithAttributesXML(int labID)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_lab_sessions_attributes_xml";
+                SqlParameter perfId = cmd.Parameters.Add("@lab_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = labID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("LabSessionWithAttributesList"));
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+
+            return xd;
+        }
 
         // Trial queries
 

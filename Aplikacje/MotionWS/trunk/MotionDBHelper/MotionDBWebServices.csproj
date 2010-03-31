@@ -98,6 +98,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\ListLabSessionsWithAttributesXML.xsd" />
+    <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
     <None Include="res\GetTrialByIdXML.xsd" />
     <None Include="res\GetSegmentByIdXML.xsd" />
     <None Include="res\GetSessionByIdXML.xsd" />

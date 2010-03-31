@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerSessionWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+<s:schema id="LabSessionWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
   <s:include schemaLocation="SessionDetailsWithAttributesElement" />
-  <s:element name="PerformerSessionWithAttributesList">
+  <s:element name="LabSessionWithAttributesList">
     <s:complexType>
       <s:sequence>
         <s:element ref="SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
