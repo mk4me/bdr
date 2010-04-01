@@ -6,12 +6,14 @@ import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.trees.ConfigurationTree;
 
@@ -29,17 +31,10 @@ public class BottomSplitPanel extends JPanel {
 		// Configuration area
 		JPanel configurationPanel = new JPanel();
 		configurationPanel.setLayout(new BoxLayout(configurationPanel, BoxLayout.X_AXIS));
-		ConfigurationTree performerTree = new ConfigurationTree(TableNamesInstance.PERFORMER);
-		JScrollPane performerScrollPane = new JScrollPane(performerTree.tree);
-		configurationPanel.add(performerScrollPane);
 		
-		ConfigurationTree sessionTree = new ConfigurationTree(TableNamesInstance.SESSION);
-		JScrollPane sessionScrollPane = new JScrollPane(sessionTree.tree);
-		configurationPanel.add(sessionScrollPane);
-		
-		ConfigurationTree trialTree = new ConfigurationTree(TableNamesInstance.TRIAL);
-		JScrollPane trialScrollPane = new JScrollPane(trialTree.tree);
-		configurationPanel.add(trialScrollPane);
+		configurationPanel.add(createTreePanel(TableNamesInstance.PERFORMER));
+		configurationPanel.add(createTreePanel(TableNamesInstance.SESSION));
+		configurationPanel.add(createTreePanel(TableNamesInstance.TRIAL));
 		
 		this.add(configurationPanel, BorderLayout.CENTER);
 		
@@ -54,5 +49,18 @@ public class BottomSplitPanel extends JPanel {
 		
 		this.add(buttonPanel, BorderLayout.PAGE_END);
 	}
-
+	
+	private JPanel createTreePanel(TableName tableName) {
+		JPanel treePanel = new JPanel();
+		treePanel.setLayout(new BorderLayout());
+		ConfigurationTree performerTree = new ConfigurationTree(tableName);
+		JScrollPane performerScrollPane = new JScrollPane(performerTree.tree);
+		
+		JLabel treeLabel = new JLabel(tableName.toString());
+		
+		treePanel.add(treeLabel, BorderLayout.NORTH);
+		treePanel.add(performerScrollPane, BorderLayout.CENTER);
+		
+		return treePanel;
+	}
 }

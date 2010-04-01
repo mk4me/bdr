@@ -31,7 +31,7 @@ public class ConfigurationTree {
 	public ConfigurationTree(TableName tableName) {
 		Vector groupVector = new Vector();
 		Vector group1 = new Vector();
-		group1.add("Defined attribute group 1");
+		group1.add("Attribute group _ALL");
 		group1.addAll(tableName.getDefinedAttributes());
 		//group1.add("Defined attribute 1");
 		//group1.add("Defined attribute 2");

@@ -1,10 +1,10 @@
 package motion.applet.database;
 
 public class TableNamesInstance {
-	public static final TableName PERFORMER = new TableName(TableName.PERFORMER_TABLE, "Performer");
-	public static final TableName SESSION = new TableName(TableName.SESSION_TABLE, "Session");
-	public static final TableName TRIAL = new TableName(TableName.TRIAL_TABLE, "Trial");
-	public static final TableName PATIENT = new TableName(TableName.PATIENT_TABLE, "Patient");
+	public static final TableName PERFORMER = new TableName(TableName.PERFORMER_TABLE, TableName.PERFORMER_TABLE_ENG);
+	public static final TableName SESSION = new TableName(TableName.SESSION_TABLE, TableName.SESSION_TABLE_ENG);
+	public static final TableName TRIAL = new TableName(TableName.TRIAL_TABLE, TableName.TRIAL_TABLE_ENG);
+	public static final TableName PATIENT = new TableName(TableName.PATIENT_TABLE, TableName.PATIENT_TABLE_ENG);
 	
 	public static TableName toTableName(String table) {
 		if (table.equals(TableName.PERFORMER_TABLE)) {

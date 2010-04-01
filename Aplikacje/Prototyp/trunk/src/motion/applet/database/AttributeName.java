@@ -3,6 +3,7 @@ package motion.applet.database;
 import motion.applet.filter.model.Predicate;
 
 public class AttributeName {
+	// Attribute types (defined only here for the applet).
 	protected static final String INTEGER_TYPE = "Integer";
 	protected static final String STRING_TYPE = "String";
 	protected static final String DATE_TYPE = "DATE";

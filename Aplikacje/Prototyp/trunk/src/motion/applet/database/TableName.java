@@ -9,10 +9,17 @@ import motion.database.SessionStaticAttributes;
 import motion.database.TrialStaticAttributes;
 
 public class TableName {
+	// Database table names (defined only here for the applet).
 	protected static final String PERFORMER_TABLE = "Performer";
 	protected static final String SESSION_TABLE = "Sesja";
 	protected static final String TRIAL_TABLE = "Obserwacja";
 	protected static final String PATIENT_TABLE = "Pacjent";
+	
+	// English database table names (defined only here for the applet).
+	protected static final String PERFORMER_TABLE_ENG = "Performer";
+	protected static final String SESSION_TABLE_ENG = "Session";
+	protected static final String TRIAL_TABLE_ENG = "Trial";
+	protected static final String PATIENT_TABLE_ENG = "Patient";
 	
 	private final String table;
 	private final String label;
