@@ -919,7 +919,7 @@ namespace MotionDBWebServices
         }
 
     // Metadata queries
-
+        
         [WebMethod]
         public XmlDocument ListAttributesDefined(string attributeGroupName, string entityKind)
         {
@@ -940,7 +940,6 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("AttributeDefinitionList"));
 
                 dr.Close();
 
@@ -950,6 +949,40 @@ namespace MotionDBWebServices
                 // report exception
             }
             CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("AttributeDefinitionList"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+
+        [WebMethod]
+        public XmlDocument ListAttributeGroupsDefined(string entityKind)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_attribute_groups_defined";
+                cmd.Parameters.Add("@entity_kind", SqlDbType.VarChar, 20);
+                cmd.Parameters["@entity_kind"].Value = entityKind;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("AttributeGroupDefinitionList"));
             xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
             return xd;
         }

@@ -6,9 +6,9 @@
         <s:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
           <s:complexType>
             <s:sequence>
-              <s:element name="attributeName" type="s:string" />
-              <s:element name="attributeType" type="s:string" />
-              <s:element name="attributeGroupName" type="s:string" />
+              <s:element name="AttributeName" type="s:string" />
+              <s:element name="AttributeType" type="s:string" />
+              <s:element name="AttributeGroupName" type="s:string" />
             </s:sequence>
           </s:complexType>
         </s:element>
