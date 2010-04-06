@@ -2,5 +2,5 @@ package motion.database;
 
 public enum EntityKinds {
 
-	performer, session, trial, segment;
+	performer, session, trial, segment, file;
 }
