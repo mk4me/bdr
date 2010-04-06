@@ -27,18 +27,19 @@ import motion.database.ws.basicQueriesService.Attributes.Attribute;
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                   &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                   &lt;attribute name="entity">
+ *                   &lt;attribute name="Entity">
  *                     &lt;simpleType>
  *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *                         &lt;enumeration value="performer"/>
  *                         &lt;enumeration value="session"/>
  *                         &lt;enumeration value="trial"/>
  *                         &lt;enumeration value="segment"/>
+ *                         &lt;enumeration value="file"/>
  *                       &lt;/restriction>
  *                     &lt;/simpleType>
  *                   &lt;/attribute>
+ *                   &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                   &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
  *             &lt;/complexType>
@@ -101,18 +102,19 @@ public class Attributes {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *       &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="entity">
+     *       &lt;attribute name="Entity">
      *         &lt;simpleType>
      *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
      *             &lt;enumeration value="performer"/>
      *             &lt;enumeration value="session"/>
      *             &lt;enumeration value="trial"/>
      *             &lt;enumeration value="segment"/>
+     *             &lt;enumeration value="file"/>
      *           &lt;/restriction>
      *         &lt;/simpleType>
      *       &lt;/attribute>
+     *       &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -124,12 +126,36 @@ public class Attributes {
     @XmlType(name = "")
     public static class Attribute {
 
+        @XmlAttribute(name = "Entity")
+        protected String entity;
         @XmlAttribute(name = "Name", required = true)
         protected String name;
         @XmlAttribute(name = "Value", required = true)
         protected String value;
-        @XmlAttribute
-        protected String entity;
+
+        /**
+         * Gets the value of the entity property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getEntity() {
+            return entity;
+        }
+
+        /**
+         * Sets the value of the entity property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setEntity(String value) {
+            this.entity = value;
+        }
 
         /**
          * Gets the value of the name property.
@@ -177,30 +203,6 @@ public class Attributes {
          */
         public void setValue(String value) {
             this.value = value;
-        }
-
-        /**
-         * Gets the value of the entity property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getEntity() {
-            return entity;
-        }
-
-        /**
-         * Sets the value of the entity property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setEntity(String value) {
-            this.entity = value;
         }
 
     }

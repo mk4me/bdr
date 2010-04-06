@@ -8,28 +8,27 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
+import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList.AttributeGroupDefinition;
 
 
 /**
- * <p>Java class for AttributeDefinitionList element declaration.
+ * <p>Java class for AttributeGroupDefinitionList element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="AttributeDefinitionList">
+ * &lt;element name="AttributeGroupDefinitionList">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="AttributeDefinition" maxOccurs="unbounded" minOccurs="0">
+ *           &lt;element name="AttributeGroupDefinition" maxOccurs="unbounded" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                     &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                     &lt;element name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -46,41 +45,41 @@ import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeD
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "attributeDefinition"
+    "attributeGroupDefinition"
 })
-@XmlRootElement(name = "AttributeDefinitionList")
-public class AttributeDefinitionList {
+@XmlRootElement(name = "AttributeGroupDefinitionList")
+public class AttributeGroupDefinitionList {
 
-    @XmlElement(name = "AttributeDefinition", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-    protected List<AttributeDefinition> attributeDefinition;
+    @XmlElement(name = "AttributeGroupDefinition", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+    protected List<AttributeGroupDefinition> attributeGroupDefinition;
 
     /**
-     * Gets the value of the attributeDefinition property.
+     * Gets the value of the attributeGroupDefinition property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attributeDefinition property.
+     * This is why there is not a <CODE>set</CODE> method for the attributeGroupDefinition property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAttributeDefinition().add(newItem);
+     *    getAttributeGroupDefinition().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link AttributeDefinition }
+     * {@link AttributeGroupDefinition }
      * 
      * 
      */
-    public List<AttributeDefinition> getAttributeDefinition() {
-        if (attributeDefinition == null) {
-            attributeDefinition = new ArrayList<AttributeDefinition>();
+    public List<AttributeGroupDefinition> getAttributeGroupDefinition() {
+        if (attributeGroupDefinition == null) {
+            attributeGroupDefinition = new ArrayList<AttributeGroupDefinition>();
         }
-        return this.attributeDefinition;
+        return this.attributeGroupDefinition;
     }
 
 
@@ -94,9 +93,8 @@ public class AttributeDefinitionList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
-     *         &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *         &lt;element name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -107,66 +105,15 @@ public class AttributeDefinitionList {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "attributeName",
-        "attributeType",
-        "attributeGroupName"
+        "attributeGroupName",
+        "describedEntity"
     })
-    public static class AttributeDefinition {
+    public static class AttributeGroupDefinition {
 
-        @XmlElement(name = "AttributeName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected String attributeName;
-        @XmlElement(name = "AttributeType", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
-        protected String attributeType;
         @XmlElement(name = "AttributeGroupName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String attributeGroupName;
-
-        /**
-         * Gets the value of the attributeName property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getAttributeName() {
-            return attributeName;
-        }
-
-        /**
-         * Sets the value of the attributeName property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setAttributeName(String value) {
-            this.attributeName = value;
-        }
-
-        /**
-         * Gets the value of the attributeType property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getAttributeType() {
-            return attributeType;
-        }
-
-        /**
-         * Sets the value of the attributeType property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setAttributeType(String value) {
-            this.attributeType = value;
-        }
+        @XmlElement(name = "DescribedEntity", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
+        protected String describedEntity;
 
         /**
          * Gets the value of the attributeGroupName property.
@@ -190,6 +137,30 @@ public class AttributeDefinitionList {
          */
         public void setAttributeGroupName(String value) {
             this.attributeGroupName = value;
+        }
+
+        /**
+         * Gets the value of the describedEntity property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getDescribedEntity() {
+            return describedEntity;
+        }
+
+        /**
+         * Sets the value of the describedEntity property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setDescribedEntity(String value) {
+            this.describedEntity = value;
         }
 
     }

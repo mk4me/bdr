@@ -14,27 +14,32 @@ import java.util.logging.SimpleFormatter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
+import org.bouncycastle.asn1.cms.Time;
+
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileWithAttributesList;
+import motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.PerformerWithAttributesList;
 import motion.database.ws.basicQueriesService.PlainSessionDetails;
+import motion.database.ws.basicQueriesService.SegmentDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
+import motion.database.ws.basicQueriesService.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
+import motion.database.ws.basicQueriesService.GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult;
+import motion.database.ws.basicQueriesService.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
+import motion.database.ws.basicQueriesService.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
-import motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList.SessionDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.PerformerWithAttributesList.PerformerDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList.TrialDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList.SegmentDetailsWithAttributes;
 import motion.database.ws.basicUpdateService.ArrayOfInt;
 import motion.database.ws.basicUpdateService.BasicUpdatesService;
 import motion.database.ws.basicUpdateService.BasicUpdatesServiceSoap;
@@ -198,6 +203,7 @@ public class DatabaseConnection {
 			fileTransferSupport.registerUploadListener(listener);
 		
 		try {
+			createRemoteFolder( destRemoteFolder, "" );
 			fileTransferSupport.putFile(localFilePath, destRemoteFolder, ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
 		} catch (Exception e) {
 			log.severe( e.getMessage() );
@@ -222,7 +228,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 			putFile(localFilePath, destRemoteFolder, listener);			
 			
 		    FileStoremanService service = new FileStoremanService();
@@ -235,12 +241,16 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	private String getUniqueFolderName() {
+		return wsCredentials.userName + System.currentTimeMillis()+"/";
+	}
+
 	// TODO: Kasowanie pliku po sobie na serwerze
 	public void uploadTrialFile(int trialId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 			putFile(localFilePath, destRemoteFolder, listener);			
 		    
 			FileStoremanService service = new FileStoremanService();
@@ -258,7 +268,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 			putFile(localFilePath, destRemoteFolder, listener);			
 		    
 			FileStoremanService service = new FileStoremanService();
@@ -294,7 +304,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 
 			File dir = new File(filesPath);
 			if ( dir.isDirectory() )
@@ -322,7 +332,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 
 			File dir = new File(filesPath);
 			if ( dir.isDirectory() )
@@ -344,7 +354,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			String destRemoteFolder = "";
+			String destRemoteFolder = getUniqueFolderName();
 
 			File dir = new File(filesPath);
 			if ( dir.isDirectory() )
@@ -380,22 +390,32 @@ public class DatabaseConnection {
 			for (Object o : result.getContent())
 			{
 				PerformerWithAttributesList ss = (motion.database.ws.basicQueriesService.PerformerWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
-				for ( PerformerDetailsWithAttributes s : ss.getPerformerDetailsWithAttributes() )
-				{
-					Performer performer = new Performer();
-					performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
-					performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
-					performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
-					
-					transformGenericAttributes( s.getAttributes(), performer );
-					output.add( performer );
-				}
+				for ( motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes s : ss.getPerformerDetailsWithAttributes() )
+					output.add( transformPerformerDetails(s) );
 			}
 			
 			return output;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot list performers.");
+	}
+
+	/**
+	 * @param s
+	 * @return
+	 */
+	private Performer transformPerformerDetails(
+			motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes s) {
+		if (s==null)
+			return null;
+		
+		Performer performer = new Performer();
+		performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
+		performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
+		performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
+		
+		transformGenericAttributes( s.getAttributes(), performer );
+		return performer;
 	}
 	
 	
@@ -461,6 +481,84 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot list attributes.");
 	}
 	
+	public Session getSessionById(int id) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "getSessionById" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			GetSessionByIdXMLResult result = port.getSessionByIdXML(id);
+			motion.database.ws.basicQueriesService.SessionDetailsWithAttributes s = (motion.database.ws.basicQueriesService.SessionDetailsWithAttributes) result.getContent().get(0);
+			return transformSessionDetails(s);
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform data retrival.");
+		
+	}
+
+	public Performer getPerformerById(int id) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "getSessionById" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			GetPerformerByIdXMLResult result = port.getPerformerByIdXML(id);
+			PerformerDetailsWithAttributes s = (motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes) result.getContent().get(0);
+			return transformPerformerDetails(s);
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform data retrival.");
+	}
+
+	public Trial getTrialById(int id) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "getSessionById" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			GetTrialByIdXMLResult result = port.getTrialByIdXML(id);
+			TrialDetailsWithAttributes s = (motion.database.ws.basicQueriesService.TrialDetailsWithAttributes) result.getContent().get(0);
+			return transformTrialDetails(s);
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform data retrival.");
+	}
+
+
+	public Segment getSegmentById(int id) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "getSessionById" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			GetSegmentByIdXMLResult result = port.getSegmentByIdXML(id);
+			SegmentDetailsWithAttributes s = (motion.database.ws.basicQueriesService.SegmentDetailsWithAttributes) result.getContent().get(0);
+			return transformSegmentDetails(s);
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform data retrival.");
+	}
+
 	
 	public  DbElementsList<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
 	{
@@ -479,19 +577,8 @@ public class DatabaseConnection {
 			for (Object o : result.getContent())
 			{
 				motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList ss = (motion.database.ws.basicQueriesService.PerformerSessionWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
-				for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
-				{
-					Session session = new Session();
-					session.put( SessionStaticAttributes.labID, s.getLabID() );
-					session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
-					session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
-					session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
-					session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
-					session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
-					session.put( SessionStaticAttributes.userID, s.getUserID() );
-					transformGenericAttributes( s.getAttributes(), session );
-					output.add( session );
-				}
+				for ( motion.database.ws.basicQueriesService.SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+					output.add( transformSessionDetails(s) );
 			}
 			
 			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
@@ -502,6 +589,27 @@ public class DatabaseConnection {
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	/**
+	 * @param s
+	 * @return
+	 */
+	private Session transformSessionDetails(
+			motion.database.ws.basicQueriesService.SessionDetailsWithAttributes s) {
+		if(s==null)
+			return null;
+		
+		Session session = new Session();
+		session.put( SessionStaticAttributes.labID, s.getLabID() );
+		session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
+		session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
+		session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
+		session.put( SessionStaticAttributes.userID, s.getUserID() );
+		transformGenericAttributes( s.getAttributes(), session );
+		return session;
 	}
 
 
@@ -522,16 +630,8 @@ public class DatabaseConnection {
 			for (Object o : result.getContent())
 			{
 				SessionTrialWithAttributesList ss = (motion.database.ws.basicQueriesService.SessionTrialWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
-				for ( TrialDetailsWithAttributes s : ss.getTrialDetailsWithAttributes() )
-				{
-					Trial trial = new Trial();
-					trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
-					trial.put( TrialStaticAttributes.duration, s.getDuration() );
-					trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
-					trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
-					transformGenericAttributes( s.getAttributes(), trial );
-					output.add( trial );
-				}
+				for ( motion.database.ws.basicQueriesService.TrialDetailsWithAttributes s : ss.getTrialDetailsWithAttributes() )
+					output.add( transformTrialDetails(s) );
 			}
 			
 			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
@@ -542,6 +642,24 @@ public class DatabaseConnection {
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	/**
+	 * @param s
+	 * @return
+	 */
+	private Trial transformTrialDetails(
+			motion.database.ws.basicQueriesService.TrialDetailsWithAttributes s) {
+		if (s==null)
+			return null;
+
+		Trial trial = new Trial();
+		trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.duration, s.getDuration() );
+		trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
+		trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
+		transformGenericAttributes( s.getAttributes(), trial );
+		return trial;
 	}
 
 
@@ -636,7 +754,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+			log.entering( "DatabaseConnection", "setSessionAttribute" );
 	
 			BasicUpdatesService service = new BasicUpdatesService();
 			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
@@ -647,14 +765,14 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot set attribute.");
 	}
 
 	public int setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+			log.entering( "DatabaseConnection", "setTrialAttribute" );
 	
 			BasicUpdatesService service = new BasicUpdatesService();
 			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
@@ -665,7 +783,7 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot set attribute.");
 	}
 
 	public int setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
@@ -683,14 +801,14 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot set attribute.");
 	}
 
 	public int setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+			log.entering( "DatabaseConnection", "setSegmentAttribute" );
 	
 			BasicUpdatesService service = new BasicUpdatesService();
 			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
@@ -701,14 +819,14 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot set attribute.");
 	}
 
 	public int setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
-			log.entering( "DatabaseConnection", "setPerformerAttribute" );
+			log.entering( "DatabaseConnection", "setFileAttribute" );
 	
 			BasicUpdatesService service = new BasicUpdatesService();
 			BasicUpdatesServiceSoap port = service.getBasicUpdatesServiceSoap();
@@ -719,7 +837,7 @@ public class DatabaseConnection {
 			return result;
 		}
 		else
-			throw new Exception("Not Initialized. Cannot create performer.");
+			throw new Exception("Not Initialized. Cannot set file attribute.");
 	}
 
 			
@@ -739,22 +857,33 @@ public class DatabaseConnection {
 			for (Object o : result.getContent())
 			{
 				TrailSegmentWithAttributesList ss = (motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
-				for ( SegmentDetailsWithAttributes s : ss.getSegmentDetailsWithAttributes() )
-				{
-					Segment segment = new Segment();
-					segment.put( SegmentStaticAttributes.endTime, s.getEndTime() );
-					segment.put( SegmentStaticAttributes.segmentID, s.getSegmentID() );
-					segment.put( SegmentStaticAttributes.segmentName, s.getSegmentName() );
-					segment.put( SegmentStaticAttributes.startTime, s.getStartTime() );
-					segment.put( SegmentStaticAttributes.trialID, s.getTrialID() );
-					transformGenericAttributes( s.getAttributes(), segment );
-					output.add( segment );
-				}
+				for ( motion.database.ws.basicQueriesService.SegmentDetailsWithAttributes s : ss.getSegmentDetailsWithAttributes() )
+					output.add( transformSegmentDetails(s) );
 			}
 			return output;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+	/**
+	 * @param s
+	 * @return
+	 */
+	private Segment transformSegmentDetails(
+			motion.database.ws.basicQueriesService.SegmentDetailsWithAttributes s) {
+		
+		if (s==null)
+			return null;
+
+		Segment segment = new Segment();
+		segment.put( SegmentStaticAttributes.endTime, s.getEndTime() );
+		segment.put( SegmentStaticAttributes.segmentID, s.getSegmentID() );
+		segment.put( SegmentStaticAttributes.segmentName, s.getSegmentName() );
+		segment.put( SegmentStaticAttributes.startTime, s.getStartTime() );
+		segment.put( SegmentStaticAttributes.trialID, s.getTrialID() );
+		transformGenericAttributes( s.getAttributes(), segment );
+		return segment;
 	}
 
 	public  DbElementsList<DatabaseFile> listSessionFiles(int sessionID) throws Exception
@@ -875,7 +1004,7 @@ public class DatabaseConnection {
 					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
 					destLocalFolder, transferListener );
 
-			port.downloadComplete(fileID);
+			port.downloadComplete(fileID, file);
 			
 			return destLocalFolder + remoteFile.getName();
 		}

@@ -2,6 +2,7 @@ package motion.database;
 
 import java.util.HashMap;
 
+//TODO: co z metod¹ equals() ?
 @SuppressWarnings("serial")
 abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, Object>
 {

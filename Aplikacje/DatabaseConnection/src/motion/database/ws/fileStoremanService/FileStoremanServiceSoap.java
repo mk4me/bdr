@@ -139,13 +139,16 @@ public interface FileStoremanServiceSoap {
     /**
      * 
      * @param fileID
+     * @param path
      */
     @WebMethod(operationName = "DownloadComplete", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/DownloadComplete")
     @RequestWrapper(localName = "DownloadComplete", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.DownloadComplete")
     @ResponseWrapper(localName = "DownloadCompleteResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanService.DownloadCompleteResponse")
     public void downloadComplete(
         @WebParam(name = "fileID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        int fileID);
+        int fileID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path);
 
     /**
      * 

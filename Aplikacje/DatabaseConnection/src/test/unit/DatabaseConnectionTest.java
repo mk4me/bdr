@@ -128,8 +128,8 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
-		//if (!testFileUploading)
-		//	return;
+		if (!testFileUploading)
+			return;
 		int id = 2;
 		
 		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
@@ -215,8 +215,8 @@ public class DatabaseConnectionTest {
 		int id = database.createPerformer("Chuck", "Noris");
 		System.out.println("Created performer: " + id );
 
-		DbElementsList<Performer> performer = database.listPerformersWithAttributes();
-		Assert.assertNotNull( performer.findById( id ) );
+		Performer performer = database.getPerformerById(id);
+		Assert.assertNotNull( performer );
 	}
 	
 	@Test
@@ -232,8 +232,8 @@ public class DatabaseConnectionTest {
 		int id = database.createSession(1, null, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pó³obrotu");
 		System.out.println("Created session: " + id );
 
-		DbElementsList<Session> sessions = database.listPerformerSessionsWithAttributes(1);
-		Assert.assertNotNull( sessions.findById(id) );
+		Session session = database.getSessionById(id);
+		Assert.assertNotNull( session );
 	}
 
 	@Test
@@ -244,8 +244,8 @@ public class DatabaseConnectionTest {
 		int id = database.createTrial( 1, "Kopniak lew¹ nog¹", 1 );
 		System.out.println("Created trial: " + id );
 		
-		DbElementsList<Trial> trials = database.listSessionTrialsWithAttributes(1);
-		Assert.assertNotNull( trials.findById( id ) );
+		Trial trials = database.getTrialById(id);
+		Assert.assertNotNull( trials );
 	}
 
 	@Test
@@ -258,8 +258,8 @@ public class DatabaseConnectionTest {
 		
 		System.out.println("Created segment: " + id );
 		
-		DbElementsList<Segment> segments = database.listTrialSegmentsWithAttributes(id);
-		Assert.assertNotNull( segments.findById(id) );
+		Segment segments = database.getSegmentById(id);
+		Assert.assertNotNull( segments );
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
-		int sessionID = 1;
+		int sessionID = 2;
 		DbElementsList<DatabaseFile> results = database.listSessionFiles(sessionID);
 
 		System.out.println("Files for session: " + sessionID);
@@ -322,16 +322,54 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
-		int id = 1;
-		int result = database.setPerformerAttribute( id, "kick_length", "10", true);
+		int id = 3;
+		String attributeName = "date_of_birth";
+		String value = "12.12.2012";
+		int result = database.setPerformerAttribute( id, attributeName, value, false);
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
-		Performer x = list.findById(id);
-		System.out.println( x );
-		this.testListAttributesDefined();
+		Performer x = list.findById(3);
+		Assert.assertTrue( x.get( attributeName ).equals( value ) );
 	}
 	
-	
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#setPerformerAttribute}.
+	 * @throws Exception 
+	 */
+	//@Test
+	public void testSetSesssionAttribute() throws Exception {
+		
+		beforeTest();
+
+		int id = 3;
+		String attributeName = "date_of_birth";
+		String value = "12.12.2012";
+		int result = database.setSessionAttribute( id, attributeName, value, false);
+
+//		DbElementsList<Performer> list = database.listPerformerSessionsWithAttributes(1);
+//		Performer x = list.findById(3);
+//		Assert.assertTrue( x.get( attributeName ).equals( value ) );
+	}
+
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#setPerformerAttribute}.
+	 * @throws Exception 
+	 */
+	//@Test
+	public void testSetTrialAttribute() throws Exception {
+		
+		beforeTest();
+
+		int id = 3;
+		String attributeName = "date_of_birth";
+		String value = "12.12.2012";
+		int result = database.setPerformerAttribute( id, attributeName, value, false);
+
+		DbElementsList<Performer> list = database.listPerformersWithAttributes();
+		Performer x = list.findById(3);
+		Assert.assertTrue( x.get( attributeName ).equals( value ) );
+	}
+
 	
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listSessionFiles()}.

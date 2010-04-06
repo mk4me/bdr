@@ -126,8 +126,8 @@ public class GenericQueryXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link GenericQueryResult }
          * {@link String }
+         * {@link GenericQueryResult }
          * 
          * 
          */
