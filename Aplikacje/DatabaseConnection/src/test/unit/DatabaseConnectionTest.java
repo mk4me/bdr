@@ -5,6 +5,7 @@ package test.unit;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -189,7 +190,8 @@ public class DatabaseConnectionTest {
 		if (results!=null)
 			System.out.println( results );			
 	}
-/**
+
+	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listAtributesDefined()}.
 	 * @throws Exception 
 	 */
@@ -207,6 +209,25 @@ public class DatabaseConnectionTest {
 			System.out.println("Attribute: "+ s + " type: " + results.get( s ));			
 	}
 
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#listAtributeGroupDefined()}.
+	 * @throws Exception 
+	 */
+	
+	@Test
+	public void testListAttributeGroupsDefined() throws Exception {
+		
+		beforeTest();
+
+		Vector<String> results = database.listAttributeGroupsDefined("_ALL_ENTITIES");
+
+		System.out.println("Attributes defined:");
+		
+		for (String s : results ) 
+			System.out.println("Attributes group: "+ s );			
+	}
+	
+	
 	@Test
 	public void testCreatePerformer() throws Exception {
 		

@@ -5,6 +5,7 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javax.xml.ws.BindingProvider;
 import org.bouncycastle.asn1.cms.Time;
 
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
+import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList;
 import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
@@ -29,11 +31,13 @@ import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
 import motion.database.ws.basicQueriesService.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
+import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList.AttributeGroupDefinition;
 import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
+import motion.database.ws.basicQueriesService.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
@@ -480,6 +484,35 @@ public class DatabaseConnection {
 		else
 			throw new Exception("Not Initialized. Cannot list attributes.");
 	}
+
+	
+	public Vector<String> listAttributeGroupsDefined(String entityKind) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listAttributesDefined" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+		
+			ListAttributeGroupsDefinedResult result = port.listAttributeGroupsDefined(entityKind);
+			
+			Vector<String> output = new Vector<String>();
+			for( Object o : result.getContent() )
+			{
+				AttributeGroupDefinitionList attr = (motion.database.ws.basicQueriesService.AttributeGroupDefinitionList)o;//(((JAXBElement<?>)o).getValue());
+				for (AttributeGroupDefinition a : attr.getAttributeGroupDefinition() )
+					output.add( a.getAttributeGroupName() );
+			}
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list attributes.");
+	}
+
 	
 	public Session getSessionById(int id) throws Exception
 	{
@@ -897,7 +930,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, "session");
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKinds.session.name());
 
 			return transformListOfFiles(result);
 		}
@@ -951,7 +984,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, "trial");
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKinds.trial.name());
 		
 			return transformListOfFiles(result);
 		}
@@ -970,7 +1003,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, "performer");
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKinds.performer.name());
 		
 			return transformListOfFiles(result);
 		}
