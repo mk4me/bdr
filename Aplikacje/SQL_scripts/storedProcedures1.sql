@@ -1,11 +1,11 @@
 use Motion;
-
+go
 -- non-XML queries
 -- ==================================
 
 create procedure list_performer_sessions @perf_id int
 as
-	select IdSesja as SessonID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
+	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
       Opis_sesji as SessionDescription  from Sesja where IdPerformer=@perf_id
 go
@@ -14,6 +14,60 @@ create procedure list_session_files @sess_id int
 as
 	select IdPlik as FileID, Nazwa_pliku as FileName from Plik where IdSesja=@sess_id
 go
+
+-- Generic By-ID retrieval
+-- =======================
+
+alter procedure get_performer_by_id_xml ( @res_id int )
+as
+			select
+				IdPerformer as PerformerID,
+				Imie as FirstName,
+				Nazwisko as LastName,
+				(select * from list_performer_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE) as Attributes
+			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
+			for XML AUTO, ELEMENTS
+go
+alter procedure get_session_by_id_xml ( @res_id int )
+as
+			select
+				IdSesja as SessionID,
+				IdUzytkownik as UserID,
+				IdLaboratorium as LabID,
+				IdRodzaj_ruchu as MotionKindID,
+				IdPerformer as PerformerID,
+				Data as SessionDate,
+				Opis_sesji as SessionDescription,
+				(select * from list_session_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Sesja SessionDetailsWithAttributes where IdSesja=@res_id
+			for XML AUTO, ELEMENTS
+go
+alter procedure get_trial_by_id_xml ( @res_id int )
+as
+			select 
+				IdObserwacja as TrialID, 
+				IdSesja as SessionID, 
+				Opis_obserwacji as TrialDescription, 
+				Czas_trwania as Duration,
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
+			for XML AUTO, ELEMENTS
+go
+alter procedure get_segment_by_id_xml ( @res_id int )
+as
+			select 
+				IdSegment as SegmentID,
+				IdObserwacja as TrialID,
+				Nazwa as SegmentName,
+				Czas_poczatku as StartTime,
+				Czas_konca as EndTime,
+				(select * from list_segment_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Segment SegmentDetailsWithAttributes where IdSegment=@res_id
+			for XML AUTO, ELEMENTS
+go
+
+
+
 
 -- Performer queries
 -- =======================
@@ -46,8 +100,20 @@ select
 	Imie as FirstName,
 	Nazwisko as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from Performer Performer
+	from Performer PerformerDetailsWithAttributes
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
+go
+
+create procedure list_lab_performers_attributes_xml (@lab_id int)
+as
+select
+	IdPerformer as PerformerID,
+	Imie as FirstName,
+	Nazwisko as LastName,
+	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Performer PerformerDetailsWithAttributes
+	where exists(select * from Sesja s join Performer p on p.IdPerformer = s.IdPerformer where s.IdLaboratorium = @lab_id)
+    for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
 go
 
 
@@ -73,11 +139,12 @@ go
 
 create procedure list_performer_sessions_xml @perf_id int
 as
-	select IdSesja as SessonID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
+	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
       Opis_sesji as SessionDescription  from Sesja SessionDetails where IdPerformer=@perf_id
       for XML AUTO, root ('PerformerSessionList')
-     
+go
+
 create procedure list_performer_sessions_attributes_xml @perf_id int
 as
 	select
@@ -91,6 +158,22 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdPerformer=@perf_id
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
+
+go
+
+create procedure list_lab_sessions_attributes_xml @lab_id int
+as
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		IdRodzaj_ruchu as MotionKindID,
+		IdPerformer as PerformerID,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Sesja SessionDetailsWithAttributes where IdLaboratorium=@lab_id
+      for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
 
 go
 
@@ -152,7 +235,7 @@ from Atrybut a
 inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
 inner join Segment s on was.IdSegment=s.IdSegment
 where s.IdSegment = @segment_id
-
+go
 create procedure list_trial_segments_xml @trial_id int
 as
 select
@@ -198,19 +281,19 @@ go
 create procedure list_performer_files_xml @perf_id int
 as
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdPerformer=@perf_id
-	for XML AUTO, root ('PerformerFileList')
+	for XML AUTO, root ('FileList')
 go
 
 create procedure list_session_files_xml @sess_id int
 as
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdSesja=@sess_id
-	for XML AUTO, root ('SessionFileList')
+	for XML AUTO, root ('FileList')
 go
 
 create procedure list_trial_files_xml @trial_id int
 as
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdObserwacja=@trial_id
-	for XML AUTO, root ('TrialFileList')
+	for XML AUTO, root ('FileList')
 go
 
 create procedure list_performer_files_attributes_xml @perf_id int
@@ -221,7 +304,7 @@ as
 	Opis_pliku as FileDescription, 
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes where IdPerformer=@perf_id
-	for XML AUTO, root ('PerformerFileWithAttributesList')
+	for XML AUTO, root ('FileWithAttributesList')
 go
 
 create procedure list_session_files_attributes_xml @sess_id int
@@ -232,7 +315,7 @@ as
 	Opis_pliku as FileDescription, 
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes where IdSesja=@sess_id
-	for XML AUTO, root ('SessionFileWithAttributesList')
+	for XML AUTO, root ('FileWithAttributesList')
 go
 
 create procedure list_trial_files_attributes_xml @trial_id int
@@ -244,7 +327,7 @@ as
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes
 		where IdObserwacja=@trial_id
-	for XML AUTO, root ('TrialFileWithAttributesList')
+	for XML AUTO, root ('FileWithAttributesList')
 go
 
 
@@ -253,17 +336,26 @@ go
 -- Metadata queries
 -- ===================
 
-create procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
+alter procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
 as
 select
-	a.Nazwa as attributeName, a.Typ_danych as attributeType, a.Wyliczeniowy as attributeEnum, ga.Nazwa as attributeGroupName
+	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName
 from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-where @entity_kind=a.Opisywana_encja and ( @att_group = '_ALL' or ga.Nazwa = @att_group )
+where @entity_kind=ga.Opisywana_encja and ( @att_group = '_ALL' or ga.Nazwa = @att_group )
 for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
 
 go
 
-execute list_attributes_defined  'General_session_attributes', 'session';
+alter procedure list_attribute_groups_defined( @entity_kind varchar(20) )
+as
+select
+	Nazwa as AttributeGroupName, Opisywana_encja as DescribedEntity
+from Grupa_atrybutow
+where (@entity_kind=Opisywana_encja or @entity_kind = '_ALL_ENTITIES')
+for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinitionList')
+
+go
+
 
 
 -- Attribute setting operations
@@ -280,7 +372,7 @@ Output parameter "result" meaning:
 6 - the value provided is not valid for this numeric-type attribute
 
 */
-create procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+alter procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -290,7 +382,7 @@ begin
 	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'session';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'session';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -341,8 +433,8 @@ begin
 			set @result = 0;
 		end;
 end;
-
-create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+go
+alter procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -352,7 +444,7 @@ begin
 	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'performer';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'performer';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -403,7 +495,7 @@ begin
 			set @result = 0;
 		end;
 end;
-
+go
 
 
 create procedure set_trial_attribute (@trial_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
@@ -416,7 +508,7 @@ begin
 	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'trial';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'trial';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -469,7 +561,7 @@ begin
 end;
 go
 
-create procedure set_segment_attribute (@segment_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+alter procedure set_segment_attribute (@segment_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -479,7 +571,7 @@ begin
 	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'segment';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'segment';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -542,7 +634,7 @@ begin
 	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut where Nazwa = @attr_name and Opisywana_encja = 'file';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'file';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -593,7 +685,7 @@ begin
 			set @result = 0;
 		end;
 end;
-
+go
 
 DECLARE @result int
 EXECUTE set_session_attribute 4, 'marker_set', abc, 1, @result OUTPUT;

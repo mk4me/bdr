@@ -5,7 +5,6 @@
         IdGrupa_atrybutow    int NOT NULL,
         Nazwa                varchar(100) NOT NULL,
         Typ_danych           varchar(20) NOT NULL,
-        Opisywana_encja		varchar(20) NOT NULL,
         Wyliczeniowy		bit
  )
 go
@@ -62,7 +61,8 @@ go
  
  CREATE TABLE Grupa_atrybutow (
         IdGrupa_atrybutow    int IDENTITY,
-        Nazwa                varchar(100) NOT NULL
+        Nazwa                varchar(100) NOT NULL,
+        Opisywana_encja		varchar(20) NOT NULL
  )
 go
  
