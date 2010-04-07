@@ -5,6 +5,6 @@ package motion.database;
 public class Trial extends GenericDescription<TrialStaticAttributes>{
 
 	public Trial() {
-		super(TrialStaticAttributes.trialID.name());
+		super(TrialStaticAttributes.trialID.name(), EntityKind.trial);
 	}
 }

@@ -126,8 +126,8 @@ public class ListAttributeGroupsDefinedResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link AttributeGroupDefinitionList }
          * {@link String }
+         * {@link AttributeGroupDefinitionList }
          * 
          * 
          */

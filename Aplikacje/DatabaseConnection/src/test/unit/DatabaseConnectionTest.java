@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseFile;
 import motion.database.DbElementsList;
+import motion.database.EntityAttributeGroup;
 import motion.database.FileTransferListener;
 import motion.database.Performer;
 import motion.database.Segment;
@@ -209,6 +210,25 @@ public class DatabaseConnectionTest {
 			System.out.println("Attribute: "+ s + " type: " + results.get( s ));			
 	}
 
+	
+	/**
+	 * Test method for {@link motion.database.DatabaseConnection#listGrouppedAtributesDefined()}.
+	 * @throws Exception 
+	 */
+	
+	@Test
+	public void testListGrouppedAttributesDefined() throws Exception {
+		
+		beforeTest();
+
+		HashMap<String, EntityAttributeGroup> results = database.listGrouppedAttributesDefined( "performer" );
+
+		System.out.println("Groupped attributes defined:");
+		
+		for (String s : results.keySet() ) 
+			System.out.println("Attribute group: " + s + "\n\r content: " + results.get( s ));			
+	}
+
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listAtributeGroupDefined()}.
 	 * @throws Exception 
@@ -350,7 +370,7 @@ public class DatabaseConnectionTest {
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
 		Performer x = list.findById(3);
-		Assert.assertTrue( x.get( attributeName ).equals( value ) );
+		Assert.assertTrue( x.get( attributeName ).value.equals( value ) );
 	}
 	
 	/**

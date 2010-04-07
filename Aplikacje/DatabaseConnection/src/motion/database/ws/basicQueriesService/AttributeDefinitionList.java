@@ -29,6 +29,7 @@ import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeD
  *                   &lt;sequence>
  *                     &lt;element name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                     &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                     &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                     &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
@@ -96,6 +97,7 @@ public class AttributeDefinitionList {
      *       &lt;sequence>
      *         &lt;element name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *         &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -109,6 +111,7 @@ public class AttributeDefinitionList {
     @XmlType(name = "", propOrder = {
         "attributeName",
         "attributeType",
+        "attributeEnum",
         "attributeGroupName"
     })
     public static class AttributeDefinition {
@@ -117,6 +120,8 @@ public class AttributeDefinitionList {
         protected String attributeName;
         @XmlElement(name = "AttributeType", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String attributeType;
+        @XmlElement(name = "AttributeEnum", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        protected Integer attributeEnum;
         @XmlElement(name = "AttributeGroupName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", required = true)
         protected String attributeGroupName;
 
@@ -166,6 +171,30 @@ public class AttributeDefinitionList {
          */
         public void setAttributeType(String value) {
             this.attributeType = value;
+        }
+
+        /**
+         * Gets the value of the attributeEnum property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Integer }
+         *     
+         */
+        public Integer getAttributeEnum() {
+            return attributeEnum;
+        }
+
+        /**
+         * Sets the value of the attributeEnum property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Integer }
+         *     
+         */
+        public void setAttributeEnum(Integer value) {
+            this.attributeEnum = value;
         }
 
         /**

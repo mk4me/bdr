@@ -5,6 +5,6 @@ package motion.database;
 public class Session extends GenericDescription<SessionStaticAttributes>{
 
 	public Session() {
-		super(SessionStaticAttributes.sessionID.name());
+		super(SessionStaticAttributes.sessionID.name(), EntityKind.session);
 	}
 }

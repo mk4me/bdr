@@ -5,6 +5,6 @@ package motion.database;
 public class Segment extends GenericDescription<SegmentStaticAttributes>{
 
 	public Segment() {
-		super(SegmentStaticAttributes.segmentID.name());
+		super(SegmentStaticAttributes.segmentID.name(), EntityKind.segment);
 	}
 }

@@ -126,8 +126,8 @@ public class ListLabPerformersWithAttributesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link LabPerformerWithAttributesList }
          * {@link String }
+         * {@link LabPerformerWithAttributesList }
          * 
          * 
          */

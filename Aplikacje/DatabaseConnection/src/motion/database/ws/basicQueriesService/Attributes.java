@@ -27,6 +27,7 @@ import motion.database.ws.basicQueriesService.Attributes.Attribute;
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                   &lt;attribute name="AttributeGroup" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="Entity">
  *                     &lt;simpleType>
  *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -39,6 +40,7 @@ import motion.database.ws.basicQueriesService.Attributes.Attribute;
  *                     &lt;/simpleType>
  *                   &lt;/attribute>
  *                   &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                   &lt;attribute name="Type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -102,6 +104,7 @@ public class Attributes {
      * &lt;complexType>
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;attribute name="AttributeGroup" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="Entity">
      *         &lt;simpleType>
      *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -114,6 +117,7 @@ public class Attributes {
      *         &lt;/simpleType>
      *       &lt;/attribute>
      *       &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="Type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -126,12 +130,40 @@ public class Attributes {
     @XmlType(name = "")
     public static class Attribute {
 
+        @XmlAttribute(name = "AttributeGroup", required = true)
+        protected String attributeGroup;
         @XmlAttribute(name = "Entity")
         protected String entity;
         @XmlAttribute(name = "Name", required = true)
         protected String name;
+        @XmlAttribute(name = "Type", required = true)
+        protected String type;
         @XmlAttribute(name = "Value", required = true)
         protected String value;
+
+        /**
+         * Gets the value of the attributeGroup property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getAttributeGroup() {
+            return attributeGroup;
+        }
+
+        /**
+         * Sets the value of the attributeGroup property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setAttributeGroup(String value) {
+            this.attributeGroup = value;
+        }
 
         /**
          * Gets the value of the entity property.
@@ -179,6 +211,30 @@ public class Attributes {
          */
         public void setName(String value) {
             this.name = value;
+        }
+
+        /**
+         * Gets the value of the type property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getType() {
+            return type;
+        }
+
+        /**
+         * Sets the value of the type property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setType(String value) {
+            this.type = value;
         }
 
         /**

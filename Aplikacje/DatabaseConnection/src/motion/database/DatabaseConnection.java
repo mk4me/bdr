@@ -18,6 +18,7 @@ import javax.xml.ws.BindingProvider;
 import org.bouncycastle.asn1.cms.Time;
 
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
+import motion.database.ws.basicQueriesService.AttributeDefinitionList;
 import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList;
 import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
@@ -417,7 +418,6 @@ public class DatabaseConnection {
 		performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
 		performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
 		performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
-		
 		transformGenericAttributes( s.getAttributes(), performer );
 		return performer;
 	}
@@ -474,17 +474,51 @@ public class DatabaseConnection {
 			HashMap<String, String> output = new HashMap<String, String>();
 			for( Object o : result.getContent() )
 			{
-				motion.database.ws.basicQueriesService.AttributeDefinitionList attr = (motion.database.ws.basicQueriesService.AttributeDefinitionList)o;//(((JAXBElement<?>)o).getValue());
+				AttributeDefinitionList attr = (AttributeDefinitionList)o;//(((JAXBElement<?>)o).getValue());
 				for (AttributeDefinition a : attr.getAttributeDefinition() )
 					output.put( a.getAttributeName(), a.getAttributeType() );
 			}
-			
 			return output;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot list attributes.");
 	}
 
+	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(String entityKind) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listGrouppedAttributesDefined" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+		
+			ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
+			
+			HashMap<String, EntityAttributeGroup> output = new HashMap<String, EntityAttributeGroup>();
+			for( Object o : result.getContent() )
+			{
+				AttributeDefinitionList attr = (AttributeDefinitionList)o;
+				for (AttributeDefinition a : attr.getAttributeDefinition() )
+				{	
+					EntityAttributeGroup group = output.get( a.getAttributeGroupName() );
+					if (group == null)
+					{
+						group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
+						output.put( a.getAttributeGroupName(), group );
+					}
+					group.add( new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() ) );
+				}
+			}
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list attributes.");
+	}
+
+	
 	
 	public Vector<String> listAttributeGroupsDefined(String entityKind) throws Exception
 	{
@@ -930,7 +964,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKinds.session.name());
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKind.session.name());
 
 			return transformListOfFiles(result);
 		}
@@ -967,8 +1001,8 @@ public class DatabaseConnection {
 			if (attributes.getAttribute() != null)
 				for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : attributes.getAttribute() )
 				{
-					Object value = att.getValue();
-					destinationObject.put(att.getName(), value );
+					EntityAttribute attribute = new EntityAttribute(att.getName(), att.getValue(), att.getAttributeGroup(), att.getType() );
+					destinationObject.put(att.getName(), attribute );
 				}
 	}
 
@@ -984,7 +1018,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKinds.trial.name());
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKind.trial.name());
 		
 			return transformListOfFiles(result);
 		}
@@ -1003,7 +1037,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKinds.performer.name());
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKind.performer.name());
 		
 			return transformListOfFiles(result);
 		}

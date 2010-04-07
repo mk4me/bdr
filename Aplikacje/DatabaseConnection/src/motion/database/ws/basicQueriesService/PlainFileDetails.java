@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="FileID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,7 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PlainFileDetails", propOrder = {
     "fileID",
-    "fileName"
+    "fileName",
+    "fileDescription"
 })
 public class PlainFileDetails {
 
@@ -38,6 +40,8 @@ public class PlainFileDetails {
     protected int fileID;
     @XmlElement(name = "FileName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
     protected String fileName;
+    @XmlElement(name = "FileDescription", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected String fileDescription;
 
     /**
      * Gets the value of the fileID property.
@@ -77,6 +81,30 @@ public class PlainFileDetails {
      */
     public void setFileName(String value) {
         this.fileName = value;
+    }
+
+    /**
+     * Gets the value of the fileDescription property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFileDescription() {
+        return fileDescription;
+    }
+
+    /**
+     * Sets the value of the fileDescription property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFileDescription(String value) {
+        this.fileDescription = value;
     }
 
 }
