@@ -16,4 +16,9 @@ public class EntityAttributeGroup extends Vector<EntityAttribute>{
 		this.entityKind = entityKind;
 	}
 	
+	public String toString()
+	{
+		return name;
+	}
+
 }

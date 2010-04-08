@@ -5,11 +5,11 @@ import java.util.Vector;
 
 //TODO: co z metod¹ equals() ?
 @SuppressWarnings("serial")
-abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, EntityAttribute>
+public abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, EntityAttribute>
 {
 	String idAttributeName;
-	EntityKind entityKind;
-	HashMap<String, EntityAttributeGroup> groups;
+	public EntityKind entityKind;
+	public HashMap<String, EntityAttributeGroup> groups;
 	
 	public GenericDescription(String name, EntityKind entityKind)
 	{
@@ -23,7 +23,11 @@ abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, Ent
 		return super.get(key.name());
 	}
 	
-	public Object put(T key, EntityAttribute arg) {
+	public EntityAttribute put(T key, EntityAttribute arg) {
+		return put(key.name(), arg);
+	}
+	
+	public EntityAttribute put(String key, EntityAttribute arg) {
 		if (arg!=null)
 		{
 			EntityAttributeGroup group = groups.get( arg.groupName );
@@ -35,13 +39,13 @@ abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, Ent
 			group.add( arg );
 		}
 		
-		return super.put( key.name(), arg );
+		return super.put( key, arg );
 	}
 
 	
 	public Object put(T key, Object arg) {
 		
-		return this.put( key, new EntityAttribute( key.name(), arg, "static", arg.getClass().getName() ) );
+		return this.put( key.name(), new EntityAttribute( key.name(), arg, "static", arg.getClass().getName() ) );
 	}
 
 	public int getId()
@@ -49,6 +53,33 @@ abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, Ent
 		return (Integer)get( idAttributeName ).value;
 	}
 	
+	public void addEmptyGenericAttributes( HashMap<String, EntityAttributeGroup> newGroups )
+	{
+		for( EntityAttributeGroup g: newGroups.values())
+			for ( EntityAttribute a : g )
+				if ( get( a.name ) == null )
+				{	
+					a.emptyValue();
+					this.put( a.name, a );
+				}
+	}
+	
+	public void removeEmptyAttributes()
+	{
+		for( EntityAttribute a : this.values() )
+			if (a.value == null)
+				removeAttribute( a );
+	}
+	
+	private void removeAttribute(EntityAttribute a) 
+	{
+		EntityAttributeGroup g = groups.get( a.groupName );
+		if (g != null)
+			g.remove( a );
+		this.remove( a );
+	}
+
+
 	public String toString()
 	{
 		StringBuffer output = new StringBuffer();
