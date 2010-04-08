@@ -22,8 +22,8 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import motion.applet.database.AttributeGroup;
 import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 
 public class ConfigurationTree {
 	public JTree tree;
@@ -31,11 +31,12 @@ public class ConfigurationTree {
 	public ConfigurationTree(TableName tableName) {
 		Vector groupVector = new Vector();
 		Vector group1 = new Vector();
-		group1.add("Attribute group _ALL");
-		group1.addAll(tableName.getDefinedAttributes());
+		//group1.add("Attribute group _ALL");
+		//group1.addAll(tableName.getDefinedAttributes());
 		//group1.add("Defined attribute 1");
 		//group1.add("Defined attribute 2");
 		//group1.add("Defined attribute 3");
+		
 		
 		Vector group2 = new Vector();
 		//group2.add("Attribute group 2");
@@ -52,12 +53,17 @@ public class ConfigurationTree {
 		//noGroup.add("Static attribute 3");
 		
 		groupVector.add(noGroup);
-		if (group1.size() > 1) {
-			groupVector.add(group1);
-		}
+		//if (group1.size() > 1) {
+			//groupVector.add(group1);
+		//}
 		//groupVector.add(group2);
 		
-		
+		for (AttributeGroup a : tableName.getGroupedAttributes()) {
+			Vector groupA = new Vector();
+			groupA.add(a.getGroupName());
+			groupA.addAll(a.getAttributes());
+			groupVector.add(groupA);
+		}
 		
         
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");

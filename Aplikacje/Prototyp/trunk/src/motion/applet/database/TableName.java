@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.EntityAttribute;
+import motion.database.EntityAttributeGroup;
 import motion.database.PerformerStaticAttributes;
 import motion.database.SessionStaticAttributes;
 import motion.database.TrialStaticAttributes;
@@ -24,7 +26,8 @@ public class TableName {
 	private final String table;
 	private final String label;
 	private final ArrayList<AttributeName> staticAttributes = new ArrayList<AttributeName>();
-	private final ArrayList<AttributeName> definedAttributes = new ArrayList<AttributeName>();
+	//private final ArrayList<AttributeName> definedAttributes = new ArrayList<AttributeName>();
+	private final ArrayList<AttributeGroup> groupedDefinedAttributes = new ArrayList<AttributeGroup>();
 	
 	public TableName(String table, String label) {
 		this.table = table;
@@ -35,30 +38,39 @@ public class TableName {
 	
 	private void fillStaticAttributes() {
 		if (this.table.equals(PERFORMER_TABLE)) {
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.performerID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.firstName.toString(), "String"));
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.lastName.toString(), "String"));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.firstName.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.lastName.toString(), AttributeName.STRING_TYPE));
 		} else if (this.table.equals(SESSION_TABLE)) {
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.userID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.labID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.motionKindID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDate.toString(), "Date"));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDescription.toString(), "String"));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.userID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.labID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.motionKindID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDate.toString(), AttributeName.DATE_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDescription.toString(), AttributeName.STRING_TYPE));
 		} else if (this.table.equals(TRIAL_TABLE)) {
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.sessionID.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.duration.toString(), "Integer"));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialDescription.toString(), "String"));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.duration.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialDescription.toString(), AttributeName.STRING_TYPE));
 		}
 	}
 	
 	private void fillDefinedAttributes() {
 		try {
-			HashMap<String, String> results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", table);
+			//HashMap<String, String> results = WebServiceInstance.getDatabaseConnection().listAttributesDefined("_ALL", table);
+			//for (String s : results.keySet()) {
+				//definedAttributes.add(new AttributeName(s, toTypeString(results.get(s))));
+			//}
+			
+			HashMap<String, EntityAttributeGroup> results = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined(table);
 			for (String s : results.keySet()) {
-				definedAttributes.add(new AttributeName(s, toTypeString(results.get(s))));
+				ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
+				for (EntityAttribute e : results.get(s)) {
+					attributes.add(new AttributeName(e.name, toTypeString(e.type)));
+				}
+				groupedDefinedAttributes.add(new AttributeGroup(s, attributes));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -95,15 +107,25 @@ public class TableName {
 	}
 	
 	public ArrayList<AttributeName> getDefinedAttributes() {
+		ArrayList<AttributeName> all = new ArrayList<AttributeName>();
+		for (AttributeGroup a : this.groupedDefinedAttributes) {
+			all.addAll(a.getAttributes());
+		}
 		
-		return this.definedAttributes;
+		return new ArrayList<AttributeName>(all);
+		//return this.definedAttributes;
 	}
 	
 	public ArrayList<AttributeName> getAllAttributes() {
 		ArrayList<AttributeName> all = new ArrayList<AttributeName>();
 		all.addAll(staticAttributes);
-		all.addAll(definedAttributes);
+		all.addAll(getDefinedAttributes());
 		
 		return new ArrayList<AttributeName>(all);
+	}
+	
+	public ArrayList<AttributeGroup> getGroupedAttributes() {
+		
+		return this.groupedDefinedAttributes;
 	}
 }
