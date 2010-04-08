@@ -1,15 +1,22 @@
 package motion.applet.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JComboBox;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 import motion.applet.database.Connector;
@@ -39,6 +46,21 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		splitPane.setResizeWeight(0.8);
 		this.add(splitPane, BorderLayout.CENTER);
 		
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)) {
+					Point point = e.getPoint();
+					int row = table.rowAtPoint(point);
+					//int column = table.columnAtPoint(point);
+					ListSelectionModel model = table.getSelectionModel();
+					model.setSelectionInterval(row, row);
+					JPopupMenu popupMenu = new JPopupMenu();
+					popupMenu.add(new JMenuItem("Context menu"));
+					popupMenu.show(table, point.x, point.y);
+				}
+			}
+		});
 	}
 	
 	private void showTable(String tableName) {
