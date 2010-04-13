@@ -9,9 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -23,7 +21,7 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 import motion.database.FileTransferListener;
 
-public class UploadDialog extends JDialog {
+public class UploadDialog extends BasicDialog {
 	private static String UPLOAD_TITLE = "Upload session file";
 	private static String UPLOAD_FILE = "Upload";
 	private static String FILE_PATH = "File:";
@@ -39,7 +37,6 @@ public class UploadDialog extends JDialog {
 	private JButton browseButton;
 	private JButton uploadButton;
 	private JButton cancelButton;
-	private JLabel messageLabel;
 	private JTextField filePathText;
 	private JTextField sessionNumber;
 	private JTextField descriptionText;
@@ -49,26 +46,12 @@ public class UploadDialog extends JDialog {
 	private DatabaseConnection databaseConnection;
 	
 	public UploadDialog() {
-		super((JFrame) null, UPLOAD_TITLE, true);
+		super(UPLOAD_TITLE, WELCOME_MESSAGE);
 		
-		databaseConnection = DatabaseConnection.getInstance();
-		databaseConnection.setWSCredentials("applet", "motion#motion2X", "pjwstk");
-		databaseConnection.setFTPSCredentials("dbpawell", "testUser", "testUser");
-		
-		this.setSize(420, 200);
-		this.setLocation(200, 200);
-		
-		this.constructUserInterface();
-		this.addListeners();
+		this.finishUserInterface();
 	}
 	
-	private void constructUserInterface() {
-		// Message area
-		JPanel messagePanel = new JPanel();
-		this.messageLabel = new JLabel(WELCOME_MESSAGE);
-		messagePanel.add(this.messageLabel);
-		this.add(messagePanel, BorderLayout.PAGE_START);
-		
+	protected void constructUserInterface() {
 		// Form area
 		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
@@ -123,26 +106,24 @@ public class UploadDialog extends JDialog {
 		this.add(formPanel, BorderLayout.CENTER);
 		
 		// Button area
-		JPanel buttonPanel = new JPanel();
-		FlowLayout buttonPanelLayout = new FlowLayout();
-		buttonPanelLayout.setAlignment(FlowLayout.TRAILING);
-		buttonPanel.setLayout(buttonPanelLayout);
-		
 		progressBar = new JProgressBar(0, 100);
 		progressBar.setStringPainted(true);
-		buttonPanel.add(progressBar);
+		this.addToButtonPanel(progressBar);
 		progressBar.setVisible(false);
 		
 		uploadButton = new JButton(UPLOAD_FILE);
-		buttonPanel.add(uploadButton);
+		this.addToButtonPanel(uploadButton);
 		
 		cancelButton = new JButton(CANCEL_UPLOAD);
-		buttonPanel.add(cancelButton);
-		
-		this.add(buttonPanel, BorderLayout.PAGE_END);
+		this.addToButtonPanel(cancelButton);
 	}
 	
-	private void addListeners() {
+	protected void finishUserInterface() {
+		this.setSize(420, 200);
+		this.setLocation(200, 200);
+	}
+	
+	protected void addListeners() {
 		this.browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();

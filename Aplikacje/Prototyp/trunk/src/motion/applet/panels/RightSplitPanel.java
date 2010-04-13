@@ -22,6 +22,7 @@ import javax.swing.table.TableModel;
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.SessionDialog;
 import motion.applet.tables.BasicTable;
 import motion.applet.trees.ResultTree;
 
@@ -56,7 +57,15 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					ListSelectionModel model = table.getSelectionModel();
 					model.setSelectionInterval(row, row);
 					JPopupMenu popupMenu = new JPopupMenu();
-					popupMenu.add(new JMenuItem("Context menu"));
+					JMenuItem createSessionMenuItem = new JMenuItem("Create new session");
+					popupMenu.add(createSessionMenuItem);
+					createSessionMenuItem.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							SessionDialog sessionDialog = new SessionDialog();
+							sessionDialog.show();
+						}
+					});
 					popupMenu.show(table, point.x, point.y);
 				}
 			}

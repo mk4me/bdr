@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -25,7 +23,7 @@ import motion.applet.filter.Filter;
 import motion.applet.filter.model.PredicateComposition;
 import motion.applet.filter.model.SimplePredicate;
 
-public class FilterDialog extends JDialog {
+public class FilterDialog extends BasicDialog {
 	private static String FILTER_TITLE = "Add filter";
 	private static String FILTER_NAME = "Name:";
 	private static String TABLE_LABEL = "Table:";
@@ -33,6 +31,9 @@ public class FilterDialog extends JDialog {
 	private static String CANCEL_FILTER = "Cancel";
 	private static String EDIT_FILTER = "Edit";
 	private static String ADD_CONDITION = "+";
+	private static String WELCOME_MESSAGE = "Add new filter.";
+	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
+	
 	private JTextField nameText;
 	private JButton addButton;
 	private JButton cancelButton;
@@ -40,9 +41,8 @@ public class FilterDialog extends JDialog {
 	public static int ADD_PRESSED = 1;
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
-	private JLabel messageLabel;
-	private static String WELCOME_MESSAGE = "Add new filter.";
-	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
+	
+	private JLabel tableNameLabel;
 	
 	private JPanel conditionPanel;
 	
@@ -55,14 +55,9 @@ public class FilterDialog extends JDialog {
 	private TableName tableName;
 	
 	public FilterDialog(TableName tableName) {
-		super((JFrame) null, FILTER_TITLE, true);
-		this.setSize(440, 400);
-		this.setLocation(200, 200);
-		
+		super(FILTER_TITLE, WELCOME_MESSAGE);
 		this.tableName = tableName;
-		
-		constructUserInterface();
-		addListeners();
+		this.finishUserInterface();
 	}
 	
 	public FilterDialog(Filter filter) {
@@ -73,13 +68,7 @@ public class FilterDialog extends JDialog {
 		this.setPredicate(this.predicate);
 	}
 	
-	private void constructUserInterface() {
-		// Message area
-		JPanel messagePanel = new JPanel();
-		this.messageLabel = new JLabel(WELCOME_MESSAGE);
-		messagePanel.add(this.messageLabel);
-		this.add(messagePanel, BorderLayout.PAGE_START);
-		
+	protected void constructUserInterface() {
 		// Form area
 		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
@@ -104,7 +93,7 @@ public class FilterDialog extends JDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableLabel, gridBagConstraints);
 		
-		JLabel tableNameLabel = new JLabel(this.tableName.toString());
+		tableNameLabel = new JLabel();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableNameLabel, gridBagConstraints);
@@ -122,28 +111,25 @@ public class FilterDialog extends JDialog {
 		conditionPanel = new JPanel();
 		conditionPanel.setLayout(new BoxLayout(conditionPanel, BoxLayout.Y_AXIS));
 		
-		this.addColumnCondition(true);
-		
 		centerPanel.add(conditionPanel);
 		centerPanel2.add(centerPanel);
 		this.add(centerPanel2, BorderLayout.WEST);
 		
 		// Button area
-		JPanel buttonPanel = new JPanel();
-		FlowLayout buttonPanelLayout = new FlowLayout();
-		buttonPanelLayout.setAlignment(FlowLayout.TRAILING);
-		buttonPanel.setLayout(buttonPanelLayout);
-		
 		addConditionButton = new JButton(ADD_CONDITION);
-		buttonPanel.add(addConditionButton);
+		this.addToButtonPanel(addConditionButton);
 		
 		addButton = new JButton(ADD_FILTER);
-		buttonPanel.add(addButton);
+		this.addToButtonPanel(addButton);
 		
 		cancelButton = new JButton(CANCEL_FILTER);
-		buttonPanel.add(cancelButton);
-		
-		this.add(buttonPanel, BorderLayout.PAGE_END);
+		this.addToButtonPanel(cancelButton);
+	}
+	
+	protected void finishUserInterface() {
+		this.setSize(440, 400);
+		this.tableNameLabel.setText(this.tableName.toString());
+		this.addColumnCondition(true);
 	}
 	
 	private void setPredicate(SimplePredicate predicate) {
@@ -178,7 +164,7 @@ public class FilterDialog extends JDialog {
 		this.conditionPanel.revalidate();
 	}
 	
-	private void addListeners() {
+	protected void addListeners() {
 		this.addConditionButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FilterDialog.this.addColumnCondition(false);

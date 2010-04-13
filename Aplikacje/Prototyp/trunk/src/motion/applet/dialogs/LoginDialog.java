@@ -1,7 +1,6 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -9,13 +8,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginDialog extends JDialog {
+public class LoginDialog extends BasicDialog {
 	private static String LOGIN_TITLE = "Login";
 	private static String USER = "User name:";
 	private static String PASSWORD = "Password:";
@@ -25,19 +23,12 @@ public class LoginDialog extends JDialog {
 	private JButton loginButton;
 	
 	public LoginDialog() {
-		super((JFrame) null, LOGIN_TITLE, true);
-		this.setSize(250, 200);
-		this.setLocation(200, 200);
-		this.getContentPane().setLayout(new BorderLayout());
-		this.setResizable(false);
-		// Disable the close button
-		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		super(LOGIN_TITLE, WELCOME_TITLE);
 		
-		constructUserInterface();
-		addListeners();
+		this.finishUserInterface();
 	}
 	
-	private void constructUserInterface() {
+	protected void constructUserInterface() {
 		// Text fields
 		JPanel loginPanel = new JPanel();
 		loginPanel.setLayout(new GridBagLayout());
@@ -70,24 +61,19 @@ public class LoginDialog extends JDialog {
 		
 		this.add(loginPanel, BorderLayout.CENTER);
 		
-		// Welcome text
-		JPanel welcomePanel = new JPanel();
-		JLabel welcomeTitleLabel = new JLabel(WELCOME_TITLE);
-		welcomePanel.add(welcomeTitleLabel);
-		
-		this.add(welcomePanel, BorderLayout.PAGE_START);
-		
-		// Buttons
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
-		
+		// Button area
 		loginButton = new JButton(LOGIN);
-		buttonPanel.add(loginButton);
-		
-		this.add(buttonPanel, BorderLayout.PAGE_END);
+		this.addToButtonPanel(loginButton);
 	}
 	
-	private void addListeners() {
+	protected void finishUserInterface() {
+		this.setSize(250, 200);
+		this.setResizable(false);
+		// Disable the close button
+		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+	}
+	
+	protected void addListeners() {
 		this.loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
