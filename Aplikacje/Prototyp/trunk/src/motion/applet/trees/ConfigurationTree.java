@@ -125,8 +125,11 @@ public class ConfigurationTree {
 		                
 		                if(isAllChiledSelected){
 		                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)editedNode.getParent();
+		                    // No parent group exception.
+		                    if (!(node.getUserObject() instanceof String)) {
 		                      CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
-		                    cbn.setSelected(isAllChiledSelected);
+		                      cbn.setSelected(isAllChiledSelected);
+		                    }
 		                }
 		            }
 		            

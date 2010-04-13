@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,6 +28,7 @@ public class FilterDialog extends BasicDialog {
 	private static String FILTER_TITLE = "Add filter";
 	private static String FILTER_NAME = "Name:";
 	private static String TABLE_LABEL = "Table:";
+	private static String QUERY_LABEL = "Query:";
 	private static String ADD_FILTER = "Add";
 	private static String CANCEL_FILTER = "Cancel";
 	private static String EDIT_FILTER = "Edit";
@@ -98,6 +100,11 @@ public class FilterDialog extends BasicDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableNameLabel, gridBagConstraints);
 		
+		JLabel queryLabel = new JLabel(QUERY_LABEL);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		formPanel.add(queryLabel, gridBagConstraints);
+		
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 		JPanel centerPanel2 = new JPanel();
@@ -110,6 +117,7 @@ public class FilterDialog extends BasicDialog {
 		// Column condition area
 		conditionPanel = new JPanel();
 		conditionPanel.setLayout(new BoxLayout(conditionPanel, BoxLayout.Y_AXIS));
+		conditionPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 5));
 		
 		centerPanel.add(conditionPanel);
 		centerPanel2.add(centerPanel);
