@@ -17,9 +17,10 @@ import javax.swing.treetable.JTreeTable;
 import motion.applet.models.EntityEditorModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.EntityAttributeGroup;
-import motion.database.GenericDescription;
 import motion.database.Performer;
 import motion.database.PerformerStaticAttributes;
+import motion.database.Session;
+import motion.database.SessionStaticAttributes;
 
 public class SessionDialog extends BasicDialog {
 	private static String TITLE = "New session";
@@ -79,18 +80,22 @@ public class SessionDialog extends BasicDialog {
 		try {
 			Performer performer = WebServiceInstance.getDatabaseConnection().getPerformerById(this.performerID);
 			this.performerNameLabel.setText(performer.getId() + " " +
-					performer.get(PerformerStaticAttributes.firstName).toString() + " " +
-					performer.get(PerformerStaticAttributes.lastName).toString());
+					performer.get(PerformerStaticAttributes.firstName.toString()).value + " " +
+					performer.get(PerformerStaticAttributes.lastName.toString()).value);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
-			GenericDescription<?> entity = WebServiceInstance.getDatabaseConnection().getSessionById(this.performerID);
-			HashMap<String, EntityAttributeGroup> g = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined("session");
-			entity.addEmptyGenericAttributes( g );
-			JTreeTable treeTable = new JTreeTable(new EntityEditorModel( entity ));
+			Session session = new Session();
+			HashMap<String, EntityAttributeGroup> attributesDefined = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined("session");
+			session.put(SessionStaticAttributes.sessionID, 1234);
+			session.put(SessionStaticAttributes.sessionDescription, "");
+			session.put(SessionStaticAttributes.sessionDate, "");
+			session.put(SessionStaticAttributes.performerID, this.performerID);
+			session.addEmptyGenericAttributes(attributesDefined);
+			JTreeTable treeTable = new JTreeTable(new EntityEditorModel(session));
 			centerPanel.add(new JScrollPane(new JScrollPane(treeTable)), BorderLayout.CENTER);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
