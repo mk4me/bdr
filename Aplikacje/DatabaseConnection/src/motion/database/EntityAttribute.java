@@ -64,15 +64,17 @@ public class EntityAttribute {
 	}
 
 	public void emptyValue() {
-		try {
-			this.value = getTypeClass().newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		if ( getTypeClass() == String.class)
+			this.value = "";
+		else if ( getTypeClass() == Integer.class)
+			this.value = 0;
+		else if ( getTypeClass() == Float.class)
+			this.value = 0;
+		else if ( getTypeClass() == Double.class)
+			this.value = 0;
+		else if ( getTypeClass() == GregorianCalendar.class)
+			this.value = GregorianCalendar.getInstance();
+		else	
+			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() );
 	}
 }
