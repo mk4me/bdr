@@ -53,17 +53,19 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				if (SwingUtilities.isRightMouseButton(e)) {
 					Point point = e.getPoint();
 					int row = table.rowAtPoint(point);
-					//int column = table.columnAtPoint(point);
+					int column = table.columnAtPoint(point);
 					ListSelectionModel model = table.getSelectionModel();
 					model.setSelectionInterval(row, row);
 					JPopupMenu popupMenu = new JPopupMenu();
 					JMenuItem createSessionMenuItem = new JMenuItem("Create new session");
 					popupMenu.add(createSessionMenuItem);
+					final Object value = table.getModel().getValueAt(row, 0); // ID column.
+					
 					createSessionMenuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							SessionDialog sessionDialog = new SessionDialog();
-							sessionDialog.show();
+							SessionDialog sessionDialog = new SessionDialog(Integer.parseInt(value.toString()));
+							sessionDialog.setVisible(true);
 						}
 					});
 					popupMenu.show(table, point.x, point.y);
