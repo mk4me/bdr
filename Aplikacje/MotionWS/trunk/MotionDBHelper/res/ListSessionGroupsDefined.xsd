@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<s:schema id="SessionGroupDefinitionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <s:element name="SessionGroupDefinitionList" >
+    <s:complexType>
+      <s:sequence>
+        <s:element name="SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded">
+          <s:complexType>
+            <s:sequence>
+              <s:element name="SessionGroupID" type="s:int" />
+              <s:element name="SessionGroupName" type="s:string" />
+            </s:sequence>
+          </s:complexType>
+        </s:element>
+      </s:sequence>
+    </s:complexType>
+  </s:element>
+</s:schema>

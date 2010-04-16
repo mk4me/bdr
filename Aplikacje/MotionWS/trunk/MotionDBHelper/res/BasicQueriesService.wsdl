@@ -22,6 +22,8 @@
 			<s:include schemaLocation="_PerformQuery.xsd"/>
 			<s:include schemaLocation="ListAttributesDefined.xsd"/>
 			<s:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
+			<s:include schemaLocation="ListSessionGroupsDefined.xsd"/>
+			<s:include schemaLocation="ListMotionKindsDefined.xsd"/>
 			<s:element name="ListPerformerSessions">
 				<s:complexType>
 					<s:sequence>
@@ -75,6 +77,7 @@
 				<s:sequence>
 					<s:element minOccurs="1" maxOccurs="1" name="FileID" type="s:int"/>
 					<s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="FileDescription" type="s:string"/>
 				</s:sequence>
 			</s:complexType>
 			<s:element name="GenericQueryXML">
@@ -93,9 +96,10 @@
 			<s:complexType name="FilterPredicate">
 				<s:sequence>
 					<s:element minOccurs="1" maxOccurs="1" name="PredicateID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="ParentPredicate" type="s:int"/>
 					<s:element minOccurs="0" maxOccurs="1" name="ContextEntity" type="s:string"/>
-					<s:element minOccurs="1" maxOccurs="1" name="NextPredicate" type="s:int"/>
-					<s:element minOccurs="0" maxOccurs="1" name="NextOperator" type="s:string"/>
+					<s:element minOccurs="1" maxOccurs="1" name="PrecedingPredicate" type="s:int"/>
+					<s:element minOccurs="0" maxOccurs="1" name="PrecedingOperator" type="s:string"/>
 					<s:element minOccurs="0" maxOccurs="1" name="FeatureName" type="s:string"/>
 					<s:element minOccurs="0" maxOccurs="1" name="Operator" type="s:string"/>
 					<s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string"/>
@@ -496,6 +500,38 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:element name="ListSessionGroupsDefined">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListSessionGroupsDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionGroupDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListMotionKindsDefined">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListMotionKindsDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:MotionKindDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
 		</s:schema>
 	</wsdl:types>
 	<wsdl:message name="ListPerformerSessionsSoapIn">
@@ -630,6 +666,18 @@
 	<wsdl:message name="ListAttributeGroupsDefinedSoapOut">
 		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
 	</wsdl:message>
+	<wsdl:message name="ListSessionGroupsDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionGroupsDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListMotionKindsDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListMotionKindsDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="BasicQueriesServiceSoap">
 		<wsdl:operation name="ListPerformerSessions">
 			<wsdl:input message="tns:ListPerformerSessionsSoapIn"/>
@@ -718,6 +766,14 @@
 		<wsdl:operation name="ListAttributeGroupsDefined">
 			<wsdl:input message="tns:ListAttributeGroupsDefinedSoapIn"/>
 			<wsdl:output message="tns:ListAttributeGroupsDefinedSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<wsdl:input message="tns:ListSessionGroupsDefinedSoapIn"/>
+			<wsdl:output message="tns:ListSessionGroupsDefinedSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<wsdl:input message="tns:ListMotionKindsDefinedSoapIn"/>
+			<wsdl:output message="tns:ListMotionKindsDefinedSoapOut"/>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicQueriesServiceSoap" type="tns:BasicQueriesServiceSoap">
@@ -920,6 +976,24 @@
 				<soap:body use="literal"/>
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:binding name="BasicQueriesServiceSoap12" type="tns:BasicQueriesServiceSoap">
 		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -1114,6 +1188,24 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListAttributeGroupsDefined">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListAttributeGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListMotionKindsDefined" style="document"/>
 			<wsdl:input>
 				<soap12:body use="literal"/>
 			</wsdl:input>

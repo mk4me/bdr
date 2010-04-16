@@ -72,7 +72,6 @@ namespace MotionDBWebServices
         public PlainFileDetails[] ListSessionFiles(int sessionID)
         {
             List<PlainFileDetails> fdl = new List<PlainFileDetails>();
-            // server = DBPAWELL
             try
             {
                 OpenConnection();
@@ -90,6 +89,7 @@ namespace MotionDBWebServices
                     PlainFileDetails fd = new PlainFileDetails();
                     fd.FileID = int.Parse(dr[0].ToString());
                     fd.FileName = dr[1].ToString();
+                    fd.FileDescription = dr[2].ToString();
 
                     fdl.Add(fd);
                 }
@@ -983,6 +983,64 @@ namespace MotionDBWebServices
             }
             CloseConnection();
             if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("AttributeGroupDefinitionList"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument ListSessionGroupsDefined()
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "list_session_groups_defined";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("SessionGroupDefinitionList"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+        }
+
+        [WebMethod]
+        public XmlDocument ListMotionKindsDefined()
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_motion_kinds_defined";
+               XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("MotionKindDefinitionList"));
             xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
             return xd;
         }

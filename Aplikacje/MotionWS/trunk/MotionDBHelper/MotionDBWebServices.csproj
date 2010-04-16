@@ -98,6 +98,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\ListSessionGroupsDefined.xsd" />
+    <None Include="res\ListMotionKindsDefined.xsd" />
     <None Include="res\ListAttributeGroupsDefined.xsd" />
     <None Include="res\ListLabSessionsWithAttributesXML.xsd" />
     <None Include="res\ListLabPerformersWithAttributesXML.xsd" />

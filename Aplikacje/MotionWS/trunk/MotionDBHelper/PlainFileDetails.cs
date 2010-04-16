@@ -9,5 +9,6 @@ namespace MotionDBWebServices
     {
         public int FileID;
         public string FileName;
+        public string FileDescription;
     }
 }

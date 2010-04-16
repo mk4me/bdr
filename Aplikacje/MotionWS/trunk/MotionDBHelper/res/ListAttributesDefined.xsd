@@ -8,6 +8,7 @@
             <s:sequence>
               <s:element name="AttributeName" type="s:string" />
               <s:element name="AttributeType" type="s:string" />
+              <s:element name="AttributeEnum" type="s:int" minOccurs="0" maxOccurs="1" />
               <s:element name="AttributeGroupName" type="s:string" />
             </s:sequence>
           </s:complexType>

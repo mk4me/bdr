@@ -18,6 +18,8 @@
                 </s:restriction>
               </s:simpleType>
             </s:attribute>
+            <s:attribute name="AttributeGroup" type="s:string" use="required" />
+            <s:attribute name="Type" type="s:string" use="required" />
           </s:complexType>
         </s:element>
       </s:sequence>
