@@ -126,8 +126,8 @@ public class GetPerformerByIdXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link PerformerDetailsWithAttributes }
          * {@link String }
+         * {@link PerformerDetailsWithAttributes }
          * 
          * 
          */

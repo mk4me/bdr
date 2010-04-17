@@ -15,6 +15,8 @@ import motion.database.DatabaseFile;
 import motion.database.DbElementsList;
 import motion.database.EntityAttributeGroup;
 import motion.database.FileTransferListener;
+import motion.database.GenericName;
+import motion.database.MotionKind;
 import motion.database.Performer;
 import motion.database.Segment;
 import motion.database.Session;
@@ -139,7 +141,53 @@ public class DatabaseConnectionTest {
 	
 		System.out.println( database.listSessionFiles( id ) );
 	}
+
 	
+	@Test
+	public void testListMotionKindsSessionGroupsDefined() throws Exception {
+		
+		beforeTest();
+		Vector<? extends GenericName> results = database.listMotionKindsDefined();
+		
+		System.out.println("Motion kinds: ");
+		if (results != null)
+			for ( GenericName m : results)
+				System.out.println( m );
+
+		results = database.listSessionGroupsDefined();
+		
+		System.out.println("Session groups: ");
+		if (results != null)
+			for ( GenericName m : results)
+				System.out.println( m );
+	}
+
+
+	@Test
+	public void testListLabSessionsWithAttributes() throws Exception {
+		
+		beforeTest();
+
+		int labID = 1;
+		List<Session> results = database.listPerformerSessionsWithAttributes(labID);
+		
+		System.out.println("Sessions for lab: " + labID);
+		if (results != null)
+			System.out.println( results );			
+	}
+
+	@Test
+	public void testListLabPerformersWithAttributes() throws Exception {
+		
+		beforeTest();
+
+		int labID = 1;
+		DbElementsList<Performer> results = database.listLabPerformersWithAttributes(labID);
+		
+		System.out.println("Performers for lab: " + labID);
+		if (results != null)
+			System.out.println( results );			
+	}
 	
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#listPerformerSessionsWithAttributes()}.

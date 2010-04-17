@@ -24,10 +24,14 @@ import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileWithAttributesList;
+import motion.database.ws.basicQueriesService.LabPerformerWithAttributesList;
+import motion.database.ws.basicQueriesService.LabSessionWithAttributesList;
+import motion.database.ws.basicQueriesService.MotionKindDefinitionList;
 import motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.PerformerWithAttributesList;
 import motion.database.ws.basicQueriesService.PlainSessionDetails;
 import motion.database.ws.basicQueriesService.SegmentDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.SessionGroupDefinitionList;
 import motion.database.ws.basicQueriesService.SessionTrialWithAttributesList;
 import motion.database.ws.basicQueriesService.TrailSegmentWithAttributesList;
 import motion.database.ws.basicQueriesService.TrialDetailsWithAttributes;
@@ -41,10 +45,16 @@ import motion.database.ws.basicQueriesService.GetTrialByIdXMLResponse.GetTrialBy
 import motion.database.ws.basicQueriesService.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesService.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesService.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult;
 import motion.database.ws.basicQueriesService.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult;
 import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesService.ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.MotionKindDefinitionList.MotionKindDefinition;
+import motion.database.ws.basicQueriesService.SessionGroupDefinitionList.SessionGroupDefinition;
 import motion.database.ws.basicUpdateService.ArrayOfInt;
 import motion.database.ws.basicUpdateService.BasicUpdatesService;
 import motion.database.ws.basicUpdateService.BasicUpdatesServiceSoap;
@@ -405,6 +415,36 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot list performers.");
 	}
 
+
+	public  DbElementsList<Performer> listLabPerformersWithAttributes(int labID) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessions" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ListLabPerformersWithAttributesXMLResult result = port.listLabPerformersWithAttributesXML(labID);
+
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			for (Object o : result.getContent())
+			{
+				LabPerformerWithAttributesList ss = (motion.database.ws.basicQueriesService.LabPerformerWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
+				for ( motion.database.ws.basicQueriesService.PerformerDetailsWithAttributes s : ss.getPerformerDetailsWithAttributes() )
+					output.add( transformPerformerDetails(s) );
+			}
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list performers.");
+	}
+
+	
 	/**
 	 * @param s
 	 * @return
@@ -547,6 +587,62 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot list attributes.");
 	}
 
+
+	public Vector<MotionKind> listMotionKindsDefined() throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listAttributesDefined" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+		
+			ListMotionKindsDefinedResult result = port.listMotionKindsDefined();
+			
+			Vector<MotionKind> output = new Vector<MotionKind>();
+			for( Object o : result.getContent() )
+			{
+				MotionKindDefinitionList attr = (motion.database.ws.basicQueriesService.MotionKindDefinitionList)o;//(((JAXBElement<?>)o).getValue());
+				for (MotionKindDefinition a : attr.getMotionKindDefinition() )
+					output.add( new MotionKind( a.getMotionKindID(), a.getMotionKindName() ) );
+			}
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list motion kinds.");
+	}
+
+	
+	public Vector<SessionGroup> listSessionGroupsDefined() throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listAttributesDefined" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+		
+			ListSessionGroupsDefinedResult result = port.listSessionGroupsDefined();
+			
+			Vector<SessionGroup> output = new Vector<SessionGroup>();
+			for( Object o : result.getContent() )
+			{
+				SessionGroupDefinitionList attr = (motion.database.ws.basicQueriesService.SessionGroupDefinitionList)o;//(((JAXBElement<?>)o).getValue());
+				for (SessionGroupDefinition a : attr.getSessionGroupDefinition() )
+					output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
+			}
+			
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list motion kinds.");
+	}
+
 	
 	public Session getSessionById(int id) throws Exception
 	{
@@ -650,7 +746,35 @@ public class DatabaseConnection {
 			
 			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
 			
-			//System.out.println( result );
+			return output;
+		}
+		else
+			throw new Exception("Not Initialized. Cannot perform file uploading.");
+	}
+
+
+	public  DbElementsList<Session> listLabSessionsWithAttributes(int labID) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessionsWithAttributes" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
+			DbElementsList<Session> output = new DbElementsList<Session>();
+			
+			for (Object o : result.getContent())
+			{
+				LabSessionWithAttributesList ss = (motion.database.ws.basicQueriesService.LabSessionWithAttributesList)o;//(((JAXBElement<?>)o).getValue());
+				for ( motion.database.ws.basicQueriesService.SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+					output.add( transformSessionDetails(s) );
+			}
+			
+			log.exiting( "DatabaseConnection", "listPerformerSessionsWithAttributes", result );
 			
 			return output;
 		}
@@ -658,6 +782,7 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	
 	/**
 	 * @param s
 	 * @return

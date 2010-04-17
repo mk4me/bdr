@@ -86,7 +86,7 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		
 		output.append( this.getClass().getName() ).append( '(' ).append( this.getId() ).append(')').append(System.getProperty( "line.separator" ) );
 		for ( String key : this.keySet() )
-				output.append( key ).append('=').append( this.get(key) ).append(System.getProperty( "line.separator" ) );
+				output.append( key ).append('=').append( this.get(key).value ).append(System.getProperty( "line.separator" ) );
 		return output.toString();
 	}
 }
