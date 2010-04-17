@@ -226,6 +226,11 @@ public class DatabaseConnection {
 		}
 	}
 	
+	public void cancelCurrentFileTransfer()
+	{
+		
+	}
+	
 	private void createRemoteFolder( String newFolder, String destRemoteFolder ) throws FileTransferException
 	{
 		int status = FTPs.createFolder( newFolder, destRemoteFolder, 
@@ -238,7 +243,6 @@ public class DatabaseConnection {
 		}
 	}
 	
-	// TODO: Kasowanie pliku po sobie na serwerze
 	public void uploadSessionFile(int sessionId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
