@@ -173,6 +173,7 @@ public class UploadDialog extends BasicDialog {
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//UploadDialog.this.result = CANCEL_PRESSED;
+				WebServiceInstance.getDatabaseConnection().cancelCurrentFileTransfer();
 				UploadDialog.this.setVisible(false);
 				UploadDialog.this.dispose();
 			}
