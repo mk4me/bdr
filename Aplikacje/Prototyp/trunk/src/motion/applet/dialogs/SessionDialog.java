@@ -5,6 +5,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -13,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.treetable.JTreeTable;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.models.EntityEditorModel;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -25,13 +30,17 @@ import motion.database.SessionStaticAttributes;
 public class SessionDialog extends BasicDialog {
 	private static String TITLE = "New session";
 	private static String WELCOME_MESSAGE = "Create new session.";
+	private static String CREATE = "Create";
 	private static String CANCEL = "Cancel";
 	private static String PERFORMER_LABEL = "Performer:";
 	private int performerID;
 	private JLabel performerNameLabel;
 	private JPanel centerPanel;
 	
+	private JButton createButton;
 	private JButton cancelButton;
+	
+	private JTreeTable treeTable;
 	
 	public SessionDialog() {
 		super(TITLE, WELCOME_MESSAGE);
@@ -71,6 +80,9 @@ public class SessionDialog extends BasicDialog {
 		this.add(centerPanel, BorderLayout.CENTER);
 		
 		// Button area
+		createButton = new JButton(CREATE);
+		this.addToButtonPanel(createButton);
+		
 		cancelButton = new JButton(CANCEL);
 		this.addToButtonPanel(cancelButton);
 	}
@@ -90,12 +102,15 @@ public class SessionDialog extends BasicDialog {
 		try {
 			Session session = new Session();
 			HashMap<String, EntityAttributeGroup> attributesDefined = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined("session");
-			session.put(SessionStaticAttributes.sessionID, 1234);
-			session.put(SessionStaticAttributes.sessionDescription, "");
-			session.put(SessionStaticAttributes.sessionDate, "");
-			session.put(SessionStaticAttributes.performerID, this.performerID);
+			session.put(SessionStaticAttributes.sessionID, 0);	// Error if there is no sessionID.
+			//session.put(SessionStaticAttributes.performerID, this.performerID);
+			session.put(SessionStaticAttributes.sessionDescription, "");	// [1, 1]
+			session.put(SessionStaticAttributes.sessionDate, "");	// [1, 2]
+			//session.put(SessionStaticAttributes.motionKindID, 1);
+			//session.put(SessionStaticAttributes.labID, 1);
+			//session.put(SessionStaticAttributes.userID, 1);
 			session.addEmptyGenericAttributes(attributesDefined);
-			JTreeTable treeTable = new JTreeTable(new EntityEditorModel(session));
+			treeTable = new JTreeTable(new EntityEditorModel(session));
 			centerPanel.add(new JScrollPane(new JScrollPane(treeTable)), BorderLayout.CENTER);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -105,6 +120,35 @@ public class SessionDialog extends BasicDialog {
 	
 	@Override
 	protected void addListeners() {
+		this.createButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//UploadDialog.this.result = CANCEL_PRESSED;
+				try {
+					//System.out.println(SessionDialog.this.getSessionDate());
+					//DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					//Date date = dateFormat.parse(SessionDialog.this.getSessionDate());
+					DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+					XMLGregorianCalendar sessionDate = datatypeFactory.newXMLGregorianCalendar();
+					sessionDate.setDay(1);
+					sessionDate.setMonth(1);
+					sessionDate.setYear(2010);
+					WebServiceInstance.getDatabaseConnection().createSession(
+							SessionDialog.this.performerID,
+							new int[]{},
+							SessionDialog.this.getSessionDescription(),
+							1,
+							1,
+							sessionDate,
+							"kopniak z pó³obrotu");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				SessionDialog.this.setVisible(false);
+				SessionDialog.this.dispose();
+			}
+		});
+		
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//UploadDialog.this.result = CANCEL_PRESSED;
@@ -112,5 +156,16 @@ public class SessionDialog extends BasicDialog {
 				SessionDialog.this.dispose();
 			}
 		});
+	}
+	
+	// Get form contents.
+	private String getSessionDescription() {
+		
+		return this.treeTable.getModel().getValueAt(1, 1).toString();
+	}
+	
+	private String getSessionDate() {
+		
+		return this.treeTable.getModel().getValueAt(2, 1).toString();
 	}
 }
