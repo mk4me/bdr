@@ -1,12 +1,15 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -16,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.treetable.JTreeTable;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -30,9 +34,13 @@ import motion.database.SessionStaticAttributes;
 public class SessionDialog extends BasicDialog {
 	private static String TITLE = "New session";
 	private static String WELCOME_MESSAGE = "Create new session.";
+	private static String MISSING_SESSION_DESCRIPTION_MESSAGE = "Please write a session description.";
+	private static String MISSING_SESSION_DATE_MESSAGE = "Please input the session date.";
+	private static String INCORRECT_SESSION_DATE_MESSAGE = "Incorrect session date.";
 	private static String CREATE = "Create";
 	private static String CANCEL = "Cancel";
 	private static String PERFORMER_LABEL = "Performer:";
+	private static String SESSION_ATTRIBUTES_LABEL = "Session:";
 	private int performerID;
 	private JLabel performerNameLabel;
 	private JPanel centerPanel;
@@ -73,9 +81,16 @@ public class SessionDialog extends BasicDialog {
 		gridBagConstraints.gridy = 0;
 		formPanel.add(performerNameLabel, gridBagConstraints);
 		
+		JLabel sessionAttributesLabel = new JLabel(SESSION_ATTRIBUTES_LABEL);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		formPanel.add(sessionAttributesLabel, gridBagConstraints);
+		
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-		centerPanel.add(formPanel, BorderLayout.NORTH);
+		JPanel formPanel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		formPanel2.add(formPanel);
+		centerPanel.add(formPanel2, BorderLayout.NORTH);
 		
 		this.add(centerPanel, BorderLayout.CENTER);
 		
@@ -89,11 +104,14 @@ public class SessionDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
+		this.setSize(620, 400);
+		
 		try {
 			Performer performer = WebServiceInstance.getDatabaseConnection().getPerformerById(this.performerID);
-			this.performerNameLabel.setText(performer.getId() + " " +
+			this.performerNameLabel.setText(
 					performer.get(PerformerStaticAttributes.firstName.toString()).value + " " +
-					performer.get(PerformerStaticAttributes.lastName.toString()).value);
+					performer.get(PerformerStaticAttributes.lastName.toString()).value + " (" +
+					performer.getId() + ")");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,7 +123,9 @@ public class SessionDialog extends BasicDialog {
 			session.put(SessionStaticAttributes.sessionID, 0);	// Error if there is no sessionID.
 			//session.put(SessionStaticAttributes.performerID, this.performerID);
 			session.put(SessionStaticAttributes.sessionDescription, "");	// [1, 1]
-			session.put(SessionStaticAttributes.sessionDate, "");	// [1, 2]
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String date = dateFormat.format(Calendar.getInstance().getTime()).toString();
+			session.put(SessionStaticAttributes.sessionDate, date);	// [1, 2]
 			//session.put(SessionStaticAttributes.motionKindID, 1);
 			//session.put(SessionStaticAttributes.labID, 1);
 			//session.put(SessionStaticAttributes.userID, 1);
@@ -122,30 +142,40 @@ public class SessionDialog extends BasicDialog {
 	protected void addListeners() {
 		this.createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//UploadDialog.this.result = CANCEL_PRESSED;
-				try {
-					//System.out.println(SessionDialog.this.getSessionDate());
-					//DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-					//Date date = dateFormat.parse(SessionDialog.this.getSessionDate());
-					DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
-					XMLGregorianCalendar sessionDate = datatypeFactory.newXMLGregorianCalendar();
-					sessionDate.setDay(1);
-					sessionDate.setMonth(1);
-					sessionDate.setYear(2010);
-					WebServiceInstance.getDatabaseConnection().createSession(
-							SessionDialog.this.performerID,
-							new int[]{},
-							SessionDialog.this.getSessionDescription(),
-							1,
-							1,
-							sessionDate,
-							"kopniak z pó³obrotu");
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (SessionDialog.this.validateResult() == true) {
+					//UploadDialog.this.result = CANCEL_PRESSED;
+					try {
+						//System.out.println(SessionDialog.this.getSessionDate());
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						Date date = dateFormat.parse(SessionDialog.this.getSessionDate());
+						DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+						XMLGregorianCalendar sessionDate = datatypeFactory.newXMLGregorianCalendar();
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(date);
+						sessionDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+						sessionDate.setMonth(calendar.get(Calendar.MONTH));
+						sessionDate.setYear(calendar.get(Calendar.YEAR));
+						WebServiceInstance.getDatabaseConnection().createSession(
+								SessionDialog.this.performerID,
+								new int[]{},
+								SessionDialog.this.getSessionDescription(),
+								1,
+								1,
+								sessionDate,
+								"kopniak z pó³obrotu");
+						SessionDialog.this.setVisible(false);
+						SessionDialog.this.dispose();
+					} catch (ParseException e1) {
+						SessionDialog.this.messageLabel.setText(INCORRECT_SESSION_DATE_MESSAGE);
+						//e1.printStackTrace();
+					} catch (DatatypeConfigurationException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					} catch (Exception e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
 				}
-				SessionDialog.this.setVisible(false);
-				SessionDialog.this.dispose();
 			}
 		});
 		
@@ -167,5 +197,19 @@ public class SessionDialog extends BasicDialog {
 	private String getSessionDate() {
 		
 		return this.treeTable.getModel().getValueAt(2, 1).toString();
+	}
+	
+	private boolean validateResult() {
+		if (this.getSessionDescription().equals("")) {
+			this.messageLabel.setText(MISSING_SESSION_DESCRIPTION_MESSAGE);
+			
+			return false;
+		} else if (this.getSessionDate().equals("")) {
+			this.messageLabel.setText(MISSING_SESSION_DATE_MESSAGE);
+			
+			return false;
+		}
+		
+		return true;
 	}
 }
