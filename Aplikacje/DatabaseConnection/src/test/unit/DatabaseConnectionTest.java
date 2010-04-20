@@ -360,7 +360,7 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
-		int sessionID = 2;
+		int sessionID = 3;
 		DbElementsList<DatabaseFile> results = database.listSessionFiles(sessionID);
 
 		System.out.println("Files for session: " + sessionID);

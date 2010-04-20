@@ -99,6 +99,7 @@ public class DatabaseConnection {
 	private Credentials ftpsCredentials = new Credentials();
 	private Authenticator authenticator;
 	private FileTransferSupport fileTransferSupport = new FileTransferSupport();
+	private boolean fileTransferCancelled;
 
 	private static DatabaseConnection instance;
 	private static Logger log;
@@ -228,7 +229,8 @@ public class DatabaseConnection {
 	
 	public void cancelCurrentFileTransfer()
 	{
-		
+		fileTransferSupport.cancel();
+		fileTransferCancelled = true;
 	}
 	
 	private void createRemoteFolder( String newFolder, String destRemoteFolder ) throws FileTransferException
@@ -247,6 +249,7 @@ public class DatabaseConnection {
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
+			fileTransferCancelled = false;
 			String destRemoteFolder = getUniqueFolderName();
 			putFile(localFilePath, destRemoteFolder, listener);			
 			
@@ -254,7 +257,8 @@ public class DatabaseConnection {
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
 
-			port.storeSessionFile(sessionId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+			if (!fileTransferCancelled)
+				port.storeSessionFile(sessionId, "", description, destRemoteFolder+new File(localFilePath).getName() );
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
@@ -264,7 +268,6 @@ public class DatabaseConnection {
 		return wsCredentials.userName + System.currentTimeMillis()+"/";
 	}
 
-	// TODO: Kasowanie pliku po sobie na serwerze
 	public void uploadTrialFile(int trialId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -282,11 +285,11 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	// TODO: Kasowanie pliku po sobie na serwerze
 	public void uploadPerformerFile(int performerId, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
+			fileTransferCancelled = false;
 			String destRemoteFolder = getUniqueFolderName();
 			putFile(localFilePath, destRemoteFolder, listener);			
 		    
@@ -294,7 +297,8 @@ public class DatabaseConnection {
 			FileStoremanServiceSoap port = service.getFileStoremanServiceSoap();
 			prepareCall( (BindingProvider)port );
 
-			port.storePerformerFile( performerId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+			if (!fileTransferCancelled)
+				port.storePerformerFile( performerId, "", description, destRemoteFolder+new File(localFilePath).getName() );
 		}
 		else
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
