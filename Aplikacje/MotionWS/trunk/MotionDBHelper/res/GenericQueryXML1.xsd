@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="GenericQueryResult" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+<s:schema id="GenericQueryResult1" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
   <s:include schemaLocation="AttributesElement.xsd" />
   <s:element name="GenericQueryResult">
     <s:complexType>

@@ -65,7 +65,7 @@
     <Content Include="BasicUpdatesService.asmx" />
     <Content Include="DataDictionaryMaintenanceService.asmx" />
     <Content Include="FileStoremanService.asmx" />
-    <Content Include="res\PreciseXSDWeaver.xslt" />
+    <Content Include="res\StandaloneWSDLCompositor.xslt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +81,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FilterPredicate.cs" />
+    <Compile Include="FilterPredicateCollection.cs" />
     <Compile Include="PlainFileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
@@ -98,6 +99,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
+    <None Include="res\BasicQueriesServiceStandalone.wsdl" />
+    <None Include="res\GenericQueryXML1.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
     <None Include="res\ListMotionKindsDefined.xsd" />
     <None Include="res\ListAttributeGroupsDefined.xsd" />

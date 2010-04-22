@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <s:schema id="FileList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
   <s:include schemaLocation="FileListType.xsd" />
-  <s:element name="FileList" type="FileListType">
+  <s:element name="FileList">
+    <s:complexType>
+      <s:sequence>
+        <s:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+          <s:complexType>
+            <s:attribute name="FileID" type="s:int" />
+            <s:attribute name="FileName" type="s:string" />
+            <s:attribute name="FileDescription" type="s:string" />
+          </s:complexType>
+        </s:element>
+      </s:sequence>
+    </s:complexType>
   </s:element>
 </s:schema>

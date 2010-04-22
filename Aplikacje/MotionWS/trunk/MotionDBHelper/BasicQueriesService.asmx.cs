@@ -106,10 +106,13 @@ namespace MotionDBWebServices
             return fdl.ToArray();
         }
 
+
+
+
         // Generic query
 
         [WebMethod]
-        public XmlDocument GenericQueryXML(FilterPredicate[] filter, string[] entitiesToInclude)
+        public XmlDocument GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
 
@@ -117,18 +120,31 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_performer_sessions_xml";
-                SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
-                perfId.Direction = ParameterDirection.Input;
-                perfId.Value = 999;
+                cmd.CommandText = "evaluate_generic_query";
+                SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
+                filterPar.Direction = ParameterDirection.Input;
+                filterPar.Value = filter;
+                SqlParameter showPerfPar = cmd.Parameters.Add("@perf", SqlDbType.Bit);
+                showPerfPar.Direction = ParameterDirection.Input;
+                showPerfPar.Value = entitiesToInclude.Contains("performer")?1:0;
+                SqlParameter showSessfPar = cmd.Parameters.Add("@sess", SqlDbType.Bit);
+                showSessfPar.Direction = ParameterDirection.Input;
+                showSessfPar.Value = entitiesToInclude.Contains("session")?1:0;
+                SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
+                showTrialfPar.Direction = ParameterDirection.Input;
+                showTrialfPar.Value = entitiesToInclude.Contains("trial")?1:0;
+                SqlParameter showSegmPar = cmd.Parameters.Add("@segm", SqlDbType.Bit);
+                showSegmPar.Direction = ParameterDirection.Input;
+                showSegmPar.Value = entitiesToInclude.Contains("segment")?1:0;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("GenericQueryResult"));
 
                 dr.Close();
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("GenericQueryResult"));
+
             }
             catch (SqlException ex)
             {
@@ -139,7 +155,69 @@ namespace MotionDBWebServices
             return xd;
             //            return (PerformerSessionListXML) xd;
         }
+        /*
+        [WebMethod]
+        public XmlDocument GenericQueryXML1()
+        {
+            XmlDocument xd = new XmlDocument();
 
+            FilterPredicateCollection filter = new FilterPredicateCollection();
+
+            FilterPredicate p1 = new FilterPredicate();
+
+            p1.PredicateID = 1;
+            p1.ParentPredicate = 0;
+            p1.ContextEntity = "performer";
+            p1.PreviousPredicate = 0;
+            p1.NextOperator = "";
+            p1.FeatureName = "LastName";
+            p1.Operator = "=";
+            p1.Value = "Kowalski";
+            p1.AggregateFunction = "";
+            p1.AggregateEntity = "";
+
+            filter.Add(p1);
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "evaluate_generic_query";
+                SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
+                filterPar.Direction = ParameterDirection.Input;
+                filterPar.Value = filter;
+                SqlParameter showPerfPar = cmd.Parameters.Add("@perf", SqlDbType.Bit);
+                showPerfPar.Direction = ParameterDirection.Input;
+                showPerfPar.Value = 1;
+                SqlParameter showSessfPar = cmd.Parameters.Add("@sess", SqlDbType.Bit);
+                showSessfPar.Direction = ParameterDirection.Input;
+                showSessfPar.Value = 1;
+                SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
+                showTrialfPar.Direction = ParameterDirection.Input;
+                showTrialfPar.Value = 0;
+                SqlParameter showSegmPar = cmd.Parameters.Add("@segm", SqlDbType.Bit);
+                showSegmPar.Direction = ParameterDirection.Input;
+                showSegmPar.Value = 0;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("GenericQueryResult"));
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+            //            return (PerformerSessionListXML) xd;
+        }
+
+        */
         // By ID lookup
 
         [WebMethod]
