@@ -17,13 +17,19 @@ import javax.xml.ws.BindingProvider;
 
 import org.bouncycastle.asn1.cms.Time;
 
+import motion.database.ws.DatabaseArrayOfInteger;
+import motion.database.ws.DatabaseArrayOfString;
+import motion.database.ws.FilterPredicate;
+import motion.database.ws.basicQueriesService.ArrayOfFilterPredicate;
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
+import motion.database.ws.basicQueriesService.ArrayOfString;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList;
 import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList;
 import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileWithAttributesList;
+import motion.database.ws.basicQueriesService.GenericQueryResult;
 import motion.database.ws.basicQueriesService.LabPerformerWithAttributesList;
 import motion.database.ws.basicQueriesService.LabSessionWithAttributesList;
 import motion.database.ws.basicQueriesService.MotionKindDefinitionList;
@@ -38,6 +44,8 @@ import motion.database.ws.basicQueriesService.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList.AttributeGroupDefinition;
 import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
+import motion.database.ws.basicQueriesService.GenericQueryResult.GenericResultRow;
+import motion.database.ws.basicQueriesService.GenericQueryXMLResponse.GenericQueryXMLResult;
 import motion.database.ws.basicQueriesService.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
@@ -394,6 +402,40 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	
+
+	public  List<? extends Object> execGenericQuery(FilterPredicate[] filters, String[] p_entitiesToInclude) throws Exception
+	{
+		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
+		{
+			log.entering( "DatabaseConnection", "listPerformerSessions" );
+	
+			BasicQueriesService service = new BasicQueriesService();
+			BasicQueriesServiceSoap port = service.getBasicQueriesServiceSoap();
+			
+			prepareCall( (BindingProvider)port);
+	
+			//ArrayOfFilterPredicate filter;
+			ArrayOfString entitiesToInclude = new DatabaseArrayOfString( p_entitiesToInclude ) ;
+			GenericQueryXMLResult result = port.genericQueryXML( new DatabaseArrayOfFilterPredicate(filters), entitiesToInclude);
+
+			for (Object o : result.getContent())
+			{
+				GenericQueryResult ss = (motion.database.ws.basicQueriesService.GenericQueryResult)o;//(((JAXBElement<?>)o).getValue());
+				for ( GenericResultRow s : ss.getGenericResultRow() )
+				{
+					System.out.println( s.getLastName() );
+					System.out.println( s.getSessionDescription() );
+				}
+			}
+			
+			return result.getContent();
+		}
+		else
+			throw new Exception("Not Initialized. Cannot list performers.");
+	}
+
+	
 	
 	public  DbElementsList<Performer> listPerformersWithAttributes() throws Exception
 	{
@@ -887,7 +929,6 @@ public class DatabaseConnection {
 			throw new Exception("Not Initialized. Cannot create performer.");
 	}
 
-	// TODO: sessionGroupID -- nie jest przekazywane 
 	public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
@@ -899,7 +940,7 @@ public class DatabaseConnection {
 			
 			prepareCall( (BindingProvider)port);
 	
-			ArrayOfInt sessionGroupIDs = new ArrayOfInt();
+			ArrayOfInt sessionGroupIDs = new DatabaseArrayOfInteger( sessionGroupID );
 			
 			int result = port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
 			

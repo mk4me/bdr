@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="PredicateID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ParentPredicate" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ContextEntity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="PrecedingPredicate" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="PrecedingOperator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="PreviousPredicate" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="NextOperator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="FeatureName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Operator" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Value" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -40,8 +40,8 @@ import javax.xml.bind.annotation.XmlType;
     "predicateID",
     "parentPredicate",
     "contextEntity",
-    "precedingPredicate",
-    "precedingOperator",
+    "previousPredicate",
+    "nextOperator",
     "featureName",
     "operator",
     "value",
@@ -56,10 +56,10 @@ public class FilterPredicate {
     protected int parentPredicate;
     @XmlElement(name = "ContextEntity", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
     protected String contextEntity;
-    @XmlElement(name = "PrecedingPredicate", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected int precedingPredicate;
-    @XmlElement(name = "PrecedingOperator", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected String precedingOperator;
+    @XmlElement(name = "PreviousPredicate", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected int previousPredicate;
+    @XmlElement(name = "NextOperator", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected String nextOperator;
     @XmlElement(name = "FeatureName", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
     protected String featureName;
     @XmlElement(name = "Operator", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
@@ -128,43 +128,43 @@ public class FilterPredicate {
     }
 
     /**
-     * Gets the value of the precedingPredicate property.
+     * Gets the value of the previousPredicate property.
      * 
      */
-    public int getPrecedingPredicate() {
-        return precedingPredicate;
+    public int getPreviousPredicate() {
+        return previousPredicate;
     }
 
     /**
-     * Sets the value of the precedingPredicate property.
+     * Sets the value of the previousPredicate property.
      * 
      */
-    public void setPrecedingPredicate(int value) {
-        this.precedingPredicate = value;
+    public void setPreviousPredicate(int value) {
+        this.previousPredicate = value;
     }
 
     /**
-     * Gets the value of the precedingOperator property.
+     * Gets the value of the nextOperator property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getPrecedingOperator() {
-        return precedingOperator;
+    public String getNextOperator() {
+        return nextOperator;
     }
 
     /**
-     * Sets the value of the precedingOperator property.
+     * Sets the value of the nextOperator property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setPrecedingOperator(String value) {
-        this.precedingOperator = value;
+    public void setNextOperator(String value) {
+        this.nextOperator = value;
     }
 
     /**

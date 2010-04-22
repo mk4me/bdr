@@ -1,10 +1,8 @@
 
 package motion.database.ws.basicQueriesService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -106,9 +104,9 @@ public class ListFilesXMLResponse {
     })
     public static class ListFilesXMLResult {
 
-        @XmlElementRef(name = "FileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = JAXBElement.class)
+        @XmlElementRef(name = "FileList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = FileList.class)
         @XmlMixed
-        protected List<Serializable> content;
+        protected List<Object> content;
 
         /**
          * Gets the value of the content property.
@@ -129,13 +127,13 @@ public class ListFilesXMLResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link String }
-         * {@link JAXBElement }{@code <}{@link FileListType }{@code >}
+         * {@link FileList }
          * 
          * 
          */
-        public List<Serializable> getContent() {
+        public List<Object> getContent() {
             if (content == null) {
-                content = new ArrayList<Serializable>();
+                content = new ArrayList<Object>();
             }
             return this.content;
         }

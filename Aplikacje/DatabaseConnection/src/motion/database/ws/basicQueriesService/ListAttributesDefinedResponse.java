@@ -126,8 +126,8 @@ public class ListAttributesDefinedResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link AttributeDefinitionList }
          * {@link String }
+         * {@link AttributeDefinitionList }
          * 
          * 
          */

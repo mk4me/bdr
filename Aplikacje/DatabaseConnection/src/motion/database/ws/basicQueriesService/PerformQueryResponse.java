@@ -126,8 +126,8 @@ public class PerformQueryResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link Result }
          * {@link String }
+         * {@link Result }
          * 
          * 
          */
