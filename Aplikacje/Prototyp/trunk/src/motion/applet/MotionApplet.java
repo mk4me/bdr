@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.security.auth.callback.LanguageCallback;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JMenu;
@@ -20,7 +21,7 @@ import motion.applet.panels.RightSplitPanel;
 import motion.applet.toolbars.AppletToolBar;
 
 public class MotionApplet extends JApplet {
-	public static String APPLET_NAME = "Motion";
+	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
 	public static int APPLET_HEIGHT = 600;
 	public static int APPLET_WIDTH = 800;
 	
@@ -39,13 +40,15 @@ public class MotionApplet extends JApplet {
 	}
 	
 	private void initUserInterface() {
-		
+		// Set language
+		Messages.setLanguage(Messages.POLISH);
+		//Messages.setLanguage(Messages.ENGLISH);
 		
 		// Create the menu bar
 		JMenuBar appletMenuBar = new JMenuBar();
-		JMenu motionMenu = new JMenu("Session");
+		JMenu motionMenu = new JMenu(Messages.getString("Session")); //$NON-NLS-1$
 		appletMenuBar.add(motionMenu);
-		JMenuItem uploadItem = new JMenuItem("Upload");
+		JMenuItem uploadItem = new JMenuItem(Messages.getString("Upload")); //$NON-NLS-1$
 		motionMenu.add(uploadItem);
 		uploadItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

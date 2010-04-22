@@ -13,12 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import motion.applet.Messages;
+
 public class LoginDialog extends BasicDialog {
-	private static String LOGIN_TITLE = "Login";
-	private static String USER = "User name:";
-	private static String PASSWORD = "Password:";
-	private static String LOGIN = "Login";
-	private static String WELCOME_TITLE = "<html>Enter user name and password.</html>";
+	private static String LOGIN_TITLE = Messages.getString("LoginDialog.LoginTitle"); //$NON-NLS-1$
+	private static String USER = Messages.getString("LoginDialog.UserName") + Messages.COLON; //$NON-NLS-1$
+	private static String PASSWORD = Messages.getString("LoginDialog.Password") + Messages.COLON; //$NON-NLS-1$
+	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
+	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
 	
 	private JButton loginButton;
 	

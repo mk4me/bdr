@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import motion.applet.Messages;
 import motion.applet.database.AttributeName;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
@@ -25,16 +26,16 @@ import motion.applet.filter.model.PredicateComposition;
 import motion.applet.filter.model.SimplePredicate;
 
 public class FilterDialog extends BasicDialog {
-	private static String FILTER_TITLE = "Add filter";
-	private static String FILTER_NAME = "Name:";
-	private static String TABLE_LABEL = "Table:";
-	private static String QUERY_LABEL = "Query:";
-	private static String ADD_FILTER = "Add";
-	private static String CANCEL_FILTER = "Cancel";
-	private static String EDIT_FILTER = "Edit";
-	private static String ADD_CONDITION = "+";
-	private static String WELCOME_MESSAGE = "Add new filter.";
-	private static String MISSING_NAME_MESSAGE = "Please type the name of the filter.";
+	private static String FILTER_TITLE = Messages.getString("FilterDialog.AddFilter"); //$NON-NLS-1$
+	private static String FILTER_NAME = Messages.getString("Name") + Messages.COLON; //$NON-NLS-1$
+	private static String TABLE_LABEL = Messages.getString("Table") + Messages.COLON; //$NON-NLS-1$
+	private static String QUERY_LABEL = Messages.getString("FilterDialog.Query") + Messages.COLON; //$NON-NLS-1$
+	private static String ADD_FILTER = Messages.getString("Add"); //$NON-NLS-1$
+	private static String CANCEL_FILTER = Messages.getString("Cancel"); //$NON-NLS-1$
+	private static String EDIT_FILTER = Messages.getString("Edit"); //$NON-NLS-1$
+	private static String ADD_CONDITION = Messages.ADD_SIGN;
+	private static String WELCOME_MESSAGE = Messages.getString("FilterDialog.AddNewFilter"); //$NON-NLS-1$
+	private static String MISSING_NAME_MESSAGE = Messages.getString("FilterDialog.PleaseTypeTheNameOfTheFilter"); //$NON-NLS-1$
 	
 	private JTextField nameText;
 	private JButton addButton;
@@ -261,10 +262,7 @@ public class FilterDialog extends BasicDialog {
 		private JComboBox logicalComboBox;
 		private JTextField conditionText = new JTextField(10);
 		private TableName tableName;
-		
-		
-		
-		private String REMOVE_CONDITION = "X";
+		private String REMOVE_CONDITION = Messages.REMOVE_SIGN;
 		private boolean firstCondition;
 		
 		private JButton removeButton;

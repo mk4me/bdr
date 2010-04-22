@@ -1,7 +1,6 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -17,22 +16,23 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 import motion.database.FileTransferListener;
 
 public class UploadDialog extends BasicDialog {
-	private static String UPLOAD_TITLE = "Upload session file";
-	private static String UPLOAD_FILE = "Upload";
-	private static String FILE_PATH = "File:";
-	private static String DESCRIPTION = "Description:";
-	private static String SESSION = "Session:";
-	private static String CANCEL_UPLOAD = "Cancel";
-	private static String WELCOME_MESSAGE = "Choose a file to upload.";
-	private static String MISSING_FILE_PATH_MESSAGE = "No file selected.";
-	private static String MISSING_SESSION_MESSAGE = "No session number entered.";
-	private static String PRESS_UPLOAD_MESSAGE = "Press Upload to send file.";
-	private static String BROWSE = "Browse";
+	private static String UPLOAD_TITLE = Messages.getString("UploadDialog.UploadTitle"); //$NON-NLS-1$
+	private static String UPLOAD_FILE = Messages.getString("Upload"); //$NON-NLS-1$
+	private static String FILE_PATH = Messages.getString("File") + Messages.COLON; //$NON-NLS-1$
+	private static String DESCRIPTION = Messages.getString("Description") + Messages.COLON; //$NON-NLS-1$
+	private static String SESSION = Messages.getString("Session") + Messages.COLON; //$NON-NLS-1$
+	private static String CANCEL_UPLOAD = Messages.getString("Cancel"); //$NON-NLS-1$
+	private static String WELCOME_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
+	private static String MISSING_FILE_PATH_MESSAGE = Messages.getString("UploadDialog.NoFileSelected"); //$NON-NLS-1$
+	private static String MISSING_SESSION_MESSAGE = Messages.getString("UploadDialog.NoSessionNumberEntered"); //$NON-NLS-1$
+	private static String PRESS_UPLOAD_MESSAGE = Messages.getString("UploadDialog.PressUploadToSendFile"); //$NON-NLS-1$
+	private static String BROWSE = Messages.getString("Browse"); //$NON-NLS-1$
 	
 	private JButton browseButton;
 	private JButton uploadButton;
@@ -127,7 +127,7 @@ public class UploadDialog extends BasicDialog {
 		this.browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
 				fileChooser.showOpenDialog(UploadDialog.this);
 				File file = fileChooser.getSelectedFile();
 				if (file != null) {
@@ -202,7 +202,7 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	private boolean validateResult() {
-		if (this.getFilePath().equals("")) {
+		if (this.getFilePath().equals("")) { //$NON-NLS-1$
 			this.messageLabel.setText(MISSING_FILE_PATH_MESSAGE);
 			
 			return false;
