@@ -3,6 +3,7 @@ package motion.applet.database;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.EntityAttribute;
 import motion.database.EntityAttributeGroup;
@@ -18,10 +19,10 @@ public class TableName {
 	protected static final String PATIENT_TABLE = "Pacjent";
 	
 	// English database table names (defined only here for the applet).
-	protected static final String PERFORMER_TABLE_ENG = "Performer";
-	protected static final String SESSION_TABLE_ENG = "Session";
-	protected static final String TRIAL_TABLE_ENG = "Trial";
-	protected static final String PATIENT_TABLE_ENG = "Patient";
+	protected static final String PERFORMER_TABLE_ENG = Messages.getString("TableName.Performer"); //$NON-NLS-1$
+	protected static final String SESSION_TABLE_ENG = Messages.getString("TableName.Session"); //$NON-NLS-1$
+	protected static final String TRIAL_TABLE_ENG = Messages.getString("TableName.Trial"); //$NON-NLS-1$
+	protected static final String PATIENT_TABLE_ENG = Messages.getString("TableName.Patient"); //$NON-NLS-1$
 	
 	private final String table;
 	private final String label;

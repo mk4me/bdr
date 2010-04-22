@@ -18,6 +18,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import motion.applet.Messages;
 import motion.applet.MotionApplet;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.FilterDialog;
@@ -29,11 +30,11 @@ public class LeftSplitPanel extends JPanel {
 	private DefaultMutableTreeNode rootNode;
 	private DefaultTreeModel treeModel;
 	private JTree tree;
-	private static String ADD_FILTER = "Add";
-	private static String REMOVE_FILTER = "Remove";
-	private static String EDIT_FILTER = "Edit";
-	private static String START_FILTER = "Start";
-	private static String TREE_TITLE = " filters";
+	private static String ADD_FILTER = Messages.getString("Add"); //$NON-NLS-1$
+	private static String REMOVE_FILTER = Messages.getString("Remove"); //$NON-NLS-1$
+	private static String EDIT_FILTER = Messages.getString("Edit"); //$NON-NLS-1$
+	private static String START_FILTER = Messages.getString("LeftSplitPanel.Start"); //$NON-NLS-1$
+	private static String TREE_TITLE = Messages.getString("LeftSplitPanel.Filters"); //$NON-NLS-1$
 	private TableName tableName;
 	
 	public LeftSplitPanel(TableName tableName) {

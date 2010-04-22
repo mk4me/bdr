@@ -13,13 +13,14 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import motion.applet.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.trees.ConfigurationTree;
 
 public class BottomSplitPanel extends JPanel {
-	private static final String BORDER_TITLE = "View configuration";
-	private static final String APPLY_SELECTION = "Apply selection";
+	private static final String BORDER_TITLE = Messages.getString("BottomSplitPanel.ViewConfiguration"); //$NON-NLS-1$
+	private static final String APPLY_SELECTION = Messages.getString("BottomSplitPanel.ApplySelection"); //$NON-NLS-1$
 	
 	public BottomSplitPanel() {
 		super();
