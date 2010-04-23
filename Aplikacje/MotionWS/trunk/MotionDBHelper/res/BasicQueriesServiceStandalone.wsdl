@@ -56,6 +56,13 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:element name="GenericUniformAttributesQueryResult">
+				<s:complexType>
+					<s:sequence>
+						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="unbounded"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
 			<s:element name="PerformerDetailsWithAttributes">
 				<s:complexType>
 					<s:sequence>
@@ -393,6 +400,27 @@
 							<s:complexType mixed="true">
 								<s:sequence>
 									<s:element ref="tns:GenericQueryResult"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenericQueryUniformXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+						<s:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenericQueryUniformXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GenericQueryUniformXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:GenericUniformAttributesQueryResult"/>
 								</s:sequence>
 							</s:complexType>
 						</s:element>
@@ -826,6 +854,12 @@
 	<wsdl:message name="GenericQueryXMLSoapOut">
 		<wsdl:part name="parameters" element="tns:GenericQueryXMLResponse"/>
 	</wsdl:message>
+	<wsdl:message name="GenericQueryUniformXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXML"/>
+	</wsdl:message>
+	<wsdl:message name="GenericQueryUniformXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXMLResponse"/>
+	</wsdl:message>
 	<wsdl:message name="GetPerformerByIdXMLSoapIn">
 		<wsdl:part name="parameters" element="tns:GetPerformerByIdXML"/>
 	</wsdl:message>
@@ -965,6 +999,10 @@
 			<wsdl:input message="tns:GenericQueryXMLSoapIn"/>
 			<wsdl:output message="tns:GenericQueryXMLSoapOut"/>
 		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<wsdl:input message="tns:GenericQueryUniformXMLSoapIn"/>
+			<wsdl:output message="tns:GenericQueryUniformXMLSoapOut"/>
+		</wsdl:operation>
 		<wsdl:operation name="GetPerformerByIdXML">
 			<wsdl:input message="tns:GetPerformerByIdXMLSoapIn"/>
 			<wsdl:output message="tns:GetPerformerByIdXMLSoapOut"/>
@@ -1072,6 +1110,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryUniformXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -1291,6 +1338,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryUniformXML" style="document"/>
 			<wsdl:input>
 				<soap12:body use="literal"/>
 			</wsdl:input>

@@ -9,9 +9,9 @@ namespace MotionDBWebServices
     {
         public int PredicateID; // valid value is 1 or bigger
         public int ParentPredicate; // 0 for top-level predicates; enclosing group ID for nested ones
-        public string ContextEntity; // performer, session, trial, segment, file, GROUP
+        public string ContextEntity; // performer, session, trial, segment, GROUP
         public int PreviousPredicate; // optional; if absent - set to 0
-        public string NextOperator; // valid and required only when NextPredicate is non-zero;
+        public string NextOperator; // operator or empty string
         public string FeatureName; // required, except for GROUP
         public string Operator; // can be empty only for GROUP or for Feature that is boolean-type
         public string Value;

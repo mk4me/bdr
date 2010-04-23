@@ -153,8 +153,54 @@ namespace MotionDBWebServices
             CloseConnection();
             xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
             return xd;
-            //            return (PerformerSessionListXML) xd;
+            
         }
+
+
+        [WebMethod]
+        public XmlDocument GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude)
+        {
+            XmlDocument xd = new XmlDocument();
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "evaluate_generic_query_uniform";
+                SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
+                filterPar.Direction = ParameterDirection.Input;
+                filterPar.Value = filter;
+                SqlParameter showPerfPar = cmd.Parameters.Add("@perf", SqlDbType.Bit);
+                showPerfPar.Direction = ParameterDirection.Input;
+                showPerfPar.Value = entitiesToInclude.Contains("performer")?1:0;
+                SqlParameter showSessfPar = cmd.Parameters.Add("@sess", SqlDbType.Bit);
+                showSessfPar.Direction = ParameterDirection.Input;
+                showSessfPar.Value = entitiesToInclude.Contains("session")?1:0;
+                SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
+                showTrialfPar.Direction = ParameterDirection.Input;
+                showTrialfPar.Value = entitiesToInclude.Contains("trial")?1:0;
+                SqlParameter showSegmPar = cmd.Parameters.Add("@segm", SqlDbType.Bit);
+                showSegmPar.Direction = ParameterDirection.Input;
+                showSegmPar.Value = entitiesToInclude.Contains("segment")?1:0;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+
+                dr.Close();
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("GenericUniformAttributesQueryResult"));
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+            return xd;
+            
+        }        
         /*
         [WebMethod]
         public XmlDocument GenericQueryXML1()
