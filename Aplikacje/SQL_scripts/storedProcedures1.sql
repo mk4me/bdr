@@ -12,13 +12,13 @@ go
 
 create procedure list_session_files @sess_id int
 as
-	select IdPlik as FileID, Nazwa_pliku as FileName from Plik where IdSesja=@sess_id
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription  from Plik where IdSesja=@sess_id
 go
 
 -- Generic By-ID retrieval
 -- =======================
 
-alter procedure get_performer_by_id_xml ( @res_id int )
+create procedure get_performer_by_id_xml ( @res_id int )
 as
 			select
 				IdPerformer as PerformerID,
@@ -28,7 +28,7 @@ as
 			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
 			for XML AUTO, ELEMENTS
 go
-alter procedure get_session_by_id_xml ( @res_id int )
+create procedure get_session_by_id_xml ( @res_id int )
 as
 			select
 				IdSesja as SessionID,
@@ -42,7 +42,7 @@ as
 			from Sesja SessionDetailsWithAttributes where IdSesja=@res_id
 			for XML AUTO, ELEMENTS
 go
-alter procedure get_trial_by_id_xml ( @res_id int )
+create procedure get_trial_by_id_xml ( @res_id int )
 as
 			select 
 				IdObserwacja as TrialID, 
@@ -53,7 +53,7 @@ as
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
 go
-alter procedure get_segment_by_id_xml ( @res_id int )
+create procedure get_segment_by_id_xml ( @res_id int )
 as
 			select 
 				IdSegment as SegmentID,
@@ -79,12 +79,56 @@ select
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
 		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
-		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+	a.Typ_danych as Type,
+	ga.Nazwa as AttributeGroup
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
-inner join Performer p on wap.IdPerformer=p.IdPerformer
-where p.IdPerformer = @perf_id
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where wap.IdPerformer = @perf_id
 go
+
+create function list_performer_attributes_uniform ( @perf_id int )
+returns TABLE as
+return 
+(
+ with Perf as
+( select * from Performer where IdPerformer=@perf_id )
+	(
+	(select 'FirstName' as Name,
+			p.Imie as Value,
+			'string' as Type,
+			'_performer_static' as AttributeGroup
+	from Perf p)
+	union
+	(select 'LastName' as Name,
+			p.Nazwisko as Value,
+			'string' as Type,
+			'_performer_static' as AttributeGroup
+	from Perf p)
+	union
+	(select 'PerformerID' as Name,
+			p.IdPerformer as Value,
+			'integer' as Type,
+			'_performer_static' as AttributeGroup
+	from Perf p)
+	)
+union
+(select
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+	a.Typ_danych as Type,
+	ga.Nazwa as AttributeGroup
+from Atrybut a 
+inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where wap.IdPerformer = @perf_id));
+go
+
+
 
 create procedure list_performers_xml
 as
@@ -129,13 +173,80 @@ select
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
-		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
-inner join Sesja s on was.IdSesja=s.IdSesja
-where s.IdSesja = @sess_id
-
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where was.IdSesja = @sess_id
 go
+
+
+create function list_session_attributes_uniform ( @sess_id int )
+returns TABLE as
+return 
+(
+ with Sess as
+( select * from Sesja where IdSesja=@sess_id )
+	(
+	(select 'SessionID' as Name,
+			s.IdSesja as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'UserID' as Name,
+			s.IdUzytkownik as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'LabID' as Name,
+			s.IdLaboratorium as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'MotionKindID' as Name,
+			s.IdRodzaj_ruchu as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'PerformerID' as Name,
+			s.IdPerformer as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'SessionDate' as Name,
+			s.Data as Value,
+			'string' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	union
+	(select 'SessionDescription' as Name,
+			s.Opis_sesji as Value,
+			'string' as Type,
+			'_session_static' as AttributeGroup
+	from Sess s)
+	)
+union
+(select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
+from Atrybut a 
+inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where was.IdSesja = @sess_id));
+go
+
 
 create procedure list_performer_sessions_xml @perf_id int
 as
@@ -188,12 +299,53 @@ select
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
 		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
-		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
-inner join Obserwacja o on wao.IdObserwacja=o.IdObserwacja
-where o.IdObserwacja = @trial_id
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where wao.IdObserwacja = @trial_id
+go
 
+
+create function list_trial_attributes_uniform ( @trial_id int )
+returns TABLE as
+return 
+(
+ with Trial as
+( select * from Obserwacja where IdObserwacja=@trial_id )
+	(
+	(select 'TrialID' as Name,
+			t.IdObserwacja as Value,
+			'integer' as Type,
+			'_trial_static' as AttributeGroup
+	from Trial t)
+	union
+	(select 'TrialDescription' as Name,
+			t.Opis_obserwacji as Value,
+			'string' as Type,
+			'_trial_static' as AttributeGroup
+	from Trial t)
+	union
+	(select 'Duration' as Name,
+			t.Czas_trwania as Value,
+			'integer' as Type,
+			'_trial_static' as AttributeGroup
+	from Trial t)
+	)
+union
+(	select a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
+from Atrybut a 
+inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where wao.IdObserwacja = @trial_id ));
 go
 
 create procedure list_session_trials_xml @sess_id int
@@ -230,12 +382,64 @@ select
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
-		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
 from Atrybut a 
 inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
-inner join Segment s on was.IdSegment=s.IdSegment
-where s.IdSegment = @segment_id
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where was.IdSegment = @segment_id
 go
+
+
+create function list_segment_attributes_uniform ( @segment_id int )
+returns TABLE as
+return 
+(
+ with Sgmnt as
+( select * from Segment where IdSegment=@segment_id )
+	(
+	(select 'SegmentID' as Name,
+			segm.IdSegment as Value,
+			'integer' as Type,
+			'_segment_static' as AttributeGroup
+	from Sgmnt segm)
+	union
+	(select 'SegmentName' as Name,
+			segm.Nazwa as Value,
+			'string' as Type,
+			'_segment_static' as AttributeGroup
+	from Sgmnt segm)
+	union
+	(select 'StartTime' as Name,
+			segm.Czas_poczatku as Value,
+			'integer' as Type,
+			'_segment_static' as AttributeGroup
+	from Sgmnt segm)
+	union
+	(select 'EndTime' as Name,
+			segm.Czas_konca as Value,
+			'integer' as Type,
+			'_segment_static' as AttributeGroup
+	from Sgmnt segm)
+	)
+union
+(select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
+from Atrybut a 
+inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where was.IdSegment = @segment_id));
+go
+
+select * from list_segment_attributes_uniform (1)
+
 create procedure list_trial_segments_xml @trial_id int
 as
 select
@@ -272,9 +476,12 @@ select
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
 		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
-		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value
+		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup
 from Atrybut a 
 inner join Wartosc_atrybutu_pliku wap on a.IdAtrybut=wap.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPlik = @file_id
 go
 
@@ -336,7 +543,7 @@ go
 -- Metadata queries
 -- ===================
 
-alter procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
+create procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
 as
 select
 	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName
@@ -346,7 +553,7 @@ for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
 
 go
 
-alter procedure list_attribute_groups_defined( @entity_kind varchar(20) )
+create procedure list_attribute_groups_defined( @entity_kind varchar(20) )
 as
 select
 	Nazwa as AttributeGroupName, Opisywana_encja as DescribedEntity
@@ -357,6 +564,19 @@ for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinit
 go
 
 
+create procedure list_motion_kinds_defined
+as
+select IdRodzaj_ruchu as MotionKindID, Nazwa as MotionKindName from Rodzaj_ruchu
+for XML RAW ('MotionKindDefinition'), ELEMENTS, root ('MotionKindDefinitionList')
+
+go
+create procedure list_session_groups_defined
+as
+select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
+for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
+go
+
+exec list_session_groups_defined
 
 -- Attribute setting operations
 -- ============================
@@ -372,7 +592,7 @@ Output parameter "result" meaning:
 6 - the value provided is not valid for this numeric-type attribute
 
 */
-alter procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+create procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -434,7 +654,7 @@ begin
 		end;
 end;
 go
-alter procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -561,7 +781,7 @@ begin
 end;
 go
 
-alter procedure set_segment_attribute (@segment_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+create procedure set_segment_attribute (@segment_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
@@ -692,8 +912,8 @@ EXECUTE set_session_attribute 4, 'marker_set', abc, 1, @result OUTPUT;
 select @result
 
 
-
-select * from list_session_attributes(1)
+DECLARE @res int
+execute set_performer_attribute 1, 'date_of_birth', '2000-01-01', 1, @res output
 
 
 execute list_performer_sessions_xml 1
