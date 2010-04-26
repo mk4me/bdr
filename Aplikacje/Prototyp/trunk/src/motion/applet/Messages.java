@@ -9,12 +9,18 @@ public class Messages {
 	private static String currentLanguage = ENGLISH;
 	
 	private static final String BUNDLE_NAME = "motion.applet.messages"; //$NON-NLS-1$
+	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 	
+	// Symbols
 	public static final String COLON = ":"; //$NON-NLS-1$
 	public static final String ADD_SIGN = "+"; //$NON-NLS-1$
 	public static final String REMOVE_SIGN = "X"; //$NON-NLS-1$
 	
-	private static ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+	// Button labels
+	public static final String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
+	public static final String ADD = Messages.getString("Add"); //$NON-NLS-1$
+	public static final String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
+	public static final String CREATE = Messages.getString("Create"); //$NON-NLS-1$
 	
 	private Messages() {
 	}
@@ -36,12 +42,12 @@ public class Messages {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param language one of Messages.ENGLISH, Messages.POLISH
-	 */
-	public static void setLanguage(String language) {
-		currentLanguage = language;
+	public static void setLanguageEnglish() {
+		currentLanguage = ENGLISH;
+	}
+	
+	public static void setLanguagePolish() {
+		currentLanguage = POLISH;
 	}
 	
 	public static String getLanguage() {

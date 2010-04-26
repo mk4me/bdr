@@ -27,7 +27,7 @@ public class UploadDialog extends BasicDialog {
 	private static String FILE_PATH = Messages.getString("File") + Messages.COLON; //$NON-NLS-1$
 	private static String DESCRIPTION = Messages.getString("Description") + Messages.COLON; //$NON-NLS-1$
 	private static String SESSION = Messages.getString("Session") + Messages.COLON; //$NON-NLS-1$
-	private static String CANCEL_UPLOAD = Messages.getString("Cancel"); //$NON-NLS-1$
+	private static String CANCEL_UPLOAD = Messages.CANCEL;
 	private static String WELCOME_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
 	private static String MISSING_FILE_PATH_MESSAGE = Messages.getString("UploadDialog.NoFileSelected"); //$NON-NLS-1$
 	private static String MISSING_SESSION_MESSAGE = Messages.getString("UploadDialog.NoSessionNumberEntered"); //$NON-NLS-1$

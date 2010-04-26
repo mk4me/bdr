@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.security.auth.callback.LanguageCallback;
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
 import javax.swing.JMenu;
@@ -15,6 +14,7 @@ import javax.swing.JSplitPane;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
+import motion.applet.dialogs.PerformerDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
@@ -41,23 +41,35 @@ public class MotionApplet extends JApplet {
 	
 	private void initUserInterface() {
 		// Set language
-		Messages.setLanguage(Messages.POLISH);
-		//Messages.setLanguage(Messages.ENGLISH);
+		//Messages.setLanguagePolish();
+		Messages.setLanguageEnglish();
 		
 		// Create the menu bar
 		JMenuBar appletMenuBar = new JMenuBar();
-		JMenu motionMenu = new JMenu(Messages.getString("Session")); //$NON-NLS-1$
-		appletMenuBar.add(motionMenu);
+		JMenu sessionMenu = new JMenu(Messages.getString("Session")); //$NON-NLS-1$
+		appletMenuBar.add(sessionMenu);
 		JMenuItem uploadItem = new JMenuItem(Messages.getString("Upload")); //$NON-NLS-1$
-		motionMenu.add(uploadItem);
+		sessionMenu.add(uploadItem);
 		uploadItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Crete the upload dialog
+				// Create the upload dialog
 				UploadDialog uploadDialog = new UploadDialog();
 				uploadDialog.setVisible(true);
 			}
 		});
 		
+		JMenu performerMenu = new JMenu(Messages.getString("Performer")); //$NON-NLS-1$
+		appletMenuBar.add(performerMenu);
+		JMenuItem createPerformerItem = new JMenuItem(Messages.getString("MotionApplet.New_performer")); //$NON-NLS-1$
+		performerMenu.add(createPerformerItem);
+		createPerformerItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the new performer dialog
+				PerformerDialog performerDialog = new PerformerDialog();
+				performerDialog.setVisible(true);
+				
+			}
+		});
 		
 		//JMenu menuMenu = new JMenu("Menu");
 		//appletMenuBar.add(menuMenu);

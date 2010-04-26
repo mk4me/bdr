@@ -23,6 +23,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import motion.applet.Messages;
 import motion.applet.models.EntityEditorModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.EntityAttributeGroup;
@@ -37,8 +38,8 @@ public class SessionDialog extends BasicDialog {
 	private static String MISSING_SESSION_DESCRIPTION_MESSAGE = "Please write a session description.";
 	private static String MISSING_SESSION_DATE_MESSAGE = "Please input the session date.";
 	private static String INCORRECT_SESSION_DATE_MESSAGE = "Incorrect session date.";
-	private static String CREATE = "Create";
-	private static String CANCEL = "Cancel";
+	private static String CREATE = Messages.CREATE;
+	private static String CANCEL = Messages.CANCEL;
 	private static String PERFORMER_LABEL = "Performer:";
 	private static String SESSION_ATTRIBUTES_LABEL = "Session:";
 	private int performerID;
@@ -125,7 +126,7 @@ public class SessionDialog extends BasicDialog {
 			session.put(SessionStaticAttributes.sessionDescription, "");	// [1, 1]
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			String date = dateFormat.format(Calendar.getInstance().getTime()).toString();
-			session.put(SessionStaticAttributes.sessionDate, date);	// [1, 2]
+			session.put(SessionStaticAttributes.sessionDate, date);	// [2, 1]
 			//session.put(SessionStaticAttributes.motionKindID, 1);
 			//session.put(SessionStaticAttributes.labID, 1);
 			//session.put(SessionStaticAttributes.userID, 1);
