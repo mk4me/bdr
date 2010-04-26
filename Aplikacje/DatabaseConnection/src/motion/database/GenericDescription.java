@@ -1,7 +1,6 @@
 package motion.database;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 //TODO: co z metod¹ equals() ?
 @SuppressWarnings("serial")

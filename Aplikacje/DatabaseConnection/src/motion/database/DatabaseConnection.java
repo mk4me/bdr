@@ -15,12 +15,9 @@ import java.util.logging.SimpleFormatter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
-import org.bouncycastle.asn1.cms.Time;
-
 import motion.database.ws.DatabaseArrayOfInteger;
 import motion.database.ws.DatabaseArrayOfString;
 import motion.database.ws.FilterPredicate;
-import motion.database.ws.basicQueriesService.ArrayOfFilterPredicate;
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.ArrayOfString;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList;
@@ -29,7 +26,7 @@ import motion.database.ws.basicQueriesService.Attributes;
 import motion.database.ws.basicQueriesService.BasicQueriesService;
 import motion.database.ws.basicQueriesService.BasicQueriesServiceSoap;
 import motion.database.ws.basicQueriesService.FileWithAttributesList;
-import motion.database.ws.basicQueriesService.GenericQueryResult;
+import motion.database.ws.basicQueriesService.GenericUniformAttributesQueryResult;
 import motion.database.ws.basicQueriesService.LabPerformerWithAttributesList;
 import motion.database.ws.basicQueriesService.LabSessionWithAttributesList;
 import motion.database.ws.basicQueriesService.MotionKindDefinitionList;
@@ -44,8 +41,7 @@ import motion.database.ws.basicQueriesService.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesService.AttributeGroupDefinitionList.AttributeGroupDefinition;
 import motion.database.ws.basicQueriesService.FileWithAttributesList.FileDetailsWithAttributes;
-import motion.database.ws.basicQueriesService.GenericQueryResult.GenericResultRow;
-import motion.database.ws.basicQueriesService.GenericQueryXMLResponse.GenericQueryXMLResult;
+import motion.database.ws.basicQueriesService.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult;
 import motion.database.ws.basicQueriesService.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
@@ -404,7 +400,7 @@ public class DatabaseConnection {
 
 	
 
-	public  List<? extends Object> execGenericQuery(FilterPredicate[] filters, String[] p_entitiesToInclude) throws Exception
+	public  List<GenericResult> execGenericQuery(FilterPredicate[] filters, String[] p_entitiesToInclude) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -417,19 +413,17 @@ public class DatabaseConnection {
 	
 			//ArrayOfFilterPredicate filter;
 			ArrayOfString entitiesToInclude = new DatabaseArrayOfString( p_entitiesToInclude ) ;
-			GenericQueryXMLResult result = port.genericQueryXML( new DatabaseArrayOfFilterPredicate(filters), entitiesToInclude);
+			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( new DatabaseArrayOfFilterPredicate(filters), entitiesToInclude);
 
+			
+			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
 			for (Object o : result.getContent())
 			{
-				GenericQueryResult ss = (motion.database.ws.basicQueriesService.GenericQueryResult)o;//(((JAXBElement<?>)o).getValue());
-				for ( GenericResultRow s : ss.getGenericResultRow() )
-				{
-					System.out.println( s.getLastName() );
-					System.out.println( s.getSessionDescription() );
-				}
+				GenericUniformAttributesQueryResult ss = (motion.database.ws.basicQueriesService.GenericUniformAttributesQueryResult)o;//(((JAXBElement<?>)o).getValue());
+				output.add( transformGenericAttributes( ss.getAttributes().get(0), new GenericResult() ) );
 			}
 			
-			return result.getContent();
+			return output;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot list performers.");
@@ -1170,7 +1164,7 @@ public class DatabaseConnection {
 	 * @param attributes
 	 * @param destinationObject
 	 */
-	private void transformGenericAttributes(Attributes attributes, GenericDescription<?> destinationObject) {
+	private <T extends GenericDescription<?>> T transformGenericAttributes(Attributes attributes, T destinationObject) {
 		if (attributes != null)
 			if (attributes.getAttribute() != null)
 				for (  motion.database.ws.basicQueriesService.Attributes.Attribute att : attributes.getAttribute() )
@@ -1178,6 +1172,7 @@ public class DatabaseConnection {
 					EntityAttribute attribute = new EntityAttribute(att.getName(), att.getValue(), att.getAttributeGroup(), att.getType() );
 					destinationObject.put(att.getName(), attribute );
 				}
+		return destinationObject;
 	}
 
 

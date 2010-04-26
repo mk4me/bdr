@@ -31,7 +31,7 @@ public class EntityAttribute {
 		return result.toString();
 	}
 
-	private Class getTypeClass()
+	private Class<?> getTypeClass()
 	{
 		String typeL = type.toLowerCase();
 		if (typeL.contains( "string" ))

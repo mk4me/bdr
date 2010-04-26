@@ -7,6 +7,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
+import motion.database.ws.basicQueriesService.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult;
 import motion.database.ws.basicQueriesService.GenericQueryXMLResponse.GenericQueryXMLResult;
 import motion.database.ws.basicQueriesService.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesService.GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult;
@@ -81,6 +82,23 @@ public interface BasicQueriesServiceSoap {
     @RequestWrapper(localName = "GenericQueryXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.GenericQueryXML")
     @ResponseWrapper(localName = "GenericQueryXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.GenericQueryXMLResponse")
     public GenericQueryXMLResult genericQueryXML(
+        @WebParam(name = "filter", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        ArrayOfFilterPredicate filter,
+        @WebParam(name = "entitiesToInclude", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        ArrayOfString entitiesToInclude);
+
+    /**
+     * 
+     * @param entitiesToInclude
+     * @param filter
+     * @return
+     *     returns motion.database.ws.basicQueriesService.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult
+     */
+    @WebMethod(operationName = "GenericQueryUniformXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryUniformXML")
+    @WebResult(name = "GenericQueryUniformXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "GenericQueryUniformXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.GenericQueryUniformXML")
+    @ResponseWrapper(localName = "GenericQueryUniformXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesService.GenericQueryUniformXMLResponse")
+    public GenericQueryUniformXMLResult genericQueryUniformXML(
         @WebParam(name = "filter", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         ArrayOfFilterPredicate filter,
         @WebParam(name = "entitiesToInclude", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")

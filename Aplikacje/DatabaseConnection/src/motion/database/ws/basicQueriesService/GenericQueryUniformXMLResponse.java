@@ -10,26 +10,26 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlMixed;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesService.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult;
 
 
 /**
- * <p>Java class for ListSessionTrialsWithAttributesXMLResponse element declaration.
+ * <p>Java class for GenericQueryUniformXMLResponse element declaration.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;element name="ListSessionTrialsWithAttributesXMLResponse">
+ * &lt;element name="GenericQueryUniformXMLResponse">
  *   &lt;complexType>
  *     &lt;complexContent>
  *       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *         &lt;sequence>
- *           &lt;element name="ListSessionTrialsWithAttributesXMLResult" minOccurs="0">
+ *           &lt;element name="GenericQueryUniformXMLResult" minOccurs="0">
  *             &lt;complexType>
  *               &lt;complexContent>
  *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                   &lt;sequence>
- *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionTrialWithAttributesList"/>
+ *                     &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}GenericUniformAttributesQueryResult"/>
  *                   &lt;/sequence>
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -46,36 +46,36 @@ import motion.database.ws.basicQueriesService.ListSessionTrialsWithAttributesXML
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "listSessionTrialsWithAttributesXMLResult"
+    "genericQueryUniformXMLResult"
 })
-@XmlRootElement(name = "ListSessionTrialsWithAttributesXMLResponse")
-public class ListSessionTrialsWithAttributesXMLResponse {
+@XmlRootElement(name = "GenericQueryUniformXMLResponse")
+public class GenericQueryUniformXMLResponse {
 
-    @XmlElement(name = "ListSessionTrialsWithAttributesXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    protected ListSessionTrialsWithAttributesXMLResult listSessionTrialsWithAttributesXMLResult;
+    @XmlElement(name = "GenericQueryUniformXMLResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    protected GenericQueryUniformXMLResult genericQueryUniformXMLResult;
 
     /**
-     * Gets the value of the listSessionTrialsWithAttributesXMLResult property.
+     * Gets the value of the genericQueryUniformXMLResult property.
      * 
      * @return
      *     possible object is
-     *     {@link ListSessionTrialsWithAttributesXMLResult }
+     *     {@link GenericQueryUniformXMLResult }
      *     
      */
-    public ListSessionTrialsWithAttributesXMLResult getListSessionTrialsWithAttributesXMLResult() {
-        return listSessionTrialsWithAttributesXMLResult;
+    public GenericQueryUniformXMLResult getGenericQueryUniformXMLResult() {
+        return genericQueryUniformXMLResult;
     }
 
     /**
-     * Sets the value of the listSessionTrialsWithAttributesXMLResult property.
+     * Sets the value of the genericQueryUniformXMLResult property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ListSessionTrialsWithAttributesXMLResult }
+     *     {@link GenericQueryUniformXMLResult }
      *     
      */
-    public void setListSessionTrialsWithAttributesXMLResult(ListSessionTrialsWithAttributesXMLResult value) {
-        this.listSessionTrialsWithAttributesXMLResult = value;
+    public void setGenericQueryUniformXMLResult(GenericQueryUniformXMLResult value) {
+        this.genericQueryUniformXMLResult = value;
     }
 
 
@@ -89,7 +89,7 @@ public class ListSessionTrialsWithAttributesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionTrialWithAttributesList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}GenericUniformAttributesQueryResult"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -102,9 +102,9 @@ public class ListSessionTrialsWithAttributesXMLResponse {
     @XmlType(name = "", propOrder = {
         "content"
     })
-    public static class ListSessionTrialsWithAttributesXMLResult {
+    public static class GenericQueryUniformXMLResult {
 
-        @XmlElementRef(name = "SessionTrialWithAttributesList", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = SessionTrialWithAttributesList.class)
+        @XmlElementRef(name = "GenericUniformAttributesQueryResult", namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", type = GenericUniformAttributesQueryResult.class)
         @XmlMixed
         protected List<Object> content;
 
@@ -126,7 +126,7 @@ public class ListSessionTrialsWithAttributesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SessionTrialWithAttributesList }
+         * {@link GenericUniformAttributesQueryResult }
          * {@link String }
          * 
          * 

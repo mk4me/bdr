@@ -126,8 +126,8 @@ public class ListPerformersWithAttributesXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link PerformerWithAttributesList }
          * {@link String }
+         * {@link PerformerWithAttributesList }
          * 
          * 
          */
