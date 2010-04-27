@@ -208,7 +208,7 @@ public class FilterDialog extends BasicDialog {
 	public SimplePredicate getPredicate() {
 		ColumnCondition firstColumnCondition = columnConditions.get(0);
 		SimplePredicate firstPredicate = new SimplePredicate(
-				tableName.getTableName(),
+				tableName.toString(),
 				firstColumnCondition.getFeature(),
 				firstColumnCondition.getOperator(),
 				firstColumnCondition.getValue());
@@ -220,7 +220,7 @@ public class FilterDialog extends BasicDialog {
 				first = false;
 			} else {
 				SimplePredicate currentPredicate = new SimplePredicate(
-						tableName.getTableName(),
+						tableName.toString(),
 						cc.getFeature(),
 						cc.getOperator(),
 						cc.getValue(),

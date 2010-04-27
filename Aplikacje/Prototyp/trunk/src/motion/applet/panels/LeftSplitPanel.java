@@ -3,6 +3,7 @@ package motion.applet.panels;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -25,6 +26,8 @@ import motion.applet.dialogs.FilterDialog;
 import motion.applet.filter.Filter;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
+import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.ws.FilterPredicate;
 
 public class LeftSplitPanel extends JPanel {
 	private DefaultMutableTreeNode rootNode;
@@ -90,6 +93,36 @@ public class LeftSplitPanel extends JPanel {
 		});
 		
 		JButton startButton = new JButton(START_FILTER);
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(tree.getModel().getRoot());
+				if (tree.getSelectionPath() != null) {
+					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
+					if (!selectedNode.isRoot()) {
+						FilterPredicate[] query = ((Filter) selectedNode.getUserObject()).toFilterPredicate();
+						try {
+							List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(query, new String[]{LeftSplitPanel.this.tableName.toString().toLowerCase()});
+							System.out.println(result);
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+				
+				//TreeNode root = (TreeNode) tree.getModel().getRoot();
+			}
+			/*
+			private ArrayList<SimplePredicate> getChildPredicates(TreeNode node) {
+				//ArrayList<SimplePredicate> predicates
+				Enumeration children = node.children();
+				while(children.hasMoreElements()) {
+					TreeNode currentNode = (TreeNode) children.nextElement();
+					
+				}
+			}*/
+		});
 		toolBar.add(startButton);
 		
 		add(toolBar);

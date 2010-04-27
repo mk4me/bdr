@@ -7,13 +7,13 @@ public class TableNamesInstance {
 	public static final TableName PATIENT = new TableName(TableName.PATIENT_TABLE, TableName.PATIENT_TABLE_ENG);
 	
 	public static TableName toTableName(String table) {
-		if (table.equals(TableName.PERFORMER_TABLE)) {
+		if (table.equals(TableName.PERFORMER_TABLE) || table.equals(TableName.PERFORMER_TABLE_ENG)) {
 			return PERFORMER;
-		} else if (table.equals(TableName.SESSION_TABLE)) {
+		} else if (table.equals(TableName.SESSION_TABLE) || table.equals(TableName.SESSION_TABLE_ENG)) {
 			return SESSION;
-		} else if (table.equals(TableName.TRIAL_TABLE)) {
+		} else if (table.equals(TableName.TRIAL_TABLE) || table.equals(TableName.TRIAL_TABLE_ENG)) {
 			return TRIAL;
-		} else if (table.equals(TableName.PATIENT_TABLE)) {
+		} else if (table.equals(TableName.PATIENT_TABLE) || table.equals(TableName.PATIENT_TABLE)) {
 			return PATIENT;
 		} else {
 			return null;
