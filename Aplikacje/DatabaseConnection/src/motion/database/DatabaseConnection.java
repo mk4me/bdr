@@ -15,9 +15,28 @@ import java.util.logging.SimpleFormatter;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 
+import motion.database.model.DatabaseFile;
+import motion.database.model.DatabaseFileStaticAttributes;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.EntityKind;
+import motion.database.model.Filter;
+import motion.database.model.GenericDescription;
+import motion.database.model.GenericResult;
+import motion.database.model.MotionKind;
+import motion.database.model.Performer;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.Segment;
+import motion.database.model.SegmentStaticAttributes;
+import motion.database.model.Session;
+import motion.database.model.SessionGroup;
+import motion.database.model.SessionStaticAttributes;
+import motion.database.model.Trial;
+import motion.database.model.TrialStaticAttributes;
+import motion.database.ws.DatabaseArrayOfFilterPredicate;
 import motion.database.ws.DatabaseArrayOfInteger;
 import motion.database.ws.DatabaseArrayOfString;
-import motion.database.ws.FilterPredicate;
+
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.ArrayOfString;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList;
@@ -400,7 +419,7 @@ public class DatabaseConnection {
 
 	
 
-	public  List<GenericResult> execGenericQuery(FilterPredicate[] filters, String[] p_entitiesToInclude) throws Exception
+	public  List<GenericResult> execGenericQuery(Filter filter, String[] p_entitiesToInclude) throws Exception
 	{
 		if (this.state == DatabaseConnection.ConnectionState.INITIALIZED)
 		{
@@ -413,7 +432,9 @@ public class DatabaseConnection {
 	
 			//ArrayOfFilterPredicate filter;
 			ArrayOfString entitiesToInclude = new DatabaseArrayOfString( p_entitiesToInclude ) ;
-			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( new DatabaseArrayOfFilterPredicate(filters), entitiesToInclude);
+			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
+					new DatabaseArrayOfFilterPredicate(filter.toFilterPredicate()), 
+					entitiesToInclude);
 
 			
 			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();

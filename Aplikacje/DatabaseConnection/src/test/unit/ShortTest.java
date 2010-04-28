@@ -10,20 +10,23 @@ import java.util.Vector;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.Assert;
-import motion.database.DatabaseArrayOfFilterPredicate;
 import motion.database.DatabaseConnection;
-import motion.database.DatabaseFile;
 import motion.database.DbElementsList;
-import motion.database.EntityAttributeGroup;
 import motion.database.FileTransferListener;
-import motion.database.GenericName;
-import motion.database.MotionKind;
-import motion.database.Performer;
-import motion.database.Segment;
-import motion.database.Session;
-import motion.database.Trial;
+import motion.database.model.AttributeName;
+import motion.database.model.DatabaseFile;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.Filter;
+import motion.database.model.GenericName;
+import motion.database.model.MotionKind;
+import motion.database.model.Performer;
+import motion.database.model.Segment;
+import motion.database.model.Session;
+import motion.database.model.SimplePredicate;
+import motion.database.model.Trial;
 import motion.database.ws.basicQueriesService.ArrayOfFilterPredicate;
-import motion.database.ws.FilterPredicate;
+import motion.database.ws.basicQueriesService.FilterPredicate;
+import motion.database.ws.DatabaseArrayOfFilterPredicate;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -61,19 +64,10 @@ public class ShortTest {
 		
 		beforeTest();
 		
-		FilterPredicate filter = new FilterPredicate();
-		filter.setPredicateID(1);
-		filter.setParentPredicate(0);
-		filter.setContextEntity("session");
-		filter.setPreviousPredicate(0);
-		filter.setNextOperator("");
-		filter.setFeatureName("sessionID");
-		filter.setOperator("=");
-		filter.setValue("1");
-		filter.setAggregateEntity("");
-		filter.setAggregateFunction("");
+		SimplePredicate predicate = new SimplePredicate("session", new AttributeName("sessionID", "INTEGER_TYPE"), "=", "1" );
+		Filter filter = new Filter("my filter", predicate);
 		
-		List<? extends Object> result = database.execGenericQuery(new FilterPredicate[]{filter}, new String[]{"session"});
+		List<? extends Object> result = database.execGenericQuery( filter, new String[]{"session"});
 	
 		System.out.println(result);
 	}

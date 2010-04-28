@@ -11,16 +11,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.Assert;
 import motion.database.DatabaseConnection;
-import motion.database.DatabaseFile;
 import motion.database.DbElementsList;
-import motion.database.EntityAttributeGroup;
 import motion.database.FileTransferListener;
-import motion.database.GenericName;
-import motion.database.MotionKind;
-import motion.database.Performer;
-import motion.database.Segment;
-import motion.database.Session;
-import motion.database.Trial;
+import motion.database.model.DatabaseFile;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.GenericName;
+import motion.database.model.MotionKind;
+import motion.database.model.Performer;
+import motion.database.model.Segment;
+import motion.database.model.Session;
+import motion.database.model.Trial;
 
 import org.junit.Before;
 import org.junit.BeforeClass;

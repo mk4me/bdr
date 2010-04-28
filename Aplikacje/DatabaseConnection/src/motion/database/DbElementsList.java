@@ -2,6 +2,8 @@ package motion.database;
 
 import java.util.ArrayList;
 
+import motion.database.model.GenericDescription;
+
 @SuppressWarnings("serial")
 public class DbElementsList<T extends GenericDescription<?>> extends ArrayList<T>
 {

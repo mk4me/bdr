@@ -1,4 +1,4 @@
-package motion.database;
+package motion.database.model;
 
 import java.util.Vector;
 

@@ -4,6 +4,7 @@
 package motion.database;
 
 
+
 class TransferNotifier extends Thread
 {
 	private final NotifyingInputStream nis;

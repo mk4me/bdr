@@ -1,4 +1,4 @@
-package motion.database;
+package motion.database.model;
 
 public class SessionGroup extends GenericName {
 

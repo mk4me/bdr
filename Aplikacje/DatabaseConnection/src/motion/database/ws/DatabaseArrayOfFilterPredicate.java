@@ -1,7 +1,7 @@
-package motion.database;
+package motion.database.ws;
 
 import motion.database.ws.basicQueriesService.ArrayOfFilterPredicate;
-import motion.database.ws.FilterPredicate;
+import motion.database.ws.basicQueriesService.FilterPredicate;
 
 public class DatabaseArrayOfFilterPredicate extends ArrayOfFilterPredicate
 {

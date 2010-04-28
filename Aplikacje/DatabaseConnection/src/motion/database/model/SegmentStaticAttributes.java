@@ -1,7 +1,7 @@
 /**
  * 
  */
-package motion.database;
+package motion.database.model;
 
 public enum SegmentStaticAttributes{
 	endTime,

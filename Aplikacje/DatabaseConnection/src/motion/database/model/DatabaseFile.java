@@ -1,4 +1,5 @@
-package motion.database;
+package motion.database.model;
+
 
 
 @SuppressWarnings("serial")
