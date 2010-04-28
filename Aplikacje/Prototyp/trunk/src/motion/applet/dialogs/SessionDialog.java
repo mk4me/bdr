@@ -26,11 +26,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.applet.Messages;
 import motion.applet.models.EntityEditorModel;
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.EntityAttributeGroup;
-import motion.database.Performer;
-import motion.database.PerformerStaticAttributes;
-import motion.database.Session;
-import motion.database.SessionStaticAttributes;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.Performer;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.Session;
+import motion.database.model.SessionStaticAttributes;
 
 public class SessionDialog extends BasicDialog {
 	private static String TITLE = "New session";

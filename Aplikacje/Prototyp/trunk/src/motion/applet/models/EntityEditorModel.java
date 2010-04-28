@@ -47,11 +47,11 @@ import javax.swing.tree.TreePath;
 import javax.swing.treetable.AbstractTreeTableModel;
 import javax.swing.treetable.TreeTableModel;
 
-import motion.database.EntityAttribute;
-import motion.database.EntityAttributeGroup;
-import motion.database.GenericDescription;
-import motion.database.Session;
-import motion.database.SessionStaticAttributes;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.GenericDescription;
+import motion.database.model.Session;
+import motion.database.model.SessionStaticAttributes;
 
 public class EntityEditorModel extends AbstractTreeTableModel 
                              implements TreeTableModel {

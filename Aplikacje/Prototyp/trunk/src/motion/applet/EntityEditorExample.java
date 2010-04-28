@@ -10,10 +10,10 @@ import javax.swing.treetable.JTreeTable;
 
 import motion.applet.models.EntityEditorModel;
 import motion.database.DatabaseConnection;
-import motion.database.EntityAttributeGroup;
-import motion.database.GenericDescription;
-import motion.database.Session;
-import motion.database.SessionStaticAttributes;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.GenericDescription;
+import motion.database.model.Session;
+import motion.database.model.SessionStaticAttributes;
 
 
 public class EntityEditorExample

@@ -5,12 +5,12 @@ import java.util.HashMap;
 
 import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.EntityAttribute;
-import motion.database.EntityAttributeGroup;
-import motion.database.PerformerStaticAttributes;
-import motion.database.SessionStaticAttributes;
-import motion.database.TrialStaticAttributes;
 import motion.database.model.AttributeName;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
+import motion.database.model.TrialStaticAttributes;
 
 public class TableName {
 	// Database table names (defined only here for the applet).

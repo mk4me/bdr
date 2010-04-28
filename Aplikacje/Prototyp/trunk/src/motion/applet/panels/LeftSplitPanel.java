@@ -27,7 +27,6 @@ import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Filter;
-import motion.database.ws.FilterPredicate;
 
 public class LeftSplitPanel extends JPanel {
 	private DefaultMutableTreeNode rootNode;
@@ -100,9 +99,9 @@ public class LeftSplitPanel extends JPanel {
 				if (tree.getSelectionPath() != null) {
 					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
 					if (!selectedNode.isRoot()) {
-						FilterPredicate[] query = ((Filter) selectedNode.getUserObject()).toFilterPredicate();
+						//FilterPredicate[] query = ((Filter) selectedNode.getUserObject()).toFilterPredicate();
 						try {
-							List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(query, new String[]{LeftSplitPanel.this.tableName.toString().toLowerCase()});
+							List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(((Filter) selectedNode.getUserObject()), new String[]{LeftSplitPanel.this.tableName.toString().toLowerCase()});
 							System.out.println(result);
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
