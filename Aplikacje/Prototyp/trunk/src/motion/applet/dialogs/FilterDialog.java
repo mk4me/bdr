@@ -18,12 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import motion.applet.Messages;
-import motion.applet.database.AttributeName;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
-import motion.applet.filter.Filter;
-import motion.applet.filter.model.PredicateComposition;
-import motion.applet.filter.model.SimplePredicate;
+import motion.database.model.AttributeName;
+import motion.database.model.Filter;
+import motion.database.model.PredicateComposition;
+import motion.database.model.SimplePredicate;
 
 public class FilterDialog extends BasicDialog {
 	private static String FILTER_TITLE = Messages.getString("FilterDialog.AddFilter"); //$NON-NLS-1$

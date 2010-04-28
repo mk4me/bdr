@@ -10,6 +10,7 @@ import motion.database.EntityAttributeGroup;
 import motion.database.PerformerStaticAttributes;
 import motion.database.SessionStaticAttributes;
 import motion.database.TrialStaticAttributes;
+import motion.database.model.AttributeName;
 
 public class TableName {
 	// Database table names (defined only here for the applet).

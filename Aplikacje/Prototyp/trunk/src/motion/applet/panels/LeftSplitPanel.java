@@ -23,10 +23,10 @@ import motion.applet.Messages;
 import motion.applet.MotionApplet;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.FilterDialog;
-import motion.applet.filter.Filter;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.Filter;
 import motion.database.ws.FilterPredicate;
 
 public class LeftSplitPanel extends JPanel {

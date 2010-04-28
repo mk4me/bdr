@@ -11,7 +11,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import motion.applet.filter.Filter;
+import motion.database.model.Filter;
 
 public class CheckBoxNodeRenderer implements TreeCellRenderer {
 	private JCheckBox leafRenderer = new JCheckBox();

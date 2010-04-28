@@ -2,6 +2,8 @@ package motion.applet.database;
 
 import java.util.ArrayList;
 
+import motion.database.model.AttributeName;
+
 public class AttributeGroup {
 	private String groupName;
 	private ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
