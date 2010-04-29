@@ -15,7 +15,7 @@ import javax.xml.ws.WebServiceClient;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "BasicQueriesService", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", wsdlLocation = "http://dbpawell/Motion/res/BasicQueriesService.wsdl")
+@WebServiceClient(name = "BasicQueriesService", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/res/BasicQueriesService.wsdl")
 public class BasicQueriesService
     extends Service
 {
@@ -25,7 +25,7 @@ public class BasicQueriesService
     static {
         URL url = null;
         try {
-            url = new URL("http://dbpawell/Motion/res/BasicQueriesService.wsdl");
+            url = new URL("http://dbpawell.pjwstk.edu.pl/Motion/res/BasicQueriesService.wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

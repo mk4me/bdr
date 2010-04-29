@@ -15,7 +15,7 @@ import javax.xml.ws.WebServiceClient;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "FileStoremanService", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", wsdlLocation = "http://dbpawell/Motion/FileStoremanService.asmx?WSDL")
+@WebServiceClient(name = "FileStoremanService", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/FileStoremanService.asmx?WSDL")
 public class FileStoremanService
     extends Service
 {
@@ -25,7 +25,7 @@ public class FileStoremanService
     static {
         URL url = null;
         try {
-            url = new URL("http://dbpawell/Motion/FileStoremanService.asmx?WSDL");
+            url = new URL("http://dbpawell.pjwstk.edu.pl/Motion/FileStoremanService.asmx?WSDL");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

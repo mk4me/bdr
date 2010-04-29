@@ -318,7 +318,7 @@ public class DatabaseConnectionTest {
 		date.setMonth(3);
 		date.setDay(23);
 		
-		int id = database.createSession(1, null, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pó³obrotu");
+		int id = database.createSession(1, new int[]{1}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pó³obrotu");
 		System.out.println("Created session: " + id );
 
 		Session session = database.getSessionById(id);
