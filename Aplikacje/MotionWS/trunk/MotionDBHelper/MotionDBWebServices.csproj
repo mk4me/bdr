@@ -47,6 +47,12 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -62,15 +68,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BasicQueriesService.asmx" />
+    <Content Include="BasicQueriesWS.svc" />
     <Content Include="BasicUpdatesService.asmx" />
     <Content Include="DataDictionaryMaintenanceService.asmx" />
     <Content Include="FileStoremanService.asmx" />
     <Content Include="res\StandaloneWSDLCompositor.xslt" />
-    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicQueriesService.asmx.cs">
       <DependentUpon>BasicQueriesService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BasicQueriesWS.svc.cs">
+      <DependentUpon>BasicQueriesWS.svc</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DatabaseAccessService.cs">
@@ -82,6 +92,9 @@
     </Compile>
     <Compile Include="FilterPredicate.cs" />
     <Compile Include="FilterPredicateCollection.cs" />
+    <Compile Include="IBasicQueriesWS.cs">
+    </Compile>
+    <Compile Include="MDBExceptions.cs" />
     <Compile Include="PlainFileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
       <DependentUpon>FileStoremanService.asmx</DependentUpon>
@@ -100,6 +113,8 @@
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
     <None Include="res\BasicQueriesServiceStandalone.wsdl" />
+    <None Include="res\BasicQueriesWS.wsdl" />
+    <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\GenericQueryUniformXML.xsd" />
     <None Include="res\GenericQueryXML1.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
@@ -136,6 +151,7 @@
     <None Include="res\ListPerformerSessionsXML.xsd" />
     <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

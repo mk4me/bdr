@@ -2,31 +2,7 @@
 <wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
 	<wsdl:types>
 		<s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
-			<s:element name="Attributes">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="Name" type="s:string" use="required"/>
-								<s:attribute name="Value" type="s:string" use="required"/>
-								<s:attribute name="Entity" use="optional">
-									<s:simpleType>
-										<s:restriction base="s:string">
-											<s:enumeration value="performer"/>
-											<s:enumeration value="session"/>
-											<s:enumeration value="trial"/>
-											<s:enumeration value="segment"/>
-											<s:enumeration value="file"/>
-										</s:restriction>
-									</s:simpleType>
-								</s:attribute>
-								<s:attribute name="AttributeGroup" type="s:string" use="required"/>
-								<s:attribute name="Type" type="s:string" use="required"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
+			<s:include schemaLocation="AttributesElement.xsd"/>
 			<s:element name="GenericQueryResult">
 				<s:complexType>
 					<s:sequence>
@@ -56,6 +32,7 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="AttributesElement.xsd"/>
 			<s:element name="GenericUniformAttributesQueryResult">
 				<s:complexType>
 					<s:sequence>
@@ -63,53 +40,10 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
-			<s:element name="PerformerDetailsWithAttributes">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="PerformerID" type="s:int"/>
-						<s:element name="FirstName" type="s:string"/>
-						<s:element name="LastName" type="s:string"/>
-						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="SessionDetailsWithAttributes">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="SessionID" type="s:int"/>
-						<s:element name="UserID" type="s:int"/>
-						<s:element name="LabID" type="s:int"/>
-						<s:element name="MotionKindID" type="s:int"/>
-						<s:element name="PerformerID" type="s:int"/>
-						<s:element name="SessionDate" type="s:dateTime"/>
-						<s:element name="SessionDescription" type="s:string"/>
-						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="TrialDetailsWithAttributes">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="TrialID" type="s:int"/>
-						<s:element name="SessionID" type="s:int"/>
-						<s:element name="TrialDescription" type="s:string"/>
-						<s:element name="Duration" type="s:int"/>
-						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="SegmentDetailsWithAttributes">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="SegmentID" type="s:int"/>
-						<s:element name="TrialID" type="s:int"/>
-						<s:element name="SegmentName" type="s:string"/>
-						<s:element name="StartTime" type="s:int"/>
-						<s:element name="EndTime" type="s:int"/>
-						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
+			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
+			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
+			<s:include schemaLocation="TrialDetailsWithAttributesElement.xsd"/>
+			<s:include schemaLocation="SegmentDetailsWithAttributesElement.xsd"/>
 			<s:element name="PerformerList">
 				<s:complexType>
 					<s:sequence>
@@ -123,17 +57,21 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
 			<s:element name="PerformerWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
 			<s:element name="LabPerformerWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
@@ -154,17 +92,21 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
 			<s:element name="PerformerSessionWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
 			<s:element name="LabSessionWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
@@ -182,10 +124,12 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="TrialDetailsWithAttributesElement.xsd"/>
 			<s:element name="SessionTrialWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
@@ -204,13 +148,16 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="SegmentDetailsWithAttributesElement.xsd"/>
 			<s:element name="TrailSegmentWithAttributesList">
 				<s:complexType>
 					<s:sequence>
-						<s:element ref="tns:SegmentDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded"/>
+						<s:element ref="tns:SegmentDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            </s:element>
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="FileListType.xsd"/>
 			<s:element name="FileList">
 				<s:complexType>
 					<s:sequence>
@@ -224,6 +171,7 @@
 					</s:sequence>
 				</s:complexType>
 			</s:element>
+			<s:include schemaLocation="AttributesElement.xsd"/>
 			<s:element name="FileWithAttributesList">
 				<s:complexType>
 					<s:sequence>
@@ -1546,10 +1494,10 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesService">
 		<wsdl:port name="BasicQueriesServiceSoap" binding="tns:BasicQueriesServiceSoap">
-			<soap:address location="http://dbpawell/Motion/BasicQueriesService.asmx"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
 		</wsdl:port>
 		<wsdl:port name="BasicQueriesServiceSoap12" binding="tns:BasicQueriesServiceSoap12">
-			<soap12:address location="http://dbpawell/Motion/BasicQueriesService.asmx"/>
+			<soap12:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
