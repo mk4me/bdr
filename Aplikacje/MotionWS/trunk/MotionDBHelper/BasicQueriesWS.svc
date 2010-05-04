@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionDBWebServices.BasicQueriesWS" CodeBehind="BasicQueriesWS.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionDBWebServices.BasicQueriesWS" Factory="Thinktecture.ServiceModel.Extensions.Description.FlatWsdlServiceHostFactory" CodeBehind="BasicQueriesWS.svc.cs" %>

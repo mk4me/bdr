@@ -152,6 +152,8 @@
     <None Include="res\ListPerformerSessionsXML.xsd" />
     <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
+    <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.dll" />
+    <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
