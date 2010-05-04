@@ -115,6 +115,7 @@
     <None Include="res\BasicQueriesServiceStandalone.wsdl" />
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
+    <None Include="res\BasicQueriesWSNoImports.wsdl" />
     <None Include="res\GenericQueryUniformXML.xsd" />
     <None Include="res\GenericQueryXML1.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
