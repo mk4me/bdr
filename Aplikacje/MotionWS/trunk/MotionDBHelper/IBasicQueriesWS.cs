@@ -12,10 +12,93 @@ namespace MotionDBWebServices
     [ServiceContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"), XmlSerializerFormat(Style = OperationFormatStyle.Document, Use = OperationFormatUse.Literal)]
     public interface IBasicQueriesWS
     {
-        [OperationContract ] 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude);
+
+        [OperationContract] 
         [FaultContract(typeof(QueryException))]
         XmlElement GetPerformerByIdXML(int id);
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetSessionByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetTrialByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetSegmentByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListPerformersXML();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListPerformersWithAttributesXML();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListLabPerformersWithAttributesXML(int labID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListPerformerSessionsXML(int performerID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListPerformerSessionsWithAttributesXML(int performerID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListLabSessionsWithAttributesXML(int labID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionTrialsXML(int sessionID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionTrialsWithAttributesXML(int sessionID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListTrialSegmentsXML(int trialID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListTrialSegmentsWithAttributesXML(int trialID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListFilesXML(int subjectID, string subjectType);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListAttributesDefined(string attributeGroupName, string entityKind);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListAttributeGroupsDefined(string entityKind);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionGroupsDefined();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListMotionKindsDefined();
     }
 
 }

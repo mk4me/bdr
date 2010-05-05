@@ -800,7 +800,7 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileList"));
+                if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("FileWithAttributesList"));
 
                 dr.Close();
             }

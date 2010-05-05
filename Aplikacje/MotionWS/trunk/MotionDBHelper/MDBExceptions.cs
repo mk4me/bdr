@@ -8,14 +8,14 @@ namespace MotionDBWebServices
     [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")]
     public class QueryException
     {
-        string _issue_kind;
+        string _fault_source;
         string _details;
 
         [DataMember]
         public string IssueKind
         {
-            get { return _issue_kind; }
-            set { _issue_kind = value; }
+            get { return _fault_source; }
+            set { _fault_source = value; }
         }
         [DataMember]
         public string Details
@@ -24,9 +24,9 @@ namespace MotionDBWebServices
             set { _details = value; }
         }
 
-        public QueryException(string res, string det)
+        public QueryException(string src, string det)
         {
-            _issue_kind = res;
+            _fault_source = src;
             _details = det;
         }
     }
