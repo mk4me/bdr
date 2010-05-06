@@ -35,7 +35,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		super();
 		this.setLayout(new BorderLayout());
 		table = new JTable();
-		showTable(TableNamesInstance.PERFORMER.getTableName());
+		showTable(TableNamesInstance.PERFORMER);
 		JScrollPane scrollPane = new JScrollPane(table);
 		//showTree("Performer");
 		//JScrollPane scrollPane = new JScrollPane(tree);
@@ -74,7 +74,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		});
 	}
 	
-	private void showTable(String tableName) {
+	private void showTable(TableName tableName) {
 		Connector connector = new Connector();
 		try {
 			tableModel = new BasicTable(connector, tableName);
@@ -97,6 +97,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		JComboBox comboBox = (JComboBox) actionEvent.getSource();
-		showTable(((TableName) comboBox.getSelectedItem()).getTableName());
+		showTable(((TableName) comboBox.getSelectedItem()));
 	}
 }
