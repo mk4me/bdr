@@ -75,7 +75,9 @@ public class Filter {
 		if (currentPredicate.getPreviousComposition() == null) {
 			filter.setNextOperator("");
 		} else {
-			filter.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
+			//filter.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
+			previousFilterPredicate.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
+			filter.setNextOperator("");
 		}
 		filter.setFeatureName(currentPredicate.getFeature().toString());
 		filter.setOperator(currentPredicate.getOperator());
