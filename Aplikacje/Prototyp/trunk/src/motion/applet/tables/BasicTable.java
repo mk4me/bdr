@@ -29,14 +29,11 @@ public class BasicTable extends AbstractTableModel {
 	private TableName tableName;
 	private String databaseName;
 	
-	public BasicTable(TableName tableName) { //public BasicTable(Connector connector, TableName tableName) {
+	public BasicTable(TableName tableName) {
 		super();
 		this.tableName = tableName;
-		//this.databaseName = connector.getDatabaseName();
-		//this.connection = connector.openConnection();
-		//getTableContents();
+		
 		getTableContentsFromAttributes();
-		//connector.closeConnection();
 	}
 	
 	private void getTableContents() throws SQLException {
@@ -96,6 +93,7 @@ public class BasicTable extends AbstractTableModel {
 				}
 				cellList.add (cellValue);
 			}
+			contents2.add(cellList);
 			Object[] cells = cellList.toArray();
 			rowList.add(cells);
 		}
@@ -103,6 +101,7 @@ public class BasicTable extends AbstractTableModel {
 		for (int i = 0; i < this.contents.length; i++) {
 			this.contents[i] = (Object[]) rowList.get(i);
 		}
+		
 		
 		// 1. Close the ResultSet
 		// 2. Close the Statement
@@ -116,6 +115,17 @@ public class BasicTable extends AbstractTableModel {
 			listPerformers();
 		} else if (tableName.equals(TableNamesInstance.SESSION)) {
 			listSessions();
+		} else {
+			Connector connector = new Connector();
+			this.databaseName = connector.getDatabaseName();
+			this.connection = connector.openConnection();
+			try {
+				getTableContents();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			connector.closeConnection();
 		}
 	}
 	

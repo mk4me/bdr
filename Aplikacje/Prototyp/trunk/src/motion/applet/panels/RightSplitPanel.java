@@ -23,6 +23,7 @@ import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.SessionDialog;
+import motion.applet.dialogs.TrialDialog;
 import motion.applet.tables.BasicTable;
 import motion.applet.trees.ResultTree;
 
@@ -33,6 +34,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private TableName tableName;
 	
 	private static String MENU_CREATE_SESSION = "Create new session";
+	private static String MENU_CREATE_TRIAL = "Create new trial";
 	
 	public RightSplitPanel() {
 		super();
@@ -74,6 +76,25 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 							}
 						});
 						popupMenu.show(table, point.x, point.y);
+					} else if (RightSplitPanel.this.tableName.equals(TableNamesInstance.SESSION)) {
+						Point point = e.getPoint();
+						int row = table.rowAtPoint(point);
+						int column = table.columnAtPoint(point);
+						ListSelectionModel model = table.getSelectionModel();
+						model.setSelectionInterval(row, row);
+						JPopupMenu popupMenu = new JPopupMenu();
+						JMenuItem createTrialMenuItem = new JMenuItem(MENU_CREATE_TRIAL);
+						popupMenu.add(createTrialMenuItem);
+						final Object value = table.getModel().getValueAt(row, 0); // ID column.
+						
+						createTrialMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								TrialDialog trialDialog = new TrialDialog(Integer.parseInt(value.toString()));
+								trialDialog.setVisible(true);
+							}
+						});
+						popupMenu.show(table, point.x, point.y);
 					}
 				}
 			}
@@ -81,7 +102,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	private void showTable(TableName tableName) {
-		//Connector connector = new Connector();
 		this.tableName = tableName;
 		try {
 			tableModel = new BasicTable(tableName);
