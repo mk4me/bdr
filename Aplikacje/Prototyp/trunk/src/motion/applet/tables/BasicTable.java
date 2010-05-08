@@ -18,6 +18,7 @@ import motion.database.DbElementsList;
 import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
 import motion.database.model.Performer;
+import motion.database.model.Session;
 
 public class BasicTable extends AbstractTableModel {
 	private Object[][] contents;
@@ -113,6 +114,8 @@ public class BasicTable extends AbstractTableModel {
 	private void getTableContentsFromAttributes() {
 		if (tableName.equals(TableNamesInstance.PERFORMER)) {
 			listPerformers();
+		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+			listSessions();
 		}
 	}
 	
@@ -123,6 +126,27 @@ public class BasicTable extends AbstractTableModel {
 				ArrayList<Object> cellList = new ArrayList<Object>();
 				for (AttributeName a : tableName.getAllAttributes()) {
 					EntityAttribute entityAttribute = p.get(a.toString());
+					if (entityAttribute != null) {
+						cellList.add(entityAttribute.value);
+					} else {
+						cellList.add(null);
+					}
+				}
+				this.contents2.add(cellList);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void listSessions() {
+		try {
+			DbElementsList<Session> sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+			for (Session s : sessions) {
+				ArrayList<Object> cellList = new ArrayList<Object>();
+				for (AttributeName a : tableName.getAllAttributes()) {
+					EntityAttribute entityAttribute = s.get(a.toString());
 					if (entityAttribute != null) {
 						cellList.add(entityAttribute.value);
 					} else {
