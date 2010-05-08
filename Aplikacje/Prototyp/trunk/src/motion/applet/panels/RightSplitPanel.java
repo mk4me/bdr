@@ -30,12 +30,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private JTable table;
 	private TableModel tableModel;
 	private JTree tree;
+	private TableName tableName;
+	
+	private static String MENU_CREATE_SESSION = "Create new session";
 	
 	public RightSplitPanel() {
 		super();
+		this.tableName = TableNamesInstance.PERFORMER;
 		this.setLayout(new BorderLayout());
 		table = new JTable();
-		showTable(TableNamesInstance.PERFORMER);
+		showTable(this.tableName);
 		JScrollPane scrollPane = new JScrollPane(table);
 		//showTree("Performer");
 		//JScrollPane scrollPane = new JScrollPane(tree);
@@ -51,33 +55,36 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)) {
-					Point point = e.getPoint();
-					int row = table.rowAtPoint(point);
-					int column = table.columnAtPoint(point);
-					ListSelectionModel model = table.getSelectionModel();
-					model.setSelectionInterval(row, row);
-					JPopupMenu popupMenu = new JPopupMenu();
-					JMenuItem createSessionMenuItem = new JMenuItem("Create new session");
-					popupMenu.add(createSessionMenuItem);
-					final Object value = table.getModel().getValueAt(row, 0); // ID column.
-					
-					createSessionMenuItem.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							SessionDialog sessionDialog = new SessionDialog(Integer.parseInt(value.toString()));
-							sessionDialog.setVisible(true);
-						}
-					});
-					popupMenu.show(table, point.x, point.y);
+					if (RightSplitPanel.this.tableName.equals(TableNamesInstance.PERFORMER)) {
+						Point point = e.getPoint();
+						int row = table.rowAtPoint(point);
+						int column = table.columnAtPoint(point);
+						ListSelectionModel model = table.getSelectionModel();
+						model.setSelectionInterval(row, row);
+						JPopupMenu popupMenu = new JPopupMenu();
+						JMenuItem createSessionMenuItem = new JMenuItem(MENU_CREATE_SESSION);
+						popupMenu.add(createSessionMenuItem);
+						final Object value = table.getModel().getValueAt(row, 0); // ID column.
+						
+						createSessionMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								SessionDialog sessionDialog = new SessionDialog(Integer.parseInt(value.toString()));
+								sessionDialog.setVisible(true);
+							}
+						});
+						popupMenu.show(table, point.x, point.y);
+					}
 				}
 			}
 		});
 	}
 	
 	private void showTable(TableName tableName) {
-		Connector connector = new Connector();
+		//Connector connector = new Connector();
+		this.tableName = tableName;
 		try {
-			tableModel = new BasicTable(connector, tableName);
+			tableModel = new BasicTable(tableName);
 			table.setModel(tableModel);
 		} catch (Exception e) {
 			e.printStackTrace();

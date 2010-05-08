@@ -29,10 +29,10 @@ public class BasicTable extends AbstractTableModel {
 	private TableName tableName;
 	private String databaseName;
 	
-	public BasicTable(Connector connector, TableName tableName) {
+	public BasicTable(TableName tableName) { //public BasicTable(Connector connector, TableName tableName) {
 		super();
 		this.tableName = tableName;
-		this.databaseName = connector.getDatabaseName();
+		//this.databaseName = connector.getDatabaseName();
 		//this.connection = connector.openConnection();
 		//getTableContents();
 		getTableContentsFromAttributes();
