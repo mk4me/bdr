@@ -7,11 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,7 +26,8 @@ import motion.database.FileTransferListener;
 public class UploadDialog extends BasicDialog {
 	private static String UPLOAD_TITLE = Messages.getString("UploadDialog.UploadTitle"); //$NON-NLS-1$
 	private static String UPLOAD_FILE = Messages.getString("Upload"); //$NON-NLS-1$
-	private static String FILE_PATH = Messages.getString("File") + Messages.COLON; //$NON-NLS-1$
+	private static String FILE_PATH = Messages.getString("File"); //$NON-NLS-1$
+	private static String DIRECTORY_PATH = Messages.getString("Directory"); //$NON-NLS-1$
 	private static String DESCRIPTION = Messages.getString("Description") + Messages.COLON; //$NON-NLS-1$
 	private static String SESSION = Messages.getString("Session") + Messages.COLON; //$NON-NLS-1$
 	private static String CANCEL_UPLOAD = Messages.CANCEL;
@@ -34,12 +37,16 @@ public class UploadDialog extends BasicDialog {
 	private static String PRESS_UPLOAD_MESSAGE = Messages.getString("UploadDialog.PressUploadToSendFile"); //$NON-NLS-1$
 	private static String BROWSE = Messages.getString("Browse"); //$NON-NLS-1$
 	
+	private JRadioButton fileRadioButton;
+	private JRadioButton directoryRadioButton;
 	private JButton browseButton;
 	private JButton uploadButton;
 	private JButton cancelButton;
 	private JTextField filePathText;
 	private JTextField sessionNumber;
 	private JTextField descriptionText;
+	
+	private boolean directoryUpload;
 	
 	private JProgressBar progressBar;
 	
@@ -60,13 +67,26 @@ public class UploadDialog extends BasicDialog {
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		gridBagConstraints.ipadx = 10;
 		
-		// File path
-		JLabel filePathLabel = new JLabel(FILE_PATH);
+		// File
+		fileRadioButton = new JRadioButton(FILE_PATH);
+		fileRadioButton.setSelected(true);
+		directoryUpload = false;
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		formPanel.add(filePathLabel, gridBagConstraints);
-		filePathLabel.setLabelFor(filePathText);
+		formPanel.add(fileRadioButton, gridBagConstraints);
 		
+		// Directory
+		directoryRadioButton = new JRadioButton(DIRECTORY_PATH);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		formPanel.add(directoryRadioButton, gridBagConstraints);
+		
+		// Radio button group
+		ButtonGroup group = new ButtonGroup();
+		group.add(fileRadioButton);
+		group.add(directoryRadioButton);
+		
+		// Path
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		this.filePathText = new JTextField(20);
@@ -75,29 +95,28 @@ public class UploadDialog extends BasicDialog {
 		// Description
 		JLabel descriptionLabel = new JLabel(DESCRIPTION);
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
+		gridBagConstraints.gridy = 2;
 		formPanel.add(descriptionLabel, gridBagConstraints);
 		descriptionLabel.setLabelFor(descriptionText);
 		
 		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 1;
+		gridBagConstraints.gridy = 2;
 		this.descriptionText = new JTextField(20);
 		formPanel.add(descriptionText, gridBagConstraints);
 		
 		// Session number
 		JLabel sessionLabel = new JLabel(SESSION);
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 2;
+		gridBagConstraints.gridy = 3;
 		formPanel.add(sessionLabel, gridBagConstraints);
 		sessionLabel.setLabelFor(sessionNumber);
 		
 		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 2;
+		gridBagConstraints.gridy = 3;
 		this.sessionNumber = new JTextField(3);
 		formPanel.add(sessionNumber, gridBagConstraints);
 		
-		
-		
+		// Browse button
 		this.browseButton = new JButton(BROWSE);
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 0;
@@ -124,11 +143,39 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void addListeners() {
+		this.fileRadioButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (UploadDialog.this.directoryUpload != false) {
+					UploadDialog.this.filePathText.setText("");
+					UploadDialog.this.descriptionText.setEnabled(true);
+				}
+				UploadDialog.this.directoryUpload = false;
+			}
+		});
+		
+		this.directoryRadioButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (UploadDialog.this.directoryUpload != true) {
+					UploadDialog.this.filePathText.setText("");
+					UploadDialog.this.descriptionText.setEnabled(false);
+				}
+				UploadDialog.this.directoryUpload = true;
+			}
+		});
+		
 		this.browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (UploadDialog.this.directoryUpload == false) {
+					fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
+				} else {
+					fileChooser.setAcceptAllFileFilterUsed(false);
+					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				}
 				fileChooser.showOpenDialog(UploadDialog.this);
+				
 				File file = fileChooser.getSelectedFile();
 				if (file != null) {
 					UploadDialog.this.filePathText.setText(file.toString());
@@ -147,11 +194,18 @@ public class UploadDialog extends BasicDialog {
 						@Override
 						protected Void doInBackground() throws InterruptedException {
 							try {
-								WebServiceInstance.getDatabaseConnection().uploadSessionFile(
-										UploadDialog.this.getSession(),
-										UploadDialog.this.getDescription(),
-										UploadDialog.this.getFilePath(),
-										new UploadTransferListener());
+								if (UploadDialog.this.directoryUpload == false) {
+									WebServiceInstance.getDatabaseConnection().uploadSessionFile(
+											UploadDialog.this.getSession(),
+											UploadDialog.this.getDescription(),
+											UploadDialog.this.getFilePath(),
+											new UploadTransferListener());
+								} else {
+									WebServiceInstance.getDatabaseConnection().uploadSessionFiles(
+											UploadDialog.this.getSession(),
+											UploadDialog.this.getFilePath(),
+											new UploadTransferListener());
+								}
 							} catch (Exception e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
