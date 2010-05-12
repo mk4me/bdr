@@ -19,8 +19,9 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import motion.applet.Messages;
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.DatabaseConnection;
 import motion.database.FileTransferListener;
 
 public class UploadDialog extends BasicDialog {
@@ -29,11 +30,11 @@ public class UploadDialog extends BasicDialog {
 	private static String FILE_PATH = Messages.getString("File"); //$NON-NLS-1$
 	private static String DIRECTORY_PATH = Messages.getString("Directory"); //$NON-NLS-1$
 	private static String DESCRIPTION = Messages.getString("Description") + Messages.COLON; //$NON-NLS-1$
-	private static String SESSION = Messages.getString("Session") + Messages.COLON; //$NON-NLS-1$
 	private static String CANCEL_UPLOAD = Messages.CANCEL;
-	private static String WELCOME_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
+	private static String CHOOSE_FILE_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
+	private static String CHOOSE_DIRECTORY_MESSAGE = Messages.getString("UploadDialog.ChooseADirectoryToUpload"); //$NON-NLS-1$
 	private static String MISSING_FILE_PATH_MESSAGE = Messages.getString("UploadDialog.NoFileSelected"); //$NON-NLS-1$
-	private static String MISSING_SESSION_MESSAGE = Messages.getString("UploadDialog.NoSessionNumberEntered"); //$NON-NLS-1$
+	private static String MISSING_ID_MESSAGE = Messages.getString("UploadDialog.NoIdEntered"); //$NON-NLS-1$
 	private static String PRESS_UPLOAD_MESSAGE = Messages.getString("UploadDialog.PressUploadToSendFile"); //$NON-NLS-1$
 	private static String BROWSE = Messages.getString("Browse"); //$NON-NLS-1$
 	
@@ -45,15 +46,25 @@ public class UploadDialog extends BasicDialog {
 	private JTextField filePathText;
 	private JTextField sessionNumber;
 	private JTextField descriptionText;
+	private JLabel idLabel;
 	
 	private boolean directoryUpload;
 	
 	private JProgressBar progressBar;
 	
-	private DatabaseConnection databaseConnection;
+	private TableName tableName;
+	
 	
 	public UploadDialog() {
-		super(UPLOAD_TITLE, WELCOME_MESSAGE);
+		super(UPLOAD_TITLE, CHOOSE_FILE_MESSAGE);
+		this.tableName = TableNamesInstance.SESSION;
+		
+		this.finishUserInterface();
+	}
+	
+	public UploadDialog(TableName tableName) {
+		super(UPLOAD_TITLE,CHOOSE_FILE_MESSAGE);
+		this.tableName = tableName;
 		
 		this.finishUserInterface();
 	}
@@ -104,12 +115,12 @@ public class UploadDialog extends BasicDialog {
 		this.descriptionText = new JTextField(20);
 		formPanel.add(descriptionText, gridBagConstraints);
 		
-		// Session number
-		JLabel sessionLabel = new JLabel(SESSION);
+		// ID number
+		idLabel = new JLabel();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
-		formPanel.add(sessionLabel, gridBagConstraints);
-		sessionLabel.setLabelFor(sessionNumber);
+		formPanel.add(idLabel, gridBagConstraints);
+		idLabel.setLabelFor(sessionNumber);
 		
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 3;
@@ -138,8 +149,10 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void finishUserInterface() {
-		this.setSize(420, 200);
+		this.setSize(430, 200);
 		this.setLocation(200, 200);
+		
+		this.idLabel.setText(this.tableName.toString() + Messages.COLON);
 	}
 	
 	protected void addListeners() {
@@ -149,6 +162,7 @@ public class UploadDialog extends BasicDialog {
 				if (UploadDialog.this.directoryUpload != false) {
 					UploadDialog.this.filePathText.setText("");
 					UploadDialog.this.descriptionText.setEnabled(true);
+					UploadDialog.this.messageLabel.setText(CHOOSE_FILE_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = false;
 			}
@@ -160,6 +174,7 @@ public class UploadDialog extends BasicDialog {
 				if (UploadDialog.this.directoryUpload != true) {
 					UploadDialog.this.filePathText.setText("");
 					UploadDialog.this.descriptionText.setEnabled(false);
+					UploadDialog.this.messageLabel.setText(CHOOSE_DIRECTORY_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = true;
 			}
@@ -194,17 +209,13 @@ public class UploadDialog extends BasicDialog {
 						@Override
 						protected Void doInBackground() throws InterruptedException {
 							try {
+								int id = UploadDialog.this.getId();
+								String path = UploadDialog.this.getFilePath();
 								if (UploadDialog.this.directoryUpload == false) {
-									WebServiceInstance.getDatabaseConnection().uploadSessionFile(
-											UploadDialog.this.getSession(),
-											UploadDialog.this.getDescription(),
-											UploadDialog.this.getFilePath(),
-											new UploadTransferListener());
+									String description = UploadDialog.this.getDescription();
+									uploadFile(id, path, description);
 								} else {
-									WebServiceInstance.getDatabaseConnection().uploadSessionFiles(
-											UploadDialog.this.getSession(),
-											UploadDialog.this.getFilePath(),
-											new UploadTransferListener());
+									uploadDirectory(id, path);
 								}
 							} catch (Exception e1) {
 								// TODO Auto-generated catch block
@@ -220,6 +231,26 @@ public class UploadDialog extends BasicDialog {
 						}
 					};
 					worker.execute();
+				}
+			}
+			
+			private void uploadFile(int id, String path, String description) throws Exception {
+				if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
+					WebServiceInstance.getDatabaseConnection().uploadSessionFile(id, path, description, new UploadTransferListener());
+				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)) {
+					WebServiceInstance.getDatabaseConnection().uploadPerformerFile(id, path, description, new UploadTransferListener());
+				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)) {
+					WebServiceInstance.getDatabaseConnection().uploadTrialFile(id, path, description, new UploadTransferListener());
+				}
+			}
+			
+			private void uploadDirectory(int id, String path) throws Exception {
+				if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
+					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, new UploadTransferListener());
+				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)){
+					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, new UploadTransferListener());
+				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)){
+					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, new UploadTransferListener());
 				}
 			}
 		});
@@ -244,15 +275,15 @@ public class UploadDialog extends BasicDialog {
 		return this.descriptionText.getText();
 	}
 	
-	private int getSession() {
-		int session = -1;
+	private int getId() {
+		int id = -1;
 		try {
-			session = Integer.parseInt(this.sessionNumber.getText());
+			id = Integer.parseInt(this.sessionNumber.getText());
 		} catch (NumberFormatException e) {
-			this.messageLabel.setText(MISSING_SESSION_MESSAGE);
+			this.messageLabel.setText(MISSING_ID_MESSAGE);
 		}
 		
-		return session;
+		return id;
 	}
 	
 	private boolean validateResult() {
@@ -260,8 +291,8 @@ public class UploadDialog extends BasicDialog {
 			this.messageLabel.setText(MISSING_FILE_PATH_MESSAGE);
 			
 			return false;
-		} else if (this.getSession() < 0) {
-			this.messageLabel.setText(MISSING_SESSION_MESSAGE);
+		} else if (this.getId() < 0) {
+			this.messageLabel.setText(MISSING_ID_MESSAGE);
 			
 			return false;
 		}

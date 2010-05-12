@@ -46,14 +46,32 @@ public class MotionApplet extends JApplet {
 		
 		// Create the menu bar
 		JMenuBar appletMenuBar = new JMenuBar();
-		JMenu sessionMenu = new JMenu(Messages.getString("Session")); //$NON-NLS-1$
-		appletMenuBar.add(sessionMenu);
-		JMenuItem uploadItem = new JMenuItem(Messages.getString("Upload")); //$NON-NLS-1$
-		sessionMenu.add(uploadItem);
-		uploadItem.addActionListener(new ActionListener() {
+		JMenu uploadMenu = new JMenu(Messages.getString("Upload")); //$NON-NLS-1$
+		appletMenuBar.add(uploadMenu);
+		JMenuItem uploadPerformerItem = new JMenuItem(Messages.getString("TableName.Performer")); //$NON-NLS-1$
+		uploadMenu.add(uploadPerformerItem);
+		uploadPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Create the upload dialog
-				UploadDialog uploadDialog = new UploadDialog();
+				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.PERFORMER);
+				uploadDialog.setVisible(true);
+			}
+		});
+		JMenuItem uploadSessionItem = new JMenuItem(Messages.getString("TableName.Session")); //$NON-NLS-1$
+		uploadMenu.add(uploadSessionItem);
+		uploadSessionItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the upload dialog
+				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.SESSION);
+				uploadDialog.setVisible(true);
+			}
+		});
+		JMenuItem uploadTrialItem = new JMenuItem(Messages.getString("TableName.Trial")); //$NON-NLS-1$
+		uploadMenu.add(uploadTrialItem);
+		uploadTrialItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the upload dialog
+				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.TRIAL);
 				uploadDialog.setVisible(true);
 			}
 		});
