@@ -152,6 +152,8 @@
     <None Include="res\ListPerformerSessionsXML.xsd" />
     <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
+    <Content Include="res\PreciseXSDWeaver.xslt" />
+    <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
