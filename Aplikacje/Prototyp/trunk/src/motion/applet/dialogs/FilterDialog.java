@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -79,6 +80,7 @@ public class FilterDialog extends BasicDialog {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		gridBagConstraints.ipadx = 10;
+		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
 		
 		JLabel nameLabel = new JLabel(FILTER_NAME);
 		gridBagConstraints.gridx = 0;

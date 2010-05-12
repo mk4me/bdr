@@ -3,6 +3,7 @@ package motion.applet.dialogs;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -44,7 +45,7 @@ public class UploadDialog extends BasicDialog {
 	private JButton uploadButton;
 	private JButton cancelButton;
 	private JTextField filePathText;
-	private JTextField sessionNumber;
+	private JTextField idText;
 	private JTextField descriptionText;
 	private JLabel idLabel;
 	
@@ -53,7 +54,8 @@ public class UploadDialog extends BasicDialog {
 	private JProgressBar progressBar;
 	
 	private TableName tableName;
-	
+	private int recordId;
+	private boolean selectId = true;
 	
 	public UploadDialog() {
 		super(UPLOAD_TITLE, CHOOSE_FILE_MESSAGE);
@@ -69,6 +71,15 @@ public class UploadDialog extends BasicDialog {
 		this.finishUserInterface();
 	}
 	
+	public UploadDialog(TableName tableName, int recordId) {
+		super(UPLOAD_TITLE,CHOOSE_FILE_MESSAGE);
+		this.tableName = tableName;
+		this.recordId = recordId;
+		this.selectId = false;
+		
+		this.finishUserInterface();
+	}
+	
 	protected void constructUserInterface() {
 		// Form area
 		JPanel formPanel = new JPanel();
@@ -77,6 +88,7 @@ public class UploadDialog extends BasicDialog {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 		gridBagConstraints.ipadx = 10;
+		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
 		
 		// File
 		fileRadioButton = new JRadioButton(FILE_PATH);
@@ -120,12 +132,12 @@ public class UploadDialog extends BasicDialog {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
 		formPanel.add(idLabel, gridBagConstraints);
-		idLabel.setLabelFor(sessionNumber);
+		idLabel.setLabelFor(idText);
 		
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 3;
-		this.sessionNumber = new JTextField(3);
-		formPanel.add(sessionNumber, gridBagConstraints);
+		this.idText = new JTextField(3);
+		formPanel.add(idText, gridBagConstraints);
 		
 		// Browse button
 		this.browseButton = new JButton(BROWSE);
@@ -149,10 +161,15 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void finishUserInterface() {
-		this.setSize(430, 200);
+		this.setSize(440, 200);
 		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.tableName.toString() + Messages.COLON);
+		
+		if (this.selectId == false) {
+			this.idText.setText("(" + this.recordId + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+			this.idText.setEditable(false);
+		}
 	}
 	
 	protected void addListeners() {
@@ -161,7 +178,7 @@ public class UploadDialog extends BasicDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.directoryUpload != false) {
 					UploadDialog.this.filePathText.setText("");
-					UploadDialog.this.descriptionText.setEnabled(true);
+					UploadDialog.this.descriptionText.setEditable(true);
 					UploadDialog.this.messageLabel.setText(CHOOSE_FILE_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = false;
@@ -173,7 +190,7 @@ public class UploadDialog extends BasicDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.directoryUpload != true) {
 					UploadDialog.this.filePathText.setText("");
-					UploadDialog.this.descriptionText.setEnabled(false);
+					UploadDialog.this.descriptionText.setEditable(false);
 					UploadDialog.this.messageLabel.setText(CHOOSE_DIRECTORY_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = true;
@@ -277,10 +294,16 @@ public class UploadDialog extends BasicDialog {
 	
 	private int getId() {
 		int id = -1;
-		try {
-			id = Integer.parseInt(this.sessionNumber.getText());
-		} catch (NumberFormatException e) {
-			this.messageLabel.setText(MISSING_ID_MESSAGE);
+		
+		if (this.selectId == true) {
+			try {
+				id = Integer.parseInt(this.idText.getText());
+			} catch (NumberFormatException e) {
+				this.messageLabel.setText(MISSING_ID_MESSAGE);
+			}
+		} else {
+			
+			return this.recordId;
 		}
 		
 		return id;

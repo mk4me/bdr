@@ -3,6 +3,7 @@ package motion.applet.dialogs;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -38,6 +39,7 @@ public class LoginDialog extends BasicDialog {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
 		gridBagConstraints.ipadx = 10;
+		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
 		
 		JLabel loginLabel = new JLabel(USER);
 		gridBagConstraints.gridx = 0;
