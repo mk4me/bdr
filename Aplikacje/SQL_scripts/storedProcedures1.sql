@@ -18,8 +18,9 @@ go
 -- Generic By-ID retrieval
 -- =======================
 
-create procedure get_performer_by_id_xml ( @res_id int )
+alter procedure get_performer_by_id_xml ( @res_id int )
 as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
 				IdPerformer as PerformerID,
 				Imie as FirstName,
@@ -28,8 +29,9 @@ as
 			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
 			for XML AUTO, ELEMENTS
 go
-create procedure get_session_by_id_xml ( @res_id int )
+alter procedure get_session_by_id_xml ( @res_id int )
 as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
 				IdSesja as SessionID,
 				IdUzytkownik as UserID,
@@ -42,8 +44,9 @@ as
 			from Sesja SessionDetailsWithAttributes where IdSesja=@res_id
 			for XML AUTO, ELEMENTS
 go
-create procedure get_trial_by_id_xml ( @res_id int )
+alter procedure get_trial_by_id_xml ( @res_id int )
 as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdObserwacja as TrialID, 
 				IdSesja as SessionID, 
@@ -53,8 +56,9 @@ as
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
 go
-create procedure get_segment_by_id_xml ( @res_id int )
+alter procedure get_segment_by_id_xml ( @res_id int )
 as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdSegment as SegmentID,
 				IdObserwacja as TrialID,
@@ -130,15 +134,17 @@ go
 
 
 
-create procedure list_performers_xml
+alter procedure list_performers_xml
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdPerformer as PerformerID, Imie as FirstName, Nazwisko as LastName
 	from Performer Performer
     for XML AUTO, root ('PerformerList')
 go
 
-create procedure list_performers_attributes_xml
+alter procedure list_performers_attributes_xml
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
 	Imie as FirstName,
@@ -148,8 +154,9 @@ select
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
 
-create procedure list_lab_performers_attributes_xml (@lab_id int)
+alter procedure list_lab_performers_attributes_xml (@lab_id int)
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
 	Imie as FirstName,
@@ -163,6 +170,15 @@ go
 
 -- Session queries
 -- =======================
+
+alter function session_label( @sess_id int )
+returns TABLE as
+return
+select p.Nazwisko+','+p.Imie+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
+from Sesja s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
+go	
+
+
 
 
 create function list_session_attributes ( @sess_id int )
@@ -247,17 +263,20 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id));
 go
 
-
-create procedure list_performer_sessions_xml @perf_id int
+alter procedure list_performer_sessions_xml (@perf_id int)
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
-      Opis_sesji as SessionDescription  from Sesja SessionDetails where IdPerformer=@perf_id
+      Opis_sesji as SessionDescription, (select * from session_label(IdSesja)) as SessionLabel
+      from Sesja SessionDetails where IdPerformer=@perf_id
       for XML AUTO, root ('PerformerSessionList')
 go
 
-create procedure list_performer_sessions_attributes_xml @perf_id int
+
+alter procedure list_performer_sessions_attributes_xml @perf_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
@@ -266,14 +285,15 @@ as
 		IdPerformer as PerformerID,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
+		(select * from session_label(IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdPerformer=@perf_id
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
-
 go
 
-create procedure list_lab_sessions_attributes_xml @lab_id int
+alter procedure list_lab_sessions_attributes_xml @lab_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
@@ -282,6 +302,7 @@ as
 		IdPerformer as PerformerID,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
+		(select * from session_label(IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdLaboratorium=@lab_id
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
@@ -348,8 +369,9 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wao.IdObserwacja = @trial_id ));
 go
 
-create procedure list_session_trials_xml @sess_id int
+alter procedure list_session_trials_xml @sess_id int
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdObserwacja as TrialID,
 	IdSesja as SessionID,
@@ -359,8 +381,9 @@ from Obserwacja TrialDetails where IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
 
-create procedure list_session_trials_attributes_xml @sess_id int
+alter procedure list_session_trials_attributes_xml @sess_id int
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select 
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
@@ -438,10 +461,9 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSegment = @segment_id));
 go
 
-select * from list_segment_attributes_uniform (1)
-
-create procedure list_trial_segments_xml @trial_id int
+alter procedure list_trial_segments_xml @trial_id int
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdSegment as SegmentID,
 	IdObserwacja as TrialID,
@@ -452,8 +474,9 @@ from Segment SegmentDetails where IdObserwacja=@trial_id
       for XML AUTO, root ('TrailSegmentList')
 go
 
-create procedure list_trial_segments_attributes_xml @trial_id int
+alter procedure list_trial_segments_attributes_xml @trial_id int
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select 
 	IdSegment as SegmentID,
 	IdObserwacja as TrialID,
@@ -485,26 +508,30 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPlik = @file_id
 go
 
-create procedure list_performer_files_xml @perf_id int
+alter procedure list_performer_files_xml @perf_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdPerformer=@perf_id
 	for XML AUTO, root ('FileList')
 go
 
-create procedure list_session_files_xml @sess_id int
+alter procedure list_session_files_xml @sess_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdSesja=@sess_id
 	for XML AUTO, root ('FileList')
 go
 
-create procedure list_trial_files_xml @trial_id int
+alter procedure list_trial_files_xml @trial_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdObserwacja=@trial_id
 	for XML AUTO, root ('FileList')
 go
 
-create procedure list_performer_files_attributes_xml @perf_id int
+alter procedure list_performer_files_attributes_xml @perf_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
 	IdPlik as FileID,
 	Nazwa_pliku as FileName,
@@ -514,8 +541,9 @@ as
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
-create procedure list_session_files_attributes_xml @sess_id int
+alter procedure list_session_files_attributes_xml @sess_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
 	IdPlik as FileID,
 	Nazwa_pliku as FileName,
@@ -525,8 +553,9 @@ as
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
-create procedure list_trial_files_attributes_xml @trial_id int
+alter procedure list_trial_files_attributes_xml @trial_id int
 as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
 		IdPlik as FileID,
 		Nazwa_pliku as FileName,
@@ -543,8 +572,9 @@ go
 -- Metadata queries
 -- ===================
 
-create procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
+alter procedure list_attributes_defined( @att_group varchar(100), @entity_kind varchar(20) )
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName
 from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
@@ -553,8 +583,9 @@ for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
 
 go
 
-create procedure list_attribute_groups_defined( @entity_kind varchar(20) )
+alter procedure list_attribute_groups_defined( @entity_kind varchar(20) )
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	Nazwa as AttributeGroupName, Opisywana_encja as DescribedEntity
 from Grupa_atrybutow
@@ -564,14 +595,16 @@ for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinit
 go
 
 
-create procedure list_motion_kinds_defined
+alter procedure list_motion_kinds_defined
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdRodzaj_ruchu as MotionKindID, Nazwa as MotionKindName from Rodzaj_ruchu
 for XML RAW ('MotionKindDefinition'), ELEMENTS, root ('MotionKindDefinitionList')
 
 go
-create procedure list_session_groups_defined
+alter procedure list_session_groups_defined
 as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
 for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
 go

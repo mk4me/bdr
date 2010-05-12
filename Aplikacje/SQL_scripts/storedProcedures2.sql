@@ -82,7 +82,7 @@ exec dbo.evaluate_generic_query_uniform @filters,  1,  1,  0,  0
 
 
 
-create procedure evaluate_generic_query(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
+alter procedure evaluate_generic_query(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -119,7 +119,7 @@ begin
 	declare @whereClause varchar (1000);
 	set @whereClause = ' where ';
 	declare @selectClause varchar (1000);
-	set @selectClause = 'select ';
+	set @selectClause = 'with XMLNAMESPACES (DEFAULT ''http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService'') select ';
 	declare @leftOperandCode varchar (100);
 	declare @sql as nvarchar(2500);
 	
@@ -248,7 +248,7 @@ begin
 end
 go
 
-create procedure evaluate_generic_query_uniform(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
+alter procedure evaluate_generic_query_uniform(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -285,7 +285,7 @@ begin
 	declare @whereClause varchar (1000);
 	set @whereClause = ' where ';
 	declare @selectClause varchar (1000);
-	set @selectClause = 'select ';
+	set @selectClause = 'with XMLNAMESPACES (DEFAULT ''http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService'') select ';
 	declare @leftOperandCode varchar (100);
 	declare @sql as nvarchar(2500);
 	

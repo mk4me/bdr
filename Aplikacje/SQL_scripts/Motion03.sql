@@ -5,7 +5,8 @@
         IdGrupa_atrybutow    int NOT NULL,
         Nazwa                varchar(100) NOT NULL,
         Typ_danych           varchar(20) NOT NULL,
-        Wyliczeniowy		bit
+        Wyliczeniowy		bit NULL,
+        Plugin varchar(100) NULL
  )
 go
  
