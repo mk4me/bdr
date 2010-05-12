@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
-	<s:include xmlns:s="http://www.w3.org/2001/XMLSchema" schemaLocation="GetPerformerByIdXML.xsd"/>
+	<xsd:include xmlns:xsd="http://www.w3.org/2001/XMLSchema" schemaLocation="GetPerformerByIdXML.xsd"/>
 	<xs:element name="GetPerformerByIdXML">
 		<xs:complexType>
 			<xs:sequence>
@@ -14,7 +14,7 @@
 				<xs:element minOccurs="0" maxOccurs="1" name="GetPerformerByIdXMLResult">
 					<xs:complexType>
 						<xs:sequence>
-							<s:element xmlns:s="http://www.w3.org/2001/XMLSchema" ref="tns:PerformerDetailsWithAttributes"/>
+							<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" ref="tns:PerformerDetailsWithAttributes"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>

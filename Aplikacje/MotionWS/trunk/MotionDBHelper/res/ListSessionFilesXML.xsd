@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="SessionFileList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:include schemaLocation="FileListType.xsd" />
-  <s:element name="FileList" type="FileListType">
-  </s:element>
-</s:schema>
+<xsd:schema id="SessionFileList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:include schemaLocation="FileListType.xsd" />
+  <xsd:element name="FileList" type="FileListType">
+  </xsd:element>
+</xsd:schema>

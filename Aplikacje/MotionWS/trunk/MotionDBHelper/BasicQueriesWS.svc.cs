@@ -7,10 +7,12 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Xml;
+using System.Security.Permissions;
 
 namespace MotionDBWebServices
 {
     [ServiceBehavior (Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")]
+ //   [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)] 
     public class BasicQueriesWS : DatabaseAccessService, IBasicQueriesWS
     {
         // GENERIC QUERIES
@@ -186,6 +188,44 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        public string GetSessionLabel(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+            bool found = false;
+            string res = "";
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select * from session_label(@sess_id)";
+                SqlParameter resId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    res = dr[0].ToString();
+                    found = true;
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (!found)
+            {
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session");
+                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionLabel")));
+            }
+            //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+            return res;
+        }
+
         public XmlElement GetTrialByIdXML(int id)
         {
             XmlDocument xd = new XmlDocument();
@@ -257,6 +297,9 @@ namespace MotionDBWebServices
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return xd.DocumentElement;
         }
+
+
+
 
         // PERFORMER QUERIES
         public XmlElement ListPerformersXML()
@@ -394,7 +437,7 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Name = @"DBPAWELL\applet_user")]
         public XmlElement ListPerformerSessionsWithAttributesXML(int performerID)
         {
             XmlDocument xd = new XmlDocument();

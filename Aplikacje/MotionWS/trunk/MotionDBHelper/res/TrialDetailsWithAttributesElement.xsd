@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <s:include schemaLocation="AttributesElement.xsd" />
-    <s:element name="TrialDetailsWithAttributes">
-      <s:complexType>
-        <s:sequence>
-          <s:element name="TrialID" type="s:int" />
-          <s:element name="SessionID" type="s:int" />
-          <s:element name="TrialDescription" type="s:string" />
-          <s:element name="Duration" type="s:int" />
-          <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
-        </s:sequence>
-      </s:complexType>
-    </s:element>
-</s:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+    <xsd:element name="TrialDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="TrialID" type="xsd:int" />
+          <xsd:element name="SessionID" type="xsd:int" />
+          <xsd:element name="TrialDescription" type="xsd:string" />
+          <xsd:element name="Duration" type="xsd:int" />
+          <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

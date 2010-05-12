@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-      <s:element name="PerformerList">
-        <s:complexType>
-          <s:sequence>
-            <s:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
-              <s:complexType>
-                <s:attribute name="PerformerID" type="s:int" />
-                <s:attribute name="FirstName" type="s:string" />
-                <s:attribute name="LastName" type="s:string" />
-              </s:complexType>
-            </s:element>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-</s:schema>
+<xsd:schema id="PerformerList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+      <xsd:element name="PerformerList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="PerformerID" type="xsd:int" />
+                <xsd:attribute name="FirstName" type="xsd:string" />
+                <xsd:attribute name="LastName" type="xsd:string" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>

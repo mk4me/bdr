@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="FileWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+<xsd:schema id="FileWithAttributesList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
  
-  <s:include schemaLocation="AttributesElement.xsd" />
-      <s:element name="FileWithAttributesList">
-        <s:complexType>
-          <s:sequence>
-            <s:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-              <s:complexType>
-                <s:sequence>
-                  <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
-                </s:sequence>
-                <s:attribute name="FileID" type="s:int" />
-                <s:attribute name="FileName" type="s:string" />
-                <s:attribute name="FileDescription" type="s:string" />
-              </s:complexType>
-            </s:element>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-</s:schema>
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+      <xsd:element name="FileWithAttributesList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+                <xsd:attribute name="FileID" type="xsd:int" />
+                <xsd:attribute name="FileName" type="xsd:string" />
+                <xsd:attribute name="FileDescription" type="xsd:string" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>

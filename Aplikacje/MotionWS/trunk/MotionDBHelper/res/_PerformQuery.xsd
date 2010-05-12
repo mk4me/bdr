@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="Result" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:element name="Result">
-    <s:complexType>
-    <s:sequence>
-      <s:any minOccurs="0" maxOccurs="unbounded" />
-    </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="Result" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="Result">
+    <xsd:complexType>
+    <xsd:sequence>
+      <xsd:any minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

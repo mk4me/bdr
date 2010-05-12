@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:complexType name="FileListType">
-      <s:sequence>
-        <s:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
-          <s:complexType>
-            <s:attribute name="FileID" type="s:int" />
-            <s:attribute name="FileName" type="s:string" />
-            <s:attribute name="FileDescription" type="s:string" />            
-          </s:complexType>
-        </s:element>
-      </s:sequence>
-    </s:complexType>
-</s:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:complexType name="FileListType">
+      <xsd:sequence>
+        <xsd:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:attribute name="FileID" type="xsd:int" />
+            <xsd:attribute name="FileName" type="xsd:string" />
+            <xsd:attribute name="FileDescription" type="xsd:string" />            
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

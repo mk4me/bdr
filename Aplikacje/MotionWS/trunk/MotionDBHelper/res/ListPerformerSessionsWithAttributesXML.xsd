@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerSessionWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <s:include schemaLocation="SessionDetailsWithAttributesElement.xsd" />
-  <s:element name="PerformerSessionWithAttributesList">
-    <s:complexType>
-      <s:sequence>
-        <s:element ref="SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-      </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="PerformerSessionWithAttributesList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="SessionDetailsWithAttributesElement.xsd" />
+  <xsd:element name="PerformerSessionWithAttributesList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

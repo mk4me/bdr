@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="MotionKindDefinitionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:element name="MotionKindDefinitionList" >
-    <s:complexType>
-      <s:sequence>
-        <s:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
-          <s:complexType>
-            <s:sequence>
-              <s:element name="MotionKindID" type="s:int" />
-              <s:element name="MotionKindName" type="s:string" />
-            </s:sequence>
-          </s:complexType>
-        </s:element>
-      </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="MotionKindDefinitionList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="MotionKindDefinitionList" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="MotionKindID" type="xsd:int" />
+              <xsd:element name="MotionKindName" type="xsd:string" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

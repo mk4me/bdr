@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerWithAttributesList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd" />
-  <s:element name="PerformerWithAttributesList">
-    <s:complexType>
-      <s:sequence>
-        <s:element ref="PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-      </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="PerformerWithAttributesList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="PerformerDetailsWithAttributesElement.xsd" />
+  <xsd:element name="PerformerWithAttributesList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="GenericsUniformAttributeQueryResult" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:include schemaLocation="AttributesElement.xsd" />
-  <s:element name="GenericUniformAttributesQueryResult">
-    <s:complexType>
-    <s:sequence>
-      <s:element ref="Attributes" minOccurs="0" maxOccurs="unbounded" />
-    </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="GenericUniformAttributeQueryResult" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+  <xsd:element name="GenericUniformAttributesQueryResult">
+    <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element ref="Attributes" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

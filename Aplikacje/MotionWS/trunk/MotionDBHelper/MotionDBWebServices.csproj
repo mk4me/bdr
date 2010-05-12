@@ -112,12 +112,12 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\BasicQueriesService.wsdl" />
-    <None Include="res\BasicQueriesServiceStandalone.wsdl" />
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSNoImports.wsdl" />
+    <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\BasicQueriesServiceStandalone.wsdl" />
     <None Include="res\GenericQueryUniformXML.xsd" />
-    <None Include="res\GenericQueryXML1.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
     <None Include="res\ListMotionKindsDefined.xsd" />
     <None Include="res\ListAttributeGroupsDefined.xsd" />

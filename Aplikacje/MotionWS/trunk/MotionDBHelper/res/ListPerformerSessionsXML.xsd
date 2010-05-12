@@ -1,20 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="PerformerSessionList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-      <s:element name="PerformerSessionList">
-        <s:complexType>
-          <s:sequence>
-            <s:element name="SessionDetails" minOccurs="0" maxOccurs="unbounded">
-              <s:complexType>
-                <s:attribute name="SessionID" type="s:int" />
-                <s:attribute name="UserID" type="s:int" />
-                <s:attribute name="LabID" type="s:int" />
-                <s:attribute name="MotionKindID" type="s:int" />
-                <s:attribute name="PerformerID" type="s:int" />
-                <s:attribute name="SessionDate" type="s:dateTime" />
-                <s:attribute name="SessionDescription" type="s:string" />
-              </s:complexType>
-            </s:element>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-</s:schema>
+<xsd:schema id="PerformerSessionList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+      <xsd:element name="PerformerSessionList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="SessionDetails" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="UserID" type="xsd:int" />
+                <xsd:attribute name="LabID" type="xsd:int" />
+                <xsd:attribute name="MotionKindID" type="xsd:int" />
+                <xsd:attribute name="PerformerID" type="xsd:int" />
+                <xsd:attribute name="SessionDate" type="xsd:dateTime" />
+                <xsd:attribute name="SessionDescription" type="xsd:string" />
+                <xsd:attribute name="SessionLabel" type="xsd:string" use="optional" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>

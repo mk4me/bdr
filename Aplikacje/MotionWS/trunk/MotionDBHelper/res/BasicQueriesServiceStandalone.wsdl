@@ -2,257 +2,317 @@
 <wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
 	<wsdl:types>
 		<s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
-			<s:include schemaLocation="AttributesElement.xsd"/>
-			<s:element name="GenericQueryResult">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element name="PerformerID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="FirstName" type="s:string" minOccurs="0" maxOccurs="1"/>
-									<s:element name="LastName" type="s:string" minOccurs="0" maxOccurs="1"/>
-									<s:element name="SessionID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="UserID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="LabID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="MotionKindID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="SessionDate" type="s:dateTime" minOccurs="0" maxOccurs="1"/>
-									<s:element name="SessionDescription" type="s:string" minOccurs="0" maxOccurs="1"/>
-									<s:element name="TrialID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="TrialDescription" type="s:string" minOccurs="0" maxOccurs="1"/>
-									<s:element name="Duration" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="SegmentID" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="SegmentName" type="s:string" minOccurs="0" maxOccurs="1"/>
-									<s:element name="StartTime" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="EndTime" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-								</s:sequence>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="AttributesElement.xsd"/>
-			<s:element name="GenericUniformAttributesQueryResult">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="unbounded"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
-			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
-			<s:include schemaLocation="TrialDetailsWithAttributesElement.xsd"/>
-			<s:include schemaLocation="SegmentDetailsWithAttributesElement.xsd"/>
-			<s:element name="PerformerList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="PerformerID" type="s:int"/>
-								<s:attribute name="FirstName" type="s:string"/>
-								<s:attribute name="LastName" type="s:string"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
-			<s:element name="PerformerWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="PerformerDetailsWithAttributesElement.xsd"/>
-			<s:element name="LabPerformerWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="PerformerSessionList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="SessionDetails" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="SessionID" type="s:int"/>
-								<s:attribute name="UserID" type="s:int"/>
-								<s:attribute name="LabID" type="s:int"/>
-								<s:attribute name="MotionKindID" type="s:int"/>
-								<s:attribute name="PerformerID" type="s:int"/>
-								<s:attribute name="SessionDate" type="s:dateTime"/>
-								<s:attribute name="SessionDescription" type="s:string"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
-			<s:element name="PerformerSessionWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="SessionDetailsWithAttributesElement.xsd"/>
-			<s:element name="LabSessionWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="SessionTrialList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="TrialID" type="s:int"/>
-								<s:attribute name="SessionID" type="s:int"/>
-								<s:attribute name="TrialDescription" type="s:string"/>
-								<s:attribute name="Duration" type="s:int"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="TrialDetailsWithAttributesElement.xsd"/>
-			<s:element name="SessionTrialWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-            </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="TrailSegmentList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="SegmentDetails" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="SegmentID" type="s:int"/>
-								<s:attribute name="TrialID" type="s:int"/>
-								<s:attribute name="SegmentName" type="s:string"/>
-								<s:attribute name="StartTime" type="s:int"/>
-								<s:attribute name="EndTime" type="s:int"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="SegmentDetailsWithAttributesElement.xsd"/>
-			<s:element name="TrailSegmentWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element ref="tns:SegmentDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-            </s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="FileListType.xsd"/>
-			<s:element name="FileList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:attribute name="FileID" type="s:int"/>
-								<s:attribute name="FileName" type="s:string"/>
-								<s:attribute name="FileDescription" type="s:string"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:include schemaLocation="AttributesElement.xsd"/>
-			<s:element name="FileWithAttributesList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-								</s:sequence>
-								<s:attribute name="FileID" type="s:int"/>
-								<s:attribute name="FileName" type="s:string"/>
-								<s:attribute name="FileDescription" type="s:string"/>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="Result">
-				<s:complexType>
-					<s:sequence>
-						<s:any minOccurs="0" maxOccurs="unbounded"/>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="AttributeDefinitionList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element name="AttributeName" type="s:string"/>
-									<s:element name="AttributeType" type="s:string"/>
-									<s:element name="AttributeEnum" type="s:int" minOccurs="0" maxOccurs="1"/>
-									<s:element name="AttributeGroupName" type="s:string"/>
-								</s:sequence>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="AttributeGroupDefinitionList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="AttributeGroupDefinition" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element name="AttributeGroupName" type="s:string"/>
-									<s:element name="DescribedEntity" type="s:string"/>
-								</s:sequence>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="SessionGroupDefinitionList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element name="SessionGroupID" type="s:int"/>
-									<s:element name="SessionGroupName" type="s:string"/>
-								</s:sequence>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
-			<s:element name="MotionKindDefinitionList">
-				<s:complexType>
-					<s:sequence>
-						<s:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
-							<s:complexType>
-								<s:sequence>
-									<s:element name="MotionKindID" type="s:int"/>
-									<s:element name="MotionKindName" type="s:string"/>
-								</s:sequence>
-							</s:complexType>
-						</s:element>
-					</s:sequence>
-				</s:complexType>
-			</s:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Attributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="Name" type="xsd:string" use="required"/>
+								<xsd:attribute name="Value" type="xsd:string" use="required"/>
+								<xsd:attribute name="Entity" use="optional">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:enumeration value="performer"/>
+											<xsd:enumeration value="session"/>
+											<xsd:enumeration value="trial"/>
+											<xsd:enumeration value="segment"/>
+											<xsd:enumeration value="file"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:attribute>
+								<xsd:attribute name="AttributeGroup" type="xsd:string" use="required"/>
+								<xsd:attribute name="Type" type="xsd:string" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GenericQueryResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PerformerID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="FirstName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="LastName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="UserID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="MotionKindID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SessionDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="Duration" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SegmentID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SegmentName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="StartTime" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="EndTime" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="GenericUniformAttributesQueryResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PerformerDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PerformerID" type="xsd:int"/>
+						<xsd:element name="FirstName" type="xsd:string"/>
+						<xsd:element name="LastName" type="xsd:string"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SessionDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionID" type="xsd:int"/>
+						<xsd:element name="UserID" type="xsd:int"/>
+						<xsd:element name="LabID" type="xsd:int"/>
+						<xsd:element name="MotionKindID" type="xsd:int"/>
+						<xsd:element name="PerformerID" type="xsd:int"/>
+						<xsd:element name="SessionDate" type="xsd:dateTime"/>
+						<xsd:element name="SessionDescription" type="xsd:string"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+						<xsd:element name="SessionLabel" type="xsd:string" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TrialDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TrialID" type="xsd:int"/>
+						<xsd:element name="SessionID" type="xsd:int"/>
+						<xsd:element name="TrialDescription" type="xsd:string"/>
+						<xsd:element name="Duration" type="xsd:int"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SegmentDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SegmentID" type="xsd:int"/>
+						<xsd:element name="TrialID" type="xsd:int"/>
+						<xsd:element name="SegmentName" type="xsd:string"/>
+						<xsd:element name="StartTime" type="xsd:int"/>
+						<xsd:element name="EndTime" type="xsd:int"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PerformerList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="PerformerID" type="xsd:int"/>
+								<xsd:attribute name="FirstName" type="xsd:string"/>
+								<xsd:attribute name="LastName" type="xsd:string"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PerformerWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LabPerformerWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PerformerSessionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="SessionID" type="xsd:int"/>
+								<xsd:attribute name="UserID" type="xsd:int"/>
+								<xsd:attribute name="LabID" type="xsd:int"/>
+								<xsd:attribute name="MotionKindID" type="xsd:int"/>
+								<xsd:attribute name="PerformerID" type="xsd:int"/>
+								<xsd:attribute name="SessionDate" type="xsd:dateTime"/>
+								<xsd:attribute name="SessionDescription" type="xsd:string"/>
+								<xsd:attribute name="SessionLabel" type="xsd:string" use="optional"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PerformerSessionWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LabSessionWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SessionTrialList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="TrialID" type="xsd:int"/>
+								<xsd:attribute name="SessionID" type="xsd:int"/>
+								<xsd:attribute name="TrialDescription" type="xsd:string"/>
+								<xsd:attribute name="Duration" type="xsd:int"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SessionTrialWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TrailSegmentList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SegmentDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="SegmentID" type="xsd:int"/>
+								<xsd:attribute name="TrialID" type="xsd:int"/>
+								<xsd:attribute name="SegmentName" type="xsd:string"/>
+								<xsd:attribute name="StartTime" type="xsd:int"/>
+								<xsd:attribute name="EndTime" type="xsd:int"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TrailSegmentWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SegmentDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FileList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="FileID" type="xsd:int"/>
+								<xsd:attribute name="FileName" type="xsd:string"/>
+								<xsd:attribute name="FileDescription" type="xsd:string"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FileWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+								</xsd:sequence>
+								<xsd:attribute name="FileID" type="xsd:int"/>
+								<xsd:attribute name="FileName" type="xsd:string"/>
+								<xsd:attribute name="FileDescription" type="xsd:string"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Result">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:any minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AttributeDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="AttributeName" type="xsd:string"/>
+									<xsd:element name="AttributeType" type="xsd:string"/>
+									<xsd:element name="AttributeEnum" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="AttributeGroupName" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AttributeGroupDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="AttributeGroupDefinition" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="AttributeGroupName" type="xsd:string"/>
+									<xsd:element name="DescribedEntity" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SessionGroupDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="SessionGroupID" type="xsd:int"/>
+									<xsd:element name="SessionGroupName" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MotionKindDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="MotionKindID" type="xsd:int"/>
+									<xsd:element name="MotionKindName" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<s:element name="ListPerformerSessions">
 				<s:complexType>
 					<s:sequence>

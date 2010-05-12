@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:element name="Attributes" >
-    <s:complexType>
-      <s:sequence>
-        <s:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
-          <s:complexType>
-            <s:attribute name="Name" type="s:string" use="required" />
-            <s:attribute name="Value" type="s:string" use="required" />
-            <s:attribute name="Entity" use="optional">
-              <s:simpleType>
-                <s:restriction base="s:string">
-                  <s:enumeration value="performer" />
-                  <s:enumeration value="session" />
-                  <s:enumeration value="trial" />
-                  <s:enumeration value="segment" />
-                  <s:enumeration value="file" />
-                </s:restriction>
-              </s:simpleType>
-            </s:attribute>
-            <s:attribute name="AttributeGroup" type="s:string" use="required" />
-            <s:attribute name="Type" type="s:string" use="required" />
-          </s:complexType>
-        </s:element>
-      </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="Attributes" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:attribute name="Name" type="xsd:string" use="required" />
+            <xsd:attribute name="Value" type="xsd:string" use="required" />
+            <xsd:attribute name="Entity" use="optional">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:enumeration value="performer" />
+                  <xsd:enumeration value="session" />
+                  <xsd:enumeration value="trial" />
+                  <xsd:enumeration value="segment" />
+                  <xsd:enumeration value="file" />
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:attribute>
+            <xsd:attribute name="AttributeGroup" type="xsd:string" use="required" />
+            <xsd:attribute name="Type" type="xsd:string" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

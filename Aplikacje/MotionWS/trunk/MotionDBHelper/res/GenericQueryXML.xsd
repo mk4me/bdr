@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="GenericQueryResult" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <s:include schemaLocation="AttributesElement.xsd" />
-  <s:element name="GenericQueryResult">
-    <s:complexType>
-    <s:sequence>
-      <s:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
-        <s:complexType>
-          <s:sequence>
-            <s:element name="PerformerID" type="s:int" minOccurs="0" maxOccurs="1"/>
-            <s:element name="FirstName" type="s:string" minOccurs="0" maxOccurs="1" />
-            <s:element name="LastName" type="s:string"  minOccurs="0" maxOccurs="1"/>
-            <s:element name="SessionID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="UserID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="LabID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="MotionKindID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="SessionDate" type="s:dateTime" minOccurs="0" maxOccurs="1"  />
-            <s:element name="SessionDescription" type="s:string" minOccurs="0" maxOccurs="1"  />
-            <s:element name="TrialID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="TrialDescription" type="s:string" minOccurs="0" maxOccurs="1"  />
-            <s:element name="Duration" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="SegmentID" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="SegmentName" type="s:string" minOccurs="0" maxOccurs="1"  />
-            <s:element name="StartTime" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element name="EndTime" type="s:int" minOccurs="0" maxOccurs="1"  />
-            <s:element ref="Attributes" minOccurs="0" maxOccurs="1" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-    </s:sequence>
-    </s:complexType>
-  </s:element>
-</s:schema>
+<xsd:schema id="GenericQueryResult" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+  <xsd:element name="GenericQueryResult">
+    <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="PerformerID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="FirstName" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="LastName" type="xsd:string"  minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="UserID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="MotionKindID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="SessionDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="Duration" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="SegmentID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="SegmentName" type="xsd:string" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="StartTime" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="EndTime" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

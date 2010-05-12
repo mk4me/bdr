@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<s:schema id="SessionTrialList" xmlns:s="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+<xsd:schema id="SessionTrialList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
 
-      <s:element name="SessionTrialList">
-        <s:complexType>
-          <s:sequence>
-            <s:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
-              <s:complexType>
-                <s:attribute name="TrialID" type="s:int" />
-                <s:attribute name="SessionID" type="s:int" />
-                <s:attribute name="TrialDescription" type="s:string" />
-                <s:attribute name="Duration" type="s:int" />
-              </s:complexType>
-            </s:element>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-</s:schema>
+      <xsd:element name="SessionTrialList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="TrialID" type="xsd:int" />
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="TrialDescription" type="xsd:string" />
+                <xsd:attribute name="Duration" type="xsd:int" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>
