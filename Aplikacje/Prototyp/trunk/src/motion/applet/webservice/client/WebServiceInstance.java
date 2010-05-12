@@ -1,9 +1,10 @@
 package motion.applet.webservice.client;
 
 import motion.database.DatabaseConnection;
+import motion.database.DatabaseProxy;
 
 public class WebServiceInstance {
-	private static DatabaseConnection databaseConnection;
+	private static DatabaseProxy databaseConnection;
 	
 	private WebServiceInstance() {
 		databaseConnection = DatabaseConnection.getInstance();
@@ -11,7 +12,7 @@ public class WebServiceInstance {
 		databaseConnection.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 	
-	public static DatabaseConnection getDatabaseConnection() {
+	public static DatabaseProxy getDatabaseConnection() {
 		if (databaseConnection == null) {
 			new WebServiceInstance();
 		}

@@ -10,6 +10,7 @@ import javax.swing.treetable.JTreeTable;
 
 import motion.applet.models.EntityEditorModel;
 import motion.database.DatabaseConnection;
+import motion.database.DatabaseProxy;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.GenericDescription;
 import motion.database.model.Session;
@@ -25,7 +26,7 @@ public class EntityEditorExample
     public EntityEditorExample() throws Exception {
 	JFrame frame = new JFrame("Entity Editor");
 
-	DatabaseConnection database = DatabaseConnection.getInstance();
+	DatabaseProxy database = DatabaseConnection.getInstance();
 	database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 	database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 
