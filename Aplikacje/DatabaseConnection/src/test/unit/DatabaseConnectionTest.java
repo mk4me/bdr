@@ -11,6 +11,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.Assert;
 import motion.database.DatabaseConnection;
+import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.model.DatabaseFile;
@@ -50,7 +51,7 @@ public class DatabaseConnectionTest {
 	
 	}
 
-	private DatabaseConnection database; 
+	private DatabaseProxy database; 
 	
 	
 	/**
@@ -59,7 +60,9 @@ public class DatabaseConnectionTest {
 	@Before
 	public void setUp() throws Exception {
 		database = DatabaseConnection.getInstance();
-		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
+//		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
+//		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
+		database.setWSCredentials("bzdura", "bzdura", "DBPAWELL");
 		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 

@@ -34,6 +34,7 @@ import motion.database.ws.basicQueriesService.PerformerSessionList.SessionDetail
  *                   &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
  *                   &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                   &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                   &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;/restriction>
  *               &lt;/complexContent>
@@ -103,6 +104,7 @@ public class PerformerSessionList {
      *       &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
      *       &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -127,6 +129,8 @@ public class PerformerSessionList {
         protected String sessionDescription;
         @XmlAttribute(name = "SessionID")
         protected Integer sessionID;
+        @XmlAttribute(name = "SessionLabel")
+        protected String sessionLabel;
         @XmlAttribute(name = "UserID")
         protected Integer userID;
 
@@ -272,6 +276,30 @@ public class PerformerSessionList {
          */
         public void setSessionID(Integer value) {
             this.sessionID = value;
+        }
+
+        /**
+         * Gets the value of the sessionLabel property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getSessionLabel() {
+            return sessionLabel;
+        }
+
+        /**
+         * Sets the value of the sessionLabel property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setSessionLabel(String value) {
+            this.sessionLabel = value;
         }
 
         /**

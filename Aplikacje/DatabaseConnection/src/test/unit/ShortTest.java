@@ -11,6 +11,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import junit.framework.Assert;
 import motion.database.DatabaseConnection;
+import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.model.AttributeName;
@@ -45,7 +46,7 @@ public class ShortTest {
 		System.out.println("============================================================");
 	}
 	
-	private DatabaseConnection database; 
+	private DatabaseProxy database; 
 	
 	
 	/**
@@ -54,21 +55,20 @@ public class ShortTest {
 	@Before
 	public void setUp() throws Exception {
 		database = DatabaseConnection.getInstance();
-		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
+//		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
+//		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
+		database.setWSCredentials("kaczmarski", "Etiopia10", "pjwstk");
 		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 
 	
 	@Test
-	public void testDownloadFile() throws Exception {
+	public void test() throws Exception {
 		
 		beforeTest();
-		
-		SimplePredicate predicate = new SimplePredicate("session", new AttributeName("sessionID", "INTEGER_TYPE"), "=", "1" );
-		Filter filter = new Filter("my filter", predicate);
-		
-		List<? extends Object> result = database.execGenericQuery( filter, new String[]{"session"});
 	
-		System.out.println(result);
+		//database.testNewService();
+		
+//		System.out.println(result);
 	}
 }

@@ -126,8 +126,8 @@ public class GetSessionByIdXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link SessionDetailsWithAttributes }
+         * {@link String }
          * 
          * 
          */

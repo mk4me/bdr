@@ -126,8 +126,8 @@ public class GetSegmentByIdXMLResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link String }
          * {@link SegmentDetailsWithAttributes }
+         * {@link String }
          * 
          * 
          */
