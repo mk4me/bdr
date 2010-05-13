@@ -1,4 +1,4 @@
-package motion.database;
+package motion.database.ws;
 
 import java.io.File;
 import java.lang.reflect.Proxy;
@@ -17,6 +17,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 
+import motion.database.DatabaseProxy;
+import motion.database.DbElementsList;
+import motion.database.FileTransferListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
@@ -35,9 +38,6 @@ import motion.database.model.SessionGroup;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
-import motion.database.ws.DatabaseArrayOfFilterPredicate;
-import motion.database.ws.DatabaseArrayOfInteger;
-import motion.database.ws.DatabaseArrayOfString;
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.ArrayOfString;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList;
@@ -1397,4 +1397,9 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			throw new Exception("Not Initialized. Cannot perform file listing.");
 	}
 */
+	
+	public  String getSessionLabel(int sessionID) throws Exception
+	{
+		return "session label available only in WCF service";
+	}
 }

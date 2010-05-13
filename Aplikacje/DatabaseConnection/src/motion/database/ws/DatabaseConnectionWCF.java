@@ -1,4 +1,4 @@
-package motion.database;
+package motion.database.ws;
 
 import java.io.File;
 import java.lang.reflect.Proxy;
@@ -17,7 +17,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 
-import motion.database.DatabaseConnectionOld.ConnectionState;
+import motion.database.DbElementsList;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
@@ -36,10 +36,6 @@ import motion.database.model.SessionGroup;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
-import motion.database.ws.DatabaseArrayOfFilterPredicate;
-import motion.database.ws.DatabaseArrayOfInteger;
-import motion.database.ws.DatabaseArrayOfString;
-import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.*;
 import motion.database.ws.basicQueriesServiceWCF.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesServiceWCF.AttributeGroupDefinitionList.AttributeGroupDefinition;
@@ -208,71 +204,52 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 //
 //	
 //
-	/* (non-Javadoc)
-	 * @see motion.database.DatabaseProxy#execGenericQuery(motion.database.model.Filter, java.lang.String[])
-	 */
+
 	public  List<GenericResult> execGenericQuery(Filter filter, String[] p_entitiesToInclude) throws Exception
 	{
-		if (this.state == ConnectionState.INITIALIZED)
-		{
-			log.entering( "DatabaseConnection", "listPerformerSessions" );
-	
-			BasicQueriesWS service = new BasicQueriesWS();
-			IBasicQueriesWS port = service.getBasicHttpBindingIBasicQueriesWS();
-			
-			prepareCall(port);
-	
-			//ArrayOfFilterPredicate filter;
-			ArrayOfString entitiesToInclude = new ArrayOfString();//new DatabaseArrayOfString( p_entitiesToInclude ) ;
-			for( String s : p_entitiesToInclude )
-				entitiesToInclude.getString().add( s );
-			
-			ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
-			for ( FilterPredicate f : filter.toFilterPredicateWCF() )
-				arrayOfFilterPredicate.getFilterPredicate().add( f );
-			
-			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
-					arrayOfFilterPredicate,	entitiesToInclude );
+		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "execGenericQuery", this );
+		
+		ArrayOfString entitiesToInclude = new ArrayOfString();
+		for( String s : p_entitiesToInclude )
+			entitiesToInclude.getString().add( s );
+		
+		ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
+		for ( FilterPredicate f : filter.toFilterPredicateWCF() )
+			arrayOfFilterPredicate.getFilterPredicate().add( f );
+		
+		GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
+				arrayOfFilterPredicate,	entitiesToInclude );
 
-			
-			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
-			GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
-			output.add( transformGenericAttributes( ss.getAttributes().get(0), new GenericResult() ) );
-			
-			return output;
-		}
-		else
-			throw new Exception("Not Initialized. Cannot list performers.");
+		
+		DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
+		GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
+		for (Attributes aa : ss.getAttributes() )
+			output.add( transformGenericAttributes( aa, new GenericResult() ) );
+		
+		return output;
 	}
 
 	
+	public  String getSessionLabel(int sessionID) throws Exception
+	{
+		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionLabel", this );
 	
+		return port.getSessionLabel( sessionID );
+	}
 
-	/* (non-Javadoc)
-	 * @see motion.database.DatabaseProxy#listLabPerformersWithAttributes(int)
-	 */
+	
 	public  DbElementsList<Performer> listLabPerformersWithAttributes(int labID) throws Exception
 	{
-		if (this.state == ConnectionState.INITIALIZED)
-		{
-			log.entering( "DatabaseConnection", "listPerformerSessions" );
-	
-			BasicQueriesWS service = new BasicQueriesWS();
-			IBasicQueriesWS port = service.getBasicHttpBindingIBasicQueriesWS();
-			
-			prepareCall(port);
-	
-			ListLabPerformersWithAttributesXMLResult result = port.listLabPerformersWithAttributesXML(labID);
+		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listLabPerformersWithAttributes", this );
 
-			DbElementsList<Performer> output = new DbElementsList<Performer>();
-			
-			for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-					output.add( transformPerformerDetails(s) );
-			
-			return output;
-		}
-		else
-			throw new Exception("Not Initialized. Cannot list performers.");
+		ListLabPerformersWithAttributesXMLResult result = port.listLabPerformersWithAttributesXML(labID);
+
+		DbElementsList<Performer> output = new DbElementsList<Performer>();
+		
+		for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+				output.add( transformPerformerDetails(s) );
+		
+		return output;
 	}
 
 	
@@ -280,8 +257,8 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 	 * @param s
 	 * @return
 	 */
-	private Performer transformPerformerDetails(
-			motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes s) {
+	private Performer transformPerformerDetails(PerformerDetailsWithAttributes s) 
+	{
 		if (s==null)
 			return null;
 		
@@ -299,25 +276,15 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 	 */
 	public HashMap<String, String> listAttributesDefined(String group, String entityKind) throws Exception
 	{
-		if (this.state == ConnectionState.INITIALIZED)
-		{
-			log.entering( "DatabaseConnection", "listAttributesDefined" );
-	
-			BasicQueriesWS service = new BasicQueriesWS();
-			IBasicQueriesWS port = service.getBasicHttpBindingIBasicQueriesWS();
-			
-			prepareCall(port);
+		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listAttributesDefined", this );
+
+		ListAttributesDefinedResult result = port.listAttributesDefined( group, entityKind );
 		
-			ListAttributesDefinedResult result = port.listAttributesDefined( group, entityKind);
-			
-			HashMap<String, String> output = new HashMap<String, String>();
-			for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
-					output.put( a.getAttributeName(), a.getAttributeType() );
-			
-			return output;
-		}
-		else
-			throw new Exception("Not Initialized. Cannot list attributes.");
+		HashMap<String, String> output = new HashMap<String, String>();
+		for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+				output.put( a.getAttributeName(), a.getAttributeType() );
+		
+		return output;
 	}
 
 	
@@ -523,6 +490,8 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 		session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
 		session.put( SessionStaticAttributes.userID, s.getUserID() );
+		session.put( SessionStaticAttributes.sessionLabel, s.getSessionLabel() );
+		
 		transformGenericAttributes( s.getAttributes(), session );
 		return session;
 	}
@@ -599,6 +568,7 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
+	
 
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#listLabSessionsWithAttributes(int)

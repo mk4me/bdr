@@ -62,6 +62,9 @@ public interface DatabaseProxy {
 	public abstract DbElementsList<Performer> listLabPerformersWithAttributes(
 			int labID) throws Exception;
 
+	public  String getSessionLabel(int sessionID) throws Exception;
+
+	
 	@Deprecated
 	public abstract DbElementsList<Session> listPerformerSessions(
 			int performerID) throws Exception;

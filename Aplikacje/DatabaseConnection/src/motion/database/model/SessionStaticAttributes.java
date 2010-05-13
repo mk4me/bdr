@@ -10,5 +10,6 @@ public enum SessionStaticAttributes{
     motionKindID,
     performerID,
     sessionDate,
+    sessionLabel,
     sessionDescription;
 }

@@ -38,6 +38,8 @@ import motion.database.model.TrialStaticAttributes;
 import motion.database.ws.DatabaseArrayOfFilterPredicate;
 import motion.database.ws.DatabaseArrayOfInteger;
 import motion.database.ws.DatabaseArrayOfString;
+import motion.database.ws.DatabaseConnectionOld;
+import motion.database.ws.DatabaseConnectionWCF;
 import motion.database.ws.basicQueriesService.ArrayOfPlainSessionDetails;
 import motion.database.ws.basicQueriesService.ArrayOfString;
 import motion.database.ws.basicQueriesService.AttributeDefinitionList;

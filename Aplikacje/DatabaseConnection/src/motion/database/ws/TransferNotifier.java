@@ -1,7 +1,9 @@
 /**
  * 
  */
-package motion.database;
+package motion.database.ws;
+
+import motion.database.FileTransferListener;
 
 
 

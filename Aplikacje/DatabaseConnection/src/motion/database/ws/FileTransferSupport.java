@@ -1,4 +1,4 @@
-package motion.database;
+package motion.database.ws;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,6 +9,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
+
+import motion.database.FileTransferListener;
 
 
 import com.zehon.FileTransferStatus;
