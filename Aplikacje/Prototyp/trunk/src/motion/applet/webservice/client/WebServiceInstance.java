@@ -7,8 +7,8 @@ public class WebServiceInstance {
 	private static DatabaseProxy databaseConnection;
 	
 	private WebServiceInstance() {
-		databaseConnection = DatabaseConnection.getInstance();
-		databaseConnection.setWSCredentials("applet", "motion#motion2X", "pjwstk");
+		databaseConnection = DatabaseConnection.getInstanceWCF();
+//		databaseConnection.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 		databaseConnection.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 	

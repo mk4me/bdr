@@ -15,6 +15,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import motion.applet.Messages;
+import motion.applet.webservice.client.WebServiceInstance;
 
 public class LoginDialog extends BasicDialog {
 	private static String LOGIN_TITLE = Messages.getString("LoginDialog.LoginTitle"); //$NON-NLS-1$
@@ -23,6 +24,8 @@ public class LoginDialog extends BasicDialog {
 	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
 	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
 	
+	private JTextField loginText;
+	private JPasswordField passwordText;
 	private JButton loginButton;
 	
 	public LoginDialog() {
@@ -46,7 +49,7 @@ public class LoginDialog extends BasicDialog {
 		gridBagConstraints.gridy = 0;
 		loginPanel.add(loginLabel, gridBagConstraints);
 		
-		JTextField loginText = new JTextField(10);
+		loginText = new JTextField(10);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		loginLabel.setLabelFor(loginText);
@@ -57,7 +60,7 @@ public class LoginDialog extends BasicDialog {
 		gridBagConstraints.gridy = 1;
 		loginPanel.add(passwordLabel, gridBagConstraints);
 		
-		JPasswordField passwordText = new JPasswordField(10);
+		passwordText = new JPasswordField(10);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		passwordLabel.setLabelFor(passwordText);
@@ -78,8 +81,14 @@ public class LoginDialog extends BasicDialog {
 	}
 	
 	protected void addListeners() {
+	
+		loginText.setText( "applet_user" );
+		passwordText.setText( "aplet4Motion" );
+		
 		this.loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), "dbpawell");
 				
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.dispose();
