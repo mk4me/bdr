@@ -118,13 +118,6 @@ public class DatabaseConnection {
 
 	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED };
 	
-	private ConnectionState state;
-	private Credentials wsCredentials = new Credentials();
-	private Credentials ftpsCredentials = new Credentials();
-	private Authenticator authenticator;
-	private FileTransferSupport fileTransferSupport = new FileTransferSupport();
-	private boolean fileTransferCancelled;
-
 	private static DatabaseProxy instance;
 	private static Logger log;
 	
@@ -156,12 +149,14 @@ public class DatabaseConnection {
 	public static DatabaseProxy getInstance()
 	{
 		if (instance==null)
-			instance = new DatabaseConnectionOld();
+			instance = new DatabaseConnectionOld(log);
 		return instance;
 	}
-	
-	private DatabaseConnection()
+
+	public static DatabaseProxy getInstanceWCF()
 	{
-		this.state = ConnectionState.UNINITIALIZED;
-	};
+		if (instance==null)
+			instance = new DatabaseConnectionWCF(log);
+		return instance;
+	}
 }

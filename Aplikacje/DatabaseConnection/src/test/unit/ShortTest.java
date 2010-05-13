@@ -54,10 +54,10 @@ public class ShortTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		database = DatabaseConnection.getInstance();
+		database = DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
-//		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
-		database.setWSCredentials("kaczmarski", "Etiopia10", "pjwstk");
+//		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
+		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
 		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 
@@ -67,8 +67,8 @@ public class ShortTest {
 		
 		beforeTest();
 	
-		//database.testNewService();
+		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
 		
-//		System.out.println(result);
+		System.out.println(r);
 	}
 }

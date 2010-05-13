@@ -87,4 +87,51 @@ public class Filter {
 		
 		return filter;
 	}
+
+	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] toFilterPredicateWCF() {
+
+		ArrayList<motion.database.ws.basicQueriesServiceWCF.FilterPredicate> resultFilterPredicates = new ArrayList<motion.database.ws.basicQueriesServiceWCF.FilterPredicate>();
+		resultFilterPredicates.add(fillFilterPredicateWCF(this.predicate, null, null));
+		
+		SimplePredicate currentPredicate = this.predicate;
+		if (currentPredicate.getNextComposition() != null) {
+			do {
+				currentPredicate = (SimplePredicate) currentPredicate.getNextComposition().getPredicate();
+				resultFilterPredicates.add(fillFilterPredicateWCF(currentPredicate, null, resultFilterPredicates.get(resultFilterPredicates.size()-1)));
+			} while (currentPredicate.getNextComposition() != null);
+		}
+		
+		return resultFilterPredicates.toArray(new motion.database.ws.basicQueriesServiceWCF.FilterPredicate[1]);
+	}
+
+
+	private motion.database.ws.basicQueriesServiceWCF.FilterPredicate fillFilterPredicateWCF(SimplePredicate currentPredicate, motion.database.ws.basicQueriesServiceWCF.FilterPredicate parentFilterPredicate, motion.database.ws.basicQueriesServiceWCF.FilterPredicate previousFilterPredicate) {
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate filter = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
+		filter.setPredicateID(Filter.newId());
+		if (parentFilterPredicate == null) {
+			filter.setParentPredicate(0);
+		} else {
+			filter.setParentPredicate(parentFilterPredicate.getPredicateID());
+		}
+		filter.setContextEntity(currentPredicate.getContextEntity().toLowerCase());
+		if (previousFilterPredicate == null) {
+			filter.setPreviousPredicate(0);
+		} else {
+			filter.setPreviousPredicate(previousFilterPredicate.getPredicateID());
+		}
+		if (currentPredicate.getPreviousComposition() == null) {
+			filter.setNextOperator("");
+		} else {
+			//filter.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
+			previousFilterPredicate.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
+			filter.setNextOperator("");
+		}
+		filter.setFeatureName(currentPredicate.getFeature().toString());
+		filter.setOperator(currentPredicate.getOperator());
+		filter.setValue(currentPredicate.getValue());
+		filter.setAggregateEntity("");
+		filter.setAggregateFunction("");
+		
+		return filter;
+	}
 }

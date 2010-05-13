@@ -118,50 +118,19 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 
 	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED };
 	
-	private ConnectionState state;
-	private Credentials wsCredentials = new Credentials();
-	private Credentials ftpsCredentials = new Credentials();
-	private Authenticator authenticator;
-	private FileTransferSupport fileTransferSupport = new FileTransferSupport();
-	private boolean fileTransferCancelled;
+	protected ConnectionState state;
+	protected Credentials wsCredentials = new Credentials();
+	protected Credentials ftpsCredentials = new Credentials();
+	protected Authenticator authenticator;
+	protected FileTransferSupport fileTransferSupport = new FileTransferSupport();
+	protected boolean fileTransferCancelled;
 
-	private static DatabaseConnectionOld instance;
-	private static Logger log;
+	protected Logger log;
 	
-	public static final String LOG_ID = "DatabaseConnection";
-	public static final String LOG_FILE_NAME = "DatabaseConnection.log";
 	
-	static{
-		FileHandler hand;
-		ConsoleHandler cons;
-		try {
-			hand = new FileHandler( LOG_FILE_NAME );
-			cons = new ConsoleHandler();
-			hand.setFormatter( new SimpleFormatter() );
-			
-			log = Logger.getLogger( LOG_ID );
-		    log.addHandler(hand);
-		    log.addHandler( cons );
-		    hand.setLevel( Level.ALL);
-		    cons.setLevel( Level.INFO );
-		    log.setLevel( Level.ALL );
-		    //log.setFilter(null);
-		    log.finer( "Database Connection Log created" );
-		} catch (Exception e) {
-			System.out.println("Cannot create logger!");
-			e.printStackTrace();
-		}
-	}
-	
-	public static DatabaseProxy getInstance()
+	public DatabaseConnectionOld(Logger log)
 	{
-		if (instance==null)
-			instance = new DatabaseConnectionOld();
-		return instance;
-	}
-	
-	public DatabaseConnectionOld()
-	{
+		this.log = log;
 		this.state = ConnectionState.UNINITIALIZED;
 	};
 	
@@ -179,9 +148,8 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			
 			protected PasswordAuthentication getPasswordAuthentication() {
 				
-				System.err.println("Serwer pyta o has³o. (Odpowiedzia³em)" );
+				System.err.println("Serwer pyta o hasÅ‚o. (OdpowiedziaÅ‚em)" );
 				
-				Logger log = Logger.getLogger( DatabaseConnectionOld.LOG_ID );
 				log.entering("Authenticator", "getPasswordAuthentication");
 				log.fine( "Host: " + this.getRequestingHost() );
 				log.fine( "Prompt: " + this.getRequestingPrompt() );
@@ -190,9 +158,9 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 				log.fine( "Site: " + this.getRequestingSite() );
 				log.fine( "Requestor Type: " + this.getRequestorType() );
 				
-				// W niektórych przypadkach przed username trzeba podaæ domain oddzielone backslashem
-				// my te¿ tak robimy na wszelki wypadek 
-				return new PasswordAuthentication(instance.wsCredentials.domainName+"\\"+instance.wsCredentials.userName, instance.wsCredentials.password.toCharArray() );
+				// W niektï¿½rych przypadkach przed username trzeba podaï¿½ domain oddzielone backslashem
+				// my teï¿½ tak robimy na wszelki wypadek 
+				return new PasswordAuthentication(wsCredentials.domainName+"\\"+wsCredentials.userName, wsCredentials.password.toCharArray() );
 			  }
 		};
 		
@@ -214,7 +182,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 		this.ftpsCredentials.setCredentials(userName, password, null);
 	}
 	
-	private void prepareCall(BindingProvider port)
+	protected void prepareCall(BindingProvider port)
 	{
 //		((BindingProvider)port).getRequestContext().put( BindingProvider.USERNAME_PROPERTY, this.wsCredentials.domainName+"\\"+this.wsCredentials.userName);
 //       ((BindingProvider)port).getRequestContext().put( BindingProvider.PASSWORD_PROPERTY, this.wsCredentials.password );
@@ -240,6 +208,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 		log.exiting( "DatabaseConnection", "testConnection", true );
 		
 		return true;
+
 	}
 	
 	/* (non-Javadoc)
@@ -250,7 +219,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 		this.fileTransferSupport.registerUploadListener(listener);
 	}
 	
-	private void putFile(String localFilePath, String destRemoteFolder, FileTransferListener listener) throws FileTransferException
+	protected void putFile(String localFilePath, String destRemoteFolder, FileTransferListener listener) throws FileTransferException
 	{
 		fileTransferSupport.resetUploadListeners();
 		if (listener != null)
@@ -274,7 +243,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 		fileTransferCancelled = true;
 	}
 	
-	private void createRemoteFolder( String newFolder, String destRemoteFolder ) throws FileTransferException
+	protected void createRemoteFolder( String newFolder, String destRemoteFolder ) throws FileTransferException
 	{
 		int status = FTPs.createFolder( newFolder, destRemoteFolder, 
 				this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password);
@@ -308,7 +277,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			throw new Exception("Not Initialized. Cannot perform file uploading.");
 	}
 
-	private String getUniqueFolderName() {
+	protected String getUniqueFolderName() {
 		return wsCredentials.userName + System.currentTimeMillis()+"/";
 	}
 
@@ -359,7 +328,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 
 		@Override
 		public void transferComplete(String arg0) {
-			System.out.println( "Transfer zakoñczono: " + arg0);
+			System.out.println( "Transfer zakoï¿½czono: " + arg0);
 		}
 
 		@Override
@@ -369,7 +338,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 
 		@Override
 		public void transferStart(String arg0) {
-			System.out.println( "Transfer rozpoczêto: " + arg0);
+			System.out.println( "Transfer rozpoczï¿½to: " + arg0);
 		}
 	}
 	
