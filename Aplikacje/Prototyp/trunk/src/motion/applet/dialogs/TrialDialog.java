@@ -30,7 +30,7 @@ public class TrialDialog extends BasicDialog {
 	private static String WELCOME_MESSAGE = "Create new trial.";
 	private static String CREATE = Messages.CREATE;
 	private static String CANCEL = Messages.CANCEL;
-	private static String SESSION_ATTRIBUTES_LABEL = "Performer" + Messages.COLON;
+	private static String SESSION_ATTRIBUTES_LABEL = "Trial" + Messages.COLON;
 	private static String MISSING_TRIAL_DESCRIPTION_MESSAGE = "Please input the description of the trial.";
 	private static String MISSING_TRIAL_DURATION_MESSAGE = "Please input the duration of the trial.";
 	

@@ -12,9 +12,9 @@ import motion.applet.database.TableNamesInstance;
 
 public class AppletToolBar extends JToolBar {
 	private TableName[] tableNames = {TableNamesInstance.PERFORMER,
-			TableNamesInstance.SESSION,
-			TableNamesInstance.TRIAL,
-			TableNamesInstance.PATIENT};
+			TableNamesInstance.SESSION};
+			//TableNamesInstance.TRIAL,
+			//TableNamesInstance.PATIENT};
 	private JComboBox tableComboBox = new JComboBox(tableNames);
 	
 	public AppletToolBar() {

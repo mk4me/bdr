@@ -37,6 +37,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_CREATE_TRIAL = "Create new trial";
 	private static String MENU_UPLOAD = "Upload file";
+	private static String MENU_VIEW_SESSIONS = "View sessions";
+	private static String MENU_VIEW_TRIALS = "View trials";
 	
 	public RightSplitPanel() {
 		super();
@@ -68,6 +70,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					final Object value = table.getModel().getValueAt(row, 0); // ID column.
 					
 					if (RightSplitPanel.this.tableName.equals(TableNamesInstance.PERFORMER)) {
+						// New Session context menu.
 						JMenuItem createSessionMenuItem = new JMenuItem(MENU_CREATE_SESSION);
 						popupMenu.add(createSessionMenuItem);
 						
@@ -78,7 +81,18 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 								sessionDialog.setVisible(true);
 							}
 						});
+						// View Performer sessions context menu
+						JMenuItem viewSessionsMenuItem = new JMenuItem(MENU_VIEW_SESSIONS);
+						popupMenu.add(viewSessionsMenuItem);
+						
+						viewSessionsMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								RightSplitPanel.this.showTable(TableNamesInstance.SESSION, Integer.parseInt(value.toString()));
+							}
+						});
 					} else if (RightSplitPanel.this.tableName.equals(TableNamesInstance.SESSION)) {
+						// New Trial context menu.
 						JMenuItem createTrialMenuItem = new JMenuItem(MENU_CREATE_TRIAL);
 						popupMenu.add(createTrialMenuItem);
 						
@@ -89,8 +103,18 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 								trialDialog.setVisible(true);
 							}
 						});
+						// View Session trials context menu
+						JMenuItem viewTrialsMenuItem = new JMenuItem(MENU_VIEW_TRIALS);
+						popupMenu.add(viewTrialsMenuItem);
+						
+						viewTrialsMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								RightSplitPanel.this.showTable(TableNamesInstance.TRIAL, Integer.parseInt(value.toString()));
+							}
+						});
 					}
-					
+					// Upload context menu.
 					JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
 					popupMenu.add(uploadMenuItem);
 					
@@ -112,6 +136,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		this.tableName = tableName;
 		try {
 			tableModel = new BasicTable(tableName);
+			table.setModel(tableModel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void showTable(TableName tableName, int recordId) {
+		this.tableName = tableName;
+		try {
+			tableModel = new BasicTable(tableName, recordId);
 			table.setModel(tableModel);
 		} catch (Exception e) {
 			e.printStackTrace();

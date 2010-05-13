@@ -19,6 +19,7 @@ import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
 import motion.database.model.Performer;
 import motion.database.model.Session;
+import motion.database.model.Trial;
 
 public class BasicTable extends AbstractTableModel {
 	private Object[][] contents;
@@ -28,10 +29,20 @@ public class BasicTable extends AbstractTableModel {
 	private java.sql.Connection connection;
 	private TableName tableName;
 	private String databaseName;
+	private int recordId;
 	
 	public BasicTable(TableName tableName) {
 		super();
 		this.tableName = tableName;
+		this.recordId = -1;
+		
+		getTableContentsFromAttributes();
+	}
+	
+	public BasicTable(TableName tableName, int recordId) {
+		super();
+		this.tableName = tableName;
+		this.recordId = recordId;
 		
 		getTableContentsFromAttributes();
 	}
@@ -115,7 +126,9 @@ public class BasicTable extends AbstractTableModel {
 			listPerformers();
 		} else if (tableName.equals(TableNamesInstance.SESSION)) {
 			listSessions();
-		} else {
+		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+			listTrials();
+		}/* else {
 			Connector connector = new Connector();
 			this.databaseName = connector.getDatabaseName();
 			this.connection = connector.openConnection();
@@ -126,7 +139,7 @@ public class BasicTable extends AbstractTableModel {
 				e.printStackTrace();
 			}
 			connector.closeConnection();
-		}
+		}*/
 	}
 	
 	private void listPerformers() {
@@ -152,11 +165,41 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listSessions() {
 		try {
-			DbElementsList<Session> sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+			DbElementsList<Session> sessions = new DbElementsList<Session>();
+			if (this.recordId > -1) {
+				sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
+			} else {
+				sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+			}
 			for (Session s : sessions) {
 				ArrayList<Object> cellList = new ArrayList<Object>();
 				for (AttributeName a : tableName.getAllAttributes()) {
 					EntityAttribute entityAttribute = s.get(a.toString());
+					if (entityAttribute != null) {
+						cellList.add(entityAttribute.value);
+					} else {
+						cellList.add(null);
+					}
+				}
+				this.contents2.add(cellList);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void listTrials() {
+		try {
+			DbElementsList<Trial> trials = new DbElementsList<Trial>();
+			if (this.recordId > -1) {
+				trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
+			}
+			
+			for (Trial t : trials) {
+				ArrayList<Object> cellList = new ArrayList<Object>();
+				for (AttributeName a : tableName.getAllAttributes()) {
+					EntityAttribute entityAttribute = t.get(a.toString());
 					if (entityAttribute != null) {
 						cellList.add(entityAttribute.value);
 					} else {
