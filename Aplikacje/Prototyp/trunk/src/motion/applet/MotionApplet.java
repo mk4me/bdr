@@ -28,6 +28,10 @@ public class MotionApplet extends JApplet {
 	public void init() {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		
+		// Set language
+		//Messages.setLanguagePolish();
+		Messages.setLanguageEnglish();
+		
 		loginUser();
 		initUserInterface();
 		
@@ -47,9 +51,7 @@ public class MotionApplet extends JApplet {
 	}
 	
 	private void initUserInterface() {
-		// Set language
-		//Messages.setLanguagePolish();
-		Messages.setLanguageEnglish();
+		
 		
 		// Create the menu bar
 		JMenuBar appletMenuBar = new JMenuBar();

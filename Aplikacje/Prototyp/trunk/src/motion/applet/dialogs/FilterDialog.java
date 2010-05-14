@@ -33,7 +33,7 @@ public class FilterDialog extends BasicDialog {
 	private static String QUERY_LABEL = Messages.getString("FilterDialog.Query") + Messages.COLON; //$NON-NLS-1$
 	private static String ADD_FILTER = Messages.ADD;
 	private static String CANCEL_FILTER = Messages.CANCEL;
-	private static String EDIT_FILTER = Messages.EDIT;
+	private static String UPDATE_FILTER = Messages.UPDATE;
 	private static String ADD_CONDITION = Messages.ADD_SIGN;
 	private static String WELCOME_MESSAGE = Messages.getString("FilterDialog.AddNewFilter"); //$NON-NLS-1$
 	private static String MISSING_NAME_MESSAGE = Messages.getString("FilterDialog.PleaseTypeTheNameOfTheFilter"); //$NON-NLS-1$
@@ -68,7 +68,7 @@ public class FilterDialog extends BasicDialog {
 		this(TableNamesInstance.toTableName(filter.getPredicate().getContextEntity()));
 		this.nameText.setText(filter.getName());
 		this.predicate = filter.getPredicate();
-		this.addButton.setText(EDIT_FILTER);
+		this.addButton.setText(UPDATE_FILTER);
 		this.setPredicate(this.predicate);
 	}
 	
