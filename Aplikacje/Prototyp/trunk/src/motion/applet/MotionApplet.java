@@ -28,6 +28,7 @@ public class MotionApplet extends JApplet {
 	public void init() {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		
+		loginUser();
 		initUserInterface();
 		
 		//Connector connectorTest = new Connector();
@@ -37,6 +38,12 @@ public class MotionApplet extends JApplet {
 		//wsClient.callWebService();
 		
 		//ConnectorInstance connectorInstance = new ConnectorInstance();
+	}
+	
+	private void loginUser() {
+		// Create the login dialog
+		LoginDialog loginDialog = new LoginDialog();
+		loginDialog.setVisible(true);
 	}
 	
 	private void initUserInterface() {
@@ -115,10 +122,5 @@ public class MotionApplet extends JApplet {
 		this.getContentPane().add(leftRightSplitPane);
 		
 		appletToolBar.addTableComboBoxListener(rightPanel);
-		
-		// Create the login dialog
-		LoginDialog loginDialog = new LoginDialog();
-		loginDialog.setVisible(true);
-		
 	}
 }
