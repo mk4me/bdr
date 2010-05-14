@@ -45,7 +45,7 @@ public class IBasicQueriesWSListSessionTrialsWithAttributesXMLQueryExceptionFaul
     /**
      * 
      * @return
-     *     returns fault bean: motion.database.ws.BasicQueriesServiceWCF.QueryException
+     *     returns fault bean: motion.database.ws.basicQueriesServiceWCF.QueryException
      */
     public QueryException getFaultInfo() {
         return faultInfo;
