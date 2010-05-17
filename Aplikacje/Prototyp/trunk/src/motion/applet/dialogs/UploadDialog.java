@@ -10,6 +10,7 @@ import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +24,15 @@ import motion.applet.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.model.GenericDescription;
+import motion.database.model.Performer;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.Session;
+import motion.database.model.SessionStaticAttributes;
+import motion.database.model.Trial;
+import motion.database.model.TrialStaticAttributes;
 
 public class UploadDialog extends BasicDialog {
 	private static String UPLOAD_TITLE = Messages.getString("UploadDialog.UploadTitle"); //$NON-NLS-1$
@@ -45,9 +54,9 @@ public class UploadDialog extends BasicDialog {
 	private JButton uploadButton;
 	private JButton cancelButton;
 	private JTextField filePathText;
-	private JTextField idText;
 	private JTextField descriptionText;
 	private JLabel idLabel;
+	private JComboBox entityComboBox;
 	
 	private boolean directoryUpload;
 	
@@ -132,12 +141,13 @@ public class UploadDialog extends BasicDialog {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
 		formPanel.add(idLabel, gridBagConstraints);
-		idLabel.setLabelFor(idText);
 		
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 3;
-		this.idText = new JTextField(3);
-		formPanel.add(idText, gridBagConstraints);
+		
+		entityComboBox = new JComboBox();
+		formPanel.add(entityComboBox, gridBagConstraints);
+		
 		
 		// Browse button
 		this.browseButton = new JButton(BROWSE);
@@ -161,14 +171,41 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void finishUserInterface() {
-		this.setSize(440, 200);
+		this.setSize(440, 210);
 		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.tableName.toString() + Messages.COLON);
-		
-		if (this.selectId == false) {
-			this.idText.setText("(" + this.recordId + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-			this.idText.setEditable(false);
+		try {
+			if (this.selectId == false) {
+				entityComboBox.setEnabled(false);
+				if (this.tableName.equals(TableNamesInstance.SESSION)) {
+					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getSessionById(this.recordId));
+				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getPerformerById(this.recordId));
+				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getTrialById(this.recordId));
+				}
+			} else {
+				if (this.tableName.equals(TableNamesInstance.SESSION)) {
+					DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+					for (Session s : list) {
+						entityComboBox.addItem(s);
+					}
+				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+					DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listPerformersWithAttributes();
+					for (Performer p : list) {
+						entityComboBox.addItem(p);
+					}
+				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+					DbElementsList<Trial> list = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(1);
+					for (Trial t : list) {
+						entityComboBox.addItem(t);
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -297,10 +334,28 @@ public class UploadDialog extends BasicDialog {
 		
 		if (this.selectId == true) {
 			try {
-				id = Integer.parseInt(this.idText.getText());
+				if (this.tableName.equals(TableNamesInstance.SESSION)) {
+					id = Integer.parseInt(((Session) this.entityComboBox.getSelectedItem()).
+							get(SessionStaticAttributes.sessionID.toString()).
+							value.toString());
+				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+					id = Integer.parseInt(((Performer) this.entityComboBox.getSelectedItem()).
+							get(PerformerStaticAttributes.performerID.toString()).
+							value.toString());
+				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+					id = Integer.parseInt(((Trial) this.entityComboBox.getSelectedItem()).
+							get(TrialStaticAttributes.trialID.toString()).
+							value.toString());
+				}
 			} catch (NumberFormatException e) {
 				this.messageLabel.setText(MISSING_ID_MESSAGE);
 			}
+			/*
+			try {
+				id = Integer.parseInt(this.idText.getText());
+			} catch (NumberFormatException e) {
+				this.messageLabel.setText(MISSING_ID_MESSAGE);
+			}*/
 		} else {
 			
 			return this.recordId;
