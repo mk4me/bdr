@@ -246,8 +246,10 @@ public class DatabaseConnectionWCF extends DatabaseConnectionOld {
 
 		DbElementsList<Performer> output = new DbElementsList<Performer>();
 		
-		for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-				output.add( transformPerformerDetails(s) );
+		if (result.getLabPerformerWithAttributesList() != null) {
+			for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+					output.add( transformPerformerDetails(s) );
+		}
 		
 		return output;
 	}
