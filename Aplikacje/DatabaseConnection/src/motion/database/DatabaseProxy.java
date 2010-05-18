@@ -156,4 +156,6 @@ public interface DatabaseProxy {
 
 	public abstract Performer getPerformerById(int id) throws Exception;
 
+	public abstract void registerStateMessageListener(TextMessageListener listener);
+
 }

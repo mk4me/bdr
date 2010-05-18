@@ -20,6 +20,7 @@ import javax.xml.ws.Service;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
@@ -139,6 +140,8 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	 */
 	public void setWSCredentials(String userName, String password, String domainName)
 	{
+		log.info("Setting WS credentials for:" + userName + " domain:" + domainName);
+
 		this.wsCredentials.userName = userName;
 		this.wsCredentials.password = password;
 		this.wsCredentials.domainName = domainName;
@@ -178,6 +181,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	 */
 	public void setFTPSCredentials(String address, String userName, String password)
 	{
+		log.info("Setting FTP credentials for:" + userName + "@" + address);
 		this.ftpsCredentials.setAddress(address);
 		this.ftpsCredentials.setCredentials(userName, password, null);
 	}
@@ -1401,5 +1405,10 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	public  String getSessionLabel(int sessionID) throws Exception
 	{
 		return "session label available only in WCF service";
+	}
+
+	@Override
+	public void registerStateMessageListener(TextMessageListener listener) {
+		
 	}
 }
