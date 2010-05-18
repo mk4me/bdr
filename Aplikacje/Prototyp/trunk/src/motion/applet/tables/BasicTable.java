@@ -13,6 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.AttributeName;
@@ -144,7 +145,7 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listPerformers() {
 		try {
-			DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listPerformersWithAttributes();
+			DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 			for (Performer p : performers) {
 				ArrayList<Object> cellList = new ArrayList<Object>();
 				for (AttributeName a : tableName.getAllAttributes()) {
@@ -169,7 +170,7 @@ public class BasicTable extends AbstractTableModel {
 			if (this.recordId > -1) {
 				sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
 			} else {
-				sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+				sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
 			}
 			for (Session s : sessions) {
 				ArrayList<Object> cellList = new ArrayList<Object>();

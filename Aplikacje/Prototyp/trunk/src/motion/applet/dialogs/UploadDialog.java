@@ -23,10 +23,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import motion.applet.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
-import motion.database.model.GenericDescription;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
@@ -44,7 +44,9 @@ public class UploadDialog extends BasicDialog {
 	private static String CHOOSE_FILE_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
 	private static String CHOOSE_DIRECTORY_MESSAGE = Messages.getString("UploadDialog.ChooseADirectoryToUpload"); //$NON-NLS-1$
 	private static String MISSING_FILE_PATH_MESSAGE = Messages.getString("UploadDialog.NoFileSelected"); //$NON-NLS-1$
-	private static String MISSING_ID_MESSAGE = Messages.getString("UploadDialog.NoIdEntered"); //$NON-NLS-1$
+	private static String MISSING_PERFORMER_MESSAGE = Messages.getString("UploadDialog.NoPerformerSelected"); //$NON-NLS-1$
+	private static String MISSING_SESSION_MESSAGE = Messages.getString("UploadDialog.NoSessionSelected"); //$NON-NLS-1$
+	private static String MISSING_TRIAL_MESSAGE = Messages.getString("UploadDialog.NoTrialSelected"); //$NON-NLS-1$
 	private static String PRESS_UPLOAD_MESSAGE = Messages.getString("UploadDialog.PressUploadToSendFile"); //$NON-NLS-1$
 	private static String BROWSE = Messages.getString("Browse"); //$NON-NLS-1$
 	
@@ -187,12 +189,12 @@ public class UploadDialog extends BasicDialog {
 				}
 			} else {
 				if (this.tableName.equals(TableNamesInstance.SESSION)) {
-					DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(1);
+					DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
 					for (Session s : list) {
 						entityComboBox.addItem(s);
 					}
 				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-					DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listPerformersWithAttributes();
+					DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 					for (Performer p : list) {
 						entityComboBox.addItem(p);
 					}
@@ -333,29 +335,25 @@ public class UploadDialog extends BasicDialog {
 		int id = -1;
 		
 		if (this.selectId == true) {
-			try {
-				if (this.tableName.equals(TableNamesInstance.SESSION)) {
-					id = Integer.parseInt(((Session) this.entityComboBox.getSelectedItem()).
-							get(SessionStaticAttributes.sessionID.toString()).
-							value.toString());
-				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-					id = Integer.parseInt(((Performer) this.entityComboBox.getSelectedItem()).
-							get(PerformerStaticAttributes.performerID.toString()).
-							value.toString());
-				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
-					id = Integer.parseInt(((Trial) this.entityComboBox.getSelectedItem()).
-							get(TrialStaticAttributes.trialID.toString()).
-							value.toString());
+			if (this.entityComboBox.getSelectedItem() != null) {
+				try {
+					if (this.tableName.equals(TableNamesInstance.SESSION)) {
+						id = Integer.parseInt(((Session) this.entityComboBox.getSelectedItem()).
+								get(SessionStaticAttributes.sessionID.toString()).
+								value.toString());
+					} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+						id = Integer.parseInt(((Performer) this.entityComboBox.getSelectedItem()).
+								get(PerformerStaticAttributes.performerID.toString()).
+								value.toString());
+					} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+						id = Integer.parseInt(((Trial) this.entityComboBox.getSelectedItem()).
+								get(TrialStaticAttributes.trialID.toString()).
+								value.toString());
+					}
+				} catch (NumberFormatException e) {
+					this.messageLabel.setText(getMessage());
 				}
-			} catch (NumberFormatException e) {
-				this.messageLabel.setText(MISSING_ID_MESSAGE);
 			}
-			/*
-			try {
-				id = Integer.parseInt(this.idText.getText());
-			} catch (NumberFormatException e) {
-				this.messageLabel.setText(MISSING_ID_MESSAGE);
-			}*/
 		} else {
 			
 			return this.recordId;
@@ -364,13 +362,26 @@ public class UploadDialog extends BasicDialog {
 		return id;
 	}
 	
+	private String getMessage() {
+		if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+			
+			return MISSING_PERFORMER_MESSAGE;
+		} else if (this.tableName.equals(TableNamesInstance.SESSION)) {
+			
+			return MISSING_SESSION_MESSAGE;
+		} else {
+			
+			return MISSING_TRIAL_MESSAGE;
+		}
+	}
+	
 	private boolean validateResult() {
 		if (this.getFilePath().equals("")) { //$NON-NLS-1$
 			this.messageLabel.setText(MISSING_FILE_PATH_MESSAGE);
 			
 			return false;
 		} else if (this.getId() < 0) {
-			this.messageLabel.setText(MISSING_ID_MESSAGE);
+			this.messageLabel.setText(getMessage());
 			
 			return false;
 		}
