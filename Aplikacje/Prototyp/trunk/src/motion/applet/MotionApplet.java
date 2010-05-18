@@ -18,7 +18,9 @@ import motion.applet.dialogs.PerformerDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
+import motion.applet.panels.StatusBar;
 import motion.applet.toolbars.AppletToolBar;
+import motion.database.DatabaseConnection;
 
 public class MotionApplet extends JApplet {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
@@ -31,6 +33,10 @@ public class MotionApplet extends JApplet {
 		// Set language
 		//Messages.setLanguagePolish();
 		Messages.setLanguageEnglish();
+		
+		StatusBar statusBar =  new StatusBar(this);
+		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
+		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
 		
 		loginUser();
 		initUserInterface();
@@ -122,7 +128,6 @@ public class MotionApplet extends JApplet {
 		RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		this.getContentPane().add(leftRightSplitPane);
-		
 		appletToolBar.addTableComboBoxListener(rightPanel);
 	}
 }
