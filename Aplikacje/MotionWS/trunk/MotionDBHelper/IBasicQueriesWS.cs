@@ -15,10 +15,10 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude);
-/*
+
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude); */
+        XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude);
 
         [OperationContract] 
         [FaultContract(typeof(QueryException))]

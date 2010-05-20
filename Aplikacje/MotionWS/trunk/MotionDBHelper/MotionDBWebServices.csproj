@@ -83,6 +83,10 @@
       <DependentUpon>BasicQueriesWS.svc</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BasicUpdatesWS.svc.cs">
+      <DependentUpon>BasicUpdatesWS.svc</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DatabaseAccessService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -90,10 +94,16 @@
       <DependentUpon>DataDictionaryMaintenanceService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FileStoremanWS.svc.cs">
+      <DependentUpon>FileStoremanWS.svc</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FilterPredicate.cs" />
     <Compile Include="FilterPredicateCollection.cs" />
     <Compile Include="IBasicQueriesWS.cs">
     </Compile>
+    <Compile Include="IBasicUpdatesWS.cs" />
+    <Compile Include="IFileStoremanWS.cs" />
     <Compile Include="MDBExceptions.cs" />
     <Compile Include="PlainFileDetails.cs" />
     <Compile Include="FileStoremanService.asmx.cs">
@@ -114,7 +124,6 @@
     <None Include="res\BasicQueriesService.wsdl" />
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
-    <None Include="res\BasicQueriesWSNoImports.wsdl" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
     <None Include="res\BasicQueriesServiceStandalone.wsdl" />
     <None Include="res\GenericQueryUniformXML.xsd" />
@@ -152,6 +161,8 @@
     <None Include="res\ListPerformerSessionsXML.xsd" />
     <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
+    <Content Include="BasicUpdatesWS.svc" />
+    <Content Include="FileStoremanWS.svc" />
     <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="Web.config" />

@@ -30,5 +30,56 @@ namespace MotionDBWebServices
             _details = det;
         }
     }
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")]
+    public class UpdateException
+    {
+        string _fault_source;
+        string _details;
+
+        [DataMember]
+        public string IssueKind
+        {
+            get { return _fault_source; }
+            set { _fault_source = value; }
+        }
+        [DataMember]
+        public string Details
+        {
+            get { return _details; }
+            set { _details = value; }
+        }
+
+        public UpdateException(string src, string det)
+        {
+            _fault_source = src;
+            _details = det;
+        }
+    }
+
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
+    public class FileAccessServiceException
+    {
+        string _fault_source;
+        string _details;
+
+        [DataMember]
+        public string IssueKind
+        {
+            get { return _fault_source; }
+            set { _fault_source = value; }
+        }
+        [DataMember]
+        public string Details
+        {
+            get { return _details; }
+            set { _details = value; }
+        }
+
+        public FileAccessServiceException(string src, string det)
+        {
+            _fault_source = src;
+            _details = det;
+        }
+    }
 
 }

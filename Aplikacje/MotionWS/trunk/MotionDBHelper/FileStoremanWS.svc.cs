@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Services;
-
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.Text;
 using System.Data;
 using System.Data.SqlClient;
-
-
 using System.IO;
 
 namespace MotionDBWebServices
 {
-    /// <summary>
-    /// Summary description for FileStoremanService
-    /// </summary>
-    [WebService(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
-    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-    // [System.Web.Script.Services.ScriptService]
-    public class FileStoremanService : DatabaseAccessService
+    // NOTE: If you change the class name "FileStoremanWS" here, you must also update the reference to "FileStoremanWS" in Web.config.
+    public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
         string baseLocalFilePath = @"C:\FTPShare\";
         int maxFileSize = 10000000;
@@ -29,7 +20,6 @@ namespace MotionDBWebServices
         SqlDataReader fileReader = null;
 
 
-        [WebMethod]
         public int StorePerformerFile(int performerID, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath + path + @"\" + filename;
@@ -71,8 +61,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // log the exception
-                return 0;
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Update failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFile")));
 
             }
             finally
@@ -82,7 +72,6 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [WebMethod]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath+path+@"\"+filename;
@@ -124,8 +113,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // log the exception
-                return 0;
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Update failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFile")));
 
             }
             finally
@@ -135,7 +124,6 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [WebMethod]
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath + path + @"\" + filename;
@@ -177,8 +165,9 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // log the exception
-                return 0;
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Update failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFile")));
+
 
             }
             finally
@@ -188,14 +177,14 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [WebMethod]
         public void StorePerformerFiles(int performerID, string path)
         {
-            return;
+           FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
+           throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
+           return;
         }
 
-        [WebMethod]
-        public int StoreSessionFiles(int sessionID, string path, string description)
+        public void StoreSessionFiles(int sessionID, string path, string description)
         {
             string dirLocation = baseLocalFilePath + path;
 
@@ -238,23 +227,25 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return 1;
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+
 
             }
             finally
             {
                 CloseConnection();
             }
-            return 0;
-        }
-
-        [WebMethod]
-        public void StoreTrialFiles(int trialId, string path)
-        {
             return;
         }
 
-        [WebMethod]
+        public void StoreTrialFiles(int trialId, string path)
+        {
+           FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
+           throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
+           return;
+        }
+
         public void DownloadComplete(int fileID, string path)
         {
 
@@ -285,7 +276,9 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // log the exception
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("DownloadComplete")));
+
             }
             finally
             {
@@ -293,7 +286,6 @@ namespace MotionDBWebServices
             }
         }
 
-        [WebMethod]
         public string RetrieveFile(int fileID)
         {
             string relativePath = "";
@@ -343,7 +335,9 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                return "error occurred";
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+
 
             }
             finally
@@ -355,4 +349,5 @@ namespace MotionDBWebServices
 
 
     }
+
 }

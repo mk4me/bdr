@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionDBWebServices.BasicUpdatesWS" CodeBehind="BasicUpdatesWS.svc.cs" %>

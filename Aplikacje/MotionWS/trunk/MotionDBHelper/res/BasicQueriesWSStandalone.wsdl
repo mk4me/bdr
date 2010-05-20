@@ -63,6 +63,13 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="GenericUniformAttributesQueryResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="PerformerDetailsWithAttributes">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -358,6 +365,27 @@
 				</xsd:sequence>
 			</xsd:complexType>
 			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
+			<xsd:element name="GenericQueryUniformXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenericQueryUniformXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="GenericQueryUniformXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:GenericUniformAttributesQueryResult"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="GetPerformerByIdXML">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -811,6 +839,15 @@
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GenericQueryUniformXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GenericQueryUniformXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GenericQueryUniformXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GetPerformerByIdXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GetPerformerByIdXML"/>
 	</wsdl:message>
@@ -1006,6 +1043,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GenericQueryXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryUniformXML" message="tns:IBasicQueriesWS_GenericQueryUniformXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryUniformXMLResponse" message="tns:IBasicQueriesWS_GenericQueryUniformXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryUniformXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GenericQueryUniformXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GetPerformerByIdXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetPerformerByIdXML" message="tns:IBasicQueriesWS_GetPerformerByIdXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetPerformerByIdXMLResponse" message="tns:IBasicQueriesWS_GetPerformerByIdXML_OutputMessage"/>
@@ -1117,6 +1159,18 @@
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
 		<wsdl:operation name="GenericQueryXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryUniformXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
