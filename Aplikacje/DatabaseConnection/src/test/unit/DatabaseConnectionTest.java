@@ -66,17 +66,17 @@ public class DatabaseConnectionTest {
 		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 	}
 
-	/**
-	 * Test method for {@link motion.database.DatabaseConnection#testConnection()}.
-	 * @throws Exception 
-	 */
-	//@Test
-	public void testTestConnection() throws Exception {
-		
-		beforeTest();
-
-		database.testConnection();
-	}
+//	/**
+//	 * Test method for {@link motion.database.DatabaseConnection#testConnection()}.
+//	 * @throws Exception 
+//	 */
+//	//@Test
+//	public void testTestConnection() throws Exception {
+//		
+//		beforeTest();
+//
+//		database.testConnection();
+//	}
 
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#uploadSessionFile()}.
@@ -90,8 +90,8 @@ public class DatabaseConnectionTest {
 		if (!testFileUploading)
 			return;
 		
-		database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/Combo_1.c3d", new ConsoleTransferListener() );
-		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
+		database.uploadSessionFile( 1, "Prï¿½ba wgrania pliku ze ï¿½ledzeniem", "data/Combo_1.c3d", new ConsoleTransferListener() );
+		//database.uploadSessionFile( 1, "Prï¿½ba wgrania pliku ze ï¿½ledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class DatabaseConnectionTest {
 		int id = 2;
 		
 		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
-		//database.uploadSessionFile( 1, "Próba wgrania pliku ze œledzeniem", "data/test.xml", new ConsoleTransferListener() );
+		//database.uploadSessionFile( 1, "Prï¿½ba wgrania pliku ze ï¿½ledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	
 		System.out.println( database.listSessionFiles( id ) );
 	}
@@ -321,7 +321,7 @@ public class DatabaseConnectionTest {
 		date.setMonth(3);
 		date.setDay(23);
 		
-		int id = database.createSession(1, new int[]{1}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pó³obrotu");
+		int id = database.createSession(1, new int[]{1}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z pï¿½obrotu");
 		System.out.println("Created session: " + id );
 
 		Session session = database.getSessionById(id);
@@ -333,7 +333,7 @@ public class DatabaseConnectionTest {
 		
 		beforeTest();
 
-		int id = database.createTrial( 1, "Kopniak lew¹ nog¹", 1 );
+		int id = database.createTrial( 1, "Kopniak lewï¿½ nogï¿½", 1 );
 		System.out.println("Created trial: " + id );
 		
 		Trial trials = database.getTrialById(id);
@@ -417,7 +417,7 @@ public class DatabaseConnectionTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setPerformerAttribute( id, attributeName, value, false);
+		database.setPerformerAttribute( id, attributeName, value, false);
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
 		Performer x = list.findById(3);
@@ -436,7 +436,7 @@ public class DatabaseConnectionTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setSessionAttribute( id, attributeName, value, false);
+		database.setSessionAttribute( id, attributeName, value, false);
 
 //		DbElementsList<Performer> list = database.listPerformerSessionsWithAttributes(1);
 //		Performer x = list.findById(3);
@@ -455,7 +455,7 @@ public class DatabaseConnectionTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setPerformerAttribute( id, attributeName, value, false);
+		database.setPerformerAttribute( id, attributeName, value, false);
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
 		Performer x = list.findById(3);
@@ -497,7 +497,7 @@ public class DatabaseConnectionTest {
 		@Override
 		public int getDesiredStepPercent()
 		{
-			return 5; // bêdzie informowany co 5%
+			return 5; // bï¿½dzie informowany co 5%
 		}
 
 		@Override

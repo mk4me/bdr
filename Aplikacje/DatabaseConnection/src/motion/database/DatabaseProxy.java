@@ -25,7 +25,7 @@ public interface DatabaseProxy {
 	public abstract void setFTPSCredentials(String address, String userName,
 			String password);
 
-	public abstract boolean testConnection() throws Exception;
+	//public abstract boolean testConnection() throws Exception;
 
 	public abstract void registerFileUploadListener(
 			FileTransferListener listener);
@@ -66,8 +66,8 @@ public interface DatabaseProxy {
 
 	
 	@Deprecated
-	public abstract DbElementsList<Session> listPerformerSessions(
-			int performerID) throws Exception;
+//	public abstract DbElementsList<Session> listPerformerSessions(
+//			int performerID) throws Exception;
 
 	public abstract HashMap<String, String> listAttributesDefined(String group,
 			String entityKind) throws Exception;
@@ -113,22 +113,22 @@ public interface DatabaseProxy {
 	public abstract int defineTrialSegment(int trialID, String segmentName,
 			int startTime, int endTime) throws Exception;
 
-	public abstract int setSessionAttribute(int sessionID,
+	public abstract void setSessionAttribute(int sessionID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
-	public abstract int setTrialAttribute(int trialID, String attributeName,
+	public abstract void setTrialAttribute(int trialID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 
-	public abstract int setPerformerAttribute(int performerID,
+	public abstract void setPerformerAttribute(int performerID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
-	public abstract int setSegmentAttribute(int segmentID,
+	public abstract void setSegmentAttribute(int segmentID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
-	public abstract int setFileAttribute(int fileID, String attributeName,
+	public abstract void setFileAttribute(int fileID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 
 	public abstract DbElementsList<Segment> listTrialSegmentsWithAttributes(

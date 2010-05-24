@@ -1079,7 +1079,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#setSessionAttribute(int, java.lang.String, java.lang.String, boolean)
 	 */
-	public int setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
+	public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -1090,8 +1090,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			
 			prepareCall( (BindingProvider)port);
 	
-			int result = port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
-			return result;
+			port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
 		}
 		else
 			throw new Exception("Not Initialized. Cannot set attribute.");
@@ -1100,7 +1099,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#setTrialAttribute(int, java.lang.String, java.lang.String, boolean)
 	 */
-	public int setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
+	public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -1112,16 +1111,13 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			prepareCall( (BindingProvider)port);
 	
 			int result = port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
-			return result;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot set attribute.");
 	}
 
-	/* (non-Javadoc)
-	 * @see motion.database.DatabaseProxy#setPerformerAttribute(int, java.lang.String, java.lang.String, boolean)
-	 */
-	public int setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
+
+	public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -1133,7 +1129,6 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			prepareCall( (BindingProvider)port);
 	
 			int result = port.setPerformerAttribute(performerID, attributeName, attributeValue, update);			
-			return result;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot set attribute.");
@@ -1142,7 +1137,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#setSegmentAttribute(int, java.lang.String, java.lang.String, boolean)
 	 */
-	public int setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
+	public void setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -1154,7 +1149,6 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			prepareCall( (BindingProvider)port);
 	
 			int result = port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
-			return result;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot set attribute.");
@@ -1163,7 +1157,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#setFileAttribute(int, java.lang.String, java.lang.String, boolean)
 	 */
-	public int setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
+	public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -1175,7 +1169,6 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 			prepareCall( (BindingProvider)port);
 	
 			int result = port.setFileAttribute(fileID, attributeName, attributeValue, update);			
-			return result;
 		}
 		else
 			throw new Exception("Not Initialized. Cannot set file attribute.");

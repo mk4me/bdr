@@ -14,7 +14,7 @@ import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
-import motion.database.ws.DatabaseConnectionOld.ConnectionState;
+import motion.database.ws.DatabaseConnectionWCF.ConnectionState;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
 import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
@@ -22,17 +22,32 @@ import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
+import motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
+import motion.database.ws.fileStoremanServiceWCF.FileStoremanWS;
+import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
 
 public class ToolsWCF {
 
 	private static TextMessageListener textMessageListener;
 
 
-	private static void prepareCall(IBasicQueriesWS port) {
+	private static void prepareBasicQueriesServiceCall(IBasicQueriesWS port) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	private static void prepareFileStoremanServiceCall(IFileStoremanWS port) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void prepareBasicUpdatesServicesCall(IBasicUpdatesWS port) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	public static void setMessage(String message)
 	{
 		if (textMessageListener!=null)
@@ -53,11 +68,51 @@ public class ToolsWCF {
 		BasicQueriesWS service = new BasicQueriesWS();
 		IBasicQueriesWS port = service.getBasicHttpBindingIBasicQueriesWS();
 		
-		prepareCall(port);
+		prepareBasicQueriesServiceCall(port);
 
 		return port;
 	}
-	
+
+	public static IFileStoremanWS getFileStoremanServicePort( String callerName, DatabaseConnectionWCF db ) throws Exception
+	{
+		if (db.state != ConnectionState.INITIALIZED)
+		{
+			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
+			throw new Exception("Not Initialized. Cannot do: " + callerName );
+		}
+		db.log.entering( "DatabaseConnectionWCF", callerName );
+		if (textMessageListener!=null)
+			textMessageListener.setMessage("Performing: " + callerName);
+		
+		FileStoremanWS service = new FileStoremanWS();
+		IFileStoremanWS port = service.getBasicHttpBindingIFileStoremanWS();
+		
+		prepareFileStoremanServiceCall(port);
+
+		return port;
+	}
+
+
+	public static IBasicUpdatesWS getBasicUpdateServicePort(String callerName, DatabaseConnectionWCF db) throws Exception 
+	{
+		if (db.state != ConnectionState.INITIALIZED)
+		{
+			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
+			throw new Exception("Not Initialized. Cannot do: " + callerName );
+		}
+		db.log.entering( "DatabaseConnectionWCF", callerName );
+		if (textMessageListener!=null)
+			textMessageListener.setMessage("Performing: " + callerName);
+		
+		BasicUpdatesWS service = new BasicUpdatesWS();
+		IBasicUpdatesWS port = service.getBasicHttpBindingIBasicUpdatesWS();
+		
+		prepareBasicUpdatesServicesCall(port);
+
+		return port;
+	}
+
+
 	
 	public static void finalizeCall()
 	{
@@ -93,6 +148,7 @@ public class ToolsWCF {
 		return destinationObject;
 	}
 
+	
 	public static DbElementsList<DatabaseFile> transformListOfFiles(Object result) {
 
 		DbElementsList<DatabaseFile> list = new DbElementsList<DatabaseFile>();

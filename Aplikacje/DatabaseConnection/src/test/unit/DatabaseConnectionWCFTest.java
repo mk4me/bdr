@@ -35,7 +35,7 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
  */
 public class DatabaseConnectionWCFTest {
 
-	static final boolean testFileUploading = false;
+	static final boolean testFileUploading = true;
 	
 	
 	public void beforeTest()
@@ -63,20 +63,20 @@ public class DatabaseConnectionWCFTest {
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
 //		database.setWSCredentials("bzdura", "bzdura", "DBPAWELL");
-		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
+		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#testConnection()}.
 	 * @throws Exception 
 	 */
-	//@Test
-	public void testTestConnection() throws Exception {
-		
-		beforeTest();
-
-		database.testConnection();
-	}
+//	//@Test
+//	public void testTestConnection() throws Exception {
+//		
+//		beforeTest();
+//
+//		database.testConnection();
+//	}
 
 	/**
 	 * Test method for {@link motion.database.DatabaseConnection#uploadSessionFile()}.
@@ -417,7 +417,7 @@ public class DatabaseConnectionWCFTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setPerformerAttribute( id, attributeName, value, false);
+		database.setPerformerAttribute( id, attributeName, value, false);
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
 		Performer x = list.findById(3);
@@ -436,7 +436,7 @@ public class DatabaseConnectionWCFTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setSessionAttribute( id, attributeName, value, false);
+		database.setSessionAttribute( id, attributeName, value, false);
 
 //		DbElementsList<Performer> list = database.listPerformerSessionsWithAttributes(1);
 //		Performer x = list.findById(3);
@@ -455,7 +455,7 @@ public class DatabaseConnectionWCFTest {
 		int id = 3;
 		String attributeName = "date_of_birth";
 		String value = "12.12.2012";
-		int result = database.setPerformerAttribute( id, attributeName, value, false);
+		database.setPerformerAttribute( id, attributeName, value, false);
 
 		DbElementsList<Performer> list = database.listPerformersWithAttributes();
 		Performer x = list.findById(3);
