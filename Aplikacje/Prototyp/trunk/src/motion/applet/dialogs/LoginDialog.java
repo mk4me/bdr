@@ -1,6 +1,9 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -71,6 +74,7 @@ public class LoginDialog extends BasicDialog {
 		// Button area
 		loginButton = new JButton(LOGIN);
 		this.addToButtonPanel(loginButton);
+//		this.setFocusCycleRoot( true );
 	}
 	
 	protected void finishUserInterface() {
