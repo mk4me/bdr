@@ -25,11 +25,13 @@ public class LoginDialog extends BasicDialog {
 	private static String USER = Messages.getString("LoginDialog.UserName") + Messages.COLON; //$NON-NLS-1$
 	private static String PASSWORD = Messages.getString("LoginDialog.Password") + Messages.COLON; //$NON-NLS-1$
 	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
+	private static String CANCEL = Messages.CANCEL;
 	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
 	
 	private JTextField loginText;
 	private JPasswordField passwordText;
 	private JButton loginButton;
+	private JButton cancelButton;
 	
 	public LoginDialog() {
 		super(LOGIN_TITLE, WELCOME_TITLE);
@@ -74,7 +76,12 @@ public class LoginDialog extends BasicDialog {
 		// Button area
 		loginButton = new JButton(LOGIN);
 		this.addToButtonPanel(loginButton);
+		
+		cancelButton = new JButton(CANCEL);
+		this.addToButtonPanel(cancelButton);
+		
 //		this.setFocusCycleRoot( true );
+		
 	}
 	
 	protected void finishUserInterface() {
@@ -96,6 +103,13 @@ public class LoginDialog extends BasicDialog {
 				
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.dispose();
+			}
+		});
+		
+		this.cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				System.exit(0);
 			}
 		});
 	}
