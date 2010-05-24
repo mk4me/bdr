@@ -72,14 +72,14 @@ public class ConfigurationTree {
             String group = ((Vector)groupVector.elementAt(i)).elementAt(0).toString();
             
             if (!group.equals("No Group")) {
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(0).toString(), false));
+                DefaultMutableTreeNode node = new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(0).toString(), true));
                 for(int j=1;j<((Vector)groupVector.elementAt(i)).size();j++){
-                        node.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(j).toString(), false)));		
+                        node.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(j).toString(), true)));		
                 }
                 root.add(node);
             } else {
                 for(int j=1;j<((Vector)groupVector.elementAt(i)).size();j++){
-                    root.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(j).toString(), false)));		
+                    root.add(new DefaultMutableTreeNode(new CheckBoxNode(((Vector)groupVector.elementAt(i)).elementAt(j).toString(), true)));		
                 }
             }
             
@@ -273,7 +273,7 @@ public class ConfigurationTree {
 	    }
 	}
 	
-	private class CheckBoxNode {
+	public class CheckBoxNode {
 	    String text;
 	    
 	    boolean selected;

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -17,7 +18,6 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableModel;
 
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
@@ -30,7 +30,7 @@ import motion.applet.trees.ResultTree;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
 	private JTable table;
-	private TableModel tableModel;
+	private BasicTable tableModel;
 	private JTree tree;
 	private TableName tableName;
 	
@@ -40,23 +40,28 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_TRIALS = "View trials";
 	
+	private BottomSplitPanel bottomPanel;
+	
 	public RightSplitPanel() {
 		super();
 		this.tableName = TableNamesInstance.PERFORMER;
 		this.setLayout(new BorderLayout());
 		table = new JTable();
-		showTable(this.tableName);
+		
 		JScrollPane scrollPane = new JScrollPane(table);
 		//showTree("Performer");
 		//JScrollPane scrollPane = new JScrollPane(tree);
 		
 		////this.add(scrollPane, BorderLayout.CENTER);
 		
-		BottomSplitPanel bottomPanel = new BottomSplitPanel();
+		bottomPanel = new BottomSplitPanel();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, bottomPanel);
 		splitPane.setResizeWeight(0.8);
 		this.add(splitPane, BorderLayout.CENTER);
 		
+		bottomPanel.addApplyButtonListener(this);
+		
+		showTable(this.tableName);
 		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -67,7 +72,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					ListSelectionModel model = table.getSelectionModel();
 					model.setSelectionInterval(row, row);
 					JPopupMenu popupMenu = new JPopupMenu();
-					final Object value = table.getModel().getValueAt(row, 0); // ID column.
+					final int recordId = ((BasicTable) table.getModel()).getRecordId(row); // ID column.
 					
 					if (RightSplitPanel.this.tableName.equals(TableNamesInstance.PERFORMER)) {
 						// New Session context menu.
@@ -77,7 +82,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						createSessionMenuItem.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								SessionDialog sessionDialog = new SessionDialog(Integer.parseInt(value.toString()));
+								SessionDialog sessionDialog = new SessionDialog(recordId);
 								sessionDialog.setVisible(true);
 							}
 						});
@@ -88,7 +93,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						viewSessionsMenuItem.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								RightSplitPanel.this.showTable(TableNamesInstance.SESSION, Integer.parseInt(value.toString()));
+								RightSplitPanel.this.showTable(TableNamesInstance.SESSION, recordId);
 							}
 						});
 					} else if (RightSplitPanel.this.tableName.equals(TableNamesInstance.SESSION)) {
@@ -99,7 +104,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						createTrialMenuItem.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								TrialDialog trialDialog = new TrialDialog(Integer.parseInt(value.toString()));
+								TrialDialog trialDialog = new TrialDialog(recordId);
 								trialDialog.setVisible(true);
 							}
 						});
@@ -110,7 +115,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						viewTrialsMenuItem.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								RightSplitPanel.this.showTable(TableNamesInstance.TRIAL, Integer.parseInt(value.toString()));
+								RightSplitPanel.this.showTable(TableNamesInstance.TRIAL, recordId);
 							}
 						});
 					}
@@ -121,7 +126,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					uploadMenuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							UploadDialog uploadDialog = new UploadDialog(RightSplitPanel.this.tableName, Integer.parseInt(value.toString()));
+							UploadDialog uploadDialog = new UploadDialog(RightSplitPanel.this.tableName, recordId);
 							uploadDialog.setVisible(true);
 						}
 					});
@@ -164,7 +169,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		JComboBox comboBox = (JComboBox) actionEvent.getSource();
-		showTable(((TableName) comboBox.getSelectedItem()));
+		if (actionEvent.getSource() instanceof JComboBox) {
+			JComboBox comboBox = (JComboBox) actionEvent.getSource();
+			showTable(((TableName) comboBox.getSelectedItem()));
+		} else if (actionEvent.getSource() instanceof JButton) {
+			showTable(tableModel.tableName, tableModel.recordId);
+		}
 	}
 }

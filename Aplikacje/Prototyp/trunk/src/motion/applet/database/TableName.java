@@ -126,6 +126,29 @@ public class TableName {
 		return new ArrayList<AttributeName>(all);
 	}
 	
+	public ArrayList<AttributeName> getSelectedAttributes(ArrayList<String> selectedAttributes) {
+		if (selectedAttributes.isEmpty()) {
+			
+			//return getAllAttributes();
+			return new ArrayList<AttributeName>();
+		} else {
+			ArrayList<AttributeName> all = new ArrayList<AttributeName>();
+			for (AttributeName a : staticAttributes) {
+				if (selectedAttributes.contains(a.toString())) {
+					all.add(a);
+				}
+			}
+			
+			for (AttributeName a : getDefinedAttributes()) {
+				if (selectedAttributes.contains(a.toString())) {
+					all.add(a);
+				}
+			}
+			
+			return new ArrayList<AttributeName>(all);
+		}
+	}
+	
 	public ArrayList<AttributeGroup> getGroupedAttributes() {
 		
 		return this.groupedDefinedAttributes;

@@ -1,36 +1,35 @@
 package motion.applet.tables;
 
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.panels.BottomSplitPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
 import motion.database.model.Performer;
+import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
+import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
+import motion.database.model.TrialStaticAttributes;
 
 public class BasicTable extends AbstractTableModel {
-	private Object[][] contents;
-	private String[] columnNames;
-	private Class[] columnClasses;
+	//private Object[][] contents;
+	//private String[] columnNames;
+	//private Class[] columnClasses;
 	private ArrayList<ArrayList<Object>> contents2 = new ArrayList<ArrayList<Object>>();
-	private java.sql.Connection connection;
-	private TableName tableName;
-	private String databaseName;
-	private int recordId;
+	private ArrayList<String> attributeNames = new ArrayList<String>();
+	private ArrayList<Integer> recordIds = new ArrayList<Integer>();
+	//private java.sql.Connection connection;
+	public TableName tableName;
+	//private String databaseName;
+	public int recordId;
 	
 	public BasicTable(TableName tableName) {
 		super();
@@ -48,6 +47,7 @@ public class BasicTable extends AbstractTableModel {
 		getTableContentsFromAttributes();
 	}
 	
+	/*
 	private void getTableContents() throws SQLException {
 		DatabaseMetaData databaseMetaData = this.connection.getMetaData();
 		ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName.getTableName(), null);
@@ -121,7 +121,7 @@ public class BasicTable extends AbstractTableModel {
 		resultSet.close();
 		statement.close();
 	}
-	
+	*/
 	private void getTableContentsFromAttributes() {
 		if (tableName.equals(TableNamesInstance.PERFORMER)) {
 			listPerformers();
@@ -148,7 +148,8 @@ public class BasicTable extends AbstractTableModel {
 			DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 			for (Performer p : performers) {
 				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getAllAttributes()) {
+				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes())) {
+					this.attributeNames.add(a.toString());
 					EntityAttribute entityAttribute = p.get(a.toString());
 					if (entityAttribute != null) {
 						cellList.add(entityAttribute.value);
@@ -156,6 +157,7 @@ public class BasicTable extends AbstractTableModel {
 						cellList.add(null);
 					}
 				}
+				this.recordIds.add(Integer.parseInt(p.get(PerformerStaticAttributes.performerID.toString()).value.toString()));
 				this.contents2.add(cellList);
 			}
 		} catch (Exception e) {
@@ -174,7 +176,8 @@ public class BasicTable extends AbstractTableModel {
 			}
 			for (Session s : sessions) {
 				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getAllAttributes()) {
+				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes())) {
+					this.attributeNames.add(a.toString());
 					EntityAttribute entityAttribute = s.get(a.toString());
 					if (entityAttribute != null) {
 						cellList.add(entityAttribute.value);
@@ -182,6 +185,7 @@ public class BasicTable extends AbstractTableModel {
 						cellList.add(null);
 					}
 				}
+				this.recordIds.add(Integer.parseInt(s.get(SessionStaticAttributes.sessionID.toString()).value.toString()));
 				this.contents2.add(cellList);
 			}
 		} catch (Exception e) {
@@ -199,7 +203,8 @@ public class BasicTable extends AbstractTableModel {
 			
 			for (Trial t : trials) {
 				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getAllAttributes()) {
+				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes())) {
+					this.attributeNames.add(a.toString());
 					EntityAttribute entityAttribute = t.get(a.toString());
 					if (entityAttribute != null) {
 						cellList.add(entityAttribute.value);
@@ -207,6 +212,7 @@ public class BasicTable extends AbstractTableModel {
 						cellList.add(null);
 					}
 				}
+				this.recordIds.add(Integer.parseInt(t.get(TrialStaticAttributes.trialID.toString()).value.toString()));
 				this.contents2.add(cellList);
 			}
 		} catch (Exception e) {
@@ -244,7 +250,12 @@ public class BasicTable extends AbstractTableModel {
 	
 	public String getColumnName(int column) {
 		
-		return this.tableName.getAllAttributes().get(column).toString();
+		return this.attributeNames.get(column);
+	}
+	
+	public int getRecordId(int row) {
+		
+		return this.recordIds.get(row);
 	}
 	
 	/*
