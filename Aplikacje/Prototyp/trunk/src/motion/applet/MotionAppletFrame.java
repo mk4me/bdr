@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
-import javax.swing.JApplet;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,13 +22,14 @@ import motion.applet.panels.StatusBar;
 import motion.applet.toolbars.AppletToolBar;
 import motion.database.DatabaseConnection;
 
-public class MotionApplet extends JApplet {
+public class MotionAppletFrame extends JFrame {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
 	public static int APPLET_HEIGHT = 600;
 	public static int APPLET_WIDTH = 800;
 	
-	public void init() {
+	public MotionAppletFrame() {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
+		this.setTitle(APPLET_NAME);
 		
 		// Set language
 		//Messages.setLanguagePolish();

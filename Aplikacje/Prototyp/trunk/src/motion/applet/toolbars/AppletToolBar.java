@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 
-import motion.applet.MotionApplet;
+import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 
@@ -22,7 +22,7 @@ public class AppletToolBar extends JToolBar {
 	private static int labId = 1;
 	
 	public AppletToolBar() {
-		super(MotionApplet.APPLET_NAME, JToolBar.HORIZONTAL);
+		super(MotionAppletFrame.APPLET_NAME, JToolBar.HORIZONTAL);
 		
 		FlowLayout appletToolBarLayout = new FlowLayout();
 		appletToolBarLayout.setAlignment(FlowLayout.LEADING);

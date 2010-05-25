@@ -20,7 +20,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import motion.applet.Messages;
-import motion.applet.MotionApplet;
+import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.trees.CheckBoxNodeEditor;
@@ -46,7 +46,7 @@ public class LeftSplitPanel extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		// Create the tool bar
-		JToolBar toolBar = new JToolBar(MotionApplet.APPLET_NAME, JToolBar.HORIZONTAL);
+		JToolBar toolBar = new JToolBar(MotionAppletFrame.APPLET_NAME, JToolBar.HORIZONTAL);
 		toolBar.setFloatable(false);
 		JButton addButton = new JButton(ADD_FILTER);
 		toolBar.add(addButton);
