@@ -1,0 +1,23 @@
+<? header ("Content-Type: application/x-java-jnlp-file"); ?>
+<jnlp
+  spec="1.0+"
+  codebase="http://db-bdr.pjwstk.edu.pl/Motion-Client"
+  href="MotionClientApplication.jnlp">
+  <information>
+    <title>Motion Web Client</title>
+    <vendor>PJWSTK Centrum Badawcze Warszawa</vendor>
+    <homepage href="docs/help.html"/>
+    <description>Motion Web Client</description>
+    <description kind="short"></description>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.6+"/>
+    <jar href="MotionClient.jar" main="true"/>
+  </resources>
+  <application-desc name="Motion Web Client" main-class="motion.applet.MotionAppletFrame"
+  width="800" height="600"
+  />
+</jnlp> 

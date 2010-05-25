@@ -16,8 +16,8 @@
     -->
     <!-- uncomment the above lines to use ANT outside of Eclipse -->
     <target name="main">
-        <fatjar.build output="deploy/MotionClient.jar">
-            <fatjar.manifest/>
+        <fatjar.build output="deploy/uMotionClient.jar">
+            <fatjar.manifest mainclass="motion.applet.MotionAppletFrame"/>
             <fatjar.filesource path="/home/kk/workspaces/workspace/Motion_1/bin" relpath="">
                 <fatjar.exclude relpath="DatabaseConnection.log"/>
                 <fatjar.exclude relpath="sqljdbc4.jar"/>
@@ -43,9 +43,22 @@
     	<copy todir="deploy">
     		<fileset dir="html"></fileset>
     	</copy>
-    	<jar destfile="deploy/MotionClient.jar" update="true">
+    	<jar destfile="deploy/uMotionClient.jar" update="true">
     		<fileset file="../DatabaseConnection/krb5.conf"></fileset>
     		<fileset file="../DatabaseConnection/login.conf"></fileset>
+    		<fileset file="html/*.jnlp"></fileset>
     	</jar>
+    	<exec executable="jarsigner" >
+	    	<arg value="-keystore"></arg>
+	    	<arg value="keystore"></arg>
+	    	<arg value="-keypass"></arg>
+	    	<arg value="aplet4Motion"></arg>
+	    	<arg value="-storepass"></arg>
+	    	<arg value="aplet4Motion"></arg>
+	    	<arg value="-signedJar"></arg>
+	    	<arg value="deploy/MotionClient.jar"></arg>
+	    	<arg value="deploy/uMotionClient.jar"></arg>
+	    	<arg value="MotionClientKey"></arg>
+    	</exec>
     </target>
 </project>

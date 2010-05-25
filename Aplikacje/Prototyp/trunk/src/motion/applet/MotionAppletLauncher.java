@@ -32,15 +32,8 @@ public class MotionAppletLauncher extends JApplet {
 		
 		launcherButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Create the login dialog
-				LoginDialog loginDialog = new LoginDialog();
-				loginDialog.setVisible(true);
-				
-				// Check if login was successful
-				if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) {
-					MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
-					motionAppletFrame.setVisible(true);
-				}
+
+				MotionAppletFrame.main(new String[0]);
 			}
 		});
 	}

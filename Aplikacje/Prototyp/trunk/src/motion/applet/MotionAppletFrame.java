@@ -3,6 +3,8 @@ package motion.applet;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -13,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.PerformerDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
@@ -30,11 +33,24 @@ public class MotionAppletFrame extends JFrame {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
 		
-		// Set language
-		//Messages.setLanguagePolish();
-		Messages.setLanguageEnglish();
+		StatusBar statusBar =  new StatusBar(this);
+		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
+		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
+		
+		//loginUser();
+		
+		//DatabaseConnection.getInstanceWCF().setWSCredentials( "applet_user", "aplet4Motion", "dbpawell");
+		//DatabaseConnection.getInstanceWCF().setFTPSCredentials( "db-bdr.pjwstk.edu.pl", "test", "test");
 		
 		initUserInterface();
+		
+		//Connector connectorTest = new Connector();
+		//connectorTest.displayDatabaseProperties();
+		
+		//MotionWebServiceClient wsClient = new MotionWebServiceClient();
+		//wsClient.callWebService();
+		
+		//ConnectorInstance connectorInstance = new ConnectorInstance();
 	}
 	
 	private void initUserInterface() {
@@ -113,5 +129,30 @@ public class MotionAppletFrame extends JFrame {
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
 		this.getContentPane().add(leftRightSplitPane);
 		appletToolBar.addTableComboBoxListener(rightPanel);
+		
+		this.addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				MotionAppletFrame.this.dispose();
+			}
+			
+		});
+	}
+	
+	public static void main(String args[])
+	{
+		// Set language
+		//Messages.setLanguagePolish();
+		Messages.setLanguageEnglish();
+
+		// Login dialog
+		LoginDialog loginDialog = new LoginDialog();
+		loginDialog.setVisible(true);
+		
+		// Check if login was successful
+		if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) {
+			MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
+			motionAppletFrame.setVisible(true);
+		}
 	}
 }

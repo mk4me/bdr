@@ -105,7 +105,7 @@ public class LoginDialog extends BasicDialog {
 		this.setSize(250, 200);
 		this.setResizable(false);
 		// Disable the close button
-		this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 	
 	protected void addListeners() {
@@ -113,10 +113,11 @@ public class LoginDialog extends BasicDialog {
 			public void actionPerformed(ActionEvent e) {
 				
 				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
+				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 				
 				//Check login first
 				LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
-				
+
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.dispose();
 			}
