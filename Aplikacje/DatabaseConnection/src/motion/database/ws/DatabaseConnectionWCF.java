@@ -196,6 +196,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for (Attributes aa : ss.getAttributes() )
 			output.add( ToolsWCF.transformGenericAttributes( aa, new GenericResult() ) );
 		
+		ToolsWCF.finalizeCall();
+		
 		return output;
 	}
 	
@@ -214,6 +216,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
 				output.put( a.getAttributeName(), a.getAttributeType() );
 		
+		ToolsWCF.finalizeCall();
+
 		return output;
 	}
 
@@ -236,6 +240,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			}
 			group.add( new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() ) );
 		}
+	
+		ToolsWCF.finalizeCall();
+
 		return output;
 	}
 
@@ -254,6 +261,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		Vector<String> output = new Vector<String>();
 		for (AttributeGroupDefinition a : result.getAttributeGroupDefinitionList().getAttributeGroupDefinition() )
 			output.add( a.getAttributeGroupName() );
+
+		ToolsWCF.finalizeCall();
 		
 		return output;
 	}
@@ -272,6 +281,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		Vector<MotionKind> output = new Vector<MotionKind>();
 		for (MotionKindDefinition a : result.getMotionKindDefinitionList().getMotionKindDefinition() )
 			output.add( new MotionKind( a.getMotionKindID(), a.getMotionKindName() ) );
+
+		ToolsWCF.finalizeCall();
 		
 		return output;
 	}
@@ -293,6 +304,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		GetPerformerByIdXMLResult result = port.getPerformerByIdXML(id);
 		PerformerDetailsWithAttributes s = result.getPerformerDetailsWithAttributes();
 
+		ToolsWCF.finalizeCall();
+
 		return ToolsWCF.transformPerformerDetails(s);
 	}
 
@@ -307,7 +320,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		
 		for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
 				output.add( ToolsWCF.transformPerformerDetails(s) );
-		
+
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -322,6 +336,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for ( PerformerDetailsWithAttributes s : result.getPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
 			output.add( ToolsWCF.transformPerformerDetails(s) );
 		
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -337,6 +352,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		GetSessionByIdXMLResult result = port.getSessionByIdXML(id);
 		SessionDetailsWithAttributes s = result.getSessionDetailsWithAttributes();
 
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformSessionDetails(s);
 	}
 
@@ -345,6 +361,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	{
 		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionLabel", this );
 	
+		ToolsWCF.finalizeCall();
 		return port.getSessionLabel( sessionID );
 	}
 
@@ -360,6 +377,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
 				output.add( ToolsWCF.transformSessionDetails(s) );
 
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -374,6 +392,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
 			output.add( ToolsWCF.transformSessionDetails(s) );
 		
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -392,6 +411,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for (SessionGroupDefinition a : result.getSessionGroupDefinitionList().getSessionGroupDefinition() )
 			output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
 		
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -409,6 +429,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		GetTrialByIdXMLResult result = port.getTrialByIdXML(id);
 		TrialDetailsWithAttributes s = result.getTrialDetailsWithAttributes();
 
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformTrialDetails(s);
 	}
 
@@ -423,6 +444,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for ( TrialDetailsWithAttributes s : result.getSessionTrialWithAttributesList().getTrialDetailsWithAttributes() )
 			output.add( ToolsWCF.transformTrialDetails(s) );
 			
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -438,6 +460,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 		GetSegmentByIdXMLResult result = port.getSegmentByIdXML(id);
 		SegmentDetailsWithAttributes s = result.getSegmentDetailsWithAttributes();
+		
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformSegmentDetails(s);
 	}
 
@@ -452,6 +476,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		for ( SegmentDetailsWithAttributes s : result.getTrailSegmentWithAttributesList().getSegmentDetailsWithAttributes() )
 			output.add( ToolsWCF.transformSegmentDetails(s) );
 
+		ToolsWCF.finalizeCall();
 		return output;
 	}
 
@@ -466,6 +491,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKind.session.name());
 
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformListOfFiles(result);
 	}
 
@@ -477,6 +503,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKind.trial.name());
 		
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformListOfFiles(result);
 	}
 
@@ -488,6 +515,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKind.performer.name());
 		
+		ToolsWCF.finalizeCall();
 		return ToolsWCF.transformListOfFiles(result);
 	}
 	
@@ -564,6 +592,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 			port.downloadComplete(fileID, file);
 			
+			ToolsWCF.finalizeCall();
 			return destLocalFolder + remoteFile.getName();
 	}
 
@@ -580,6 +609,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		} catch (Exception e) {
 			log.severe( e.getMessage() );
 			e.printStackTrace();
+		}
+		finally{
+			ToolsWCF.finalizeCall();
 		}
 	}
 
@@ -600,6 +632,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		} catch (Exception e) {
 			log.severe( e.getMessage() );
 			e.printStackTrace();
+		} finally
+		{
+			ToolsWCF.finalizeCall();
 		}
 	}
 
@@ -614,6 +649,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		    
 		if (!fileTransferCancelled)
 				port.storePerformerFile( performerId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+		ToolsWCF.finalizeCall();
 	}
 
 	
@@ -626,6 +662,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		if (!fileTransferCancelled)
 				port.storeSessionFile(sessionId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+		ToolsWCF.finalizeCall();
 	}
 
 	
@@ -638,6 +675,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		if (!fileTransferCancelled)
 			port.storeTrialFile(trialId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+		ToolsWCF.finalizeCall();
 	}
 
 
@@ -656,6 +694,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
+		ToolsWCF.finalizeCall();
 	}
 	
 
@@ -674,6 +713,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
+		ToolsWCF.finalizeCall();
 	}
 
 	public void uploadTrialFiles(int trialId, String filesPath, FileTransferListener listener) throws Exception
@@ -691,6 +731,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
+		ToolsWCF.finalizeCall();
 	}
 	
 	
@@ -710,6 +751,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			performerData.setName( name );
 			performerData.setSurname( surname );
 	
+			ToolsWCF.finalizeCall();
 			return port.createPerformer(performerData);
 		}
 
@@ -722,6 +764,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			for (int s: sessionGroupID)
 				sessionGroupIDs.getInt().add(s);
 				
+			ToolsWCF.finalizeCall();
 			return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
 		}
 
@@ -730,6 +773,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		{
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createTrial", this );
 			
+			ToolsWCF.finalizeCall();
 			return port.createTrial(sessionID, trialDescription, trialDuration);
 		}
 	
@@ -738,6 +782,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		{
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "defineTrialSegment", this );
 
+			ToolsWCF.finalizeCall();
 			return port.defineTrialSegment(trialID, segmentName, startTime, endTime);
 		}
 	
@@ -747,6 +792,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
 
 			port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
 		}
 	
 
@@ -755,6 +801,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setTrialAttribute", this );
 
 			port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
 		}
 	
 
@@ -763,6 +810,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
 
 			port.setPerformerAttribute(performerID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
 		}
 	
 		
@@ -771,6 +819,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
 
 			port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
 		}
 	
 
@@ -779,5 +828,6 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
 
 			port.setFileAttribute(fileID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
 		}
 }

@@ -129,22 +129,25 @@ public class DatabaseConnection {
 	static{
 		FileHandler hand;
 		ConsoleHandler cons;
+		log = Logger.getLogger( LOG_ID );
 		try {
 			hand = new FileHandler( LOG_FILE_NAME );
-			cons = new ConsoleHandler();
 			hand.setFormatter( new SimpleFormatter() );
-			
-			log = Logger.getLogger( LOG_ID );
 		    log.addHandler(hand);
-		    log.addHandler( cons );
 		    hand.setLevel( Level.ALL);
+		    log.setLevel( Level.ALL );
+		    //log.setFilter(null);
+		    log.finer( "Database Connection File Log created" );
+		} catch (Exception e) {
+		}
+		try {
+			cons = new ConsoleHandler();
+		    log.addHandler( cons );
 		    cons.setLevel( Level.INFO );
 		    log.setLevel( Level.ALL );
 		    //log.setFilter(null);
-		    log.finer( "Database Connection Log created" );
+		    log.finer( "Database Connection Console Log created" );
 		} catch (Exception e) {
-			System.out.println("Cannot create logger!");
-			e.printStackTrace();
 		}
 	}
 	
