@@ -20,12 +20,14 @@ import motion.applet.webservice.client.WebServiceInstance;
 public class LoginDialog extends BasicDialog {
 	private static String LOGIN_TITLE = Messages.getString("LoginDialog.LoginTitle"); //$NON-NLS-1$
 	private static String USER = Messages.getString("LoginDialog.UserName") + Messages.COLON; //$NON-NLS-1$
+	private static String DOMAIN = Messages.getString("LoginDialog.Domain") + Messages.COLON; //$NON-NLS-1$
 	private static String PASSWORD = Messages.getString("LoginDialog.Password") + Messages.COLON; //$NON-NLS-1$
 	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
 	private static String CANCEL = Messages.CANCEL;
 	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
 	
 	private JTextField loginText;
+	private JTextField domainText;
 	private JPasswordField passwordText;
 	private JButton loginButton;
 	private JButton cancelButton;
@@ -72,6 +74,17 @@ public class LoginDialog extends BasicDialog {
 		passwordLabel.setLabelFor(passwordText);
 		loginPanel.add(passwordText, gridBagConstraints);
 		
+		JLabel domainLabel = new JLabel(DOMAIN);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		loginPanel.add(domainLabel, gridBagConstraints);
+		
+		domainText = new JTextField(10);
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 2;
+		domainLabel.setLabelFor(domainText);
+		loginPanel.add(domainText, gridBagConstraints);
+		
 		this.add(loginPanel, BorderLayout.CENTER);
 		
 		// Button area
@@ -80,6 +93,11 @@ public class LoginDialog extends BasicDialog {
 		
 		cancelButton = new JButton(CANCEL);
 		this.addToButtonPanel(cancelButton);
+		
+		// Initial text
+		loginText.setText( "applet_user" );
+		passwordText.setText( "aplet4Motion" );
+		domainText.setText("dbpawell");
 		
 	}
 	
@@ -91,14 +109,10 @@ public class LoginDialog extends BasicDialog {
 	}
 	
 	protected void addListeners() {
-	
-		loginText.setText( "applet_user" );
-		passwordText.setText( "aplet4Motion" );
-		
 		this.loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), "dbpawell");
+				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
 				
 				//Check login first
 				LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
