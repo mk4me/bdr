@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import motion.applet.database.TableNamesInstance;
-import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.PerformerDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
@@ -35,30 +34,14 @@ public class MotionAppletFrame extends JFrame {
 		//Messages.setLanguagePolish();
 		Messages.setLanguageEnglish();
 		
-		StatusBar statusBar =  new StatusBar(this);
-		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
-		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
-		
-		loginUser();
 		initUserInterface();
-		
-		//Connector connectorTest = new Connector();
-		//connectorTest.displayDatabaseProperties();
-		
-		//MotionWebServiceClient wsClient = new MotionWebServiceClient();
-		//wsClient.callWebService();
-		
-		//ConnectorInstance connectorInstance = new ConnectorInstance();
-	}
-	
-	private void loginUser() {
-		// Create the login dialog
-		LoginDialog loginDialog = new LoginDialog();
-		loginDialog.setVisible(true);
 	}
 	
 	private void initUserInterface() {
-		
+		// Create the status bar
+		StatusBar statusBar =  new StatusBar(this);
+		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
+		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
 		
 		// Create the menu bar
 		JMenuBar appletMenuBar = new JMenuBar();

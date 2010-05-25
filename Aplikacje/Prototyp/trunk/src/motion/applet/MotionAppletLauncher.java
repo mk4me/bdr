@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import motion.applet.dialogs.LoginDialog;
+
 public class MotionAppletLauncher extends JApplet {
 	
 	@Override
@@ -30,8 +32,15 @@ public class MotionAppletLauncher extends JApplet {
 		
 		launcherButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
-				motionAppletFrame.setVisible(true);
+				// Create the login dialog
+				LoginDialog loginDialog = new LoginDialog();
+				loginDialog.setVisible(true);
+				
+				// Check if login was successful
+				if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) {
+					MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
+					motionAppletFrame.setVisible(true);
+				}
 			}
 		});
 	}

@@ -1,9 +1,6 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -32,6 +29,10 @@ public class LoginDialog extends BasicDialog {
 	private JPasswordField passwordText;
 	private JButton loginButton;
 	private JButton cancelButton;
+	
+	public static int LOGIN_SUCCESSFUL = 1;
+	public static int CANCEL_PRESSED = 0;
+	private int result = CANCEL_PRESSED;
 	
 	public LoginDialog() {
 		super(LOGIN_TITLE, WELCOME_TITLE);
@@ -80,8 +81,6 @@ public class LoginDialog extends BasicDialog {
 		cancelButton = new JButton(CANCEL);
 		this.addToButtonPanel(cancelButton);
 		
-//		this.setFocusCycleRoot( true );
-		
 	}
 	
 	protected void finishUserInterface() {
@@ -101,6 +100,9 @@ public class LoginDialog extends BasicDialog {
 				
 				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), "dbpawell");
 				
+				//Check login first
+				LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
+				
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.dispose();
 			}
@@ -108,9 +110,21 @@ public class LoginDialog extends BasicDialog {
 		
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LoginDialog.this.setResult(CANCEL_PRESSED);
 				
-				System.exit(0);
+				LoginDialog.this.setVisible(false);
+				LoginDialog.this.dispose();
 			}
 		});
+	}
+	
+	private void setResult(int result) {
+		
+		this.result = result;
+	}
+	
+	public int getResult() {
+		
+		return this.result;
 	}
 }
