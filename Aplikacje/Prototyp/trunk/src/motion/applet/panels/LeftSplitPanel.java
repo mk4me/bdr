@@ -23,6 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import motion.applet.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
@@ -110,8 +111,8 @@ public class LeftSplitPanel extends JPanel {
 								}
 							}
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+							exceptionDialog.setVisible(true);
 						}
 						
 						return null;

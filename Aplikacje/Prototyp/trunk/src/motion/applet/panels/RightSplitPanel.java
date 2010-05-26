@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.SessionDialog;
 import motion.applet.dialogs.TrialDialog;
 import motion.applet.dialogs.UploadDialog;
@@ -139,22 +140,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void showTable(TableName tableName) {
 		this.tableName = tableName;
-		try {
-			tableModel = new BasicTable(tableName);
-			table.setModel(tableModel);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		tableModel = new BasicTable(tableName);
+		table.setModel(tableModel);
 	}
 	
 	private void showTable(TableName tableName, int recordId) {
 		this.tableName = tableName;
-		try {
-			tableModel = new BasicTable(tableName, recordId);
-			table.setModel(tableModel);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		tableModel = new BasicTable(tableName, recordId);
+		table.setModel(tableModel);
 	}
 	
 	private void showTree(String tableName) {
@@ -163,7 +158,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			ResultTree resultTree = new ResultTree(connector, tableName);
 			tree = resultTree.tree;
 		} catch (Exception e) {
-			e.printStackTrace();
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
+			exceptionDialog.setVisible(true);
 		}
 	}
 	

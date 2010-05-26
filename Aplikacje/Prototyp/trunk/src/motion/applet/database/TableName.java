@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import motion.applet.Messages;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
@@ -75,8 +76,8 @@ public class TableName {
 				groupedDefinedAttributes.add(new AttributeGroup(s, attributes));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
+			exceptionDialog.setVisible(true);
 		}
 	}
 	

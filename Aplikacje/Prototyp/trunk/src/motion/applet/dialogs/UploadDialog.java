@@ -184,8 +184,8 @@ public class UploadDialog extends BasicDialog {
 				try {
 					UploadDialog.this.getEntityComboBoxContents();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
 				}
 				
 				return null;
@@ -292,8 +292,8 @@ public class UploadDialog extends BasicDialog {
 									uploadDirectory(id, path);
 								}
 							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+								exceptionDialog.setVisible(true);
 							}
 							return null;
 						}
@@ -421,7 +421,7 @@ public class UploadDialog extends BasicDialog {
 	
 		@Override
 		public int getDesiredStepPercent() {
-			// TODO Auto-generated method stub
+			
 			return 5;
 		}
 	
@@ -430,7 +430,7 @@ public class UploadDialog extends BasicDialog {
 			// TODO Auto-generated method stub
 			
 		}
-	
+		
 		@Override
 		public void transferStepPercent(final int percent) {
 			UploadDialog.this.setProgressBarValue(percent);

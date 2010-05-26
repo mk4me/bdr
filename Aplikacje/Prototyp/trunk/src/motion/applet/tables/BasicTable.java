@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.BottomSplitPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -56,8 +57,8 @@ public class BasicTable extends AbstractTableModel {
 						listTrials();
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
 				}
 				
 				return null;

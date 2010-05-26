@@ -23,6 +23,7 @@ public class Messages {
 	public static final String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
 	public static final String CREATE = Messages.getString("Create"); //$NON-NLS-1$
 	public static final String UPDATE = Messages.getString("Update"); //$NON-NLS-1$
+	public static final String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
 	
 	private Messages() {
 	}

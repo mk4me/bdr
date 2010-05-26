@@ -103,8 +103,8 @@ public class TrialDialog extends BasicDialog {
 			treeTable = new JTreeTable(new EntityEditorModel(trial));
 			centerPanel.add(new JScrollPane(new JScrollPane(treeTable)), BorderLayout.CENTER);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
+			exceptionDialog.setVisible(true);
 		}
 	}
 	
@@ -148,13 +148,14 @@ public class TrialDialog extends BasicDialog {
 						TrialDialog.this.dispose();
 					} catch (ParseException e1) {
 						//SessionDialog.this.messageLabel.setText(INCORRECT_SESSION_DATE_MESSAGE);
-						//e1.printStackTrace();
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						exceptionDialog.setVisible(true);
 					} catch (DatatypeConfigurationException e2) {
-						// TODO Auto-generated catch block
-						//e2.printStackTrace();
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e2);
+						exceptionDialog.setVisible(true);
 					} catch (Exception e3) {
-						// TODO Auto-generated catch block
-						e3.printStackTrace();
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e3);
+						exceptionDialog.setVisible(true);
 					}
 				}
 			}
