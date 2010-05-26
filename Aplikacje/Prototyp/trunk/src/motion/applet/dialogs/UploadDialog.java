@@ -177,37 +177,55 @@ public class UploadDialog extends BasicDialog {
 		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.tableName.toString() + Messages.COLON);
-		try {
-			if (this.selectId == false) {
-				entityComboBox.setEnabled(false);
-				if (this.tableName.equals(TableNamesInstance.SESSION)) {
-					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getSessionById(this.recordId));
-				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getPerformerById(this.recordId));
-				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
-					entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getTrialById(this.recordId));
+		
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					UploadDialog.this.getEntityComboBoxContents();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			} else {
-				if (this.tableName.equals(TableNamesInstance.SESSION)) {
-					DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
-					for (Session s : list) {
-						entityComboBox.addItem(s);
-					}
-				} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-					DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
-					for (Performer p : list) {
-						entityComboBox.addItem(p);
-					}
-				} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
-					DbElementsList<Trial> list = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(1);
-					for (Trial t : list) {
-						entityComboBox.addItem(t);
-					}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				UploadDialog.this.validateResult();
+			}
+		};
+		worker.execute();
+	}
+	
+	private void getEntityComboBoxContents() throws Exception {
+		if (this.selectId == false) {
+			entityComboBox.setEnabled(false);
+			if (this.tableName.equals(TableNamesInstance.SESSION)) {
+				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getSessionById(this.recordId));
+			} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getPerformerById(this.recordId));
+			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getTrialById(this.recordId));
+			}
+		} else {
+			if (this.tableName.equals(TableNamesInstance.SESSION)) {
+				DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
+				for (Session s : list) {
+					entityComboBox.addItem(s);
+				}
+			} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+				DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
+				for (Performer p : list) {
+					entityComboBox.addItem(p);
+				}
+			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+				DbElementsList<Trial> list = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(1);
+				for (Trial t : list) {
+					entityComboBox.addItem(t);
 				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
