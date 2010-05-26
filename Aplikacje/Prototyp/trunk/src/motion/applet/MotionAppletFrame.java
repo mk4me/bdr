@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
@@ -33,7 +34,11 @@ public class MotionAppletFrame extends JFrame {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
 		
-		initUserInterface();
+//		new Thread(){
+//			public void run(){
+				initUserInterface();
+//			}
+//		}.start();
 	}
 	
 	private void initUserInterface() {
@@ -124,18 +129,24 @@ public class MotionAppletFrame extends JFrame {
 	
 	public static void main(String args[])
 	{
-		// Set language
-		//Messages.setLanguagePolish();
-		Messages.setLanguageEnglish();
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+	
+		    	// Set language
+				//Messages.setLanguagePolish();
+				Messages.setLanguageEnglish();
 
-		// Login dialog
-		LoginDialog loginDialog = new LoginDialog();
-		loginDialog.setVisible(true);
-		
-		// Check if login was successful
-		if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) {
-			MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
-			motionAppletFrame.setVisible(true);
-		}
+				// Login dialog
+				LoginDialog loginDialog = new LoginDialog();
+				loginDialog.setVisible(true);
+				
+				// Check if login was successful
+				if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) 
+				{	
+					MotionAppletFrame motionAppletFrame = new MotionAppletFrame();
+					motionAppletFrame.setVisible(true);
+				}
+		    }
+		});
 	}
 }

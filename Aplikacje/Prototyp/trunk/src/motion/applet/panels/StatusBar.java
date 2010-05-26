@@ -28,13 +28,8 @@ public class StatusBar extends JPanel implements TextMessageListener{
     }
     
     public void setMessage(String message) {
-        invalidate();
         System.err.println("Status bar --" + message);
         label.setText(" "+message);
-        label.repaint();
-        if (container!=null)
-        	container.invalidate();
-        repaint();
-        this.updateUI();
+        label.invalidate();
     }        
 }
