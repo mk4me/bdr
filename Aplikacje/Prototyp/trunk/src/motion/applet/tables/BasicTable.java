@@ -2,6 +2,7 @@ package motion.applet.tables;
 
 import java.util.ArrayList;
 
+import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import motion.applet.database.TableName;
@@ -20,15 +21,10 @@ import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
 
 public class BasicTable extends AbstractTableModel {
-	//private Object[][] contents;
-	//private String[] columnNames;
-	//private Class[] columnClasses;
-	private ArrayList<ArrayList<Object>> contents2 = new ArrayList<ArrayList<Object>>();
+	private ArrayList<ArrayList<Object>> contents = new ArrayList<ArrayList<Object>>();
 	private ArrayList<String> attributeNames = new ArrayList<String>();
 	private ArrayList<Integer> recordIds = new ArrayList<Integer>();
-	//private java.sql.Connection connection;
 	public TableName tableName;
-	//private String databaseName;
 	public int recordId;
 	
 	public BasicTable(TableName tableName) {
@@ -47,199 +43,116 @@ public class BasicTable extends AbstractTableModel {
 		getTableContentsFromAttributes();
 	}
 	
-	/*
-	private void getTableContents() throws SQLException {
-		DatabaseMetaData databaseMetaData = this.connection.getMetaData();
-		ResultSet resultSet = databaseMetaData.getColumns(this.databaseName, null, this.tableName.getTableName(), null);
-		ArrayList<String> columnNameList = new ArrayList<String>();
-		ArrayList<Object> columnClassList = new ArrayList<Object>();
-		while (resultSet.next()) {
-			columnNameList.add(resultSet.getString("COLUMN_NAME"));
-			int dataType = resultSet.getInt("DATA_TYPE");
-			
-			switch (dataType) {
-			case Types.INTEGER:
-				columnClassList.add(Integer.class);
-				break;
-			case Types.FLOAT:
-				columnClassList.add(Float.class);
-				break;
-			case Types.DOUBLE:
-			case Types.REAL:
-				columnClassList.add(String.class);
-				break;
-			case Types.DATE:
-			case Types.TIME:
-			case Types.TIMESTAMP:
-				columnClassList.add(Date.class);
-				break;
-			default:
-				columnClassList.add(String.class);
-				break;
-			}
-		}
-		this.columnNames = new String[columnNameList.size()];
-		columnNameList.toArray(this.columnNames);
-		this.columnClasses = new Class[columnClassList.size()];
-		columnClassList.toArray(this.columnClasses);
-		Statement statement = this.connection.createStatement();
-		resultSet = statement.executeQuery("SELECT * FROM " + tableName.getTableName());
-		ArrayList<Object> rowList = new ArrayList<Object>();
-		while (resultSet.next()) {
-			ArrayList<Object> cellList = new ArrayList<Object>();
-			
-			for (int i = 0; i < this.columnClasses.length; i++) {
-				Object cellValue = null;
-				if (this.columnClasses[i] == String.class) {
-					cellValue = resultSet.getString(this.columnNames[i]);
-				} else if (this.columnClasses[i] == Integer.class) {
-					cellValue = new Integer(resultSet.getInt(this.columnNames[i]));
-				} else if (this.columnClasses[i] == Float.class) {
-					cellValue = new Float(resultSet.getFloat(this.columnNames[i]));	//getInt
-				} else if (this.columnClasses[i] == Double.class) {
-					cellValue = new Double(resultSet.getDouble(this.columnNames[i]));
-				} else if (this.columnClasses[i] == java.sql.Date.class) {
-					cellValue = resultSet.getDate(this.columnNames[i]);
-				} else {
-					//
-				}
-				cellList.add (cellValue);
-			}
-			contents2.add(cellList);
-			Object[] cells = cellList.toArray();
-			rowList.add(cells);
-		}
-		this.contents = new Object[rowList.size()] [];
-		for (int i = 0; i < this.contents.length; i++) {
-			this.contents[i] = (Object[]) rowList.get(i);
-		}
-		
-		
-		// 1. Close the ResultSet
-		// 2. Close the Statement
-		// 3. Close the Connection
-		resultSet.close();
-		statement.close();
-	}
-	*/
 	private void getTableContentsFromAttributes() {
-		if (tableName.equals(TableNamesInstance.PERFORMER)) {
-			listPerformers();
-		} else if (tableName.equals(TableNamesInstance.SESSION)) {
-			listSessions();
-		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-			listTrials();
-		}/* else {
-			Connector connector = new Connector();
-			this.databaseName = connector.getDatabaseName();
-			this.connection = connector.openConnection();
-			try {
-				getTableContents();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			connector.closeConnection();
-		}*/
-	}
-	
-	private void listPerformers() {
-		try {
-			DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
-			for (Performer p : performers) {
-				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes())) {
-					this.attributeNames.add(a.toString());
-					EntityAttribute entityAttribute = p.get(a.toString());
-					if (entityAttribute != null) {
-						cellList.add(entityAttribute.value);
-					} else {
-						cellList.add(null);
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					if (tableName.equals(TableNamesInstance.PERFORMER)) {
+						listPerformers();
+					} else if (tableName.equals(TableNamesInstance.SESSION)) {
+						listSessions();
+					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+						listTrials();
 					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				this.recordIds.add(Integer.parseInt(p.get(PerformerStaticAttributes.performerID.toString()).value.toString()));
-				this.contents2.add(cellList);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void listSessions() {
-		try {
-			DbElementsList<Session> sessions = new DbElementsList<Session>();
-			if (this.recordId > -1) {
-				sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
-			} else {
-				sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
-			}
-			for (Session s : sessions) {
-				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes())) {
-					this.attributeNames.add(a.toString());
-					EntityAttribute entityAttribute = s.get(a.toString());
-					if (entityAttribute != null) {
-						cellList.add(entityAttribute.value);
-					} else {
-						cellList.add(null);
-					}
-				}
-				this.recordIds.add(Integer.parseInt(s.get(SessionStaticAttributes.sessionID.toString()).value.toString()));
-				this.contents2.add(cellList);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void listTrials() {
-		try {
-			DbElementsList<Trial> trials = new DbElementsList<Trial>();
-			if (this.recordId > -1) {
-				trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
+				
+				return null;
 			}
 			
-			for (Trial t : trials) {
-				ArrayList<Object> cellList = new ArrayList<Object>();
-				for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes())) {
-					this.attributeNames.add(a.toString());
-					EntityAttribute entityAttribute = t.get(a.toString());
-					if (entityAttribute != null) {
-						cellList.add(entityAttribute.value);
-					} else {
-						cellList.add(null);
-					}
-				}
-				this.recordIds.add(Integer.parseInt(t.get(TrialStaticAttributes.trialID.toString()).value.toString()));
-				this.contents2.add(cellList);
+			@Override
+			protected void done() {
+				BasicTable.this.fireTableStructureChanged();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		};
+		worker.execute();
+	}
+	
+	private void listPerformers() throws Exception {
+		DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
+		for (Performer p : performers) {
+			ArrayList<Object> cellList = new ArrayList<Object>();
+			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes())) {
+				this.attributeNames.add(a.toString());
+				EntityAttribute entityAttribute = p.get(a.toString());
+				if (entityAttribute != null) {
+					cellList.add(entityAttribute.value);
+				} else {
+					cellList.add(null);
+				}
+			}
+			this.recordIds.add(Integer.parseInt(p.get(PerformerStaticAttributes.performerID.toString()).value.toString()));
+			this.contents.add(cellList);
+		}
+	}
+	
+	private void listSessions() throws Exception {
+		DbElementsList<Session> sessions = new DbElementsList<Session>();
+		if (this.recordId > -1) {
+			sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
+		} else {
+			sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
+		}
+		for (Session s : sessions) {
+			ArrayList<Object> cellList = new ArrayList<Object>();
+			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes())) {
+				this.attributeNames.add(a.toString());
+				EntityAttribute entityAttribute = s.get(a.toString());
+				if (entityAttribute != null) {
+					cellList.add(entityAttribute.value);
+				} else {
+					cellList.add(null);
+				}
+			}
+			this.recordIds.add(Integer.parseInt(s.get(SessionStaticAttributes.sessionID.toString()).value.toString()));
+			this.contents.add(cellList);
+		}
+	}
+	
+	private void listTrials() throws Exception {
+		DbElementsList<Trial> trials = new DbElementsList<Trial>();
+		if (this.recordId > -1) {
+			trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
+		}
+		
+		for (Trial t : trials) {
+			ArrayList<Object> cellList = new ArrayList<Object>();
+			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes())) {
+				this.attributeNames.add(a.toString());
+				EntityAttribute entityAttribute = t.get(a.toString());
+				if (entityAttribute != null) {
+					cellList.add(entityAttribute.value);
+				} else {
+					cellList.add(null);
+				}
+			}
+			this.recordIds.add(Integer.parseInt(t.get(TrialStaticAttributes.trialID.toString()).value.toString()));
+			this.contents.add(cellList);
 		}
 	}
 	
 	@Override
 	public int getColumnCount() {
-		if (this.contents2.size() == 0) {
+		if (this.contents.size() == 0) {
 			return 0;
 		} else {
-			return this.contents2.get(0).size();
+			return this.contents.get(0).size();
 		}
 	}
 	
 	@Override
 	public int getRowCount() {
 		
-		return this.contents2.size();
+		return this.contents.size();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int column) {
 		
-		return this.contents2.get(row).get(column);
+		return this.contents.get(row).get(column);
 	}
 	/*
 	public Class getColumnClass(int column) {
