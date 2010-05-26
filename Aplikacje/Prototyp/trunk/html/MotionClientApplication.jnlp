@@ -5,10 +5,9 @@
   href="MotionClientApplication.jnlp">
   <information>
     <title>Motion Web Client</title>
-    <vendor>PJWSTK Centrum Badawcze Warszawa</vendor>
-    <homepage href="docs/help.html"/>
+    <vendor>Centrum Badawcze PJWSTK Warszawa</vendor>
+    <homepage href="index.html"/>
     <description>Motion Web Client</description>
-    <description kind="short"></description>
   </information>
   <security>
       <all-permissions/>

@@ -8,32 +8,43 @@
 <p style="text-align: center; font-family: sans-serif;"><img
  src="logo.png" height="35">&nbsp;<big>
 <big style="font-weight: bold; color: rgb(204, 0, 0);"><big><big>Web
-Client<br>
+Client
 </big></big></big></big></p>
 <div style="text-align: center; font-family: sans-serif;">
 <table
- style="text-align: left; width: 800px; margin-left: auto; margin-right: auto; background-color: rgb(255, 255, 255);"
+ style="text-align: left; width: 800px; margin-right: auto; background-color: rgb(255, 255, 255); margin-left: auto;"
  border="0" cellpadding="20" cellspacing="2">
   <tbody>
     <tr>
       <td colspan="2" rowspan="1" style="vertical-align: top;">
-      <div style="margin-left: 40px;"><br>
-Welcome
-to Motion Web Client Launcher page!<br>
+      <div>
+      <h3><span style="font-weight: bold;"></span>Welcome
+to the Motion Web Client Launcher page!</h3>
+      <hr style="width: 100%; height: 2px;"><br>
+This is version 0.9 (31.05.2010). <br>
+To see our planned functionality have a look at our <a
+ href="roadmap.html">roadmap</a>. <br>
       <br>
-This application requires Java JRE 1.6.0 (click here to download and
-install)<br>
-      <br>
+This application requires Java JRE 1.6.0 (click for <a
+ href="https://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_Developer-Site/en_US/-/USD/ViewProductDetail-Start?ProductRef=jre-6u20-oth-JPR@CDS-CDS_Developer">download
+and
+install</a>)<br>
 If Java is already installed on your computer choose one of the two
 possible launchers below.<br>
       </div>
+      <br>
       <br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top;">1. Web Browser launcher. <br>
       <br>
-      <div style="margin-left: 40px;"><small>Application will be
+      <div style="margin-left: 40px;"><small>a) Just press the button
+and if you previously accepted our signed applet you should see a login
+dialog.<br>
+b) Enter your login name, password and domain and start using the client<br>
+      <br>
+Application will be
 embeded in the internet browser window. This option requires the
 browser to be correctly configured to run java applets. Also browser
 window has to be openned all the time if the Motion Web Client is in
@@ -49,7 +60,14 @@ use.</small><br>
     <tr>
       <td style="vertical-align: top;">2. Java Web Start launcher. <br>
       <br>
-      <div style="margin-left: 40px;"><small>This option is independent
+      <div style="margin-left: 40px;"><small>a) Clik on the link. You
+will be prompted to run a jnlp Java Web Start Application. Confirm.<br>
+b) After a short download you will be prompted to run a signed
+application. Choose "Run"<br>
+c) You will see a login dialog. </small><small>Enter your login name,
+password and domain and start using the client.<br>
+      </small><br>
+      <small>This option is independent
 of the internet browser and requires only Java to be installed. You may
 also close the browser after the application is started. You may also
 download MotionClientApplication.jnlp file, save it somewhere in your
@@ -59,19 +77,18 @@ home directory and use for launching the Web Client in the future.<br>
       </td>
       <td style="vertical-align: top;"><br>
       <div style="margin-left: 40px;">
-      <a
- href="MotionClientApplication.jnlp">Java Web Start Launcher</a>
-    <br>
-    </br><script src="http://www.java.com/js/deployJava.js"></script>
-    <script>
+      <div style="text-align: center;"> <a
+ href="MotionClientApplication.jnlp">Java Web Start Launcher</a> <br>
+      </div>
+<!--script src="http://www.java.com/js/deployJava.js"></script>
+      <script>
         // using JavaScript to get location of JNLP file relative to HTML page
         var dir = location.href.substring(0, location.href.lastIndexOf('/')+1);
         var url = dir + "MotionClientApplication.jnlp";
         deployJava.createWebStartLaunchButton(url, '1.6.0');
-    </script>
- 
- <br>
+    </script-->
       </div>
+      <br>
       </td>
     </tr>
   </tbody>
