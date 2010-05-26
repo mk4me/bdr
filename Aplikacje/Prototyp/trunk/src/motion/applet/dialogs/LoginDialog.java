@@ -8,11 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -110,14 +110,27 @@ public class LoginDialog extends BasicDialog {
 		this.loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
-				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
-				
-				//Check login first
-				LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						LoginDialog.this.loginButton.setEnabled(false);
+						WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
+						WebServiceInstance.getDatabaseConnection().setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
+						
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						// Login always successful, add login check
+						LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
 
-				LoginDialog.this.setVisible(false);
-				LoginDialog.this.dispose();
+						LoginDialog.this.setVisible(false);
+						LoginDialog.this.dispose();
+					}
+				};
+				worker.execute();
 			}
 		});
 		
