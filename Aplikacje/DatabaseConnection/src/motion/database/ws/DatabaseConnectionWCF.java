@@ -67,6 +67,7 @@ import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.Motion
 import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinitionList.SessionGroupDefinition;
 import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.PerformerData;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
@@ -809,10 +810,17 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-
-			port.setPerformerAttribute(performerID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
+			try {
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+				port.setPerformerAttribute(performerID, attributeName, attributeValue, update);
+			
+			} catch (IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage e) {
+			
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 		

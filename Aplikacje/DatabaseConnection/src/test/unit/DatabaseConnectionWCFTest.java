@@ -22,6 +22,7 @@ import motion.database.model.Performer;
 import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.Trial;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -61,7 +62,7 @@ public class DatabaseConnectionWCFTest {
 	public void setUp() throws Exception {
 		database = DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
-		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
+		database.setWSCredentials("applet_user", "aplet4Motion", "db-bdr");
 //		database.setWSCredentials("bzdura", "bzdura", "DBPAWELL");
 		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 	}
@@ -321,7 +322,7 @@ public class DatabaseConnectionWCFTest {
 		date.setMonth(3);
 		date.setDay(23);
 		
-		int id = database.createSession(1, new int[]{1}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak z p�obrotu");
+		int id = database.createSession(1, new int[]{}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak tyłem na siedząco?");
 		System.out.println("Created session: " + id );
 
 		Session session = database.getSessionById(id);
@@ -412,16 +413,16 @@ public class DatabaseConnectionWCFTest {
 	@Test
 	public void testSetPerformerAttribute() throws Exception {
 		
-		beforeTest();
+			beforeTest();
 
-		int id = 3;
-		String attributeName = "date_of_birth";
-		String value = "12.12.2012";
-		database.setPerformerAttribute( id, attributeName, value, false);
+			int id = 3;
+			String attributeName = "date_of_birth";
+			String value = "12.12.2012";
+			database.setPerformerAttribute( id, attributeName, value, true);
 
-		DbElementsList<Performer> list = database.listPerformersWithAttributes();
-		Performer x = list.findById(3);
-		Assert.assertTrue( x.get( attributeName ).value.equals( value ) );
+			DbElementsList<Performer> list = database.listPerformersWithAttributes();
+			Performer x = list.findById(3);
+			Assert.assertTrue( x.get( attributeName ).value.equals( value ) );
 	}
 	
 	/**

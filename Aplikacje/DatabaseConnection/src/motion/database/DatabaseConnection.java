@@ -121,7 +121,7 @@ public class DatabaseConnection {
 	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED };
 	
 	private static DatabaseProxy instance;
-	private static Logger log;
+	public static Logger log;
 	
 	public static final String LOG_ID = "DatabaseConnection";
 	public static final String LOG_FILE_NAME = "DatabaseConnection.log";

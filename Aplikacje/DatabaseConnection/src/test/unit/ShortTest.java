@@ -33,6 +33,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import test.unit.DatabaseConnectionWCFTest.ConsoleTransferListener;
+
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 /**
@@ -57,18 +59,45 @@ public class ShortTest {
 		database = DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
-		database.setWSCredentials("applet_user", "aplet4Motion", "DBPAWELL");
-		database.setFTPSCredentials("dbpawell", "testUser", "testUser");
+		database.setWSCredentials("applet_user", "aplet4Motion", "db-bdr");
+		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
+	class ConsoleTransferListener implements FileTransferListener
+	{
+
+		@Override
+		public void transferStepPercent(int percent) {
+
+			System.out.println( "-------->" + percent + "%" );	
+			System.out.flush();
+		}
+		
+		@Override
+		public int getDesiredStepPercent()
+		{
+			return 5; // b�dzie informowany co 5%
+		}
+
+		@Override
+		public void transferStep() {
+			System.out.println( "--------> tick" );	
+			System.out.flush();
+		}
+	}
 	
 	@Test
 	public void test() throws Exception {
 		
 		beforeTest();
 	
-		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
+		int id = 2;
 		
-		System.out.println(r);
+		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
+
+//		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
+		//DbElementsList<Session> r = database.listLabSessionsWithAttributes(1);
+		
+	//	System.out.println(r);
 	}
 }
