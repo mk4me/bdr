@@ -104,8 +104,6 @@ public class LoginDialog extends BasicDialog {
 	protected void finishUserInterface() {
 		this.setSize(250, 200);
 		this.setResizable(false);
-		// Disable the close button
-		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 	
 	protected void addListeners() {

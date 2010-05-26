@@ -33,24 +33,7 @@ public class MotionAppletFrame extends JFrame {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
 		
-		StatusBar statusBar =  new StatusBar(this);
-		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
-		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
-		
-		//loginUser();
-		
-		//DatabaseConnection.getInstanceWCF().setWSCredentials( "applet_user", "aplet4Motion", "dbpawell");
-		//DatabaseConnection.getInstanceWCF().setFTPSCredentials( "db-bdr.pjwstk.edu.pl", "test", "test");
-		
 		initUserInterface();
-		
-		//Connector connectorTest = new Connector();
-		//connectorTest.displayDatabaseProperties();
-		
-		//MotionWebServiceClient wsClient = new MotionWebServiceClient();
-		//wsClient.callWebService();
-		
-		//ConnectorInstance connectorInstance = new ConnectorInstance();
 	}
 	
 	private void initUserInterface() {
