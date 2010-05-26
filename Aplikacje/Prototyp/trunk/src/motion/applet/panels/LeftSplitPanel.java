@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
+import javax.swing.SwingWorker;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -95,20 +96,33 @@ public class LeftSplitPanel extends JPanel {
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(tree.getModel().getRoot());
-				if (tree.getSelectionPath() != null) {
-					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
-					if (!selectedNode.isRoot()) {
-						//FilterPredicate[] query = ((Filter) selectedNode.getUserObject()).toFilterPredicate();
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws InterruptedException {
 						try {
-							List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(((Filter) selectedNode.getUserObject()), new String[]{LeftSplitPanel.this.tableName.toString().toLowerCase()});
-							System.out.println(result);
+							if (tree.getSelectionPath() != null) {
+								DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
+								if (!selectedNode.isRoot()) {
+									List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+											((Filter) selectedNode.getUserObject()),
+											new String[] {LeftSplitPanel.this.tableName.toString().toLowerCase()});
+									System.out.println(result);
+								}
+							}
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						
+						return null;
 					}
-				}
+					
+					@Override
+					protected void done() {
+						
+					}
+				};
+				worker.execute();
 				
 				//TreeNode root = (TreeNode) tree.getModel().getRoot();
 			}
