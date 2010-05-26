@@ -11,6 +11,7 @@ using System.IO;
 namespace MotionDBWebServices
 {
     // NOTE: If you change the class name "FileStoremanWS" here, you must also update the reference to "FileStoremanWS" in Web.config.
+    [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
     public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
         string baseLocalFilePath = @"C:\FTPShare\";

@@ -1554,10 +1554,10 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesService">
 		<wsdl:port name="BasicQueriesServiceSoap" binding="tns:BasicQueriesServiceSoap">
-			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
+			<soap:address location="http://db-bdr.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
 		</wsdl:port>
 		<wsdl:port name="BasicQueriesServiceSoap12" binding="tns:BasicQueriesServiceSoap12">
-			<soap12:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
+			<soap12:address location="http://db-bdr.pjwstk.edu.pl/Motion/BasicQueriesService.asmx"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

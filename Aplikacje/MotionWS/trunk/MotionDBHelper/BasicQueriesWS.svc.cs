@@ -437,7 +437,7 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
-        [PrincipalPermission(SecurityAction.Demand, Name = @"DBPAWELL\applet_user")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListPerformerSessionsWithAttributesXML(int performerID)
         {
             XmlDocument xd = new XmlDocument();
@@ -472,7 +472,7 @@ namespace MotionDBWebServices
 
             return xd.DocumentElement;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListLabSessionsWithAttributesXML(int labID)
         {
             XmlDocument xd = new XmlDocument();

@@ -14,8 +14,10 @@ namespace MotionDBWebServices
 
         protected void OpenConnection()
         {
-            // server = DBPAWELL
-            conn = new SqlConnection(@"server = DBPAWELL; integrated security = true; database = Motion");
+            // server = DBPAWELL albo DB-BDR
+            // UWAGA! To samo trzeba zmieniac (development / produkcja) w permissions w .svc.cs
+            // oraz w recznie generowanych wsdl-ach
+            conn = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             conn.Open();
             cmd = conn.CreateCommand();
         }

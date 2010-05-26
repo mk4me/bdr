@@ -11,10 +11,11 @@ using System.Security.Permissions;
 namespace MotionDBWebServices
 {
     // NOTE: If you change the class name "BasicUpdatesWS" here, you must also update the reference to "BasicUpdatesWS" in Web.config.
+    [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")]
     public class BasicUpdatesWS : DatabaseAccessService, IBasicUpdatesWS
     {
 
-        [PrincipalPermission(SecurityAction.Demand, Name = @"DBPAWELL\applet_user")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int CreatePerformer(PerformerData performerData)
         {
             int newPerformerId = 0;
@@ -62,6 +63,33 @@ namespace MotionDBWebServices
             {
 
                 OpenConnection();
+
+                SqlDataReader dr = null;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "validate_session_group_id";
+                SqlParameter idPar = cmd.Parameters.Add("@group_id", SqlDbType.Int);
+                idPar.Direction = ParameterDirection.Input;
+                if(sessionGroupIDs!=null) foreach (int sg in sessionGroupIDs) {
+                    idPar.Value = sg;
+                    dr = cmd.ExecuteReader();
+
+                
+                if (dr.Read())
+                {
+                   if(int.Parse(dr[0].ToString())!=1) {
+                       UpdateException exc = new UpdateException("Invalid ID" , "Group with ID ="+sg.ToString()+" not found");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                   }
+                   dr.Dispose();
+
+                }
+                }
+                if(dr!=null) dr.Close();
+                //
+                cmd.Parameters.Remove(idPar);
+
+                cmd.CommandType = CommandType.Text;
+
                 cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
                                             values (@sess_user, @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
                                             set @sess_id = SCOPE_IDENTITY()";
