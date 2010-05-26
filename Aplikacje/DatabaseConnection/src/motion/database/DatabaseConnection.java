@@ -164,4 +164,9 @@ public class DatabaseConnection {
 			instance = new DatabaseConnectionWCF(log);
 		return instance;
 	}
+	
+	public static Logger getLogger()
+	{
+		return log;
+	}
 }
