@@ -60,5 +60,6 @@
 	    	<arg value="deploy/uMotionClient.jar"></arg>
 	    	<arg value="MotionClientKey"></arg>
     	</exec>
+    	<delete><fileset file="deploy/uMotionClient.jar"/></delete>
     </target>
 </project>
