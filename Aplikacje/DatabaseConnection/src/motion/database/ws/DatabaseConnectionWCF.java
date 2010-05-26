@@ -318,9 +318,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		DbElementsList<Performer> output = new DbElementsList<Performer>();
 		
-		for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-				output.add( ToolsWCF.transformPerformerDetails(s) );
-
+		if (result.getLabPerformerWithAttributesList() != null) {
+			for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+					output.add( ToolsWCF.transformPerformerDetails(s) );
+		}
+		
 		ToolsWCF.finalizeCall();
 		return output;
 	}
