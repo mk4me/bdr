@@ -97,7 +97,7 @@ public class LoginDialog extends BasicDialog {
 		// Initial text
 		loginText.setText( "applet_user" );
 		passwordText.setText( "aplet4Motion" );
-		domainText.setText("dbpawell");
+		domainText.setText("db-bdr");
 		
 	}
 	
