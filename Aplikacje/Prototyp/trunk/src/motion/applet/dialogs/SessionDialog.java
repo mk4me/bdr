@@ -126,7 +126,7 @@ public class SessionDialog extends BasicDialog {
 			session.put(SessionStaticAttributes.sessionID, 0);	// Error if there is no sessionID.
 			//session.put(SessionStaticAttributes.performerID, this.performerID);
 			session.put(SessionStaticAttributes.sessionDescription, "");	// [1, 1]
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String date = dateFormat.format(Calendar.getInstance().getTime()).toString();
 			session.put(SessionStaticAttributes.sessionDate, date);	// [2, 1]
 			//session.put(SessionStaticAttributes.motionKindID, 1);
@@ -149,7 +149,7 @@ public class SessionDialog extends BasicDialog {
 					//UploadDialog.this.result = CANCEL_PRESSED;
 					try {
 						//System.out.println(SessionDialog.this.getSessionDate());
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Date date = dateFormat.parse(SessionDialog.this.getSessionDate());
 						DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
 						XMLGregorianCalendar sessionDate = datatypeFactory.newXMLGregorianCalendar();
@@ -158,6 +158,9 @@ public class SessionDialog extends BasicDialog {
 						sessionDate.setDay(calendar.get(Calendar.DAY_OF_MONTH));
 						sessionDate.setMonth(calendar.get(Calendar.MONTH));
 						sessionDate.setYear(calendar.get(Calendar.YEAR));
+						sessionDate.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+						sessionDate.setMinute(calendar.get(Calendar.MINUTE));
+						sessionDate.setSecond(calendar.get(Calendar.SECOND));
 						WebServiceInstance.getDatabaseConnection().createSession(
 								SessionDialog.this.performerID,
 								new int[]{},
