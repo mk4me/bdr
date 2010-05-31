@@ -132,7 +132,7 @@ public class PerformerDialog extends BasicDialog {
 							WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
 									performerID,
 									PerformerDialog.this.treeTable.getModel().getValueAt(5, 0).toString(),
-									PerformerDialog.this.getPerformerBirthDate(),
+									PerformerDialog.this.getPerformerDiagnosis(),
 									false);
 						}
 						PerformerDialog.this.setVisible(false);
