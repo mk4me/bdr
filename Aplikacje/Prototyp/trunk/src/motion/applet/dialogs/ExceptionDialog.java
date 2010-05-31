@@ -41,6 +41,13 @@ public class ExceptionDialog extends BasicDialog {
 		this.finishUserInterface();
 	}
 	
+	public ExceptionDialog(String text, String message) {
+		super(TITLE, message);
+		this.exceptionText = text;
+		
+		this.finishUserInterface();
+	}
+	
 	@Override
 	protected void constructUserInterface() {
 		// Exception area

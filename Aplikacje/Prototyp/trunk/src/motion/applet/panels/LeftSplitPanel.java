@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
@@ -107,7 +108,10 @@ public class LeftSplitPanel extends JPanel {
 									List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 											((Filter) selectedNode.getUserObject()),
 											new String[] {LeftSplitPanel.this.tableName.toString().toLowerCase()});
-									System.out.println(result);
+									//System.out.println(result);
+									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
+									ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
+									resultDialog.setVisible(true);
 								}
 							}
 						} catch (Exception e1) {
