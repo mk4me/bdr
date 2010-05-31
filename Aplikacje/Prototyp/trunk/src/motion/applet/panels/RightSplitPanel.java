@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
@@ -40,6 +41,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_UPLOAD = "Upload file";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_TRIALS = "View trials";
+	private static String MENU_VIEW_FILES = "View files";
 	
 	private BottomSplitPanel bottomPanel;
 	
@@ -120,17 +122,34 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 							}
 						});
 					}
-					// Upload context menu.
-					JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
-					popupMenu.add(uploadMenuItem);
 					
-					uploadMenuItem.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							UploadDialog uploadDialog = new UploadDialog(RightSplitPanel.this.tableName, recordId);
-							uploadDialog.setVisible(true);
-						}
-					});
+					if (RightSplitPanel.this.tableName.equals(TableNamesInstance.PERFORMER) ||
+							RightSplitPanel.this.tableName.equals(TableNamesInstance.SESSION) ||
+							RightSplitPanel.this.tableName.equals(TableNamesInstance.TRIAL)) {
+						popupMenu.add(new JSeparator());
+						// Upload context menu.
+						JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
+						popupMenu.add(uploadMenuItem);
+						
+						uploadMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								UploadDialog uploadDialog = new UploadDialog(RightSplitPanel.this.tableName, recordId);
+								uploadDialog.setVisible(true);
+							}
+						});
+						
+						// View files context menu
+						JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
+						popupMenu.add(viewFilesMenuItem);
+						
+						viewFilesMenuItem.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, RightSplitPanel.this.tableName);
+							}
+						});
+					}
 					
 					popupMenu.show(table, point.x, point.y);
 				}
@@ -152,6 +171,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		table.setModel(tableModel);
 	}
 	
+	private void showTable(TableName tableName, int recordId, TableName fromTableName) {
+		this.tableName = tableName;
+		
+		tableModel = new BasicTable(tableName, recordId, fromTableName);
+		table.setModel(tableModel);
+	}
+	
 	private void showTree(String tableName) {
 		Connector connector = new Connector();
 		try {
@@ -165,11 +191,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		if (actionEvent.getSource() instanceof JComboBox) {
+		if (actionEvent.getSource() instanceof JComboBox) {	// The source is the toolbar combo box.
 			JComboBox comboBox = (JComboBox) actionEvent.getSource();
 			showTable(((TableName) comboBox.getSelectedItem()));
-		} else if (actionEvent.getSource() instanceof JButton) {
-			showTable(tableModel.tableName, tableModel.recordId);
+		} else if (actionEvent.getSource() instanceof JButton) {	// The source is the Apply selection button.
+			showTable(tableModel.tableName, tableModel.recordId, tableModel.fromTableName);
 		}
 	}
 }

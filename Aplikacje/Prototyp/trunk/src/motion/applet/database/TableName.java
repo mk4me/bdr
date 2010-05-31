@@ -7,6 +7,7 @@ import motion.applet.Messages;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;
+import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.PerformerStaticAttributes;
@@ -19,12 +20,14 @@ public class TableName {
 	protected static final String SESSION_TABLE = "Sesja";
 	protected static final String TRIAL_TABLE = "Obserwacja";
 	protected static final String PATIENT_TABLE = "Pacjent";
+	protected static final String FILE_TABLE = "Plik";
 	
 	// English database table names (defined only here for the applet).
 	protected static final String PERFORMER_TABLE_ENG = Messages.getString("TableName.Performer"); //$NON-NLS-1$
 	protected static final String SESSION_TABLE_ENG = Messages.getString("TableName.Session"); //$NON-NLS-1$
 	protected static final String TRIAL_TABLE_ENG = Messages.getString("TableName.Trial"); //$NON-NLS-1$
 	protected static final String PATIENT_TABLE_ENG = Messages.getString("TableName.Patient"); //$NON-NLS-1$
+	protected static final String FILE_TABLE_ENG = Messages.getString("TableName.File"); //$NON-NLS-1$
 	
 	private final String table;
 	private final String label;
@@ -57,6 +60,10 @@ public class TableName {
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.duration.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialDescription.toString(), AttributeName.STRING_TYPE));
+		} else if (this.table.equals(FILE_TABLE)) {
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileName.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileDescription.toString(), AttributeName.STRING_TYPE));
 		}
 	}
 	
