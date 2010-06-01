@@ -6,6 +6,7 @@ import java.net.PasswordAuthentication;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -40,6 +41,23 @@ import motion.database.ws.basicQueriesServiceWCF.Attributes;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.GenericUniformAttributesQueryResult;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSegmentByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListPerformerSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListSessionTrialsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListTrialSegmentsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerSessionWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.SegmentDetailsWithAttributes;
@@ -67,7 +85,15 @@ import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.Motion
 import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinitionList.SessionGroupDefinition;
 import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.PerformerData;
 import motion.database.ws.fileStoremanService.FileStoremanService;
 import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
@@ -178,28 +204,37 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public  List<GenericResult> execGenericQuery(Filter filter, String[] p_entitiesToInclude) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "execGenericQuery", this );
-		
-		ArrayOfString entitiesToInclude = new ArrayOfString();
-		for( String s : p_entitiesToInclude )
-			entitiesToInclude.getString().add( s );
-		
-		ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
-		for ( FilterPredicate f : filter.toFilterPredicateWCF() )
-			arrayOfFilterPredicate.getFilterPredicate().add( f );
-		
-		GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
-				arrayOfFilterPredicate,	entitiesToInclude );
-
-		
-		DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
-		GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
-		for (Attributes aa : ss.getAttributes() )
-			output.add( ToolsWCF.transformGenericAttributes( aa, new GenericResult() ) );
-		
-		ToolsWCF.finalizeCall();
-		
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "execGenericQuery", this );
+			
+			ArrayOfString entitiesToInclude = new ArrayOfString();
+			for( String s : p_entitiesToInclude )
+				entitiesToInclude.getString().add( s );
+			
+			ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
+			for ( FilterPredicate f : filter.toFilterPredicateWCF() )
+				arrayOfFilterPredicate.getFilterPredicate().add( f );
+			
+			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
+					arrayOfFilterPredicate,	entitiesToInclude );
+	
+			
+			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
+			GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
+			for (Attributes aa : ss.getAttributes() )
+				output.add( ToolsWCF.transformGenericAttributes( aa, new GenericResult() ) );
+			
+			return output;
+		}
+		catch(IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 	
 
@@ -209,42 +244,60 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public HashMap<String, String> listAttributesDefined(String group, String entityKind) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listAttributesDefined", this );
-
-		ListAttributesDefinedResult result = port.listAttributesDefined( group, entityKind );
-		
-		HashMap<String, String> output = new HashMap<String, String>();
-		for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
-				output.put( a.getAttributeName(), a.getAttributeType() );
-		
-		ToolsWCF.finalizeCall();
-
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listAttributesDefined", this );
+	
+			ListAttributesDefinedResult result = port.listAttributesDefined( group, entityKind );
+			
+			HashMap<String, String> output = new HashMap<String, String>();
+			for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+					output.put( a.getAttributeName(), a.getAttributeType() );
+			
+			return output;
+		}
+		catch(IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(String entityKind) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listGrouppedAttributesDefined", this );
-
-		ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
-		
-		HashMap<String, EntityAttributeGroup> output = new HashMap<String, EntityAttributeGroup>();
-
-		for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
-		{	
-			EntityAttributeGroup group = output.get( a.getAttributeGroupName() );
-			if (group == null)
-			{
-				group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
-				output.put( a.getAttributeGroupName(), group );
-			}
-			group.add( new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() ) );
-		}
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listGrouppedAttributesDefined", this );
 	
-		ToolsWCF.finalizeCall();
-
-		return output;
+			ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
+			
+			HashMap<String, EntityAttributeGroup> output = new HashMap<String, EntityAttributeGroup>();
+	
+			for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+			{	
+				EntityAttributeGroup group = output.get( a.getAttributeGroupName() );
+				if (group == null)
+				{
+					group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
+					output.put( a.getAttributeGroupName(), group );
+				}
+				group.add( new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() ) );
+			}
+		
+			return output;
+		}
+		catch(IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
@@ -255,17 +308,26 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Vector<String> listAttributeGroupsDefined(String entityKind) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listAttributeGroupsDefined", this );
-		
-		ListAttributeGroupsDefinedResult result = port.listAttributeGroupsDefined(entityKind);
-		
-		Vector<String> output = new Vector<String>();
-		for (AttributeGroupDefinition a : result.getAttributeGroupDefinitionList().getAttributeGroupDefinition() )
-			output.add( a.getAttributeGroupName() );
-
-		ToolsWCF.finalizeCall();
-		
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listAttributeGroupsDefined", this );
+			
+			ListAttributeGroupsDefinedResult result = port.listAttributeGroupsDefined(entityKind);
+			
+			Vector<String> output = new Vector<String>();
+			for (AttributeGroupDefinition a : result.getAttributeGroupDefinitionList().getAttributeGroupDefinition() )
+				output.add( a.getAttributeGroupName() );
+	
+			return output;
+		}
+		catch(IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
@@ -275,22 +337,27 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Vector<MotionKind> listMotionKindsDefined() throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listMotionKindsDefined", this );
-		
-		ListMotionKindsDefinedResult result = port.listMotionKindsDefined();
-		
-		Vector<MotionKind> output = new Vector<MotionKind>();
-		for (MotionKindDefinition a : result.getMotionKindDefinitionList().getMotionKindDefinition() )
-			output.add( new MotionKind( a.getMotionKindID(), a.getMotionKindName() ) );
-
-		ToolsWCF.finalizeCall();
-		
-		return output;
-	}
-
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listMotionKindsDefined", this );
+			
+			ListMotionKindsDefinedResult result = port.listMotionKindsDefined();
+			
+			Vector<MotionKind> output = new Vector<MotionKind>();
+			for (MotionKindDefinition a : result.getMotionKindDefinitionList().getMotionKindDefinition() )
+				output.add( new MotionKind( a.getMotionKindID(), a.getMotionKindName() ) );
 	
-	
-
+			return output;
+		}
+		catch(IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
+}
 
 
 	
@@ -300,47 +367,76 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Performer getPerformerById(int id) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getPerformerById", this );
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getPerformerById", this );
+		
+			GetPerformerByIdXMLResult result = port.getPerformerByIdXML(id);
+			PerformerDetailsWithAttributes s = result.getPerformerDetailsWithAttributes();
 	
-		GetPerformerByIdXMLResult result = port.getPerformerByIdXML(id);
-		PerformerDetailsWithAttributes s = result.getPerformerDetailsWithAttributes();
-
-		ToolsWCF.finalizeCall();
-
-		return ToolsWCF.transformPerformerDetails(s);
+			return ToolsWCF.transformPerformerDetails(s);
+		}
+		catch(IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 	public  DbElementsList<Performer> listLabPerformersWithAttributes(int labID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listLabPerformersWithAttributes", this );
-
-		ListLabPerformersWithAttributesXMLResult result = port.listLabPerformersWithAttributesXML(labID);
-
-		DbElementsList<Performer> output = new DbElementsList<Performer>();
-		
-		if (result.getLabPerformerWithAttributesList() != null) {
-			for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-					output.add( ToolsWCF.transformPerformerDetails(s) );
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listLabPerformersWithAttributes", this );
+	
+			ListLabPerformersWithAttributesXMLResult result = port.listLabPerformersWithAttributesXML(labID);
+	
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			if (result.getLabPerformerWithAttributesList() != null) 
+				for ( PerformerDetailsWithAttributes s : result.getLabPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+						output.add( ToolsWCF.transformPerformerDetails(s) );
+			
+			return output;
 		}
-		
-		ToolsWCF.finalizeCall();
-		return output;
+		catch(IBasicQueriesWSListLabPerformersWithAttributesXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
+	
 	public  DbElementsList<Performer> listPerformersWithAttributes() throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformersWithAttributes", this );
-
-		ListPerformersWithAttributesXMLResult result = port.listPerformersWithAttributesXML();
-
-		DbElementsList<Performer> output = new DbElementsList<Performer>();
-		
-		for ( PerformerDetailsWithAttributes s : result.getPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-			output.add( ToolsWCF.transformPerformerDetails(s) );
-		
-		ToolsWCF.finalizeCall();
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformersWithAttributes", this );
+	
+			ListPerformersWithAttributesXMLResult result = port.listPerformersWithAttributesXML();
+	
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			for ( PerformerDetailsWithAttributes s : result.getPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+				output.add( ToolsWCF.transformPerformerDetails(s) );
+			
+			return output;
+		}
+		catch(IBasicQueriesWSListPerformersWithAttributesXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
@@ -350,53 +446,93 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Session getSessionById(int id) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionById", this );
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionById", this );
+		
+			GetSessionByIdXMLResult result = port.getSessionByIdXML(id);
+			SessionDetailsWithAttributes s = result.getSessionDetailsWithAttributes();
 	
-		GetSessionByIdXMLResult result = port.getSessionByIdXML(id);
-		SessionDetailsWithAttributes s = result.getSessionDetailsWithAttributes();
-
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformSessionDetails(s);
+			return ToolsWCF.transformSessionDetails(s);
+		}
+		catch(IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 
 	public  String getSessionLabel(int sessionID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionLabel", this );
-	
-		ToolsWCF.finalizeCall();
-		return port.getSessionLabel( sessionID );
+		try{	
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSessionLabel", this );
+		
+			return port.getSessionLabel( sessionID );
+		}
+		catch(IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 	public  DbElementsList<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformerSessionsWithAttributes", this );
-	
-		ListPerformerSessionsWithAttributesXMLResult result = port.listPerformerSessionsWithAttributesXML(performerID);
-		DbElementsList<Session> output = new DbElementsList<Session>();
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformerSessionsWithAttributes", this );
 		
-		PerformerSessionWithAttributesList ss = result.getPerformerSessionWithAttributesList();
-		for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
-				output.add( ToolsWCF.transformSessionDetails(s) );
-
-		ToolsWCF.finalizeCall();
-		return output;
+			ListPerformerSessionsWithAttributesXMLResult result = port.listPerformerSessionsWithAttributesXML(performerID);
+			DbElementsList<Session> output = new DbElementsList<Session>();
+			
+			PerformerSessionWithAttributesList ss = result.getPerformerSessionWithAttributesList();
+			for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+					output.add( ToolsWCF.transformSessionDetails(s) );
+	
+			return output;
+		}
+		catch(IBasicQueriesWSListPerformerSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 	public  DbElementsList<Session> listLabSessionsWithAttributes(int labID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listLabSessionsWithAttributes", this );
-	
-		ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
-		DbElementsList<Session> output = new DbElementsList<Session>();
-		
-		for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
-			output.add( ToolsWCF.transformSessionDetails(s) );
-		
-		ToolsWCF.finalizeCall();
-		return output;
+		try {
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listLabSessionsWithAttributes", this );
+
+			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
+			DbElementsList<Session> output = new DbElementsList<Session>();
+			
+			for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
+				output.add( ToolsWCF.transformSessionDetails(s) );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
@@ -405,17 +541,27 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Vector<SessionGroup> listSessionGroupsDefined() throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionGroupsDefined", this );
-		
-		ListSessionGroupsDefinedResult result = port.listSessionGroupsDefined();
-		
-		Vector<SessionGroup> output = new Vector<SessionGroup>();
-
-		for (SessionGroupDefinition a : result.getSessionGroupDefinitionList().getSessionGroupDefinition() )
-			output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
-		
-		ToolsWCF.finalizeCall();
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionGroupsDefined", this );
+			
+			ListSessionGroupsDefinedResult result = port.listSessionGroupsDefined();
+			
+			Vector<SessionGroup> output = new Vector<SessionGroup>();
+	
+			for (SessionGroupDefinition a : result.getSessionGroupDefinitionList().getSessionGroupDefinition() )
+				output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 
@@ -427,28 +573,50 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Trial getTrialById(int id) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getTrialById", this );
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getTrialById", this );
 	
-		GetTrialByIdXMLResult result = port.getTrialByIdXML(id);
-		TrialDetailsWithAttributes s = result.getTrialDetailsWithAttributes();
-
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformTrialDetails(s);
+			GetTrialByIdXMLResult result = port.getTrialByIdXML(id);
+			TrialDetailsWithAttributes s = result.getTrialDetailsWithAttributes();
+	
+			ToolsWCF.finalizeCall();
+			return ToolsWCF.transformTrialDetails(s);
+		} 
+		catch (IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 
 	public  DbElementsList<Trial> listSessionTrialsWithAttributes(int sessionID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionTrialsWithAttributes", this );
-	
-		ListSessionTrialsWithAttributesXMLResult result = port.listSessionTrialsWithAttributesXML(sessionID);
-		DbElementsList<Trial> output = new DbElementsList<Trial>();
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionTrialsWithAttributes", this );
 		
-		for ( TrialDetailsWithAttributes s : result.getSessionTrialWithAttributesList().getTrialDetailsWithAttributes() )
-			output.add( ToolsWCF.transformTrialDetails(s) );
+			ListSessionTrialsWithAttributesXMLResult result = port.listSessionTrialsWithAttributesXML(sessionID);
+			DbElementsList<Trial> output = new DbElementsList<Trial>();
 			
-		ToolsWCF.finalizeCall();
-		return output;
+			for ( TrialDetailsWithAttributes s : result.getSessionTrialWithAttributesList().getTrialDetailsWithAttributes() )
+				output.add( ToolsWCF.transformTrialDetails(s) );
+				
+			ToolsWCF.finalizeCall();
+			return output;
+		} 
+		catch (IBasicQueriesWSListSessionTrialsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 
@@ -459,28 +627,48 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public Segment getSegmentById(int id) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSegmentById", this );
-	
-		GetSegmentByIdXMLResult result = port.getSegmentByIdXML(id);
-		SegmentDetailsWithAttributes s = result.getSegmentDetailsWithAttributes();
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "getSegmentById", this );
 		
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformSegmentDetails(s);
+			GetSegmentByIdXMLResult result = port.getSegmentByIdXML(id);
+			SegmentDetailsWithAttributes s = result.getSegmentDetailsWithAttributes();
+			
+			return ToolsWCF.transformSegmentDetails(s);
+		} 
+		catch (IBasicQueriesWSGetSegmentByIdXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 	public  DbElementsList<Segment> listTrialSegmentsWithAttributes(int trialID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listTrialSegmentsWithAttributes", this );
-		
-		ListTrialSegmentsWithAttributesXMLResult result = port.listTrialSegmentsWithAttributesXML(trialID);
-		DbElementsList<Segment> output = new DbElementsList<Segment>();
-		
-		for ( SegmentDetailsWithAttributes s : result.getTrailSegmentWithAttributesList().getSegmentDetailsWithAttributes() )
-			output.add( ToolsWCF.transformSegmentDetails(s) );
-
-		ToolsWCF.finalizeCall();
-		return output;
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listTrialSegmentsWithAttributes", this );
+			
+			ListTrialSegmentsWithAttributesXMLResult result = port.listTrialSegmentsWithAttributesXML(trialID);
+			DbElementsList<Segment> output = new DbElementsList<Segment>();
+			
+			for ( SegmentDetailsWithAttributes s : result.getTrailSegmentWithAttributesList().getSegmentDetailsWithAttributes() )
+				output.add( ToolsWCF.transformSegmentDetails(s) );
+	
+			return output;
+		} 
+		catch (IBasicQueriesWSListTrialSegmentsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
@@ -490,36 +678,66 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 	public  DbElementsList<DatabaseFile> listSessionFiles(int sessionID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionFiles", this );
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listSessionFiles", this );
+		
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKind.session.name());
 	
-		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKind.session.name());
-
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformListOfFiles(result);
+			return ToolsWCF.transformListOfFiles(result);
+		} 
+		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 
 	public  DbElementsList<DatabaseFile> listTrialFiles(int trialID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listTrialFiles", this );
-
-		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKind.trial.name());
-		
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformListOfFiles(result);
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listTrialFiles", this );
+	
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKind.trial.name());
+			
+			return ToolsWCF.transformListOfFiles(result);
+		} 
+		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 
 	
 
 	public  DbElementsList<DatabaseFile> listPerformerFiles(int performerID) throws Exception
 	{
-		IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformerFiles", this );
-
-		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKind.performer.name());
-		
-		ToolsWCF.finalizeCall();
-		return ToolsWCF.transformListOfFiles(result);
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listPerformerFiles", this );
+	
+			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKind.performer.name());
+			
+			return ToolsWCF.transformListOfFiles(result);
+		} 
+		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
 	}
 	
 	
@@ -748,63 +966,112 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	
 		public int createPerformer(String name, String surname) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createPerformer", this );
-
-			PerformerData performerData = new PerformerData();
-			performerData.setName( name );
-			performerData.setSurname( surname );
+			try{
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createPerformer", this );
 	
-			ToolsWCF.finalizeCall();
-			return port.createPerformer(performerData);
+				PerformerData performerData = new PerformerData();
+				performerData.setName( name );
+				performerData.setSurname( surname );
+		
+				return port.createPerformer(performerData);
+			} 
+			catch ( IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 
 		
 		public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createSession", this );
-		
-			ArrayOfInt sessionGroupIDs = new ArrayOfInt();
-			for (int s: sessionGroupID)
-				sessionGroupIDs.getInt().add(s);
-				
-			ToolsWCF.finalizeCall();
-			return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
+			try {
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createSession", this );
+
+				ArrayOfInt sessionGroupIDs = new ArrayOfInt();
+				for (int s: sessionGroupID)
+					sessionGroupIDs.getInt().add(s);
+					
+				return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
+			} 
+			catch ( IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 
 		
 		public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createTrial", this );
-			
-			ToolsWCF.finalizeCall();
-			return port.createTrial(sessionID, trialDescription, trialDuration);
+			try{
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createTrial", this );
+				
+				return port.createTrial(sessionID, trialDescription, trialDuration);
+			} 
+			catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 
 		public int defineTrialSegment(int trialID, String segmentName, int startTime, int endTime ) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "defineTrialSegment", this );
-
-			ToolsWCF.finalizeCall();
-			return port.defineTrialSegment(trialID, segmentName, startTime, endTime);
+			try{	
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "defineTrialSegment", this );
+	
+				return port.defineTrialSegment(trialID, segmentName, startTime, endTime);
+			} 
+			catch ( IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 		
 		public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
-
-			port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
+			try{
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
+	
+				port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
+				ToolsWCF.finalizeCall();
+			} 
+			catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 
 		public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setTrialAttribute", this );
-
-			port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
+			try{
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setTrialAttribute", this );
+	
+				port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
+			} 
+			catch ( IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 
@@ -815,7 +1082,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 				port.setPerformerAttribute(performerID, attributeName, attributeValue, update);
 			
 			} catch (IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage e) {
-			
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 			}	
 			finally{
@@ -826,18 +1093,34 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		
 		public void setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-
-			port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
+			try{	
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+	
+				port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
+				ToolsWCF.finalizeCall();
+			} catch (IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 	
 
 		public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
 		{
-			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-
-			port.setFileAttribute(fileID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
+			try{	
+				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+	
+				port.setFileAttribute(fileID, attributeName, attributeValue, update);			
+				ToolsWCF.finalizeCall();
+			} catch (IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage e) {
+				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ToolsWCF.finalizeCall();
+			}
 		}
 }
