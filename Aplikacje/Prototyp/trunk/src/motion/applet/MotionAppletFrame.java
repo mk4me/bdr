@@ -89,6 +89,9 @@ public class MotionAppletFrame extends JFrame {
 				PerformerDialog performerDialog = new PerformerDialog();
 				performerDialog.setVisible(true);
 				
+				//PerformerFormDialog performerFormDialog = new PerformerFormDialog();
+				//performerFormDialog.setVisible(true);
+				
 			}
 		});
 		
