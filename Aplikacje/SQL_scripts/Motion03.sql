@@ -173,8 +173,6 @@ go
         Opis_pliku           varchar(100) NOT NULL,
         Plik                 varbinary(max) filestream not null,
 	rowguid uniqueidentifier rowguidcol not null unique,
-        Czas_poczatku        int NULL,
-        Czas_konca           int NULL,
 	Nazwa_pliku          varchar(255) null
  )
 go
@@ -572,6 +570,17 @@ CREATE TABLE Plik_udostepniony (
         Lokalizacja varchar(80) NOT NULL
  )
 go
+
+ CREATE TABLE Blad (
+        IdBlad         int IDENTITY,
+        NrBledu		int,
+        Dotkliwosc	int,
+        Stan		int,
+        Procedura	nvarchar(100),
+        Linia		int,
+        Komunikat  nvarchar(500)
+ )
+ go
 
  CREATE INDEX XIF46Wartosc_wyliczeniowa ON Wartosc_wyliczeniowa
  (

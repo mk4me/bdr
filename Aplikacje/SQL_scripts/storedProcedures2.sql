@@ -406,4 +406,18 @@ end
 go
 
 
+// Utility procedures 
 
+create procedure validate_session_group_id( @group_id int )
+as
+ select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
+go
+
+exec validate_session_group_id 5
+
+alter procedure list_session_groups_defined
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
+for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
+go
