@@ -54,7 +54,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int CreateSession(int userID, int labID, string motionKindName, int performerID, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
@@ -89,6 +89,17 @@ namespace MotionDBWebServices
                 cmd.Parameters.Remove(idPar);
 
                 cmd.CommandType = CommandType.Text;
+
+
+//                @"BEGIN TRY
+//    insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
+//                                            values (@sess_user, @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
+//                                            set @sess_id = SCOPE_IDENTITY()END TRY
+//    BEGIN CATCH
+//        insert into Blad ( TekstBledu ) 
+//        values (' Message: '+ERROR_MESSAGE() )
+//    END CATCH;";
+
 
                 cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
                                             values (@sess_user, @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
@@ -133,7 +144,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int CreateTrial(int sessionID, string trialDescription, int trialDuration)
         {
             int newTrialId = 0;
@@ -173,7 +184,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int DefineTrialSegment(int trialID, string segmentName, int startTime, int endTime)
         {
             int newSegmentId = 0;
@@ -215,7 +226,7 @@ namespace MotionDBWebServices
 
         // Group Assignment operations
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public bool AssignSessionToGroup(int sessionID, int groupID)
         {
 
@@ -260,7 +271,7 @@ namespace MotionDBWebServices
         6 - the value provided is not valid for this numeric-type attribute
         7 - other exception
         */
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetPerformerAttribute(int performerID, string attributeName, string attributeValue, bool update)
         {
 
@@ -341,7 +352,7 @@ namespace MotionDBWebServices
         6 - the value provided is not valid for this numeric-type attribute
         7 - other exception
         */
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetSessionAttribute(int sessionID, string attributeName, string attributeValue, bool update)
         {
 
@@ -412,7 +423,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetTrialAttribute(int trialID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -482,7 +493,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetSegmentAttribute(int segmentID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -552,7 +563,7 @@ namespace MotionDBWebServices
 
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;

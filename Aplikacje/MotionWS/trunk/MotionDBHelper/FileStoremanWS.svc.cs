@@ -7,6 +7,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Security.Permissions;
 
 namespace MotionDBWebServices
 {
@@ -20,7 +21,7 @@ namespace MotionDBWebServices
 
         SqlDataReader fileReader = null;
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StorePerformerFile(int performerID, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath + path + @"\" + filename;
@@ -72,7 +73,7 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath+path+@"\"+filename;
@@ -124,7 +125,7 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
             string fileLocation = baseLocalFilePath + path + @"\" + filename;
@@ -177,14 +178,14 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StorePerformerFiles(int performerID, string path)
         {
            FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
            throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
            return;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -239,14 +240,14 @@ namespace MotionDBWebServices
             }
             return;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreTrialFiles(int trialId, string path)
         {
            FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
            throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
            return;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void DownloadComplete(int fileID, string path)
         {
 
@@ -286,7 +287,7 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string RetrieveFile(int fileID)
         {
             string relativePath = "";

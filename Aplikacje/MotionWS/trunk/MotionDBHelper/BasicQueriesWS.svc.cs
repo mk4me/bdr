@@ -223,7 +223,7 @@ namespace MotionDBWebServices
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionLabel")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-            return res;
+            return res +"(retrieved by: "+OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name+")";
         }
 
         public XmlElement GetTrialByIdXML(int id)

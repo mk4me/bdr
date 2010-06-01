@@ -11,6 +11,7 @@ namespace MotionDBWebServices
     {
         protected SqlConnection conn = null;
         protected SqlCommand cmd = null;
+        protected bool debug = false;
 
         protected void OpenConnection()
         {
@@ -25,6 +26,14 @@ namespace MotionDBWebServices
         protected void CloseConnection()
         {
             conn.Close();
+        }
+        protected string WrapTryCatch(string query)
+        {
+            return @"BEGIN TRY " + query + @" END TRY
+                        BEGIN CATCH
+                            insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat )
+                            values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() )
+                        END CATCH;";
         }
     }
 }
