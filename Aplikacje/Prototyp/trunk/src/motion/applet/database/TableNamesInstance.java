@@ -7,6 +7,8 @@ public class TableNamesInstance {
 	public static final TableName PATIENT = new TableName(TableName.PATIENT_TABLE, TableName.PATIENT_TABLE_ENG);
 	public static final TableName FILE = new TableName(TableName.FILE_TABLE, TableName.FILE_TABLE_ENG);
 	
+	public static final TableName allTableNames[] = { PERFORMER, SESSION, TRIAL, FILE };
+	
 	public static TableName toTableName(String table) {
 		if (table.equals(TableName.PERFORMER_TABLE) || table.equals(TableName.PERFORMER_TABLE_ENG)) {
 			return PERFORMER;
