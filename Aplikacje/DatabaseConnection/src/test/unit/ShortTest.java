@@ -93,10 +93,12 @@ public class ShortTest {
 	
 		int id = 2;
 		
-		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
+		//database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
 
 //		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
 		//DbElementsList<Session> r = database.listLabSessionsWithAttributes(1);
+		
+		database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
 	//	System.out.println(r);
 	}

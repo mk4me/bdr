@@ -869,7 +869,10 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		putFile(localFilePath, destRemoteFolder, listener);			
 		    
 		if (!fileTransferCancelled)
-				port.storePerformerFile( performerId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+				port.storePerformerFile( performerId, destRemoteFolder, description, new File(localFilePath).getName() );
+		
+		System.out.println( destRemoteFolder + "   " + localFilePath );
+		
 		ToolsWCF.finalizeCall();
 	}
 
@@ -882,7 +885,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		putFile(localFilePath, destRemoteFolder, listener);			
 
 		if (!fileTransferCancelled)
-				port.storeSessionFile(sessionId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+				port.storeSessionFile(sessionId, destRemoteFolder, description, new File(localFilePath).getName() );
 		ToolsWCF.finalizeCall();
 	}
 
@@ -895,12 +898,12 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		putFile(localFilePath, destRemoteFolder, listener);			
 
 		if (!fileTransferCancelled)
-			port.storeTrialFile(trialId, "", description, destRemoteFolder+new File(localFilePath).getName() );
+			port.storeTrialFile(trialId, destRemoteFolder, description, new File(localFilePath).getName() );
 		ToolsWCF.finalizeCall();
 	}
 
 
-	public void uploadPerformerFiles(int performerId, String filesPath, FileTransferListener listener) throws Exception
+	public void uploadPerformerFiles(int performerId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		IFileStoremanWS port = ToolsWCF.getFileStoremanServicePort( "uploadPerformerFiles", this );
 
@@ -919,7 +922,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 	
 
-	public void uploadSessionFiles(int sessionId, String filesPath, FileTransferListener listener) throws Exception
+	public void uploadSessionFiles(int sessionId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		IFileStoremanWS port = ToolsWCF.getFileStoremanServicePort( "uploadSessionFiles", this );
 
@@ -930,14 +933,15 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		{
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storeSessionFiles( sessionId, "TODO: add description", destRemoteFolder+dir.getName() );
+			port.storeSessionFiles( sessionId, destRemoteFolder+dir.getName(), description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
 		ToolsWCF.finalizeCall();
 	}
 
-	public void uploadTrialFiles(int trialId, String filesPath, FileTransferListener listener) throws Exception
+	
+	public void uploadTrialFiles(int trialId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		IFileStoremanWS port = ToolsWCF.getFileStoremanServicePort( "uploadTrialFiles", this );
 

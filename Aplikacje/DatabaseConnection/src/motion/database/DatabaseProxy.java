@@ -45,13 +45,13 @@ public interface DatabaseProxy {
 			FileTransferListener listener) throws Exception;
 
 	public abstract void uploadSessionFiles(int sessionId, String filesPath,
-			FileTransferListener listener) throws Exception;
+			String description, FileTransferListener listener) throws Exception;
 
 	public abstract void uploadPerformerFiles(int performerId,
-			String filesPath, FileTransferListener listener) throws Exception;
+			String filesPath, String description, FileTransferListener listener) throws Exception;
 
 	public abstract void uploadTrialFiles(int trialId, String filesPath,
-			FileTransferListener listener) throws Exception;
+			String description, FileTransferListener listener) throws Exception;
 
 	public abstract List<GenericResult> execGenericQuery(Filter filter,
 			String[] p_entitiesToInclude) throws Exception;

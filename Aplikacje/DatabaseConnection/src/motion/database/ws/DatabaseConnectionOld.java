@@ -349,7 +349,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#uploadSessionFiles(int, java.lang.String, motion.database.FileTransferListener)
 	 */
-	public void uploadSessionFiles(int sessionId, String filesPath, FileTransferListener listener) throws Exception
+	public void uploadSessionFiles(int sessionId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -380,7 +380,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#uploadPerformerFiles(int, java.lang.String, motion.database.FileTransferListener)
 	 */
-	public void uploadPerformerFiles(int performerId, String filesPath, FileTransferListener listener) throws Exception
+	public void uploadPerformerFiles(int performerId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{
@@ -405,7 +405,7 @@ public class DatabaseConnectionOld implements DatabaseProxy {
 	/* (non-Javadoc)
 	 * @see motion.database.DatabaseProxy#uploadTrialFiles(int, java.lang.String, motion.database.FileTransferListener)
 	 */
-	public void uploadTrialFiles(int trialId, String filesPath, FileTransferListener listener) throws Exception
+	public void uploadTrialFiles(int trialId, String filesPath, String description, FileTransferListener listener) throws Exception
 	{
 		if (this.state == ConnectionState.INITIALIZED)
 		{

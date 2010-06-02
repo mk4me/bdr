@@ -25,7 +25,7 @@ public class BasicQueriesService
     static {
         URL url = null;
         try {
-            url = new URL("http://dbbdr.pjwstk.edu.pl/Motion/res/BasicQueriesService.wsdl");
+            url = new URL("http://db-bdr.pjwstk.edu.pl/Motion/res/BasicQueriesService.wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

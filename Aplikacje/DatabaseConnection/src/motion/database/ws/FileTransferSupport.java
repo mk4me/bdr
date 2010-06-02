@@ -113,7 +113,7 @@ class NotifyingInputStream extends FilterInputStream
 		this.currentSize = 0;
 		stop = false;
 		this.listeners = listeners;
-		if (listeners != null && listeners.get(0) != null)
+		if (listeners != null && listeners.size()>0 && listeners.get(0) != null)
 			this.notificationStepPercent = listeners.get(0).getDesiredStepPercent();
 		
 		notifier = new TransferNotifier(this);

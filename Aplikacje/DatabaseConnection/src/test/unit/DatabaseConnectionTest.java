@@ -139,7 +139,7 @@ public class DatabaseConnectionTest {
 			return;
 		int id = 2;
 		
-		database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
+		database.uploadSessionFiles(id, "data/uploaded", "", new ConsoleTransferListener() );
 		//database.uploadSessionFile( 1, "Pr�ba wgrania pliku ze �ledzeniem", "data/test.xml", new ConsoleTransferListener() );
 	
 		System.out.println( database.listSessionFiles( id ) );
