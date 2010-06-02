@@ -235,7 +235,7 @@ public class UploadDialog extends BasicDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.directoryUpload != false) {
 					UploadDialog.this.filePathText.setText("");
-					UploadDialog.this.descriptionText.setEditable(true);
+					//UploadDialog.this.descriptionText.setEditable(true);
 					UploadDialog.this.messageLabel.setText(CHOOSE_FILE_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = false;
@@ -247,7 +247,7 @@ public class UploadDialog extends BasicDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (UploadDialog.this.directoryUpload != true) {
 					UploadDialog.this.filePathText.setText("");
-					UploadDialog.this.descriptionText.setEditable(false);
+					//UploadDialog.this.descriptionText.setEditable(false);
 					UploadDialog.this.messageLabel.setText(CHOOSE_DIRECTORY_MESSAGE);
 				}
 				UploadDialog.this.directoryUpload = true;
@@ -285,11 +285,11 @@ public class UploadDialog extends BasicDialog {
 							try {
 								int id = UploadDialog.this.getId();
 								String path = UploadDialog.this.getFilePath();
+								String description = UploadDialog.this.getDescription();
 								if (UploadDialog.this.directoryUpload == false) {
-									String description = UploadDialog.this.getDescription();
 									uploadFile(id, path, description);
 								} else {
-									uploadDirectory(id, path);
+									uploadDirectory(id, path, description);
 								}
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -318,13 +318,13 @@ public class UploadDialog extends BasicDialog {
 				}
 			}
 			
-			private void uploadDirectory(int id, String path) throws Exception {
+			private void uploadDirectory(int id, String path, String description) throws Exception {
 				if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
-					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, "", new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, description, new UploadTransferListener());
 				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)){
-					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, "", new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, description, new UploadTransferListener());
 				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)){
-					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, "", new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, description, new UploadTransferListener());
 				}
 			}
 		});
