@@ -320,11 +320,11 @@ public class UploadDialog extends BasicDialog {
 			
 			private void uploadDirectory(int id, String path) throws Exception {
 				if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
-					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, "", new UploadTransferListener());
 				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)){
-					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, "", new UploadTransferListener());
 				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)){
-					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, new UploadTransferListener());
+					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, "", new UploadTransferListener());
 				}
 			}
 		});
