@@ -307,7 +307,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			JComboBox comboBox = (JComboBox) actionEvent.getSource();
 			showTable(((TableName) comboBox.getSelectedItem()));
 		} else if (actionEvent.getSource() instanceof JButton) {	// The source is the Apply selection button.
-			showTable(tableModel.tableName, tableModel.recordId, tableModel.fromTableName);
+			// TODO: Simplify code.
+			if (tables[2].getModel() instanceof BasicTable) {
+				showTable(TableNamesInstance.TRIAL, ((BasicTable) tables[2].getModel()).recordId, ((BasicTable) tables[2].getModel()).fromTableName);
+			}
+			if (tables[1].getModel() instanceof BasicTable) {
+				showTable(TableNamesInstance.SESSION, ((BasicTable) tables[1].getModel()).recordId, ((BasicTable) tables[1].getModel()).fromTableName);
+			}
+			if (tables[0].getModel() instanceof BasicTable) {
+				showTable(TableNamesInstance.PERFORMER, ((BasicTable) tables[0].getModel()).recordId, ((BasicTable) tables[0].getModel()).fromTableName);
+			}
 		}
 	}
 }
