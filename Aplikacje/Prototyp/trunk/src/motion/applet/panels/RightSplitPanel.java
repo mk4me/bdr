@@ -93,12 +93,14 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		bottomPanel.addApplyButtonListener(this);
 		
 		tables[0].addMouseListener(new PerformerMouseAdapter() ); 
-		tables[1].addMouseListener(new SessionMouseAdapter() ); 
+		tables[1].addMouseListener(new SessionMouseAdapter() );
+		tables[2].addMouseListener(new TrialMouseAdapter());
 		
 		showTable( TableNamesInstance.PERFORMER );
 		
 	}
 	
+	// TODO: Avoid code duplication.
 	class PerformerMouseAdapter extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent e) {
@@ -132,29 +134,29 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					}
 				});
 				
-					popupMenu.add(new JSeparator());
-					// Upload context menu.
-					JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
-					popupMenu.add(uploadMenuItem);
-					
-					uploadMenuItem.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.PERFORMER, recordId);
-							uploadDialog.setVisible(true);
-						}
-					});
-					
-					// View files context menu
-					JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
-					popupMenu.add(viewFilesMenuItem);
-					
-					viewFilesMenuItem.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.PERFORMER);
-						}
-					});
+				popupMenu.add(new JSeparator());
+				// Upload context menu.
+				JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
+				popupMenu.add(uploadMenuItem);
+				
+				uploadMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.PERFORMER, recordId);
+						uploadDialog.setVisible(true);
+					}
+				});
+				
+				// View files context menu
+				JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
+				popupMenu.add(viewFilesMenuItem);
+				
+				viewFilesMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.PERFORMER);
+					}
+				});
 
 				popupMenu.show( tables[0], point.x, point.y);
 			}
@@ -220,6 +222,45 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				});
 				
 				popupMenu.show( tables[1], point.x, point.y);
+			}
+		}
+	}
+	
+	class TrialMouseAdapter extends MouseAdapter {
+		public void mouseClicked(MouseEvent e) {
+			Point point = e.getPoint();
+			int row = tables[1].rowAtPoint(point);
+			int column = tables[1].columnAtPoint(point);
+			ListSelectionModel model = tables[1].getSelectionModel();
+			model.setSelectionInterval(row, row);
+			JPopupMenu popupMenu = new JPopupMenu();
+			final int recordId = ((BasicTable) tables[1].getModel()).getRecordId(row); // ID column.
+			
+			if (SwingUtilities.isRightMouseButton(e)) {
+				// Upload context menu.
+				JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
+				popupMenu.add(uploadMenuItem);
+				
+				uploadMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.TRIAL, recordId);
+						uploadDialog.setVisible(true);
+					}
+				});
+				
+				// View files context menu
+				JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
+				popupMenu.add(viewFilesMenuItem);
+				
+				viewFilesMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.TRIAL);
+					}
+				});
+				
+				popupMenu.show( tables[2], point.x, point.y);
 			}
 		}
 	}
