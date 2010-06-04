@@ -1,19 +1,26 @@
 package motion.applet;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
@@ -34,13 +41,9 @@ public class MotionAppletFrame extends JFrame {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
 		
-//		new Thread(){
-//			public void run(){
-				initUserInterface();
-//			}
-//		}.start();
+		initUserInterface();
 	}
-	
+
 	private void initUserInterface() {
 		// Create the status bar
 		StatusBar statusBar =  new StatusBar(this);
@@ -103,7 +106,7 @@ public class MotionAppletFrame extends JFrame {
 		AppletToolBar appletToolBar = new AppletToolBar();
 		this.getContentPane().add(appletToolBar, BorderLayout.PAGE_START);
 		
-		
+	
 		// Create the horizontal split panels
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
@@ -114,13 +117,27 @@ public class MotionAppletFrame extends JFrame {
 		leftPanel.add(performerPanel);
 		leftPanel.add(sessionPanel);
 		leftPanel.add(observationPanel);
+
+		// Query results
+		JTabbedPane queryResultsPane = new JTabbedPane();
+		queryResultsPane.addTab("query results 1", new JPanel() );
+		queryResultsPane.addTab("query results 2", new JPanel() );
+		queryResultsPane.addTab("query results 3", new JPanel() );
 		
 		// Right panel with a tree
 		RightSplitPanel rightPanel = new RightSplitPanel();
-		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-		this.getContentPane().add(leftRightSplitPane);
+		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
+		//this.getContentPane().add(leftRightSplitPane);
 		appletToolBar.addTableComboBoxListener(rightPanel);
-		
+
+
+		// main tabs
+		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
+		mainTabs.addTab("   Browse   ", rightPanel);
+		mainTabs.addTab("   Query   ", leftRightSplitPane);
+		this.getContentPane().add( mainTabs );
+
+		// window closing
 		this.addWindowListener( new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

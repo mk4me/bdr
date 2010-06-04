@@ -1,18 +1,23 @@
 package motion.applet.panels;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.SwingWorker;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -41,6 +46,7 @@ public class LeftSplitPanel extends JPanel {
 	private static String START_FILTER = Messages.getString("LeftSplitPanel.Start"); //$NON-NLS-1$
 	private static String TREE_TITLE = Messages.getString("LeftSplitPanel.Filters"); //$NON-NLS-1$
 	private TableName tableName;
+	private JLabel messageLabel;
 	
 	public LeftSplitPanel(TableName tableName) {
 		super();
