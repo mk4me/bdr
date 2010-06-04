@@ -229,12 +229,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	class TrialMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			Point point = e.getPoint();
-			int row = tables[1].rowAtPoint(point);
-			int column = tables[1].columnAtPoint(point);
-			ListSelectionModel model = tables[1].getSelectionModel();
+			int row = tables[2].rowAtPoint(point);
+			int column = tables[2].columnAtPoint(point);
+			ListSelectionModel model = tables[2].getSelectionModel();
 			model.setSelectionInterval(row, row);
 			JPopupMenu popupMenu = new JPopupMenu();
-			final int recordId = ((BasicTable) tables[1].getModel()).getRecordId(row); // ID column.
+			final int recordId = ((BasicTable) tables[2].getModel()).getRecordId(row); // ID column.
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
 				// Upload context menu.
