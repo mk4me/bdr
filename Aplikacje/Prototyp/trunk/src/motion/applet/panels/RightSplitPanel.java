@@ -96,6 +96,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[1].addMouseListener(new SessionMouseAdapter() );
 		tables[2].addMouseListener(new TrialMouseAdapter());
 		
+		showTable(TableNamesInstance.SESSION);
 		showTable( TableNamesInstance.PERFORMER );
 		
 	}

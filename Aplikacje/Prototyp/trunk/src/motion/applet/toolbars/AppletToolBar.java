@@ -29,7 +29,7 @@ public class AppletToolBar extends JToolBar {
 		this.setLayout(appletToolBarLayout);
 		//JButton showTableButton = new JButton("Show");
 		//this.add(showTableButton);
-		this.add(tableComboBox);
+		//this.add(tableComboBox);
 		
 		labComboBox.setSelectedIndex(labId);
 		this.add(labComboBox);
