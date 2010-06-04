@@ -100,19 +100,25 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		showTable( TableNamesInstance.PERFORMER );
 		
 	}
+
+	private int getSelectedRecord( JTable table, MouseEvent e ) 
+	{
+		Point point = e.getPoint();
+		int row = table.rowAtPoint(point);
+		ListSelectionModel model = table.getSelectionModel();
+		model.setSelectionInterval(row, row);
+
+		return ((BasicTable) table.getModel()).getRecordId(row); // ID column.
+	}
 	
-	// TODO: Avoid code duplication.
+
 	class PerformerMouseAdapter extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent e) {
 			if (SwingUtilities.isRightMouseButton(e)) {
-				Point point = e.getPoint();
-				int row = tables[0].rowAtPoint(point);
-				int column = tables[0].columnAtPoint(point);
-				ListSelectionModel model = tables[0].getSelectionModel();
-				model.setSelectionInterval(row, row);
+
+				final int recordId = getSelectedRecord( tables[0], e );
 				JPopupMenu popupMenu = new JPopupMenu();
-				final int recordId = ((BasicTable) tables[0].getModel()).getRecordId(row); // ID column.
 				
 				JMenuItem createSessionMenuItem = new JMenuItem(MENU_CREATE_SESSION);
 				popupMenu.add(createSessionMenuItem);
@@ -159,7 +165,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					}
 				});
 
-				popupMenu.show( tables[0], point.x, point.y);
+				popupMenu.show( tables[0], e.getPoint().x, e.getPoint().y);
 			}
 		}
 	}
@@ -169,13 +175,9 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	{
 		public void mouseClicked(MouseEvent e) {
 			if (SwingUtilities.isRightMouseButton(e)) {
-				Point point = e.getPoint();
-				int row = tables[1].rowAtPoint(point);
-				int column = tables[1].columnAtPoint(point);
-				ListSelectionModel model = tables[1].getSelectionModel();
-				model.setSelectionInterval(row, row);
+
+				final int recordId = getSelectedRecord( tables[1], e );
 				JPopupMenu popupMenu = new JPopupMenu();
-				final int recordId = ((BasicTable) tables[1].getModel()).getRecordId(row); // ID column.
 				
 				JMenuItem createTrialMenuItem = new JMenuItem(MENU_CREATE_TRIAL);
 				popupMenu.add(createTrialMenuItem);
@@ -222,20 +224,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					}
 				});
 				
-				popupMenu.show( tables[1], point.x, point.y);
+				popupMenu.show( tables[1], e.getPoint().x, e.getPoint().y);
 			}
 		}
 	}
 	
 	class TrialMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
-			Point point = e.getPoint();
-			int row = tables[2].rowAtPoint(point);
-			int column = tables[2].columnAtPoint(point);
-			ListSelectionModel model = tables[2].getSelectionModel();
-			model.setSelectionInterval(row, row);
+
+			final int recordId = getSelectedRecord( tables[2], e );
 			JPopupMenu popupMenu = new JPopupMenu();
-			final int recordId = ((BasicTable) tables[2].getModel()).getRecordId(row); // ID column.
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
 				// Upload context menu.
@@ -261,7 +259,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					}
 				});
 				
-				popupMenu.show( tables[2], point.x, point.y);
+				popupMenu.show( tables[2], e.getPoint().x, e.getPoint().y);
 			}
 		}
 	}
