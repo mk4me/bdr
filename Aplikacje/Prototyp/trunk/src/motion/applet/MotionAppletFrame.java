@@ -136,8 +136,8 @@ public class MotionAppletFrame extends JFrame {
 		    public void run() {
 	
 		    	// Set language
-				//Messages.setLanguagePolish();
-				Messages.setLanguageEnglish();
+				Messages.setLanguagePolish();
+				//Messages.setLanguageEnglish();
 
 				// Login dialog
 				LoginDialog loginDialog = new LoginDialog();
