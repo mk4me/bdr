@@ -26,7 +26,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        void StorePerformerFiles(int performerID, string path);
+        void StorePerformerFiles(int performerID, string path, string description);
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
@@ -34,7 +34,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        void StoreTrialFiles(int trialId, string path);
+        void StoreTrialFiles(int trialId, string path, string description);
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]

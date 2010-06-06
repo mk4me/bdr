@@ -24,7 +24,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StorePerformerFile(int performerID, string path, string description, string filename)
         {
-            string fileLocation = baseLocalFilePath + path + @"\" + filename;
+            string dirLocation = baseLocalFilePath + path;
+            string fileLocation = dirLocation + @"\" + filename;
 
 
             int newFileId = 0;
@@ -32,6 +33,7 @@ namespace MotionDBWebServices
 
             try
             {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
                 cmd.CommandText = @"insert into Plik ( IdPerformer, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@perf_id, @file_desc, @file_data, @file_name)
@@ -59,6 +61,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
+                Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -76,7 +79,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
-            string fileLocation = baseLocalFilePath+path+@"\"+filename;
+            string dirLocation = baseLocalFilePath + path;
+            string fileLocation = dirLocation + @"\" + filename;
 
 
             int newFileId = 0;
@@ -84,6 +88,7 @@ namespace MotionDBWebServices
             
             try
             {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
                 cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@sess_id, @file_desc, @file_data, @file_name)
@@ -111,6 +116,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
+                Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -128,7 +134,9 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
-            string fileLocation = baseLocalFilePath + path + @"\" + filename;
+
+            string dirLocation = baseLocalFilePath + path;
+            string fileLocation = dirLocation + @"\" + filename;
 
 
             int newFileId = 0;
@@ -136,6 +144,7 @@ namespace MotionDBWebServices
 
             try
             {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
                 cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@trial_id, @file_desc, @file_data, @file_name)
@@ -163,6 +172,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
+                Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -179,11 +189,60 @@ namespace MotionDBWebServices
             return newFileId;
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void StorePerformerFiles(int performerID, string path)
+        public void StorePerformerFiles(int performerID, string path, string description)
+
         {
-           FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
-           throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
-           return;
+            string dirLocation = baseLocalFilePath + path;
+            
+
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
+                OpenConnection();
+                cmd.CommandText = @"insert into Plik ( IdPerformer, Opis_pliku, Plik, Nazwa_pliku)
+                                        values (@perf_id, @file_desc, @file_data, @file_name)";
+                cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                SqlParameter fileIdParameter =
+                    new SqlParameter("@file_id", SqlDbType.Int);
+                // can be used for recoring of several files
+                cmd.Parameters["@perf_id"].Value = performerID;
+
+                FileInfo[] sFiles = di.GetFiles("*.*");
+                foreach (FileInfo fi in sFiles)
+                {
+                    FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
+                    BinaryReader br = new BinaryReader(fs);
+                    fileData = br.ReadBytes(maxFileSize);
+                    if (description.Equals("")) description = "sample description";
+                    cmd.Parameters["@file_desc"].Value = description;
+                    cmd.Parameters["@file_data"].Value = fileData;
+                    cmd.Parameters["@file_name"].Value = fi.Name;
+                    cmd.ExecuteNonQuery();
+                    br.Close();
+                    fs.Close();
+                    File.Delete(fi.FullName);
+                }
+
+
+                Directory.Delete(di.FullName);
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
+
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return;
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreSessionFiles(int sessionID, string path, string description)
@@ -193,6 +252,7 @@ namespace MotionDBWebServices
 
             try
             {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
                 cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@sess_id, @file_desc, @file_data, @file_name)";
@@ -205,7 +265,6 @@ namespace MotionDBWebServices
                 // can be used for recoring of several files
                 cmd.Parameters["@sess_id"].Value = sessionID;
 
-                DirectoryInfo di = new DirectoryInfo(dirLocation);
                 FileInfo[] sFiles = di.GetFiles("*.*");
                 foreach (FileInfo fi in sFiles)
                 {
@@ -241,11 +300,59 @@ namespace MotionDBWebServices
             return;
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void StoreTrialFiles(int trialId, string path)
+        public void StoreTrialFiles(int trialId, string path, string description)
         {
-           FileAccessServiceException exc = new FileAccessServiceException("Not Implemented", "THIS OPERATION IS NOT YET IMPLEMENTED");
-           throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
-           return;
+            string dirLocation = baseLocalFilePath + path;
+
+
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
+                OpenConnection();
+                cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
+                                        values (@trial_id, @file_desc, @file_data, @file_name)";
+                cmd.Parameters.Add("@trial_id", SqlDbType.Int);
+                cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                SqlParameter fileIdParameter =
+                    new SqlParameter("@file_id", SqlDbType.Int);
+                // can be used for recoring of several files
+                cmd.Parameters["@trial_id"].Value = trialId;
+
+                FileInfo[] sFiles = di.GetFiles("*.*");
+                foreach (FileInfo fi in sFiles)
+                {
+                    FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
+                    BinaryReader br = new BinaryReader(fs);
+                    fileData = br.ReadBytes(maxFileSize);
+                    if (description.Equals("")) description = "sample description";
+                    cmd.Parameters["@file_desc"].Value = description;
+                    cmd.Parameters["@file_data"].Value = fileData;
+                    cmd.Parameters["@file_name"].Value = fi.Name;
+                    cmd.ExecuteNonQuery();
+                    br.Close();
+                    fs.Close();
+                    File.Delete(fi.FullName);
+                }
+
+
+                Directory.Delete(di.FullName);
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
+
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return;
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void DownloadComplete(int fileID, string path)
