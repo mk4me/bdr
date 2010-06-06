@@ -30,6 +30,12 @@ namespace MotionDBWebServices
 
             int newFileId = 0;
 
+            if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '"+filename+"'. Must be a simple file name.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFile")));
+
+            }
 
             try
             {
@@ -85,6 +91,12 @@ namespace MotionDBWebServices
 
             int newFileId = 0;
 
+            if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFile")));
+
+            }
             
             try
             {
@@ -141,6 +153,12 @@ namespace MotionDBWebServices
 
             int newFileId = 0;
 
+            if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFile")));
+
+            }
 
             try
             {

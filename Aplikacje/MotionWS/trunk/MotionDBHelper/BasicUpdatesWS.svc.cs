@@ -102,9 +102,9 @@ namespace MotionDBWebServices
 
 
                 cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
-                                            values (@sess_user, @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
+                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
                                             set @sess_id = SCOPE_IDENTITY()";
-                cmd.Parameters.Add("@sess_user", SqlDbType.Int);
+                cmd.Parameters.Add("@sess_user", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
                 cmd.Parameters.Add("@motion_kind_name", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@sess_perf", SqlDbType.Int);
@@ -115,7 +115,7 @@ namespace MotionDBWebServices
                     new SqlParameter("@sess_id", SqlDbType.Int);
                 sessionIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(sessionIdParameter);
-                cmd.Parameters["@sess_user"].Value = userID;
+                cmd.Parameters["@sess_user"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@motion_kind_name"].Value = motionKindName;
                 cmd.Parameters["@sess_perf"].Value = performerID;
