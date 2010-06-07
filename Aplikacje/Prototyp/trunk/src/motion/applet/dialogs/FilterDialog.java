@@ -139,7 +139,7 @@ public class FilterDialog extends BasicDialog {
 	
 	protected void finishUserInterface() {
 		this.setSize(440, 400);
-		this.tableNameLabel.setText(this.tableName.toString());
+		this.tableNameLabel.setText(this.tableName.getLabel());
 		this.addColumnCondition(true);
 	}
 	
@@ -210,7 +210,7 @@ public class FilterDialog extends BasicDialog {
 	public SimplePredicate getPredicate() {
 		ColumnCondition firstColumnCondition = columnConditions.get(0);
 		SimplePredicate firstPredicate = new SimplePredicate(
-				tableName.toString(),
+				tableName.getEntity(),
 				firstColumnCondition.getFeature(),
 				firstColumnCondition.getOperator(),
 				firstColumnCondition.getValue());
@@ -222,7 +222,7 @@ public class FilterDialog extends BasicDialog {
 				first = false;
 			} else {
 				SimplePredicate currentPredicate = new SimplePredicate(
-						tableName.toString(),
+						tableName.getEntity(),
 						cc.getFeature(),
 						cc.getOperator(),
 						cc.getValue(),

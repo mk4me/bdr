@@ -67,7 +67,7 @@ public class BottomSplitPanel extends JPanel {
 		treePanel.setLayout(new BorderLayout());
 		ConfigurationTree configurationTree = new ConfigurationTree(tableName);
 		JScrollPane performerScrollPane = new JScrollPane(configurationTree.tree);
-		JLabel treeLabel = new JLabel(tableName.toString());
+		JLabel treeLabel = new JLabel(tableName.getLabel());
 		treePanel.add(treeLabel, BorderLayout.NORTH);
 		treePanel.add(performerScrollPane, BorderLayout.CENTER);
 		panel.add(treePanel);

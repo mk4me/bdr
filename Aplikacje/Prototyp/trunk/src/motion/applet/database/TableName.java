@@ -22,32 +22,42 @@ public class TableName {
 	protected static final String PATIENT_TABLE = "Pacjent";
 	protected static final String FILE_TABLE = "Plik";
 	
-	// English database table names (defined only here for the applet).
-	protected static final String PERFORMER_TABLE_ENG = Messages.getString("TableName.Performer"); //$NON-NLS-1$
-	protected static final String SESSION_TABLE_ENG = Messages.getString("TableName.Session"); //$NON-NLS-1$
-	protected static final String TRIAL_TABLE_ENG = Messages.getString("TableName.Trial"); //$NON-NLS-1$
-	protected static final String PATIENT_TABLE_ENG = Messages.getString("TableName.Patient"); //$NON-NLS-1$
-	protected static final String FILE_TABLE_ENG = Messages.getString("TableName.File"); //$NON-NLS-1$
+	// English entity names (defined only here for the applet).
+	protected static final String PERFORMER_ENTITY = "Performer";
+	protected static final String SESSION_ENTITY = "Session";
+	protected static final String TRIAL_ENTITY = "Trial";
+	protected static final String PATIENT_ENTITY = "Patient";
+	protected static final String FILE_ENTITY = "File";
 	
-	private final String table;
-	private final String label;
+	// Translatable database table names.
+	protected static final String PERFORMER_LABEL = Messages.getString("TableName.Performer"); //$NON-NLS-1$
+	protected static final String SESSION_LABEL = Messages.getString("TableName.Session"); //$NON-NLS-1$
+	protected static final String TRIAL_LABEL = Messages.getString("TableName.Trial"); //$NON-NLS-1$
+	protected static final String PATIENT_LABEL = Messages.getString("TableName.Patient"); //$NON-NLS-1$
+	protected static final String FILE_LABEL = Messages.getString("TableName.File"); //$NON-NLS-1$
+	
+	private final String table;	// Database table name (in Polish)
+	private final String entity;	// Entity name (in English)
+	private final String label;	// Table name (in English or in Polish depending on language setting)
 	private final ArrayList<AttributeName> staticAttributes = new ArrayList<AttributeName>();
 	//private final ArrayList<AttributeName> definedAttributes = new ArrayList<AttributeName>();
 	private final ArrayList<AttributeGroup> groupedDefinedAttributes = new ArrayList<AttributeGroup>();
 	
-	public TableName(String table, String label) {
+	public TableName(String table, String entity, String label) {
 		this.table = table;
+		this.entity = entity;
 		this.label = label;
+		
 		fillStaticAttributes();
 		fillDefinedAttributes();
 	}
 	
 	private void fillStaticAttributes() {
-		if (this.table.equals(PERFORMER_TABLE)) {
+		if (this.entity.equals(PERFORMER_ENTITY)) {
 			staticAttributes.add(new AttributeName(PerformerStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(PerformerStaticAttributes.firstName.toString(), AttributeName.STRING_TYPE));
 			staticAttributes.add(new AttributeName(PerformerStaticAttributes.lastName.toString(), AttributeName.STRING_TYPE));
-		} else if (this.table.equals(SESSION_TABLE)) {
+		} else if (this.entity.equals(SESSION_ENTITY)) {
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.userID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.labID.toString(), AttributeName.INTEGER_TYPE));
@@ -55,12 +65,12 @@ public class TableName {
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDate.toString(), AttributeName.DATE_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDescription.toString(), AttributeName.STRING_TYPE));
-		} else if (this.table.equals(TRIAL_TABLE)) {
+		} else if (this.entity.equals(TRIAL_ENTITY)) {
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.duration.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialDescription.toString(), AttributeName.STRING_TYPE));
-		} else if (this.table.equals(FILE_TABLE)) {
+		} else if (this.entity.equals(FILE_ENTITY)) {
 			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileName.toString(), AttributeName.STRING_TYPE));
 			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileDescription.toString(), AttributeName.STRING_TYPE));
@@ -103,12 +113,22 @@ public class TableName {
 	
 	public String toString() {
 		
-		return this.label;
+		return "Table: " + this.table + ", Entity: " + this.entity + ", Label: " + this.label;
 	}
 	
-	public String getTableName() {
+	public String getTable() {
 		
 		return this.table;
+	}
+	
+	public String getEntity() {
+		
+		return this.entity;
+	}
+	
+	public String getLabel() {
+		
+		return this.label;
 	}
 	
 	public ArrayList<AttributeName> getStaticAttributes() {

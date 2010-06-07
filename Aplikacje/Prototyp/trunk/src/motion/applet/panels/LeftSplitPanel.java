@@ -113,7 +113,7 @@ public class LeftSplitPanel extends JPanel {
 								if (!selectedNode.isRoot()) {
 									List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 											((Filter) selectedNode.getUserObject()),
-											new String[] {LeftSplitPanel.this.tableName.toString().toLowerCase()});
+											new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 									//System.out.println(result);
 									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
 									ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
@@ -152,7 +152,7 @@ public class LeftSplitPanel extends JPanel {
 		add(toolBar);
 		
 		// Create the tree
-		rootNode = new DefaultMutableTreeNode(this.tableName + TREE_TITLE);
+		rootNode = new DefaultMutableTreeNode(this.tableName.getLabel() + TREE_TITLE);
 		treeModel = new DefaultTreeModel(rootNode);
 		treeModel.addTreeModelListener(new TreeModelListener() {
 			@Override

@@ -176,7 +176,7 @@ public class UploadDialog extends BasicDialog {
 		this.setSize(440, 210);
 		this.setLocation(200, 200);
 		
-		this.idLabel.setText(this.tableName.toString() + Messages.COLON);
+		this.idLabel.setText(this.tableName.getLabel() + Messages.COLON);
 		
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override

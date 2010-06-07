@@ -1,17 +1,13 @@
 package motion.applet;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -19,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
@@ -54,7 +48,7 @@ public class MotionAppletFrame extends JFrame {
 		JMenuBar appletMenuBar = new JMenuBar();
 		JMenu uploadMenu = new JMenu(Messages.getString("Upload")); //$NON-NLS-1$
 		appletMenuBar.add(uploadMenu);
-		JMenuItem uploadPerformerItem = new JMenuItem(Messages.getString("TableName.Performer")); //$NON-NLS-1$
+		JMenuItem uploadPerformerItem = new JMenuItem(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
 		uploadMenu.add(uploadPerformerItem);
 		uploadPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -63,7 +57,7 @@ public class MotionAppletFrame extends JFrame {
 				uploadDialog.setVisible(true);
 			}
 		});
-		JMenuItem uploadSessionItem = new JMenuItem(Messages.getString("TableName.Session")); //$NON-NLS-1$
+		JMenuItem uploadSessionItem = new JMenuItem(TableNamesInstance.SESSION.getLabel()); //$NON-NLS-1$
 		uploadMenu.add(uploadSessionItem);
 		uploadSessionItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -72,7 +66,7 @@ public class MotionAppletFrame extends JFrame {
 				uploadDialog.setVisible(true);
 			}
 		});
-		JMenuItem uploadTrialItem = new JMenuItem(Messages.getString("TableName.Trial")); //$NON-NLS-1$
+		JMenuItem uploadTrialItem = new JMenuItem(TableNamesInstance.TRIAL.getLabel()); //$NON-NLS-1$
 		uploadMenu.add(uploadTrialItem);
 		uploadTrialItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -82,7 +76,7 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
-		JMenu performerMenu = new JMenu(Messages.getString("Performer")); //$NON-NLS-1$
+		JMenu performerMenu = new JMenu(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
 		appletMenuBar.add(performerMenu);
 		JMenuItem createPerformerItem = new JMenuItem(Messages.getString("MotionApplet.New_performer")); //$NON-NLS-1$
 		performerMenu.add(createPerformerItem);

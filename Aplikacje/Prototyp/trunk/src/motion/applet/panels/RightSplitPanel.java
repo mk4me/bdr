@@ -63,7 +63,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		{
 			tabNameHash.put( tn, i );
 			tables[i] = new JTable();
-			tabbedPane.addTab( tn.toString(), new JScrollPane ( tables[i] ) );
+			tabbedPane.addTab( tn.getLabel(), new JScrollPane ( tables[i] ) );
 			i++;
 		}
 		this.setLayout(new BorderLayout());
