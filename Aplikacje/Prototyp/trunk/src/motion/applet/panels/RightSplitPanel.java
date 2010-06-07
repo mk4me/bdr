@@ -57,6 +57,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		//this.performerTableName = TableNamesInstance.PERFORMER;
 		//this.sessionTableName = TableNamesInstance.SESSION;
 		tabbedPane = new JTabbedPane();
+		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 
 		int i=0;
 		for( TableName tn : TableNamesInstance.allTableNames )
