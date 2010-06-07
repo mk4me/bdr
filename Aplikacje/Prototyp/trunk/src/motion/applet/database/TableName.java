@@ -84,7 +84,7 @@ public class TableName {
 				//definedAttributes.add(new AttributeName(s, toTypeString(results.get(s))));
 			//}
 			
-			HashMap<String, EntityAttributeGroup> results = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined(table);
+			HashMap<String, EntityAttributeGroup> results = WebServiceInstance.getDatabaseConnection().listGrouppedAttributesDefined(this.entity);
 			for (String s : results.keySet()) {
 				ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
 				for (EntityAttribute e : results.get(s)) {
