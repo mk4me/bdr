@@ -173,7 +173,7 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void finishUserInterface() {
-		this.setSize(440, 210);
+		this.setSize(460, 210);
 		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.tableName.getLabel() + Messages.COLON);

@@ -181,9 +181,9 @@ public class TableName {
 		
 		return this.groupedDefinedAttributes;
 	}
-	/*
-	public AttributeName getStaticAttributeName(String attributeName) {
-		for (AttributeName a : this.staticAttributes) {
+	
+	public AttributeName getAttributeName(String attributeName) {
+		for (AttributeName a : getAllAttributes()) {
 			if (a.toString().equals(attributeName)) {
 				
 				return a;
@@ -191,5 +191,5 @@ public class TableName {
 		}
 		
 		return null;
-	}*/
+	}
 }

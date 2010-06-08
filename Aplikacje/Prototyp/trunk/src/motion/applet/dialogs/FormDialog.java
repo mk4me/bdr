@@ -15,6 +15,8 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -27,7 +29,7 @@ public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.CREATE;
 	private static String CANCEL = Messages.CANCEL;
 	
-	private JButton createButton;
+	protected JButton createButton;
 	private JButton cancelButton;
 	
 	protected JPanel formPanel;
@@ -102,7 +104,7 @@ class FormField {
 		
 		gridBagConstraints.gridx++;
 		
-		text = new JTextField(10);
+		text = new JTextField(20);
 		label.setLabelFor(text);
 		formPanel.add(text, gridBagConstraints);
 		
@@ -121,6 +123,34 @@ class FormTextField extends FormField {
 	public String getData() {
 		
 		return text.getText();
+	}
+}
+
+class FormTextAreaField extends FormField {
+	private JTextArea textArea;
+	
+	public FormTextAreaField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+		super(attribute, gridBagConstraints, formPanel);
+		
+	}
+	
+	public String getData() {
+		
+		return textArea.getText();
+	}
+	
+	protected void prepareField() {
+		label = new JLabel(attribute.toString() + ":");
+		formPanel.add(label, gridBagConstraints);
+		
+		gridBagConstraints.gridx++;
+		
+		JScrollPane textAreaScroll = new JScrollPane(textArea = new JTextArea(5, 20));
+		label.setLabelFor(textArea);
+		formPanel.add(textAreaScroll, gridBagConstraints);
+		
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy++;
 	}
 }
 

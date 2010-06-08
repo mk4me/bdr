@@ -18,7 +18,7 @@ import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
-import motion.applet.dialogs.PerformerDialog;
+import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
@@ -83,11 +83,11 @@ public class MotionAppletFrame extends JFrame {
 		createPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Create the new performer dialog
-				PerformerDialog performerDialog = new PerformerDialog();
-				performerDialog.setVisible(true);
+				//PerformerDialog performerDialog = new PerformerDialog();
+				//performerDialog.setVisible(true);
 				
-				//PerformerFormDialog performerFormDialog = new PerformerFormDialog();
-				//performerFormDialog.setVisible(true);
+				PerformerFormDialog performerFormDialog = new PerformerFormDialog();
+				performerFormDialog.setVisible(true);
 				
 			}
 		});
