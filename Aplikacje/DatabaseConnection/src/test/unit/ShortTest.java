@@ -16,6 +16,7 @@ import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.model.AttributeName;
 import motion.database.model.DatabaseFile;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.Filter;
 import motion.database.model.GenericName;
@@ -98,8 +99,15 @@ public class ShortTest {
 //		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
 		//DbElementsList<Session> r = database.listLabSessionsWithAttributes(1);
 		
-		database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
+		//database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
+		HashMap<String, EntityAttributeGroup> results = database.listGrouppedAttributesDefined( "performer" );
+		for (String s : results.keySet() ) 
+		{
+			System.out.println("Attribute group: " + s );			
+			for ( EntityAttribute e : results.get(s) )
+				System.out.println( "Attribute: " + e.name + " Type:" + e.type );
+		}
 	//	System.out.println(r);
 	}
 }

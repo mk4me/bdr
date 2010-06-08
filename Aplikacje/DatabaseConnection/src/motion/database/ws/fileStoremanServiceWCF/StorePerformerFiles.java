@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="performerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="path" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,13 +31,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "performerID",
-    "path"
+    "path",
+    "description"
 })
 @XmlRootElement(name = "StorePerformerFiles")
 public class StorePerformerFiles {
 
     protected int performerID;
     protected String path;
+    protected String description;
 
     /**
      * Gets the value of the performerID property.
@@ -76,6 +79,30 @@ public class StorePerformerFiles {
      */
     public void setPath(String value) {
         this.path = value;
+    }
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+        this.description = value;
     }
 
 }

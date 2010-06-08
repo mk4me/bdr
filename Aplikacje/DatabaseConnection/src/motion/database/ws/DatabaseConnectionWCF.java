@@ -914,7 +914,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		{
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storePerformerFiles( performerId, destRemoteFolder+dir.getName() );
+			port.storePerformerFiles( performerId, destRemoteFolder+dir.getName(), description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
@@ -952,7 +952,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		{
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storeTrialFiles( trialId, destRemoteFolder+dir.getName() );
+			port.storeTrialFiles( trialId, destRemoteFolder+dir.getName(), description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
