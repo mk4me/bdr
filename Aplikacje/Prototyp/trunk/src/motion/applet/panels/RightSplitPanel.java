@@ -26,7 +26,7 @@ import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.ExceptionDialog;
-import motion.applet.dialogs.SessionDialog;
+import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.tables.BasicTable;
@@ -127,8 +127,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				createSessionMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						SessionDialog sessionDialog = new SessionDialog(recordId);
-						sessionDialog.setVisible(true);
+						//SessionDialog sessionDialog = new SessionDialog(recordId);
+						//sessionDialog.setVisible(true);
+						SessionFormDialog sessionFormDialog = new SessionFormDialog(recordId);
+						sessionFormDialog.setVisible(true);
 					}
 				});
 				// View Performer sessions context menu
