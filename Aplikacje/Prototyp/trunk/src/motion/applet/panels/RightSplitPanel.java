@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Hashtable;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -25,6 +27,7 @@ import javax.swing.SwingUtilities;
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialDialog;
@@ -44,6 +47,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_CREATE_TRIAL = "Create new trial";
 	private static String MENU_UPLOAD = "Upload file";
+	private static String MENU_DOWNLOAD = "Download file";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_TRIALS = "View trials";
 	private static String MENU_VIEW_FILES = "View files";
@@ -96,6 +100,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[0].addMouseListener(new PerformerMouseAdapter() ); 
 		tables[1].addMouseListener(new SessionMouseAdapter() );
 		tables[2].addMouseListener(new TrialMouseAdapter());
+		tables[3].addMouseListener(new FileMouseAdapter());
 		
 		showTable(TableNamesInstance.SESSION);
 		showTable( TableNamesInstance.PERFORMER );
@@ -267,6 +272,36 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
+	class FileMouseAdapter extends MouseAdapter {
+		public void mouseClicked(MouseEvent e) {
+
+			final int recordId = getSelectedRecord( tables[3], e );
+			JPopupMenu popupMenu = new JPopupMenu();
+			
+			if (SwingUtilities.isRightMouseButton(e)) {
+				// Upload context menu.
+				JMenuItem downloadMenuItem = new JMenuItem(MENU_DOWNLOAD);
+				popupMenu.add(downloadMenuItem);
+				
+				downloadMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JFileChooser fileChooser = new JFileChooser();
+						fileChooser.setAcceptAllFileFilterUsed(false);
+						fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						int result = fileChooser.showSaveDialog(RightSplitPanel.this);
+						if (result == JFileChooser.APPROVE_OPTION) {
+							final File file = fileChooser.getSelectedFile();
+							DownloadDialog downloadDialog = new DownloadDialog(recordId, file.toString());
+							downloadDialog.setVisible(true);
+						}
+					}
+				});
+				
+				popupMenu.show( tables[3], e.getPoint().x, e.getPoint().y);
+			}
+		}
+	}
 	
 	private void showTable(TableName tableName) {
 
