@@ -43,7 +43,7 @@ class FileTransferSupport {
 	public void getFile(String remoteFileName, String remoteFilePath, String localFileName, String destLocalFolder, String address, String userName, String password ) throws Exception
 	{
 		BufferedInputStream input;
-		BufferedOutputStream output = new BufferedOutputStream( new FileOutputStream( localFileName ) );
+		BufferedOutputStream output = new BufferedOutputStream( new FileOutputStream( destLocalFolder+ "/" +localFileName ) );
 		input = new BufferedInputStream( FTPs.getFileAsStream(remoteFileName, remoteFilePath, address, userName, password) );
 		
 		byte buffer[] = new byte[4096];
