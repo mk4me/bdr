@@ -131,7 +131,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
 
             }
             finally

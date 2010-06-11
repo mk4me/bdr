@@ -108,7 +108,8 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 QueryException exc = new QueryException("unknown", "Query execution error");
-                throw new FaultException<QueryException>(exc, "Query invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("GenericQueryUniformXML")));
+                
+                throw new FaultException<QueryException>(exc, "Query invocation failure: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("GenericQueryUniformXML")));
             }
             CloseConnection();
             return xd.DocumentElement;
