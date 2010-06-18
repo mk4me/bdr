@@ -16,7 +16,7 @@
     <j2se version="1.6+"/>
     <jar href="MotionClient.jar" main="true"/>
   </resources>
+  <update check="always" policy="always"/>
   <application-desc name="Motion Web Client" main-class="motion.applet.MotionAppletFrame"
-  width="800" height="600"
-  />
+  width="800" height="600" />
 </jnlp> 

@@ -16,11 +16,10 @@
     <j2se version="1.6.0"/>
     <jar href="MotionClient.jar"/>
   </resources>
+  <update check="always" policy="always"/>
   <applet-desc 
          name="Motion Client Applet"
-         main-class="motion.applet.MotionAppletLauncher"
-         width="800"
-         height="600">             
+         main-class="motion.applet.MotionAppletLauncher" width="100" height="200">             
   </applet-desc>
   
   <!--application-desc main-class="motion.applet.MotionApplet"/-->
