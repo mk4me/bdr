@@ -60,8 +60,8 @@ public class ShortTest {
 		database = DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
-		database.setWSCredentials("applet_user", "aplet4Motion", "db-bdr");
-		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
+		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
+		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
 	class ConsoleTransferListener implements FileTransferListener

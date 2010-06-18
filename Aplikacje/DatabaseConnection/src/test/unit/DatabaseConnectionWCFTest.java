@@ -62,9 +62,9 @@ public class DatabaseConnectionWCFTest {
 	public void setUp() throws Exception {
 		database = DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
-		database.setWSCredentials("applet_user", "aplet4Motion", "db-bdr");
+		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
 //		database.setWSCredentials("bzdura", "bzdura", "DBPAWELL");
-		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
+		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
 	/**
