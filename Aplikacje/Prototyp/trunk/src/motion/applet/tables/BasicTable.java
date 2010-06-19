@@ -1,6 +1,7 @@
 package motion.applet.tables;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
@@ -16,6 +17,7 @@ import motion.database.model.AttributeName;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
+import motion.database.model.GenericResult;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
@@ -56,6 +58,10 @@ public class BasicTable extends AbstractTableModel {
 		getTableContentsFromAttributes();
 	}
 	
+	public BasicTable(List<GenericResult> result) {
+		getTableContentsFromResult(result);
+	}
+	
 	private void getTableContentsFromAttributes() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
@@ -91,7 +97,7 @@ public class BasicTable extends AbstractTableModel {
 		for (Performer p : performers) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
 			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes())) {
-				this.attributeNames.add(a.toString());
+				this.attributeNames.add(a.toString());	//TODO: should be done only on the first loop
 				EntityAttribute entityAttribute = p.get(a.toString());
 				if (entityAttribute != null) {
 					cellList.add(entityAttribute.value);
@@ -176,6 +182,35 @@ public class BasicTable extends AbstractTableModel {
 			this.recordIds.add(Integer.parseInt(f.get(DatabaseFileStaticAttributes.fileID.toString()).value.toString()));
 			this.contents.add(cellList);
 		}
+	}
+	
+	private void getTableContentsFromResult(final List<GenericResult> result) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					boolean first = true;
+					for (GenericResult r : result) {
+						if (first == true) {
+							BasicTable.this.tableName = TableNamesInstance.toTableName(r.entityKind.toString());
+							first = false;
+						}
+						
+					}
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				BasicTable.this.fireTableStructureChanged();
+			}
+		};
+		worker.execute();
 	}
 	
 	@Override

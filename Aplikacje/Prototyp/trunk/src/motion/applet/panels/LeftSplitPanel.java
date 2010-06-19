@@ -1,23 +1,18 @@
 package motion.applet.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.SwingWorker;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,6 +30,7 @@ import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Filter;
+import motion.database.model.GenericResult;
 
 public class LeftSplitPanel extends JPanel {
 	private DefaultMutableTreeNode rootNode;
@@ -111,13 +107,16 @@ public class LeftSplitPanel extends JPanel {
 							if (tree.getSelectionPath() != null) {
 								DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
 								if (!selectedNode.isRoot()) {
-									List<? extends Object> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+									List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 											((Filter) selectedNode.getUserObject()),
 											new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 									//System.out.println(result);
 									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
 									ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
 									resultDialog.setVisible(true);
+									for (GenericResult g : result) {
+										System.out.println(g);
+									}
 								}
 							}
 						} catch (Exception e1) {
