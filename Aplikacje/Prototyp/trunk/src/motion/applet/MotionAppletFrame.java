@@ -12,8 +12,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableNamesInstance;
@@ -30,6 +32,8 @@ public class MotionAppletFrame extends JFrame {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
 	public static int APPLET_HEIGHT = 600;
 	public static int APPLET_WIDTH = 800;
+	
+	private static JTabbedPane queryResultsPane;
 	
 	public MotionAppletFrame() {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
@@ -113,10 +117,10 @@ public class MotionAppletFrame extends JFrame {
 		leftPanel.add(observationPanel);
 
 		// Query results
-		JTabbedPane queryResultsPane = new JTabbedPane();
-		queryResultsPane.addTab("query results 1", new JPanel() );
-		queryResultsPane.addTab("query results 2", new JPanel() );
-		queryResultsPane.addTab("query results 3", new JPanel() );
+		queryResultsPane = new JTabbedPane();
+		//queryResultsPane.addTab("query results 1", new JPanel() );
+		//queryResultsPane.addTab("query results 2", new JPanel() );
+		//queryResultsPane.addTab("query results 3", new JPanel() );
 		
 		// Right panel with a tree
 		RightSplitPanel rightPanel = new RightSplitPanel();
@@ -139,6 +143,10 @@ public class MotionAppletFrame extends JFrame {
 			}
 			
 		});
+	}
+	
+	public static void addResult(JTable resultTable) {
+		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
 	}
 	
 	public static void main(String args[])

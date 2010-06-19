@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.SwingWorker;
@@ -26,6 +27,7 @@ import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
+import motion.applet.tables.BasicTable;
 import motion.applet.trees.CheckBoxNodeEditor;
 import motion.applet.trees.CheckBoxNodeRenderer;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -112,11 +114,14 @@ public class LeftSplitPanel extends JPanel {
 											new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 									//System.out.println(result);
 									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
-									ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
-									resultDialog.setVisible(true);
+									//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
+									//resultDialog.setVisible(true);
 									for (GenericResult g : result) {
 										System.out.println(g);
 									}
+									JTable resultTable = new JTable();
+									resultTable.setModel(new BasicTable(result));
+									MotionAppletFrame.addResult(resultTable);
 								}
 							}
 						} catch (Exception e1) {

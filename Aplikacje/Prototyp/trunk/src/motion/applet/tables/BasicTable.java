@@ -94,10 +94,13 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listPerformers() throws Exception {
 		DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
+		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes());
+		for (AttributeName a : attributes) {
+			this.attributeNames.add(a.toString());
+		}
 		for (Performer p : performers) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
-			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes())) {
-				this.attributeNames.add(a.toString());	//TODO: should be done only on the first loop
+			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = p.get(a.toString());
 				if (entityAttribute != null) {
 					cellList.add(entityAttribute.value);
@@ -112,6 +115,10 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listSessions() throws Exception {
 		DbElementsList<Session> sessions = new DbElementsList<Session>();
+		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes());
+		for (AttributeName a : attributes) {
+			this.attributeNames.add(a.toString());
+		}
 		if (this.recordId > -1) {
 			sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
 		} else {
@@ -119,8 +126,7 @@ public class BasicTable extends AbstractTableModel {
 		}
 		for (Session s : sessions) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
-			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes())) {
-				this.attributeNames.add(a.toString());
+			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = s.get(a.toString());
 				if (entityAttribute != null) {
 					cellList.add(entityAttribute.value);
@@ -135,14 +141,17 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listTrials() throws Exception {
 		DbElementsList<Trial> trials = new DbElementsList<Trial>();
+		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes());
+		for (AttributeName a : attributes) {
+			this.attributeNames.add(a.toString());
+		}
 		if (this.recordId > -1) {
 			trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
 		}
 		
 		for (Trial t : trials) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
-			for (AttributeName a : tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes())) {
-				this.attributeNames.add(a.toString());
+			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = t.get(a.toString());
 				if (entityAttribute != null) {
 					cellList.add(entityAttribute.value);
@@ -167,11 +176,14 @@ public class BasicTable extends AbstractTableModel {
 			}
 		}
 		
+		ArrayList<AttributeName> attributes = tableName.getAllAttributes();
+		for (AttributeName a : attributes) {
+			this.attributeNames.add(a.toString());
+		}
 		for (DatabaseFile f : files) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
 			
-			for (AttributeName a : tableName.getAllAttributes()) {
-				this.attributeNames.add(a.toString());
+			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = f.get(a.toString());
 				if (entityAttribute != null) {
 					cellList.add(entityAttribute.value);
@@ -188,14 +200,69 @@ public class BasicTable extends AbstractTableModel {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
-				try {
-					boolean first = true;
-					for (GenericResult r : result) {
-						if (first == true) {
-							BasicTable.this.tableName = TableNamesInstance.toTableName(r.entityKind.toString());
-							first = false;
+				try { //TODO: Needs improvement.
+					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
+					//BasicTable.this.tableName = TableNamesInstance.SESSION;
+					if (result.get(0).keySet().contains("FirstName")) {
+						BasicTable.this.tableName = TableNamesInstance.PERFORMER;
+					} else if (result.get(0).keySet().contains("SessionDate")) {
+						BasicTable.this.tableName = TableNamesInstance.SESSION;
+					} else if (result.get(0).keySet().contains("Duration")) {
+						BasicTable.this.tableName = TableNamesInstance.TRIAL;
+					}
+					
+					// Don't filter attributes.
+					ArrayList<AttributeName> attributes = tableName.getAllAttributes();
+					for (AttributeName a : attributes) {
+						//TODO: sessionID / SessionID
+						BasicTable.this.attributeNames.add(a.toString().toLowerCase());
+					}
+					
+					/*//Filter attributes from view configuration.
+					ArrayList<AttributeName> attributes = null;
+					if (tableName.equals(TableNamesInstance.PERFORMER)) {
+						attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes());
+					} else if (tableName.equals(TableNamesInstance.SESSION)) {
+						attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes());
+					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+						attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes());
+					}*/
+					
+					if (attributes != null) {
+						/*//Filter attributes from view configuration.
+						for (String key : result.get(0).keySet()) {
+							for (AttributeName a : attributes) {
+								//TODO: sessionID / SessionID
+								if (a.toString().toLowerCase().equals(key.toLowerCase())) {
+									BasicTable.this.attributeNames.add(key);
+								}
+							}
 						}
+						*/
 						
+						for (GenericResult r : result) {
+							Object[] cellList = new Object[attributeNames.size()];
+							
+							for (String key : r.keySet()) {
+								//TODO: sessionID / SessionID
+								int i = attributeNames.indexOf(key.toLowerCase());
+								if (i >= 0)
+									cellList[i] = r.get(key).value;
+							}
+							//TODO: sessionID / SessionID
+							if (tableName.equals(TableNamesInstance.PERFORMER)) {
+								BasicTable.this.recordIds.add(Integer.parseInt(r.get("PerformerID").value.toString()));
+							} else if (tableName.equals(TableNamesInstance.SESSION)) {
+								BasicTable.this.recordIds.add(Integer.parseInt(r.get("SessionID").value.toString()));
+							} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+								BasicTable.this.recordIds.add(Integer.parseInt(r.get("TrialID").value.toString()));
+							}
+							ArrayList<Object> list = new ArrayList<Object>();
+							for (int i = 0; i < cellList.length; i++) {
+								list.add(cellList[i]);
+							}
+							BasicTable.this.contents.add(list);
+						}
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
