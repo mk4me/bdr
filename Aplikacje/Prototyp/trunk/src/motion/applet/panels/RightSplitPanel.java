@@ -30,7 +30,7 @@ import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.SessionFormDialog;
-import motion.applet.dialogs.TrialDialog;
+import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.tables.BasicTable;
 import motion.applet.trees.ResultTree;
@@ -193,8 +193,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				createTrialMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						TrialDialog trialDialog = new TrialDialog(recordId);
-						trialDialog.setVisible(true);
+						TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
+						trialFormDialog.setVisible(true);
 					}
 				});
 				// View Session trials context menu

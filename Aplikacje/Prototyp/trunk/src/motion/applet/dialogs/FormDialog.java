@@ -30,6 +30,8 @@ public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.CREATE;
 	private static String CANCEL = Messages.CANCEL;
 	
+	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
+	
 	protected JButton createButton;
 	private JButton cancelButton;
 	

@@ -19,7 +19,6 @@ public class SessionFormDialog extends FormDialog {
 	private static String WELCOME_MESSAGE = "Create new session.";
 	private static String MISSING_SESSION_DATE = "Missing or incorrect session date.";
 	private static String MISSING_MOTION_KIND = "Missing motion kind.";
-	private static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
 	private FormDateField sessionDateField;
@@ -97,8 +96,8 @@ public class SessionFormDialog extends FormDialog {
 			motionKindField = new FormListField(
 					TableNamesInstance.SESSION.getAttributeName("motionKindID"), gridBagConstraints, formPanel, getMotionKinds());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
+			exceptionDialog.setVisible(true);
 		}
 		
 		addFormTextLabel("Defined attributes:");
@@ -108,7 +107,7 @@ public class SessionFormDialog extends FormDialog {
 				TableNamesInstance.SESSION.getAttributeName("number_of_trials"), gridBagConstraints, formPanel);
 	}
 	
-	private String[] getMotionKinds() throws Exception {
+	private String[] getMotionKinds() throws Exception {	//TODO: Add thread.
 		Vector<MotionKind> motionKinds = WebServiceInstance.getDatabaseConnection().listMotionKindsDefined();
 		String[] motionKindsStrings = new String[motionKinds.size()];
 		

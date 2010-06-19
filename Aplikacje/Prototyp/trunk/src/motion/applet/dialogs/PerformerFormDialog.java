@@ -19,7 +19,6 @@ public class PerformerFormDialog extends FormDialog {
 	private static String MISSING_FIRST_NAME = "Please input performer's first name.";
 	private static String MISSING_LAST_NAME = "Please input performer's last name.";
 	private static String MISSING_BIRTH_DATE = "Missing or incorrect birth date";
-	private static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	private static String CREATING_MESSAGE = "Creating a new performer...";
 	
 	private FormTextField firstNameField;
