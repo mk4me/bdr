@@ -2,7 +2,6 @@ package motion.applet.panels;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -21,8 +20,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import motion.applet.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.trees.CheckBoxNode;
 import motion.applet.trees.ConfigurationTree;
-import motion.applet.trees.ConfigurationTree.CheckBoxNode;
 
 public class BottomSplitPanel extends JPanel {
 	private static final String BORDER_TITLE = Messages.getString("BottomSplitPanel.ViewConfiguration"); //$NON-NLS-1$

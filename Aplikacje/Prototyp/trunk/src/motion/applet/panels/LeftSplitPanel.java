@@ -12,15 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
-import javax.swing.JTree;
 import javax.swing.SwingWorker;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import motion.applet.Messages;
 import motion.applet.MotionAppletFrame;
@@ -28,16 +21,16 @@ import motion.applet.database.TableName;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.tables.BasicTable;
-import motion.applet.trees.CheckBoxNodeEditor;
-import motion.applet.trees.CheckBoxNodeRenderer;
+import motion.applet.trees.FilterNode;
+import motion.applet.trees.FilterTree;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Filter;
 import motion.database.model.GenericResult;
 
 public class LeftSplitPanel extends JPanel {
-	private DefaultMutableTreeNode rootNode;
-	private DefaultTreeModel treeModel;
-	private JTree tree;
+	//private DefaultMutableTreeNode rootNode;
+	//private DefaultTreeModel treeModel;
+	private FilterTree filterTree;
 	private static String ADD_FILTER = Messages.getString("Add"); //$NON-NLS-1$
 	private static String REMOVE_FILTER = Messages.getString("Remove"); //$NON-NLS-1$
 	private static String EDIT_FILTER = Messages.getString("Edit"); //$NON-NLS-1$
@@ -63,8 +56,8 @@ public class LeftSplitPanel extends JPanel {
 				FilterDialog filterDialog = new FilterDialog(LeftSplitPanel.this.tableName);
 				filterDialog.setVisible(true);
 				if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
-					Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
-					addObject(filter).setUserObject(filter);
+					FilterNode filterNode = new FilterNode(new Filter(filterDialog.getName(), filterDialog.getPredicate()));
+					filterTree.addFilterNode(filterNode).setUserObject(filterNode);
 				}
 			}
 		});
@@ -74,7 +67,7 @@ public class LeftSplitPanel extends JPanel {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				removeCurrentNode();
+				filterTree.removeCurrentNode();
 			}
 		});
 		
@@ -83,15 +76,15 @@ public class LeftSplitPanel extends JPanel {
 		editButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (tree.getSelectionPath() != null) {
-					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
+				if (filterTree.tree.getSelectionPath() != null) {
+					DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 					if (!selectedNode.isRoot()) {
-						FilterDialog filterDialog = new FilterDialog((Filter) selectedNode.getUserObject());
+						FilterDialog filterDialog = new FilterDialog(((FilterNode) selectedNode.getUserObject()).getFilter());
 						filterDialog.setVisible(true);
 						if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
-							Filter filter = new Filter(filterDialog.getName(), filterDialog.getPredicate());
-							selectedNode.setUserObject(filter);
-							treeModel.reload();
+							FilterNode filterNode = new FilterNode(new Filter(filterDialog.getName(), filterDialog.getPredicate()));
+							selectedNode.setUserObject(filterNode);
+							filterTree.treeModel.reload();
 						}
 					}
 				}
@@ -106,11 +99,11 @@ public class LeftSplitPanel extends JPanel {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							if (tree.getSelectionPath() != null) {
-								DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) tree.getSelectionPath().getLastPathComponent());
+							if (filterTree.tree.getSelectionPath() != null) {
+								DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 								if (!selectedNode.isRoot()) {
 									List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
-											((Filter) selectedNode.getUserObject()),
+											((FilterNode) selectedNode.getUserObject()).getFilter(),
 											new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 									//System.out.println(result);
 									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
@@ -156,9 +149,14 @@ public class LeftSplitPanel extends JPanel {
 		add(toolBar);
 		
 		// Create the tree
-		rootNode = new DefaultMutableTreeNode(this.tableName.getLabel() + TREE_TITLE);
-		treeModel = new DefaultTreeModel(rootNode);
-		treeModel.addTreeModelListener(new TreeModelListener() {
+		//rootNode = new DefaultMutableTreeNode(this.tableName.getLabel() + TREE_TITLE);
+		//treeModel = new DefaultTreeModel(rootNode);
+		
+		filterTree = new FilterTree(this.tableName);
+		JScrollPane scrollPane = new JScrollPane(filterTree.tree);
+		add(scrollPane, BorderLayout.CENTER);
+		/*
+		filterTree.treeModel.addTreeModelListener(new TreeModelListener() {
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {
 				DefaultMutableTreeNode node;
@@ -184,65 +182,6 @@ public class LeftSplitPanel extends JPanel {
 				// TODO Auto-generated method stub
 				
 			}
-		});
-		tree = new JTree(treeModel);
-		CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
-	    tree.setCellRenderer(renderer);
-	    tree.setCellEditor(new CheckBoxNodeEditor(tree));
-		tree.setEditable(true);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		tree.setShowsRootHandles(true);
-		JScrollPane scrollPane = new JScrollPane(tree);
-		add(scrollPane, BorderLayout.CENTER);
-	}
-	
-	public void clear() {
-		rootNode.removeAllChildren();
-		treeModel.reload();
-	}
-	
-	public void removeCurrentNode() {
-		TreePath currentSelection = tree.getSelectionPath();
-		if (currentSelection != null) {
-			DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) (currentSelection.getLastPathComponent());
-			MutableTreeNode parent = (MutableTreeNode)(currentNode.getParent());
-			if (parent != null) {
-				treeModel.removeNodeFromParent(currentNode);
-				return;
-	        }
-	    }
-	}
-	
-	public DefaultMutableTreeNode addObject(Object child) {
-		DefaultMutableTreeNode parentNode = null;
-		TreePath parentPath = tree.getSelectionPath();
-		
-		if (parentPath == null) {
-			parentNode = rootNode;
-		} else {
-			parentNode = (DefaultMutableTreeNode) (parentPath.getLastPathComponent());
-		}
-		
-		return addObject(parentNode, child, true);
-	}
-	
-	public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child) {
-		return addObject(parent, child, false);
-	}
-	
-	public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child, boolean shouldBeVisible) {
-		DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
-		
-		if (parent == null) {
-			parent = rootNode;
-		}
-		
-		treeModel.insertNodeInto(childNode, parent, parent.getChildCount());
-		
-		if (shouldBeVisible) {
-			tree.scrollPathToVisible(new TreePath(childNode.getPath()));
-		}
-		
-		return childNode;
+		});*/
 	}
 }
