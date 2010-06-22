@@ -29,11 +29,15 @@ public class Filter {
 		return this.predicate;
 	}
 	
+	@Deprecated
+	// CheckBoxNode has selection instead.
 	public boolean isSelected() {
 		
 		return this.selected;
 	}
 	
+	@Deprecated
+	// CheckBoxNode has selection instead.
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
