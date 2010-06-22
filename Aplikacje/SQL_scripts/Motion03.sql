@@ -366,7 +366,6 @@ go
  CREATE TABLE Uzytkownik (
         IdUzytkownik         int IDENTITY,
         Login                varchar(20) NOT NULL,
-        Haslo                varchar(30) NOT NULL,
         Imie                 varchar(30) NOT NULL,
         Nazwisko             varchar(50) NOT NULL
  )
@@ -581,6 +580,36 @@ go
         Komunikat  nvarchar(500)
  )
  go
+
+create table Predykat
+(
+	IdPredykat int not null,
+	IdRodzicPredykat int not null,
+	EncjaKontekst varchar(20) not null,
+	IdPoprzedniPredykat int not null,
+	NastepnyOperator varchar(5) not null,
+	NazwaWlasciwosci varchar(100) not null,
+	Operator varchar(5) not null,
+	Wartosc varchar(100) not null,
+	FunkcjaAgregujaca varchar(10) not null,
+	EncjaAgregowana varchar(20) not null,
+	Nazwa varchar(20) not null,
+	IdUzytkownik int not null
+)
+go
+ ALTER TABLE Predykat
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+
+ALTER TABLE Predykat
+		ADD PRIMARY KEY (IdUzytkownik, IdPredykat)
+go
+
+ CREATE INDEX XIFPredykat ON Predykat
+ (
+        IdPredykat
+ )
+go
 
  CREATE INDEX XIF46Wartosc_wyliczeniowa ON Wartosc_wyliczeniowa
  (

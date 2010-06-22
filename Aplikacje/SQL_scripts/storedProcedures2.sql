@@ -15,6 +15,23 @@ create type PredicateUdt as table
 )
 go
 
+/* -- TEST
+CREATE TABLE PredykatTest (
+        IdPredykat            int IDENTITY,
+		PredicateID int,
+		ParentPredicate int,
+		ContextEntity varchar(20),
+		PreviousPredicate int,
+		NextOperator varchar(5),
+		FeatureName varchar(100),
+		Operator varchar(5),
+		Value varchar(100),
+		AggregateFunction varchar(10),
+		AggregateEntity varchar(20),
+		timestamp
+ )
+*/
+
 create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -70,15 +87,58 @@ go
 /* sample calls of filter-based queries */
 
 declare @filters as PredicateUdt;
-insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
-insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
-insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
-insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
+--insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
+--insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
+--insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
+--insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
+
+insert into @filters values (1, 3, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
+insert into @filters values (3, 5, 'GROUP', 0, 'OR', 'Walk', '', '', '', '');
+insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '3', '', '');
+insert into @filters values (4, 5, 'GROUP', 3, '', 'Run', '', '', '', '');
+insert into @filters values (5, 8, 'GROUP', 7, '', 'SIBLING', '', '', '', '');
+insert into @filters values (6, 7, 'session', 0, '', 'SessionID', '<=', '10', '', '');
+insert into @filters values (7, 8, 'GROUP', 0, 'AND', 'NiskieNry', '', '', '', '');
+insert into @filters values (8, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
+
+
 exec dbo.evaluate_generic_query @filters,  1,  1,  0,  0 
+
+declare @filters as PredicateUdt;
+--insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
+--insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
+--insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
+--insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
+
+insert into @filters values (1, 3, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
+insert into @filters values (3, 5, 'GROUP', 0, 'OR', 'Walk', '', '', '', '');
+insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '3', '', '');
+insert into @filters values (4, 5, 'GROUP', 3, '', 'Run', '', '', '', '');
+insert into @filters values (5, 8, 'GROUP', 7, '', 'SIBLING', '', '', '', '');
+insert into @filters values (6, 7, 'session', 0, '', 'SessionID', '<=', '10', '', '');
+insert into @filters values (7, 8, 'GROUP', 0, 'AND', 'NiskieNry', '', '', '', '');
+insert into @filters values (8, 15, 'GROUP', 0, 'OR', 'BRANCH', '', '', '', '');
+
+insert into @filters values (9, 10, 'performer', 0, '', 'PerformerID', '>', '10', '', '');
+insert into @filters values (10, 11, 'GROUP', 0, '', 'PerfIDHigherTen', '', '', '', '');
+insert into @filters values (11, 14, 'GROUP', 13, '', 'SIBLING', '', '', '', '');
+
+insert into @filters values (12, 13, 'performer', 0, '', 'FirstName', '=', 'Jan', '', '');
+insert into @filters values (13, 14, 'GROUP', 0, 'AND', 'Jan', '', '', '', '');
+insert into @filters values (14, 15, 'GROUP', 8, '', 'BRANCH', '', '', '', '');
+insert into @filters values (15, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
+
+exec dbo.evaluate_generic_query @filters,  1,  1,  0,  0 
+
+
 
 declare @filters as PredicateUdt;
 insert into @filters values (4, 0, 'performer', 0, '', 'LastName', '=', 'Kowalski', '', '');
 exec dbo.evaluate_generic_query_uniform @filters,  1,  1,  0,  0 
+
+declare @filters as PredicateUdt;
+insert into @filters values (8, 0, 'sesja', 0, '', 'sessionID', '=', '1', '', '');
+exec dbo.evaluate_generic_query_uniform @filters,  0,  1,  0,  0 
 
 
 
@@ -113,6 +173,8 @@ begin
 	declare @currentAggregateFunction varchar(10);
 	declare @currentAggregateEntity varchar(20);
 
+	declare @groupClosingRun bit;
+	set @groupClosingRun = 0;
 	
 	declare @fromClause varchar (500);
 	set @fromClause = ' from ';
@@ -122,6 +184,7 @@ begin
 	set @selectClause = 'with XMLNAMESPACES (DEFAULT ''http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService'') select ';
 	declare @leftOperandCode varchar (100);
 	declare @sql as nvarchar(2500);
+
 	
 	/* Determine the content of the select clause */
 	
@@ -160,14 +223,15 @@ begin
 	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
 	if( @trial = 1 and @segm = 1) set @fromClause = @fromClause + 'join Segment as seg on seg.IdObserwacja = t.IdObserwacja ';
 	if( @trial = 0 and @segm = 1) set @fromClause = @fromClause + 'Segment as seg ';
-	set @fromClause = @fromClause ;
 
 
-	select @predicatesLeft = count(PredicateID) from @filter;
+	select @predicatesLeft = count(PredicateID) from @filter
+	select @predicatesLeft = @predicatesLeft + count(PredicateID) from @filter where ContextEntity = 'GROUP' -- NOWE
 	select @currentId = 0;
 	set @currentGroup = 0;
 	while @predicatesLeft > 0
 		begin
+			set @predicatesLeft = @predicatesLeft-1;	
 			select
 				@currentId = PredicateID,
 				@currentGroup = ParentPredicate,
@@ -183,13 +247,23 @@ begin
 			where PreviousPredicate = @currentId and ParentPredicate = @currentGroup;	
 		if (@currentContextEntity = 'GROUP')
 		begin
-			set @whereClause = @whereClause + '( ';
-			set @currentGroup = @currentId;
-			set @currentId = 0;
-			set @nextOperator = '';
+			if(@groupClosingRun = 0)
+			begin
+				set @whereClause = @whereClause + '( ';
+				set @currentGroup = @currentId;
+				set @currentId = 0;
+				continue; -- do nastepnej petli - wez poczatkowy element w lancuchu odwiedzonej teraz grupy
+			end
+			else
+			begin
+				set @whereClause = @whereClause + ') ';
+				set @groupClosingRun = 0;
+			end
 		end
 		else
 			begin
+			--if @previousId = 0 set @whereClause = @whereClause + '(';
+			
 			
 			set @leftOperandCode = (
 			case @currentContextEntity 
@@ -226,25 +300,38 @@ begin
 			)
 			set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''');
 
-			if (@nextOperator = '' and @currentGroup <> 0)
+			end -- of non-GROUP case
+
+			if (@nextOperator = '' )
 			begin
-			 set @whereClause = @whereClause + ') ';
+			 -- set @whereClause = @whereClause + ') '+@currentFeatureName; -- usuniete w NOWE
 			 set @currentId = @currentGroup;
-			 select @currentGroup = ParentPredicate, @nextOperator = NextOperator from @filter where PredicateID=@currentId;
-			end
-			
+			 set @groupClosingRun = 1; -- NOWE
+
+			 if @currentGroup <> 0 
+			 begin 
+			 	-- cofamy sie tak, by nastepny przebieg chwycil grupe zawierajaca wlasnie zakonczony lancuch:
+			    -- To wyselekcjonuje grupe zawierajaca
+				select @currentGroup = ParentPredicate from @filter where PredicateID=@currentId;
+				-- zas to: parametry, jej poprzednika tak, aby to wlasnie ta grupa byla odwiedzona w nastepnym przebiegu  
+				select @currentId = PreviousPredicate from @filter where PredicateID=@currentId;		
+				-- cofamy sie tak, by nastepny przebieg chwycil grupe zawierajaca wlasnie zakonczony lancuch:
+			 end
 			end
 		 
 
-		 set @whereClause = @whereClause + ' '+ @nextOperator+' ';
-		set @predicatesLeft = @predicatesLeft-1;	
+		 if (@nextOperator <> '' ) set @whereClause = @whereClause + ' '+ @nextOperator+' ';
+
 	
-	/* Add compile directive */				
-		end
+	/* TD: Add compile directive */				
+		end -- of the predictate loop
 		set @whereClause = @whereClause+' for XML RAW (''GenericResultRow''), ELEMENTS, root (''GenericQueryResult'')';
 		set @sql = N''+(@selectClause+@fromClause+@whereClause);
-		
+		-- set @sql = N'BEGIN TRY ' + (@selectClause+@fromClause+@whereClause) + ' END TRY BEGIN CATCH insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat ) values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() ) END CATCH;'
+
+		-- select @sql;
 		exec sp_executesql @statement = @sql;
+		
 end
 go
 
@@ -278,7 +365,8 @@ begin
 	declare @currentValue varchar(100);
 	declare @currentAggregateFunction varchar(10);
 	declare @currentAggregateEntity varchar(20);
-
+	declare @groupClosingRun bit;
+	set @groupClosingRun = 0;
 	
 	declare @fromClause varchar (500);
 	set @fromClause = ' from ';
@@ -288,6 +376,12 @@ begin
 	set @selectClause = 'with XMLNAMESPACES (DEFAULT ''http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService'') select ';
 	declare @leftOperandCode varchar (100);
 	declare @sql as nvarchar(2500);
+	
+/*	
+	insert into 
+	PredykatTest (PredicateID, ParentPredicate, ContextEntity, PreviousPredicate,	NextOperator,FeatureName, Operator,	Value, AggregateFunction, AggregateEntity) 
+	( select PredicateID, ParentPredicate, ContextEntity, PreviousPredicate,	NextOperator,FeatureName, Operator,	Value, AggregateFunction, AggregateEntity from @filter );
+*/
 	
 	/* Determine the content of the select clause */
 	
@@ -318,14 +412,15 @@ begin
 	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
 	if( @trial = 1 and @segm = 1) set @fromClause = @fromClause + 'join Segment as seg on seg.IdObserwacja = t.IdObserwacja ';
 	if( @trial = 0 and @segm = 1) set @fromClause = @fromClause + 'Segment as seg ';
-	set @fromClause = @fromClause ;
 
 
-	select @predicatesLeft = count(PredicateID) from @filter;
+	select @predicatesLeft = count(PredicateID) from @filter
+	select @predicatesLeft = @predicatesLeft + count(PredicateID) from @filter where ContextEntity = 'GROUP' -- NOWE
 	select @currentId = 0;
 	set @currentGroup = 0;
 	while @predicatesLeft > 0
 		begin
+			set @predicatesLeft = @predicatesLeft-1;	
 			select
 				@currentId = PredicateID,
 				@currentGroup = ParentPredicate,
@@ -341,13 +436,23 @@ begin
 			where PreviousPredicate = @currentId and ParentPredicate = @currentGroup;	
 		if (@currentContextEntity = 'GROUP')
 		begin
-			set @whereClause = @whereClause + '( ';
-			set @currentGroup = @currentId;
-			set @currentId = 0;
-			set @nextOperator = '';
+			if(@groupClosingRun = 0)
+			begin
+				set @whereClause = @whereClause + '( ';
+				set @currentGroup = @currentId;
+				set @currentId = 0;
+				continue; -- do nastepnej petli - wez poczatkowy element w lancuchu odwiedzonej teraz grupy
+			end
+			else
+			begin
+				set @whereClause = @whereClause + ') ';
+				set @groupClosingRun = 0;
+			end
 		end
 		else
 			begin
+			--if @previousId = 0 set @whereClause = @whereClause + '(';
+			
 			
 			set @leftOperandCode = (
 			case @currentContextEntity 
@@ -384,24 +489,38 @@ begin
 			)
 			set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''');
 
-			if (@nextOperator = '' and @currentGroup <> 0)
+			end -- of non-GROUP case
+
+			if (@nextOperator = '' )
 			begin
-			 set @whereClause = @whereClause + ') ';
+			 -- set @whereClause = @whereClause + ') '+@currentFeatureName; -- usuniete w NOWE
 			 set @currentId = @currentGroup;
-			 select @currentGroup = ParentPredicate, @nextOperator = NextOperator from @filter where PredicateID=@currentId;
-			end
-			
+			 set @groupClosingRun = 1; -- NOWE
+
+			 if @currentGroup <> 0 
+			 begin 
+			 	-- cofamy sie tak, by nastepny przebieg chwycil grupe zawierajaca wlasnie zakonczony lancuch:
+			    -- To wyselekcjonuje grupe zawierajaca
+				select @currentGroup = ParentPredicate from @filter where PredicateID=@currentId;
+				-- zas to: parametry, jej poprzednika tak, aby to wlasnie ta grupa byla odwiedzona w nastepnym przebiegu  
+				select @currentId = PreviousPredicate from @filter where PredicateID=@currentId;		
+				-- cofamy sie tak, by nastepny przebieg chwycil grupe zawierajaca wlasnie zakonczony lancuch:
+			 end
 			end
 		 
 
-		 set @whereClause = @whereClause + ' '+ @nextOperator+' ';
-		set @predicatesLeft = @predicatesLeft-1;	
+		 if (@nextOperator <> '' ) set @whereClause = @whereClause + ' '+ @nextOperator+' ';
+
 	
-	/* Add compile directive */				
-		end
-		set @whereClause = @whereClause+' for XML RAW (''Attributes''), ELEMENTS, root (''GenericUniformAttributesQueryResult'')';
+	/* TD: Add compile directive */				
+		end -- of the predictate loop
+		set @whereClause = @whereClause+' for XML RAW (''GenericResultRow''), ELEMENTS, root (''GenericQueryResult'')';
 		set @sql = N''+(@selectClause+@fromClause+@whereClause);
-		exec sp_executesql @statement = @sql; 
+		-- set @sql = N'BEGIN TRY ' + (@selectClause+@fromClause+@whereClause) + ' END TRY BEGIN CATCH insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat ) values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() ) END CATCH;'
+
+		-- select @sql;
+		exec sp_executesql @statement = @sql;
+		
 end
 go
 

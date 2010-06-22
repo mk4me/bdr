@@ -20,6 +20,22 @@ trial file:	trial_id = 1, file_id = ??
 
 */
 
+select * from Uzytkownik
+
+insert into Uzytkownik ( Login, Imie, Nazwisko ) values ( 'PJWSTK\habela', 'Piotr', 'Habela')
+go
+insert into Uzytkownik ( Login, Imie, Nazwisko ) values ( 'PJWSTK\kulbacki', 'Marek', 'Kulbacki')
+go
+insert into Uzytkownik ( Login, Imie, Nazwisko ) values ( 'PJWSTK\kaczmarski', 'Krzysztof', 'Kaczmarski')
+go
+insert into Uzytkownik ( Login, Imie, Nazwisko ) values ( 'PJWSTK\wiktor', 'Wiktor', 'Filipowicz')
+go
+insert into Uzytkownik ( Login, Imie, Nazwisko ) values ( 'DB-BDR\applet_user', 'Uzytkownik', 'Testowy')
+go
+
+update Uzytkownik   set  Login = 'DB-BDR\applet_user'  where Login = 'applet_user'
+
+
 insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'General_session_attributes', 'session' )
 go
 
