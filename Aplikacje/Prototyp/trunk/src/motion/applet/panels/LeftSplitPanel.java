@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import motion.applet.Messages;
@@ -99,24 +101,25 @@ public class LeftSplitPanel extends JPanel {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							if (filterTree.tree.getSelectionPath() != null) {
-								DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
-								if (!selectedNode.isRoot()) {
-									List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
-											((FilterNode) selectedNode.getUserObject()).getFilter(),
-											new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
-									//System.out.println(result);
-									//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
-									//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
-									//resultDialog.setVisible(true);
-									for (GenericResult g : result) {
-										System.out.println(g);
-									}
-									JTable resultTable = new JTable();
-									resultTable.setModel(new BasicTable(result));
-									MotionAppletFrame.addResult(resultTable);
+							//DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
+							DefaultMutableTreeNode root = (DefaultMutableTreeNode) filterTree.tree.getModel().getRoot();
+							DefaultMutableTreeNode startNode = filterTree.composeChildPredicates(root);
+							if (startNode != null) {
+								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+										((FilterNode) startNode.getUserObject()).getFilter(),
+										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
+								//System.out.println(result);
+								//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
+								//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
+								//resultDialog.setVisible(true);
+								for (GenericResult g : result) {
+									System.out.println(g);
 								}
+								JTable resultTable = new JTable();
+								resultTable.setModel(new BasicTable(result));
+								MotionAppletFrame.addResult(resultTable);
 							}
+							filterTree.decomposeChildPredicates(root);
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);
@@ -163,6 +166,7 @@ public class LeftSplitPanel extends JPanel {
 				node = (DefaultMutableTreeNode)(e.getTreePath().getLastPathComponent());
 				int index = e.getChildIndices()[0];
 				node = (DefaultMutableTreeNode)(node.getChildAt(index));
+				((FilterNode) node.getUserObject()).getFilter().getPredicate().printPredicate();
 			}
 			
 			@Override

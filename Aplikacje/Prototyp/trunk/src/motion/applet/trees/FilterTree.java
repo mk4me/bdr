@@ -7,6 +7,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import motion.applet.database.TableName;
+import motion.database.model.Predicate;
 
 public class FilterTree {
 	public JTree tree;
@@ -126,5 +127,52 @@ public class FilterTree {
 		}
 		
 		return childNode;
+	}
+	
+	public DefaultMutableTreeNode composeChildPredicates(DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode previousNode = null;
+		if (node != root) {
+			previousNode = node;
+		}
+		
+		DefaultMutableTreeNode returnNode = null;	// First checked node.
+		boolean first = true;
+		for (int i = 0; i < node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			if (((FilterNode) child.getUserObject()).isSelected()) {
+				if (previousNode != null){
+					Predicate previousPredicate = ((FilterNode) previousNode.getUserObject()).getFilter().getPredicate();
+					if (child.getChildCount() > 0 || first == true) {
+						((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("AND", previousPredicate);
+						first = false;
+					} else {
+						((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("OR", previousPredicate);
+					}
+					
+				}
+				
+				if (child.getChildCount() > 0) {
+					composeChildPredicates(child);
+				}
+				
+				previousNode = child;
+				
+				if (returnNode == null) {
+					returnNode = child;
+				}
+			}
+		}
+		
+		return returnNode;
+	}
+	
+	public void decomposeChildPredicates(DefaultMutableTreeNode node) {
+		for (int i = 0; i < node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			((FilterNode) child.getUserObject()).getFilter().getPredicate().decomposeGroup();
+			if (child.getChildCount() > 0) {
+				decomposeChildPredicates(child);
+			}
+		}
 	}
 }
