@@ -7,7 +7,6 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import motion.applet.database.TableName;
-import motion.database.model.Filter;
 
 public class FilterTree {
 	public JTree tree;
@@ -34,11 +33,7 @@ public class FilterTree {
 					DefaultMutableTreeNode editedNode = (DefaultMutableTreeNode) currNode;
 					CheckBoxNode newCBN = (CheckBoxNode) newValue;
 					if (!editedNode.isLeaf() && newCBN.isSelected() == false) {	// TODO: select parents up to root
-						for (int i = 0; i < editedNode.getChildCount(); i++) {
-							DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getChildAt(i);
-							CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
-							cbn.setSelected(newCBN.isSelected());
-						}
+						unCheckAllChildren(editedNode);
 					}
 					else {
 						boolean isAllChiledSelected = true;
@@ -59,9 +54,22 @@ public class FilterTree {
 						}
 					}
 					if (newCBN.isSelected()) {
-						DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getParent();
-						if (node.getUserObject() instanceof CheckBoxNode)
-							((CheckBoxNode) node.getUserObject()).setSelected(true);                            
+						DefaultMutableTreeNode node = editedNode;
+						while (node.getParent() != root) {
+							node = (DefaultMutableTreeNode) node.getParent();
+							if (node.getUserObject() instanceof CheckBoxNode)
+								((CheckBoxNode) node.getUserObject()).setSelected(true);
+						}
+					}
+				}
+			}
+			private void unCheckAllChildren(DefaultMutableTreeNode node) {
+				for (int i = 0; i < node.getChildCount(); i++) {
+					DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+					CheckBoxNode checkBoxNode = (CheckBoxNode) child.getUserObject();
+					checkBoxNode.setSelected(false);
+					if (child.getChildCount() > 0) {
+						unCheckAllChildren(child);
 					}
 				}
 			}
