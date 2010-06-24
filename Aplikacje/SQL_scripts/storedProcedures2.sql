@@ -86,6 +86,23 @@ go
 
 /* sample calls of filter-based queries */
 
+
+declare @filters as PredicateUdt;
+--insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
+--insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
+--insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
+--insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
+
+insert into @filters values (1, 3, 'performer', 0, '', 'SessionID', '>', '0', 'count', 'session');
+insert into @filters values (3, 5, 'GROUP', 0, 'AND', 'Walk', '', '', '', '');
+insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
+insert into @filters values (4, 5, 'GROUP', 3, '', 'Walk', '', '', '', '');
+insert into @filters values (5, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
+
+exec dbo.evaluate_generic_query_uniform @filters,  0,  1,  0,  0 
+
+
+
 declare @filters as PredicateUdt;
 --insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
 --insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
@@ -149,15 +166,13 @@ begin
 	
 		PredicateID is unique
 		NextPredicate has matching PredicateID in other tuple; otherwise should be 0
-		For complex subexpression (enclosed in parentheses) the FeatureName should be 'GROUP'
-		For any predicate enclosed in parentheses it should contain non-zero value of the ParentPredicate field, matching the PredicateID of respective 'GROUP'-type predicate
+		For complex subexpression (enclosed in parentheses) the ContextEntity should be 'GROUP'
+		For any predicate enclosed in a group it should contain non-zero value of the ParentPredicate field, matching the PredicateID of respective 'GROUP'-type predicate
 		Moreover, the first predicate that occurs directly after the opening parenthesis should have its PreviousPredicate set to 0
 		For a predicate that follows some other predicate a non-zero value of the PreviousPredicate identifier field is required
 		For a predicate that is not the last segment of its subexpression
 		(i.e. it has some further predicate behind it (at the same level of nesting: before closing parenthesis or expression end comes)),
-		it is required to provide the NextOperator non-empty and valid value
-		
-		NO AGGREGATE PREDICATES IMPLEMENTED YET!
+		it is required to provide the NextOperator with non-empty and valid value
 	*/
 
 	declare @predicatesLeft int;
@@ -172,6 +187,11 @@ begin
 	declare @currentValue varchar(100);
 	declare @currentAggregateFunction varchar(10);
 	declare @currentAggregateEntity varchar(20);
+	
+	declare @aggregateSearchIdentifier varchar(100); 
+	declare @aggregateSearchIdentifierNonQualified varchar(100); 
+	declare @aggregateEntityTranslated varchar(20); 
+	declare @contextEntityTranslated varchar(20);  
 
 	declare @groupClosingRun bit;
 	set @groupClosingRun = 0;
@@ -262,11 +282,10 @@ begin
 		end
 		else
 			begin
-			--if @previousId = 0 set @whereClause = @whereClause + '(';
 			
-			
+--Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
 			set @leftOperandCode = (
-			case @currentContextEntity 
+			case ( case @currentAggregateEntity  when '' then @currentContextEntity else @currentAggregateEntity end )
 			when 'performer' then (
 				case @currentFeatureName 
 					when 'FirstName' then 'p.Imie'
@@ -296,9 +315,40 @@ begin
 					when 'StartTime' then 'segm.Czas_poczatku'
 					when 'EndTime' then 'segm.Czas_konca'
 					else '(select top 1 * from segm_attr_value(seg.IdSegment, '+quotename(@currentFeatureName,'''')+'))' end				)
-			else 'UNKNOWN' end
-			)
-			set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''');
+			else 'UNKNOWN' end )
+
+			if(@currentAggregateEntity<>'')
+			begin
+				set @aggregateSearchIdentifier = (
+					case @currentContextEntity
+					when 'performer' then 'p.IdPerformer'
+					when 'session' then 's.IdSesja'
+					when 'trial' then 't.IdObserwacja'
+					else 'WRONG CONTEXT ENT.' end
+				)
+				set @aggregateSearchIdentifierNonQualified = substring(@aggregateSearchIdentifier,3,20);
+				set @aggregateEntityTranslated = (
+					case @currentAggregateEntity
+					when 'performer' then 'Performer'
+					when 'session' then 'Sesja'
+					when 'trial' then 'Obserwacja'
+					when 'segment' then 'Segment'
+					else 'WRONG AGGREGATE ENT.' end
+				)
+				set @contextEntityTranslated = (
+					case @currentContextEntity
+					when 'performer' then 'Performer'
+					when 'session' then 'Sesja'
+					when 'trial' then 'Obserwacja'
+					else 'WRONG CONTEXT ENT.' end
+				)
+				--Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
+				set @whereClause = @whereClause + '( ' + @aggregateSearchIdentifier + ' in ( select '+@aggregateSearchIdentifierNonQualified+' from '+@aggregateEntityTranslated+' group by '+@aggregateSearchIdentifierNonQualified+ ' having '+@currentAggregateFunction+'('+ substring(@leftOperandCode,3,20) +') '+@currentOperator + quotename(@currentValue,'''') + ' ) )';				
+			end
+			else
+			begin
+				set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''')
+			end;
 
 			end -- of non-GROUP case
 
@@ -342,15 +392,13 @@ begin
 	
 		PredicateID is unique
 		NextPredicate has matching PredicateID in other tuple; otherwise should be 0
-		For complex subexpression (enclosed in parentheses) the FeatureName should be 'GROUP'
-		For any predicate enclosed in parentheses it should contain non-zero value of the ParentPredicate field, matching the PredicateID of respective 'GROUP'-type predicate
+		For complex subexpression (enclosed in parentheses) the ContextEntity should be 'GROUP'
+		For any predicate enclosed in a group it should contain non-zero value of the ParentPredicate field, matching the PredicateID of respective 'GROUP'-type predicate
 		Moreover, the first predicate that occurs directly after the opening parenthesis should have its PreviousPredicate set to 0
 		For a predicate that follows some other predicate a non-zero value of the PreviousPredicate identifier field is required
 		For a predicate that is not the last segment of its subexpression
 		(i.e. it has some further predicate behind it (at the same level of nesting: before closing parenthesis or expression end comes)),
-		it is required to provide the NextOperator non-empty and valid value
-		
-		NO AGGREGATE PREDICATES IMPLEMENTED YET!
+		it is required to provide the NextOperator with non-empty and valid value
 	*/
 
 	declare @predicatesLeft int;
@@ -367,6 +415,11 @@ begin
 	declare @currentAggregateEntity varchar(20);
 	declare @groupClosingRun bit;
 	set @groupClosingRun = 0;
+	
+	declare @aggregateSearchIdentifier varchar(100); 
+	declare @aggregateSearchIdentifierNonQualified varchar(100); 
+	declare @aggregateEntityTranslated varchar(20); 
+	declare @contextEntityTranslated varchar(20); 
 	
 	declare @fromClause varchar (500);
 	set @fromClause = ' from ';
@@ -451,11 +504,10 @@ begin
 		end
 		else
 			begin
-			--if @previousId = 0 set @whereClause = @whereClause + '(';
 			
-			
+--Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
 			set @leftOperandCode = (
-			case @currentContextEntity 
+			case ( case @currentAggregateEntity  when '' then @currentContextEntity else @currentAggregateEntity end )
 			when 'performer' then (
 				case @currentFeatureName 
 					when 'FirstName' then 'p.Imie'
@@ -485,9 +537,40 @@ begin
 					when 'StartTime' then 'segm.Czas_poczatku'
 					when 'EndTime' then 'segm.Czas_konca'
 					else '(select top 1 * from segm_attr_value(seg.IdSegment, '+quotename(@currentFeatureName,'''')+'))' end				)
-			else 'UNKNOWN' end
-			)
-			set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''');
+			else 'UNKNOWN' end )
+
+			if(@currentAggregateEntity<>'')
+			begin
+				set @aggregateSearchIdentifier = (
+					case @currentContextEntity
+					when 'performer' then 'p.IdPerformer'
+					when 'session' then 's.IdSesja'
+					when 'trial' then 't.IdObserwacja'
+					else 'WRONG CONTEXT ENT.' end
+				)
+				set @aggregateSearchIdentifierNonQualified = substring(@aggregateSearchIdentifier,3,20);
+				set @aggregateEntityTranslated = (
+					case @currentAggregateEntity
+					when 'performer' then 'Performer'
+					when 'session' then 'Sesja'
+					when 'trial' then 'Obserwacja'
+					when 'segment' then 'Segment'
+					else 'WRONG AGGREGATE ENT.' end
+				)
+				set @contextEntityTranslated = (
+					case @currentContextEntity
+					when 'performer' then 'Performer'
+					when 'session' then 'Sesja'
+					when 'trial' then 'Obserwacja'
+					else 'WRONG CONTEXT ENT.' end
+				)
+				--Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
+				set @whereClause = @whereClause + '( ' + @aggregateSearchIdentifier + ' in ( select '+@aggregateSearchIdentifierNonQualified+' from '+@aggregateEntityTranslated+' group by '+@aggregateSearchIdentifierNonQualified+ ' having '+@currentAggregateFunction+'('+ substring(@leftOperandCode,3,20) +') '+@currentOperator + quotename(@currentValue,'''') + ' ) )';				
+			end
+			else
+			begin
+				set @whereClause = @whereClause +  @leftOperandCode + @currentOperator + quotename(@currentValue,'''')
+			end;
 
 			end -- of non-GROUP case
 
