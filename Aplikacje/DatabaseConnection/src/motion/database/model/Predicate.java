@@ -11,4 +11,13 @@ public abstract class Predicate {
 	
 	protected abstract void setNextPredicate(String logicalOperator, Predicate nextPredicate);
 	protected abstract void setPreviousPredicate(String logicalOperator, Predicate previousPredicate);
+	
+	protected Predicate getLastPredicate() {
+		Predicate returnPredicate = this;
+		if (next != null) {
+			returnPredicate = next.predicate.getLastPredicate();
+		}
+		
+		return returnPredicate;
+	}
 }

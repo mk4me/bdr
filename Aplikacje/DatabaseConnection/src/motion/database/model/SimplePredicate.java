@@ -42,16 +42,19 @@ public class SimplePredicate extends Predicate {
 		this.setNextPredicateComposition(nextPredicateComposition);
 	}
 	
-	public void setPreviousPredicateGroup(String logicalOperator, Predicate previousPredicate) {
+	public Predicate setPreviousPredicateGroup(String logicalOperator, Predicate previousPredicate) {
+		previousPredicate = previousPredicate.getLastPredicate();
 		PredicateComposition previousPredicateComposition = new PredicateComposition(logicalOperator, previousPredicate, true);
 		this.setPreviousPredicateComposition(previousPredicateComposition);
 		previousPredicate.setNextPredicate(logicalOperator, this);
+		
+		return previousPredicate;
 	}
 	
 	public void decomposeGroup() {
 		if (this.getPreviousComposition() != null) {
-			this.previous.predicate.next = null;
 			if (this.getPreviousComposition().isFilterGroup()) {
+				this.previous.predicate.next = null;
 				this.previous = null;
 			}
 		}
