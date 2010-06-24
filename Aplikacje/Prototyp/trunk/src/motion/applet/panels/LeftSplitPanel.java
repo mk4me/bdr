@@ -112,9 +112,9 @@ public class LeftSplitPanel extends JPanel {
 								//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
 								//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
 								//resultDialog.setVisible(true);
-								for (GenericResult g : result) {
-									System.out.println(g);
-								}
+								//for (GenericResult g : result) {
+								//	System.out.println(g);
+								//z}
 								JTable resultTable = new JTable();
 								resultTable.setModel(new BasicTable(result));
 								MotionAppletFrame.addResult(resultTable);

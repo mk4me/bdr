@@ -143,15 +143,20 @@ public class FilterTree {
 				if (previousNode != null){
 					Predicate previousPredicate = ((FilterNode) previousNode.getUserObject()).getFilter().getPredicate();
 					if (first == true) {
-						((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("AND", previousPredicate);
+						previousPredicate = ((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("AND", previousPredicate);
 					} else {
-						((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("OR", previousPredicate);
+						previousPredicate = ((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("OR", previousPredicate);
 					}
 					
 				}
 				
 				if (child.getChildCount() > 0) {
-					previousNode = composeChildPredicates(child);
+					DefaultMutableTreeNode checkedChild = composeChildPredicates(child);
+					if (checkedChild != null) {
+						previousNode = checkedChild;
+					} else {
+						previousNode = child;
+					}
 				} else {
 					previousNode = child;
 				}
