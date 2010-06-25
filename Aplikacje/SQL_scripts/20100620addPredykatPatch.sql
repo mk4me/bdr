@@ -17,6 +17,7 @@ create table Predykat
 	IdUzytkownik int not null
 )
 go
+
  ALTER TABLE Predykat
         ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
 go
@@ -25,8 +26,11 @@ ALTER TABLE Predykat
 		ADD PRIMARY KEY (IdUzytkownik, IdPredykat)
 go
 
+-- drop index XIFPredykat on Predykat
+-- go
+
  CREATE INDEX XIFPredykat ON Predykat
  (
-        IdPredykat
+        IdUzytkownik
  )
 go
