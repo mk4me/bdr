@@ -75,6 +75,10 @@
     <Content Include="res\StandaloneWSDLCompositor.xslt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationWS.svc.cs">
+      <DependentUpon>AuthorizationWS.svc</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BasicQueriesService.asmx.cs">
       <DependentUpon>BasicQueriesService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -100,6 +104,7 @@
     </Compile>
     <Compile Include="FilterPredicate.cs" />
     <Compile Include="FilterPredicateCollection.cs" />
+    <Compile Include="IAuthorizationWS.cs" />
     <Compile Include="IBasicQueriesWS.cs">
     </Compile>
     <Compile Include="IBasicUpdatesWS.cs" />
@@ -161,6 +166,7 @@
     <None Include="res\ListPerformerSessionsXML.xsd" />
     <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
+    <Content Include="AuthorizationWS.svc" />
     <Content Include="BasicUpdatesWS.svc" />
     <Content Include="FileStoremanWS.svc" />
     <Content Include="res\PreciseXSDWeaver.xslt" />
