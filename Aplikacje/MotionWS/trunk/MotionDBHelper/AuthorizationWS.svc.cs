@@ -17,14 +17,12 @@ namespace MotionDBWebServices
     {
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public bool CheckUserAccount(string login, string domain)
+        public bool CheckUserAccount()
         {
             int result = 0;
 
             try
             {
-
-
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "check_user_account";
@@ -34,7 +32,7 @@ namespace MotionDBWebServices
                 resultParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(resultParameter);
 
-                cmd.Parameters["@user_login"].Value = domain+"\\"+login;
+                cmd.Parameters["@user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
 
                 cmd.ExecuteNonQuery();
                 result = (int)resultParameter.Value;

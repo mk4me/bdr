@@ -13,12 +13,12 @@ namespace MotionDBWebServices
     {
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        bool CheckUserAccount(string login, string domain);
+        bool CheckUserAccount();
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void CreateUserAccount(string firstName, string lastName);
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void GrantSessionPrivileges(string grantingUserLogin, string grantedUserDomain, int sessionID, bool write);
+        void GrantSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID, bool write);
     }
 }
