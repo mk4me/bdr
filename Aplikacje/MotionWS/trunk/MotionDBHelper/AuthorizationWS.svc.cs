@@ -91,7 +91,7 @@ namespace MotionDBWebServices
 
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "create_user_account";
+                cmd.CommandText = "set_session_privileges";
                 cmd.Parameters.Add("@granting_user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@granted_user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
@@ -107,8 +107,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("unknown", "Privilege grant failed");
-                throw new FaultException<UpdateException>(exc, OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name + " Not allowed to grant to " + (grantedUserDomain.Equals("") ? grantedUserLogin : grantedUserDomain + "\\" + grantedUserLogin), FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionPrivileges")));
+                UpdateException exc = new UpdateException("SQL error", "Privilege grant failed");
+                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionPrivileges")));
             }
             finally
             {
