@@ -106,7 +106,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("SQL error", "Privilege grant failed");
-                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionPrivileges")));
+                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             }
             finally
             {
@@ -114,6 +114,36 @@ namespace MotionDBWebServices
             }
         }
 
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID)
+        {
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "unset_session_privileges";
+                cmd.Parameters.Add("@granting_user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@granted_user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@granted_user_login"].Value = grantedUserDomain.Equals("") ? grantedUserLogin : grantedUserDomain + "\\" + grantedUserLogin;
+                cmd.Parameters["@sess_id"].Value = sessionID;
+
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("SQL error", "Privilege grant failed");
+                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
 
 
 
