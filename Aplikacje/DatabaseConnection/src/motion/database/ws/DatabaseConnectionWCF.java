@@ -35,6 +35,8 @@ import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
 import motion.database.ws.DatabaseConnectionOld.ConnectionState;
 import motion.database.ws.DatabaseConnectionOld.Credentials;
+import motion.database.ws.authorizationWCF.IAuthorizationWS;
+import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfFilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfString;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
@@ -965,166 +967,230 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	 * 	BasicUpdateServiceWCF
 	 *==========================================================================
 	 */	
+	
+	public int createPerformer(String name, String surname) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createPerformer", this );
 
+			PerformerData performerData = new PerformerData();
+			performerData.setName( name );
+			performerData.setSurname( surname );
 	
-	
-		public int createPerformer(String name, String surname) throws Exception
-		{
-			try{
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createPerformer", this );
-	
-				PerformerData performerData = new PerformerData();
-				performerData.setName( name );
-				performerData.setSurname( surname );
-		
-				return port.createPerformer(performerData);
-			} 
-			catch ( IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
+			return port.createPerformer(performerData);
+		} 
+		catch ( IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
 		}
+	}
 
-		
-		public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
-		{
-			try {
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createSession", this );
+	
+	public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
+	{
+		try {
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createSession", this );
 
-				ArrayOfInt sessionGroupIDs = new ArrayOfInt();
-				for (int s: sessionGroupID)
-					sessionGroupIDs.getInt().add(s);
-					
-				return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
-			} 
-			catch ( IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
-		}
-
-		
-		public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
-		{
-			try{
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createTrial", this );
+			ArrayOfInt sessionGroupIDs = new ArrayOfInt();
+			for (int s: sessionGroupID)
+				sessionGroupIDs.getInt().add(s);
 				
-				return port.createTrial(sessionID, trialDescription, trialDuration);
-			} 
-			catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
+			return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
+		} 
+		catch ( IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
 		}
-	
+	}
 
-		public int defineTrialSegment(int trialID, String segmentName, int startTime, int endTime ) throws Exception
-		{
-			try{	
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "defineTrialSegment", this );
 	
-				return port.defineTrialSegment(trialID, segmentName, startTime, endTime);
-			} 
-			catch ( IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
-		}
-	
-		
-		public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
-		{
-			try{
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
-	
-				port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
-				ToolsWCF.finalizeCall();
-			} 
-			catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
-		}
-	
-
-		public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
-		{
-			try{
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setTrialAttribute", this );
-	
-				port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
-			} 
-			catch ( IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
-		}
-	
-
-		public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
-		{
-			try {
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-				port.setPerformerAttribute(performerID, attributeName, attributeValue, update);
+	public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createTrial", this );
 			
-			} catch (IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
+			return port.createTrial(sessionID, trialDescription, trialDuration);
+		} 
+		catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
 		}
-	
-		
-		public void setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
-		{
-			try{	
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-	
-				port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
-				ToolsWCF.finalizeCall();
-			} catch (IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
-		}
-	
+	}
 
-		public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
-		{
-			try{	
-				IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
-	
-				port.setFileAttribute(fileID, attributeName, attributeValue, update);			
-				ToolsWCF.finalizeCall();
-			} catch (IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage e) {
-				log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}	
-			finally{
-				ToolsWCF.finalizeCall();
-			}
+
+	public int defineTrialSegment(int trialID, String segmentName, int startTime, int endTime ) throws Exception
+	{
+		try{	
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "defineTrialSegment", this );
+
+			return port.defineTrialSegment(trialID, segmentName, startTime, endTime);
+		} 
+		catch ( IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
 		}
+	}
+
+	
+	public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
+
+			port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
+		} 
+		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+
+	public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setTrialAttribute", this );
+
+			port.setTrialAttribute(trialID, attributeName, attributeValue, update);			
+		} 
+		catch ( IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+
+	public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		try {
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+			port.setPerformerAttribute(performerID, attributeName, attributeValue, update);
+		
+		} catch (IBasicUpdatesWSSetPerformerAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
+	public void setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		try{	
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+
+			port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
+		} catch (IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+
+	public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
+	{
+		try{	
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
+
+			port.setFileAttribute(fileID, attributeName, attributeValue, update);			
+			ToolsWCF.finalizeCall();
+		} catch (IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
+	/*==========================================================================
+	 * 	AuthorizationWS
+	 *==========================================================================
+	 */	
+
+	public boolean checkUserAccount() throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "checkUserAccount", this );
+			return port.checkUserAccount();
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	public void createUserAccount(String firstName, String lastName) throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "createUserAccount", this );
+			port.createUserAccount(firstName, lastName);
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	public void grantSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "grantSessionPrivileges", this );
+			port.grantSessionPrivileges(grantedUserLogin, grantedUserDomain, sessionID, writePrivilege);
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	public void removeSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "removeSessionPrivileges", this );
+			port.removeSessionPrivileges(grantedUserLogin, grantedUserDomain, sessionID);
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
 }

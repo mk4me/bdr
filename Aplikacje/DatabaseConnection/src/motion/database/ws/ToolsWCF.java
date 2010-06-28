@@ -15,6 +15,8 @@ import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
 import motion.database.ws.DatabaseConnectionWCF.ConnectionState;
+import motion.database.ws.authorizationWCF.AuthorizationWS;
+import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
 import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
@@ -43,6 +45,11 @@ public class ToolsWCF {
 	}
 
 	private static void prepareBasicUpdatesServicesCall(IBasicUpdatesWS port) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void prepareAuthorizationServiceCall(IAuthorizationWS port) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -112,6 +119,24 @@ public class ToolsWCF {
 		return port;
 	}
 
+	public static IAuthorizationWS getAuthorizationServicePort( String callerName, DatabaseConnectionWCF db ) throws Exception
+	{
+		if (db.state != ConnectionState.INITIALIZED)
+		{
+			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
+			throw new Exception("Not Initialized. Cannot do: " + callerName );
+		}
+		db.log.entering( "DatabaseConnectionWCF", callerName );
+		if (textMessageListener!=null)
+			textMessageListener.setMessage("Performing: " + callerName);
+		
+		AuthorizationWS service = new AuthorizationWS();
+		IAuthorizationWS port = service.getBasicHttpBindingIAuthorizationWS();
+		
+		prepareAuthorizationServiceCall(port);
+
+		return port;
+	}
 
 	
 	public static void finalizeCall()
