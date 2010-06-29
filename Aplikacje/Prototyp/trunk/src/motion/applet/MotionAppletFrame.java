@@ -1,13 +1,18 @@
 package motion.applet;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -147,6 +152,25 @@ public class MotionAppletFrame extends JFrame {
 	
 	public static void addResult(JTable resultTable) {
 		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
+		final JPanel tabPanel = new JPanel();
+		tabPanel.setOpaque(false);
+		tabPanel.add(new JLabel("Results"));
+		JButton closeButton = new JButton();
+		closeButton.setContentAreaFilled(false);
+		closeButton.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("../images/close.gif")));
+		closeButton.setPreferredSize(new Dimension(16, 16));
+		closeButton.setBorderPainted(false);
+		
+		tabPanel.add(closeButton);
+		
+		queryResultsPane.setTabComponentAt(queryResultsPane.getTabCount()-1, tabPanel);
+		
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int i = queryResultsPane.indexOfTabComponent(tabPanel);
+				queryResultsPane.removeTabAt(i);
+			}
+		});
 	}
 	
 	public static void main(String args[])
