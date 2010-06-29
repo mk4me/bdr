@@ -133,19 +133,7 @@ go
         ADD PRIMARY KEY (IdObserwacja)
 go
  
- 
- CREATE TABLE Pacjent (
-        IdPerformer          int NOT NULL,
-        Dane_medyczne        char(18) NULL
- )
-go
- 
- CREATE INDEX XIF35Pacjent ON Pacjent
- (
-        IdPerformer
- )
-go
- 
+  
  
  ALTER TABLE Pacjent
         ADD PRIMARY KEY (IdPerformer)
@@ -719,9 +707,6 @@ ALTER TABLE Segment_Koszyk
 go
 
 
-
-alter table Atrybut add pluginDescriptor varchar(100) null ;
-go
 
 create table Materializacja_Atrybutu_Performera (
         IdPerformer         int NOT NULL,
