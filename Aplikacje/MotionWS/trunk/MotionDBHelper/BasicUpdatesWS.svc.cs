@@ -55,7 +55,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateSession(int labID, string motionKindName, int performerID, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
+        public int CreateSession(int labID, string motionKindName, int performerID, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs, bool isPublic)
         {
             int newSessionId = 0;
 
@@ -101,8 +101,8 @@ namespace MotionDBWebServices
 //    END CATCH;";
 
 
-                cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
-                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
+                cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji, Publiczna)
+                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc, @sess_publ )
                                             set @sess_id = SCOPE_IDENTITY()";
                 cmd.Parameters.Add("@sess_user", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
@@ -110,6 +110,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@sess_perf", SqlDbType.Int);
                 cmd.Parameters.Add("@sess_date", SqlDbType.DateTime);
                 cmd.Parameters.Add("@sess_desc", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@sess_publ", SqlDbType.Bit);
 
                 SqlParameter sessionIdParameter =
                     new SqlParameter("@sess_id", SqlDbType.Int);
@@ -121,6 +122,7 @@ namespace MotionDBWebServices
                 cmd.Parameters["@sess_perf"].Value = performerID;
                 cmd.Parameters["@sess_date"].Value = sessionDate;
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
+                cmd.Parameters["@sess_publ"].Value = isPublic ? 1 : 0;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 newSessionId = (int)sessionIdParameter.Value;

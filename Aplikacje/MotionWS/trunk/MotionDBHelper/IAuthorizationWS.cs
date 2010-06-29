@@ -20,5 +20,8 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void GrantSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID, bool write);
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID);
     }
 }
