@@ -44,6 +44,8 @@ public class DownloadDialog extends BasicDialog {
 		progressBar.setStringPainted(true);
 		this.addToButtonPanel(progressBar);
 		progressBar.setVisible(false);
+		progressBar.setIndeterminate(true);
+		progressBar.setStringPainted(false);
 		
 		downloadButton = new JButton(DOWNLOAD_FILE);
 		this.addToButtonPanel(downloadButton);
@@ -123,7 +125,7 @@ public class DownloadDialog extends BasicDialog {
 		
 		@Override
 		public void transferStepPercent(final int percent) {
-			DownloadDialog.this.setProgressBarValue(percent);
+			DownloadDialog.this.setProgressBarValue(percent);	// Doesn't work for downloads.
 		}
 	}
 }
