@@ -273,6 +273,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	class FileMouseAdapter extends MouseAdapter {
+		private File file;	// Save last directory for downloaded files.
+		
 		public void mouseClicked(MouseEvent e) {
 
 			final int recordId = getSelectedRecord( tables[3], e );
@@ -289,9 +291,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						JFileChooser fileChooser = new JFileChooser();
 						fileChooser.setAcceptAllFileFilterUsed(false);
 						fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+						fileChooser.setCurrentDirectory(file);
 						int result = fileChooser.showSaveDialog(RightSplitPanel.this);
 						if (result == JFileChooser.APPROVE_OPTION) {
-							final File file = fileChooser.getSelectedFile();
+							file = fileChooser.getSelectedFile();
 							DownloadDialog downloadDialog = new DownloadDialog(recordId, file.toString());
 							downloadDialog.setVisible(true);
 						}
