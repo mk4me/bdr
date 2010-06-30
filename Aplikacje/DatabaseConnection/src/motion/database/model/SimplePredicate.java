@@ -18,6 +18,11 @@ public class SimplePredicate extends Predicate {
 		setPreviousPredicate(logicalOperator, previousPredicate);
 	}
 	
+	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
+		this(contextEntity, feature, operator, value, logicalOperator, previousPredicate);
+		this.parent = parentPredicate;
+	}
+	
 	protected void setNextPredicate(String logicalOperator, Predicate nextPredicate) {
 		PredicateComposition nextPredicateComposition = new PredicateComposition(logicalOperator, nextPredicate);
 		this.setNextPredicateComposition(nextPredicateComposition);
@@ -37,6 +42,7 @@ public class SimplePredicate extends Predicate {
 		this.previous = previousPredicateComposition;
 	}
 	
+	// Change to new algorithm.
 	protected void setNextPredicateGroup(String logicalOperator, Predicate nextPredicate) {
 		PredicateComposition nextPredicateComposition = new PredicateComposition(logicalOperator, nextPredicate, true);
 		this.setNextPredicateComposition(nextPredicateComposition);

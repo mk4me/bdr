@@ -29,6 +29,16 @@ public class Filter {
 		return this.predicate;
 	}
 	
+	public SimplePredicate getPredicateGroup(String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
+		SimplePredicate predicateGroup = new SimplePredicate(
+				"GROUP", new AttributeName(this.name, AttributeName.UNKNOWN_TYPE),
+				PredicateComposition.emptyOperator, "",
+				logicalOperator, previousPredicate,
+				parentPredicate);
+		
+		return predicateGroup;
+	}
+	
 	@Deprecated
 	// CheckBoxNode has selection instead.
 	public boolean isSelected() {

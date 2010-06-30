@@ -9,6 +9,8 @@ public abstract class Predicate {
 	protected PredicateComposition previous;
 	protected String contextEntity;
 	
+	protected Predicate parent;
+	
 	protected abstract void setNextPredicate(String logicalOperator, Predicate nextPredicate);
 	protected abstract void setPreviousPredicate(String logicalOperator, Predicate previousPredicate);
 	

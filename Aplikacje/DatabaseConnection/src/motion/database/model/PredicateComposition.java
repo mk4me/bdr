@@ -1,7 +1,10 @@
 package motion.database.model;
 
 public class PredicateComposition {
-	public static final String[] logicalOperators = {"AND", "OR"};
+	public static final String andOperator = "AND";
+	public static final String orOperator = "OR";
+	public static final String emptyOperator = "";
+	public static final String[] logicalOperators = {andOperator, orOperator};
 	
 	private String logicalOperator;
 	// FIXME: change to private after removing printPredicate() from SimplePredicate
