@@ -16,6 +16,7 @@ import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DatabaseConnection;
 
 public class LoginDialog extends BasicDialog {
 	private static String LOGIN_TITLE = Messages.getString("LoginDialog.LoginTitle"); //$NON-NLS-1$
@@ -33,6 +34,7 @@ public class LoginDialog extends BasicDialog {
 	private JButton cancelButton;
 	
 	public static int LOGIN_SUCCESSFUL = 1;
+	public static int LOGIN_UNSUCCESSFUL = 2;
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
 	
@@ -123,10 +125,33 @@ public class LoginDialog extends BasicDialog {
 					
 					@Override
 					protected void done() {
-						// Login always successful, add login check
-						LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
 
 						LoginDialog.this.setVisible(false);
+
+						// Check user credentials
+						try {
+							boolean exists = WebServiceInstance.getDatabaseConnection().checkUserAccount();
+							if (!exists)
+							{
+								// Login dialog
+								UserDetailsDialog userDetailsDialog = new UserDetailsDialog();
+								userDetailsDialog.setVisible(true);
+								
+								// Check if login was successful
+								if (userDetailsDialog.getResult() == UserDetailsDialog.OK_PRESSED)									
+									WebServiceInstance.getDatabaseConnection().createUserAccount(
+											userDetailsDialog.getFirstName(), userDetailsDialog.getLastName());
+							}
+							LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
+							
+						} catch (Exception e) {
+							
+							DatabaseConnection.log.severe( e.getMessage() );
+							LoginDialog.this.setResult(LOGIN_UNSUCCESSFUL);
+						}
+						
+						// Login always successful, add login check
+
 						LoginDialog.this.dispose();
 					}
 				};
