@@ -10,12 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.BindingProvider;
-
-import com.zehon.BatchTransferProgress;
-import com.zehon.FileTransferStatus;
-import com.zehon.exception.FileTransferException;
-import com.zehon.ftps.FTPs;
 
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
@@ -33,8 +27,6 @@ import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
-import motion.database.ws.DatabaseConnectionOld.ConnectionState;
-import motion.database.ws.DatabaseConnectionOld.Credentials;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfFilterPredicate;
@@ -97,9 +89,12 @@ import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSegmentAttrib
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.PerformerData;
-import motion.database.ws.fileStoremanService.FileStoremanService;
-import motion.database.ws.fileStoremanService.FileStoremanServiceSoap;
 import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
+
+import com.zehon.BatchTransferProgress;
+import com.zehon.FileTransferStatus;
+import com.zehon.exception.FileTransferException;
+import com.zehon.ftps.FTPs;
 
 
 public class DatabaseConnectionWCF implements DatabaseProxy {

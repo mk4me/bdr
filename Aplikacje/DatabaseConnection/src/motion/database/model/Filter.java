@@ -2,7 +2,7 @@ package motion.database.model;
 
 import java.util.ArrayList;
 
-import motion.database.ws.basicQueriesService.FilterPredicate;
+import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public class Filter {
 	private String name;

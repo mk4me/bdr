@@ -158,4 +158,13 @@ public interface DatabaseProxy {
 
 	public abstract void registerStateMessageListener(TextMessageListener listener);
 
+	public void removeSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception;
+
+	public void grantSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception;
+
+	public void createUserAccount(String firstName, String lastName) throws Exception;
+	
+	public boolean checkUserAccount() throws Exception;
+
+
 }
