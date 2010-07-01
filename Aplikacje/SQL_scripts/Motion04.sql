@@ -1,4 +1,4 @@
-
+use Motion;
  
  CREATE TABLE Atrybut (
         IdAtrybut            int IDENTITY,
@@ -134,10 +134,7 @@ go
 go
  
   
- 
- ALTER TABLE Pacjent
-        ADD PRIMARY KEY (IdPerformer)
-go
+
  
  
  CREATE TABLE Performer (
@@ -884,11 +881,7 @@ go
                               REFERENCES Sesja
 go
  
- 
- ALTER TABLE Pacjent
-        ADD FOREIGN KEY (IdPerformer)
-                              REFERENCES Performer
-go
+
  
  
  ALTER TABLE Plik
