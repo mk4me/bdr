@@ -39,8 +39,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("unknown", "Validation failed");
-                throw new FaultException<UpdateException>(exc, "Login validation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
+                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
             }
             finally
             {
@@ -72,8 +72,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("unknown", "User creation failed");
-                throw new FaultException<UpdateException>(exc, "Failed to create user", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateUserAccount")));
+                AuthorizationException exc = new AuthorizationException("unknown", "User creation failed");
+                throw new FaultException<AuthorizationException>(exc, "Failed to create user", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateUserAccount")));
             }
             finally
             {
@@ -105,8 +105,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("SQL error", "Privilege grant failed");
-                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             }
             finally
             {
@@ -136,8 +136,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("SQL error", "Privilege grant failed");
-                throw new FaultException<UpdateException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
             }
             finally
             {

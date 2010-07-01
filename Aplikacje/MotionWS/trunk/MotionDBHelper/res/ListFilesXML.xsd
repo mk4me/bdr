@@ -4,7 +4,7 @@
   <xsd:element name="FileList">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
           <xsd:complexType>
             <xsd:attribute name="FileID" type="xsd:int" />
             <xsd:attribute name="FileName" type="xsd:string" />
