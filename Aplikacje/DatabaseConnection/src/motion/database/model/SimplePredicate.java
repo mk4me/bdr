@@ -15,7 +15,9 @@ public class SimplePredicate extends Predicate {
 	
 	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
 		this(contextEntity, feature, operator, value);
-		setPreviousPredicate(logicalOperator, previousPredicate);
+		if (previousPredicate != null) {	//new
+			setPreviousPredicate(logicalOperator, previousPredicate);
+		}
 	}
 	
 	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
@@ -97,10 +99,22 @@ public class SimplePredicate extends Predicate {
 	}
 	
 	// FIXME: remove this method.
-	public void printPredicate() {
-		System.out.println(contextEntity + " " + feature + " " + operator + " " + value + " n: " + next + " p: " + previous);
-		if (next != null) {
-			((SimplePredicate) next.predicate).printPredicate();
-		}
+	public String toString() {
+		
+		return "\n*predicate(entity[" + contextEntity +
+			"], feature[" + feature +
+			"], operator[" + operator +
+			"], value[" + value +
+			"], par[" + parent +
+			"], n[" + next +
+			"])";
+	}
+	
+	// FIXME: remove this method.
+	public String printPredicate() {
+		String text = "\n";
+		text += this.toString();
+		
+		return text;
 	}
 }

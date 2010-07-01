@@ -9,6 +9,7 @@ public class Filter {
 	private boolean selected;
 	private SimplePredicate predicate;
 	private static int id = 1;
+	private SimplePredicate predicateGroup;
 	
 	public Filter(String name) {
 		this.name = name;
@@ -29,12 +30,19 @@ public class Filter {
 		return this.predicate;
 	}
 	
-	public SimplePredicate getPredicateGroup(String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
+	public SimplePredicate getPredicateGroup() {
+		
+		return this.predicateGroup;
+	}
+	
+	public SimplePredicate createPredicateGroup(String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
 		SimplePredicate predicateGroup = new SimplePredicate(
 				"GROUP", new AttributeName(this.name, AttributeName.UNKNOWN_TYPE),
 				PredicateComposition.emptyOperator, "",
 				logicalOperator, previousPredicate,
 				parentPredicate);
+		
+		this.predicateGroup = predicateGroup;
 		
 		return predicateGroup;
 	}

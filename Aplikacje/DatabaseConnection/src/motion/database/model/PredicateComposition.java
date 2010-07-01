@@ -36,4 +36,11 @@ public class PredicateComposition {
 		
 		return filterGroup;
 	}
+	
+	// FIXME: remove this method.
+	public String toString() {
+		
+		return "\n-composition(logical:[" + logicalOperator +
+		"]" + predicate.toString() + ")";
+	}
 }
