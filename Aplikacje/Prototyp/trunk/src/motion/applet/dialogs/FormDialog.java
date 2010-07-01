@@ -36,6 +36,7 @@ public class FormDialog extends BasicDialog {
 	private JButton cancelButton;
 	
 	protected JPanel formPanel;
+	protected JPanel userPanel;
 	protected GridBagConstraints gridBagConstraints;
 	
 	public FormDialog(String title, String message) {
@@ -44,11 +45,16 @@ public class FormDialog extends BasicDialog {
 	
 	@Override
 	protected void constructUserInterface() {
+		
+		userPanel = new JPanel();
+		userPanel.setLayout( new BorderLayout() );
+		
 		// Form panel
 		formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
 		
-		this.add(formPanel, BorderLayout.CENTER);
+		this.add( userPanel, BorderLayout.CENTER );
+		userPanel.add(formPanel, BorderLayout.CENTER);
 		
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;

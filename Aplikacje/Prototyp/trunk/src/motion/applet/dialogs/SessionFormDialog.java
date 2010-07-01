@@ -1,5 +1,6 @@
 package motion.applet.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -10,6 +11,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.database.TableNamesInstance;
+import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.MotionKind;
@@ -34,6 +36,8 @@ public class SessionFormDialog extends FormDialog {
 		this.performerId = performerId;
 		
 		addFormFields();
+		
+		
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -83,6 +87,8 @@ public class SessionFormDialog extends FormDialog {
 				}
 			}
 		});
+		
+		userPanel.add( new PrivilegesPanel(), BorderLayout.SOUTH );
 	}
 	
 	private void addFormFields() {

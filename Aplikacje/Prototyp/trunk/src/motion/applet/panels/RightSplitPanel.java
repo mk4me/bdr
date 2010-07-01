@@ -135,6 +135,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						//SessionDialog sessionDialog = new SessionDialog(recordId);
 						//sessionDialog.setVisible(true);
 						SessionFormDialog sessionFormDialog = new SessionFormDialog(recordId);
+						sessionFormDialog.pack();
 						sessionFormDialog.setVisible(true);
 					}
 				});
