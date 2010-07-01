@@ -57,7 +57,7 @@ public class UserDetailsDialog extends BasicDialog {
 		gridBagConstraints.gridy = 0;
 		loginPanel.add(firstNameLabel, gridBagConstraints);
 		
-		firstNameText = new JTextField(30);
+		firstNameText = new JTextField(20);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		firstNameLabel.setLabelFor(firstNameText);
@@ -68,7 +68,7 @@ public class UserDetailsDialog extends BasicDialog {
 		gridBagConstraints.gridy = 1;
 		loginPanel.add(lastNameLabel, gridBagConstraints);
 		
-		lastNameText = new JTextField(30);
+		lastNameText = new JTextField(20);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		lastNameLabel.setLabelFor(lastNameText);
