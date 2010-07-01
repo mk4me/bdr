@@ -104,10 +104,13 @@ public class LeftSplitPanel extends JPanel {
 							//DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 							DefaultMutableTreeNode root = (DefaultMutableTreeNode) filterTree.tree.getModel().getRoot();
 							DefaultMutableTreeNode startNode = filterTree.composeChildPredicates(root);
+							//DefaultMutableTreeNode startNode = filterTree.composeChildPredicates2(root);
 							if (startNode != null) {
+								
 								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 										((FilterNode) startNode.getUserObject()).getFilter(),
 										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
+										
 								//System.out.println(result);
 								//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
 								//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
@@ -115,9 +118,14 @@ public class LeftSplitPanel extends JPanel {
 								//for (GenericResult g : result) {
 								//	System.out.println(g);
 								//z}
+								
 								JTable resultTable = new JTable();
 								resultTable.setModel(new BasicTable(result));
 								MotionAppletFrame.addResult(resultTable);
+								
+								/*
+								System.out.println(((FilterNode) startNode.getUserObject()).getFilter().getPredicateGroup().printPredicate());
+								*/
 							}
 							filterTree.decomposeChildPredicates(root);
 						} catch (Exception e1) {

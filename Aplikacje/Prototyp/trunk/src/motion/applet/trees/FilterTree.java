@@ -8,6 +8,7 @@ import javax.swing.tree.TreePath;
 
 import motion.applet.database.TableName;
 import motion.database.model.Predicate;
+import motion.database.model.PredicateComposition;
 
 public class FilterTree {
 	public JTree tree;
@@ -127,6 +128,44 @@ public class FilterTree {
 		}
 		
 		return childNode;
+	}
+	
+	public DefaultMutableTreeNode composeChildPredicates2(DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode returnNode = null;	// First checked node.
+		Predicate parentPredicateGroup = null;
+		if (node != root) {
+			parentPredicateGroup = ((FilterNode) node.getUserObject()).getFilter().getPredicateGroup();
+		}
+		Predicate previousPredicateGroup = null;
+		for (int i = 0; i < node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			if (((FilterNode) child.getUserObject()).isSelected()) {
+				if (previousPredicateGroup != null){
+					previousPredicateGroup = ((FilterNode) child.getUserObject()).getFilter().createPredicateGroup(
+							PredicateComposition.orOperator, previousPredicateGroup, parentPredicateGroup);
+				}
+				
+				DefaultMutableTreeNode checkedChild = null;
+				if (child.getChildCount() > 0) {
+					checkedChild = composeChildPredicates2(child);
+				}
+				
+				if (checkedChild != null) {
+					previousPredicateGroup = ((FilterNode) checkedChild.getUserObject()).getFilter().createPredicateGroup(
+							PredicateComposition.andOperator, null, ((FilterNode) child.getUserObject()).getFilter().getPredicateGroup());
+				} else {
+					previousPredicateGroup = ((FilterNode) child.getUserObject()).getFilter().createPredicateGroup(
+							PredicateComposition.emptyOperator, null, parentPredicateGroup);
+				}
+				
+				if (returnNode == null) {
+					returnNode = child;
+				}
+				
+			}
+		}
+		
+		return returnNode;
 	}
 	
 	public DefaultMutableTreeNode composeChildPredicates(DefaultMutableTreeNode node) {
