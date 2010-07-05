@@ -225,7 +225,9 @@ go
         IdRodzaj_ruchu       int NULL,
         IdPerformer          int NULL,
         Data                 datetime NOT NULL,
-        Opis_sesji           varchar(100) NULL
+        Opis_sesji           varchar(100) NULL,
+        Publiczna			bit not null default 0,
+        PublicznaZapis		 bit not null default 0
  )
 go
  
@@ -348,7 +350,7 @@ go
  
  CREATE TABLE Uzytkownik (
         IdUzytkownik         int IDENTITY,
-        Login                varchar(30) NOT NULL,
+        Login                varchar(30) NOT NULL UNIQUE,
         Imie                 varchar(30) NOT NULL,
         Nazwisko             varchar(50) NOT NULL
  )
@@ -1051,4 +1053,112 @@ go
                               REFERENCES Atrybut
 go
  
- 
+ ALTER TABLE Performer_Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+go
+ ALTER TABLE Performer_Koszyk
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer
+go
+ ALTER TABLE Sesja_Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+go
+ ALTER TABLE Sesja_Koszyk
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja
+go
+ ALTER TABLE Obserwacja_Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+go
+ ALTER TABLE Obserwacja_Koszyk
+        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja
+go
+ ALTER TABLE Segment_Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+go
+ ALTER TABLE Segment_Koszyk
+        ADD FOREIGN KEY (IdSegment) REFERENCES Segment
+go 
+ALTER TABLE Materializacja_Atrybutu_Performera
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPerformer)
+go
+ALTER TABLE Materializacja_Atrybutu_Performera
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+ALTER TABLE Materializacja_Atrybutu_Performera
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+go
+ALTER TABLE Materializacja_Atrybutu_Performera
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer
+go
+ALTER TABLE Materializacja_Atrybutu_Sesji
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdSesja)
+go
+ALTER TABLE Materializacja_Atrybutu_Sesji
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+ALTER TABLE Materializacja_Atrybutu_Sesji
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+go
+ALTER TABLE Materializacja_Atrybutu_Sesji
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja
+go
+ALTER TABLE Materializacja_Atrybutu_Obserwacji
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdObserwacja)
+go
+ALTER TABLE Materializacja_Atrybutu_Obserwacji
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+ALTER TABLE Materializacja_Atrybutu_Obserwacji
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+go
+ALTER TABLE Materializacja_Atrybutu_Obserwacji
+        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja
+go
+ALTER TABLE Materializacja_Atrybutu_Segmentu
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdSegment)
+go
+ALTER TABLE Materializacja_Atrybutu_Segmentu
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+ALTER TABLE Materializacja_Atrybutu_Segmentu
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+go
+ALTER TABLE Materializacja_Atrybutu_Segmentu
+        ADD FOREIGN KEY (IdSegment) REFERENCES Segment
+go
+ALTER TABLE Materializacja_Atrybutu_Pliku
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPlik)
+go
+ALTER TABLE Materializacja_Atrybutu_Pliku
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+go
+ALTER TABLE Materializacja_Atrybutu_Pliku
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+go
+ALTER TABLE Materializacja_Atrybutu_Pliku
+        ADD FOREIGN KEY (IdPlik) REFERENCES Plik
+go
+
+ALTER TABLE Predykat
+        ADD FOREIGN KEY (IdPredykat, IdUzytkownik) REFERENCES Predykat
+go
+SELECT OBJECT_NAME(id) AS TableName, OBJECT_NAME(constid) AS ConstraintName
+FROM sysconstraints where OBJECT_NAME(id) = 'Uzytkownik'
+
+declare @sql nvarchar(200);
+WHILE EXISTS(SELECT * FROM sys.default_constraints where parent_object_id = OBJECT_ID('dbo.Sesja'))
+BEGIN
+    select    @sql = 'ALTER TABLE Sesja DROP CONSTRAINT ' + name
+    FROM sys.default_constraints where parent_object_id = OBJECT_ID('dbo.Sesja')
+    exec    sp_executesql @sql
+END
+
+ALTER TABLE Sesja WITH NOCHECK
+ADD CONSTRAINT DF__Sesja__Publiczna DEFAULT 0 FOR Publiczna
+go
+ALTER TABLE Sesja WITH NOCHECK
+ADD CONSTRAINT DF__Sesja__PublicznaZapis DEFAULT 0 FOR PublicznaZapis
+go
+
+ALTER TABLE Uzytkownik WITH NOCHECK
+ADD CONSTRAINT U_UzytkownikLogin UNIQUE (Login)
+go

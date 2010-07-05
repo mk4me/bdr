@@ -159,7 +159,7 @@ exec dbo.evaluate_generic_query_uniform @filters,  0,  1,  0,  0
 
 
 
-alter procedure evaluate_generic_query(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
+create procedure evaluate_generic_query(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -385,7 +385,7 @@ begin
 end
 go
 
-alter procedure evaluate_generic_query_uniform(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
+create procedure evaluate_generic_query_uniform(@filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @segm as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -618,7 +618,7 @@ go
 
 exec validate_session_group_id 5
 
-alter procedure list_session_groups_defined
+create procedure list_session_groups_defined
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
@@ -700,3 +700,12 @@ begin
 end
 go
 
+create procedure alter_session_visibility (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
+as
+begin
+
+	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
+	else
+	update Sesja set Publiczna = @public, PublicznaZapis = @writeable where IdSesja = @sess_id;
+end
+go
