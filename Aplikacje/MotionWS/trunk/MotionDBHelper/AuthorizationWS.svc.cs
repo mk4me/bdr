@@ -145,7 +145,39 @@ namespace MotionDBWebServices
             }
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void AlterSessionVisibility(string grantedUserLogin, string grantedUserDomain, int sessionID, bool isPublic, bool isWritable)
+        {
+            try
+            {
 
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "alter_session_visibility";
+                cmd.Parameters.Add("@granting_user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@granted_user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters.Add("@public", SqlDbType.Bit);
+                cmd.Parameters.Add("@writeable", SqlDbType.Bit);
+                cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@granted_user_login"].Value = grantedUserDomain.Equals("") ? grantedUserLogin : grantedUserDomain + "\\" + grantedUserLogin;
+                cmd.Parameters["@sess_id"].Value = sessionID;
+                cmd.Parameters["@public"].Value = isPublic;
+                cmd.Parameters["@writeable"].Value = isWritable;
+
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
 
     }
 }

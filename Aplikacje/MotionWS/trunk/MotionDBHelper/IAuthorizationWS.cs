@@ -23,5 +23,9 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID);
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        void AlterSessionVisibility(string grantedUserLogin, string grantedUserDomain, int sessionID, bool idPublic, bool isWritable);
+        // To do: alter session visibility
     }
 }
