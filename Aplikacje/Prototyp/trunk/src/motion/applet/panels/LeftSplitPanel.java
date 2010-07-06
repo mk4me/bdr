@@ -3,6 +3,7 @@ package motion.applet.panels;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -28,6 +29,7 @@ import motion.applet.trees.FilterTree;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Filter;
 import motion.database.model.GenericResult;
+import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public class LeftSplitPanel extends JPanel {
 	//private DefaultMutableTreeNode rootNode;
@@ -103,14 +105,39 @@ public class LeftSplitPanel extends JPanel {
 						try {
 							//DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 							DefaultMutableTreeNode root = (DefaultMutableTreeNode) filterTree.tree.getModel().getRoot();
-							DefaultMutableTreeNode startNode = filterTree.composeChildPredicates(root);
+							ArrayList<FilterPredicate> filterPredicates = new ArrayList<FilterPredicate>();
+							filterTree.composeChildPredicates3(root, filterPredicates);
+							
+							for (FilterPredicate f : filterPredicates) {
+								System.out.println(
+										"pId=" + f.getPredicateID() +
+										", cE=" + f.getContextEntity() +
+										", fN=" + f.getFeatureName() +
+										", parP=" + f.getParentPredicate() +
+										", prevP=" + f.getPreviousPredicate() +
+										", nO=" + f.getNextOperator() +
+										", o=" + f.getOperator() +
+										", v=" + f.getValue()
+										);
+							}
+							
+							List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+									filterPredicates,
+									new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
+							
+							JTable resultTable = new JTable();
+							resultTable.setModel(new BasicTable(result));
+							MotionAppletFrame.addResult(resultTable);
+							
+							
+							//DefaultMutableTreeNode startNode = filterTree.composeChildPredicates(root);
 							//DefaultMutableTreeNode startNode = filterTree.composeChildPredicates2(root);
-							if (startNode != null) {
-								
+							//if (startNode != null) {
+								/*
 								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 										((FilterNode) startNode.getUserObject()).getFilter(),
 										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
-										
+									*/	
 								//System.out.println(result);
 								//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
 								//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
@@ -118,16 +145,16 @@ public class LeftSplitPanel extends JPanel {
 								//for (GenericResult g : result) {
 								//	System.out.println(g);
 								//z}
-								
+								/*
 								JTable resultTable = new JTable();
 								resultTable.setModel(new BasicTable(result));
 								MotionAppletFrame.addResult(resultTable);
-								
-								/*
-								System.out.println(((FilterNode) startNode.getUserObject()).getFilter().getPredicateGroup().printPredicate());
 								*/
-							}
-							filterTree.decomposeChildPredicates(root);
+								
+								//System.out.println(((FilterNode) startNode.getUserObject()).getFilter().getPredicateGroup().printPredicate());
+								
+							//}
+							//filterTree.decomposeChildPredicates(root);
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);

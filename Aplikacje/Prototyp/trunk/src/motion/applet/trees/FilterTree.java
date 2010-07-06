@@ -1,5 +1,7 @@
 package motion.applet.trees;
 
+import java.util.ArrayList;
+
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -7,8 +9,9 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import motion.applet.database.TableName;
+import motion.database.model.Filter;
 import motion.database.model.Predicate;
-import motion.database.model.PredicateComposition;
+import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public class FilterTree {
 	public JTree tree;
@@ -130,19 +133,55 @@ public class FilterTree {
 		return childNode;
 	}
 	
-	public DefaultMutableTreeNode composeChildPredicates2(DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode returnNode = null;	// First checked node.
-		Predicate parentPredicateGroup = null;
-		if (node != root) {
-			parentPredicateGroup = ((FilterNode) node.getUserObject()).getFilter().getPredicateGroup();
-		}
-		Predicate previousPredicateGroup = null;
+	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate composeChildPredicates3(DefaultMutableTreeNode node,
+			ArrayList<FilterPredicate> filterPredicates) {
+		boolean emptyBranch = true;
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch = Filter.createBranchGroup();
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate previousBranch = null;
 		for (int i = 0; i < node.getChildCount(); i++) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
 			if (((FilterNode) child.getUserObject()).isSelected()) {
-				if (previousPredicateGroup != null){
-					previousPredicateGroup = ((FilterNode) child.getUserObject()).getFilter().createPredicateGroup(
-							PredicateComposition.orOperator, previousPredicateGroup, parentPredicateGroup);
+				emptyBranch = false;
+				motion.database.ws.basicQueriesServiceWCF.FilterPredicate childBranch = composeChildPredicates3(child, filterPredicates);
+				filterPredicates.addAll(((FilterNode) child.getUserObject()).getFilter().getFilterPredicatesWCF());
+				if (node != root) {
+					((FilterNode) node.getUserObject()).getFilter().linkChildGroupFilterPredicates(
+							branch,
+							childBranch,
+							filterPredicates);
+				}
+				
+				if (previousBranch != null) {
+					Filter.linkSiblingBranches(previousBranch, childBranch);
+				}
+				previousBranch = childBranch;
+			}
+		}
+		
+		if (emptyBranch) {
+			
+			//return null;
+			return ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF().get(0);
+		} else {
+			filterPredicates.add(branch);
+			
+			return branch;
+		}
+	}
+	/*
+	public DefaultMutableTreeNode composeChildPredicates2(DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode returnNode = null;	// First checked node.
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] parentGroup = null;
+		if (node != root) {
+			parentGroup = ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF();
+		}
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] previousGroup = null;
+		for (int i = 0; i < node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			if (((FilterNode) child.getUserObject()).isSelected()) {
+				if (previousGroup != null){
+					// Sibling predicate GROUP, link with OR.
+					previousGroup = ((FilterNode) child.getUserObject()).getFilter().linkSiblingGroupFilterPredicates(previousGroup);
 				}
 				
 				DefaultMutableTreeNode checkedChild = null;
@@ -151,6 +190,7 @@ public class FilterTree {
 				}
 				
 				if (checkedChild != null) {
+					// Child predicate GROUP, link with AND.
 					previousPredicateGroup = ((FilterNode) checkedChild.getUserObject()).getFilter().createPredicateGroup(
 							PredicateComposition.andOperator, null, ((FilterNode) child.getUserObject()).getFilter().getPredicateGroup());
 				} else {
@@ -167,6 +207,7 @@ public class FilterTree {
 		
 		return returnNode;
 	}
+	*/
 	
 	public DefaultMutableTreeNode composeChildPredicates(DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode previousNode = null;

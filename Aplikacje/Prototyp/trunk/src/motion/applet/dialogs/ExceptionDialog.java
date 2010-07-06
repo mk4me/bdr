@@ -68,6 +68,7 @@ public class ExceptionDialog extends BasicDialog {
 	@Override
 	protected void finishUserInterface() {
 		this.setSize(400, 250);
+		this.setModal(false);
 		this.exceptionTextArea.setText(exceptionText);
 	}
 	
