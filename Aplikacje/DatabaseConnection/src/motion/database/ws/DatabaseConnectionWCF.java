@@ -3,6 +3,7 @@ package motion.database.ws;
 import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -19,7 +20,6 @@ import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
-import motion.database.model.Filter;
 import motion.database.model.GenericResult;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
@@ -198,7 +198,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 //	Generic Result 
 	
-	
+	/*
 	public  List<GenericResult> execGenericQuery(Filter filter, String[] p_entitiesToInclude) throws Exception
 	{
 		try{
@@ -211,6 +211,40 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
 			for ( FilterPredicate f : filter.toFilterPredicateWCF() )
 				arrayOfFilterPredicate.getFilterPredicate().add( f );
+			
+			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
+					arrayOfFilterPredicate,	entitiesToInclude );
+	
+			
+			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
+			GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
+			for (Attributes aa : ss.getAttributes() )
+				output.add( ToolsWCF.transformGenericAttributes( aa, new GenericResult() ) );
+			
+			return output;
+		}
+		catch(IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
+	}
+	*/
+	public  List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates, String[] p_entitiesToInclude) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "execGenericQuery", this );
+			
+			ArrayOfString entitiesToInclude = new ArrayOfString();
+			for( String s : p_entitiesToInclude )
+				entitiesToInclude.getString().add( s );
+			
+			ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
+			arrayOfFilterPredicate.getFilterPredicate().addAll(filterPredicates);
 			
 			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
 					arrayOfFilterPredicate,	entitiesToInclude );

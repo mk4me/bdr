@@ -9,7 +9,9 @@ public class Filter {
 	private boolean selected;
 	private SimplePredicate predicate;
 	private static int id = 1;
+	@Deprecated
 	private SimplePredicate predicateGroup;
+	private ArrayList<FilterPredicate> filterPredicates = new ArrayList<FilterPredicate>();
 	
 	public Filter(String name) {
 		this.name = name;
@@ -24,17 +26,17 @@ public class Filter {
 		
 		return this.name;
 	}
-	
+	@Deprecated
 	public SimplePredicate getPredicate() {
 		
 		return this.predicate;
 	}
-	
+	@Deprecated
 	public SimplePredicate getPredicateGroup() {
 		
 		return this.predicateGroup;
 	}
-	
+	@Deprecated
 	public SimplePredicate createPredicateGroup(String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
 		SimplePredicate predicateGroup = new SimplePredicate(
 				"GROUP", new AttributeName(this.name, AttributeName.UNKNOWN_TYPE),
@@ -64,7 +66,7 @@ public class Filter {
 		
 		return id++;
 	}
-	
+	/*
 	public FilterPredicate[] toFilterPredicate() {
 		ArrayList<FilterPredicate> resultFilterPredicates = new ArrayList<FilterPredicate>();
 		resultFilterPredicates.add(fillFilterPredicate(this.predicate, null, null));
@@ -109,21 +111,30 @@ public class Filter {
 		
 		return filter;
 	}
-
-	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] toFilterPredicateWCF() {
-
-		ArrayList<motion.database.ws.basicQueriesServiceWCF.FilterPredicate> resultFilterPredicates = new ArrayList<motion.database.ws.basicQueriesServiceWCF.FilterPredicate>();
-		resultFilterPredicates.add(fillFilterPredicateWCF(this.predicate, null, null));
+*/
+	public ArrayList<FilterPredicate> getFilterPredicatesWCF() {
+		if (this.filterPredicates.isEmpty()) {
+			toFilterPredicateWCF();
+		}
+		
+		return this.filterPredicates;
+	}
+	
+	private void toFilterPredicateWCF() {
+		// Array of FilterPredicates, order of elements doesn't matter, except the first element which should be the GROUP predicate.
+		// Create a GROUP for the filter (first predicate in the array).
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate parentPredicate = fillGroupFilterPredicateWCF();
+		filterPredicates.add(parentPredicate);
+		// Add filter predicates.
+		filterPredicates.add(fillFilterPredicateWCF(this.predicate, parentPredicate, null));
 		
 		SimplePredicate currentPredicate = this.predicate;
 		if (currentPredicate.getNextComposition() != null) {
 			do {
 				currentPredicate = (SimplePredicate) currentPredicate.getNextComposition().getPredicate();
-				resultFilterPredicates.add(fillFilterPredicateWCF(currentPredicate, null, resultFilterPredicates.get(resultFilterPredicates.size()-1)));
+				filterPredicates.add(fillFilterPredicateWCF(currentPredicate, parentPredicate, filterPredicates.get(filterPredicates.size()-1)));
 			} while (currentPredicate.getNextComposition() != null);
 		}
-		
-		return resultFilterPredicates.toArray(new motion.database.ws.basicQueriesServiceWCF.FilterPredicate[1]);
 	}
 
 
@@ -131,7 +142,7 @@ public class Filter {
 		motion.database.ws.basicQueriesServiceWCF.FilterPredicate filter = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
 		filter.setPredicateID(Filter.newId());
 		if (parentFilterPredicate == null) {
-			filter.setParentPredicate(0);
+			filter.setParentPredicate(0);	// Not used anymore, parent not null.
 		} else {
 			filter.setParentPredicate(parentFilterPredicate.getPredicateID());
 		}
@@ -155,5 +166,75 @@ public class Filter {
 		filter.setAggregateFunction("");
 		
 		return filter;
+	}
+	
+	private motion.database.ws.basicQueriesServiceWCF.FilterPredicate fillGroupFilterPredicateWCF() {
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupFilter = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
+		groupFilter.setPredicateID(Filter.newId());
+		groupFilter.setContextEntity("GROUP");
+		groupFilter.setFeatureName(this.getName());
+		groupFilter.setOperator("");
+		groupFilter.setValue("");
+		groupFilter.setAggregateFunction("");
+		groupFilter.setAggregateEntity("");
+		groupFilter.setNextOperator("");
+		
+		return groupFilter;
+	}
+	/*
+	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] linkSiblingGroupFilterPredicates(motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] previousGroup) {
+		if (this.filterPredicates == null) {
+			getFilterPredicatesWCF();
+		}
+		// First element is the GROUP predicate
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupA = previousGroup[0];
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupB = this.filterPredicates[0];
+		groupA.setNextOperator("OR");
+		groupB.setPreviousPredicate(groupA.getPredicateID());
+		
+		return this.filterPredicates;
+	}
+	*/
+	public void linkChildGroupFilterPredicates(
+			motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch,
+			motion.database.ws.basicQueriesServiceWCF.FilterPredicate childBranch,
+			ArrayList<FilterPredicate> filterPredicates) {
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupX = this.filterPredicates.get(0);
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupG = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
+		groupG.setPredicateID(Filter.newId());
+		groupG.setContextEntity("GROUP");
+		groupG.setFeatureName("SIBLING");
+		groupG.setOperator("");
+		groupG.setValue("");
+		groupG.setAggregateFunction("");
+		groupG.setAggregateEntity("");
+		groupG.setNextOperator("");
+		
+		groupX.setNextOperator("AND");
+		childBranch.setParentPredicate(groupX.getPredicateID());
+		
+		groupX.setParentPredicate(branch.getPredicateID());
+		
+		filterPredicates.add(groupG);
+	}
+	
+	public static motion.database.ws.basicQueriesServiceWCF.FilterPredicate createBranchGroup() {
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
+		branch.setPredicateID(Filter.newId());
+		branch.setContextEntity("GROUP");
+		branch.setFeatureName("BRANCH");
+		branch.setOperator("");
+		branch.setValue("");
+		branch.setAggregateFunction("");
+		branch.setAggregateEntity("");
+		branch.setNextOperator("");
+		
+		return branch;
+	}
+	
+	public static void linkSiblingBranches(motion.database.ws.basicQueriesServiceWCF.FilterPredicate previousBranch,
+			motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch) {
+		previousBranch.setNextOperator("OR");
+		branch.setPreviousPredicate(previousBranch.getPredicateID());
 	}
 }

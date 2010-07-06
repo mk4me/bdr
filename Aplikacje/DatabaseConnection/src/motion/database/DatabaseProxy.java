@@ -1,5 +1,6 @@
 package motion.database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -8,7 +9,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttributeGroup;
-import motion.database.model.Filter;
 import motion.database.model.GenericResult;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
@@ -16,6 +16,7 @@ import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
+import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public interface DatabaseProxy {
 
@@ -53,7 +54,7 @@ public interface DatabaseProxy {
 	public abstract void uploadTrialFiles(int trialId, String filesPath,
 			String description, FileTransferListener listener) throws Exception;
 
-	public abstract List<GenericResult> execGenericQuery(Filter filter,
+	public abstract List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates,
 			String[] p_entitiesToInclude) throws Exception;
 
 	public abstract DbElementsList<Performer> listPerformersWithAttributes()
