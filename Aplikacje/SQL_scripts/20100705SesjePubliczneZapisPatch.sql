@@ -43,10 +43,10 @@ ALTER TABLE Uzytkownik WITH NOCHECK
 ADD CONSTRAINT U_UzytkownikLogin UNIQUE (Login)
 go
 
+select * from Sesja
 
 
-
-create procedure alter_session_visibility (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
+create procedure alter_session_visibility (@granting_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
 as
 begin
 

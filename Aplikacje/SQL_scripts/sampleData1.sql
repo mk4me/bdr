@@ -20,9 +20,9 @@ go
 	(select IdUzytkownik from Uzytkownik where Nazwisko='habela'), 
 	(select IdLaboratorium from Laboratorium where Nazwa='PJWSTK'), 
 	(select IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa='walk'), 
-	(select IdPerformer from Performer where Nazwisko='Kowalski'), 
+	(select IdPerformer from Performer where Nazwisko='Nowak'), 
 	GETDATE(), 
-	'sesja testowa nr 1' )
+	'sesja testowa nr 3' )
 insert into Sesja (IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji) values ( 
 	(select IdUzytkownik from Uzytkownik where Nazwisko='habela'), 
 	(select IdLaboratorium from Laboratorium where Nazwa='PJWSTK'), 

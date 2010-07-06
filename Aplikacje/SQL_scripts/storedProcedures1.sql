@@ -29,7 +29,8 @@ as
 			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
 			for XML AUTO, ELEMENTS
 go
-create procedure get_session_by_id_xml ( @res_id int )
+
+create procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
@@ -41,7 +42,7 @@ as
 				Data as SessionDate,
 				Opis_sesji as SessionDescription,
 				(select * from list_session_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-			from Sesja SessionDetailsWithAttributes where IdSesja=@res_id
+			from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdSesja=@res_id
 			for XML AUTO, ELEMENTS
 go
 create procedure get_trial_by_id_xml ( @res_id int )
