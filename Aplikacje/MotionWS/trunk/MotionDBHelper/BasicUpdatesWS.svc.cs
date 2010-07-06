@@ -58,6 +58,8 @@ namespace MotionDBWebServices
         public int CreateSession(int labID, string motionKindName, int performerID, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+
 
             try
             {
@@ -115,7 +117,8 @@ namespace MotionDBWebServices
                     new SqlParameter("@sess_id", SqlDbType.Int);
                 sessionIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(sessionIdParameter);
-                cmd.Parameters["@sess_user"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                userName = userName.Substring(userName.LastIndexOf('\\')+1);
+                cmd.Parameters["@sess_user"].Value = userName;
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@motion_kind_name"].Value = motionKindName;
                 cmd.Parameters["@sess_perf"].Value = performerID;

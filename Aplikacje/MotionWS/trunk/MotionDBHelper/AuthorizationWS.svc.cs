@@ -96,7 +96,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@write", SqlDbType.Bit);
 
                 cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
-                cmd.Parameters["@granted_user_login"].Value = grantedUserDomain.Equals("")?grantedUserLogin:grantedUserDomain+"\\"+grantedUserLogin;
+                cmd.Parameters["@granted_user_login"].Value = grantedUserLogin;
                 cmd.Parameters["@sess_id"].Value = sessionID;
                 cmd.Parameters["@write"].Value = write ? 1 : 0;
 
@@ -128,7 +128,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@granted_user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
-                cmd.Parameters["@granted_user_login"].Value = grantedUserDomain.Equals("") ? grantedUserLogin : grantedUserDomain + "\\" + grantedUserLogin;
+                cmd.Parameters["@granted_user_login"].Value = grantedUserLogin;
                 cmd.Parameters["@sess_id"].Value = sessionID;
 
 

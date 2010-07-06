@@ -20,12 +20,16 @@ namespace MotionDBWebServices
         public XmlElement GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
-
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "evaluate_generic_query";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.Structured);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
                 SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
                 filterPar.Direction = ParameterDirection.Input;
                 filterPar.Value = filter;
@@ -71,12 +75,16 @@ namespace MotionDBWebServices
         public XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
-
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "evaluate_generic_query_uniform";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.Structured);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
                 SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
                 filterPar.Direction = ParameterDirection.Input;
                 filterPar.Value = filter;
@@ -121,12 +129,14 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "get_performer_by_id_xml";
+                cmd.CommandText = "get_performer_by_id_xml";  // UWAGA - performer sam w sobie nie jest poki co zabezpieczany!
                 SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
                 resId.Direction = ParameterDirection.Input;
                 resId.Value = id;
@@ -157,16 +167,21 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
-
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "get_session_by_id_xml";
                 SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                SqlParameter userLogin = cmd.Parameters.Add("@user_login", SqlDbType.VarChar,30);
                 resId.Direction = ParameterDirection.Input;
                 resId.Value = id;
+                userLogin.Direction = ParameterDirection.Input;
+                userLogin.Value = userName;
                 XmlReader dr = cmd.ExecuteXmlReader();
+
                 //if (dr.) notFound = true;
                 if (dr.Read())
                 {
