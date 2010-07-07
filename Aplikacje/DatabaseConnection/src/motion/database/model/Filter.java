@@ -120,6 +120,10 @@ public class Filter {
 		return this.filterPredicates;
 	}
 	
+	public void removeFilterPredicatesWCF() {
+		this.filterPredicates = new ArrayList<FilterPredicate>();
+	}
+	
 	private void toFilterPredicateWCF() {
 		// Array of FilterPredicates, order of elements doesn't matter, except the first element which should be the GROUP predicate.
 		// Create a GROUP for the filter (first predicate in the array).
