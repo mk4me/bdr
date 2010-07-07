@@ -134,7 +134,7 @@ public class LeftSplitPanel extends JPanel {
 							//if (startNode != null) {
 								/*
 								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
-										((FilterNode) startNode.getUserObject()).getFilter(),
+										((FilterNode) startNode.getUserObject()).getFilter().getFilterPredicatesWCF(),
 										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 									*/	
 								//System.out.println(result);

@@ -15,6 +15,7 @@ import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.MotionKind;
+import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
 	private static String TITLE = "New session";
@@ -28,6 +29,7 @@ public class SessionFormDialog extends FormDialog {
 	private FormListField motionKindField;
 	private FormTextField markerSetField;
 	private FormNumberField numberOfTrialsField;
+	private PrivilegesPanel privilegesPanel;
 	
 	private int performerId;
 	
@@ -54,7 +56,6 @@ public class SessionFormDialog extends FormDialog {
 										new int[]{},
 										SessionFormDialog.this.getSessionDescription(),
 										AppletToolBar.getLabId(),
-										1,
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());
 								WebServiceInstance.getDatabaseConnection().setSessionAttribute(
@@ -69,6 +70,11 @@ public class SessionFormDialog extends FormDialog {
 											SessionFormDialog.this.getNumberOfTrials(),
 											false);
 								}
+								
+								//privileges
+								SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionID, privilegesPanel.getResult() );
+								sessionPrivileges.performDatabaseUpdate();
+								
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -88,7 +94,8 @@ public class SessionFormDialog extends FormDialog {
 			}
 		});
 		
-		userPanel.add( new PrivilegesPanel(), BorderLayout.SOUTH );
+		privilegesPanel = new PrivilegesPanel(); 
+		userPanel.add( privilegesPanel, BorderLayout.SOUTH );
 	}
 	
 	private void addFormFields() {

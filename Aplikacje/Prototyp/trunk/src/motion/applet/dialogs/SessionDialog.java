@@ -166,7 +166,6 @@ public class SessionDialog extends BasicDialog {
 								new int[]{},
 								SessionDialog.this.getSessionDescription(),
 								1,
-								1,
 								sessionDate,
 								"kopniak z pó³obrotu");
 						SessionDialog.this.setVisible(false);
