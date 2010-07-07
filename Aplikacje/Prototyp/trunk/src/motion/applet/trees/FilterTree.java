@@ -136,7 +136,10 @@ public class FilterTree {
 	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate composeChildPredicates3(DefaultMutableTreeNode node,
 			ArrayList<FilterPredicate> filterPredicates) {
 		boolean emptyBranch = true;
-		motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch = Filter.createBranchGroup();
+		motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch = null;
+		if (node != root) {
+			branch = Filter.createBranchGroup(((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF().get(0));
+		}
 		motion.database.ws.basicQueriesServiceWCF.FilterPredicate previousBranch = null;
 		for (int i = 0; i < node.getChildCount(); i++) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
@@ -163,7 +166,9 @@ public class FilterTree {
 			//return null;
 			return ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF().get(0);
 		} else {
-			filterPredicates.add(branch);
+			if (branch != null) {
+				filterPredicates.add(branch);
+			}
 			
 			return branch;
 		}
