@@ -106,6 +106,7 @@ public class LeftSplitPanel extends JPanel {
 							//DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 							DefaultMutableTreeNode root = (DefaultMutableTreeNode) filterTree.tree.getModel().getRoot();
 							ArrayList<FilterPredicate> filterPredicates = new ArrayList<FilterPredicate>();
+							filterTree.decomposeChildPredicates3(root);
 							filterTree.composeChildPredicates3(root, filterPredicates);
 							
 							for (FilterPredicate f : filterPredicates) {
@@ -155,6 +156,7 @@ public class LeftSplitPanel extends JPanel {
 								
 							//}
 							//filterTree.decomposeChildPredicates(root);
+							
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);

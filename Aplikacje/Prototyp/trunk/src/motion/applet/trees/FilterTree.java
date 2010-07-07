@@ -261,4 +261,14 @@ public class FilterTree {
 			}
 		}
 	}
+	
+	public void decomposeChildPredicates3(DefaultMutableTreeNode node) {
+		for (int i = 0; i < node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			((FilterNode) child.getUserObject()).getFilter().removeFilterPredicatesWCF();
+			if (child.getChildCount() > 0) {
+				decomposeChildPredicates(child);
+			}
+		}
+	}
 }
