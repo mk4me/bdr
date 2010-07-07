@@ -213,16 +213,17 @@ public class Filter {
 		groupG.setAggregateFunction("");
 		groupG.setAggregateEntity("");
 		groupG.setNextOperator("");
+		groupG.setParentPredicate(branch.getPredicateID());
 		
 		groupX.setNextOperator("AND");
-		childBranch.setParentPredicate(groupX.getPredicateID());
+		childBranch.setParentPredicate(groupG.getPredicateID());
 		
 		groupX.setParentPredicate(branch.getPredicateID());
 		
 		filterPredicates.add(groupG);
 	}
 	
-	public static motion.database.ws.basicQueriesServiceWCF.FilterPredicate createBranchGroup() {
+	public static motion.database.ws.basicQueriesServiceWCF.FilterPredicate createBranchGroup(motion.database.ws.basicQueriesServiceWCF.FilterPredicate parent) {
 		motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch = new motion.database.ws.basicQueriesServiceWCF.FilterPredicate();
 		branch.setPredicateID(Filter.newId());
 		branch.setContextEntity("GROUP");
@@ -232,6 +233,7 @@ public class Filter {
 		branch.setAggregateFunction("");
 		branch.setAggregateEntity("");
 		branch.setNextOperator("");
+		branch.setParentPredicate(parent.getParentPredicate());
 		
 		return branch;
 	}
