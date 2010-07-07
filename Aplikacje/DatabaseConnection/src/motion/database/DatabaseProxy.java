@@ -104,8 +104,7 @@ public interface DatabaseProxy {
 			throws Exception;
 
 	public abstract int createSession(int performerID, int[] sessionGroupID,
-			String sessionDescription, int labID, int userID,
-			XMLGregorianCalendar sessionDate, String motionKindName)
+			String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName)
 			throws Exception;
 
 	public abstract int createTrial(int sessionID, String trialDescription,
@@ -144,14 +143,6 @@ public interface DatabaseProxy {
 	public abstract DbElementsList<DatabaseFile> listPerformerFiles(
 			int performerID) throws Exception;
 
-	/**
-	 * 
-	 * @param fileID
-	 * @param destLocalFolder must end with "/"
-	 * @param transferListener 
-	 * @return
-	 * @throws Exception
-	 */
 	public abstract String downloadFile(int fileID, String destLocalFolder,
 			FileTransferListener transferListener) throws Exception;
 
@@ -166,6 +157,7 @@ public interface DatabaseProxy {
 	public void createUserAccount(String firstName, String lastName) throws Exception;
 	
 	public boolean checkUserAccount() throws Exception;
-
+	
+	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception;
 
 }

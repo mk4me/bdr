@@ -97,4 +97,24 @@ public interface IAuthorizationWS {
         throws IAuthorizationWSRemoveSessionPrivilegesAuthorizationExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param sessionID
+     * @param isWritable
+     * @param idPublic
+     * @throws IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "AlterSessionVisibility", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility")
+    @RequestWrapper(localName = "AlterSessionVisibility", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.AlterSessionVisibility")
+    @ResponseWrapper(localName = "AlterSessionVisibilityResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.AlterSessionVisibilityResponse")
+    public void alterSessionVisibility(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        int sessionID,
+        @WebParam(name = "idPublic", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        boolean idPublic,
+        @WebParam(name = "isWritable", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        boolean isWritable)
+        throws IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage
+    ;
+
 }

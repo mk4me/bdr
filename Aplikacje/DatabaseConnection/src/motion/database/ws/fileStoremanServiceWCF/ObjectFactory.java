@@ -61,11 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StorePerformerFiles }
+     * Create an instance of {@link StoreTrialFileResponse }
      * 
      */
-    public StorePerformerFiles createStorePerformerFiles() {
-        return new StorePerformerFiles();
+    public StoreTrialFileResponse createStoreTrialFileResponse() {
+        return new StoreTrialFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFileResponse }
+     * 
+     */
+    public StorePerformerFileResponse createStorePerformerFileResponse() {
+        return new StorePerformerFileResponse();
     }
 
     /**
@@ -77,11 +85,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreSessionFileResponse }
+     * Create an instance of {@link StoreSessionFiles }
      * 
      */
-    public StoreSessionFileResponse createStoreSessionFileResponse() {
-        return new StoreSessionFileResponse();
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
     }
 
     /**
@@ -109,19 +117,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFileResponse }
+     * Create an instance of {@link FileAccessServiceException }
      * 
      */
-    public StoreTrialFileResponse createStoreTrialFileResponse() {
-        return new StoreTrialFileResponse();
+    public FileAccessServiceException createFileAccessServiceException() {
+        return new FileAccessServiceException();
     }
 
     /**
-     * Create an instance of {@link StoreSessionFiles }
+     * Create an instance of {@link StoreSessionFilesResponse }
      * 
      */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
+    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
+        return new StoreSessionFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link DownloadCompleteResponse }
+     * 
+     */
+    public DownloadCompleteResponse createDownloadCompleteResponse() {
+        return new DownloadCompleteResponse();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFiles }
+     * 
+     */
+    public StorePerformerFiles createStorePerformerFiles() {
+        return new StorePerformerFiles();
+    }
+
+    /**
+     * Create an instance of {@link StorePerformerFile }
+     * 
+     */
+    public StorePerformerFile createStorePerformerFile() {
+        return new StorePerformerFile();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveFile }
+     * 
+     */
+    public RetrieveFile createRetrieveFile() {
+        return new RetrieveFile();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFileResponse }
+     * 
+     */
+    public StoreSessionFileResponse createStoreSessionFileResponse() {
+        return new StoreSessionFileResponse();
     }
 
     /**
@@ -141,59 +189,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadCompleteResponse }
-     * 
-     */
-    public DownloadCompleteResponse createDownloadCompleteResponse() {
-        return new DownloadCompleteResponse();
-    }
-
-    /**
      * Create an instance of {@link StoreTrialFiles }
      * 
      */
     public StoreTrialFiles createStoreTrialFiles() {
         return new StoreTrialFiles();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFile }
-     * 
-     */
-    public RetrieveFile createRetrieveFile() {
-        return new RetrieveFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFilesResponse }
-     * 
-     */
-    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
-        return new StoreSessionFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link FileAccessServiceException }
-     * 
-     */
-    public FileAccessServiceException createFileAccessServiceException() {
-        return new FileAccessServiceException();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFile }
-     * 
-     */
-    public StorePerformerFile createStorePerformerFile() {
-        return new StorePerformerFile();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFileResponse }
-     * 
-     */
-    public StorePerformerFileResponse createStorePerformerFileResponse() {
-        return new StorePerformerFileResponse();
     }
 
     /**

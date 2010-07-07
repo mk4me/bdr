@@ -44,7 +44,6 @@ public interface IBasicUpdatesWS {
     /**
      * 
      * @param sessionDate
-     * @param userID
      * @param motionKindName
      * @param labID
      * @param sessionGroupIDs
@@ -59,8 +58,6 @@ public interface IBasicUpdatesWS {
     @RequestWrapper(localName = "CreateSession", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateSession")
     @ResponseWrapper(localName = "CreateSessionResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateSessionResponse")
     public int createSession(
-        @WebParam(name = "userID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int userID,
         @WebParam(name = "labID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int labID,
         @WebParam(name = "motionKindName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")

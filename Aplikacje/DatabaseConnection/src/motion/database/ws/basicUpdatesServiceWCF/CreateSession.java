@@ -20,7 +20,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="labID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="motionKindName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="performerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
@@ -37,7 +36,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "userID",
     "labID",
     "motionKindName",
     "performerID",
@@ -48,7 +46,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "CreateSession")
 public class CreateSession {
 
-    protected int userID;
     protected int labID;
     protected String motionKindName;
     protected int performerID;
@@ -57,22 +54,6 @@ public class CreateSession {
     protected XMLGregorianCalendar sessionDate;
     protected String sessionDescription;
     protected ArrayOfInt sessionGroupIDs;
-
-    /**
-     * Gets the value of the userID property.
-     * 
-     */
-    public int getUserID() {
-        return userID;
-    }
-
-    /**
-     * Sets the value of the userID property.
-     * 
-     */
-    public void setUserID(int value) {
-        this.userID = value;
-    }
 
     /**
      * Gets the value of the labID property.

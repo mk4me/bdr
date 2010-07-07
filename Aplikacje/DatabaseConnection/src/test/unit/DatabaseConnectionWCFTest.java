@@ -322,7 +322,7 @@ public class DatabaseConnectionWCFTest {
 		date.setMonth(3);
 		date.setDay(23);
 		
-		int id = database.createSession(1, new int[]{}, "Pierwsza sesja Chucka", 1, 1, date, "kopniak tyłem na siedząco?");
+		int id = database.createSession(1, new int[]{}, "Pierwsza sesja Chucka", 1, date, "kopniak tyłem na siedząco?");
 		System.out.println("Created session: " + id );
 
 		Session session = database.getSessionById(id);

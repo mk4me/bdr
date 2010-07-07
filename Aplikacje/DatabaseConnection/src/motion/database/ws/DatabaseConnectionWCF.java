@@ -28,6 +28,7 @@ import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
+import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfFilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfString;
@@ -1018,7 +1019,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
-	public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, int userID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
+	public int createSession(int performerID, int [] sessionGroupID, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
 	{
 		try {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "createSession", this );
@@ -1027,7 +1028,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			for (int s: sessionGroupID)
 				sessionGroupIDs.getInt().add(s);
 				
-			return port.createSession(userID, labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
+			return port.createSession(labID, motionKindName, performerID, sessionDate, sessionDescription, sessionGroupIDs);
 		} 
 		catch ( IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1215,6 +1216,23 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			port.removeSessionPrivileges(grantedUserLogin, grantedUserDomain, sessionID);
 		
 		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+	
+	
+	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "removeSessionPrivileges", this );
+			port.alterSessionVisibility(sessionID, readPrivilege, writePrivilege);
+			
+		
+		} catch (IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 		}	
