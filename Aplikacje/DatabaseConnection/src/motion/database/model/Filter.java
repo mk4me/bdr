@@ -214,6 +214,7 @@ public class Filter {
 		groupG.setAggregateEntity("");
 		groupG.setNextOperator("");
 		groupG.setParentPredicate(branch.getPredicateID());
+		groupG.setPreviousPredicate(groupX.getPredicateID());
 		
 		groupX.setNextOperator("AND");
 		childBranch.setParentPredicate(groupG.getPredicateID());
