@@ -1,15 +1,19 @@
 package motion.applet;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -158,13 +162,37 @@ public class MotionAppletFrame extends JFrame {
 		tabPanel.add(new JLabel("Results"));
 		JButton closeButton = new JButton();
 		closeButton.setContentAreaFilled(false);
+		/*
 		java.net.URL imageURL = ClassLoader.getSystemClassLoader().getResource("images/close.gif");
 		if (imageURL != null)
 			closeButton.setIcon(new ImageIcon( imageURL ));
 		else
 			DatabaseConnection.log.severe( "Cannot load resource images/close.gif" );
+		*/
+		closeButton.setIcon(new Icon() {
+			@Override
+			public int getIconHeight() {
+				
+				return 8;
+			}
+			
+			@Override
+			public int getIconWidth() {
+				
+				return 8;
+			}
+			
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setColor(Color.black);
+				g2.setStroke(new BasicStroke(2));
+				g2.drawLine(x, y, x+getIconWidth(), y+getIconHeight());
+				g2.drawLine(x, y+getIconHeight(), x+getIconWidth(), y);
+			}
+		});
 		closeButton.setPreferredSize(new Dimension(16, 16));
-		closeButton.setBorderPainted(false);
+		closeButton.setBorderPainted(true);
 		
 		tabPanel.add(closeButton);
 		
