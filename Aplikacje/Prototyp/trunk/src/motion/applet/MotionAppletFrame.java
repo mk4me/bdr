@@ -158,7 +158,11 @@ public class MotionAppletFrame extends JFrame {
 		tabPanel.add(new JLabel("Results"));
 		JButton closeButton = new JButton();
 		closeButton.setContentAreaFilled(false);
-		closeButton.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("../images/close.gif")));
+		java.net.URL imageURL = ClassLoader.getSystemClassLoader().getResource("images/close.gif");
+		if (imageURL != null)
+			closeButton.setIcon(new ImageIcon( imageURL ));
+		else
+			DatabaseConnection.log.severe( "Cannot load resource images/close.gif" );
 		closeButton.setPreferredSize(new Dimension(16, 16));
 		closeButton.setBorderPainted(false);
 		
@@ -186,7 +190,7 @@ public class MotionAppletFrame extends JFrame {
 				// Login dialog
 				LoginDialog loginDialog = new LoginDialog();
 				loginDialog.setVisible(true);
-				
+
 				// Check if login was successful
 				if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) 
 				{	

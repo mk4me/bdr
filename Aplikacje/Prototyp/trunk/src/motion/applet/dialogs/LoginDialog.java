@@ -97,9 +97,10 @@ public class LoginDialog extends BasicDialog {
 		this.addToButtonPanel(cancelButton);
 		
 		// Initial text
-		//loginText.setText( "applet_user" );
-		//passwordText.setText( "aplet4Motion" );
-		domainText.setText("pjwstk");
+		loginText.setText( "applet_user" );
+		passwordText.setText( "aplet4Motion" );
+		domainText.setText("db-bdr");
+		//domainText.setText("pjwstk");
 		
 	}
 	
