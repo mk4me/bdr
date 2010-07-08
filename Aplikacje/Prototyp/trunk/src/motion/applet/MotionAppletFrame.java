@@ -152,6 +152,7 @@ public class MotionAppletFrame extends JFrame {
 	
 	public static void addResult(JTable resultTable) {
 		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
+		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
 		final JPanel tabPanel = new JPanel();
 		tabPanel.setOpaque(false);
 		tabPanel.add(new JLabel("Results"));
