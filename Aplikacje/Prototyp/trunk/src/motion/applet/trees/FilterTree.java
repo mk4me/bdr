@@ -213,7 +213,7 @@ public class FilterTree {
 		return returnNode;
 	}
 	*/
-	
+	@Deprecated
 	public DefaultMutableTreeNode composeChildPredicates(DefaultMutableTreeNode node) {
 		DefaultMutableTreeNode previousNode = null;
 		if (node != root) {
@@ -256,7 +256,7 @@ public class FilterTree {
 		
 		return returnNode;
 	}
-	
+	@Deprecated
 	public void decomposeChildPredicates(DefaultMutableTreeNode node) {
 		for (int i = 0; i < node.getChildCount(); i++) {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
@@ -272,7 +272,7 @@ public class FilterTree {
 			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
 			((FilterNode) child.getUserObject()).getFilter().removeFilterPredicatesWCF();
 			if (child.getChildCount() > 0) {
-				decomposeChildPredicates(child);
+				decomposeChildPredicates3(child);
 			}
 		}
 	}
