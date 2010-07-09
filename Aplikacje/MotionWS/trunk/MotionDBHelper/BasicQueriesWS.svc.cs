@@ -16,7 +16,7 @@ namespace MotionDBWebServices
     public class BasicQueriesWS : DatabaseAccessService, IBasicQueriesWS
     {
         // GENERIC QUERIES
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
@@ -27,7 +27,7 @@ namespace MotionDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "evaluate_generic_query";
-                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.Structured);
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar,30);
                 usernamePar.Direction = ParameterDirection.Input;
                 usernamePar.Value = userName;
                 SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
@@ -71,7 +71,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
 
         }
-
+       [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
@@ -82,7 +82,7 @@ namespace MotionDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "evaluate_generic_query_uniform";
-                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.Structured);
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar,30);
                 usernamePar.Direction = ParameterDirection.Input;
                 usernamePar.Value = userName;
                 SqlParameter filterPar = cmd.Parameters.Add("@filter", SqlDbType.Structured);
@@ -125,6 +125,7 @@ namespace MotionDBWebServices
         } 
        
         // BY ID RETRIEVAL
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public  XmlElement GetPerformerByIdXML(int id)
         {
             XmlDocument xd = new XmlDocument();
@@ -162,7 +163,7 @@ namespace MotionDBWebServices
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return xd.DocumentElement;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GetSessionByIdXML(int id)
         {
             XmlDocument xd = new XmlDocument();
@@ -203,10 +204,12 @@ namespace MotionDBWebServices
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return xd.DocumentElement;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetSessionLabel(int id)
         {
             XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             bool found = false;
             string res = "";
 
@@ -215,9 +218,10 @@ namespace MotionDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select * from session_label(@sess_id)";
-                SqlParameter resId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                resId.Direction = ParameterDirection.Input;
+                SqlParameter resId = cmd.Parameters.Add("@user_login", SqlDbType.VarChar ,30);
+                SqlParameter userLogin = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 resId.Value = id;
+                userLogin.Value = userName;
 
                 SqlDataReader dr = cmd.ExecuteReader();
 
@@ -239,10 +243,10 @@ namespace MotionDBWebServices
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionLabel")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-            return res +"(retrieved by: "+OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name+")";
+            return res; // +"(retrieved by: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name + ")";
         }
-
-        public XmlElement GetTrialByIdXML(int id)
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement GetTrialByIdXML(int id)  // UWAGA - docelowo nalezaloby zabronic pobrania danych Trial-a z niedostepnej danemu uzytkownikowi sesji!
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
@@ -278,7 +282,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        public XmlElement GetSegmentByIdXML(int id)
+        public XmlElement GetSegmentByIdXML(int id)// UWAGA - docelowo nalezaloby zabronic pobrania danych z segmentu pochodzacego z Trial-a z niedostepnej danemu uzytkownikowi sesji!
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
@@ -318,7 +322,7 @@ namespace MotionDBWebServices
 
 
         // PERFORMER QUERIES
-        public XmlElement ListPerformersXML()
+        public XmlElement ListPerformersXML()  // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
 
@@ -351,7 +355,7 @@ namespace MotionDBWebServices
 
         }
 
-        public XmlElement ListPerformersWithAttributesXML()
+        public XmlElement ListPerformersWithAttributesXML() // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
 
@@ -383,7 +387,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        public XmlElement ListLabPerformersWithAttributesXML(int labID)
+        public XmlElement ListLabPerformersWithAttributesXML(int labID) // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
 
@@ -423,6 +427,8 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
 
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
                 OpenConnection();
@@ -431,6 +437,10 @@ namespace MotionDBWebServices
                 SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
                 perfId.Direction = ParameterDirection.Input;
                 perfId.Value = performerID;
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                SqlParameter userLogin = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
@@ -453,10 +463,12 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+       // [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListPerformerSessionsWithAttributesXML(int performerID)
         {
             XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
             {
@@ -466,6 +478,9 @@ namespace MotionDBWebServices
                 SqlParameter perfId = cmd.Parameters.Add("@perf_id", SqlDbType.Int);
                 perfId.Direction = ParameterDirection.Input;
                 perfId.Value = performerID;
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
@@ -492,7 +507,8 @@ namespace MotionDBWebServices
         public XmlElement ListLabSessionsWithAttributesXML(int labID)
         {
             XmlDocument xd = new XmlDocument();
-
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
                 OpenConnection();
@@ -501,6 +517,9 @@ namespace MotionDBWebServices
                 SqlParameter perfId = cmd.Parameters.Add("@lab_id", SqlDbType.Int);
                 perfId.Direction = ParameterDirection.Input;
                 perfId.Value = labID;
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {

@@ -19,6 +19,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public bool CheckUserAccount()
         {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int result = 0;
 
             try
@@ -32,7 +34,7 @@ namespace MotionDBWebServices
                 resultParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(resultParameter);
 
-                cmd.Parameters["@user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@user_login"].Value = userName;
 
                 cmd.ExecuteNonQuery();
                 result = (int)resultParameter.Value;
@@ -53,6 +55,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void CreateUserAccount(string firstName, string lastName)
         {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
 
@@ -63,7 +67,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@user_first_name", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@user_last_name", SqlDbType.VarChar, 50);
 
-                cmd.Parameters["@user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@user_login"].Value = userName;
                 cmd.Parameters["@user_first_name"].Value = firstName;
                 cmd.Parameters["@user_last_name"].Value = lastName;
 
@@ -84,9 +88,11 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void GrantSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID, bool write)
         {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
             try
             {
-
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "set_session_privileges";
@@ -95,7 +101,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters.Add("@write", SqlDbType.Bit);
 
-                cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@granting_user_login"].Value = userName;
                 cmd.Parameters["@granted_user_login"].Value = grantedUserLogin;
                 cmd.Parameters["@sess_id"].Value = sessionID;
                 cmd.Parameters["@write"].Value = write ? 1 : 0;
@@ -118,6 +124,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID)
         {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
 
@@ -127,7 +135,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@granting_user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@granted_user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@granting_user_login"].Value = userName;
                 cmd.Parameters["@granted_user_login"].Value = grantedUserLogin;
                 cmd.Parameters["@sess_id"].Value = sessionID;
 
@@ -148,6 +156,8 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable)
         {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
 
@@ -158,7 +168,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters.Add("@public", SqlDbType.Bit);
                 cmd.Parameters.Add("@writeable", SqlDbType.Bit);
-                cmd.Parameters["@granting_user_login"].Value = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+                cmd.Parameters["@granting_user_login"].Value = userName;
                 cmd.Parameters["@sess_id"].Value = sessionID;
                 cmd.Parameters["@public"].Value = isPublic?1:0;
                 cmd.Parameters["@writeable"].Value = isWritable?1:0;

@@ -103,9 +103,13 @@ namespace MotionDBWebServices
 //    END CATCH;";
 
 
-                cmd.CommandText = @"insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji, Publiczna)
+                cmd.CommandText = @"BEGIN TRY insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
                                             values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
-                                            set @sess_id = SCOPE_IDENTITY()";
+                                            set @sess_id = SCOPE_IDENTITY()     END TRY
+BEGIN CATCH
+    insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat )
+    values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() )
+END CATCH;";
                 cmd.Parameters.Add("@sess_user", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
                 cmd.Parameters.Add("@motion_kind_name", SqlDbType.VarChar, 50);
