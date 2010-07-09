@@ -525,10 +525,12 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ListPerformerSessionsWithAttributesXMLResult result = port.listPerformerSessionsWithAttributesXML(performerID);
 			DbElementsList<Session> output = new DbElementsList<Session>();
 			
-			PerformerSessionWithAttributesList ss = result.getPerformerSessionWithAttributesList();
-			for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
+			if (result != null)
+			{
+				PerformerSessionWithAttributesList ss = result.getPerformerSessionWithAttributesList();
+				for ( SessionDetailsWithAttributes s : ss.getSessionDetailsWithAttributes() )
 					output.add( ToolsWCF.transformSessionDetails(s) );
-	
+			}
 			return output;
 		}
 		catch(IBasicQueriesWSListPerformerSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e)
@@ -550,9 +552,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
 			DbElementsList<Session> output = new DbElementsList<Session>();
-			
-			for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
-				output.add( ToolsWCF.transformSessionDetails(s) );
+			if (result != null && result.getLabSessionWithAttributesList() != null )
+				for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
+					output.add( ToolsWCF.transformSessionDetails(s) );
 			
 			return output;
 		} 
