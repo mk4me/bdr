@@ -172,11 +172,11 @@ go
 -- Session queries
 -- =======================
 
-create function session_label( @sess_id int )
+create function session_label( @user_login varchar(30), @sess_id int )
 returns TABLE as
 return
 select p.Nazwisko+','+p.Imie+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
-from Sesja s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
+from user_accessible_sessions_by_login(@user_login) s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
 go	
 
 
@@ -264,18 +264,18 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id));
 go
 
-create procedure list_performer_sessions_xml (@perf_id int)
+create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
-      Opis_sesji as SessionDescription, (select * from session_label(IdSesja)) as SessionLabel
-      from Sesja SessionDetails where IdPerformer=@perf_id
+      Opis_sesji as SessionDescription, (select * from session_label(@user_login,IdSesja)) as SessionLabel
+      from user_accessible_sessions_by_login(@user_login) SessionDetails where IdPerformer=@perf_id
       for XML AUTO, root ('PerformerSessionList')
 go
 
 
-create procedure list_performer_sessions_attributes_xml @perf_id int
+create procedure list_performer_sessions_attributes_xml (@user_login varchar(30), @perf_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
@@ -286,13 +286,13 @@ as
 		IdPerformer as PerformerID,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
-		(select * from session_label(IdSesja)) as SessionLabel,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdPerformer=@perf_id
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
 go
 
-create procedure list_lab_sessions_attributes_xml @lab_id int
+create procedure list_lab_sessions_attributes_xml (@user_login varchar(30), @lab_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
@@ -303,11 +303,10 @@ as
 		IdPerformer as PerformerID,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
-		(select * from session_label(IdSesja)) as SessionLabel,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Sesja SessionDetailsWithAttributes where IdLaboratorium=@lab_id
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
-
 go
 
 -- Trial queries

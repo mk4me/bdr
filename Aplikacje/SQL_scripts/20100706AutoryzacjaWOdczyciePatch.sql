@@ -1,6 +1,6 @@
 use Motion;
 go
-
+/*
 create function is_superuser( @user_id int )
 returns bit
 as
@@ -505,3 +505,20 @@ as
 			for XML AUTO, ELEMENTS
 go
 
+*/
+
+alter function session_label( @user_login varchar(30), @sess_id int )
+returns TABLE as
+return
+select p.Nazwisko+','+p.Imie+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
+from user_accessible_sessions_by_login(@user_login) s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
+go	
+alter procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
+      IdRodzaj_ruchu as MotionKindID, IdPerformer as PerformerID, Data as SessionDate, 
+      Opis_sesji as SessionDescription, (select * from session_label(@user_login, IdSesja)) as SessionLabel
+      from user_accessible_sessions_by_login(@user_login) SessionDetails where IdPerformer=@perf_id
+      for XML AUTO, root ('PerformerSessionList')
+go
