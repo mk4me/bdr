@@ -2,7 +2,7 @@ package motion.database.model;
 
 import java.util.HashMap;
 
-//TODO: co z metod¹ equals() ?
+//TODO: co z metodï¿½ equals() ?
 @SuppressWarnings("serial")
 public abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, EntityAttribute>
 {
@@ -44,7 +44,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	
 	public Object put(T key, Object arg) {
 		
-		return this.put( key.name(), new EntityAttribute( key.name(), arg, "static", arg.getClass().getName() ) );
+		if (arg != null && key != null)
+			return this.put( key.name(), new EntityAttribute( key.name(), arg, "static", arg.getClass().getName() ) );
+		else
+			return null;
 	}
 
 	public int getId()
