@@ -147,14 +147,14 @@ public class FilterTree {
 				emptyBranch = false;
 				motion.database.ws.basicQueriesServiceWCF.FilterPredicate childBranch = composeChildPredicates3(child, filterPredicates);
 				filterPredicates.addAll(((FilterNode) child.getUserObject()).getFilter().getFilterPredicatesWCF());
-				if (node != root) {
-					((FilterNode) node.getUserObject()).getFilter().linkChildGroupFilterPredicates(
-							branch,
-							childBranch,
-							filterPredicates);
-				}
-				
-				if (previousBranch != null) {
+				if (previousBranch == null) {
+					if (node != root) {
+						((FilterNode) node.getUserObject()).getFilter().linkChildGroupFilterPredicates(
+								branch,
+								childBranch,
+								filterPredicates);
+					}
+				} else {
 					Filter.linkSiblingBranches(previousBranch, childBranch);
 				}
 				previousBranch = childBranch;
