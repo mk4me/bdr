@@ -9,7 +9,9 @@ public class Session extends GenericDescription<SessionStaticAttributes>{
 	}
 	
 	public String toString() {
-		
-		return super.get(SessionStaticAttributes.sessionLabel.toString()).value.toString();
+		if (super.get(SessionStaticAttributes.sessionLabel.toString()).value != null)
+			return super.get(SessionStaticAttributes.sessionLabel.toString()).value.toString();
+		else
+			return "Session " + super.getId() + "has no string representation.";
 	}
 }
