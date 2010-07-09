@@ -97,10 +97,10 @@ public class LoginDialog extends BasicDialog {
 		this.addToButtonPanel(cancelButton);
 		
 		// Initial text
-		loginText.setText( "applet_user" );
-		passwordText.setText( "aplet4Motion" );
-		domainText.setText("db-bdr");
-		//domainText.setText("pjwstk");
+		//loginText.setText( "applet_user" );
+		//passwordText.setText( "aplet4Motion" );
+		//domainText.setText("db-bdr");
+		domainText.setText("pjwstk");
 		
 	}
 	
@@ -119,7 +119,7 @@ public class LoginDialog extends BasicDialog {
 					protected Void doInBackground() throws InterruptedException {
 						LoginDialog.this.loginButton.setEnabled(false);
 						WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
-						WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+						WebServiceInstance.getDatabaseConnection().setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 						
 						return null;
 					}
