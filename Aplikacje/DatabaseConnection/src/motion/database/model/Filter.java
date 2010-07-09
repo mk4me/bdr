@@ -243,5 +243,6 @@ public class Filter {
 			motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch) {
 		previousBranch.setNextOperator("OR");
 		branch.setPreviousPredicate(previousBranch.getPredicateID());
+		branch.setParentPredicate(previousBranch.getParentPredicate());
 	}
 }
