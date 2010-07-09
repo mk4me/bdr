@@ -101,7 +101,6 @@ public class LeftSplitPanel extends JPanel {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							//DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) filterTree.tree.getSelectionPath().getLastPathComponent());
 							DefaultMutableTreeNode root = (DefaultMutableTreeNode) filterTree.tree.getModel().getRoot();
 							ArrayList<FilterPredicate> filterPredicates = new ArrayList<FilterPredicate>();
 							filterTree.decomposeChildPredicates3(root);
@@ -127,33 +126,6 @@ public class LeftSplitPanel extends JPanel {
 							JTable resultTable = new JTable();
 							resultTable.setModel(new BasicTable(result));
 							MotionAppletFrame.addResult(resultTable);
-							
-							
-							//DefaultMutableTreeNode startNode = filterTree.composeChildPredicates(root);
-							//DefaultMutableTreeNode startNode = filterTree.composeChildPredicates2(root);
-							//if (startNode != null) {
-								/*
-								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
-										((FilterNode) startNode.getUserObject()).getFilter().getFilterPredicatesWCF(),
-										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
-									*/	
-								//System.out.println(result);
-								//JOptionPane.showMessageDialog(LeftSplitPanel.this, result, "Result", JOptionPane.PLAIN_MESSAGE);
-								//ExceptionDialog resultDialog = new ExceptionDialog(result.toString(), "Filtering returned the following result.");
-								//resultDialog.setVisible(true);
-								//for (GenericResult g : result) {
-								//	System.out.println(g);
-								//z}
-								/*
-								JTable resultTable = new JTable();
-								resultTable.setModel(new BasicTable(result));
-								MotionAppletFrame.addResult(resultTable);
-								*/
-								
-								//System.out.println(((FilterNode) startNode.getUserObject()).getFilter().getPredicateGroup().printPredicate());
-								
-							//}
-							//filterTree.decomposeChildPredicates(root);
 							
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);

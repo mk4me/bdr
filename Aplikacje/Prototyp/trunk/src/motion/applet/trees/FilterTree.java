@@ -10,7 +10,6 @@ import javax.swing.tree.TreePath;
 
 import motion.applet.database.TableName;
 import motion.database.model.Filter;
-import motion.database.model.Predicate;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public class FilterTree {
@@ -171,99 +170,6 @@ public class FilterTree {
 			}
 			
 			return branch;
-		}
-	}
-	/*
-	public DefaultMutableTreeNode composeChildPredicates2(DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode returnNode = null;	// First checked node.
-		motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] parentGroup = null;
-		if (node != root) {
-			parentGroup = ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF();
-		}
-		motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] previousGroup = null;
-		for (int i = 0; i < node.getChildCount(); i++) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
-			if (((FilterNode) child.getUserObject()).isSelected()) {
-				if (previousGroup != null){
-					// Sibling predicate GROUP, link with OR.
-					previousGroup = ((FilterNode) child.getUserObject()).getFilter().linkSiblingGroupFilterPredicates(previousGroup);
-				}
-				
-				DefaultMutableTreeNode checkedChild = null;
-				if (child.getChildCount() > 0) {
-					checkedChild = composeChildPredicates2(child);
-				}
-				
-				if (checkedChild != null) {
-					// Child predicate GROUP, link with AND.
-					previousPredicateGroup = ((FilterNode) checkedChild.getUserObject()).getFilter().createPredicateGroup(
-							PredicateComposition.andOperator, null, ((FilterNode) child.getUserObject()).getFilter().getPredicateGroup());
-				} else {
-					previousPredicateGroup = ((FilterNode) child.getUserObject()).getFilter().createPredicateGroup(
-							PredicateComposition.emptyOperator, null, parentPredicateGroup);
-				}
-				
-				if (returnNode == null) {
-					returnNode = child;
-				}
-				
-			}
-		}
-		
-		return returnNode;
-	}
-	*/
-	@Deprecated
-	public DefaultMutableTreeNode composeChildPredicates(DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode previousNode = null;
-		if (node != root) {
-			previousNode = node;
-		}
-		
-		DefaultMutableTreeNode returnNode = null;	// First checked node.
-		boolean first = true;
-		for (int i = 0; i < node.getChildCount(); i++) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
-			if (((FilterNode) child.getUserObject()).isSelected()) {
-				if (previousNode != null){
-					Predicate previousPredicate = ((FilterNode) previousNode.getUserObject()).getFilter().getPredicate();
-					if (first == true) {
-						previousPredicate = ((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("AND", previousPredicate);
-					} else {
-						previousPredicate = ((FilterNode) child.getUserObject()).getFilter().getPredicate().setPreviousPredicateGroup("OR", previousPredicate);
-					}
-					
-				}
-				
-				if (child.getChildCount() > 0) {
-					DefaultMutableTreeNode checkedChild = composeChildPredicates(child);
-					if (checkedChild != null) {
-						previousNode = checkedChild;
-					} else {
-						previousNode = child;
-					}
-				} else {
-					previousNode = child;
-				}
-				
-				if (returnNode == null) {
-					returnNode = child;
-				}
-				
-				first = false;
-			}
-		}
-		
-		return returnNode;
-	}
-	@Deprecated
-	public void decomposeChildPredicates(DefaultMutableTreeNode node) {
-		for (int i = 0; i < node.getChildCount(); i++) {
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
-			((FilterNode) child.getUserObject()).getFilter().getPredicate().decomposeGroup();
-			if (child.getChildCount() > 0) {
-				decomposeChildPredicates(child);
-			}
 		}
 	}
 	
