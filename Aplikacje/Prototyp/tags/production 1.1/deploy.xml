@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<project name="FatJar MotionClient.jar (experimental)" default="main" basedir=".">
+    <!-- this file was created by Fat-Jar Eclipse Plug-in -->
+    <!-- the ANT-Export is in a very early stage, so this -->
+    <!-- is only experimental, ANT 1.6 or above is        -->
+    <!-- required, feedback is always welcome:            -->
+    <!--       http://sourceforge.net/projects/fjep       -->
+    <!-- uncomment the following lines if using ANT outside Eclipse -->
+    <!--
+        <property name="fjepPath" value="reference:file:plugins/net.sf.fjep.fatjar_0.0.31/fatjar.jar"/>
+        <taskdef name="fatjar.build" classname="net.sf.fjep.anttask.FJBuildTask" classpath="${fjepPath}"/>
+        <typedef name="fatjar.manifest" classname="net.sf.fjep.anttask.FJManifestType" classpath="${fjepPath}"/>
+        <typedef name="fatjar.exclude" classname="net.sf.fjep.anttask.FJExcludeType" classpath="${fjepPath}"/>
+        <typedef name="fatjar.jarsource" classname="net.sf.fjep.anttask.FJJarSourceType" classpath="${fjepPath}"/>
+        <typedef name="fatjar.filesource" classname="net.sf.fjep.anttask.FJFileSourceType" classpath="${fjepPath}"/>
+    -->
+    <!-- uncomment the above lines to use ANT outside of Eclipse -->
+    <target name="main">
+        <fatjar.build output="deploy/uMotionClient.jar">
+            <fatjar.manifest mainclass="motion.applet.MotionAppletFrame"/>
+            <fatjar.filesource path="/home/kk/workspaces/workspace/Motion_1/bin" relpath="">
+                <fatjar.exclude relpath=".svn/"/>
+                <fatjar.exclude relpath="DatabaseConnection.log"/>
+                <fatjar.exclude relpath="sqljdbc4.jar"/>
+                <fatjar.exclude relpath="motion.applet.MotionApplet1274167450838.html"/>
+                <fatjar.exclude relpath="DatabaseConnection.log.1"/>
+                <fatjar.exclude relpath="java.policy.applet"/>
+            </fatjar.filesource>
+            <fatjar.filesource path="/home/kk/workspaces/workspace/DatabaseConnection/bin" relpath="">
+                <fatjar.exclude relpath=".svn/"/>
+                <fatjar.exclude relpath="test/"/>
+            </fatjar.filesource>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/Motion_1/lib/sqljdbc4.jar" relpath=""/>
+            <fatjar.jarsource file="/usr/local/lib/eclipse-3.5ee/plugins/org.junit4_4.5.0.v20090824/junit.jar" relpath=""/>
+            <fatjar.jarsource file="/usr/local/lib/eclipse-3.5ee/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/bcprov-jdk15-1.43.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/commons-codec-1.3.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/commons-httpclient-3.1.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/commons-logging-1.0.4.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/commons-net-2.0.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/commons-vfs-2.0.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/jsch-0.1.41.jar" relpath=""/>
+            <fatjar.jarsource file="/home/kk/workspaces/workspace/DatabaseConnection/lib/zehon_file_transfer-1.1.6.jar" relpath=""/>
+            <fatjar.filesource path="/home/kk/workspaces/workspace/Motion_1/images" relpath="images">
+                <fatjar.exclude relpath=".svn/"/>
+            </fatjar.filesource>
+        </fatjar.build>
+    	<copy todir="deploy">
+    		<fileset dir="html"></fileset>
+    	</copy>
+    	<jar destfile="deploy/uMotionClient.jar" update="true">
+    		<fileset file="../DatabaseConnection/krb5.conf"></fileset>
+    		<fileset file="../DatabaseConnection/login.conf"></fileset>
+    		<fileset file="html/*.jnlp"></fileset>
+    	</jar>
+    	<exec executable="jarsigner" >
+	    	<arg value="-keystore"></arg>
+	    	<arg value="keystore"></arg>
+	    	<arg value="-keypass"></arg>
+	    	<arg value="aplet4Motion"></arg>
+	    	<arg value="-storepass"></arg>
+	    	<arg value="aplet4Motion"></arg>
+	    	<arg value="-signedJar"></arg>
+	    	<arg value="deploy/MotionClient.jar"></arg>
+	    	<arg value="deploy/uMotionClient.jar"></arg>
+	    	<arg value="MotionClientKey"></arg>
+    	</exec>
+    	<delete><fileset file="deploy/uMotionClient.jar"/></delete>
+    </target>
+</project>

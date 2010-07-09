@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Fri May 21 11:19:39 CEST 2010
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=MotionClient.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|Motion_1>~DatabaseConnection.log;<po|Motion_1>~sqljdbc4.jar;<po|Motion_1>~motion.applet.MotionApplet1274167450838.html;<po|Motion_1>~DatabaseConnection.log.1;<po|Motion_1>~java.policy.applet;<cl|/home/kk/workspaces/workspace/Motion_1/ws>;<po|DatabaseConnection>~test/
+includes=
