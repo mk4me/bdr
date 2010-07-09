@@ -44,30 +44,6 @@ public class SimplePredicate extends Predicate {
 		this.previous = previousPredicateComposition;
 	}
 	
-	// Change to new algorithm.
-	protected void setNextPredicateGroup(String logicalOperator, Predicate nextPredicate) {
-		PredicateComposition nextPredicateComposition = new PredicateComposition(logicalOperator, nextPredicate, true);
-		this.setNextPredicateComposition(nextPredicateComposition);
-	}
-	
-	public Predicate setPreviousPredicateGroup(String logicalOperator, Predicate previousPredicate) {
-		previousPredicate = previousPredicate.getLastPredicate();
-		PredicateComposition previousPredicateComposition = new PredicateComposition(logicalOperator, previousPredicate, true);
-		this.setPreviousPredicateComposition(previousPredicateComposition);
-		previousPredicate.setNextPredicate(logicalOperator, this);
-		
-		return previousPredicate;
-	}
-	
-	public void decomposeGroup() {
-		if (this.getPreviousComposition() != null) {
-			if (this.getPreviousComposition().isFilterGroup()) {
-				this.previous.predicate.next = null;
-				this.previous = null;
-			}
-		}
-	}
-	
 	public PredicateComposition getPreviousComposition() {
 		
 		return this.previous;

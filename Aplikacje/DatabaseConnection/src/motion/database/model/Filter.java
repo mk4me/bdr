@@ -9,8 +9,6 @@ public class Filter {
 	private boolean selected;
 	private SimplePredicate predicate;
 	private static int id = 1;
-	@Deprecated
-	private SimplePredicate predicateGroup;
 	private ArrayList<FilterPredicate> filterPredicates = new ArrayList<FilterPredicate>();
 	
 	public Filter(String name) {
@@ -27,26 +25,9 @@ public class Filter {
 		return this.name;
 	}
 	@Deprecated
-	public SimplePredicate getPredicate() {
+	public SimplePredicate getPredicate() {	// Why deprecated?
 		
 		return this.predicate;
-	}
-	@Deprecated
-	public SimplePredicate getPredicateGroup() {
-		
-		return this.predicateGroup;
-	}
-	@Deprecated
-	public SimplePredicate createPredicateGroup(String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
-		SimplePredicate predicateGroup = new SimplePredicate(
-				"GROUP", new AttributeName(this.name, AttributeName.UNKNOWN_TYPE),
-				PredicateComposition.emptyOperator, "",
-				logicalOperator, previousPredicate,
-				parentPredicate);
-		
-		this.predicateGroup = predicateGroup;
-		
-		return predicateGroup;
 	}
 	
 	@Deprecated
@@ -66,52 +47,7 @@ public class Filter {
 		
 		return id++;
 	}
-	/*
-	public FilterPredicate[] toFilterPredicate() {
-		ArrayList<FilterPredicate> resultFilterPredicates = new ArrayList<FilterPredicate>();
-		resultFilterPredicates.add(fillFilterPredicate(this.predicate, null, null));
-		
-		SimplePredicate currentPredicate = this.predicate;
-		if (currentPredicate.getNextComposition() != null) {
-			do {
-				currentPredicate = (SimplePredicate) currentPredicate.getNextComposition().getPredicate();
-				resultFilterPredicates.add(fillFilterPredicate(currentPredicate, null, resultFilterPredicates.get(resultFilterPredicates.size()-1)));
-			} while (currentPredicate.getNextComposition() != null);
-		}
-		
-		return resultFilterPredicates.toArray(new FilterPredicate[1]);
-	}
 	
-	private FilterPredicate fillFilterPredicate(SimplePredicate currentPredicate, FilterPredicate parentFilterPredicate, FilterPredicate previousFilterPredicate) {
-		FilterPredicate filter = new FilterPredicate();
-		filter.setPredicateID(Filter.newId());
-		if (parentFilterPredicate == null) {
-			filter.setParentPredicate(0);
-		} else {
-			filter.setParentPredicate(parentFilterPredicate.getPredicateID());
-		}
-		filter.setContextEntity(currentPredicate.getContextEntity().toLowerCase());
-		if (previousFilterPredicate == null) {
-			filter.setPreviousPredicate(0);
-		} else {
-			filter.setPreviousPredicate(previousFilterPredicate.getPredicateID());
-		}
-		if (currentPredicate.getPreviousComposition() == null) {
-			filter.setNextOperator("");
-		} else {
-			//filter.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
-			previousFilterPredicate.setNextOperator(currentPredicate.getPreviousComposition().getLogicalOperator());
-			filter.setNextOperator("");
-		}
-		filter.setFeatureName(currentPredicate.getFeature().toString());
-		filter.setOperator(currentPredicate.getOperator());
-		filter.setValue(currentPredicate.getValue());
-		filter.setAggregateEntity("");
-		filter.setAggregateFunction("");
-		
-		return filter;
-	}
-*/
 	public ArrayList<FilterPredicate> getFilterPredicatesWCF() {
 		if (this.filterPredicates.isEmpty()) {
 			toFilterPredicateWCF();
@@ -185,20 +121,7 @@ public class Filter {
 		
 		return groupFilter;
 	}
-	/*
-	public motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] linkSiblingGroupFilterPredicates(motion.database.ws.basicQueriesServiceWCF.FilterPredicate[] previousGroup) {
-		if (this.filterPredicates == null) {
-			getFilterPredicatesWCF();
-		}
-		// First element is the GROUP predicate
-		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupA = previousGroup[0];
-		motion.database.ws.basicQueriesServiceWCF.FilterPredicate groupB = this.filterPredicates[0];
-		groupA.setNextOperator("OR");
-		groupB.setPreviousPredicate(groupA.getPredicateID());
-		
-		return this.filterPredicates;
-	}
-	*/
+	
 	public void linkChildGroupFilterPredicates(
 			motion.database.ws.basicQueriesServiceWCF.FilterPredicate branch,
 			motion.database.ws.basicQueriesServiceWCF.FilterPredicate childBranch,
