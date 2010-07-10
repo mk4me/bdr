@@ -23,12 +23,14 @@ import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableModel;
 
 import motion.applet.database.Connector;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
@@ -132,11 +134,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				createSessionMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						//SessionDialog sessionDialog = new SessionDialog(recordId);
-						//sessionDialog.setVisible(true);
-						SessionFormDialog sessionFormDialog = new SessionFormDialog(recordId);
-						sessionFormDialog.pack();
-						sessionFormDialog.setVisible(true);
+						RightSplitPanel.this.showSessionDialog(recordId);
 					}
 				});
 				// View Performer sessions context menu
@@ -158,8 +156,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				uploadMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.PERFORMER, recordId);
-						uploadDialog.setVisible(true);
+						RightSplitPanel.this.showUploadDialog(TableNamesInstance.PERFORMER, recordId);
 					}
 				});
 				
@@ -194,8 +191,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				createTrialMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
-						trialFormDialog.setVisible(true);
+						RightSplitPanel.this.showTrialDialog(recordId);
 					}
 				});
 				// View Session trials context menu
@@ -217,8 +213,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				uploadMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.SESSION, recordId);
-						uploadDialog.setVisible(true);
+						RightSplitPanel.this.showUploadDialog(TableNamesInstance.SESSION, recordId);
 					}
 				});
 				
@@ -252,8 +247,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				uploadMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.TRIAL, recordId);
-						uploadDialog.setVisible(true);
+						RightSplitPanel.this.showUploadDialog(TableNamesInstance.TRIAL, recordId);
 					}
 				});
 				
@@ -348,16 +342,73 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			JComboBox comboBox = (JComboBox) actionEvent.getSource();
 			showTable(((TableName) comboBox.getSelectedItem()));
 		} else if (actionEvent.getSource() instanceof JButton) {	// The source is the Apply selection button.
-			// TODO: Simplify code.
-			if (tables[2].getModel() instanceof BasicTable) {
-				showTable(TableNamesInstance.TRIAL, ((BasicTable) tables[2].getModel()).recordId, ((BasicTable) tables[2].getModel()).fromTableName);
-			}
-			if (tables[1].getModel() instanceof BasicTable) {
-				showTable(TableNamesInstance.SESSION, ((BasicTable) tables[1].getModel()).recordId, ((BasicTable) tables[1].getModel()).fromTableName);
-			}
-			if (tables[0].getModel() instanceof BasicTable) {
-				showTable(TableNamesInstance.PERFORMER, ((BasicTable) tables[0].getModel()).recordId, ((BasicTable) tables[0].getModel()).fromTableName);
-			}
+			 refreshAllTables();
 		}
+	}
+	
+	private void refreshPerformerTable() {
+		TableModel tableModel = tables[0].getModel();
+		if (tableModel instanceof BasicTable) {
+			showTable(TableNamesInstance.PERFORMER, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		}
+	}
+	
+	private void refreshSessionTable() {
+		TableModel tableModel = tables[1].getModel();
+		if (tableModel instanceof BasicTable) {
+			showTable(TableNamesInstance.SESSION, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		}
+	}
+	
+	private void refreshTrialTable() {
+		TableModel tableModel = tables[2].getModel();
+		if (tableModel instanceof BasicTable) {
+			showTable(TableNamesInstance.TRIAL, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		}
+	}
+	
+	private void refreshFileTable() {
+		TableModel tableModel = tables[3].getModel();
+		if (tableModel instanceof BasicTable) {
+			showTable(TableNamesInstance.FILE, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		}
+	}
+	
+	private void refreshAllTables() {
+		refreshPerformerTable();
+		refreshSessionTable();
+		refreshTrialTable();
+		refreshFileTable();
+	}
+	
+	public void showPerformerDialog() {
+		PerformerFormDialog performerFormDialog = new PerformerFormDialog();
+		performerFormDialog.setVisible(true);
+		RightSplitPanel.this.refreshPerformerTable();
+	}
+	
+	public void showSessionDialog(int recordId) {
+		SessionFormDialog sessionFormDialog = new SessionFormDialog(recordId);
+		sessionFormDialog.pack();	// TODO: is this needed?
+		sessionFormDialog.setVisible(true);
+		RightSplitPanel.this.refreshSessionTable();
+	}
+	
+	public void showTrialDialog(int recordId) {
+		TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
+		trialFormDialog.setVisible(true);
+		RightSplitPanel.this.refreshTrialTable();
+	}
+	
+	public void showUploadDialog(TableName tableName, int recordId) {
+		UploadDialog uploadDialog = new UploadDialog(tableName, recordId);
+		uploadDialog.setVisible(true);
+		RightSplitPanel.this.refreshFileTable();
+	}
+	
+	public void showUploadDialog(TableName tableName) {
+		UploadDialog uploadDialog = new UploadDialog(tableName);
+		uploadDialog.setVisible(true);
+		RightSplitPanel.this.refreshFileTable();
 	}
 }

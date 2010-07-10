@@ -29,8 +29,6 @@ import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
-import motion.applet.dialogs.PerformerFormDialog;
-import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
@@ -57,58 +55,6 @@ public class MotionAppletFrame extends JFrame {
 		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
 		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
 		
-		// Create the menu bar
-		JMenuBar appletMenuBar = new JMenuBar();
-		JMenu uploadMenu = new JMenu(Messages.getString("Upload")); //$NON-NLS-1$
-		appletMenuBar.add(uploadMenu);
-		JMenuItem uploadPerformerItem = new JMenuItem(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
-		uploadMenu.add(uploadPerformerItem);
-		uploadPerformerItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Create the upload dialog
-				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.PERFORMER);
-				uploadDialog.setVisible(true);
-			}
-		});
-		JMenuItem uploadSessionItem = new JMenuItem(TableNamesInstance.SESSION.getLabel()); //$NON-NLS-1$
-		uploadMenu.add(uploadSessionItem);
-		uploadSessionItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Create the upload dialog
-				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.SESSION);
-				uploadDialog.setVisible(true);
-			}
-		});
-		JMenuItem uploadTrialItem = new JMenuItem(TableNamesInstance.TRIAL.getLabel()); //$NON-NLS-1$
-		uploadMenu.add(uploadTrialItem);
-		uploadTrialItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Create the upload dialog
-				UploadDialog uploadDialog = new UploadDialog(TableNamesInstance.TRIAL);
-				uploadDialog.setVisible(true);
-			}
-		});
-		
-		JMenu performerMenu = new JMenu(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
-		appletMenuBar.add(performerMenu);
-		JMenuItem createPerformerItem = new JMenuItem(Messages.getString("MotionApplet.New_performer")); //$NON-NLS-1$
-		performerMenu.add(createPerformerItem);
-		createPerformerItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Create the new performer dialog
-				//PerformerDialog performerDialog = new PerformerDialog();
-				//performerDialog.setVisible(true);
-				
-				PerformerFormDialog performerFormDialog = new PerformerFormDialog();
-				performerFormDialog.setVisible(true);
-				
-			}
-		});
-		
-		//JMenu menuMenu = new JMenu("Menu");
-		//appletMenuBar.add(menuMenu);
-		this.setJMenuBar(appletMenuBar);
-		
 		//Create the tool bar
 		AppletToolBar appletToolBar = new AppletToolBar();
 		this.getContentPane().add(appletToolBar, BorderLayout.PAGE_START);
@@ -127,22 +73,60 @@ public class MotionAppletFrame extends JFrame {
 
 		// Query results
 		queryResultsPane = new JTabbedPane();
-		//queryResultsPane.addTab("query results 1", new JPanel() );
-		//queryResultsPane.addTab("query results 2", new JPanel() );
-		//queryResultsPane.addTab("query results 3", new JPanel() );
 		
 		// Right panel with a tree
-		RightSplitPanel rightPanel = new RightSplitPanel();
+		final RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
 		//this.getContentPane().add(leftRightSplitPane);
 		appletToolBar.addTableComboBoxListener(rightPanel);
 
 
-		// main tabs
+		// Main tabs
 		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab("   Browse   ", rightPanel);
 		mainTabs.addTab("   Query   ", leftRightSplitPane);
 		this.getContentPane().add( mainTabs );
+		
+		// Create the menu bar
+		JMenuBar appletMenuBar = new JMenuBar();
+		JMenu uploadMenu = new JMenu(Messages.getString("Upload")); //$NON-NLS-1$
+		appletMenuBar.add(uploadMenu);
+		JMenuItem uploadPerformerItem = new JMenuItem(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
+		uploadMenu.add(uploadPerformerItem);
+		uploadPerformerItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the upload dialog
+				rightPanel.showUploadDialog(TableNamesInstance.PERFORMER);
+			}
+		});
+		JMenuItem uploadSessionItem = new JMenuItem(TableNamesInstance.SESSION.getLabel()); //$NON-NLS-1$
+		uploadMenu.add(uploadSessionItem);
+		uploadSessionItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the upload dialog
+				rightPanel.showUploadDialog(TableNamesInstance.SESSION);
+			}
+		});
+		JMenuItem uploadTrialItem = new JMenuItem(TableNamesInstance.TRIAL.getLabel()); //$NON-NLS-1$
+		uploadMenu.add(uploadTrialItem);
+		uploadTrialItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Create the upload dialog
+				rightPanel.showUploadDialog(TableNamesInstance.TRIAL);
+			}
+		});
+		
+		JMenu performerMenu = new JMenu(TableNamesInstance.PERFORMER.getLabel()); //$NON-NLS-1$
+		appletMenuBar.add(performerMenu);
+		JMenuItem createPerformerItem = new JMenuItem(Messages.getString("MotionApplet.New_performer")); //$NON-NLS-1$
+		performerMenu.add(createPerformerItem);
+		createPerformerItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.showPerformerDialog();
+			}
+		});
+		
+		this.setJMenuBar(appletMenuBar);
 
 		// window closing
 		this.addWindowListener( new WindowAdapter() {
