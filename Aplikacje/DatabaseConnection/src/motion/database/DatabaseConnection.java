@@ -11,7 +11,7 @@ import motion.database.ws.DatabaseConnectionWCF;
 
 public class DatabaseConnection {
 
-	public static class Credentials {
+/*	public static class Credentials {
 		public String userName;
 		public String password;
 		public String domainName;
@@ -29,7 +29,7 @@ public class DatabaseConnection {
 			this.address = address;
 		}
 	}
-
+*/
 	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED };
 	
 	private static DatabaseProxy instance;

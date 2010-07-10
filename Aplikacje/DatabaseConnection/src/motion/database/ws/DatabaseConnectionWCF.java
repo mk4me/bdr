@@ -169,7 +169,12 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
     	System.setProperty( "http.auth.ntlm.domain", domainName);
    	}
 	
-
+	public String getConnectionInfo()
+	{
+		return this.wsCredentials.userName + "@" + this.ftpsCredentials.address;
+	}
+	
+	
 	public void setFTPSCredentials(String address, String userName, String password)
 	{
 		log.info("Setting FTP credentials for:" + userName + "@" + address);

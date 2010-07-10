@@ -26,6 +26,9 @@ public interface DatabaseProxy {
 	public abstract void setFTPSCredentials(String address, String userName,
 			String password);
 
+	public abstract String getConnectionInfo();
+	
+	
 	//public abstract boolean testConnection() throws Exception;
 
 	public abstract void registerFileUploadListener(

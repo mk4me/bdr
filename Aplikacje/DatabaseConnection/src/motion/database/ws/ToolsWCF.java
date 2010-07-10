@@ -1,5 +1,6 @@
 package motion.database.ws;
 
+import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
 import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
@@ -141,7 +142,7 @@ public class ToolsWCF {
 	
 	public static void finalizeCall()
 	{
-		setMessage("Ready (Initialized)");
+		setMessage("Connected as '" + DatabaseConnection.getInstance().getConnectionInfo() + "'. Ready.");
 	}
 	
 	

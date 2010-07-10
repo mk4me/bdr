@@ -7,9 +7,11 @@ import java.util.HashMap;
 
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
+import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
+import motion.database.model.Session;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,7 @@ public class ShortTest {
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
-		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
 	class ConsoleTransferListener implements FileTransferListener
@@ -77,13 +79,14 @@ public class ShortTest {
 		
 		//database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
-		HashMap<String, EntityAttributeGroup> results = database.listGrouppedAttributesDefined( "performer" );
-		for (String s : results.keySet() ) 
+		DbElementsList<Session> results = database.listLabSessionsWithAttributes(1);
+		for (Session s : results ) 
 		{
-			System.out.println("Attribute group: " + s );			
-			for ( EntityAttribute e : results.get(s) )
+			for ( String ss : s.keySet() )
+			{
+				EntityAttribute e = s.get(ss);
 				System.out.println( "Attribute: " + e.name + " Type:" + e.type );
+			}
 		}
-	//	System.out.println(r);
 	}
 }
