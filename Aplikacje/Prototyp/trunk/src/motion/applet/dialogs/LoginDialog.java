@@ -92,6 +92,7 @@ public class LoginDialog extends BasicDialog {
 		// Button area
 		loginButton = new JButton(LOGIN);
 		this.addToButtonPanel(loginButton);
+		this.getRootPane().setDefaultButton(loginButton);
 		
 		cancelButton = new JButton(CANCEL);
 		this.addToButtonPanel(cancelButton);
