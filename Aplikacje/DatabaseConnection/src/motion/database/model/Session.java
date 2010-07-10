@@ -12,6 +12,6 @@ public class Session extends GenericDescription<SessionStaticAttributes>{
 		if (super.get(SessionStaticAttributes.sessionLabel.toString()) != null)
 			return super.get(SessionStaticAttributes.sessionLabel.toString()).value.toString();
 		else
-			return "Session " + super.getId() + "(no label)";
+			return "Session " + super.getId() + " (no label)";
 	}
 }
