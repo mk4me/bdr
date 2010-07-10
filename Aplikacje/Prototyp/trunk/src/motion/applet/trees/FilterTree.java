@@ -160,10 +160,14 @@ public class FilterTree {
 			}
 		}
 		
-		if (emptyBranch) {
-			
-			//return null;
-			return ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF().get(0);
+		if (emptyBranch) {	// TODO: simplify if/else
+			if (node == root) {
+				
+				return null;
+			} else {
+				
+				return ((FilterNode) node.getUserObject()).getFilter().getFilterPredicatesWCF().get(0);
+			}
 		} else {
 			if (branch != null) {
 				filterPredicates.add(branch);

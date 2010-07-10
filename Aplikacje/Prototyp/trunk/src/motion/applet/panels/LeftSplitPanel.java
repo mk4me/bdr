@@ -119,13 +119,15 @@ public class LeftSplitPanel extends JPanel {
 										);
 							}
 							
-							List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
-									filterPredicates,
-									new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
-							
-							JTable resultTable = new JTable();
-							resultTable.setModel(new BasicTable(result));
-							MotionAppletFrame.addResult(resultTable);
+							if (filterPredicates.isEmpty() == false) {
+								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+										filterPredicates,
+										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
+								
+								JTable resultTable = new JTable();
+								resultTable.setModel(new BasicTable(result));
+								MotionAppletFrame.addResult(resultTable);
+							}
 							
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
