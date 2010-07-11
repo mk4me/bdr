@@ -288,7 +288,7 @@ as
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from Sesja SessionDetailsWithAttributes where IdPerformer=@perf_id
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdPerformer=@perf_id
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
 go
 
@@ -369,7 +369,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wao.IdObserwacja = @trial_id ));
 go
 
-create procedure list_session_trials_xml @sess_id int
+create procedure list_session_trials_xml(@user_login varchar(30),  @sess_id int )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
@@ -377,11 +377,11 @@ select
 	IdSesja as SessionID,
 	Opis_obserwacji as TrialDescription,
 	Czas_trwania as Duration
-from Obserwacja TrialDetails where IdSesja=@sess_id
+from Obserwacja TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
 
-create procedure list_session_trials_attributes_xml @sess_id int
+create procedure list_session_trials_attributes_xml(@user_login varchar(30),   @sess_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select 
@@ -390,7 +390,7 @@ select
 	Opis_obserwacji as TrialDescription, 
 	Czas_trwania as Duration,
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Obserwacja TrialDetailsWithAttributes where IdSesja=@sess_id
+from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
 go
 
@@ -515,17 +515,18 @@ as
 	for XML AUTO, root ('FileList')
 go
 
-create procedure list_session_files_xml @sess_id int
+create procedure list_session_files_xml(@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdSesja=@sess_id
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
 	for XML AUTO, root ('FileList')
 go
 
-create procedure list_trial_files_xml @trial_id int
+create procedure list_trial_files_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where IdObserwacja=@trial_id
+	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription from Plik FileDetails where 
+	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdObserwacja=@trial_id
 	for XML AUTO, root ('FileList')
 go
 
@@ -541,7 +542,7 @@ as
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
-create procedure list_session_files_attributes_xml @sess_id int
+create procedure list_session_files_attributes_xml(@user_login varchar(30),  @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
@@ -549,11 +550,11 @@ as
 	Nazwa_pliku as FileName,
 	Opis_pliku as FileDescription, 
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from Plik FileDetailsWithAttributes where IdSesja=@sess_id
+	from Plik FileDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
-create procedure list_trial_files_attributes_xml @trial_id int
+create procedure list_trial_files_attributes_xml(@user_login varchar(30),  @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
@@ -562,7 +563,7 @@ as
 		Opis_pliku as FileDescription,
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes
-		where IdObserwacja=@trial_id
+		where ((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdObserwacja=@trial_id
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
