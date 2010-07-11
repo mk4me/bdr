@@ -126,6 +126,25 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
+		JMenu viewMenu = new JMenu("View");
+		appletMenuBar.add(viewMenu);
+		
+		JMenuItem viewAllPerformersItem = new JMenuItem("All performers");
+		viewMenu.add(viewAllPerformersItem);
+		viewAllPerformersItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.showTable(TableNamesInstance.PERFORMER);
+			}
+		});
+		
+		JMenuItem viewAllSessionsItem = new JMenuItem("All sessions");
+		viewMenu.add(viewAllSessionsItem);
+		viewAllSessionsItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.showTable(TableNamesInstance.SESSION);
+			}
+		});
+		
 		this.setJMenuBar(appletMenuBar);
 
 		// window closing

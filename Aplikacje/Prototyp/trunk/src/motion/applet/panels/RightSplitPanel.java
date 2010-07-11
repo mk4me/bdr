@@ -301,7 +301,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void showTable(TableName tableName) {
+	public void showTable(TableName tableName) {
 
 		int i = tabNameHash .get( tableName );
 		tables[i].setModel( new BasicTable(tableName) );
