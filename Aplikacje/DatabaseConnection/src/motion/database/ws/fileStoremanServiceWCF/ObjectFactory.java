@@ -28,8 +28,6 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _FileAccessServiceExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "IssueKind");
-    private final static QName _FileAccessServiceExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "Details");
     private final static QName _AnyURI_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "anyURI");
     private final static QName _Char_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "char");
     private final static QName _UnsignedByte_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedByte");
@@ -52,6 +50,8 @@ public class ObjectFactory {
     private final static QName _String_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "string");
     private final static QName _UnsignedLong_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedLong");
     private final static QName _Boolean_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "boolean");
+    private final static QName _FileAccessServiceExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "IssueKind");
+    private final static QName _FileAccessServiceExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "Details");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.database.ws.fileStoremanServiceWCF
@@ -61,35 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FileAccessServiceException }
+     * Create an instance of {@link StorePerformerFilesResponse }
      * 
      */
-    public FileAccessServiceException createFileAccessServiceException() {
-        return new FileAccessServiceException();
+    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
+        return new StorePerformerFilesResponse();
     }
 
     /**
-     * Create an instance of {@link StoreSessionFiles }
+     * Create an instance of {@link RetrieveFileResponse }
      * 
      */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFile }
-     * 
-     */
-    public StoreTrialFile createStoreTrialFile() {
-        return new StoreTrialFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFileResponse }
-     * 
-     */
-    public StoreSessionFileResponse createStoreSessionFileResponse() {
-        return new StoreSessionFileResponse();
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
     }
 
     /**
@@ -101,11 +85,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFileResponse }
+     * Create an instance of {@link StoreSessionFileResponse }
      * 
      */
-    public StoreTrialFileResponse createStoreTrialFileResponse() {
-        return new StoreTrialFileResponse();
+    public StoreSessionFileResponse createStoreSessionFileResponse() {
+        return new StoreSessionFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFile }
+     * 
+     */
+    public StoreTrialFile createStoreTrialFile() {
+        return new StoreTrialFile();
     }
 
     /**
@@ -117,43 +109,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadCompleteResponse }
+     * Create an instance of {@link StorePerformerFile }
      * 
      */
-    public DownloadCompleteResponse createDownloadCompleteResponse() {
-        return new DownloadCompleteResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFilesResponse }
-     * 
-     */
-    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
-        return new StoreTrialFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFiles }
-     * 
-     */
-    public StoreTrialFiles createStoreTrialFiles() {
-        return new StoreTrialFiles();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFilesResponse }
-     * 
-     */
-    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
-        return new StoreSessionFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFileResponse }
-     * 
-     */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
+    public StorePerformerFile createStorePerformerFile() {
+        return new StorePerformerFile();
     }
 
     /**
@@ -173,22 +133,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StorePerformerFile }
-     * 
-     */
-    public StorePerformerFile createStorePerformerFile() {
-        return new StorePerformerFile();
-    }
-
-    /**
-     * Create an instance of {@link StorePerformerFilesResponse }
-     * 
-     */
-    public StorePerformerFilesResponse createStorePerformerFilesResponse() {
-        return new StorePerformerFilesResponse();
-    }
-
-    /**
      * Create an instance of {@link StorePerformerFileResponse }
      * 
      */
@@ -197,21 +141,59 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * Create an instance of {@link FileAccessServiceException }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "IssueKind", scope = FileAccessServiceException.class)
-    public JAXBElement<String> createFileAccessServiceExceptionIssueKind(String value) {
-        return new JAXBElement<String>(_FileAccessServiceExceptionIssueKind_QNAME, String.class, FileAccessServiceException.class, value);
+    public FileAccessServiceException createFileAccessServiceException() {
+        return new FileAccessServiceException();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * Create an instance of {@link DownloadCompleteResponse }
      * 
      */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "Details", scope = FileAccessServiceException.class)
-    public JAXBElement<String> createFileAccessServiceExceptionDetails(String value) {
-        return new JAXBElement<String>(_FileAccessServiceExceptionDetails_QNAME, String.class, FileAccessServiceException.class, value);
+    public DownloadCompleteResponse createDownloadCompleteResponse() {
+        return new DownloadCompleteResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFilesResponse }
+     * 
+     */
+    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
+        return new StoreTrialFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFilesResponse }
+     * 
+     */
+    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
+        return new StoreSessionFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFileResponse }
+     * 
+     */
+    public StoreTrialFileResponse createStoreTrialFileResponse() {
+        return new StoreTrialFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFiles }
+     * 
+     */
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFiles }
+     * 
+     */
+    public StoreTrialFiles createStoreTrialFiles() {
+        return new StoreTrialFiles();
     }
 
     /**
@@ -410,6 +392,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "boolean")
     public JAXBElement<Boolean> createBoolean(Boolean value) {
         return new JAXBElement<Boolean>(_Boolean_QNAME, Boolean.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "IssueKind", scope = FileAccessServiceException.class)
+    public JAXBElement<String> createFileAccessServiceExceptionIssueKind(String value) {
+        return new JAXBElement<String>(_FileAccessServiceExceptionIssueKind_QNAME, String.class, FileAccessServiceException.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "Details", scope = FileAccessServiceException.class)
+    public JAXBElement<String> createFileAccessServiceExceptionDetails(String value) {
+        return new JAXBElement<String>(_FileAccessServiceExceptionDetails_QNAME, String.class, FileAccessServiceException.class, value);
     }
 
 }

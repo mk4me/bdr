@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="PerformerDetails" maxOccurs="unbounded" minOccurs="0">
+ *         &lt;element name="FileDetails" maxOccurs="unbounded" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -42,41 +42,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "performerDetails"
+    "fileDetails"
 })
 @XmlRootElement(name = "FileList")
 public class FileList {
 
-    @XmlElement(name = "PerformerDetails")
-    protected List<FileList.PerformerDetails> performerDetails;
+    @XmlElement(name = "FileDetails")
+    protected List<FileList.FileDetails> fileDetails;
 
     /**
-     * Gets the value of the performerDetails property.
+     * Gets the value of the fileDetails property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the performerDetails property.
+     * This is why there is not a <CODE>set</CODE> method for the fileDetails property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPerformerDetails().add(newItem);
+     *    getFileDetails().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link FileList.PerformerDetails }
+     * {@link FileList.FileDetails }
      * 
      * 
      */
-    public List<FileList.PerformerDetails> getPerformerDetails() {
-        if (performerDetails == null) {
-            performerDetails = new ArrayList<FileList.PerformerDetails>();
+    public List<FileList.FileDetails> getFileDetails() {
+        if (fileDetails == null) {
+            fileDetails = new ArrayList<FileList.FileDetails>();
         }
-        return this.performerDetails;
+        return this.fileDetails;
     }
 
 
@@ -101,7 +101,7 @@ public class FileList {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "")
-    public static class PerformerDetails {
+    public static class FileDetails {
 
         @XmlAttribute(name = "FileID")
         protected Integer fileID;

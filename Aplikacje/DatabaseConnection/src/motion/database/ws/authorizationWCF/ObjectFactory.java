@@ -61,19 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GrantSessionPrivileges }
+     * Create an instance of {@link CheckUserAccount }
      * 
      */
-    public GrantSessionPrivileges createGrantSessionPrivileges() {
-        return new GrantSessionPrivileges();
+    public CheckUserAccount createCheckUserAccount() {
+        return new CheckUserAccount();
     }
 
     /**
-     * Create an instance of {@link RemoveSessionPrivileges }
+     * Create an instance of {@link GrantSessionPrivilegesResponse }
      * 
      */
-    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
-        return new RemoveSessionPrivileges();
+    public GrantSessionPrivilegesResponse createGrantSessionPrivilegesResponse() {
+        return new GrantSessionPrivilegesResponse();
     }
 
     /**
@@ -85,35 +85,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AlterSessionVisibilityResponse }
+     * Create an instance of {@link RemoveSessionPrivileges }
      * 
      */
-    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
-        return new AlterSessionVisibilityResponse();
-    }
-
-    /**
-     * Create an instance of {@link CheckUserAccountResponse }
-     * 
-     */
-    public CheckUserAccountResponse createCheckUserAccountResponse() {
-        return new CheckUserAccountResponse();
-    }
-
-    /**
-     * Create an instance of {@link AlterSessionVisibility }
-     * 
-     */
-    public AlterSessionVisibility createAlterSessionVisibility() {
-        return new AlterSessionVisibility();
-    }
-
-    /**
-     * Create an instance of {@link CreateUserAccountResponse }
-     * 
-     */
-    public CreateUserAccountResponse createCreateUserAccountResponse() {
-        return new CreateUserAccountResponse();
+    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
+        return new RemoveSessionPrivileges();
     }
 
     /**
@@ -125,11 +101,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CheckUserAccount }
+     * Create an instance of {@link CheckUserAccountResponse }
      * 
      */
-    public CheckUserAccount createCheckUserAccount() {
-        return new CheckUserAccount();
+    public CheckUserAccountResponse createCheckUserAccountResponse() {
+        return new CheckUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibilityResponse }
+     * 
+     */
+    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
+        return new AlterSessionVisibilityResponse();
     }
 
     /**
@@ -141,11 +125,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GrantSessionPrivilegesResponse }
+     * Create an instance of {@link CreateUserAccountResponse }
      * 
      */
-    public GrantSessionPrivilegesResponse createGrantSessionPrivilegesResponse() {
-        return new GrantSessionPrivilegesResponse();
+    public CreateUserAccountResponse createCreateUserAccountResponse() {
+        return new CreateUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link GrantSessionPrivileges }
+     * 
+     */
+    public GrantSessionPrivileges createGrantSessionPrivileges() {
+        return new GrantSessionPrivileges();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibility }
+     * 
+     */
+    public AlterSessionVisibility createAlterSessionVisibility() {
+        return new AlterSessionVisibility();
     }
 
     /**
