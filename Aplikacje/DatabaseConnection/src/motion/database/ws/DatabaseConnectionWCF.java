@@ -818,8 +818,21 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	class BatchTransferProgressObserver implements BatchTransferProgress
 	{
 
+		FileTransferListener listener;
+		int progress;
+		float step;
+		
+		BatchTransferProgressObserver( FileTransferListener listener, int steps )
+		{
+			this.listener = listener;
+			progress = 0;
+			step = 100 / steps / 2;
+		}
+		
 		@Override
 		public void transferComplete(String arg0) {
+			progress += step;
+			listener.transferStepPercent( progress );
 			System.out.println( "Transfer finished: " + arg0);
 		}
 
@@ -830,6 +843,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 
 		@Override
 		public void transferStart(String arg0) {
+			progress += step;
+			listener.transferStepPercent( progress );
 			System.out.println( "Transfer started: " + arg0);
 		}
 	}
@@ -951,8 +966,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		File dir = new File(filesPath);
 		if ( dir.isDirectory() )
 		{
+			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
-			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
 			port.storePerformerFiles( performerId, destRemoteFolder+dir.getName(), description );
 		}
 		else
@@ -970,8 +986,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		File dir = new File(filesPath);
 		if ( dir.isDirectory() )
 		{
+			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
-			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
 			port.storeSessionFiles( sessionId, destRemoteFolder+dir.getName(), description );
 		}
 		else
@@ -989,8 +1006,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		File dir = new File(filesPath);
 		if ( dir.isDirectory() )
 		{
+			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
-			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
 			port.storeTrialFiles( trialId, destRemoteFolder+dir.getName(), description );
 		}
 		else
