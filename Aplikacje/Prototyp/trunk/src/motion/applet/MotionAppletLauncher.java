@@ -10,13 +10,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import motion.applet.dialogs.LoginDialog;
-
 public class MotionAppletLauncher extends JApplet {
 	
 	@Override
 	public void init() {
 		this.setSize(150, 80);
+		
+		// Set language
+		//Messages.setLanguagePolish();
+		Messages.setLanguageEnglish();
 		
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(Color.white);

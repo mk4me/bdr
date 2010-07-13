@@ -24,7 +24,7 @@ public class LoginDialog extends BasicDialog {
 	private static String DOMAIN = Messages.getString("LoginDialog.Domain") + Messages.COLON; //$NON-NLS-1$
 	private static String PASSWORD = Messages.getString("LoginDialog.Password") + Messages.COLON; //$NON-NLS-1$
 	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
-	private static String CANCEL = Messages.CANCEL;
+	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
 	
 	private JTextField loginText;
