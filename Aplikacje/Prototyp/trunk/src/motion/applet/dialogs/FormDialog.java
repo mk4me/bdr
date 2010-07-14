@@ -182,14 +182,24 @@ class FormTextAreaField extends FormField {
 }
 
 class FormNumberField extends FormField {
+	private String units;
 	
 	public FormNumberField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super(attribute, gridBagConstraints, formPanel);
 		finishField();
 	}
 	
+	public FormNumberField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String units) {
+		super(attribute, gridBagConstraints, formPanel);
+		this.units = units;
+		finishField();
+	}
+	
 	private void finishField() {
 		text.setColumns(5);
+		if (units != null) {
+			label.setText(attribute.toString() + " (" + units + "):");
+		}
 	}
 	
 	public int getData() throws NumberFormatException {
