@@ -37,13 +37,21 @@ public class AppletToolBar extends JToolBar {
 		labComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				labId = AppletToolBar.this.labComboBox.getSelectedIndex();
-				AppletToolBar.this.tableComboBox.setSelectedIndex(AppletToolBar.this.tableComboBox.getSelectedIndex());
+				//AppletToolBar.this.tableComboBox.setSelectedIndex(AppletToolBar.this.tableComboBox.getSelectedIndex());
 			}
 		});
 	}
 	
 	public void addTableComboBoxListener(ActionListener actionListener) {
 		this.tableComboBox.addActionListener(actionListener);
+	}
+	
+	public void addLabComboBoxListener(ActionListener actionListener) {
+		this.labComboBox.addActionListener(actionListener);
+	}
+	
+	public static void setLabId(int id) {
+		labId = id;
 	}
 	
 	public static int getLabId() {

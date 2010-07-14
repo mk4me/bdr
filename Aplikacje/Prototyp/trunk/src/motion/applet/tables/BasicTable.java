@@ -29,7 +29,7 @@ public class BasicTable extends AbstractTableModel {
 	private ArrayList<ArrayList<Object>> contents = new ArrayList<ArrayList<Object>>();
 	private ArrayList<String> attributeNames = new ArrayList<String>();
 	private ArrayList<Integer> recordIds = new ArrayList<Integer>();
-	public TableName tableName;
+	private TableName tableName;
 	public int recordId;
 	public TableName fromTableName;	// Used for listing files for different tables.
 	
@@ -60,6 +60,10 @@ public class BasicTable extends AbstractTableModel {
 	
 	public BasicTable(List<GenericResult> result) {
 		getTableContentsFromResult(result);
+	}
+	
+	public BasicTable() {
+		super();
 	}
 	
 	private void getTableContentsFromAttributes() {
@@ -166,7 +170,7 @@ public class BasicTable extends AbstractTableModel {
 	
 	private void listFiles() throws Exception {
 		DbElementsList<DatabaseFile> files = new DbElementsList<DatabaseFile>();
-		if (this.recordId > -1) {
+		if (this.recordId > -1 && fromTableName != null) {
 			if (fromTableName.equals(TableNamesInstance.PERFORMER)) {
 				files = WebServiceInstance.getDatabaseConnection().listPerformerFiles(this.recordId);
 			} else if (fromTableName.equals(TableNamesInstance.SESSION)) {

@@ -35,6 +35,7 @@ import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.tables.BasicTable;
+import motion.applet.toolbars.AppletToolBar;
 import motion.applet.trees.ResultTree;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
@@ -338,9 +339,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
-		if (actionEvent.getSource() instanceof JComboBox) {	// The source is the toolbar combo box.
+		if (actionEvent.getSource() instanceof JComboBox) {	// The source is the toolbar lab combo box.
 			JComboBox comboBox = (JComboBox) actionEvent.getSource();
-			showTable(((TableName) comboBox.getSelectedItem()));
+			//showTable(((TableName) comboBox.getSelectedItem()));
+			AppletToolBar.setLabId(comboBox.getSelectedIndex());
+			refreshTablesForLab();
 		} else if (actionEvent.getSource() instanceof JButton) {	// The source is the Apply selection button.
 			 refreshAllTables();
 		}
@@ -375,10 +378,21 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	private void refreshAllTables() {
+		int i = tabbedPane.getSelectedIndex();
 		refreshPerformerTable();
 		refreshSessionTable();
 		refreshTrialTable();
 		refreshFileTable();
+		tabbedPane.setSelectedIndex(i);
+	}
+	
+	private void refreshTablesForLab() {
+		int i = tabbedPane.getSelectedIndex();
+		showTable(TableNamesInstance.PERFORMER);
+		showTable(TableNamesInstance.SESSION);
+		clearTrialTable();
+		clearFileTable();
+		tabbedPane.setSelectedIndex(i);
 	}
 	
 	public void showPerformerDialog() {
@@ -410,5 +424,20 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		UploadDialog uploadDialog = new UploadDialog(tableName);
 		uploadDialog.setVisible(true);
 		RightSplitPanel.this.refreshFileTable();
+	}
+	
+	private void clearSessionTable() {
+		int i = tabNameHash .get(TableNamesInstance.SESSION);
+		tables[i].setModel(new BasicTable());
+	}
+	
+	private void clearTrialTable() {
+		int i = tabNameHash .get(TableNamesInstance.TRIAL);
+		tables[i].setModel(new BasicTable());
+	}
+	
+	private void clearFileTable() {
+		int i = tabNameHash .get(TableNamesInstance.FILE);
+		tables[i].setModel(new BasicTable());
 	}
 }

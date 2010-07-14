@@ -85,7 +85,8 @@ public class MotionAppletFrame extends JFrame {
 		final RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
 		//this.getContentPane().add(leftRightSplitPane);
-		appletToolBar.addTableComboBoxListener(rightPanel);
+		//appletToolBar.addTableComboBoxListener(rightPanel);
+		appletToolBar.addLabComboBoxListener(rightPanel);
 
 
 		// Main tabs
