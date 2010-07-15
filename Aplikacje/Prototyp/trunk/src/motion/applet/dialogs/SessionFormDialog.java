@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import motion.applet.database.AttributeGroup;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
@@ -39,7 +41,10 @@ public class SessionFormDialog extends FormDialog {
 		
 		addFormFields();
 		
-		
+		ArrayList<AttributeGroup> groups = TableNamesInstance.SESSION.getGroupedAttributes();
+		for (AttributeGroup g : groups) {
+			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		}
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -58,6 +63,10 @@ public class SessionFormDialog extends FormDialog {
 										AppletToolBar.getLabId(),
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());
+								
+								setDefinedAttributes(TableNamesInstance.SESSION, sessionID);
+								
+								/*
 								WebServiceInstance.getDatabaseConnection().setSessionAttribute(
 										sessionID,
 										"marker_set",
@@ -69,7 +78,7 @@ public class SessionFormDialog extends FormDialog {
 											"number_of_trials",
 											SessionFormDialog.this.getNumberOfTrials(),
 											false);
-								}
+								}*/
 								
 								//privileges
 								SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionID, privilegesPanel.getResult() );
@@ -99,7 +108,6 @@ public class SessionFormDialog extends FormDialog {
 	}
 	
 	private void addFormFields() {
-		
 		addFormTextLabel("Static attributes:");
 		sessionDateField = new FormDateField(
 				TableNamesInstance.SESSION.getAttributeName("sessionDate"), gridBagConstraints, formPanel, true);
@@ -112,12 +120,13 @@ public class SessionFormDialog extends FormDialog {
 			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
 			exceptionDialog.setVisible(true);
 		}
-		
+		/*
 		addFormTextLabel("Defined attributes:");
 		markerSetField = new FormTextField(
 				TableNamesInstance.SESSION.getAttributeName("marker_set"), gridBagConstraints, formPanel);
 		numberOfTrialsField = new FormNumberField(
 				TableNamesInstance.SESSION.getAttributeName("number_of_trials"), gridBagConstraints, formPanel);
+				*/
 	}
 	
 	private String[] getMotionKinds() throws Exception {	//TODO: Add thread.

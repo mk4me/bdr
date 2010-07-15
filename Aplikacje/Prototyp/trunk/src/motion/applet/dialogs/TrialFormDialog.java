@@ -2,9 +2,11 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
+import motion.applet.database.AttributeGroup;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
 
@@ -27,6 +29,11 @@ public class TrialFormDialog extends FormDialog {
 		
 		addFormFields();
 		
+		ArrayList<AttributeGroup> groups = TableNamesInstance.TRIAL.getGroupedAttributes();
+		for (AttributeGroup g : groups) {
+			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		}
+		
 		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -41,13 +48,15 @@ public class TrialFormDialog extends FormDialog {
 										TrialFormDialog.this.sessionId,
 										TrialFormDialog.this.getTrialDescription(),
 										TrialFormDialog.this.getDuration());
+								setDefinedAttributes(TableNamesInstance.TRIAL, trialID);
+								/*
 								if (!TrialFormDialog.this.getRelevance().equals("")) {
 									WebServiceInstance.getDatabaseConnection().setTrialAttribute(
 											trialID,
 											"relevance",
 											TrialFormDialog.this.getRelevance(),
 											false);
-								}
+								}*/
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -69,16 +78,15 @@ public class TrialFormDialog extends FormDialog {
 	}
 	
 	private void addFormFields() {
-		
 		addFormTextLabel("Static attributes:");
 		trialDescriptionField = new FormTextAreaField(
 				TableNamesInstance.TRIAL.getAttributeName("trialDescription"), gridBagConstraints, formPanel);
 		durationField = new FormNumberField(
 				TableNamesInstance.TRIAL.getAttributeName("duration"), gridBagConstraints, formPanel, "frames");
-		
+		/*
 		addFormTextLabel("Defined attributes:");
 		relevanceField = new FormNumberField(
-				TableNamesInstance.TRIAL.getAttributeName("relevance"), gridBagConstraints, formPanel);
+				TableNamesInstance.TRIAL.getAttributeName("relevance"), gridBagConstraints, formPanel);*/
 	}
 	
 	private String getTrialDescription() {

@@ -1,16 +1,15 @@
 package motion.applet.dialogs;
 
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import motion.applet.database.AttributeGroup;
 import motion.applet.database.TableNamesInstance;
-import motion.applet.tables.BasicTable;
 import motion.applet.webservice.client.WebServiceInstance;
 
 public class PerformerFormDialog extends FormDialog {
@@ -31,16 +30,14 @@ public class PerformerFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		
 		//ArrayList<AttributeName> attributes = TableNamesInstance.PERFORMER.getStaticAttributes();
-		
 		//addFormTextFields(attributes, "Static attributes");
 		
-		//ArrayList<AttributeGroup> groups = TableNamesInstance.PERFORMER.getGroupedAttributes();
-		
-		//for (AttributeGroup g : groups) {
-			//addFormTextFields(g.getAttributes(), g.getGroupName());
-		//}
-		
 		addFormFields();
+		
+		ArrayList<AttributeGroup> groups = TableNamesInstance.PERFORMER.getGroupedAttributes();
+		for (AttributeGroup g : groups) {
+			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		}
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -55,6 +52,10 @@ public class PerformerFormDialog extends FormDialog {
 								int performerID = WebServiceInstance.getDatabaseConnection().createPerformer(
 										getFirstName(),
 										getLastName());
+								
+								setDefinedAttributes(TableNamesInstance.PERFORMER, performerID);
+								
+								/*
 								WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
 										performerID,
 										"date_of_birth",
@@ -65,6 +66,7 @@ public class PerformerFormDialog extends FormDialog {
 										"diagnosis",
 										getDiagnosis(),
 										false);
+										*/
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -85,18 +87,17 @@ public class PerformerFormDialog extends FormDialog {
 		});
 	}
 	private void addFormFields() {
-		
 		addFormTextLabel("Static attributes:");
 		firstNameField = new FormTextField(
 				TableNamesInstance.PERFORMER.getAttributeName("firstName"), gridBagConstraints, formPanel);
 		lastNameField = new FormTextField(
 				TableNamesInstance.PERFORMER.getAttributeName("lastName"), gridBagConstraints, formPanel);
-		
+		/*
 		addFormTextLabel("Defined attributes:");
 		birthDateField = new FormDateField(
 				TableNamesInstance.PERFORMER.getAttributeName("date_of_birth"), gridBagConstraints, formPanel, false);
 		diagnosisField = new FormTextAreaField(
-				TableNamesInstance.PERFORMER.getAttributeName("diagnosis"), gridBagConstraints, formPanel);
+				TableNamesInstance.PERFORMER.getAttributeName("diagnosis"), gridBagConstraints, formPanel);*/
 	}
 	
 	private String getFirstName() {
@@ -134,11 +135,11 @@ public class PerformerFormDialog extends FormDialog {
 			this.messageLabel.setText(MISSING_LAST_NAME);
 			
 			return false;
-		} else if (getBirthDate().equals("")) {
+		}/* else if (getBirthDate().equals("")) {
 			this.messageLabel.setText(MISSING_BIRTH_DATE);
 			
 			return false;
-		}
+		}*/
 		
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		

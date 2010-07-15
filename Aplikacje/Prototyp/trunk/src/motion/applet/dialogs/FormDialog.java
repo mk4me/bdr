@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,6 +25,9 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.Messages;
+import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;
 
 public class FormDialog extends BasicDialog {
@@ -38,6 +42,8 @@ public class FormDialog extends BasicDialog {
 	protected JPanel formPanel;
 	protected JPanel userPanel;
 	protected GridBagConstraints gridBagConstraints;
+	
+	protected ArrayList<FormField> definedFormFields = new ArrayList<FormField>();
 	
 	public FormDialog(String title, String message) {
 		super(title, message);
@@ -102,6 +108,63 @@ public class FormDialog extends BasicDialog {
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
 		gridBagConstraints.gridy++;
 	}
+	
+	protected void addDefinedFormFields(ArrayList<AttributeName> attributes, String groupName) {
+		addFormTextLabel("Defined attributes" +  " (" + groupName + "):");
+		
+		for (AttributeName a : attributes) {
+			if (a.getType().equals(AttributeName.STRING_TYPE)) {
+				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
+				definedFormFields.add(field);
+			} else if (a.getType().equals(AttributeName.INTEGER_TYPE)) {
+				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
+				definedFormFields.add(field);
+			} else if (a.getType().equals(AttributeName.DATE_TYPE)) {
+				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
+				definedFormFields.add(field);
+			}
+		}
+	}
+	
+	protected void setDefinedAttributes(TableName tableName, int id) throws Exception {
+		for (FormField f : definedFormFields) {
+			String attributeValue = "";
+			if (f instanceof FormTextField) {
+				attributeValue = ((FormTextField) f).getData();
+			} else if (f instanceof FormNumberField) {
+				try {
+					attributeValue = "" + ((FormNumberField) f).getData();
+				} catch (NumberFormatException e) {
+				}
+			} else if (f instanceof FormDateField) {
+				try {
+					attributeValue = "" + ((FormDateField) f).getData().toString();
+				} catch (ParseException e) {
+				} catch (DatatypeConfigurationException e) {
+				}
+			}
+			
+			if (tableName.equals(TableNamesInstance.PERFORMER)) {
+				WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
+						id,
+						f.attribute.toString(),
+						attributeValue,
+						false);
+			} else if (tableName.equals(TableNamesInstance.SESSION)) {
+				WebServiceInstance.getDatabaseConnection().setSessionAttribute(
+						id,
+						f.attribute.toString(),
+						attributeValue,
+						false);
+			} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+				WebServiceInstance.getDatabaseConnection().setTrialAttribute(
+						id,
+						f.attribute.toString(),
+						attributeValue,
+						false);
+			}
+		}
+	}
 }
 
 class FormField {
@@ -109,7 +172,7 @@ class FormField {
 	protected JTextField text;
 	protected GridBagConstraints gridBagConstraints;
 	protected JPanel formPanel;
-	protected AttributeName attribute;
+	public AttributeName attribute;
 	
 	public FormField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super();
