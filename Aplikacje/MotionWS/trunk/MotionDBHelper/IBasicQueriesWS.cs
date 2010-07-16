@@ -103,6 +103,10 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListMotionKindsDefined();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListEnumValues(string attributeName, string entityKind);
     }
 
 }

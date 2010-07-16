@@ -966,6 +966,42 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        public XmlElement ListEnumValues(string attributeName, string entityKind)
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_attribute_enum_values";
+                cmd.Parameters.Add("@att_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@entity_kind", SqlDbType.VarChar, 20);
+                cmd.Parameters["@att_name"].Value = attributeName;
+                cmd.Parameters["@entity_kind"].Value = entityKind;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("EnumValueList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        }
     }
 
 

@@ -31,6 +31,7 @@
 			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
 			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
 			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
+			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xsd:element name="GenericQueryXML">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -505,6 +506,27 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="ListEnumValues">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListEnumValuesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:EnumValueList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
@@ -529,6 +551,7 @@
 			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
 			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
 			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
+			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
 			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
 			<xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
@@ -777,6 +800,15 @@
 	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValues"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValuesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:portType name="IBasicQueriesWS">
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
@@ -892,6 +924,11 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" message="tns:IBasicQueriesWS_ListMotionKindsDefined_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedResponse" message="tns:IBasicQueriesWS_ListMotionKindsDefined_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" message="tns:IBasicQueriesWS_ListEnumValues_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicHttpBinding_IBasicQueriesWS" type="tns:IBasicQueriesWS">
@@ -1163,6 +1200,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListMotionKindsDefined">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
