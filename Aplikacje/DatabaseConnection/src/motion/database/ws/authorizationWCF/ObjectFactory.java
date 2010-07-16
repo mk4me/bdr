@@ -61,11 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CheckUserAccount }
+     * Create an instance of {@link AlterSessionVisibility }
      * 
      */
-    public CheckUserAccount createCheckUserAccount() {
-        return new CheckUserAccount();
+    public AlterSessionVisibility createAlterSessionVisibility() {
+        return new AlterSessionVisibility();
     }
 
     /**
@@ -77,51 +77,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateUserAccount }
-     * 
-     */
-    public CreateUserAccount createCreateUserAccount() {
-        return new CreateUserAccount();
-    }
-
-    /**
-     * Create an instance of {@link RemoveSessionPrivileges }
-     * 
-     */
-    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
-        return new RemoveSessionPrivileges();
-    }
-
-    /**
-     * Create an instance of {@link RemoveSessionPrivilegesResponse }
-     * 
-     */
-    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
-        return new RemoveSessionPrivilegesResponse();
-    }
-
-    /**
-     * Create an instance of {@link CheckUserAccountResponse }
-     * 
-     */
-    public CheckUserAccountResponse createCheckUserAccountResponse() {
-        return new CheckUserAccountResponse();
-    }
-
-    /**
      * Create an instance of {@link AlterSessionVisibilityResponse }
      * 
      */
     public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
         return new AlterSessionVisibilityResponse();
-    }
-
-    /**
-     * Create an instance of {@link AuthorizationException }
-     * 
-     */
-    public AuthorizationException createAuthorizationException() {
-        return new AuthorizationException();
     }
 
     /**
@@ -133,19 +93,59 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RemoveSessionPrivileges }
+     * 
+     */
+    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
+        return new RemoveSessionPrivileges();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserAccount }
+     * 
+     */
+    public CreateUserAccount createCreateUserAccount() {
+        return new CreateUserAccount();
+    }
+
+    /**
+     * Create an instance of {@link RemoveSessionPrivilegesResponse }
+     * 
+     */
+    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
+        return new RemoveSessionPrivilegesResponse();
+    }
+
+    /**
+     * Create an instance of {@link CheckUserAccount }
+     * 
+     */
+    public CheckUserAccount createCheckUserAccount() {
+        return new CheckUserAccount();
+    }
+
+    /**
+     * Create an instance of {@link CheckUserAccountResponse }
+     * 
+     */
+    public CheckUserAccountResponse createCheckUserAccountResponse() {
+        return new CheckUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link AuthorizationException }
+     * 
+     */
+    public AuthorizationException createAuthorizationException() {
+        return new AuthorizationException();
+    }
+
+    /**
      * Create an instance of {@link GrantSessionPrivileges }
      * 
      */
     public GrantSessionPrivileges createGrantSessionPrivileges() {
         return new GrantSessionPrivileges();
-    }
-
-    /**
-     * Create an instance of {@link AlterSessionVisibility }
-     * 
-     */
-    public AlterSessionVisibility createAlterSessionVisibility() {
-        return new AlterSessionVisibility();
     }
 
     /**
