@@ -6,7 +6,10 @@ use Motion;
         Nazwa                varchar(100) NOT NULL,
         Typ_danych           varchar(20) NOT NULL,
         Wyliczeniowy		bit NULL,
-        Plugin varchar(100) NULL
+        Plugin varchar(100) NULL,
+        Podtyp_danych	varchar(20) NULL,
+        Jednostka	varchar(10) NULL
+        
  )
 go
  

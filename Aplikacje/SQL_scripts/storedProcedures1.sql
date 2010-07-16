@@ -86,12 +86,14 @@ select
 		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
-	ga.Nazwa as AttributeGroup
+	ga.Nazwa as AttributeGroup,
+	'session' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id
 go
+
 
 create function list_performer_attributes_uniform ( @perf_id int )
 returns TABLE as
@@ -103,19 +105,22 @@ return
 	(select 'FirstName' as Name,
 			p.Imie as Value,
 			'string' as Type,
-			'_performer_static' as AttributeGroup
+			'_performer_static' as AttributeGroup,
+			'performer' as Entity
 	from Perf p)
 	union
 	(select 'LastName' as Name,
 			p.Nazwisko as Value,
 			'string' as Type,
-			'_performer_static' as AttributeGroup
+			'_performer_static' as AttributeGroup,
+			'performer' as Entity
 	from Perf p)
 	union
 	(select 'PerformerID' as Name,
 			p.IdPerformer as Value,
 			'integer' as Type,
-			'_performer_static' as AttributeGroup
+			'_performer_static' as AttributeGroup,
+			'performer' as Entity
 	from Perf p)
 	)
 union
@@ -126,13 +131,13 @@ union
 		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
-	ga.Nazwa as AttributeGroup
+	ga.Nazwa as AttributeGroup,
+	'performer' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id));
 go
-
 
 
 create procedure list_performers_xml
@@ -180,8 +185,6 @@ from user_accessible_sessions_by_login(@user_login) s inner join Performer p on 
 go	
 
 
-
-
 create function list_session_attributes ( @sess_id int )
 returns TABLE as
 return 
@@ -192,7 +195,8 @@ select
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'session' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -210,43 +214,50 @@ return
 	(select 'SessionID' as Name,
 			s.IdSesja as Value,
 			'integer' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'UserID' as Name,
 			s.IdUzytkownik as Value,
 			'integer' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'LabID' as Name,
 			s.IdLaboratorium as Value,
 			'integer' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'MotionKindID' as Name,
 			s.IdRodzaj_ruchu as Value,
 			'integer' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'PerformerID' as Name,
 			s.IdPerformer as Value,
 			'integer' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'SessionDate' as Name,
 			s.Data as Value,
 			'string' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	union
 	(select 'SessionDescription' as Name,
 			s.Opis_sesji as Value,
 			'string' as Type,
-			'_session_static' as AttributeGroup
+			'_session_static' as AttributeGroup,
+			'session' as Entity
 	from Sess s)
 	)
 union
@@ -257,12 +268,14 @@ union
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'session' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id));
 go
+
 
 create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int)
 as
@@ -312,7 +325,7 @@ go
 -- Trial queries
 -- ===============
 
-create function list_trial_attributes ( @trial_id int )
+alter function list_trial_attributes ( @trial_id int )
 returns TABLE as
 return 
 select 
@@ -322,13 +335,13 @@ select
 		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'trial' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wao.IdObserwacja = @trial_id
 go
-
 
 create function list_trial_attributes_uniform ( @trial_id int )
 returns TABLE as
@@ -340,19 +353,22 @@ return
 	(select 'TrialID' as Name,
 			t.IdObserwacja as Value,
 			'integer' as Type,
-			'_trial_static' as AttributeGroup
+			'_trial_static' as AttributeGroup,
+			'trial' as Entity
 	from Trial t)
 	union
 	(select 'TrialDescription' as Name,
 			t.Opis_obserwacji as Value,
 			'string' as Type,
-			'_trial_static' as AttributeGroup
+			'_trial_static' as AttributeGroup,
+			'trial' as Entity
 	from Trial t)
 	union
 	(select 'Duration' as Name,
 			t.Czas_trwania as Value,
 			'integer' as Type,
-			'_trial_static' as AttributeGroup
+			'_trial_static' as AttributeGroup,
+			'trial' as Entity
 	from Trial t)
 	)
 union
@@ -362,7 +378,8 @@ union
 		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'trial' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -407,7 +424,8 @@ select
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'segment' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -425,25 +443,29 @@ return
 	(select 'SegmentID' as Name,
 			segm.IdSegment as Value,
 			'integer' as Type,
-			'_segment_static' as AttributeGroup
+			'_segment_static' as AttributeGroup,
+			'segment' as Entity
 	from Sgmnt segm)
 	union
 	(select 'SegmentName' as Name,
 			segm.Nazwa as Value,
 			'string' as Type,
-			'_segment_static' as AttributeGroup
+			'_segment_static' as AttributeGroup,
+			'segment' as Entity
 	from Sgmnt segm)
 	union
 	(select 'StartTime' as Name,
 			segm.Czas_poczatku as Value,
 			'integer' as Type,
-			'_segment_static' as AttributeGroup
+			'_segment_static' as AttributeGroup,
+			'segment' as Entity
 	from Sgmnt segm)
 	union
 	(select 'EndTime' as Name,
 			segm.Czas_konca as Value,
 			'integer' as Type,
-			'_segment_static' as AttributeGroup
+			'_segment_static' as AttributeGroup,
+			'segment' as Entity
 	from Sgmnt segm)
 	)
 union
@@ -454,7 +476,8 @@ union
 		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'segment' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_segmentu was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -491,7 +514,7 @@ go
 -- File queries
 -- ===================
 
-create function list_file_attributes ( @file_id int )
+function list_file_attributes ( @file_id int )
 returns TABLE as
 return 
 select 
@@ -501,12 +524,15 @@ select
 		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup
+		ga.Nazwa as AttributeGroup,
+		'file' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_pliku wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPlik = @file_id
 go
+
+-- UWAGA! W przyszlosci moze byc potrzebna takze list_file_attributes_uniform .
 
 create procedure list_performer_files_xml @perf_id int
 as
@@ -577,11 +603,11 @@ create procedure list_attributes_defined( @att_group varchar(100), @entity_kind 
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName
+	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName,
+	a.Podtyp_danych as Subtype, a.Jednostka as Unit 
 from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
 where @entity_kind=ga.Opisywana_encja and ( @att_group = '_ALL' or ga.Nazwa = @att_group )
 for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
-
 go
 
 create procedure list_attribute_groups_defined( @entity_kind varchar(20) )
@@ -592,17 +618,15 @@ select
 from Grupa_atrybutow
 where (@entity_kind=Opisywana_encja or @entity_kind = '_ALL_ENTITIES')
 for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinitionList')
-
 go
-
 
 create procedure list_motion_kinds_defined
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdRodzaj_ruchu as MotionKindID, Nazwa as MotionKindName from Rodzaj_ruchu
 for XML RAW ('MotionKindDefinition'), ELEMENTS, root ('MotionKindDefinitionList')
-
 go
+
 create procedure list_session_groups_defined
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -610,7 +634,14 @@ select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_ses
 for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
 go
 
-exec list_session_groups_defined
+create procedure list_attribute_enum_values ( @att_name varchar(100), @entity_kind varchar(20) )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select Wartosc_wyliczeniowa "EnumValue"
+from Wartosc_wyliczeniowa ww join Atrybut a on ww.IdAtrybut = a.IdAtrybut join Grupa_atrybutow ga on ga.IdGrupa_atrybutow = a.IdGrupa_atrybutow
+where a.Nazwa = @att_name and ga.Opisywana_encja = @entity_kind
+for XML PATH(''), root ('EnumValueList')
+go
 
 -- Attribute setting operations
 -- ============================
