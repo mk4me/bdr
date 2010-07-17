@@ -7,6 +7,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Permissions;
+using System.Xml;
 
 
 namespace MotionDBWebServices
@@ -184,6 +185,87 @@ namespace MotionDBWebServices
             {
                 CloseConnection();
             }
+        }
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListUsers()
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_users_xml";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("UserList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        }
+
+
+
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListSessionPrivileges(int sessionID)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_session_privileges_xml";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                SqlParameter sessId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = sessionID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("SessionPrivilegeList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
         }
 
     }

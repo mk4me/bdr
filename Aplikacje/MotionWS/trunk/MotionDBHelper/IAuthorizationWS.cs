@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml;
 
 namespace MotionDBWebServices
 {
@@ -26,6 +27,12 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void AlterSessionVisibility(int sessionID, bool idPublic, bool isWritable);
-        // To do: alter session visibility
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        XmlElement ListUsers();
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        XmlElement ListSessionPrivileges(int sessionID);
+
     }
 }

@@ -72,7 +72,6 @@
     <Content Include="BasicUpdatesService.asmx" />
     <Content Include="DataDictionaryMaintenanceService.asmx" />
     <Content Include="FileStoremanService.asmx" />
-    <Content Include="res\StandaloneWSDLCompositor.xslt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationWS.svc.cs">
@@ -124,51 +123,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\AttributesElement.xsd" />
-    <None Include="res\BasicQueriesService.wsdl" />
-    <None Include="res\BasicQueriesWS.wsdl" />
-    <None Include="res\BasicQueriesWS.xsd" />
-    <None Include="res\BasicQueriesWSStandalone.wsdl" />
-    <None Include="res\BasicQueriesServiceStandalone.wsdl" />
-    <None Include="res\GenericQueryUniformXML.xsd" />
-    <None Include="res\ListEnumValues.xsd" />
-    <None Include="res\ListSessionGroupsDefined.xsd" />
-    <None Include="res\ListMotionKindsDefined.xsd" />
-    <None Include="res\ListAttributeGroupsDefined.xsd" />
-    <None Include="res\ListLabSessionsWithAttributesXML.xsd" />
-    <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
-    <None Include="res\GetTrialByIdXML.xsd" />
-    <None Include="res\GetSegmentByIdXML.xsd" />
-    <None Include="res\GetSessionByIdXML.xsd" />
-    <None Include="res\SegmentDetailsWithAttributesElement.xsd" />
-    <None Include="res\TrialDetailsWithAttributesElement.xsd" />
-    <None Include="res\SessionDetailsWithAttributesElement.xsd" />
-    <None Include="res\GetPerformerByIdXML.xsd" />
-    <None Include="res\PerformerDetailsWithAttributesElement.xsd" />
-    <None Include="res\GenericQueryXML.xsd" />
-    <None Include="res\ListFilesXML.xsd" />
-    <None Include="res\ListFilesWithAttributesXML.xsd" />
-    <None Include="res\ListPerformerFilesWithAttributesXML.xsd" />
-    <None Include="res\ListPerformerFilesXML.xsd" />
-    <None Include="res\FileListType.xsd" />
-    <None Include="res\ListPerformersWithAttributesXML.xsd" />
-    <None Include="res\ListPerformersXML.xsd" />
-    <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
-    <None Include="res\ListTrialFilesXML.xsd" />
-    <None Include="res\ListSessionFilesWithAttributesXML.xsd" />
-    <None Include="res\ListTrialSegmentsWithAttributesXML.xsd" />
-    <None Include="res\ListTrialSegmentsXML.xsd" />
-    <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
-    <None Include="res\ListSessionTrialsXML.xsd" />
-    <None Include="res\_PerformQuery.xsd" />
-    <None Include="res\ListPerformerSessionsXML.xsd" />
-    <None Include="res\ListPerformerSessionsWithAttributesXML.xsd" />
-    <None Include="res\ListSessionFilesXML.xsd" />
     <Content Include="AuthorizationWS.svc" />
     <Content Include="BasicUpdatesWS.svc" />
     <Content Include="FileStoremanWS.svc" />
-    <Content Include="res\PreciseXSDWeaver.xslt" />
-    <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
