@@ -4,6 +4,7 @@
 package test.unit;
 
 import java.util.HashMap;
+import java.util.List;
 
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
@@ -79,14 +80,27 @@ public class ShortTest {
 		
 		//database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
-		DbElementsList<Session> results = database.listLabSessionsWithAttributes(1);
-		for (Session s : results ) 
+		HashMap<String, EntityAttributeGroup> results = database.listGrouppedAttributesDefined("performer" );
 		{
-			for ( String ss : s.keySet() )
+			for ( String ss : results.keySet() )
 			{
-				EntityAttribute e = s.get(ss);
-				System.out.println( "Attribute: " + e.name + " Type:" + e.type );
+				EntityAttributeGroup e = results.get(ss);
+				System.out.println( "Group: " + e.name );
+				for(EntityAttribute a : e)
+				{
+					System.out.println( "   attribute:" + a.name );
+				}
+				
 			}
 		}
+
+		List<String> resultss = database.listEnumValues("CameraView", "trial");
+
+		System.out.println("Enum values defined:");
+		
+		for (String s : resultss ) 
+			System.out.println("value: "+ s );			
+
+	
 	}
 }

@@ -36,7 +36,7 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
  */
 public class DatabaseConnectionWCFTest {
 
-	static final boolean testFileUploading = true;
+	static final boolean testFileUploading = false;
 	
 	
 	public void beforeTest()
@@ -299,6 +299,19 @@ public class DatabaseConnectionWCFTest {
 			System.out.println("Attributes group: "+ s );			
 	}
 	
+	@Test
+	public void testListEnumValues() throws Exception {
+		
+		beforeTest();
+
+		List<String> results = database.listEnumValues("Sex", "performer");
+
+		System.out.println("Enum values defined:");
+		
+		for (String s : results ) 
+			System.out.println("value: "+ s );			
+	}
+
 	
 	@Test
 	public void testCreatePerformer() throws Exception {

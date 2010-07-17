@@ -253,7 +253,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ListAttributesDefinedResult result = port.listAttributesDefined( group, entityKind );
 			
 			HashMap<String, String> output = new HashMap<String, String>();
-			for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+			if (result != null && result.getAttributeDefinitionList() != null)
+				for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
 					output.put( a.getAttributeName(), a.getAttributeType() );
 			
 			return output;
@@ -270,7 +271,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
-	public String[] listEnumValues(String attributeName, String entityKind) throws Exception
+	public List<String> listEnumValues(String attributeName, String entityKind) throws Exception
 	{
 		try{
 			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listEnumValues", this );
@@ -278,9 +279,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ListEnumValuesResult result = port.listEnumValues(attributeName, entityKind);
 			
 			if (result != null && result.getEnumValueList() != null && result.getEnumValueList().getEnumValue() != null)
-				return (String[]) result.getEnumValueList().getEnumValue().toArray();
+				return result.getEnumValueList().getEnumValue();
 			return
-				new String[0];
+				new ArrayList<String>();
 		}
 		catch(IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage e)
 		{

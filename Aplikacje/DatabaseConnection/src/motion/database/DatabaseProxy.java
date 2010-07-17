@@ -73,7 +73,7 @@ public interface DatabaseProxy {
 //	public abstract DbElementsList<Session> listPerformerSessions(
 //			int performerID) throws Exception;
 
-	public String[] listEnumValues(String attributeName, String entityKind) throws Exception;
+	public List<String> listEnumValues(String attributeName, String entityKind) throws Exception;
 
 	public abstract HashMap<String, String> listAttributesDefined(String group,
 			String entityKind) throws Exception;
