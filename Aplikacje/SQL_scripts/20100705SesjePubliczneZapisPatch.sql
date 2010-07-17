@@ -55,3 +55,9 @@ begin
 	update Sesja set Publiczna = @public, PublicznaZapis = @writeable where IdSesja = @sess_id;
 end
 go
+create function user_accessible_sessions_by_login( @user_login varchar(30) )
+returns table
+as
+return
+select * from user_accessible_sessions( dbo.identify_user( @user_login ))
+go
