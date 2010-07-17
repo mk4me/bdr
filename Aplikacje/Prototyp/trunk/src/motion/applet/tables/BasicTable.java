@@ -67,6 +67,7 @@ public class BasicTable extends AbstractTableModel {
 	}
 	
 	private void getTableContentsFromAttributes() {
+
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {

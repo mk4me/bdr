@@ -50,7 +50,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_CREATE_TRIAL = "Create new trial";
 	private static String MENU_UPLOAD = "Upload file";
-	private static String MENU_DOWNLOAD = "Download file";
+	private static String MENU_DOWNLOAD = "Download selection";
+	private static String MENU_BATCH_DOWNLOAD = "Download batch...";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_TRIALS = "View trials";
 	private static String MENU_VIEW_FILES = "View files";
@@ -105,19 +106,39 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[2].addMouseListener(new TrialMouseAdapter());
 		tables[3].addMouseListener(new FileMouseAdapter());
 		
+		tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		showTable(TableNamesInstance.SESSION);
 		showTable( TableNamesInstance.PERFORMER );
 		
 	}
 
-	private int getSelectedRecord( JTable table, MouseEvent e ) 
+	private void createSelectionAtMouse( JTable table, MouseEvent e )
 	{
 		Point point = e.getPoint();
 		int row = table.rowAtPoint(point);
 		ListSelectionModel model = table.getSelectionModel();
 		model.setSelectionInterval(row, row);
+	}
+	
+	private int getSelectedRecord( JTable table, MouseEvent e ) 
+	{
+		if ( table.getSelectedRowCount() == 0 )
+			createSelectionAtMouse(table, e);
+		
+		return ((BasicTable) table.getModel()).getRecordId( table.getSelectedRows()[0] );
+	}
 
-		return ((BasicTable) table.getModel()).getRecordId(row); // ID column.
+	private int[] getSelectedRecords( JTable table, MouseEvent e ) 
+	{
+		if ( table.getSelectedRowCount() == 0 )
+			createSelectionAtMouse(table, e);
+
+		int recordIds[] = new int[ table.getSelectedRowCount() ];
+		int i = 0;
+		for (int row : table.getSelectedRows() )
+			recordIds[i++] = ((BasicTable) table.getModel()).getRecordId(row);
+		
+		return recordIds;
 	}
 	
 
@@ -273,7 +294,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 		public void mouseClicked(MouseEvent e) {
 
-			final int recordId = getSelectedRecord( tables[3], e );
+			final int[] recordIds = getSelectedRecords( tables[3], e );
 			JPopupMenu popupMenu = new JPopupMenu();
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
@@ -291,11 +312,15 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						int result = fileChooser.showSaveDialog(RightSplitPanel.this);
 						if (result == JFileChooser.APPROVE_OPTION) {
 							file = fileChooser.getSelectedFile();
-							DownloadDialog downloadDialog = new DownloadDialog(recordId, file.toString());
+							DownloadDialog downloadDialog = new DownloadDialog(recordIds, file.toString());
 							downloadDialog.setVisible(true);
 						}
 					}
 				});
+
+				JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_BATCH_DOWNLOAD);
+				popupMenu.add(batchDownloadMenuItem);
+
 				
 				popupMenu.show( tables[3], e.getPoint().x, e.getPoint().y);
 			}

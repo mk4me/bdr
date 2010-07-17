@@ -103,7 +103,7 @@ public class SessionFormDialog extends FormDialog {
 			}
 		});
 		
-		privilegesPanel = new PrivilegesPanel(); 
+		privilegesPanel = new PrivilegesPanel(this); 
 		userPanel.add( privilegesPanel, BorderLayout.SOUTH );
 	}
 	

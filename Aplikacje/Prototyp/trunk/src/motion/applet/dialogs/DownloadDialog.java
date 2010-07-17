@@ -1,11 +1,16 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
@@ -15,18 +20,21 @@ import motion.database.FileTransferListener;
 
 public class DownloadDialog extends BasicDialog {
 	private static String TITLE = "Download file or directory";
-	private static String DOWNLOAD_MESSAGE = "Press Download.";
+	private static String DOWNLOAD_MESSAGE = "Press Download to get selected files.";
+	private static String CHECKBOX_LABEL ="Recreate original directory";
 	private static String CANCEL_DOWNLOAD = Messages.CANCEL;
 	private static String DOWNLOAD_FILE = "Download";
+	private static String PATH_LABEL = "Save to: ";
 	
 	private JLabel pathLabel;
 	private JButton downloadButton;
 	private JButton cancelButton;
 	private JProgressBar progressBar;
-	private int recordId;
+	private JCheckBox recreateDirCheckBox;
+	private int[] recordId;
 	private String path;
 	
-	public DownloadDialog(int recordId, String path) {
+	public DownloadDialog(int recordId[], String path) {
 		super(TITLE, DOWNLOAD_MESSAGE );
 		this.recordId = recordId;
 		this.path = path;
@@ -36,8 +44,20 @@ public class DownloadDialog extends BasicDialog {
 	
 	@Override
 	protected void constructUserInterface() {
+		JPanel panel = new JPanel();
+		panel.setLayout( new FlowLayout() );
+		
 		pathLabel = new JLabel();
-		this.add(pathLabel, BorderLayout.CENTER);
+		panel.add( pathLabel );
+		
+		recreateDirCheckBox = new JCheckBox( CHECKBOX_LABEL );
+		panel.add( recreateDirCheckBox );	
+
+		this.add(panel, BorderLayout.CENTER);
+
+		JPanel leftMargin = new JPanel();
+		leftMargin.setPreferredSize( new Dimension(20, 20 ) );
+		this.add( leftMargin, BorderLayout.WEST );
 		
 		// Button area
 		progressBar = new JProgressBar(0, 100);
@@ -59,7 +79,7 @@ public class DownloadDialog extends BasicDialog {
 		this.setSize(350, 150);
 		this.setLocation(200, 200);
 		
-		this.pathLabel.setText("Save to: " + path);
+		this.pathLabel.setText( PATH_LABEL + path);
 	}
 	
 	@Override
@@ -74,7 +94,9 @@ public class DownloadDialog extends BasicDialog {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							WebServiceInstance.getDatabaseConnection().downloadFile(recordId, path, new DownloadTransferListener());
+							
+							for (int id:recordId)
+								WebServiceInstance.getDatabaseConnection().downloadFile(id, path, new DownloadTransferListener());
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);
