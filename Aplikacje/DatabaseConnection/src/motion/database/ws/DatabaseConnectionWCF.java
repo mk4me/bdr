@@ -44,6 +44,7 @@ import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionLabelQ
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
@@ -67,6 +68,7 @@ import motion.database.ws.basicQueriesServiceWCF.GetSessionByIdXMLResponse.GetSe
 import motion.database.ws.basicQueriesServiceWCF.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributesDefinedResponse.ListAttributesDefinedResult;
+import motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult;
 import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult;
@@ -204,42 +206,6 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 //	Generic Result 
 	
-	/*
-	public  List<GenericResult> execGenericQuery(Filter filter, String[] p_entitiesToInclude) throws Exception
-	{
-		try{
-			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "execGenericQuery", this );
-			
-			ArrayOfString entitiesToInclude = new ArrayOfString();
-			for( String s : p_entitiesToInclude )
-				entitiesToInclude.getString().add( s );
-			
-			ArrayOfFilterPredicate arrayOfFilterPredicate = new ArrayOfFilterPredicate();
-			for ( FilterPredicate f : filter.toFilterPredicateWCF() )
-				arrayOfFilterPredicate.getFilterPredicate().add( f );
-			
-			GenericQueryUniformXMLResult result = port.genericQueryUniformXML( 
-					arrayOfFilterPredicate,	entitiesToInclude );
-	
-			
-			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
-			GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
-			for (Attributes aa : ss.getAttributes() )
-				output.add( ToolsWCF.transformGenericAttributes( aa, new GenericResult() ) );
-			
-			return output;
-		}
-		catch(IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage e)
-		{
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}
-		finally
-		{
-			ToolsWCF.finalizeCall();
-		}
-	}
-	*/
 	public  List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates, String[] p_entitiesToInclude) throws Exception
 	{
 		try{
@@ -304,6 +270,30 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
+	public String[] listEnumValues(String attributeName, String entityKind) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ToolsWCF.getBasicQueriesPort( "listEnumValues", this );
+	
+			ListEnumValuesResult result = port.listEnumValues(attributeName, entityKind);
+			
+			if (result != null && result.getEnumValueList() != null && result.getEnumValueList().getEnumValue() != null)
+				return (String[]) result.getEnumValueList().getEnumValue().toArray();
+			return
+				new String[0];
+		}
+		catch(IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
 	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(String entityKind) throws Exception
 	{
 		try{
@@ -337,6 +327,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
+	
 	
 	
 ////////////////////////////////////////////////////////////////////////////

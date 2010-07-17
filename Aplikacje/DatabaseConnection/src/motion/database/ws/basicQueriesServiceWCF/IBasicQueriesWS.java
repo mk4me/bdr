@@ -417,4 +417,24 @@ public interface IBasicQueriesWS {
         throws IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param attributeName
+     * @param entityKind
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult
+     * @throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListEnumValues", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues")
+    @WebResult(name = "ListEnumValuesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListEnumValues", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValues")
+    @ResponseWrapper(localName = "ListEnumValuesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult listEnumValues(
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        String attributeName,
+        @WebParam(name = "entityKind", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        String entityKind)
+        throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
+    ;
+
 }
