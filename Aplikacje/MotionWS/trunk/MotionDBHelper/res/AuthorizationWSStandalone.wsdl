@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AuthorizationWS" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService">
+	<wsp:Policy wsu:Id="BasicHttpBinding_IAuthorizationWS_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http"/>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService">
+			<xsd:element name="UserList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="UserDetails" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="Login" type="xsd:string"/>
+								<xsd:attribute name="FirstName" type="xsd:string"/>
+								<xsd:attribute name="LastName" type="xsd:string"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SessionPrivilegeList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionPrivilege" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="Login" type="xsd:string"/>
+								<xsd:attribute name="CanWrite" type="xsd:boolean"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CheckUserAccount">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="CheckUserAccountResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="CheckUserAccountResult" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="AuthorizationException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="AuthorizationException" nillable="true" type="tns:AuthorizationException"/>
+			<xsd:element name="CreateUserAccount">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="firstName" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="lastName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CreateUserAccountResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="GrantSessionPrivileges">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="grantedUserLogin" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="grantedUserDomain" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="write" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GrantSessionPrivilegesResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="RemoveSessionPrivileges">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="grantedUserLogin" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="grantedUserDomain" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RemoveSessionPrivilegesResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="AlterSessionVisibility">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="idPublic" type="xsd:boolean"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="isWritable" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AlterSessionVisibilityResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListUsers">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListUsersResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListUsersResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:UserList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionPrivileges">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionPrivilegesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionPrivilegesResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionPrivilegeList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
+			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+			<xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+			<xs:element name="boolean" nillable="true" type="xs:boolean"/>
+			<xs:element name="byte" nillable="true" type="xs:byte"/>
+			<xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+			<xs:element name="decimal" nillable="true" type="xs:decimal"/>
+			<xs:element name="double" nillable="true" type="xs:double"/>
+			<xs:element name="float" nillable="true" type="xs:float"/>
+			<xs:element name="int" nillable="true" type="xs:int"/>
+			<xs:element name="long" nillable="true" type="xs:long"/>
+			<xs:element name="QName" nillable="true" type="xs:QName"/>
+			<xs:element name="short" nillable="true" type="xs:short"/>
+			<xs:element name="string" nillable="true" type="xs:string"/>
+			<xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+			<xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+			<xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+			<xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+			<xs:element name="char" nillable="true" type="tns:char"/>
+			<xs:simpleType name="char">
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+			<xs:element name="duration" nillable="true" type="tns:duration"/>
+			<xs:simpleType name="duration">
+				<xs:restriction base="xs:duration">
+					<xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+					<xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+					<xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="guid" nillable="true" type="tns:guid"/>
+			<xs:simpleType name="guid">
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:attribute name="FactoryType" type="xs:QName"/>
+			<xs:attribute name="Id" type="xs:ID"/>
+			<xs:attribute name="Ref" type="xs:IDREF"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="IAuthorizationWS_CheckUserAccount_InputMessage">
+		<wsdl:part name="parameters" element="tns:CheckUserAccount"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CheckUserAccount_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CheckUserAccountResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CheckUserAccount_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CreateUserAccount_InputMessage">
+		<wsdl:part name="parameters" element="tns:CreateUserAccount"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CreateUserAccount_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CreateUserAccountResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GrantSessionPrivileges_InputMessage">
+		<wsdl:part name="parameters" element="tns:GrantSessionPrivileges"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GrantSessionPrivileges_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GrantSessionPrivilegesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GrantSessionPrivileges_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_RemoveSessionPrivileges_InputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveSessionPrivileges"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_RemoveSessionPrivileges_OutputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveSessionPrivilegesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_RemoveSessionPrivileges_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_AlterSessionVisibility_InputMessage">
+		<wsdl:part name="parameters" element="tns:AlterSessionVisibility"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_AlterSessionVisibility_OutputMessage">
+		<wsdl:part name="parameters" element="tns:AlterSessionVisibilityResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_AlterSessionVisibility_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListUsers"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListUsersResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListSessionPrivileges_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionPrivileges"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListSessionPrivileges_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionPrivilegesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListSessionPrivileges_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:portType name="IAuthorizationWS">
+		<wsdl:operation name="CheckUserAccount">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccount" message="tns:IAuthorizationWS_CheckUserAccount_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccountResponse" message="tns:IAuthorizationWS_CheckUserAccount_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CheckUserAccount_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="CreateUserAccount">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccount" message="tns:IAuthorizationWS_CreateUserAccount_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountResponse" message="tns:IAuthorizationWS_CreateUserAccount_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GrantSessionPrivileges">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivileges" message="tns:IAuthorizationWS_GrantSessionPrivileges_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivilegesResponse" message="tns:IAuthorizationWS_GrantSessionPrivileges_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivilegesAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_GrantSessionPrivileges_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveSessionPrivileges">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/RemoveSessionPrivileges" message="tns:IAuthorizationWS_RemoveSessionPrivileges_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/RemoveSessionPrivilegesResponse" message="tns:IAuthorizationWS_RemoveSessionPrivileges_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/RemoveSessionPrivilegesAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_RemoveSessionPrivileges_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="AlterSessionVisibility">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility" message="tns:IAuthorizationWS_AlterSessionVisibility_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibilityResponse" message="tns:IAuthorizationWS_AlterSessionVisibility_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibilityAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_AlterSessionVisibility_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListUsers">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" message="tns:IAuthorizationWS_ListUsers_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersResponse" message="tns:IAuthorizationWS_ListUsers_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionPrivileges">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivileges" message="tns:IAuthorizationWS_ListSessionPrivileges_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivilegesResponse" message="tns:IAuthorizationWS_ListSessionPrivileges_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivilegesAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListSessionPrivileges_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_IAuthorizationWS" type="tns:IAuthorizationWS">
+		<wsp:PolicyReference URI="#BasicHttpBinding_IAuthorizationWS_policy"/>
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="CheckUserAccount">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccount" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="CreateUserAccount">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccount" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GrantSessionPrivileges">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivileges" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveSessionPrivileges">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/RemoveSessionPrivileges" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="AlterSessionVisibility">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListUsers">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionPrivileges">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivileges" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="AuthorizationWS">
+		<wsdl:port name="BasicHttpBinding_IAuthorizationWS" binding="tns:BasicHttpBinding_IAuthorizationWS">
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/AuthorizationWS.svc"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

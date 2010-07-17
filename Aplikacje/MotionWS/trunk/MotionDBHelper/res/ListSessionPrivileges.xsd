@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="SessionPrivilegeList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+      <xsd:element name="SessionPrivilegeList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="SessionPrivilege" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="Login" type="xsd:string" />
+                <xsd:attribute name="CanWrite" type="xsd:boolean" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>
