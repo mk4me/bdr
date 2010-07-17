@@ -20,7 +20,9 @@ import motion.database.FileTransferListener;
 
 public class DownloadDialog extends BasicDialog {
 	private static String TITLE = "Download file or directory";
-	private static String DOWNLOAD_MESSAGE = "Press Download to get selected files.";
+	private static String DOWNLOAD_MESSAGE = "Press Download to get ";
+	private static String DOWNLOAD_MESSAGE_ENDING = " selected file.";
+	private static String DOWNLOAD_MESSAGE_ENDING_PRURAL = " selected files.";
 	private static String CHECKBOX_LABEL ="Recreate original directory";
 	private static String CANCEL_DOWNLOAD = Messages.CANCEL;
 	private static String DOWNLOAD_FILE = "Download";
@@ -35,7 +37,7 @@ public class DownloadDialog extends BasicDialog {
 	private String path;
 	
 	public DownloadDialog(int recordId[], String path) {
-		super(TITLE, DOWNLOAD_MESSAGE );
+		super(TITLE, DOWNLOAD_MESSAGE+recordId.length+ (recordId.length>1?DOWNLOAD_MESSAGE_ENDING_PRURAL:DOWNLOAD_MESSAGE_ENDING) );
 		this.recordId = recordId;
 		this.path = path;
 		
