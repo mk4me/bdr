@@ -27,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.panels.LeftSplitPanel;
@@ -53,49 +54,60 @@ public class MotionAppletFrame extends JFrame {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
 		
-		initUserInterface();
+		// window closing
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				MotionAppletFrame.this.dispose();
+			}
+		});
+		
+		// Create the status bar
+		StatusBar statusBar =  new StatusBar(this);
+		this.getContentPane().add(statusBar, BorderLayout.SOUTH);
+		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
+		statusBar.setMessage("Please wiat...");
+		this.setVisible(true);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				initUserInterface();
+			}
+		});
 	}
 
 	private void initUserInterface() {
-		// Create the status bar
-		StatusBar statusBar =  new StatusBar(this);
-		this.getContentPane().add( statusBar, BorderLayout.SOUTH );
-		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
-		
 		//Create the tool bar
 		AppletToolBar appletToolBar = new AppletToolBar();
-		this.getContentPane().add(appletToolBar, BorderLayout.PAGE_START);
+		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
 		
-	
 		// Create the horizontal split panels
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-		LeftSplitPanel performerPanel = new LeftSplitPanel(TableNamesInstance.PERFORMER);
-		LeftSplitPanel sessionPanel = new LeftSplitPanel(TableNamesInstance.SESSION);
-		LeftSplitPanel observationPanel = new LeftSplitPanel(TableNamesInstance.TRIAL);
-		leftPanel.add(performerPanel);
-		leftPanel.add(sessionPanel);
-		leftPanel.add(observationPanel);
-
+		createLeftSplitPanel(leftPanel, TableNamesInstance.PERFORMER);
+		createLeftSplitPanel(leftPanel, TableNamesInstance.SESSION);
+		createLeftSplitPanel(leftPanel, TableNamesInstance.TRIAL);
+		
 		// Query results
 		queryResultsPane = new JTabbedPane();
 		
 		// Right panel with a tree
-		final RightSplitPanel rightPanel = new RightSplitPanel();
+		RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
-		//this.getContentPane().add(leftRightSplitPane);
-		//appletToolBar.addTableComboBoxListener(rightPanel);
 		appletToolBar.addLabComboBoxListener(rightPanel);
-
-
+		
 		// Main tabs
 		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab(TAB_BROWSE, rightPanel);
 		mainTabs.addTab(TAB_QUERY, leftRightSplitPane);
-		this.getContentPane().add( mainTabs );
+		getContentPane().add(mainTabs, BorderLayout.CENTER);
 		
 		// Create the menu bar
+		createMenuBar(rightPanel);
+	}
+	
+	private void createMenuBar(final RightSplitPanel rightPanel) {
 		JMenuBar appletMenuBar = new JMenuBar();
 		
 		// New menu
@@ -158,15 +170,11 @@ public class MotionAppletFrame extends JFrame {
 		});
 		
 		this.setJMenuBar(appletMenuBar);
-
-		// window closing
-		this.addWindowListener( new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				MotionAppletFrame.this.dispose();
-			}
-			
-		});
+	}
+	
+	private void createLeftSplitPanel(JPanel leftPanel, TableName tableName) {
+		LeftSplitPanel leftSplitPanel = new LeftSplitPanel(tableName);
+		leftPanel.add(leftSplitPanel);
 	}
 	
 	public static void addResult(JTable resultTable) {

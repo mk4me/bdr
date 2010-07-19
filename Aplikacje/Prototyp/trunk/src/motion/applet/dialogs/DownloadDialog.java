@@ -63,11 +63,9 @@ public class DownloadDialog extends BasicDialog {
 		
 		// Button area
 		progressBar = new JProgressBar(0, 100);
-		progressBar.setStringPainted(true);
 		this.addToButtonPanel(progressBar);
 		progressBar.setVisible(false);
 		progressBar.setIndeterminate(true);
-		progressBar.setStringPainted(false);
 		
 		downloadButton = new JButton(DOWNLOAD_FILE);
 		this.addToButtonPanel(downloadButton);
