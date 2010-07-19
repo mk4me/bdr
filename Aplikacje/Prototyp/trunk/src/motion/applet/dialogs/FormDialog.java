@@ -47,6 +47,8 @@ public class FormDialog extends BasicDialog {
 	
 	public FormDialog(String title, String message) {
 		super(title, message);
+		
+		this.finishUserInterface();
 	}
 	
 	@Override
@@ -58,9 +60,10 @@ public class FormDialog extends BasicDialog {
 		// Form panel
 		formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
+		JScrollPane scrollPane = new JScrollPane(formPanel);
 		
 		this.add( userPanel, BorderLayout.CENTER );
-		userPanel.add(formPanel, BorderLayout.CENTER);
+		userPanel.add(scrollPane, BorderLayout.CENTER);
 		
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
@@ -79,8 +82,7 @@ public class FormDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
-		// TODO Auto-generated method stub
-		
+		this.setSize(460, 400);
 	}
 	
 	@Override
