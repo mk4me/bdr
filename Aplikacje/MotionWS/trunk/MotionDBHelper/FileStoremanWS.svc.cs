@@ -462,6 +462,7 @@ namespace MotionDBWebServices
                 cmd.Parameters["@file_id"].Value = fileID;
                 fileReader = cmd.ExecuteReader();
 
+
                 while (fileReader.Read())
                 {
                     fileData = (byte[])fileReader.GetValue(0);
@@ -469,6 +470,10 @@ namespace MotionDBWebServices
                 }
                 if(!Directory.Exists(baseLocalFilePath + relativePath))
                     Directory.CreateDirectory(baseLocalFilePath + relativePath);
+
+                fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
+                fileName = fileName.Substring(fileName.LastIndexOf('/') + 1);
+
                 FileStream fs = File.Create(baseLocalFilePath + relativePath + @"\" + fileName);
                 BinaryWriter sw = new BinaryWriter(fs);
                 sw.Write(fileData);
