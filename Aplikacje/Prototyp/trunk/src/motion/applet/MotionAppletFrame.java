@@ -43,10 +43,12 @@ public class MotionAppletFrame extends JFrame {
 	private static String MENU_VIEW = Messages.getString("MotionApplet.MenuView"); //$NON-NLS-1$
 	private static String MENU_ALL_PERFORMERS = Messages.getString("MotionApplet.MenuAllPerformers"); //$NON-NLS-1$
 	private static String MENU_ALL_SESSIONS = Messages.getString("MotionApplet.MenuAllSessions"); //$NON-NLS-1$
+	private static String MENU_REFRESH = Messages.getString("MotionApplet.MenuRefresh"); //$NON-NLS-1$
 	private static String MENU_NEW = Messages.getString("MotionApplet.MenuNew"); //$NON-NLS-1$
 	private static String MENU_UPLOAD = Messages.getString("Upload"); //$NON-NLS-1$
 	private static String TAB_BROWSE = Messages.getString("MotionApplet.Browse"); //$NON-NLS-1$
 	private static String TAB_QUERY = Messages.getString("MotionApplet.Query"); //$NON-NLS-1$
+	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 	
 	private static JTabbedPane queryResultsPane;
 	
@@ -66,7 +68,7 @@ public class MotionAppletFrame extends JFrame {
 		StatusBar statusBar =  new StatusBar(this);
 		this.getContentPane().add(statusBar, BorderLayout.SOUTH);
 		DatabaseConnection.getInstanceWCF().registerStateMessageListener( statusBar );
-		statusBar.setMessage("Please wiat...");
+		statusBar.setMessage(MESSAGE_PLEASE_WAIT);
 		this.setVisible(true);
 		
 		SwingUtilities.invokeLater(new Runnable() {
@@ -138,6 +140,14 @@ public class MotionAppletFrame extends JFrame {
 		viewAllSessionsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rightPanel.showTable(TableNamesInstance.SESSION);
+			}
+		});
+		
+		JMenuItem viewRefreshItem = new JMenuItem(MENU_REFRESH);
+		viewMenu.add(viewRefreshItem);
+		viewRefreshItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.refreshAllTables();
 			}
 		});
 		

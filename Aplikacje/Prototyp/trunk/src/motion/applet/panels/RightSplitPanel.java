@@ -30,6 +30,7 @@ import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
@@ -402,7 +403,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void refreshAllTables() {
+	public void refreshAllTables() {
 		int i = tabbedPane.getSelectedIndex();
 		refreshPerformerTable();
 		refreshSessionTable();
@@ -423,20 +424,26 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showPerformerDialog() {
 		PerformerFormDialog performerFormDialog = new PerformerFormDialog();
 		performerFormDialog.setVisible(true);
-		RightSplitPanel.this.refreshPerformerTable();
+		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			RightSplitPanel.this.refreshPerformerTable();
+		}
 	}
 	
 	public void showSessionDialog(int recordId) {
 		SessionFormDialog sessionFormDialog = new SessionFormDialog(recordId);
 		sessionFormDialog.pack();	// TODO: is this needed?
 		sessionFormDialog.setVisible(true);
-		RightSplitPanel.this.refreshSessionTable();
+		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			RightSplitPanel.this.refreshSessionTable();
+		}
 	}
 	
 	public void showTrialDialog(int recordId) {
 		TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
 		trialFormDialog.setVisible(true);
-		RightSplitPanel.this.refreshTrialTable();
+		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			RightSplitPanel.this.refreshTrialTable();
+		}
 	}
 	
 	public void showUploadDialog(TableName tableName, int recordId) {

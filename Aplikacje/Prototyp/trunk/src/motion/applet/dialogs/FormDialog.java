@@ -43,6 +43,10 @@ public class FormDialog extends BasicDialog {
 	protected JPanel userPanel;
 	protected GridBagConstraints gridBagConstraints;
 	
+	public static int CREATE_PRESSED = 1;
+	public static int CANCEL_PRESSED = 0;
+	private int result = CANCEL_PRESSED;
+	
 	protected ArrayList<FormField> definedFormFields = new ArrayList<FormField>();
 	
 	public FormDialog(String title, String message) {
@@ -89,16 +93,28 @@ public class FormDialog extends BasicDialog {
 	protected void addListeners() {
 		this.createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				FormDialog.this.setResult(CREATE_PRESSED);
 			}
 		});
 		
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				FormDialog.this.setResult(CANCEL_PRESSED);
 				FormDialog.this.setVisible(false);
 				FormDialog.this.dispose();
 			}
 		});
+	}
+	
+	// Button press result.
+	private void setResult(int result) {
+		
+		this.result = result;
+	}
+	
+	public int getResult() {
+		
+		return this.result;
 	}
 	
 	protected void addFormTextLabel(String label) {
