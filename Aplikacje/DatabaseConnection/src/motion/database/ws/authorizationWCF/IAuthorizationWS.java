@@ -117,4 +117,35 @@ public interface IAuthorizationWS {
         throws IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @return
+     *     returns motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult
+     * @throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListUsers", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers")
+    @WebResult(name = "ListUsersResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+    @RequestWrapper(localName = "ListUsers", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsers")
+    @ResponseWrapper(localName = "ListUsersResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsersResponse")
+    public motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult listUsers()
+        throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param sessionID
+     * @return
+     *     returns motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse.ListSessionPrivilegesResult
+     * @throws IAuthorizationWSListSessionPrivilegesAuthorizationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListSessionPrivileges", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivileges")
+    @WebResult(name = "ListSessionPrivilegesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+    @RequestWrapper(localName = "ListSessionPrivileges", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListSessionPrivileges")
+    @ResponseWrapper(localName = "ListSessionPrivilegesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse")
+    public motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse.ListSessionPrivilegesResult listSessionPrivileges(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        int sessionID)
+        throws IAuthorizationWSListSessionPrivilegesAuthorizationExceptionFaultFaultMessage
+    ;
+
 }

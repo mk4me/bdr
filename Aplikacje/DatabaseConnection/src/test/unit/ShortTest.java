@@ -94,7 +94,7 @@ public class ShortTest {
 			}
 		}
 
-		List<String> resultss = database.listEnumValues("CameraView", "trial");
+		List<String> resultss = database.listEnumValues("CameraView", "file");
 
 		System.out.println("Enum values defined:");
 		

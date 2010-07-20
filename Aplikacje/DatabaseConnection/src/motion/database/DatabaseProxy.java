@@ -16,6 +16,8 @@ import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
+import motion.database.model.User;
+import motion.database.model.UserPrivileges;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public interface DatabaseProxy {
@@ -31,6 +33,19 @@ public interface DatabaseProxy {
 	
 	//public abstract boolean testConnection() throws Exception;
 
+	public void removeBasket(String basketName) throws Exception;
+
+	public void createBasket(String basketName) throws Exception;
+	
+	public void removeEntityFromBasket(String basketName, int resourceID, String entityName) throws Exception;
+	
+	public void addEntityToBasket(String basketName, int resourceID) throws Exception;
+	
+	public DbElementsList<UserPrivileges> listSessionPrivileges(int sessionID) throws Exception;
+
+	public DbElementsList<User> listUsers() throws Exception;
+
+	
 	public abstract void registerFileUploadListener(
 			FileTransferListener listener);
 

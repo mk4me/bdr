@@ -27,6 +27,14 @@ import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
+import motion.database.model.User;
+import motion.database.model.UserPrivileges;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWS;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.UserPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
@@ -121,7 +129,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED };
+	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED }
+
+	private static final String entity = null;;
 	
 	protected ConnectionState state;
 	protected Credentials wsCredentials = new Credentials();
@@ -1097,7 +1107,6 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
 
 			port.setSessionAttribute(sessionID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
 		} 
 		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1148,7 +1157,6 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
 
 			port.setSegmentAttribute(segmentID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
 		} catch (IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
@@ -1165,7 +1173,6 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setPerformerAttribute", this );
 
 			port.setFileAttribute(fileID, attributeName, attributeValue, update);			
-			ToolsWCF.finalizeCall();
 		} catch (IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
@@ -1211,6 +1218,23 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
+
+	public DbElementsList<User> listUsers() throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "listUsers", this );
+			return ToolsWCF.transformListOfUsers( port.listUsers() );
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
 	public void grantSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception
 	{
 		try {
@@ -1257,4 +1281,113 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ToolsWCF.finalizeCall();
 		}
 	}
+
+	public DbElementsList<UserPrivileges> listSessionPrivileges(int sessionID) throws Exception
+	{
+		try {
+			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "listSessionPrivileges", this );
+			return ToolsWCF.transformListOfPrivileges( sessionID, port.listSessionPrivileges(sessionID) );
+		
+		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
+	/*==========================================================================
+	 * 	UserPersonalSpaceWS
+	 *==========================================================================
+	 */	
+
+	public void addEntityToBasket(String basketName, int resourceID) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "addEntityToBasket", this );
+			port.addEntityToBasket(basketName, resourceID, entity);
+		
+		} catch (IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+	
+
+	public void removeEntityFromBasket(String basketName, int resourceID, String entityName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "removeEntityFromoBasket", this );
+			port.removeEntityFromBasket(basketName, resourceID, entityName);
+		
+		} catch (IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
+	public void createBasket(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			port.createBasket(basketName);
+		
+		} catch (IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+
+	public void removeBasket(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			port.removeBasket(basketName);
+		
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
+/*	public void listBasketPerformersWithAttributes(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			ListBasketPerformersWithAttributesXMLResult result = port.listBasketPerformersWithAttributesXML(basketName);
+		
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			if (result.getBasketPerformerWithAttributesList() != null) 
+				for ( motion.database.ws.UserPersonalSpaceWCF.PerformerDetailsWithAttributes s : result.getBasketPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+						output.add( ToolsWCF.transformPerformerDetails(s) );
+			
+			return output;
+
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+*/
 }

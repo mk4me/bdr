@@ -15,9 +15,19 @@ import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
+import motion.database.model.User;
+import motion.database.model.UserPrivileges;
+import motion.database.model.UserPrivilegesStaticAttributes;
+import motion.database.model.UserStaticAttributes;
 import motion.database.ws.DatabaseConnectionWCF.ConnectionState;
+import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWS;
+import motion.database.ws.UserPersonalSpaceWCF.UserPersonalSpace;
 import motion.database.ws.authorizationWCF.AuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
+import motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse.ListSessionPrivilegesResult;
+import motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult;
+import motion.database.ws.authorizationWCF.SessionPrivilegeList.SessionPrivilege;
+import motion.database.ws.authorizationWCF.UserList.UserDetails;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
 import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
@@ -55,6 +65,10 @@ public class ToolsWCF {
 		
 	}
 
+	private static void prepareAuthorizationServiceCall(IUserPersonalSpaceWS port) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	public static void setMessage(String message)
 	{
@@ -140,6 +154,27 @@ public class ToolsWCF {
 	}
 
 	
+	
+	public static IUserPersonalSpaceWS getUserPersonalSpaceServicePort( String callerName, DatabaseConnectionWCF db ) throws Exception
+	{
+		if (db.state != ConnectionState.INITIALIZED)
+		{
+			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
+			throw new Exception("Not Initialized. Cannot do: " + callerName );
+		}
+		db.log.entering( "DatabaseConnectionWCF", callerName );
+		if (textMessageListener!=null)
+			textMessageListener.setMessage("Performing: " + callerName);
+		
+		UserPersonalSpace service = new UserPersonalSpace();
+		IUserPersonalSpaceWS port = service.getBasicHttpBindingIUserPersonalSpaceWS();
+		
+		prepareAuthorizationServiceCall(port);
+
+		return port;
+	}
+
+	
 	public static void finalizeCall()
 	{
 		setMessage("Connected as '" + DatabaseConnection.getInstance().getConnectionInfo() + "'. Ready.");
@@ -191,6 +226,24 @@ public class ToolsWCF {
 
 		return list;
 	}
+
+	
+	public static DbElementsList<User> transformListOfUsers(Object result) {
+
+		DbElementsList<User> list = new DbElementsList<User>();
+		ListUsersResult r = (ListUsersResult) result;
+		for (UserDetails d: r.getUserList().getUserDetails() )
+		{
+			User df = new User();
+			df.put( UserStaticAttributes.firstName, d.getFirstName() );
+			df.put( UserStaticAttributes.lastName, d.getLastName() );
+			df.put( UserStaticAttributes.login, d.getLogin() );
+			list.add( df );
+		}
+		
+		return list;
+	}
+
 	
 	/**
 	 * @param s
@@ -250,6 +303,24 @@ public class ToolsWCF {
 
 	public static void registerActionListener(TextMessageListener listener) {
 		textMessageListener = listener;
+	}
+
+	public static DbElementsList<UserPrivileges> transformListOfPrivileges(
+			int sessionId,
+			ListSessionPrivilegesResult listSessionPrivileges) 
+	{
+		DbElementsList<UserPrivileges> list = new DbElementsList<UserPrivileges>();
+		for (SessionPrivilege d: listSessionPrivileges.getSessionPrivilegeList().getSessionPrivilege() )
+		{
+			UserPrivileges df = new UserPrivileges();
+			df.put( UserPrivilegesStaticAttributes.login, d.getLogin() );
+			df.put( UserPrivilegesStaticAttributes.canRead, true );
+			df.put( UserPrivilegesStaticAttributes.canWrite, d.isCanWrite() );
+			df.put( UserPrivilegesStaticAttributes.sessionId, sessionId );
+			list.add( df );
+		}
+
+		return null;
 	}
 
 
