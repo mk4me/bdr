@@ -581,7 +581,6 @@ create table Predykat -- czesc funkcjonalnosci UPS
 	Wartosc varchar(100) not null,
 	FunkcjaAgregujaca varchar(10) not null,
 	EncjaAgregowana varchar(20) not null,
-	Nazwa varchar(20) not null,
 	IdUzytkownik int not null
 )
 go
