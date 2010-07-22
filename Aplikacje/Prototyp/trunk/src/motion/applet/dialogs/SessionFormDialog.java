@@ -36,7 +36,7 @@ public class SessionFormDialog extends FormDialog {
 	private int performerId;
 	
 	public SessionFormDialog(int performerId) {
-		super(TITLE, WELCOME_MESSAGE);
+		super(TITLE, WELCOME_MESSAGE, true);
 		this.performerId = performerId;
 		
 		addFormFields();
@@ -104,7 +104,7 @@ public class SessionFormDialog extends FormDialog {
 		});
 		
 		privilegesPanel = new PrivilegesPanel(this); 
-		userPanel.add( privilegesPanel, BorderLayout.SOUTH );
+		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
 	}
 	
 	private void addFormFields() {

@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -40,12 +41,15 @@ public class FormDialog extends BasicDialog {
 	private JButton cancelButton;
 	
 	protected JPanel formPanel;
-	protected JPanel userPanel;
+	//protected JPanel userPanel;
 	protected GridBagConstraints gridBagConstraints;
 	
 	public static int CREATE_PRESSED = 1;
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
+	
+	private boolean showTabs = false;
+	private JTabbedPane formTabs;
 	
 	protected ArrayList<FormField> definedFormFields = new ArrayList<FormField>();
 	
@@ -55,19 +59,18 @@ public class FormDialog extends BasicDialog {
 		this.finishUserInterface();
 	}
 	
+	public FormDialog(String title, String message, boolean showTabs) {
+		super(title, message);
+		this.showTabs = showTabs;
+		
+		this.finishUserInterface();
+	}
+	
 	@Override
 	protected void constructUserInterface() {
-		
-		userPanel = new JPanel();
-		userPanel.setLayout( new BorderLayout() );
-		
 		// Form panel
 		formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
-		JScrollPane scrollPane = new JScrollPane(formPanel);
-		
-		this.add( userPanel, BorderLayout.CENTER );
-		userPanel.add(scrollPane, BorderLayout.CENTER);
 		
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
@@ -87,6 +90,16 @@ public class FormDialog extends BasicDialog {
 	@Override
 	protected void finishUserInterface() {
 		this.setSize(460, 400);
+		
+		JScrollPane scrollPane = new JScrollPane(formPanel);
+		
+		if (showTabs == true) {
+			formTabs = new JTabbedPane();
+			formTabs.addTab("Form", scrollPane);
+			this.add(formTabs, BorderLayout.CENTER);
+		} else {
+			this.add(scrollPane, BorderLayout.CENTER);
+		}
 	}
 	
 	@Override
@@ -104,6 +117,11 @@ public class FormDialog extends BasicDialog {
 				FormDialog.this.dispose();
 			}
 		});
+	}
+	
+	protected JTabbedPane getFormTabbedPane() {
+		
+		return this.formTabs;
 	}
 	
 	// Button press result.
