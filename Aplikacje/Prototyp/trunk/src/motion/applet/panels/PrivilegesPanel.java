@@ -1,40 +1,29 @@
 package motion.applet.panels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import motion.applet.tables.EntityTableModel;
 import motion.database.DatabaseConnection;
@@ -151,7 +140,6 @@ public class PrivilegesPanel extends JPanel {
 		
 		//bottomPanel.setVisible( false );
 	}
-
 	
 	private JPanel createPrivilegesListPanel(int sessionId)
 	{
@@ -162,6 +150,7 @@ public class PrivilegesPanel extends JPanel {
 		if(sessionId!=-1)
 			try {
 				privileges = DatabaseConnection.getInstance().listSessionPrivileges(sessionId);
+				
 				data = new String[privileges.size()][];
 				int i = 0;
 				for (UserPrivileges p : privileges)
@@ -180,32 +169,29 @@ public class PrivilegesPanel extends JPanel {
 		GridBagConstraints constr = new GridBagConstraints();
 		constr.gridx = 0;
 		constr.gridy = 0;
-		constr.fill = GridBagConstraints.NONE;
 		constr.anchor = GridBagConstraints.NORTHWEST;
-		constr.gridwidth = 4;
-		constr.gridheight = 7;
+		constr.gridheight = 2;
 		
 		JTable privList = new JTable( new EntityTableModel(privileges, new String[]{"login", "canRead", "canWrite"}) );
-		privList.setFillsViewportHeight(false);
+		privList.setPreferredScrollableViewportSize(privList.getPreferredSize());
+		
 		for (int i=0; i<columns.length; i++)
 			privList.getColumnModel().getColumn(i).setHeaderValue( columns[i] );
 		
-		privList.setAutoscrolls( true );
-		JScrollPane pane = new JScrollPane( privList ); 
-		pane.setSize( new Dimension(200, 300 ) );
-		pane.setMaximumSize( new Dimension( 100, 100 ) );
+		JScrollPane pane = new JScrollPane( privList );
+		
 		panel.add( pane, constr );
 		
 		constr.fill = GridBagConstraints.HORIZONTAL;
 		constr.gridy = 0;
-		constr.gridx = 5;
+		constr.gridx = 1;
 		constr.gridwidth = 1;
 		constr.gridheight = 1;
 		constr.insets = new Insets( 0, 5, 5, 5 );
-		constr.anchor = GridBagConstraints.CENTER;
+		constr.anchor = GridBagConstraints.NORTHEAST;
 		panel.add( new JButton ("Add"), constr);
-		constr.gridy = 3;
-		constr.gridx = 5;
+		constr.gridy = 1;
+		constr.gridx = 1;
 		panel.add( new JButton("Remove"), constr );
 		
 		return panel;
