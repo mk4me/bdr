@@ -320,7 +320,7 @@ public class ToolsWCF {
 			list.add( df );
 		}
 
-		return null;
+		return list;
 	}
 
 

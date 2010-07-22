@@ -9,6 +9,7 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	String idAttributeName;
 	public EntityKind entityKind;
 	public HashMap<String, EntityAttributeGroup> groups;
+	public Class clazz;
 	
 	public GenericDescription(String name, EntityKind entityKind)
 	{
@@ -20,6 +21,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	
 	public Object get(T key) {
 		return super.get(key.name());
+	}
+
+	public Object getValue(T key) {
+		return ((EntityAttribute)super.get(key.name())).value;
 	}
 	
 	public EntityAttribute put(T key, EntityAttribute arg) {
@@ -41,6 +46,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		return super.put( key, arg );
 	}
 
+	public String[] getStaticAttributesArray()
+	{
+		return this.entityKind.getKeys();
+	}
 	
 	public Object put(T key, Object arg) {
 		
@@ -52,7 +61,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 
 	public int getId()
 	{
-		return (Integer)get( idAttributeName ).value;
+		if ( get(idAttributeName) != null )
+			return (Integer)get( idAttributeName ).value;
+		else
+			return -1;
 	}
 	
 	public void addEmptyGenericAttributes( HashMap<String, EntityAttributeGroup> newGroups )
@@ -86,7 +98,9 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	{
 		StringBuffer output = new StringBuffer();
 		
-		output.append( this.getClass().getName() ).append( '(' ).append( this.getId() ).append(')').append(System.getProperty( "line.separator" ) );
+		output.append( this.getClass().getName() );
+		if ( this.getId()!=-1)
+			output.append( '(' ).append( this.getId() ).append(')').append(System.getProperty( "line.separator" ) );
 		for ( String key : this.keySet() )
 				output.append( key ).append('=').append( this.get(key).value ).append(System.getProperty( "line.separator" ) );
 		return output.toString();
