@@ -135,6 +135,7 @@
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.dll" />
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="FileStoremanWS.svc" />
+    <None Include="Motion.build" />
     <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="res\StandaloneWSDLCompositor.xslt" />
@@ -193,6 +194,7 @@
     <None Include="res\SegmentDetailsWithAttributesElement.xsd" />
     <None Include="res\SessionDetailsWithAttributesElement.xsd" />
     <None Include="res\TrialDetailsWithAttributesElement.xsd" />
+    <None Include="res\UserPersonalSpaceWSStandaloneImport.wsdl" />
     <None Include="res\_PerformQuery.xsd" />
     <None Include="_PerformQuery.xsd" />
   </ItemGroup>

@@ -12,6 +12,13 @@
               <xsd:element name="AttributeGroupName" type="xsd:string" />
               <xsd:element name="Subtype" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <xsd:element name="Unit" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="EnumValues" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Value" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>

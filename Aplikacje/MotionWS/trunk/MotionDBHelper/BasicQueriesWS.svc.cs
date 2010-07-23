@@ -839,7 +839,7 @@ namespace MotionDBWebServices
 
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_attributes_defined";
+                cmd.CommandText = "list_attributes_defined_with_enums";
                 cmd.Parameters.Add("@att_group", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@entity_kind", SqlDbType.VarChar, 20);
                 cmd.Parameters["@att_group"].Value = attributeGroupName;
