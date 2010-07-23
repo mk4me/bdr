@@ -168,6 +168,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						RightSplitPanel.this.showTable(TableNamesInstance.SESSION, recordId);
+						RightSplitPanel.this.clearTrialTable();
+						RightSplitPanel.this.clearFileTable();
 					}
 				});
 				
