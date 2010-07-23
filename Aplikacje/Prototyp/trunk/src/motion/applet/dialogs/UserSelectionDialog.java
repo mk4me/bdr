@@ -1,31 +1,41 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
+import motion.applet.panels.PrivilegesPanel;
+import motion.applet.tables.BasicTable;
+import motion.applet.tables.EntityTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
+import motion.database.DatabaseProxy;
+import motion.database.DbElementsList;
+import motion.database.model.EntityKind;
+import motion.database.model.User;
+import motion.database.model.UserPrivileges;
 
 public class UserSelectionDialog extends BasicDialog {
-	private static String LOGIN_TITLE = Messages.getString("LoginDialog.LoginTitle"); //$NON-NLS-1$
-	private static String USER = Messages.getString("LoginDialog.UserName") + Messages.COLON; //$NON-NLS-1$
-	private static String DOMAIN = Messages.getString("LoginDialog.Domain") + Messages.COLON; //$NON-NLS-1$
-	private static String PASSWORD = Messages.getString("LoginDialog.Password") + Messages.COLON; //$NON-NLS-1$
-	private static String LOGIN = Messages.getString("LoginDialog.Login"); //$NON-NLS-1$
-	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
-	private static String WELCOME_TITLE = Messages.getString("LoginDialog.EnterUserNameAndPassword"); //$NON-NLS-1$
+	private static String LOGIN_TITLE = Messages.getString("UserSelectionDialog.Title"); //$NON-NLS-1$
+	private static String WELCOME_TITLE = Messages.getString("UserSelectionDialog.Welcome"); //$NON-NLS-1$
 	
 	private JButton okButton;
 	private JButton cancelButton;
@@ -33,6 +43,8 @@ public class UserSelectionDialog extends BasicDialog {
 	public static int OK_PRESSED = 1;
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
+	JTable usersTable;
+	DbElementsList<User> usersList;
 	
 	public UserSelectionDialog() {
 		super(LOGIN_TITLE, WELCOME_TITLE);
@@ -41,36 +53,50 @@ public class UserSelectionDialog extends BasicDialog {
 	}
 	
 	protected void constructUserInterface() {
+
+		try {
+			usersList = DatabaseConnection.getInstance().listUsers();
+		} catch (Exception e) {
+			usersList = new DbElementsList<User>();
+			e.printStackTrace();
+		}
+		
+		String columns[] = { Messages.getString( "User.Column.Login" ), 
+				Messages.getString( "User.Column.FirstName" ),
+				Messages.getString( "User.Column.LastName" ) };
+
 		// Text fields
-		JPanel loginPanel = new JPanel();
-		loginPanel.setLayout(new GridBagLayout());
+		JPanel panel = new JPanel();
+		panel.setLayout( new BorderLayout());
 		
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
-		gridBagConstraints.ipadx = 10;
-		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
+		usersTable = new JTable( new EntityTableModel(usersList) );//
+		Dimension tableSize = new Dimension();
+		tableSize.width = usersTable.getPreferredSize().width;
+		tableSize.height = 150;
+		usersTable.setPreferredScrollableViewportSize(tableSize);
 		
-		JLabel loginLabel = new JLabel(USER);
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 0;
-		loginPanel.add(loginLabel, gridBagConstraints);
+		for (int i=0; i<columns.length; i++)
+			usersTable.getColumnModel().getColumn(i).setHeaderValue( columns[i] );
 		
+		JScrollPane pane = new JScrollPane( usersTable );
 		
-		this.add(loginPanel, BorderLayout.CENTER);
+		panel.add( pane, BorderLayout.CENTER );
+
+		this.add( panel, BorderLayout.CENTER );
 		
 		// Button area
-		okButton = new JButton(LOGIN);
+		okButton = new JButton(Messages.OK);
 		this.addToButtonPanel(okButton);
 		this.getRootPane().setDefaultButton(okButton);
 		
-		cancelButton = new JButton(CANCEL);
+		cancelButton = new JButton(Messages.CANCEL);
 		this.addToButtonPanel(cancelButton);
 		
 	}
 	
 	protected void finishUserInterface() {
 		this.setSize(250, 200);
-		this.setResizable(false);
+		this.setResizable(true);
 	}
 	
 	protected void addListeners() {
@@ -90,31 +116,9 @@ public class UserSelectionDialog extends BasicDialog {
 					protected void done() {
 
 						UserSelectionDialog.this.setVisible(false);
-
-						// Check user credentials
-						try {
-							boolean exists = WebServiceInstance.getDatabaseConnection().checkUserAccount();
-							if (!exists)
-							{
-								// Login dialog
-								UserDetailsDialog userDetailsDialog = new UserDetailsDialog();
-								userDetailsDialog.setVisible(true);
-								
-								// Check if login was successful
-								if (userDetailsDialog.getResult() == UserDetailsDialog.OK_PRESSED)									
-									WebServiceInstance.getDatabaseConnection().createUserAccount(
-											userDetailsDialog.getFirstName(), userDetailsDialog.getLastName());
-							}
-							UserSelectionDialog.this.setResult(OK_PRESSED);
-							
-						} catch (Exception e) {
-							
-							DatabaseConnection.log.severe( e.getMessage() );
-							UserSelectionDialog.this.setResult(CANCEL_PRESSED);
-						}
+						UserSelectionDialog.this.setResult(OK_PRESSED);
 						
 						// Login always successful, add login check
-
 						UserSelectionDialog.this.dispose();
 					}
 				};
@@ -140,5 +144,38 @@ public class UserSelectionDialog extends BasicDialog {
 	public int getResult() {
 		
 		return this.result;
+	}
+
+	public DbElementsList<User> getSelectedUsers()
+	{
+		DbElementsList<User> users = new DbElementsList<User>();
+		if (result == OK_PRESSED)
+		{
+			if ( usersTable.getSelectedRowCount() != 0 )
+				for (int row : usersTable.getSelectedRows() )
+					users.add( usersList.get( row ) );
+		}
+		return users;
+	}
+	
+	public static void main(String [] args)
+	{
+		System.out.println( EntityKind.performer.getKeys() );
+		
+		DatabaseProxy database = DatabaseConnection.getInstanceWCF();
+		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
+		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+
+		UserSelectionDialog b = new UserSelectionDialog();
+		//b.setLayout( new BorderLayout() );
+		
+		b.setSize( 500, 500 );
+		b.setVisible( true );
+		b.addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);		
+			}
+		});
 	}
 }

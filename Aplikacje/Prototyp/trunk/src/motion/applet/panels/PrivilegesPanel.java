@@ -21,16 +21,22 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import motion.applet.dialogs.UserSelectionDialog;
 import motion.applet.tables.EntityTableModel;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
 import motion.database.model.Privileges;
+import motion.database.model.User;
 import motion.database.model.UserPrivileges;
+import motion.database.model.UserPrivilegesStaticAttributes;
+import motion.database.model.UserStaticAttributes;
 
 public class PrivilegesPanel extends JPanel {
 
@@ -47,7 +53,8 @@ public class PrivilegesPanel extends JPanel {
 							Privileges.PUBLIC_READ,
 							Privileges.PUBLIC_WRITE,
 							Privileges.CUSTOM };
-	
+
+	DbElementsList<UserPrivileges> privileges;
 	
 	JRadioButton[] buttons;
 	ButtonGroup privilegesGroup; 
@@ -55,11 +62,16 @@ public class PrivilegesPanel extends JPanel {
 
 	JPanel bottomPanel;
 	JPanel containerPanel;
+	JButton addButton;
+	JButton removeButton;
+	JButton canWriteButton;
 	Window frame;
+	JTable privList;
+	private JButton modifyButton;
 
 	public PrivilegesPanel(Window outerFrame)
 	{
-		this( outerFrame, 2 );
+		this( outerFrame, -1 );
 	}
 
 	public PrivilegesPanel(Window outerFrame, int sessionId)
@@ -128,14 +140,15 @@ public class PrivilegesPanel extends JPanel {
 		add( marginRight, BorderLayout.EAST );
 		
 		bottomPanel = createPrivilegesListPanel(sessionId);
-		add( bottomPanel, BorderLayout.CENTER );		
+		add( bottomPanel, BorderLayout.CENTER );	
+		
+		bottomPanel.setVisible( false );
 		
 	}
 	
 	private JPanel createPrivilegesListPanel(int sessionId)
 	{
 		String columns[] = { "user login", "can read?", "can write?" };
-		DbElementsList<UserPrivileges> privileges;
 		String data [][] = { {"", "", "" } };
 
 		if(sessionId!=-1)
@@ -156,8 +169,10 @@ public class PrivilegesPanel extends JPanel {
 		
 		JPanel panel = new JPanel();
 		panel.setLayout( new BorderLayout());
-		
-		JTable privList = new JTable( new EntityTableModel(privileges, new String[]{"login", "canRead", "canWrite"}) );
+
+		EntityTableModel model = new EntityTableModel(privileges, new String[]{"login", "canRead", "canWrite"} ); 
+		privList = new JTable( model );
+		model.addTableModelListener( privList );
 		Dimension tableSize = new Dimension();
 		tableSize.width = privList.getPreferredSize().width;
 		tableSize.height = 150;
@@ -177,10 +192,106 @@ public class PrivilegesPanel extends JPanel {
 		constr.gridy = 0;
 		constr.gridx = 1;
 		constr.insets = new Insets( 0, 5, 5, 5 );
-		buttonPanel.add( new JButton ("Add"), constr);
+		addButton = new JButton ("Add Users");
+		buttonPanel.add( addButton, constr );
+		addButton.addActionListener( new ActionListener(){
+			public void actionPerformed(ActionEvent e)
+			{
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						addButton.setEnabled(false);
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						UserSelectionDialog b = new UserSelectionDialog();
+						b.setSize( 500, 500 );
+						b.setVisible( true );
+						
+						DbElementsList<User> users = b.getSelectedUsers();
+						for (User u : users)
+						{
+							UserPrivileges up = new UserPrivileges();
+							up.put( UserPrivilegesStaticAttributes.login, ((EntityAttribute)u.get( UserStaticAttributes.login )).value );
+							up.put( UserPrivilegesStaticAttributes.canRead, true );
+							up.put( UserPrivilegesStaticAttributes.canWrite, false );
+							privileges.add( up );
+						}
+						privList.invalidate();
+						frame.pack();
+						addButton.setEnabled(true);
+					}
+				};
+				worker.execute();
+			}
+		});
 		constr.gridy = 1;
 		constr.gridx = 1;
-		buttonPanel.add( new JButton("Remove"), constr);
+		removeButton = new JButton("Remove");
+		removeButton.addActionListener( new ActionListener(){
+			public void actionPerformed(ActionEvent e)
+			{
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						removeButton.setEnabled(false);
+				
+						if (privList.getSelectedRowCount() > 0)
+							for (int row: privList.getSelectedRows() )
+								privileges.remove( row );
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						removeButton.setEnabled(true);
+						privList.invalidate();
+						frame.pack();	
+					}
+				};
+				worker.execute();
+			}
+		} );
+		buttonPanel.add( removeButton, constr);
+		
+		modifyButton = new JButton("Can write");
+		constr.gridy = 2;
+		constr.gridx = 1;
+		modifyButton.addActionListener( new ActionListener(){
+			public void actionPerformed(ActionEvent e)
+			{
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						modifyButton.setEnabled(false);
+				
+						if (privList.getSelectedRowCount() > 0)
+							for (int row: privList.getSelectedRows() )
+							{	
+								boolean canWrite = (Boolean) ((EntityAttribute)privileges.get( row ).get( UserPrivilegesStaticAttributes.canWrite )).value;
+ 
+								privileges.get( row ).remove( UserPrivilegesStaticAttributes.canWrite );
+								privileges.get( row ).put( UserPrivilegesStaticAttributes.canWrite, !canWrite );
+							}
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						modifyButton.setEnabled(true);
+						privList.invalidate();
+						frame.pack();	
+					}
+				};
+				worker.execute();
+			}
+		} );
+		buttonPanel.add( modifyButton, constr);
 		
 		panel.add(buttonPanel, BorderLayout.EAST);
 		

@@ -24,6 +24,7 @@ public class EntityTableModel extends AbstractTableModel {
 		}
 		else
 			columns = new String[0];
+		visibleColumns = columns;
 	}
 	
 	public EntityTableModel(DbElementsList<? extends GenericDescription<?>> data,
