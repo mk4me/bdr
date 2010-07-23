@@ -1,6 +1,7 @@
 package motion.database.model;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class EntityAttribute {
 
@@ -9,7 +10,10 @@ public class EntityAttribute {
 	public String groupName;
 	public Object value;
 	public String name;
-
+	public String unit;
+	public String subtype;
+	public List<String> enumValues;
+	
 	public EntityAttribute(String name, Object value, String groupName, String type)
 	{
 		this.name = name;

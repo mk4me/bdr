@@ -29,12 +29,12 @@ import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
 import motion.database.model.User;
 import motion.database.model.UserPrivileges;
-import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWS;
-import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage;
-import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
-import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
-import motion.database.ws.UserPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
-import motion.database.ws.UserPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
@@ -265,8 +265,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			HashMap<String, String> output = new HashMap<String, String>();
 			if (result != null && result.getAttributeDefinitionList() != null)
 				for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+				{
 					output.put( a.getAttributeName(), a.getAttributeType() );
-			
+				}
 			return output;
 		}
 		catch(IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage e)
@@ -322,7 +323,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 					group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
 					output.put( a.getAttributeGroupName(), group );
 				}
-				group.add( new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() ) );
+				EntityAttribute attr = new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() );
+				attr.unit = a.getUnit();
+				attr.subtype = a.getSubtype();
+				attr.enumValues = a.getEnumValues().getValue();
+				group.add( attr );
 			}
 		
 			return output;
@@ -1366,7 +1371,38 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
+
+	public void updateStoredFilters(motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate filter) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "updateStiredFilters", this );
+			port.updateStoredFilters(filter);
+		
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
 	
+	
+	public List<motion.database.ws.userPersonalSpaceWCF.FilterList.FilterPredicate> listStoredFilters() throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "updateStiredFilters", this );
+			return port.listStoredFilters().getFilterList().getFilterPredicate();
+		
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
 /*	public void listBasketPerformersWithAttributes(String basketName) throws Exception
 	{
 		try {
