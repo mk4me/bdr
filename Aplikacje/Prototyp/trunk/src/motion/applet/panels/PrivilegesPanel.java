@@ -220,6 +220,7 @@ public class PrivilegesPanel extends JPanel {
 							up.put( UserPrivilegesStaticAttributes.canWrite, false );
 							privileges.add( up );
 						}
+						privList.repaint();
 						privList.invalidate();
 						frame.pack();
 						addButton.setEnabled(true);
@@ -249,8 +250,9 @@ public class PrivilegesPanel extends JPanel {
 					@Override
 					protected void done() {
 						removeButton.setEnabled(true);
+						privList.repaint();
 						privList.invalidate();
-						frame.pack();	
+						frame.pack();
 					}
 				};
 				worker.execute();
@@ -274,7 +276,6 @@ public class PrivilegesPanel extends JPanel {
 							for (int row: privList.getSelectedRows() )
 							{	
 								boolean canWrite = (Boolean) ((EntityAttribute)privileges.get( row ).get( UserPrivilegesStaticAttributes.canWrite )).value;
- 
 								privileges.get( row ).remove( UserPrivilegesStaticAttributes.canWrite );
 								privileges.get( row ).put( UserPrivilegesStaticAttributes.canWrite, !canWrite );
 							}
@@ -284,8 +285,9 @@ public class PrivilegesPanel extends JPanel {
 					@Override
 					protected void done() {
 						modifyButton.setEnabled(true);
+						privList.repaint();
 						privList.invalidate();
-						frame.pack();	
+						frame.pack();
 					}
 				};
 				worker.execute();
