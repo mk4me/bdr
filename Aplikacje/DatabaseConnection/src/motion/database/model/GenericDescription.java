@@ -62,9 +62,13 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	public int getId()
 	{
 		if ( get(idAttributeName) != null )
-			return (Integer)get( idAttributeName ).value;
-		else
-			return -1;
+		{
+			if (get( idAttributeName ).value instanceof Integer)
+				return (Integer)get( idAttributeName ).value;
+			else if (get( idAttributeName ).value instanceof String)
+				return ((String)get( idAttributeName ).value).hashCode();
+		}
+		return -1;
 	}
 	
 	public void addEmptyGenericAttributes( HashMap<String, EntityAttributeGroup> newGroups )

@@ -5,7 +5,7 @@ package motion.database.model;
 public class UserPrivileges extends GenericDescription<UserPrivilegesStaticAttributes>{
 
 	public UserPrivileges() {
-		super(UserPrivilegesStaticAttributes.id.name(), EntityKind.userPrivileges);
+		super(UserPrivilegesStaticAttributes.login.name(), EntityKind.userPrivileges);
 	}
 
 	public String[] toStringArray()
