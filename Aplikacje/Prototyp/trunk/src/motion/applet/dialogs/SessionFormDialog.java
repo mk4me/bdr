@@ -82,6 +82,7 @@ public class SessionFormDialog extends FormDialog {
 								
 								//privileges
 								SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionID, privilegesPanel.getResult() );
+								sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
 								sessionPrivileges.performDatabaseUpdate();
 								
 							} catch (Exception e1) {

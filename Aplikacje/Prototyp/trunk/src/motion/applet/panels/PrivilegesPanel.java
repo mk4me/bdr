@@ -56,6 +56,11 @@ public class PrivilegesPanel extends JPanel {
 
 	DbElementsList<UserPrivileges> privileges;
 	
+	public DbElementsList<UserPrivileges> getPrivileges() {
+		return privileges;
+	}
+
+
 	JRadioButton[] buttons;
 	ButtonGroup privilegesGroup; 
 	ActionListener radioListener;
