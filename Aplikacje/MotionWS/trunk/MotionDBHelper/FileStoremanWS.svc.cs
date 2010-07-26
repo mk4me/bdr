@@ -211,7 +211,9 @@ namespace MotionDBWebServices
 
         {
             string dirLocation = baseLocalFilePath + path;
-            int dirLocLength = dirLocation.Length + 1;            
+            int dirLocLength = dirLocation.Length + 1;
+            string subdirPath = "";
+            string fileName = "";
 
             try
             {
@@ -222,7 +224,8 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@perf_id", SqlDbType.Int);
                 cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
-                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
                 SqlParameter fileIdParameter =
                     new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
@@ -231,14 +234,28 @@ namespace MotionDBWebServices
                 FileInfo[] sFiles = di.GetFiles("*.*", SearchOption.AllDirectories);
                 foreach (FileInfo fi in sFiles)
                 {
-                    if ((fi.FullName.Length - dirLocLength) > 100)
+
+                    if ((fi.FullName.Length - dirLocLength - fi.Name.Length) > 100)
                     {
-                        FileAccessServiceException exc = new FileAccessServiceException("File path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
-                        throw new FaultException<FileAccessServiceException>(exc, "File storage request failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
+                        FileAccessServiceException exc = new FileAccessServiceException("File subdirectory path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file path", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
                     }
                 }
                 foreach (FileInfo fi in sFiles)
                 {
+
+                    if ((fi.Name.Length) > 100)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("File name too long", "File name: " + fi.Name + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file name", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFiles")));
+                    }
+                }
+                foreach (FileInfo fi in sFiles)
+                {
+                    fileName = fi.Name;
+                    subdirPath = fi.FullName.Substring(dirLocLength);
+                    subdirPath = subdirPath.Substring(0, subdirPath.Length - fileName.Length - 1);
+                    subdirPath = subdirPath.Replace("\\", "/");
                     if ((fi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) continue;
                     FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
                     BinaryReader br = new BinaryReader(fs);
@@ -246,7 +263,8 @@ namespace MotionDBWebServices
                     if (description.Equals("")) description = "sample description";
                     cmd.Parameters["@file_desc"].Value = description;
                     cmd.Parameters["@file_data"].Value = fileData;
-                    cmd.Parameters["@file_name"].Value = fi.FullName.Substring(dirLocLength);
+                    cmd.Parameters["@file_name"].Value = fi.Name;
+                    cmd.Parameters["@file_path"].Value = subdirPath;
                     cmd.ExecuteNonQuery();
                     br.Close();
                     fs.Close();
@@ -274,20 +292,23 @@ namespace MotionDBWebServices
        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
-            string dirLocation = baseLocalFilePath + path;
-            int dirLocLength = dirLocation.Length + 1;
+           string dirLocation = baseLocalFilePath + path;
+           int dirLocLength = dirLocation.Length + 1;
+           string subdirPath = "";
+           string fileName = "";
 
 
             try
             {
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku)
-                                        values (@sess_id, @file_desc, @file_data, @file_name)";
+                cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
+                                        values (@sess_id, @file_desc, @file_data, @file_name, @file_path)";
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
-                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
                 SqlParameter fileIdParameter =
                     new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
@@ -296,15 +317,29 @@ namespace MotionDBWebServices
                 FileInfo[] sFiles = di.GetFiles("*.*",SearchOption.AllDirectories);
                 foreach (FileInfo fi in sFiles)
                 {
-                    if ((fi.FullName.Length - dirLocLength) > 100)
+                    
+                    if ((fi.FullName.Length - dirLocLength - fi.Name.Length) > 100)
                     {
-                        FileAccessServiceException exc = new FileAccessServiceException("File path too long", "Relative file path: "+fi.FullName.Substring(dirLocLength)+" exceeds the maximum length of 100 characters");
-                        throw new FaultException<FileAccessServiceException>(exc, "File storage request failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+                        FileAccessServiceException exc = new FileAccessServiceException("File subdirectory path too long", "Relative file path: "+fi.FullName.Substring(dirLocLength)+" exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file path", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+                    }
+                }
+                foreach (FileInfo fi in sFiles)
+                {
+
+                    if ((fi.Name.Length) > 100)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("File name too long", "File name: " + fi.Name + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file name", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
                     }
                 }
                 foreach (FileInfo fi in sFiles)
 
                 {
+                    fileName = fi.Name;
+                    subdirPath = fi.FullName.Substring(dirLocLength);
+                    subdirPath = subdirPath.Substring(0, subdirPath.Length - fileName.Length - 1);
+                    subdirPath = subdirPath.Replace("\\", "/");
                     if ((fi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) continue;
                     FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
                     BinaryReader br = new BinaryReader(fs);
@@ -312,7 +347,8 @@ namespace MotionDBWebServices
                     if (description.Equals("")) description = "sample description";
                     cmd.Parameters["@file_desc"].Value = description;
                     cmd.Parameters["@file_data"].Value = fileData;
-                    cmd.Parameters["@file_name"].Value = fi.FullName.Substring(dirLocLength);
+                    cmd.Parameters["@file_name"].Value = fileName;
+                    cmd.Parameters["@file_path"].Value = subdirPath;
                     cmd.ExecuteNonQuery();
                     br.Close();
                     fs.Close();
@@ -341,7 +377,8 @@ namespace MotionDBWebServices
         {
             string dirLocation = baseLocalFilePath + path;
             int dirLocLength = dirLocation.Length + 1;
-
+            string subdirPath = "";
+            string fileName = "";
 
             try
             {
@@ -352,7 +389,8 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@trial_id", SqlDbType.Int);
                 cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
-                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
                 SqlParameter fileIdParameter =
                     new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
@@ -361,14 +399,28 @@ namespace MotionDBWebServices
                 FileInfo[] sFiles = di.GetFiles("*.*", SearchOption.AllDirectories);
                 foreach (FileInfo fi in sFiles)
                 {
-                    if ((fi.FullName.Length - dirLocLength) > 100)
+
+                    if ((fi.FullName.Length - dirLocLength - fi.Name.Length) > 100)
                     {
-                        FileAccessServiceException exc = new FileAccessServiceException("File path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
-                        throw new FaultException<FileAccessServiceException>(exc, "File storage request failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
+                        FileAccessServiceException exc = new FileAccessServiceException("File subdirectory path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file path", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
                     }
                 }
                 foreach (FileInfo fi in sFiles)
                 {
+
+                    if ((fi.Name.Length) > 100)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("File name too long", "File name: " + fi.Name + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file name", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
+                    }
+                }
+                foreach (FileInfo fi in sFiles)
+                {
+                    fileName = fi.Name;
+                    subdirPath = fi.FullName.Substring(dirLocLength);
+                    subdirPath = subdirPath.Substring(0, subdirPath.Length - fileName.Length - 1);
+                    subdirPath = subdirPath.Replace("\\", "/");
                     if ((fi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) continue;
                     FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
                     BinaryReader br = new BinaryReader(fs);
@@ -376,7 +428,8 @@ namespace MotionDBWebServices
                     if (description.Equals("")) description = "sample description";
                     cmd.Parameters["@file_desc"].Value = description;
                     cmd.Parameters["@file_data"].Value = fileData;
-                    cmd.Parameters["@file_name"].Value = fi.FullName.Substring(dirLocLength);
+                    cmd.Parameters["@file_name"].Value = fi.Name;
+                    cmd.Parameters["@file_path"].Value = subdirPath;
                     cmd.ExecuteNonQuery();
                     br.Close();
                     fs.Close();
@@ -442,11 +495,13 @@ namespace MotionDBWebServices
             }
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public string RetrieveFile(int fileID)
+        public FileData RetrieveFile(int fileID)
         {
             string relativePath = "";
             string fileName = "NOT_FOUND";
+            string filePath = "";
             string fileLocation = "";
+            FileData fData = new FileData();
 
             fileData = null;
             fileName = "";
@@ -457,7 +512,7 @@ namespace MotionDBWebServices
                 // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
 
                 OpenConnection();
-                cmd.CommandText = @"select Plik, Nazwa_pliku from Plik where IdPlik = @file_id";
+                cmd.CommandText = @"select Plik, Nazwa_pliku, Sciezka from Plik where IdPlik = @file_id";
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
                 cmd.Parameters["@file_id"].Value = fileID;
                 fileReader = cmd.ExecuteReader();
@@ -467,6 +522,7 @@ namespace MotionDBWebServices
                 {
                     fileData = (byte[])fileReader.GetValue(0);
                     fileName = (string)fileReader.GetValue(1);
+                    filePath = (string)fileReader.GetValue(2);
                 }
                 if(!Directory.Exists(baseLocalFilePath + relativePath))
                     Directory.CreateDirectory(baseLocalFilePath + relativePath);
@@ -505,7 +561,9 @@ namespace MotionDBWebServices
             {
                 CloseConnection();
             }
-            return relativePath+"/"+fileName;
+            fData.FileLocation = relativePath+"/"+fileName;
+            fData.SubdirPath = filePath;
+            return fData;
         }
 
 

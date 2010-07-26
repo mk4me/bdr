@@ -42,7 +42,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        string RetrieveFile(int fileID);
+        FileData RetrieveFile(int fileID);
 
 
     }

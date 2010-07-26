@@ -87,7 +87,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void GrantSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID, bool write)
+        public void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
@@ -123,7 +123,7 @@ namespace MotionDBWebServices
 
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID)
+        public void RemoveSessionPrivileges(string grantedUserLogin, int sessionID)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);

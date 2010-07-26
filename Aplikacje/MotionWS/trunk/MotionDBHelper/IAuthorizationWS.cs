@@ -20,10 +20,10 @@ namespace MotionDBWebServices
         void CreateUserAccount(string firstName, string lastName);
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void GrantSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID, bool write);
+        void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write);
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void RemoveSessionPrivileges(string grantedUserLogin, string grantedUserDomain, int sessionID);
+        void RemoveSessionPrivileges(string grantedUserLogin, int sessionID);
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void AlterSessionVisibility(int sessionID, bool idPublic, bool isWritable);

@@ -9,6 +9,7 @@
             <xsd:attribute name="FileID" type="xsd:int" />
             <xsd:attribute name="FileName" type="xsd:string" />
             <xsd:attribute name="FileDescription" type="xsd:string" />
+            <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
