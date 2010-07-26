@@ -326,7 +326,9 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 				EntityAttribute attr = new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() );
 				attr.unit = a.getUnit();
 				attr.subtype = a.getSubtype();
-				attr.enumValues = a.getEnumValues().getValue();
+				if (a.getEnumValues() != null) {
+					attr.enumValues = a.getEnumValues().getValue();
+				}
 				group.add( attr );
 			}
 		
