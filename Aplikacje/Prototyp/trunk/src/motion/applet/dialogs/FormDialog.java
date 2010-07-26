@@ -149,13 +149,24 @@ public class FormDialog extends BasicDialog {
 		addFormTextLabel("Defined attributes" +  " (" + groupName + "):");
 		
 		for (AttributeName a : attributes) {
-			if (a.getType().equals(AttributeName.STRING_TYPE)) {
-				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
+			if (a.getEnumValues() != null) {
+				FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]));
 				definedFormFields.add(field);
+			} else if (a.getType().equals(AttributeName.STRING_TYPE)) {
+				if (a.getSubType().equals("shortString")) {
+					FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
+					definedFormFields.add(field);
+				} else if (a.getSubType().equals("longString")) {
+					FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
+					definedFormFields.add(field);
+				} else if (a.getSubType().equals("date")) {	// FIXME: date as subtype
+					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
+					definedFormFields.add(field);
+				}
 			} else if (a.getType().equals(AttributeName.INTEGER_TYPE)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
 				definedFormFields.add(field);
-			} else if (a.getType().equals(AttributeName.DATE_TYPE)) {
+			} else if (a.getType().equals(AttributeName.DATE_TYPE)) { // FIXME: date as type
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 				definedFormFields.add(field);
 			}
@@ -167,6 +178,8 @@ public class FormDialog extends BasicDialog {
 			String attributeValue = "";
 			if (f instanceof FormTextField) {
 				attributeValue = ((FormTextField) f).getData();
+			} else if (f instanceof FormTextAreaField) {
+				attributeValue = ((FormTextAreaField) f).getData();
 			} else if (f instanceof FormNumberField) {
 				try {
 					attributeValue = "" + ((FormNumberField) f).getData();
@@ -178,6 +191,8 @@ public class FormDialog extends BasicDialog {
 				} catch (ParseException e) {
 				} catch (DatatypeConfigurationException e) {
 				}
+			} else if (f instanceof FormListField) {
+				attributeValue = "" + ((FormListField) f).getData().toString();
 			}
 			
 			if (tableName.equals(TableNamesInstance.PERFORMER)) {
@@ -215,15 +230,12 @@ class FormField {
 		this.attribute = attribute;
 		this.gridBagConstraints = gridBagConstraints;
 		this.formPanel = formPanel;
+		//System.out.println(attribute.toString() + " " + attribute.getType() + " " + attribute.getSubType() + " " + attribute.getUnit() + " " + attribute.getEnumValues());
 		prepareField();
 	}
 	
 	protected void prepareField() {
-		label = new JLabel(attribute.toString() + ":");
-		formPanel.add(label, gridBagConstraints);
-		
-		gridBagConstraints.gridx++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		addLabel();
 		
 		text = new JTextField(20);
 		label.setLabelFor(text);
@@ -232,6 +244,18 @@ class FormField {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy++;
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+	}
+	
+	protected void addLabel() {
+		if (attribute.getUnit() != null) {
+			label = new JLabel(attribute.toString() + " (" + attribute.getUnit() + ") " + ":");
+		} else {
+			label = new JLabel(attribute.toString() + ":");
+		}
+		formPanel.add(label, gridBagConstraints);
+		
+		gridBagConstraints.gridx++;
+		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
 	}
 }
 
@@ -262,11 +286,7 @@ class FormTextAreaField extends FormField {
 	}
 	
 	protected void prepareField() {
-		label = new JLabel(attribute.toString() + ":");
-		formPanel.add(label, gridBagConstraints);
-		
-		gridBagConstraints.gridx++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		addLabel();
 		
 		JScrollPane textAreaScroll = new JScrollPane(textArea = new JTextArea(5, 20));
 		textArea.setLineWrap(true);
@@ -281,24 +301,14 @@ class FormTextAreaField extends FormField {
 }
 
 class FormNumberField extends FormField {
-	private String units;
 	
 	public FormNumberField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super(attribute, gridBagConstraints, formPanel);
 		finishField();
 	}
 	
-	public FormNumberField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String units) {
-		super(attribute, gridBagConstraints, formPanel);
-		this.units = units;
-		finishField();
-	}
-	
 	private void finishField() {
 		text.setColumns(5);
-		if (units != null) {
-			label.setText(attribute.toString() + " (" + units + "):");
-		}
 	}
 	
 	public int getData() throws NumberFormatException {
@@ -364,14 +374,10 @@ class FormListField extends FormField {
 	}
 	
 	protected void prepareField() {
-		label = new JLabel(attribute.toString() + ":");
-		formPanel.add(label, gridBagConstraints);
+		addLabel();
 	}
 	
 	protected void finishField() {
-		gridBagConstraints.gridx++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
-		
 		comboBox = new JComboBox(list);
 		label.setLabelFor(comboBox);
 		formPanel.add(comboBox, gridBagConstraints);

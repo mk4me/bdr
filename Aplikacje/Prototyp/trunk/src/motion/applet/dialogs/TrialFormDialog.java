@@ -82,7 +82,7 @@ public class TrialFormDialog extends FormDialog {
 		trialDescriptionField = new FormTextAreaField(
 				TableNamesInstance.TRIAL.getAttributeName("trialDescription"), gridBagConstraints, formPanel);
 		durationField = new FormNumberField(
-				TableNamesInstance.TRIAL.getAttributeName("duration"), gridBagConstraints, formPanel, "frames");
+				TableNamesInstance.TRIAL.getAttributeName("duration"), gridBagConstraints, formPanel);
 		/*
 		addFormTextLabel("Defined attributes:");
 		relevanceField = new FormNumberField(
