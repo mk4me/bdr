@@ -872,8 +872,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			File remoteFile = new File ( file.getFileLocation() );
 
 			if (recreateFolder)
-				destLocalFolder += file.getSubdirPath();
-			
+			{
+				destLocalFolder += "/"+ file.getSubdirPath();
+				File localDest = new File(destLocalFolder);
+				localDest.mkdirs();
+			}
 			getFile( remoteFile.getName(), remoteFile.getParent(), 
 					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
 					destLocalFolder, transferListener );
@@ -982,7 +985,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storePerformerFiles( performerId, destRemoteFolder+dir.getName(), description );
+			port.storePerformerFiles( performerId, destRemoteFolder, description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
@@ -1002,7 +1005,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storeSessionFiles( sessionId, destRemoteFolder+dir.getName(), description );
+			port.storeSessionFiles( sessionId, destRemoteFolder, description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
@@ -1022,7 +1025,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			int filesNo = dir.list().length;
 			createRemoteFolder( dir.getName(), destRemoteFolder );
 			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
-			port.storeTrialFiles( trialId, destRemoteFolder+dir.getName(), description );
+			port.storeTrialFiles( trialId, destRemoteFolder, description );
 		}
 		else
 			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
@@ -1156,7 +1159,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 				// TODO: add clearing an attribute 
 			}
 			else
+			{
+				if (a.value == null)
+					a.emptyValue();
 				kind.setEntityAttribute( port, ID, a, update);			
+			}
 		} 
 		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
