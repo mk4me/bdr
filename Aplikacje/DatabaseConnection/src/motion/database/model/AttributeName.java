@@ -16,22 +16,35 @@ public class AttributeName {
 	private String unit;
 	private List<String> enumValues;
 	
+	private String groupName;
+	
 	public AttributeName(String attribute, String type) {
 		this.attribute = attribute;
 		this.type = type;
 	}
 	
-	public AttributeName(String attribute, String type, String subType, String unit, List<String> enumValues) {
+	public AttributeName(String attribute, String type, String subType, String unit, List<String> enumValues, String groupName) {
 		this.attribute = attribute;
 		this.type = type;
 		this.subType = subType;
 		this.unit = unit;
 		this.enumValues = enumValues;
+		this.groupName = groupName;
 	}
 	
 	public String toString() {
 		
 		return attribute;
+	}
+	
+	public EntityAttribute toEntityAttribute(Object value) {
+		EntityAttribute entityAttribute = new EntityAttribute(
+				this.attribute,
+				value,
+				this.groupName,
+				this.type);
+		
+		return entityAttribute;
 	}
 	
 	public String getType() {
