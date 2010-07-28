@@ -51,8 +51,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_CREATE_TRIAL = "Create new trial";
 	private static String MENU_UPLOAD = "Upload file";
-	private static String MENU_DOWNLOAD = "Download selection";
-	private static String MENU_BATCH_DOWNLOAD = "Download batch...";
+	private static String MENU_DOWNLOAD = "Download selected";
+	private static String MENU_INVERT_SELECTION = "Invert selection";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_TRIALS = "View trials";
 	private static String MENU_VIEW_FILES = "View files";
@@ -140,6 +140,28 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			recordIds[i++] = ((BasicTable) table.getModel()).getRecordId(row);
 		
 		return recordIds;
+	}
+
+	private void invertSelection(JTable table)
+	{
+		int selIndex = 0, row = 0;
+		int [] selected = table.getSelectedRows(); 
+		if (selected.length == 0)
+		{
+			table.getSelectionModel().addSelectionInterval(0, table.getRowCount()-1);
+			return;
+		}
+		while (row<table.getRowCount())
+		{
+			if ( selIndex < selected.length && selected[selIndex] == row )
+			{
+				table.getSelectionModel().removeSelectionInterval(row, row);
+				selIndex++;
+			}
+			else
+				table.getSelectionModel().addSelectionInterval(row, row);
+			row++;
+		}
 	}
 	
 
@@ -321,8 +343,15 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 					}
 				});
 
-				JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_BATCH_DOWNLOAD);
+				JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_INVERT_SELECTION);
 				popupMenu.add(batchDownloadMenuItem);
+
+				batchDownloadMenuItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						invertSelection(tables[3]);
+					}
+				});
 
 				
 				popupMenu.show( tables[3], e.getPoint().x, e.getPoint().y);
