@@ -74,23 +74,21 @@ public class SessionPrivilegesSetter {
 					if ( (wanted = userPrivileges.findById( actual.getId() )) == null )
 						db.removeSessionPrivileges(
 								(String)((EntityAttribute)actual.get( UserPrivilegesStaticAttributes.login)).value, 
-								(String)((EntityAttribute)actual.get( UserPrivilegesStaticAttributes.login)).value, 
 								sessionID, 
 								(Boolean)((EntityAttribute)actual.get( UserPrivilegesStaticAttributes.canWrite)).value );
 					else
 					{
 						db.grantSessionPrivileges( 
 								(String)((EntityAttribute)wanted.get( UserPrivilegesStaticAttributes.login)).value, 
-								(String)((EntityAttribute)wanted.get( UserPrivilegesStaticAttributes.login)).value, 
 								sessionID, 
 								(Boolean)((EntityAttribute)wanted.get( UserPrivilegesStaticAttributes.canWrite)).value );
 						userPrivileges.remove( wanted );
 					}
+				
 				}
 				for (UserPrivileges toBeAdded : userPrivileges)
 				{
 					db.grantSessionPrivileges( 
-							(String)((EntityAttribute)toBeAdded.get( UserPrivilegesStaticAttributes.login)).value, 
 							(String)((EntityAttribute)toBeAdded.get( UserPrivilegesStaticAttributes.login)).value, 
 							sessionID, 
 							(Boolean)((EntityAttribute)toBeAdded.get( UserPrivilegesStaticAttributes.canWrite)).value );

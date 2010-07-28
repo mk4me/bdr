@@ -182,14 +182,14 @@ public interface IFileStoremanWS {
      * 
      * @param fileID
      * @return
-     *     returns java.lang.String
+     *     returns motion.database.ws.fileStoremanServiceWCF.FileData
      * @throws IFileStoremanWSRetrieveFileFileAccessServiceExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "RetrieveFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/RetrieveFile")
     @WebResult(name = "RetrieveFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
     @RequestWrapper(localName = "RetrieveFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.RetrieveFile")
     @ResponseWrapper(localName = "RetrieveFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.RetrieveFileResponse")
-    public String retrieveFile(
+    public FileData retrieveFile(
         @WebParam(name = "fileID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         int fileID)
         throws IFileStoremanWSRetrieveFileFileAccessServiceExceptionFaultFaultMessage

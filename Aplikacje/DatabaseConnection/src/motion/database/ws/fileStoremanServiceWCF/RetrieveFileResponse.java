@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="RetrieveFileResult" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="RetrieveFileResult" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService}FileData"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,18 +34,18 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "RetrieveFileResponse")
 public class RetrieveFileResponse {
 
-    @XmlElement(name = "RetrieveFileResult")
-    protected String retrieveFileResult;
+    @XmlElement(name = "RetrieveFileResult", required = true)
+    protected FileData retrieveFileResult;
 
     /**
      * Gets the value of the retrieveFileResult property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link FileData }
      *     
      */
-    public String getRetrieveFileResult() {
+    public FileData getRetrieveFileResult() {
         return retrieveFileResult;
     }
 
@@ -54,10 +54,10 @@ public class RetrieveFileResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link FileData }
      *     
      */
-    public void setRetrieveFileResult(String value) {
+    public void setRetrieveFileResult(FileData value) {
         this.retrieveFileResult = value;
     }
 

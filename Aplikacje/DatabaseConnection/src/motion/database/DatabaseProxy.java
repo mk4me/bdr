@@ -164,15 +164,15 @@ public interface DatabaseProxy {
 			int performerID) throws Exception;
 
 	public abstract String downloadFile(int fileID, String destLocalFolder,
-			FileTransferListener transferListener) throws Exception;
+			FileTransferListener transferListener, boolean recreateFolder) throws Exception;
 
 	public abstract Performer getPerformerById(int id) throws Exception;
 
 	public abstract void registerStateMessageListener(TextMessageListener listener);
 
-	public void removeSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception;
+	public void removeSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception;
 
-	public void grantSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception;
+	public void grantSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception;
 
 	public void createUserAccount(String firstName, String lastName) throws Exception;
 	

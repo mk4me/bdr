@@ -490,7 +490,7 @@ public class DatabaseConnectionWCFTest {
 			return;
 		
 		int fileID = 3;
-		String result = database.downloadFile(fileID, "./data/", new ConsoleTransferListener());
+		String result = database.downloadFile(fileID, "./data/", new ConsoleTransferListener(), false);
 		
 		System.out.println( "Downloaded local file name:" + result ); 
 	}

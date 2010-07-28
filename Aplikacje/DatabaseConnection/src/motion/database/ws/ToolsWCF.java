@@ -310,6 +310,7 @@ public class ToolsWCF {
 			ListSessionPrivilegesResult listSessionPrivileges) 
 	{
 		DbElementsList<UserPrivileges> list = new DbElementsList<UserPrivileges>();
+		if (listSessionPrivileges!=null && listSessionPrivileges.getSessionPrivilegeList() != null)
 		for (SessionPrivilege d: listSessionPrivileges.getSessionPrivilegeList().getSessionPrivilege() )
 		{
 			UserPrivileges df = new UserPrivileges();

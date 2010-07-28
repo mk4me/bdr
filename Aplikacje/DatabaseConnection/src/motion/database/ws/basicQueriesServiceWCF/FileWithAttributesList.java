@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -98,6 +99,7 @@ public class FileWithAttributesList {
      *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -119,6 +121,8 @@ public class FileWithAttributesList {
         protected String fileName;
         @XmlAttribute(name = "FileDescription")
         protected String fileDescription;
+        @XmlAttribute(name = "SubdirPath")
+        protected String subdirPath;
 
         /**
          * Gets the value of the attributes property.
@@ -214,6 +218,30 @@ public class FileWithAttributesList {
          */
         public void setFileDescription(String value) {
             this.fileDescription = value;
+        }
+
+        /**
+         * Gets the value of the subdirPath property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getSubdirPath() {
+            return subdirPath;
+        }
+
+        /**
+         * Sets the value of the subdirPath property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setSubdirPath(String value) {
+            this.subdirPath = value;
         }
 
     }

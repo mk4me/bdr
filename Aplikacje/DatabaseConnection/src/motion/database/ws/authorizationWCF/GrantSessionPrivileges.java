@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="grantedUserLogin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="grantedUserDomain" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="write" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
@@ -32,7 +31,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "grantedUserLogin",
-    "grantedUserDomain",
     "sessionID",
     "write"
 })
@@ -40,7 +38,6 @@ import javax.xml.bind.annotation.XmlType;
 public class GrantSessionPrivileges {
 
     protected String grantedUserLogin;
-    protected String grantedUserDomain;
     protected int sessionID;
     protected boolean write;
 
@@ -66,30 +63,6 @@ public class GrantSessionPrivileges {
      */
     public void setGrantedUserLogin(String value) {
         this.grantedUserLogin = value;
-    }
-
-    /**
-     * Gets the value of the grantedUserDomain property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getGrantedUserDomain() {
-        return grantedUserDomain;
-    }
-
-    /**
-     * Sets the value of the grantedUserDomain property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setGrantedUserDomain(String value) {
-        this.grantedUserDomain = value;
     }
 
     /**

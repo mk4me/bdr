@@ -100,6 +100,7 @@ import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSegmentAttrib
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetTrialAttributeUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.PerformerData;
+import motion.database.ws.fileStoremanServiceWCF.FileData;
 import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
 
 import com.zehon.BatchTransferProgress;
@@ -862,19 +863,22 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 //	Download
 	
 	
-	public  String downloadFile(int fileID, String destLocalFolder, FileTransferListener transferListener) throws Exception
+	public  String downloadFile(int fileID, String destLocalFolder, FileTransferListener transferListener, boolean recreateFolder) throws Exception
 	{
 			IFileStoremanWS port = ToolsWCF.getFileStoremanServicePort( "downloadFile", this );
 	
-			String file = port.retrieveFile(fileID);
+			FileData file = port.retrieveFile(fileID);
 			
-			File remoteFile = new File ( file );
+			File remoteFile = new File ( file.getFileLocation() );
 
+			if (recreateFolder)
+				destLocalFolder += file.getSubdirPath();
+			
 			getFile( remoteFile.getName(), remoteFile.getParent(), 
 					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
 					destLocalFolder, transferListener );
 
-			port.downloadComplete(fileID, file);
+			port.downloadComplete(fileID, file.getFileLocation());
 			
 			ToolsWCF.finalizeCall();
 			return destLocalFolder + remoteFile.getName();
@@ -1242,11 +1246,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
-	public void grantSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception
+	public void grantSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception
 	{
 		try {
 			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "grantSessionPrivileges", this );
-			port.grantSessionPrivileges(grantedUserLogin, grantedUserDomain, sessionID, writePrivilege);
+			port.grantSessionPrivileges(grantedUserLogin, sessionID, writePrivilege);
 		
 		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1257,11 +1261,11 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-	public void removeSessionPrivileges(String grantedUserLogin, String grantedUserDomain, int sessionID, boolean writePrivilege) throws Exception
+	public void removeSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception
 	{
 		try {
 			IAuthorizationWS port = ToolsWCF.getAuthorizationServicePort( "removeSessionPrivileges", this );
-			port.removeSessionPrivileges(grantedUserLogin, grantedUserDomain, sessionID);
+			port.removeSessionPrivileges(grantedUserLogin, sessionID);
 		
 		} catch (IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

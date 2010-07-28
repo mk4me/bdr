@@ -59,7 +59,6 @@ public interface IAuthorizationWS {
      * @param sessionID
      * @param write
      * @param grantedUserLogin
-     * @param grantedUserDomain
      * @throws IAuthorizationWSGrantSessionPrivilegesAuthorizationExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "GrantSessionPrivileges", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivileges")
@@ -68,8 +67,6 @@ public interface IAuthorizationWS {
     public void grantSessionPrivileges(
         @WebParam(name = "grantedUserLogin", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         String grantedUserLogin,
-        @WebParam(name = "grantedUserDomain", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
-        String grantedUserDomain,
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         int sessionID,
         @WebParam(name = "write", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
@@ -81,7 +78,6 @@ public interface IAuthorizationWS {
      * 
      * @param sessionID
      * @param grantedUserLogin
-     * @param grantedUserDomain
      * @throws IAuthorizationWSRemoveSessionPrivilegesAuthorizationExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "RemoveSessionPrivileges", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/RemoveSessionPrivileges")
@@ -90,8 +86,6 @@ public interface IAuthorizationWS {
     public void removeSessionPrivileges(
         @WebParam(name = "grantedUserLogin", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         String grantedUserLogin,
-        @WebParam(name = "grantedUserDomain", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
-        String grantedUserDomain,
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         int sessionID)
         throws IAuthorizationWSRemoveSessionPrivilegesAuthorizationExceptionFaultFaultMessage
