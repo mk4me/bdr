@@ -61,38 +61,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetSegmentAttributeResponse }
-     * 
-     */
-    public SetSegmentAttributeResponse createSetSegmentAttributeResponse() {
-        return new SetSegmentAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreatePerformer }
-     * 
-     */
-    public CreatePerformer createCreatePerformer() {
-        return new CreatePerformer();
-    }
-
-    /**
-     * Create an instance of {@link SetFileAttribute }
-     * 
-     */
-    public SetFileAttribute createSetFileAttribute() {
-        return new SetFileAttribute();
-    }
-
-    /**
-     * Create an instance of {@link DefineTrialSegmentResponse }
-     * 
-     */
-    public DefineTrialSegmentResponse createDefineTrialSegmentResponse() {
-        return new DefineTrialSegmentResponse();
-    }
-
-    /**
      * Create an instance of {@link CreateTrialResponse }
      * 
      */
@@ -109,19 +77,91 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineTrialSegment }
+     * Create an instance of {@link CreateSession }
      * 
      */
-    public DefineTrialSegment createDefineTrialSegment() {
-        return new DefineTrialSegment();
+    public CreateSession createCreateSession() {
+        return new CreateSession();
     }
 
     /**
-     * Create an instance of {@link UpdateException }
+     * Create an instance of {@link AssignSessionToGroupResponse }
      * 
      */
-    public UpdateException createUpdateException() {
-        return new UpdateException();
+    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
+        return new AssignSessionToGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreatePerformer }
+     * 
+     */
+    public CreatePerformer createCreatePerformer() {
+        return new CreatePerformer();
+    }
+
+    /**
+     * Create an instance of {@link PerformerData }
+     * 
+     */
+    public PerformerData createPerformerData() {
+        return new PerformerData();
+    }
+
+    /**
+     * Create an instance of {@link AssignSessionToGroup }
+     * 
+     */
+    public AssignSessionToGroup createAssignSessionToGroup() {
+        return new AssignSessionToGroup();
+    }
+
+    /**
+     * Create an instance of {@link CreatePerformerResponse }
+     * 
+     */
+    public CreatePerformerResponse createCreatePerformerResponse() {
+        return new CreatePerformerResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineTrialSegmentResponse }
+     * 
+     */
+    public DefineTrialSegmentResponse createDefineTrialSegmentResponse() {
+        return new DefineTrialSegmentResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttribute }
+     * 
+     */
+    public SetSessionAttribute createSetSessionAttribute() {
+        return new SetSessionAttribute();
+    }
+
+    /**
+     * Create an instance of {@link SetTrialAttributeResponse }
+     * 
+     */
+    public SetTrialAttributeResponse createSetTrialAttributeResponse() {
+        return new SetTrialAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetFileAttribute }
+     * 
+     */
+    public SetFileAttribute createSetFileAttribute() {
+        return new SetFileAttribute();
+    }
+
+    /**
+     * Create an instance of {@link SetTrialAttribute }
+     * 
+     */
+    public SetTrialAttribute createSetTrialAttribute() {
+        return new SetTrialAttribute();
     }
 
     /**
@@ -141,19 +181,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetSessionAttribute }
+     * Create an instance of {@link UpdateException }
      * 
      */
-    public SetSessionAttribute createSetSessionAttribute() {
-        return new SetSessionAttribute();
-    }
-
-    /**
-     * Create an instance of {@link CreatePerformerResponse }
-     * 
-     */
-    public CreatePerformerResponse createCreatePerformerResponse() {
-        return new CreatePerformerResponse();
+    public UpdateException createUpdateException() {
+        return new UpdateException();
     }
 
     /**
@@ -165,14 +197,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PerformerData }
-     * 
-     */
-    public PerformerData createPerformerData() {
-        return new PerformerData();
-    }
-
-    /**
      * Create an instance of {@link CreateSessionResponse }
      * 
      */
@@ -181,43 +205,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSession }
+     * Create an instance of {@link SetSegmentAttributeResponse }
      * 
      */
-    public CreateSession createCreateSession() {
-        return new CreateSession();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttribute }
-     * 
-     */
-    public SetTrialAttribute createSetTrialAttribute() {
-        return new SetTrialAttribute();
-    }
-
-    /**
-     * Create an instance of {@link AssignSessionToGroupResponse }
-     * 
-     */
-    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
-        return new AssignSessionToGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttributeResponse }
-     * 
-     */
-    public SetTrialAttributeResponse createSetTrialAttributeResponse() {
-        return new SetTrialAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link SetFileAttributeResponse }
-     * 
-     */
-    public SetFileAttributeResponse createSetFileAttributeResponse() {
-        return new SetFileAttributeResponse();
+    public SetSegmentAttributeResponse createSetSegmentAttributeResponse() {
+        return new SetSegmentAttributeResponse();
     }
 
     /**
@@ -237,11 +229,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AssignSessionToGroup }
+     * Create an instance of {@link DefineTrialSegment }
      * 
      */
-    public AssignSessionToGroup createAssignSessionToGroup() {
-        return new AssignSessionToGroup();
+    public DefineTrialSegment createDefineTrialSegment() {
+        return new DefineTrialSegment();
+    }
+
+    /**
+     * Create an instance of {@link SetFileAttributeResponse }
+     * 
+     */
+    public SetFileAttributeResponse createSetFileAttributeResponse() {
+        return new SetFileAttributeResponse();
     }
 
     /**

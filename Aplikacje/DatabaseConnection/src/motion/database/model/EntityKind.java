@@ -1,15 +1,66 @@
 package motion.database.model;
 
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
+
 public enum EntityKind {
 
-	performer(PerformerStaticAttributes.class), 
-	session(SessionStaticAttributes.class), 
-	trial(TrialStaticAttributes.class), 
-	segment(SegmentStaticAttributes.class), 
-	file(DatabaseFileStaticAttributes.class), 
-	user(UserStaticAttributes.class), 
-	userPrivileges(UserPrivilegesStaticAttributes.class),
-	result(null);
+	performer(PerformerStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setPerformerAttribute(ID, a.name, a.value.toString(), update);			
+		}
+	}, 
+	session(SessionStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setSessionAttribute(ID, a.name, a.value.toString(), update);			
+		}
+	}, 
+	trial(TrialStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setTrialAttribute(ID, a.name, a.value.toString(), update);			
+		}
+	}, 
+	segment(SegmentStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setSegmentAttribute(ID, a.name, a.value.toString(), update);			
+		}
+	},
+	
+	file(DatabaseFileStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setFileAttribute(ID, a.name, a.value.toString(), update);			
+		}
+	}, 
+	user(UserStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			throw new Exception("User entity does not support generic attributes!");
+		}
+	}, 
+	userPrivileges(UserPrivilegesStaticAttributes.class) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			throw new Exception("UserPrivileges entity does not support generic attributes!");
+		}
+	},
+	result(null) {
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			throw new Exception("Result entity does not support generic attributes!");
+		}
+	};
 	
 	private Class<?> staticAttributes;
 
@@ -27,4 +78,6 @@ public enum EntityKind {
 			result[i++] = o.toString();
 		return result;
 	}
+	
+	abstract public void setEntityAttribute(IBasicUpdatesWS port, int ID, EntityAttribute a, boolean update) throws Exception;
 }

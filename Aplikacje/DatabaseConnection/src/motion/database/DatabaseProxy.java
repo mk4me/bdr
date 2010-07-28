@@ -10,6 +10,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericResult;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
@@ -134,26 +135,53 @@ public interface DatabaseProxy {
 	public abstract int defineTrialSegment(int trialID, String segmentName,
 			int startTime, int endTime) throws Exception;
 
+	/**
+	 * This is a new method for setting generic attribute value of any entity which supports generic values.
+	 * Be careful since not all EntityKind objects can store generic attributes. It only applies to:
+	 * <ul>
+	 * 	<li> Performer
+	 *  <li> Session
+	 *  <li> Trial
+	 *  <li> Segment
+	 *  <li> File
+	 * </ul>
+	 * 
+	 * @param entityID Unique database identification of an entity
+	 * @param kind kind of an entity
+	 * @param attributeValue value of an attribute. If set to null then an attribute value is removed.
+	 * @param update indicated updating action
+	 * @throws Exception
+	 */
+	public abstract void setEntityAttribute(int entityID,
+			EntityKind kind, EntityAttribute attributeValue, boolean update)
+			throws Exception;
+	
+	@Deprecated
 	public abstract void setSessionAttribute(int sessionID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
+	@Deprecated
 	public void setSessionAttribute(int sessionID, EntityAttribute a, boolean update) throws Exception;
 	
+	@Deprecated
 	public abstract void setTrialAttribute(int trialID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 
+	@Deprecated
 	public abstract void setPerformerAttribute(int performerID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
+	@Deprecated
 	public abstract void setSegmentAttribute(int segmentID,
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
+	@Deprecated
 	public abstract void setFileAttribute(int fileID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
-
+	
 	public abstract DbElementsList<Segment> listTrialSegmentsWithAttributes(
 			int trialID) throws Exception;
 
