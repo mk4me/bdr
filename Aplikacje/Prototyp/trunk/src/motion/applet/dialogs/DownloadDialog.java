@@ -35,6 +35,7 @@ public class DownloadDialog extends BasicDialog {
 	private JCheckBox recreateDirCheckBox;
 	private int[] recordId;
 	private String path;
+	private JProgressBar totalProgressBar;
 	
 	public DownloadDialog(int recordId[], String path) {
 		super(TITLE, DOWNLOAD_MESSAGE+recordId.length+ (recordId.length>1?DOWNLOAD_MESSAGE_ENDING_PRURAL:DOWNLOAD_MESSAGE_ENDING) );
@@ -63,10 +64,19 @@ public class DownloadDialog extends BasicDialog {
 		
 		// Button area
 		progressBar = new JProgressBar(0, 100);
-		this.addToButtonPanel(progressBar);
+		panel.add( progressBar );
 		progressBar.setVisible(false);
+		progressBar.setString( "Partial progress" );
 		progressBar.setIndeterminate(true);
-		
+		progressBar.setStringPainted( true );
+
+		totalProgressBar =  new JProgressBar();
+		totalProgressBar.setString( "Total progress" );
+		totalProgressBar.setStringPainted( true );
+		totalProgressBar.setMinimumSize( new Dimension( 200, totalProgressBar.getHeight() ) );
+		totalProgressBar.setVisible(false);
+		panel.add( totalProgressBar );
+
 		downloadButton = new JButton(DOWNLOAD_FILE);
 		this.addToButtonPanel(downloadButton);
 		
@@ -76,7 +86,11 @@ public class DownloadDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
-		this.setSize(350, 150);
+
+		this.totalProgressBar.setMinimum(0);
+		this.totalProgressBar.setMaximum( recordId.length-1 );
+		
+		this.setSize(300, 200);
 		this.setLocation(200, 200);
 		
 		this.pathLabel.setText( PATH_LABEL + path);
@@ -94,9 +108,14 @@ public class DownloadDialog extends BasicDialog {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							
+							progressBar.setVisible(true);
+							totalProgressBar.setVisible(true);
+
 							for (int id:recordId)
-								WebServiceInstance.getDatabaseConnection().downloadFile(id, path, new DownloadTransferListener());
+							{
+								WebServiceInstance.getDatabaseConnection().downloadFile(id, path, new DownloadTransferListener(), recreateDirCheckBox.isSelected());
+								totalProgressBar.setValue( totalProgressBar.getValue() + 1 );
+							}
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);
@@ -149,5 +168,11 @@ public class DownloadDialog extends BasicDialog {
 		public void transferStepPercent(final int percent) {
 			DownloadDialog.this.setProgressBarValue(percent);	// Doesn't work for downloads.
 		}
+	}
+	
+	public static void main(String [] args)
+	{
+		DownloadDialog d = new DownloadDialog( new int[]{0, 1, 2, 4}, "/home/kk/" );
+		d.setVisible(true);
 	}
 }
