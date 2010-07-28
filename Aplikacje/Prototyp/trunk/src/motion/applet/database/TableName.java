@@ -88,7 +88,7 @@ public class TableName {
 			for (String s : results.keySet()) {
 				ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
 				for (EntityAttribute e : results.get(s)) {
-					attributes.add(new AttributeName(e.name, toTypeString(e.type), e.subtype, e.unit, e.enumValues));
+					attributes.add(new AttributeName(e.name, toTypeString(e.type), e.subtype, e.unit, e.enumValues, e.groupName));
 				}
 				groupedDefinedAttributes.add(new AttributeGroup(s, attributes));
 			}

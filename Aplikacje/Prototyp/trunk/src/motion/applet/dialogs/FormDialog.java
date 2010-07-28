@@ -175,43 +175,42 @@ public class FormDialog extends BasicDialog {
 	
 	protected void setDefinedAttributes(TableName tableName, int id) throws Exception {
 		for (FormField f : definedFormFields) {
-			String attributeValue = "";
+			Object attributeValue = null;
 			if (f instanceof FormTextField) {
 				attributeValue = ((FormTextField) f).getData();
 			} else if (f instanceof FormTextAreaField) {
 				attributeValue = ((FormTextAreaField) f).getData();
 			} else if (f instanceof FormNumberField) {
 				try {
-					attributeValue = "" + ((FormNumberField) f).getData();
+					attributeValue = ((FormNumberField) f).getData();
 				} catch (NumberFormatException e) {
 				}
 			} else if (f instanceof FormDateField) {
 				try {
-					attributeValue = "" + ((FormDateField) f).getData().toString();
+					attributeValue = ((FormDateField) f).getData().toString();
 				} catch (ParseException e) {
 				} catch (DatatypeConfigurationException e) {
 				}
 			} else if (f instanceof FormListField) {
-				attributeValue = "" + ((FormListField) f).getData().toString();
+				attributeValue = ((FormListField) f).getData().toString();
 			}
 			
 			if (tableName.equals(TableNamesInstance.PERFORMER)) {
 				WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
 						id,
 						f.attribute.toString(),
-						attributeValue,
+						"" + attributeValue,
 						false);
 			} else if (tableName.equals(TableNamesInstance.SESSION)) {
 				WebServiceInstance.getDatabaseConnection().setSessionAttribute(
 						id,
-						f.attribute.toString(),
-						attributeValue,
+						f.attribute.toEntityAttribute(attributeValue),
 						false);
 			} else if (tableName.equals(TableNamesInstance.TRIAL)) {
 				WebServiceInstance.getDatabaseConnection().setTrialAttribute(
 						id,
 						f.attribute.toString(),
-						attributeValue,
+						"" + attributeValue,
 						false);
 			}
 		}
