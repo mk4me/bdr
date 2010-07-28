@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.database.model.DatabaseFile;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.GenericResult;
 import motion.database.model.MotionKind;
@@ -137,6 +138,8 @@ public interface DatabaseProxy {
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
+	public void setSessionAttribute(int sessionID, EntityAttribute a, boolean update) throws Exception;
+	
 	public abstract void setTrialAttribute(int trialID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 

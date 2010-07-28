@@ -1128,6 +1128,25 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
+	
+	
+	public void setSessionAttribute(int sessionID, EntityAttribute a, boolean update) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ToolsWCF.getBasicUpdateServicePort( "setSessionAttribute", this );
+
+			port.setSessionAttribute(sessionID, a.name, a.value.toString(), update);			
+		} 
+		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
 
 	public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
