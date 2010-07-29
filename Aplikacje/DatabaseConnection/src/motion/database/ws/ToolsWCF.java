@@ -21,7 +21,10 @@ import motion.database.model.UserPrivilegesStaticAttributes;
 import motion.database.model.UserStaticAttributes;
 import motion.database.ws.DatabaseConnectionWCF.ConnectionState;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
+import motion.database.ws.userPersonalSpaceWCF.SegmentDetailsWithAttributes;
+import motion.database.ws.userPersonalSpaceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.userPersonalSpaceWCF.UserPersonalSpace;
+import motion.database.ws.userPersonalSpaceWCF.Attributes.Attribute;
 import motion.database.ws.authorizationWCF.AuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse.ListSessionPrivilegesResult;
@@ -324,6 +327,77 @@ public class ToolsWCF {
 		return list;
 	}
 
+	public static Performer transformPerformerDetailsUPS(
+			motion.database.ws.userPersonalSpaceWCF.PerformerDetailsWithAttributes s) {
+			if (s==null)
+				return null;
+			
+			Performer performer = new Performer();
+			performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
+			performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
+			performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
+			transformGenericAttributes( s.getAttributes(), performer );
 
+			return performer;
+	}
+
+	public static <T extends GenericDescription<?>> T transformGenericAttributes(
+			motion.database.ws.userPersonalSpaceWCF.Attributes attributes,
+			T destinationObject ) {
+			if (attributes != null)
+				if (attributes.getAttribute() != null)
+					for (  Attribute att : attributes.getAttribute() )
+					{
+						EntityAttribute attribute = new EntityAttribute(att.getName(), att.getValue(), att.getAttributeGroup(), att.getType() );
+						destinationObject.put(att.getName(), attribute );
+					}
+			return destinationObject;
+		}
+
+	public static Segment transformSegmentDetailsUPS(
+			SegmentDetailsWithAttributes s) {
+
+		if (s==null)
+			return null;
+
+		Segment segment = new Segment();
+		segment.put( SegmentStaticAttributes.endTime, s.getEndTime() );
+		segment.put( SegmentStaticAttributes.segmentID, s.getSegmentID() );
+		segment.put( SegmentStaticAttributes.segmentName, s.getSegmentName() );
+		segment.put( SegmentStaticAttributes.startTime, s.getStartTime() );
+		segment.put( SegmentStaticAttributes.trialID, s.getTrialID() );
+		ToolsWCF.transformGenericAttributes( s.getAttributes(), segment );
+		return segment;
+	}
+
+	public static Session transformSessionDetailsUPS(
+			motion.database.ws.userPersonalSpaceWCF.SessionDetailsWithAttributes s) {
+		if(s==null)
+			return null;
+		
+		Session session = new Session();
+		session.put( SessionStaticAttributes.labID, s.getLabID() );
+		session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.performerID, s.getPerformerID() );
+		session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
+		session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
+		session.put( SessionStaticAttributes.userID, s.getUserID() );
+		session.put( SessionStaticAttributes.sessionLabel, s.getSessionLabel() );
+		
+		ToolsWCF.transformGenericAttributes( s.getAttributes(), session );
+		return session;
+	}
+
+	public static Trial transformTrialDetailsUPS(TrialDetailsWithAttributes s) {
+
+		Trial trial = new Trial();
+		trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.duration, s.getDuration() );
+		trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
+		trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
+		ToolsWCF.transformGenericAttributes( s.getAttributes(), trial );
+		return trial;
+	}
 
 }

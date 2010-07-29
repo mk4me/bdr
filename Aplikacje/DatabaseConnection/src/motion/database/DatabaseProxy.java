@@ -211,4 +211,13 @@ public interface DatabaseProxy {
 	
 	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception;
 
+	public DbElementsList<Trial>  listBasketTrialsWithAttributes(String basketName) throws Exception;
+
+	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception;
+	
+	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception;
+
+	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception;
+
+	
 }

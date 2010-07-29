@@ -35,6 +35,9 @@ import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketU
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXMLResponse.ListBasketSegmentsWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
@@ -1455,7 +1458,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-/*	public void listBasketPerformersWithAttributes(String basketName) throws Exception
+	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception
 	{
 		try {
 			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
@@ -1464,8 +1467,8 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			DbElementsList<Performer> output = new DbElementsList<Performer>();
 			
 			if (result.getBasketPerformerWithAttributesList() != null) 
-				for ( motion.database.ws.UserPersonalSpaceWCF.PerformerDetailsWithAttributes s : result.getBasketPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-						output.add( ToolsWCF.transformPerformerDetails(s) );
+				for ( motion.database.ws.userPersonalSpaceWCF.PerformerDetailsWithAttributes s : result.getBasketPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+						output.add( ToolsWCF.transformPerformerDetailsUPS(s) );
 			
 			return output;
 
@@ -1477,5 +1480,76 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			ToolsWCF.finalizeCall();
 		}
 	}
-*/
+
+	
+	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			ListBasketSegmentsWithAttributesXMLResult result = port.listBasketSegmentsWithAttributesXML(basketName);
+		
+			DbElementsList<Segment> output = new DbElementsList<Segment>();
+			
+			if (result.getBasketSegmentWithAttributesList() != null) 
+				for ( motion.database.ws.userPersonalSpaceWCF.SegmentDetailsWithAttributes s : result.getBasketSegmentWithAttributesList().getSegmentDetailsWithAttributes() )
+						output.add( ToolsWCF.transformSegmentDetailsUPS(s) );
+			
+			return output;
+
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			ListBasketSessionsWithAttributesXMLResult result = port.listBasketSessionsWithAttributesXML(basketName);
+		
+			DbElementsList<Session> output = new DbElementsList<Session>();
+			
+			if (result.getBasketSessionWithAttributesList() != null) 
+				for ( motion.database.ws.userPersonalSpaceWCF.SessionDetailsWithAttributes s : result.getBasketSessionWithAttributesList().getSessionDetailsWithAttributes() )
+						output.add( ToolsWCF.transformSessionDetailsUPS(s) );
+			
+			return output;
+
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+
+	public DbElementsList<Trial>  listBasketTrialsWithAttributes(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			ListBasketTrialsWithAttributesXMLResult result = port.listBasketTrialsWithAttributesXML(basketName);
+		
+			DbElementsList<Trial> output = new DbElementsList<Trial>();
+			
+			if (result.getBasketTrialWithAttributesList() != null) 
+				for ( motion.database.ws.userPersonalSpaceWCF.TrialDetailsWithAttributes s : result.getBasketTrialWithAttributesList().getTrialDetailsWithAttributes() )
+						output.add( ToolsWCF.transformTrialDetailsUPS(s) );
+			
+			return output;
+
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
 }
