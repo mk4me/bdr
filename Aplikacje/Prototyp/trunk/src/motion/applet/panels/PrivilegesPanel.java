@@ -47,7 +47,7 @@ public class PrivilegesPanel extends JPanel {
 	String[] buttonExplanations = { "(Only you can read or write.)",
 									"(Only you can write. All can read.)",
 									"(All can read and write.)",
-									"(Customized for selected users)"};
+									"<html>(Customized for selected users.<br>You will always read and write.)</html>"};
 	
 	Privileges[] values = { Privileges.PRIVATE, 
 							Privileges.PUBLIC_READ,
