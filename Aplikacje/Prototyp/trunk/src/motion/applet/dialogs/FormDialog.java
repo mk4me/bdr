@@ -30,6 +30,7 @@ import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;
+import motion.database.model.EntityKind;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.CREATE;
@@ -195,24 +196,11 @@ public class FormDialog extends BasicDialog {
 				attributeValue = ((FormListField) f).getData().toString();
 			}
 			
-			if (tableName.equals(TableNamesInstance.PERFORMER)) {
-				WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
-						id,
-						f.attribute.toString(),
-						"" + attributeValue,
-						false);
-			} else if (tableName.equals(TableNamesInstance.SESSION)) {
-				WebServiceInstance.getDatabaseConnection().setSessionAttribute(
-						id,
-						f.attribute.toEntityAttribute(attributeValue),
-						false);
-			} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-				WebServiceInstance.getDatabaseConnection().setTrialAttribute(
-						id,
-						f.attribute.toString(),
-						"" + attributeValue,
-						false);
-			}
+			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
+					id,
+					tableName.toEntityKind(),
+					f.attribute.toEntityAttribute(attributeValue),
+					false);
 		}
 	}
 }

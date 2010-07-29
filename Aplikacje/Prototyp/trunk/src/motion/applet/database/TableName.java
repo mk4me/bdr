@@ -10,6 +10,7 @@ import motion.database.model.AttributeName;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
+import motion.database.model.EntityKind;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.TrialStaticAttributes;
@@ -191,5 +192,19 @@ public class TableName {
 		}
 		
 		return null;
+	}
+	
+	public EntityKind toEntityKind() {
+		if (this.entity.equals(PERFORMER_ENTITY)) {
+			return EntityKind.performer;
+		} else if (this.entity.equals(SESSION_ENTITY)) {
+			return EntityKind.session;
+		} else if (this.entity.equals(TRIAL_ENTITY)) {
+			return EntityKind.trial;
+		} else if (this.entity.equals(FILE_ENTITY)) {
+			return EntityKind.file;
+		} else {
+			return null;
+		}
 	}
 }
