@@ -21,16 +21,16 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
-        void DefineAttribute(string attributeName, string groupName, string storageType, bool isEnum, string pluginDescriptor, 
+        void DefineAttribute(string attributeName, string groupName, string entity, string storageType, bool isEnum, string pluginDescriptor, 
             string dataSubtype, string unit);
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
-        void RemoveAttribute(string attributeName, string groupName);
+        void RemoveAttribute(string attributeName, string groupName, string entity);
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
-        void AddAttributeEnumValue(string attributeName, string groupName, string value, bool clearExisting); 
+        void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting); 
 
     }
 }

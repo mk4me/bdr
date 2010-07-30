@@ -120,7 +120,8 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
-        public void DefineAttribute(string attributeName, string groupName, string storageType, bool isEnum, string pluginDescriptor, string dataSubtype, string unit)
+        public void DefineAttribute(string attributeName, string groupName, string entity, string storageType, bool isEnum, string pluginDescriptor, 
+            string dataSubtype, string unit)
         {
             int resultCode = 0;
 
@@ -131,6 +132,7 @@ namespace MotionDBWebServices
                 cmd.CommandText = "define_attribute";
                 cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@group_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@entity", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@storage_type", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@is_enum", SqlDbType.Bit);
                 cmd.Parameters.Add("@plugin_desc", SqlDbType.VarChar, 100);
@@ -142,6 +144,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add(resultCodeParameter);
                 cmd.Parameters["@attr_name"].Value = attributeName;
                 cmd.Parameters["@group_name"].Value = groupName;
+                cmd.Parameters["@entity"].Value = entity;
                 cmd.Parameters["@storage_type"].Value = storageType;
                 cmd.Parameters["@is_enum"].Value = isEnum ? 1 : 0;
                 cmd.Parameters["@plugin_desc"].Value = pluginDescriptor;
@@ -188,7 +191,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
-        public void RemoveAttribute(string attributeName, string groupName)
+        public void RemoveAttribute(string attributeName, string groupName, string entity)
         {
             int resultCode = 0;
 
@@ -199,11 +202,13 @@ namespace MotionDBWebServices
                 cmd.CommandText = "remove_attribute";
                 cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@group_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@entity", SqlDbType.VarChar, 20);
                 SqlParameter resultCodeParameter =
                     new SqlParameter("@result", SqlDbType.Int);
                 resultCodeParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(resultCodeParameter);
                 cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@entity"].Value = entity;
                 cmd.Parameters["@group_name"].Value = groupName;
 
                 cmd.ExecuteNonQuery();
@@ -238,7 +243,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
-        public void AddAttributeEnumValue(string attributeName, string groupName, string value, bool clearExisting)
+        public void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting)
         {
             int resultCode = 0;
 
@@ -249,6 +254,7 @@ namespace MotionDBWebServices
                 cmd.CommandText = "add_attribute_enum_value";
                 cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@group_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@entity", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@value", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@replace_all", SqlDbType.Bit);
                 SqlParameter resultCodeParameter =
@@ -257,6 +263,7 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add(resultCodeParameter);
                 cmd.Parameters["@attr_name"].Value = attributeName;
                 cmd.Parameters["@group_name"].Value = groupName;
+                cmd.Parameters["@entity"].Value = entity;
                 cmd.Parameters["@value"].Value = value;
                 cmd.Parameters["@replace_all"].Value = clearExisting?1:0;
 
