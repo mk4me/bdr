@@ -984,6 +984,69 @@ begin
 end;
 go
 
+-- Attribute value removal
+
+create procedure clear_attribute_value(@attr_name varchar(100), @entity varchar(20), @res_id int, @result int OUTPUT  )
+as
+begin
+	set @result = 0;
+	if(@entity = 'performer') 
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_performera wap on a.IdAtrybut = wap.IdAtrybut
+				where a.Nazwa = @attr_name and wap.IdPerformer = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;	
+	delete from wa from Wartosc_atrybutu_performera wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdPerformer = @res_id and a.Nazwa = @attr_name;
+	end
+	else if (@entity = 'session')
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_sesji was on a.IdAtrybut = was.IdAtrybut
+				where a.Nazwa = @attr_name and was.IdSesja = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;
+	delete from wa from Wartosc_atrybutu_sesji wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdSesja = @res_id and a.Nazwa = @attr_name;
+	end
+	else if (@entity = 'trial')
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut = wao.IdAtrybut
+				where a.Nazwa = @attr_name and wao.IdObserwacja = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;
+	delete from wa from Wartosc_atrybutu_obserwacji wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdObserwacja = @res_id and a.Nazwa = @attr_name;
+	end
+	else if (@entity = 'file')
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_pliku wapl on a.IdAtrybut = wapl.IdAtrybut
+				where a.Nazwa = @attr_name and wapl.IdPlik = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;
+	delete from wa from Wartosc_atrybutu_pliku wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdPlik = @res_id and a.Nazwa = @attr_name;
+	end
+	else if (@entity = 'segment')
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_segmentu wase on a.IdAtrybut = wase.IdAtrybut
+				where a.Nazwa = @attr_name and wase.IdSegment = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;
+	delete from wa from Wartosc_atrybutu_segmentu wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdSegment = @res_id and a.Nazwa = @attr_name;
+	end;
+end
+go
+
+-- Metadata definition procedures
+
+
+
 --DECLARE @result int
 --EXECUTE set_session_attribute 4, 'marker_set', abc, 1, @result OUTPUT;
 --select @result

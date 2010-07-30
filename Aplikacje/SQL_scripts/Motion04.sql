@@ -858,7 +858,7 @@ go
  
  ALTER TABLE Atrybut
         ADD FOREIGN KEY (IdGrupa_atrybutow)
-                              REFERENCES Grupa_atrybutow
+                              REFERENCES Grupa_atrybutow on delete cascade;
 go
  
  
@@ -991,68 +991,68 @@ go
  
  ALTER TABLE Wartosc_atrybutu_obserwacji
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_obserwacji
         ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja
+                              REFERENCES Obserwacja on delete cascade;
 go
  
  
   
  ALTER TABLE Wartosc_atrybutu_performera
         ADD FOREIGN KEY (IdPerformer)
-                              REFERENCES Performer
+                              REFERENCES Performer on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_performera
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_pliku
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_pliku
         ADD FOREIGN KEY (IdPlik)
-                              REFERENCES Plik
+                              REFERENCES Plik on delete cascade; 
 go
  
   
  ALTER TABLE Wartosc_atrybutu_segmentu
         ADD FOREIGN KEY (IdSegment)
-                              REFERENCES Segment
+                              REFERENCES Segment on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_segmentu
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_sesji
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja
+                              REFERENCES Sesja on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_atrybutu_sesji
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  
  ALTER TABLE Wartosc_wyliczeniowa
         ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut
+                              REFERENCES Atrybut on delete cascade;
 go
  
  ALTER TABLE Performer_Koszyk
