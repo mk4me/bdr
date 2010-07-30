@@ -216,11 +216,12 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select * from session_label(@sess_id)";
-                SqlParameter resId = cmd.Parameters.Add("@user_login", SqlDbType.VarChar ,30);
-                SqlParameter userLogin = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                resId.Value = id;
+                cmd.CommandText = "select * from session_label(@user_login, @sess_id)";
+                SqlParameter userLogin = cmd.Parameters.Add("@user_login", SqlDbType.VarChar ,30);
+                SqlParameter resId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 userLogin.Value = userName;
+                resId.Value = id;
+
 
                 SqlDataReader dr = cmd.ExecuteReader();
 

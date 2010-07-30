@@ -210,10 +210,17 @@ namespace MotionDBWebServices
         public void StorePerformerFiles(int performerID, string path, string description)
 
         {
-            string dirLocation = baseLocalFilePath + path;
-            int dirLocLength = dirLocation.Length + 1;
+            string dirLocation = baseLocalFilePath;
+
+            int dirLocLength;
             string subdirPath = "";
             string fileName = "";
+
+
+            if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
+            if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
+            dirLocation = baseLocalFilePath + path;
+            dirLocLength = dirLocation.Length + 1; // plus additional "/" character
 
             try
             {
@@ -292,12 +299,17 @@ namespace MotionDBWebServices
        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
-           string dirLocation = baseLocalFilePath + path;
-           int dirLocLength = dirLocation.Length + 1;
+           string dirLocation = baseLocalFilePath;
+
+           int dirLocLength;
            string subdirPath = "";
            string fileName = "";
 
 
+           if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
+           if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0,path.Length-1);
+           dirLocation = baseLocalFilePath + path;
+           dirLocLength = dirLocation.Length + 1; // plus additional "/" character
             try
             {
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
@@ -375,10 +387,17 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreTrialFiles(int trialId, string path, string description)
         {
-            string dirLocation = baseLocalFilePath + path;
-            int dirLocLength = dirLocation.Length + 1;
+            string dirLocation = baseLocalFilePath;
+
+            int dirLocLength;
             string subdirPath = "";
             string fileName = "";
+
+
+            if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
+            if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
+            dirLocation = baseLocalFilePath + path;
+            dirLocLength = dirLocation.Length + 1; // plus additional "/" character
 
             try
             {
@@ -502,6 +521,8 @@ namespace MotionDBWebServices
             string filePath = "";
             string fileLocation = "";
             FileData fData = new FileData();
+            bool found = false;
+            object pathObject;
 
             fileData = null;
             fileName = "";
@@ -522,8 +543,17 @@ namespace MotionDBWebServices
                 {
                     fileData = (byte[])fileReader.GetValue(0);
                     fileName = (string)fileReader.GetValue(1);
-                    filePath = (string)fileReader.GetValue(2);
+                    pathObject = fileReader.GetValue(2);
+                    if (pathObject != DBNull.Value) filePath = (string)fileReader.GetValue(2);
+                    found = true;
                 }
+
+                if (!found)
+                {
+                    FileAccessServiceException exc = new FileAccessServiceException("not found", "File does not exist or not permitted to retrieve");
+                    throw new FaultException<FileAccessServiceException>(exc, "Cannot retrieve this file", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+                }
+
                 if(!Directory.Exists(baseLocalFilePath + relativePath))
                     Directory.CreateDirectory(baseLocalFilePath + relativePath);
 

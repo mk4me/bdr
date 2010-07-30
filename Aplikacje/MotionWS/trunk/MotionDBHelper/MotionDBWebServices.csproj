@@ -74,6 +74,10 @@
     <Content Include="FileStoremanService.asmx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministrationWS.svc.cs">
+      <DependentUpon>AdministrationWS.svc</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AuthorizationWS.svc.cs">
       <DependentUpon>AuthorizationWS.svc</DependentUpon>
       <SubType>Component</SubType>
@@ -104,6 +108,7 @@
     </Compile>
     <Compile Include="FilterPredicate.cs" />
     <Compile Include="FilterPredicateCollection.cs" />
+    <Compile Include="IAdministrationWS.cs" />
     <Compile Include="IAuthorizationWS.cs" />
     <Compile Include="IBasicQueriesWS.cs">
     </Compile>
@@ -129,6 +134,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AdministrationWS.svc" />
     <Content Include="AuthorizationWS.svc" />
     <Content Include="BasicUpdatesWS.svc" />
     <Content Include="bin\MotionDBWebService.dll" />

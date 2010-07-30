@@ -52,5 +52,9 @@ namespace MotionDBWebServices
         [FaultContract(typeof(UpdateException))]
         void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update);
 
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        void ClearAttributeValue(int resourceID, string attributeName, string entity);
+       
     }
 }

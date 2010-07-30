@@ -134,4 +134,30 @@ namespace MotionDBWebServices
         }
     }
 
+
+        [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")]
+    public class AdministrationOperationException
+    {
+        string _fault_source;
+        string _details;
+
+        [DataMember]
+        public string IssueKind
+        {
+            get { return _fault_source; }
+            set { _fault_source = value; }
+        }
+        [DataMember]
+        public string Details
+        {
+            get { return _details; }
+            set { _details = value; }
+        }
+
+        public AdministrationOperationException(string src, string det)
+        {
+            _fault_source = src;
+            _details = det;
+        }
+    }
 }

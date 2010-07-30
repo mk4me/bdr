@@ -639,5 +639,52 @@ END CATCH;";
             }
 
         }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void ClearAttributeValue(int resourceID, string attributeName, string entity)
+        {
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "clear_attribute_value";
+                cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@entity", SqlDbType.VarChar, 20);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+
+                cmd.Parameters["@res_id"].Value = resourceID;
+                cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@entity"].Value = entity;
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                UpdateException exc = new UpdateException("unknown", "Update failed: "+ex.Message);
+                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("ClearAttributeValue")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (resultCode != 0)
+            {
+                UpdateException exc;
+                exc = new UpdateException("Resource unavailable", "Resource does not exist or no authorization to update");
+                throw new FaultException<UpdateException>(exc, "Cannot update this resource", FaultCode.CreateReceiverFaultCode(new FaultCode("ClearAttributeValue")));
+
+            }
+
+        }
+
     }
 }
