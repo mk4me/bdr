@@ -3,6 +3,7 @@ package motion.applet.tables;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
@@ -28,6 +29,7 @@ import motion.database.model.TrialStaticAttributes;
 public class BasicTable extends AbstractTableModel {
 	private ArrayList<ArrayList<Object>> contents = new ArrayList<ArrayList<Object>>();
 	private ArrayList<String> attributeNames = new ArrayList<String>();
+	private ArrayList<Class> classes = new ArrayList<Class>();
 	private ArrayList<Integer> recordIds = new ArrayList<Integer>();
 	private TableName tableName;
 	public int recordId;
@@ -37,7 +39,6 @@ public class BasicTable extends AbstractTableModel {
 		super();
 		this.tableName = tableName;
 		this.recordId = -1;
-		
 		getTableContentsFromAttributes();
 	}
 	
@@ -59,6 +60,7 @@ public class BasicTable extends AbstractTableModel {
 	}
 	
 	public BasicTable(List<GenericResult> result) {
+		super();
 		getTableContentsFromResult(result);
 	}
 	
@@ -72,6 +74,7 @@ public class BasicTable extends AbstractTableModel {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
 				try {
+					addCheckboxColumn(); // first column
 					if (tableName.equals(TableNamesInstance.PERFORMER)) {
 						listPerformers();
 					} else if (tableName.equals(TableNamesInstance.SESSION)) {
@@ -92,19 +95,29 @@ public class BasicTable extends AbstractTableModel {
 			@Override
 			protected void done() {
 				BasicTable.this.fireTableStructureChanged();
+				//table.getColumnModel().getColumn(0).setCellEditor(new CheckBoxCellEditor());
+				//table.getColumnModel().getColumn(0).setCellRenderer(new CheckBoxRenderer());  
 			}
 		};
 		worker.execute();
 	}
 	
+	private void addCheckboxColumn() {
+		this.attributeNames.add("checkbox");	// checkbox column
+		this.classes.add(Boolean.class);
+	}
+	
 	private void listPerformers() throws Exception {
 		DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes());
+		
 		for (AttributeName a : attributes) {
 			this.attributeNames.add(a.toString());
+			this.classes.add(a.getAttributeClass());
 		}
 		for (Performer p : performers) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
+			cellList.add(new Boolean(false));	// checkboxes initially unchecked
 			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = p.get(a.toString());
 				if (entityAttribute != null) {
@@ -123,6 +136,7 @@ public class BasicTable extends AbstractTableModel {
 		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes());
 		for (AttributeName a : attributes) {
 			this.attributeNames.add(a.toString());
+			this.classes.add(a.getAttributeClass());
 		}
 		if (this.recordId > -1) {
 			sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
@@ -131,6 +145,7 @@ public class BasicTable extends AbstractTableModel {
 		}
 		for (Session s : sessions) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
+			cellList.add(new Boolean(false));	// checkboxes initially unchecked
 			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = s.get(a.toString());
 				if (entityAttribute != null) {
@@ -149,6 +164,7 @@ public class BasicTable extends AbstractTableModel {
 		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes());
 		for (AttributeName a : attributes) {
 			this.attributeNames.add(a.toString());
+			this.classes.add(a.getAttributeClass());
 		}
 		if (this.recordId > -1) {
 			trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
@@ -156,6 +172,7 @@ public class BasicTable extends AbstractTableModel {
 		
 		for (Trial t : trials) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
+			cellList.add(new Boolean(false));	// checkboxes initially unchecked
 			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = t.get(a.toString());
 				if (entityAttribute != null) {
@@ -184,10 +201,11 @@ public class BasicTable extends AbstractTableModel {
 		ArrayList<AttributeName> attributes = tableName.getAllAttributes();
 		for (AttributeName a : attributes) {
 			this.attributeNames.add(a.toString());
+			this.classes.add(a.getAttributeClass());
 		}
 		for (DatabaseFile f : files) {
 			ArrayList<Object> cellList = new ArrayList<Object>();
-			
+			cellList.add(new Boolean(false));	// checkboxes initially unchecked
 			for (AttributeName a : attributes) {
 				EntityAttribute entityAttribute = f.get(a.toString());
 				if (entityAttribute != null) {
@@ -221,6 +239,7 @@ public class BasicTable extends AbstractTableModel {
 					for (AttributeName a : attributes) {
 						//TODO: sessionID / SessionID
 						BasicTable.this.attributeNames.add(a.toString().toLowerCase());
+						BasicTable.this.classes.add(a.getAttributeClass());
 					}
 					
 					/*//Filter attributes from view configuration.
@@ -265,6 +284,7 @@ public class BasicTable extends AbstractTableModel {
 							ArrayList<Object> list = new ArrayList<Object>();
 							for (int i = 0; i < cellList.length; i++) {
 								list.add(cellList[i]);
+								list.add(new Boolean(false));	// checkboxes initially unchecked
 							}
 							BasicTable.this.contents.add(list);
 						}
@@ -305,12 +325,11 @@ public class BasicTable extends AbstractTableModel {
 		
 		return this.contents.get(row).get(column);
 	}
-	/*
+	
 	public Class getColumnClass(int column) {
 		
-		return this.columnClasses[column];
+		return this.classes.get(column);
 	}
-	*/
 	
 	public String getColumnName(int column) {
 		
@@ -321,6 +340,10 @@ public class BasicTable extends AbstractTableModel {
 		
 		return this.recordIds.get(row);
 	}
+	
+	public boolean isCellEditable(int rowIndex, int columnIndex) {  
+        return (columnIndex == 0);	// enable columns for editing/checkboxes  
+    } 
 	
 	/*
 	@Override
@@ -350,4 +373,13 @@ public class BasicTable extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return this.columnNames[column];
 	}*/
+	
+	 @Override
+     public void setValueAt(Object value, int rowIndex, int columnIndex) {
+         if (columnIndex == 0) {
+             this.contents.get(rowIndex).set(columnIndex, value);
+         }
+         //super.fireTableCellUpdated(rowIndex, columnIndex);
+         
+     }
 }
