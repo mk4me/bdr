@@ -123,7 +123,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private int getSelectedRecord( JTable table, MouseEvent e ) 
 	{
-		if ( table.getSelectedRowCount() == 0 )
+		//if ( table.getSelectedRowCount() == 0 )	// FIXME: always false?
 			createSelectionAtMouse(table, e);
 		
 		return ((BasicTable) table.getModel()).getRecordId( table.getSelectedRows()[0] );
@@ -131,7 +131,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 
 	private int[] getSelectedRecords( JTable table, MouseEvent e ) 
 	{
-		if ( table.getSelectedRowCount() == 0 )
+		if ( table.getSelectedRowCount() == 0 )	// FIXME: always false?
 			createSelectionAtMouse(table, e);
 
 		int recordIds[] = new int[ table.getSelectedRowCount() ];
