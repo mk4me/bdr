@@ -78,4 +78,16 @@ public class AttributeName {
 			return new String[]{UNKNOWN_TYPE};
 		}
 	}
+	
+	public Class getAttributeClass() {
+		if (type.equals(INTEGER_TYPE)) {
+			return Integer.class;
+		} else if (type.equals(STRING_TYPE)) {
+			return String.class;
+		} else if (type.equals(DATE_TYPE)) {
+			return String.class;
+		} else { // Unknown type.
+			return Object.class;
+		}
+	}
 }
