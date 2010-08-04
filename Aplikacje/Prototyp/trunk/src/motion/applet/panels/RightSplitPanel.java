@@ -113,22 +113,26 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 	}
 
-	private void createSelectionAtMouse( JTable table, MouseEvent e )
-	{
+	private void createSelectionAtMouse( JTable table, MouseEvent e ) {
 		Point point = e.getPoint();
 		int row = table.rowAtPoint(point);
 		ListSelectionModel model = table.getSelectionModel();
 		model.setSelectionInterval(row, row);
 	}
 	
-	private int getSelectedRecord( JTable table, MouseEvent e ) 
-	{
-		//if ( table.getSelectedRowCount() == 0 )	// FIXME: always false?
-			createSelectionAtMouse(table, e);
+	private int getSelectedRecord( JTable table, MouseEvent e ) {
+		createSelectionAtMouse(table, e);
 		
 		return ((BasicTable) table.getModel()).getRecordId( table.getSelectedRows()[0] );
 	}
-
+	
+	private int[] getSelectedRecords( JTable table, MouseEvent e ) {
+		createSelectionAtMouse(table, e);
+		
+		return ((BasicTable) table.getModel()).getCheckedRecordIds();
+	}
+	
+	/*//replaced by getSelectedRecords(JTable table)
 	private int[] getSelectedRecords( JTable table, MouseEvent e ) 
 	{
 		if ( table.getSelectedRowCount() == 0 )	// FIXME: always false?
@@ -141,7 +145,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 		return recordIds;
 	}
-
+	*/
+	/*//TODO: move functionality to BasicTable
 	private void invertSelection(JTable table)
 	{
 		int selIndex = 0, row = 0;
@@ -163,7 +168,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			row++;
 		}
 	}
-	
+	*/
 
 	class PerformerMouseAdapter extends MouseAdapter
 	{
@@ -318,11 +323,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		private File file;	// Save last directory for downloaded files.
 		
 		public void mouseClicked(MouseEvent e) {
-
-			final int[] recordIds = getSelectedRecords( tables[3], e );
 			JPopupMenu popupMenu = new JPopupMenu();
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
+				// Get checked rows.
+				final int[] recordIds = RightSplitPanel.this.getSelectedRecords(tables[3], e);
 				// Upload context menu.
 				JMenuItem downloadMenuItem = new JMenuItem(MENU_DOWNLOAD);
 				popupMenu.add(downloadMenuItem);
@@ -342,7 +347,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						}
 					}
 				});
-
+				/*
 				JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_INVERT_SELECTION);
 				popupMenu.add(batchDownloadMenuItem);
 
@@ -352,7 +357,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 						invertSelection(tables[3]);
 					}
 				});
-
+				 */
 				
 				popupMenu.show( tables[3], e.getPoint().x, e.getPoint().y);
 			}

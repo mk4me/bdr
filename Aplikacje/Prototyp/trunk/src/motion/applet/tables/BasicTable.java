@@ -1,9 +1,9 @@
 package motion.applet.tables;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
@@ -34,6 +34,7 @@ public class BasicTable extends AbstractTableModel {
 	private TableName tableName;
 	public int recordId;
 	public TableName fromTableName;	// Used for listing files for different tables.
+	private int CHECKBOX_COLUMN = 0;
 	
 	public BasicTable(TableName tableName) {
 		super();
@@ -341,9 +342,10 @@ public class BasicTable extends AbstractTableModel {
 		return this.recordIds.get(row);
 	}
 	
-	public boolean isCellEditable(int rowIndex, int columnIndex) {  
-        return (columnIndex == 0);	// enable columns for editing/checkboxes  
-    } 
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		
+		return (columnIndex == CHECKBOX_COLUMN);	// enable columns for editing/checkboxes  
+	}
 	
 	/*
 	@Override
@@ -374,12 +376,26 @@ public class BasicTable extends AbstractTableModel {
 		return this.columnNames[column];
 	}*/
 	
-	 @Override
-     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-         if (columnIndex == 0) {
-             this.contents.get(rowIndex).set(columnIndex, value);
-         }
-         //super.fireTableCellUpdated(rowIndex, columnIndex);
-         
-     }
+	@Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
+		if (columnIndex == CHECKBOX_COLUMN) {
+			this.contents.get(rowIndex).set(columnIndex, value);
+		}
+		//super.fireTableCellUpdated(rowIndex, columnIndex);
+	}
+	
+	public int[] getCheckedRecordIds() {
+		int[] checkedRecordIds = new int[this.getRowCount()];
+		int i = 0;
+		int j = 0;
+		for (ArrayList<Object> row : this.contents) {
+			if ((Boolean) row.get(CHECKBOX_COLUMN) == Boolean.TRUE) {
+				checkedRecordIds[j] = getRecordId(i);
+				j++;
+			}
+			i++;
+		}
+		
+		return Arrays.copyOf(checkedRecordIds, j);
+	}
 }
