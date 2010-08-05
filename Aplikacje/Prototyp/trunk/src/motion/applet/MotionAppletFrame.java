@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
+import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
@@ -123,8 +124,17 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
+		JMenuItem createBasketItem = new JMenuItem("Basket");
+		newMenu.add(createBasketItem);
+		createBasketItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				BasketDialog basketDialog = new BasketDialog();
+				basketDialog.setVisible(true);
+			}
+		});
+		
 		// View menu
-		JMenu viewMenu = new JMenu(MENU_VIEW); //$NON-NLS-1$
+		JMenu viewMenu = new JMenu(MENU_VIEW);
 		appletMenuBar.add(viewMenu);
 		
 		JMenuItem viewAllPerformersItem = new JMenuItem(MENU_ALL_PERFORMERS);

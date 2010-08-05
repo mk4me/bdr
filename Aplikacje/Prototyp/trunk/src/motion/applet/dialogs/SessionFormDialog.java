@@ -21,7 +21,7 @@ import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
 	private static String TITLE = "New session";
-	private static String WELCOME_MESSAGE = "Create new session.";
+	private static String WELCOME_MESSAGE = "Create a new session.";
 	private static String MISSING_SESSION_DATE = "Missing or incorrect session date.";
 	private static String MISSING_MOTION_KIND = "Missing motion kind.";
 	private static String CREATING_MESSAGE = "Creating a new session...";

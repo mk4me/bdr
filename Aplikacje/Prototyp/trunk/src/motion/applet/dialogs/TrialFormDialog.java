@@ -12,7 +12,7 @@ import motion.applet.webservice.client.WebServiceInstance;
 
 public class TrialFormDialog extends FormDialog {
 	private static String TITLE = "New trial";
-	private static String WELCOME_MESSAGE = "Create new trial.";
+	private static String WELCOME_MESSAGE = "Create a new trial.";
 	private static String MISSING_TRIAL_DESCRIPTION = "Missing trial description.";
 	private static String MISSING_DURATION = "Missing or incorrect duration.";
 	private static String CREATING_MESSAGE = "Creating a new trial...";
