@@ -94,6 +94,7 @@
       <DependentUpon>BasicUpdatesWS.svc</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="DatabaseAccessService.cs">
       <SubType>Component</SubType>

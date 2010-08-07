@@ -12,6 +12,7 @@ namespace MotionDBWebServices
 {
     // NOTE: If you change the class name "BasicUpdatesWS" here, you must also update the reference to "BasicUpdatesWS" in Web.config.
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")]
+    [ErrorLoggerBehaviorAttribute]
     public class BasicUpdatesWS : DatabaseAccessService, IBasicUpdatesWS
     {
 

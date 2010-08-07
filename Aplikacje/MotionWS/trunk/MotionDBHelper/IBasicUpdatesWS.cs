@@ -9,7 +9,6 @@ namespace MotionDBWebServices
 {
     // NOTE: If you change the interface name "IBasicUpdatesWS" here, you must also update the reference to "IBasicUpdatesWS" in Web.config.
     [ServiceContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService"), XmlSerializerFormat(Style = OperationFormatStyle.Document, Use = OperationFormatUse.Literal)]
-
     public interface IBasicUpdatesWS
     {
         [OperationContract]
