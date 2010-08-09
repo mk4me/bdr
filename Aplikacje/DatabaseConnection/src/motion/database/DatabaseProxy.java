@@ -41,7 +41,7 @@ public interface DatabaseProxy {
 	
 	public void removeEntityFromBasket(String basketName, int resourceID, String entityName) throws Exception;
 	
-	public void addEntityToBasket(String basketName, int resourceID) throws Exception;
+	public void addEntityToBasket(String basketName, int resourceID, String entity) throws Exception;
 	
 	public DbElementsList<UserPrivileges> listSessionPrivileges(int sessionID) throws Exception;
 

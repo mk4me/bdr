@@ -1363,7 +1363,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	 *==========================================================================
 	 */	
 
-	public void addEntityToBasket(String basketName, int resourceID) throws Exception
+	public void addEntityToBasket(String basketName, int resourceID, String entity) throws Exception
 	{
 		try {
 			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "addEntityToBasket", this );
