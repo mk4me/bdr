@@ -79,12 +79,7 @@ public class MotionAppletFrame extends JFrame {
 		});
 	}
 
-	private void initUserInterface() {
-		//Create the tool bar
-		AppletToolBar appletToolBar = new AppletToolBar();
-		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
-		
-		// Create the horizontal split panels
+	private void initUserInterface() {// Create the horizontal split panels
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -98,7 +93,10 @@ public class MotionAppletFrame extends JFrame {
 		// Right panel with a tree
 		RightSplitPanel rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
-		appletToolBar.addLabComboBoxListener(rightPanel);
+		
+		//Create the tool bar
+		AppletToolBar appletToolBar = new AppletToolBar(rightPanel);
+		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
 		
 		// Main tabs
 		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);

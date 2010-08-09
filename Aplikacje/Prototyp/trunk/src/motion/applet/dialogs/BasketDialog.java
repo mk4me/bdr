@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
 
 public class BasketDialog extends BasicDialog {

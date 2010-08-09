@@ -42,7 +42,7 @@ import motion.applet.trees.ResultTree;
 public class RightSplitPanel extends JPanel implements ActionListener {
 	//private JTable performerTable;
 	//private JTable sessionTable;
-	private BasicTable tableModel;
+	//private BasicTable tableModel;
 	private JTree tree;
 	//private TableName performerTableName;
 	//private TableName sessionTableName;
@@ -130,6 +130,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		createSelectionAtMouse(table, e);
 		
 		return ((BasicTable) table.getModel()).getCheckedRecordIds();
+	}
+	
+	public BasicTable getCurrentTable() {
+		int currentTab = this.tabbedPane.getSelectedIndex();
+		
+		return (BasicTable) tables[currentTab].getModel();
 	}
 	
 	/*//replaced by getSelectedRecords(JTable table)

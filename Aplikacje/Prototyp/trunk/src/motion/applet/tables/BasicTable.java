@@ -69,6 +69,11 @@ public class BasicTable extends AbstractTableModel {
 		super();
 	}
 	
+	public TableName getTableName() {
+		
+		return this.tableName;
+	}
+	
 	private void getTableContentsFromAttributes() {
 
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
