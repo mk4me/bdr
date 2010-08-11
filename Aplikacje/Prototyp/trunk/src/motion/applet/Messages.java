@@ -1,9 +1,7 @@
 package motion.applet;
 
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.ResourceBundle.Control;
 
 public class Messages {
 	public static String ENGLISH = "ENG";
@@ -25,6 +23,7 @@ public class Messages {
 	public static String ADD = Messages.getString("Add"); //$NON-NLS-1$
 	public static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
 	public static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
+	public static String REMOVE = Messages.getString("Remove"); //$NON-NLS-1$
 	public static String UPDATE = Messages.getString("Update"); //$NON-NLS-1$
 	public static String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
 	
