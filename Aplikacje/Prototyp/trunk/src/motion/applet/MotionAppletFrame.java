@@ -1,22 +1,13 @@
 package motion.applet;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -36,6 +27,7 @@ import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
 import motion.applet.toolbars.AppletToolBar;
 import motion.database.DatabaseConnection;
+import motion.widgets.TabCloseButtonWidget;
 
 public class MotionAppletFrame extends JFrame {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
@@ -49,6 +41,7 @@ public class MotionAppletFrame extends JFrame {
 	private static String MENU_UPLOAD = Messages.getString("Upload"); //$NON-NLS-1$
 	private static String TAB_BROWSE = Messages.getString("MotionApplet.Browse"); //$NON-NLS-1$
 	private static String TAB_QUERY = Messages.getString("MotionApplet.Query"); //$NON-NLS-1$
+	private static String TAB_BASKETS = "Baskets";
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 	
 	private static JTabbedPane queryResultsPane;
@@ -102,6 +95,7 @@ public class MotionAppletFrame extends JFrame {
 		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab(TAB_BROWSE, rightPanel);
 		mainTabs.addTab(TAB_QUERY, leftRightSplitPane);
+		mainTabs.addTab(TAB_BASKETS, new JPanel());
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
 		
 		// Create the menu bar
@@ -198,53 +192,8 @@ public class MotionAppletFrame extends JFrame {
 	public static void addResult(JTable resultTable) {
 		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
 		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
-		final JPanel tabPanel = new JPanel();
-		tabPanel.setOpaque(false);
-		tabPanel.add(new JLabel("Results"));
-		JButton closeButton = new JButton();
-		closeButton.setContentAreaFilled(false);
-		/*
-		java.net.URL imageURL = ClassLoader.getSystemClassLoader().getResource("images/close.gif");
-		if (imageURL != null)
-			closeButton.setIcon(new ImageIcon( imageURL ));
-		else
-			DatabaseConnection.log.severe( "Cannot load resource images/close.gif" );
-		*/
-		closeButton.setIcon(new Icon() {
-			@Override
-			public int getIconHeight() {
-				
-				return 8;
-			}
-			
-			@Override
-			public int getIconWidth() {
-				
-				return 8;
-			}
-			
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setColor(Color.black);
-				g2.setStroke(new BasicStroke(2));
-				g2.drawLine(x, y, x+getIconWidth(), y+getIconHeight());
-				g2.drawLine(x, y+getIconHeight(), x+getIconWidth(), y);
-			}
-		});
-		closeButton.setPreferredSize(new Dimension(16, 16));
-		closeButton.setBorderPainted(true);
-		
-		tabPanel.add(closeButton);
-		
-		queryResultsPane.setTabComponentAt(queryResultsPane.getTabCount()-1, tabPanel);
-		
-		closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int i = queryResultsPane.indexOfTabComponent(tabPanel);
-				queryResultsPane.removeTabAt(i);
-			}
-		});
+		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(TabCloseButtonWidget.RESULTS_TAB_LABEL, queryResultsPane);
+		queryResultsPane.setTabComponentAt(queryResultsPane.getTabCount()-1, tabCloseButtonWidget);
 	}
 	
 	public static void main(String args[]) {
