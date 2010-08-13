@@ -22,6 +22,7 @@ import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
+import motion.applet.panels.BasketPanel;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
@@ -91,11 +92,16 @@ public class MotionAppletFrame extends JFrame {
 		AppletToolBar appletToolBar = new AppletToolBar(rightPanel);
 		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
 		
+		// Basket panel
+		BasketPanel basketPanel = new BasketPanel();
+		JSplitPane basketSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, basketPanel, new JPanel());
+		basketSplitPane.setResizeWeight(0.1);
+		
 		// Main tabs
 		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab(TAB_BROWSE, rightPanel);
 		mainTabs.addTab(TAB_QUERY, leftRightSplitPane);
-		mainTabs.addTab(TAB_BASKETS, new JPanel());
+		mainTabs.addTab(TAB_BASKETS, basketSplitPane);
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
 		
 		// Create the menu bar
