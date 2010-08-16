@@ -85,7 +85,7 @@ public class BasketDialog extends BasicDialog {
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		basketList = new JList(new String[]{"basketA", "basketB"});
+		basketList = new JList(new String[]{"basket1", "basket2"});
 		formPanel.add(new JScrollPane(basketList), gridBagConstraints);
 		
 		gridBagConstraints.gridx = 2;

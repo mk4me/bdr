@@ -60,4 +60,8 @@ public class TabCloseButtonWidget extends JPanel {
 			}
 		});
 	}
+	
+	public void addCloseButton() {
+		tabbedPane.setTabComponentAt(tabbedPane.getTabCount()-1, this);
+	}
 }

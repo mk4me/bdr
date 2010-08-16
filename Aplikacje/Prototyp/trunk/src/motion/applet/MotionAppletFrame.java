@@ -94,7 +94,7 @@ public class MotionAppletFrame extends JFrame {
 		
 		// Basket panel
 		BasketPanel basketPanel = new BasketPanel();
-		JSplitPane basketSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, basketPanel, new JPanel());
+		JSplitPane basketSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, basketPanel, basketPanel.tablePane);
 		basketSplitPane.setResizeWeight(0.1);
 		
 		// Main tabs
@@ -199,7 +199,7 @@ public class MotionAppletFrame extends JFrame {
 		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
 		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
 		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(TabCloseButtonWidget.RESULTS_TAB_LABEL, queryResultsPane);
-		queryResultsPane.setTabComponentAt(queryResultsPane.getTabCount()-1, tabCloseButtonWidget);
+		tabCloseButtonWidget.addCloseButton();
 	}
 	
 	public static void main(String args[]) {

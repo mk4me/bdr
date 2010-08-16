@@ -37,14 +37,12 @@ public class BasicTable extends AbstractTableModel {
 	private int CHECKBOX_COLUMN = 0;
 	
 	public BasicTable(TableName tableName) {
-		super();
 		this.tableName = tableName;
 		this.recordId = -1;
 		getTableContentsFromAttributes();
 	}
 	
 	public BasicTable(TableName tableName, int recordId) {
-		super();
 		this.tableName = tableName;
 		this.recordId = recordId;
 		
@@ -52,7 +50,6 @@ public class BasicTable extends AbstractTableModel {
 	}
 	
 	public BasicTable(TableName tableName, int recordId, TableName fromTableName) {
-		super();
 		this.tableName = tableName;
 		this.recordId = recordId;
 		this.fromTableName = fromTableName;
@@ -61,8 +58,11 @@ public class BasicTable extends AbstractTableModel {
 	}
 	
 	public BasicTable(List<GenericResult> result) {
-		super();
 		getTableContentsFromResult(result);
+	}
+	
+	public BasicTable(DbElementsList<Performer> records) {
+		getTableContentsFromPerformerRecords(records);
 	}
 	
 	public BasicTable() {
@@ -287,6 +287,55 @@ public class BasicTable extends AbstractTableModel {
 							} else if (tableName.equals(TableNamesInstance.TRIAL)) {
 								BasicTable.this.recordIds.add(Integer.parseInt(r.get("TrialID").value.toString()));
 							}
+							ArrayList<Object> list = new ArrayList<Object>();
+							for (int i = 0; i < cellList.length; i++) {
+								list.add(cellList[i]);
+								list.add(new Boolean(false));	// checkboxes initially unchecked
+							}
+							BasicTable.this.contents.add(list);
+						}
+					}
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				BasicTable.this.fireTableStructureChanged();
+			}
+		};
+		worker.execute();
+	}
+	
+	private void getTableContentsFromPerformerRecords(final DbElementsList<Performer> records) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					BasicTable.this.tableName = TableNamesInstance.PERFORMER;
+					// Don't filter attributes.
+					ArrayList<AttributeName> attributes = tableName.getAllAttributes();
+					for (AttributeName a : attributes) {
+						//TODO: sessionID / SessionID
+						BasicTable.this.attributeNames.add(a.toString().toLowerCase());
+						BasicTable.this.classes.add(a.getAttributeClass());
+					}
+					
+					if (attributes != null) {
+						for (Performer p : records) {
+							Object[] cellList = new Object[attributeNames.size()];
+							
+							for (String key : p.keySet()) {
+								//TODO: sessionID / SessionID
+								int i = attributeNames.indexOf(key.toLowerCase());
+								if (i >= 0)
+									cellList[i] = p.get(key).value;
+							}
+							BasicTable.this.recordIds.add(p.getId());
 							ArrayList<Object> list = new ArrayList<Object>();
 							for (int i = 0; i < cellList.length; i++) {
 								list.add(cellList[i]);
