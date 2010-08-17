@@ -108,6 +108,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		return ((BasicTable) table.getModel()).getCheckedRecordIds();
 	}
 	
+	//TODO: get visible tab, why is this called twice?
 	public BasicTable getCurrentTable() {
 		int currentTab = this.tabbedPane.getSelectedIndex();
 		

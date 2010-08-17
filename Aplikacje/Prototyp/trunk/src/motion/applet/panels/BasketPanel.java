@@ -58,7 +58,7 @@ public class BasketPanel extends JPanel {
 		removeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				removeBasket();
 			}
 		});
 		
@@ -141,6 +141,29 @@ public class BasketPanel extends JPanel {
 		worker.execute();
 	}
 	
+	private void removeBasket() {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					String basketName = BasketPanel.this.getSelectedBasket();
+					WebServiceInstance.getDatabaseConnection().removeBasket(basketName);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				
+			}
+		};
+		worker.execute();
+	}
+	
 	private String getSelectedEntity() {
 		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) this.tree.getSelectionPath().getLastPathComponent());
 		if (selectedNode.getLevel() == 2) {
@@ -153,9 +176,12 @@ public class BasketPanel extends JPanel {
 	
 	private String getSelectedBasket() {
 		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) this.tree.getSelectionPath().getLastPathComponent());
-		if (selectedNode.getLevel() == 2) {
+		if (selectedNode.getLevel() == 2) {	// Performer/Session/Trial node selected.
 			
 			return selectedNode.getParent().toString();
+		} else if (selectedNode.getLevel() == 1) {	// Basket name node selected.
+			
+			return selectedNode.toString();
 		}
 		
 		return "";
