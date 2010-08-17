@@ -229,7 +229,9 @@ public class BasicTable extends AbstractTableModel {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
-				try { //TODO: Needs improvement.
+				try {
+					addCheckboxColumn(); // first column
+					//TODO: Needs improvement.
 					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
 					//BasicTable.this.tableName = TableNamesInstance.SESSION;
 					if (result.get(0).keySet().contains("FirstName")) {
@@ -288,9 +290,9 @@ public class BasicTable extends AbstractTableModel {
 								BasicTable.this.recordIds.add(Integer.parseInt(r.get("TrialID").value.toString()));
 							}
 							ArrayList<Object> list = new ArrayList<Object>();
-							for (int i = 0; i < cellList.length; i++) {
+							list.add(new Boolean(false));	// checkboxes initially unchecked
+							for (int i = 1; i < cellList.length; i++) {
 								list.add(cellList[i]);
-								list.add(new Boolean(false));	// checkboxes initially unchecked
 							}
 							BasicTable.this.contents.add(list);
 						}
@@ -316,6 +318,7 @@ public class BasicTable extends AbstractTableModel {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
 				try {
+					addCheckboxColumn(); // first column
 					BasicTable.this.tableName = TableNamesInstance.PERFORMER;
 					// Don't filter attributes.
 					ArrayList<AttributeName> attributes = tableName.getAllAttributes();
@@ -337,9 +340,9 @@ public class BasicTable extends AbstractTableModel {
 							}
 							BasicTable.this.recordIds.add(p.getId());
 							ArrayList<Object> list = new ArrayList<Object>();
-							for (int i = 0; i < cellList.length; i++) {
+							list.add(new Boolean(false));	// checkboxes initially unchecked
+							for (int i = 1; i < cellList.length; i++) {
 								list.add(cellList[i]);
-								list.add(new Boolean(false));	// checkboxes initially unchecked
 							}
 							BasicTable.this.contents.add(list);
 						}

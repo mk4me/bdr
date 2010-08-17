@@ -3,6 +3,8 @@ package motion.applet.panels;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -65,47 +67,21 @@ public class BasketPanel extends JPanel {
 		viewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					@Override
-					protected Void doInBackground() throws InterruptedException {
-						try {
-							String basketName = BasketPanel.this.getSelectedBasket();
-							String entity = BasketPanel.this.getSelectedEntity();
-							TableName tableName = TableNamesInstance.toTableName(entity);
-							JTable table = new JTable();
-							if (tableName.equals(TableNamesInstance.PERFORMER)) {
-								DbElementsList<Performer> records = WebServiceInstance.getDatabaseConnection().listBasketPerformersWithAttributes(basketName);
-								table.setModel(new BasicTable(records));
-							} else if (tableName.equals(TableNamesInstance.SESSION)) {
-								DbElementsList<Session> records = WebServiceInstance.getDatabaseConnection().listBasketSessionsWithAttributes(basketName);
-								//TODO:
-								//table.setModel(new BasicTable(records));
-							} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-								DbElementsList<Trial> records = WebServiceInstance.getDatabaseConnection().listBasketTrialsWithAttributes(basketName);
-								//TODO:
-								//table.setModel(new BasicTable(records));
-							}
-							
-							BasketPanel.this.addTab(table, basketName + " (" + entity + ")");
-							
-						} catch (Exception e1) {
-							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-							exceptionDialog.setVisible(true);
-						}
-						
-						return null;
-					}
-					
-					@Override
-					protected void done() {
-						
-					}
-				};
-				worker.execute();
+				viewBasket();
 			}
 		});
 		
 		this.add(toolBar, BorderLayout.NORTH);
+		
+		tree.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				//int selRow = tree.getRowForLocation(e.getX(), e.getY());
+				//TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				if (e.getClickCount() == 2) {	// Double click.
+					viewBasket();
+				}
+			}
+		});
 	}
 	
 	private DefaultMutableTreeNode createTree() {
@@ -123,6 +99,46 @@ public class BasketPanel extends JPanel {
 		}
 		
 		return root;
+	}
+	
+	private void viewBasket() {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					String basketName = BasketPanel.this.getSelectedBasket();
+					String entity = BasketPanel.this.getSelectedEntity();
+					TableName tableName = TableNamesInstance.toTableName(entity);
+					JTable table = new JTable();
+					if (tableName.equals(TableNamesInstance.PERFORMER)) {
+						DbElementsList<Performer> records = WebServiceInstance.getDatabaseConnection().listBasketPerformersWithAttributes(basketName);
+						table.setModel(new BasicTable(records));
+					} else if (tableName.equals(TableNamesInstance.SESSION)) {
+						DbElementsList<Session> records = WebServiceInstance.getDatabaseConnection().listBasketSessionsWithAttributes(basketName);
+						//TODO:
+						//table.setModel(new BasicTable(records));
+					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+						DbElementsList<Trial> records = WebServiceInstance.getDatabaseConnection().listBasketTrialsWithAttributes(basketName);
+						//TODO:
+						//table.setModel(new BasicTable(records));
+					}
+					
+					BasketPanel.this.addTab(table, basketName + " (" + entity + ")");
+					
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				
+			}
+		};
+		worker.execute();
 	}
 	
 	private String getSelectedEntity() {
