@@ -40,12 +40,7 @@ import motion.applet.toolbars.AppletToolBar;
 import motion.applet.trees.ResultTree;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
-	//private JTable performerTable;
-	//private JTable sessionTable;
-	//private BasicTable tableModel;
 	private JTree tree;
-	//private TableName performerTableName;
-	//private TableName sessionTableName;
 	private JTabbedPane tabbedPane;
 	
 	private static String MENU_CREATE_SESSION = "Create new session";
@@ -63,8 +58,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	public RightSplitPanel() {
 		super();
-		//this.performerTableName = TableNamesInstance.PERFORMER;
-		//this.sessionTableName = TableNamesInstance.SESSION;
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 
@@ -77,23 +70,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			i++;
 		}
 		this.setLayout(new BorderLayout());
-		//performerTable = new JTable();
-		//sessionTable = new JTable();
-		
-		//tables[0] = performerTable;
-		//tables[1] = sessionTable;
-		
-		
-		//JScrollPane performerPane = new JScrollPane(performerTable);
-		//JScrollPane sessionPane = new JScrollPane(sessionTable);
-		
-		//tabbedPane.addTab( "Performer", performerPane );
-		//tabbedPane.addTab( "Session", sessionPane );
-		
-		//showTree("Performer");
-		//JScrollPane scrollPane = new JScrollPane(tree);
-		
-		////this.add(scrollPane, BorderLayout.CENTER);
 		
 		bottomPanel = new BottomSplitPanel();
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, bottomPanel);
@@ -176,12 +152,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	*/
 
-	class PerformerMouseAdapter extends MouseAdapter
-	{
+	private class PerformerMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
-			if (SwingUtilities.isRightMouseButton(e)) {
-
-				final int recordId = getSelectedRecord( tables[0], e );
+			final int recordId = getSelectedRecord( tables[0], e );
+			if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 				JPopupMenu popupMenu = new JPopupMenu();
 				
 				JMenuItem createSessionMenuItem = new JMenuItem(MENU_CREATE_SESSION);
@@ -200,9 +174,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				viewSessionsMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						RightSplitPanel.this.showTable(TableNamesInstance.SESSION, recordId);
-						RightSplitPanel.this.clearTrialTable();
-						RightSplitPanel.this.clearFileTable();
+						viewSessions(recordId);
 					}
 				});
 				
@@ -225,22 +197,31 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				viewFilesMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.PERFORMER);
+						viewFiles(recordId, TableNamesInstance.PERFORMER);
 					}
 				});
 
 				popupMenu.show( tables[0], e.getPoint().x, e.getPoint().y);
+			} else if (e.getClickCount() == 2) {	// Double click.
+				viewSessions(recordId);
 			}
 		}
+		
+		private void viewSessions(int recordId) {
+			RightSplitPanel.this.showTable(TableNamesInstance.SESSION, recordId);
+			RightSplitPanel.this.clearTrialTable();
+			RightSplitPanel.this.clearFileTable();
+		}
+		
+		private void viewFiles(int recordId, TableName tableName) {
+			RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, tableName);
+		}
 	}
-
 	
-	class SessionMouseAdapter extends MouseAdapter
-	{
+	private class SessionMouseAdapter extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
-			if (SwingUtilities.isRightMouseButton(e)) {
-
-				final int recordId = getSelectedRecord( tables[1], e );
+			final int recordId = getSelectedRecord( tables[1], e );
+			if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 				JPopupMenu popupMenu = new JPopupMenu();
 				
 				JMenuItem createTrialMenuItem = new JMenuItem(MENU_CREATE_TRIAL);
@@ -259,7 +240,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				viewTrialsMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						RightSplitPanel.this.showTable(TableNamesInstance.TRIAL, recordId);
+						viewTrials(recordId);
 					}
 				});
 				
@@ -282,22 +263,31 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				viewFilesMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.SESSION);
+						viewFiles(recordId, TableNamesInstance.SESSION);
 					}
 				});
 				
 				popupMenu.show( tables[1], e.getPoint().x, e.getPoint().y);
+			} else if (e.getClickCount() == 2) {	// Double click.
+				viewTrials(recordId);
 			}
+		}
+		
+		private void viewTrials(int recordId) {
+			RightSplitPanel.this.showTable(TableNamesInstance.TRIAL, recordId);
+		}
+		
+		private void viewFiles(int recordId, TableName tableName) {
+			RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, tableName);
 		}
 	}
 	
-	class TrialMouseAdapter extends MouseAdapter {
-		public void mouseClicked(MouseEvent e) {
-
+	private class TrialMouseAdapter extends MouseAdapter {
+		public void mouseClicked(MouseEvent e) {	// Right click.
 			final int recordId = getSelectedRecord( tables[2], e );
-			JPopupMenu popupMenu = new JPopupMenu();
-			
 			if (SwingUtilities.isRightMouseButton(e)) {
+				JPopupMenu popupMenu = new JPopupMenu();
+				
 				// Upload context menu.
 				JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
 				popupMenu.add(uploadMenuItem);
@@ -316,12 +306,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				viewFilesMenuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, TableNamesInstance.TRIAL);
+						viewFiles(recordId, TableNamesInstance.TRIAL);
 					}
 				});
 				
 				popupMenu.show( tables[2], e.getPoint().x, e.getPoint().y);
 			}
+		}
+		
+		private void viewFiles(int recordId, TableName tableName) {
+			RightSplitPanel.this.showTable(TableNamesInstance.FILE, recordId, tableName);
 		}
 	}
 	
