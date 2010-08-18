@@ -1,6 +1,7 @@
 package motion.applet;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -26,6 +27,7 @@ import motion.applet.panels.BasketPanel;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
+import motion.applet.tables.BasicTable;
 import motion.applet.toolbars.AppletToolBar;
 import motion.database.DatabaseConnection;
 import motion.widgets.TabCloseButtonWidget;
@@ -45,6 +47,8 @@ public class MotionAppletFrame extends JFrame {
 	private static String TAB_BASKETS = "Baskets";
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 	
+	private static RightSplitPanel rightPanel;
+	private static BasketPanel basketPanel;
 	private static JTabbedPane queryResultsPane;
 	
 	public MotionAppletFrame() {
@@ -85,15 +89,11 @@ public class MotionAppletFrame extends JFrame {
 		queryResultsPane = new JTabbedPane();
 		
 		// Right panel with a tree
-		RightSplitPanel rightPanel = new RightSplitPanel();
+		rightPanel = new RightSplitPanel();
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
 		
-		//Create the tool bar
-		AppletToolBar appletToolBar = new AppletToolBar(rightPanel);
-		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
-		
 		// Basket panel
-		BasketPanel basketPanel = new BasketPanel();
+		basketPanel = new BasketPanel();
 		JSplitPane basketSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, basketPanel, basketPanel.tablePane);
 		basketSplitPane.setResizeWeight(0.1);
 		
@@ -106,6 +106,10 @@ public class MotionAppletFrame extends JFrame {
 		
 		// Create the menu bar
 		createMenuBar(rightPanel);
+		
+		//Create the tool bar
+		AppletToolBar appletToolBar = new AppletToolBar(rightPanel);
+		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
 	}
 	
 	private void createMenuBar(final RightSplitPanel rightPanel) {
@@ -200,6 +204,29 @@ public class MotionAppletFrame extends JFrame {
 		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
 		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(TabCloseButtonWidget.RESULTS_TAB_LABEL, queryResultsPane);
 		tabCloseButtonWidget.addCloseButton();
+	}
+	
+	public static BasicTable getCurrentTable() {
+		JTabbedPane tabbedPane = null;
+		if (rightPanel.getTabbedPane().isShowing()) {
+			tabbedPane = rightPanel.getTabbedPane();
+		} else if (basketPanel.isShowing()) {
+			tabbedPane = basketPanel.getTabbedPane();
+		} else if (queryResultsPane.isShowing()) {
+			tabbedPane = queryResultsPane;
+		}
+		
+		if (tabbedPane != null) {
+			Component component = tabbedPane.getSelectedComponent();
+			if (component instanceof JScrollPane) {
+				component = ((JScrollPane) component).getViewport().getView();
+				if (component instanceof JTable) {
+					return (BasicTable) ((JTable) component).getModel();
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public static void main(String args[]) {

@@ -187,10 +187,15 @@ public class BasketPanel extends JPanel {
 		return "";
 	}
 	
-	public void addTab(JTable table, String tabLabel) {
+	private void addTab(JTable table, String tabLabel) {
 		tablePane.addTab("basket records", new JScrollPane(table));
 		tablePane.setSelectedIndex(tablePane.getTabCount()-1);
 		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(tabLabel, tablePane);
 		tabCloseButtonWidget.addCloseButton();
+	}
+	
+	public JTabbedPane getTabbedPane() {
+		
+		return this.tablePane;
 	}
 }

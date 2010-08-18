@@ -108,13 +108,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		return ((BasicTable) table.getModel()).getCheckedRecordIds();
 	}
 	
-	//TODO: get visible tab, why is this called twice?
-	public BasicTable getCurrentTable() {
-		int currentTab = this.tabbedPane.getSelectedIndex();
-		
-		return (BasicTable) tables[currentTab].getModel();
-	}
-	
 	/*//replaced by getSelectedRecords(JTable table)
 	private int[] getSelectedRecords( JTable table, MouseEvent e ) 
 	{
@@ -508,5 +501,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private void clearFileTable() {
 		int i = tabNameHash .get(TableNamesInstance.FILE);
 		tables[i].setModel(new BasicTable());
+	}
+	
+	public JTabbedPane getTabbedPane() {
+		
+		return this.tabbedPane;
 	}
 }

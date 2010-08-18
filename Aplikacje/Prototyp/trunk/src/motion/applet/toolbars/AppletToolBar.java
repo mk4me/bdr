@@ -13,6 +13,7 @@ import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
+import motion.applet.tables.BasicTable;
 import motion.applet.webservice.client.WebServiceInstance;
 
 public class AppletToolBar extends JToolBar {
@@ -69,11 +70,14 @@ public class AppletToolBar extends JToolBar {
 					protected Void doInBackground() throws InterruptedException {
 						try {
 							if (AppletToolBar.this.validateSelectedBasket()) {
-								int[] selectedRecords = AppletToolBar.this.rightPanel.getCurrentTable().getCheckedRecordIds();
-								String entity = AppletToolBar.this.rightPanel.getCurrentTable().getTableName().getEntity();
-								for (int i = 0; i < selectedRecords.length; i++) {
-									WebServiceInstance.getDatabaseConnection().addEntityToBasket(
-											AppletToolBar.this.getSelectedBasketName(), selectedRecords[i], entity);
+								BasicTable currentTable = MotionAppletFrame.getCurrentTable();
+								if (currentTable != null) {
+									int[] selectedRecords = currentTable.getCheckedRecordIds();
+									String entity = currentTable.getTableName().getEntity();
+									for (int i = 0; i < selectedRecords.length; i++) {
+										WebServiceInstance.getDatabaseConnection().addEntityToBasket(
+												AppletToolBar.this.getSelectedBasketName(), selectedRecords[i], entity);
+									}
 								}
 							}
 						} catch (Exception e1) {
