@@ -10,6 +10,7 @@
 	<wsdl:types>
 		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService">
 			<xsd:include schemaLocation="ListStoredFilters.xsd"/>
+			<xsd:include schemaLocation="ListUserBaskets.xsd"/>
 			<xsd:include schemaLocation="ListBasketPerformersWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketTrialsWithAttributesXML.xsd"/>
@@ -60,6 +61,22 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:FilterList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListUserBaskets">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListUserBasketsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListUserBasketsResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:BasketDefinitionList"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -193,6 +210,7 @@
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xsd:include schemaLocation="ListStoredFilters.xsd"/>
+			<xsd:include schemaLocation="ListUserBaskets.xsd"/>
 			<xsd:include schemaLocation="ListBasketPerformersWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketTrialsWithAttributesXML.xsd"/>
@@ -239,6 +257,7 @@
 		</xs:schema>
 		<xsd:schema xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
 			<xsd:include schemaLocation="ListStoredFilters.xsd"/>
+			<xsd:include schemaLocation="ListUserBaskets.xsd"/>
 			<xsd:include schemaLocation="ListBasketPerformersWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListBasketTrialsWithAttributesXML.xsd"/>
@@ -269,6 +288,15 @@
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListStoredFilters_QueryExceptionFault_FaultMessage">
 		<wsdl:part xmlns:q1="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q1:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListUserBaskets"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListUserBasketsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_QueryExceptionFault_FaultMessage">
+		<wsdl:part xmlns:q2="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q2:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_CreateBasket_InputMessage">
 		<wsdl:part name="parameters" element="tns:CreateBasket"/>
@@ -313,7 +341,7 @@
 		<wsdl:part name="parameters" element="tns:ListBasketPerformersWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part xmlns:q2="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q2:QueryException"/>
+		<wsdl:part xmlns:q3="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q3:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListBasketSessionsWithAttributesXML"/>
@@ -322,7 +350,7 @@
 		<wsdl:part name="parameters" element="tns:ListBasketSessionsWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part xmlns:q3="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q3:QueryException"/>
+		<wsdl:part xmlns:q4="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q4:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListBasketTrialsWithAttributesXML"/>
@@ -331,7 +359,7 @@
 		<wsdl:part name="parameters" element="tns:ListBasketTrialsWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part xmlns:q4="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q4:QueryException"/>
+		<wsdl:part xmlns:q5="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q5:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSegmentsWithAttributesXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListBasketSegmentsWithAttributesXML"/>
@@ -340,7 +368,7 @@
 		<wsdl:part name="parameters" element="tns:ListBasketSegmentsWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSegmentsWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part xmlns:q5="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q5:QueryException"/>
+		<wsdl:part xmlns:q6="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q6:QueryException"/>
 	</wsdl:message>
 	<wsdl:portType name="IUserPersonalSpaceWS">
 		<wsdl:operation name="UpdateStoredFilters">
@@ -352,6 +380,11 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFilters" message="tns:IUserPersonalSpaceWS_ListStoredFilters_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFiltersResponse" message="tns:IUserPersonalSpaceWS_ListStoredFilters_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFiltersQueryExceptionFault" name="QueryExceptionFault" message="tns:IUserPersonalSpaceWS_ListStoredFilters_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListUserBaskets">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBaskets" message="tns:IUserPersonalSpaceWS_ListUserBaskets_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBasketsResponse" message="tns:IUserPersonalSpaceWS_ListUserBaskets_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBasketsQueryExceptionFault" name="QueryExceptionFault" message="tns:IUserPersonalSpaceWS_ListUserBaskets_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="CreateBasket">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/CreateBasket" message="tns:IUserPersonalSpaceWS_CreateBasket_InputMessage"/>
@@ -411,6 +444,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListStoredFilters">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFilters" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListUserBaskets">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBaskets" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

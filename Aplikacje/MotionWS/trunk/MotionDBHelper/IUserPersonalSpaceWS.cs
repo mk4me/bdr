@@ -21,6 +21,10 @@ namespace MotionDBWebServices
         XmlElement ListStoredFilters();
 
         [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListUserBaskets();
+
+        [OperationContract]
         [FaultContract(typeof(UPSException))]
         void CreateBasket(string basketName);
 

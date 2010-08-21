@@ -86,6 +86,45 @@ namespace MotionDBWebServices
         }
 
 
+        public XmlElement ListUserBaskets()
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_user_baskets";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("BasketDefinitionList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                UPSException exc = new UPSException("unknown", "Basket list retrieval error");
+                throw new FaultException<UPSException>(exc, "Basket list retrieval failed at DB layer", FaultCode.CreateReceiverFaultCode(new FaultCode("ListUserBaskets")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
+
+
         public void CreateBasket(string basketName)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
