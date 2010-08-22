@@ -18,6 +18,7 @@ import motion.database.model.AttributeName;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
+import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
@@ -34,6 +35,7 @@ public class BasicTable extends AbstractTableModel {
 	private TableName tableName;
 	public int recordId;
 	public TableName fromTableName;	// Used for listing files for different tables.
+	public String fromBasket;	// Used for baskets.
 	private int CHECKBOX_COLUMN = 0;
 	
 	public BasicTable(TableName tableName) {
@@ -61,8 +63,10 @@ public class BasicTable extends AbstractTableModel {
 		getTableContentsFromResult(result);
 	}
 	
-	public BasicTable(DbElementsList<Performer> records) {
-		getTableContentsFromPerformerRecords(records);
+	public BasicTable(TableName tableName, DbElementsList<? extends GenericDescription<?>> records, String fromBasket) {
+		this.tableName = tableName;
+		this.fromBasket = fromBasket;
+		getTableContentsFromRecords(records);
 	}
 	
 	public BasicTable() {
@@ -113,6 +117,7 @@ public class BasicTable extends AbstractTableModel {
 		this.classes.add(Boolean.class);
 	}
 	
+	//FIXME: Use DbElementsList<? extends GenericDescription<?>> instead of DbElementsList<Performer>/DbElementsList<Session>...
 	private void listPerformers() throws Exception {
 		DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes());
@@ -313,13 +318,12 @@ public class BasicTable extends AbstractTableModel {
 		worker.execute();
 	}
 	
-	private void getTableContentsFromPerformerRecords(final DbElementsList<Performer> records) {
+	private void getTableContentsFromRecords(final DbElementsList<? extends GenericDescription<?>> records) {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					addCheckboxColumn(); // first column
-					BasicTable.this.tableName = TableNamesInstance.PERFORMER;
 					// Don't filter attributes.
 					ArrayList<AttributeName> attributes = tableName.getAllAttributes();
 					for (AttributeName a : attributes) {
@@ -329,16 +333,16 @@ public class BasicTable extends AbstractTableModel {
 					}
 					
 					if (attributes != null) {
-						for (Performer p : records) {
+						for (GenericDescription<?> r : records) {
 							Object[] cellList = new Object[attributeNames.size()];
 							
-							for (String key : p.keySet()) {
+							for (String key : r.keySet()) {
 								//TODO: sessionID / SessionID
 								int i = attributeNames.indexOf(key.toLowerCase());
 								if (i >= 0)
-									cellList[i] = p.get(key).value;
+									cellList[i] = r.get(key).value;
 							}
-							BasicTable.this.recordIds.add(p.getId());
+							BasicTable.this.recordIds.add(r.getId());
 							ArrayList<Object> list = new ArrayList<Object>();
 							list.add(new Boolean(false));	// checkboxes initially unchecked
 							for (int i = 1; i < cellList.length; i++) {

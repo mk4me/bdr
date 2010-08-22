@@ -208,11 +208,11 @@ public class MotionAppletFrame extends JFrame {
 	
 	public static BasicTable getCurrentTable() {
 		JTabbedPane tabbedPane = null;
-		if (rightPanel.getTabbedPane().isShowing()) {
+		if (isBrowsePanelVisible()) {
 			tabbedPane = rightPanel.getTabbedPane();
-		} else if (basketPanel.isShowing()) {
+		} else if (isBasketPanelVisible()) {
 			tabbedPane = basketPanel.getTabbedPane();
-		} else if (queryResultsPane.isShowing()) {
+		} else if (isQueryPanelVisible()) {
 			tabbedPane = queryResultsPane;
 		}
 		
@@ -227,6 +227,21 @@ public class MotionAppletFrame extends JFrame {
 		}
 		
 		return null;
+	}
+	
+	public static boolean isBrowsePanelVisible() {
+		
+		return rightPanel.getTabbedPane().isShowing();
+	}
+	
+	public static boolean isBasketPanelVisible() {
+		
+		return basketPanel.isShowing();
+	}
+	
+	public static boolean isQueryPanelVisible() {
+		
+		return queryResultsPane.isShowing();
 	}
 	
 	public static void main(String args[]) {

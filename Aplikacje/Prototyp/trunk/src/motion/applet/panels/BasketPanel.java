@@ -112,15 +112,13 @@ public class BasketPanel extends JPanel {
 					JTable table = new JTable();
 					if (tableName.equals(TableNamesInstance.PERFORMER)) {
 						DbElementsList<Performer> records = WebServiceInstance.getDatabaseConnection().listBasketPerformersWithAttributes(basketName);
-						table.setModel(new BasicTable(records));
+						table.setModel(new BasicTable(tableName, records, basketName));
 					} else if (tableName.equals(TableNamesInstance.SESSION)) {
 						DbElementsList<Session> records = WebServiceInstance.getDatabaseConnection().listBasketSessionsWithAttributes(basketName);
-						//TODO:
-						//table.setModel(new BasicTable(records));
+						table.setModel(new BasicTable(tableName, records, basketName));
 					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
 						DbElementsList<Trial> records = WebServiceInstance.getDatabaseConnection().listBasketTrialsWithAttributes(basketName);
-						//TODO:
-						//table.setModel(new BasicTable(records));
+						table.setModel(new BasicTable(tableName, records, basketName));
 					}
 					
 					BasketPanel.this.addTab(table, basketName + " (" + entity + ")");

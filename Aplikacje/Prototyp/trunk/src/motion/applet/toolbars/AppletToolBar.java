@@ -23,6 +23,7 @@ public class AppletToolBar extends JToolBar {
 	private JComboBox basketComboBox = new JComboBox(new String[]{"--Select basket--", "basket1", "basket2"});
 	private JButton newBasketButton;
 	private JButton addToBasketButton;
+	private JButton removeFromBasketButton;
 	private RightSplitPanel rightPanel;
 	
 	public AppletToolBar(RightSplitPanel rightPanel) {
@@ -47,6 +48,9 @@ public class AppletToolBar extends JToolBar {
 		this.addToBasketButton = new JButton("Add to basket");
 		this.addToBasketButton.setEnabled(false);
 		this.add(addToBasketButton);
+		
+		this.removeFromBasketButton = new JButton("Remove from basket");
+		this.add(removeFromBasketButton);
 		
 		addListeners();
 	}
@@ -77,6 +81,41 @@ public class AppletToolBar extends JToolBar {
 									for (int i = 0; i < selectedRecords.length; i++) {
 										WebServiceInstance.getDatabaseConnection().addEntityToBasket(
 												AppletToolBar.this.getSelectedBasketName(), selectedRecords[i], entity);
+									}
+								}
+							}
+						} catch (Exception e1) {
+							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+							exceptionDialog.setVisible(true);
+						}
+						
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						
+					}
+				};
+				worker.execute();
+			}
+		});
+		
+		this.removeFromBasketButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						try {
+							if (MotionAppletFrame.isBasketPanelVisible()) {
+								BasicTable currentTable = MotionAppletFrame.getCurrentTable();
+								if (currentTable != null) {
+									int[] selectedRecords = currentTable.getCheckedRecordIds();
+									String entity = currentTable.getTableName().getEntity();
+									String basketName = currentTable.fromBasket;
+									for (int i = 0; i < selectedRecords.length; i++) {
+										WebServiceInstance.getDatabaseConnection().removeEntityFromBasket(
+												basketName, selectedRecords[i], entity);
 									}
 								}
 							}
