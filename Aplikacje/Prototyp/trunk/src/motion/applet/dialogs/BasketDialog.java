@@ -1,12 +1,14 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -17,6 +19,8 @@ import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DbElementsList;
+import motion.database.model.UserBasket;
 
 public class BasketDialog extends BasicDialog {
 	private static String TITLE = "New basket";
@@ -39,6 +43,7 @@ public class BasketDialog extends BasicDialog {
 	private JTextField basketNameText;
 	
 	private JList basketList;
+	private DefaultListModel basketModel;
 	
 	public BasketDialog() {
 		super(TITLE, WELCOME_MESSAGE);
@@ -84,13 +89,19 @@ public class BasketDialog extends BasicDialog {
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		basketList = new JList(new String[]{"basket1", "basket2"});
-		formPanel.add(new JScrollPane(basketList), gridBagConstraints);
+		//gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		basketModel = new DefaultListModel();
+		basketList = new JList(basketModel);
+		JScrollPane basketScroll = new JScrollPane(basketList);
+		//basketScroll.setMaximumSize(new Dimension(50, 50));
+		basketScroll.setSize(new Dimension(165, 180));
+		basketScroll.setPreferredSize(new Dimension(165, 180));
+		formPanel.add(basketScroll, gridBagConstraints);
 		
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.anchor = GridBagConstraints.SOUTHWEST;
+		//gridBagConstraints.fill = GridBagConstraints.NONE;
 		removeButton = new JButton(REMOVE);
 		formPanel.add(removeButton, gridBagConstraints);
 		
@@ -102,6 +113,7 @@ public class BasketDialog extends BasicDialog {
 	@Override
 	protected void finishUserInterface() {
 		this.setSize(420, 350);
+		getBasketListContents();
 	}
 	
 	@Override
@@ -116,7 +128,7 @@ public class BasketDialog extends BasicDialog {
 							BasketDialog.this.createButton.setEnabled(false);
 							try {
 								WebServiceInstance.getDatabaseConnection().createBasket(BasketDialog.this.getBasketName());
-								
+								getBasketListContents();
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -146,7 +158,7 @@ public class BasketDialog extends BasicDialog {
 							BasketDialog.this.removeButton.setEnabled(false);
 							try {
 								WebServiceInstance.getDatabaseConnection().removeBasket(BasketDialog.this.getBasketNameToRemove());
-								
+								getBasketListContents();
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -208,5 +220,31 @@ public class BasketDialog extends BasicDialog {
 		} else {
 			return this.basketList.getSelectedValue().toString();
 		}
+	}
+	
+	private void getBasketListContents() {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					BasketDialog.this.basketModel.clear();
+					DbElementsList<UserBasket> baskets = WebServiceInstance.getDatabaseConnection().listUserBaskets();
+					for (UserBasket b : baskets) {
+						BasketDialog.this.basketModel.addElement(b);
+						//((EntityAttribute) b.get(UserBasketStaticAttributes.basketName)).value);
+					}
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+			}
+		};
+		worker.execute();
 	}
 }
