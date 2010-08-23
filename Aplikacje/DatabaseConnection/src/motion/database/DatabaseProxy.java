@@ -19,6 +19,7 @@ import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
 import motion.database.model.User;
+import motion.database.model.UserBasket;
 import motion.database.model.UserPrivileges;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
@@ -219,5 +220,6 @@ public interface DatabaseProxy {
 
 	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception;
 
-	
+	public DbElementsList<UserBasket>  listUserBaskets(String basketName) throws Exception;
+
 }
