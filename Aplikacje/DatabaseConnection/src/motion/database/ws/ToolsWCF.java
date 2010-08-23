@@ -16,6 +16,8 @@ import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
 import motion.database.model.User;
+import motion.database.model.UserBasket;
+import motion.database.model.UserBasketStaticAttributes;
 import motion.database.model.UserPrivileges;
 import motion.database.model.UserPrivilegesStaticAttributes;
 import motion.database.model.UserStaticAttributes;
@@ -25,6 +27,7 @@ import motion.database.ws.userPersonalSpaceWCF.SegmentDetailsWithAttributes;
 import motion.database.ws.userPersonalSpaceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.userPersonalSpaceWCF.UserPersonalSpace;
 import motion.database.ws.userPersonalSpaceWCF.Attributes.Attribute;
+import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
 import motion.database.ws.authorizationWCF.AuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.ListSessionPrivilegesResponse.ListSessionPrivilegesResult;
@@ -398,6 +401,12 @@ public class ToolsWCF {
 		trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
 		ToolsWCF.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
+	}
+
+	public static UserBasket transformBasketDefinitionUPS(BasketDefinition s) {
+		UserBasket basket = new UserBasket();
+		basket.put( UserBasketStaticAttributes.basketName, s.getBasketName() );
+		return basket;
 	}
 
 }

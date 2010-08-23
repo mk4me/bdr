@@ -53,6 +53,20 @@ public interface IUserPersonalSpaceWS {
 
     /**
      * 
+     * @return
+     *     returns motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse.ListUserBasketsResult
+     * @throws IUserPersonalSpaceWSListUserBasketsQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListUserBaskets", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBaskets")
+    @WebResult(name = "ListUserBasketsResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
+    @RequestWrapper(localName = "ListUserBaskets", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListUserBaskets")
+    @ResponseWrapper(localName = "ListUserBasketsResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse")
+    public motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse.ListUserBasketsResult listUserBaskets()
+        throws IUserPersonalSpaceWSListUserBasketsQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param basketName
      * @throws IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage
      */

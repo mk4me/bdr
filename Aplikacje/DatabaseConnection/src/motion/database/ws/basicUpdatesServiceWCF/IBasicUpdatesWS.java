@@ -257,4 +257,24 @@ public interface IBasicUpdatesWS {
         throws IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param attributeName
+     * @param resourceID
+     * @param entity
+     * @throws IBasicUpdatesWSClearAttributeValueUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ClearAttributeValue", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/ClearAttributeValue")
+    @RequestWrapper(localName = "ClearAttributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.ClearAttributeValue")
+    @ResponseWrapper(localName = "ClearAttributeValueResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.ClearAttributeValueResponse")
+    public void clearAttributeValue(
+        @WebParam(name = "resourceID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int resourceID,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
+        @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String entity)
+        throws IBasicUpdatesWSClearAttributeValueUpdateExceptionFaultFaultMessage
+    ;
+
 }

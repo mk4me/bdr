@@ -28,16 +28,19 @@ import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
 import motion.database.model.User;
+import motion.database.model.UserBasket;
 import motion.database.model.UserPrivileges;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXMLResponse.ListBasketSegmentsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse.ListUserBasketsResult;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
@@ -1458,6 +1461,31 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
+	
+	public DbElementsList<UserBasket>  listUserBaskets(String basketName) throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listUserBaskets", this );
+			ListUserBasketsResult result = port.listUserBaskets();
+		
+			DbElementsList<UserBasket> output = new DbElementsList<UserBasket>();
+			
+			if (result.getBasketDefinitionList() != null) 
+				for ( BasketDefinition s : result.getBasketDefinitionList().getBasketDefinition() )
+						output.add( ToolsWCF.transformBasketDefinitionUPS(s) );
+			
+			return output;
+
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ToolsWCF.finalizeCall();
+		}
+	}
+
+	
 	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception
 	{
 		try {
