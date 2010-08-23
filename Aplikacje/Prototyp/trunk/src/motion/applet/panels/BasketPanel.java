@@ -17,6 +17,7 @@ import javax.swing.JTree;
 import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
@@ -90,7 +91,7 @@ public class BasketPanel extends JPanel {
 		getBasketTreeContents();
 	}
 	
-	private void getBasketTreeContents() {
+	public void getBasketTreeContents() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
@@ -171,7 +172,7 @@ public class BasketPanel extends JPanel {
 				try {
 					String basketName = BasketPanel.this.getSelectedBasket();
 					WebServiceInstance.getDatabaseConnection().removeBasket(basketName);
-					BasketPanel.this.getBasketTreeContents();
+					MotionAppletFrame.refreshBaskets();
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
@@ -189,23 +190,29 @@ public class BasketPanel extends JPanel {
 	}
 	
 	private String getSelectedEntity() {
-		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) this.tree.getSelectionPath().getLastPathComponent());
-		if (selectedNode.getLevel() == 2) {
-			
-			return selectedNode.toString();
+		TreePath selectionPath = this.tree.getSelectionPath();
+		if (selectionPath != null) {	// Node clicked and not tree handles.
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+			if (selectedNode.getLevel() == 2) {
+				
+				return selectedNode.toString();
+			}
 		}
 		
 		return "";
 	}
 	
 	private String getSelectedBasket() {
-		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) this.tree.getSelectionPath().getLastPathComponent());
-		if (selectedNode.getLevel() == 2) {	// Performer/Session/Trial node selected.
-			
-			return selectedNode.getParent().toString();
-		} else if (selectedNode.getLevel() == 1) {	// Basket name node selected.
-			
-			return selectedNode.toString();
+		TreePath selectionPath = this.tree.getSelectionPath();
+		if (selectionPath != null) {	// Node clicked and not tree handles.
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+			if (selectedNode.getLevel() == 2) {	// Performer/Session/Trial node selected.
+				
+				return selectedNode.getParent().toString();
+			} else if (selectedNode.getLevel() == 1) {	// Basket name node selected.
+				
+				return selectedNode.toString();
+			}
 		}
 		
 		return "";

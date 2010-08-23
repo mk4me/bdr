@@ -51,6 +51,8 @@ public class MotionAppletFrame extends JFrame {
 	private static BasketPanel basketPanel;
 	private static JTabbedPane queryResultsPane;
 	
+	private static AppletToolBar appletToolBar;
+	
 	public MotionAppletFrame() {
 		this.setSize(APPLET_WIDTH, APPLET_HEIGHT);
 		this.setTitle(APPLET_NAME);
@@ -108,7 +110,7 @@ public class MotionAppletFrame extends JFrame {
 		createMenuBar(rightPanel);
 		
 		//Create the tool bar
-		AppletToolBar appletToolBar = new AppletToolBar(rightPanel);
+		appletToolBar = new AppletToolBar(rightPanel);
 		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
 	}
 	
@@ -242,6 +244,11 @@ public class MotionAppletFrame extends JFrame {
 	public static boolean isQueryPanelVisible() {
 		
 		return queryResultsPane.isShowing();
+	}
+	
+	public static void refreshBaskets() {
+		appletToolBar.getBasketListContents();
+		basketPanel.getBasketTreeContents();
 	}
 	
 	public static void main(String args[]) {

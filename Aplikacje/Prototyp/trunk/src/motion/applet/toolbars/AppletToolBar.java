@@ -180,7 +180,7 @@ public class AppletToolBar extends JToolBar {
 		}
 	}
 	
-	private void getBasketListContents() {
+	public void getBasketListContents() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {

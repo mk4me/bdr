@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
+import motion.applet.MotionAppletFrame;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.UserBasket;
@@ -129,6 +130,7 @@ public class BasketDialog extends BasicDialog {
 							try {
 								WebServiceInstance.getDatabaseConnection().createBasket(BasketDialog.this.getBasketName());
 								getBasketListContents();
+								MotionAppletFrame.refreshBaskets();
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -159,6 +161,7 @@ public class BasketDialog extends BasicDialog {
 							try {
 								WebServiceInstance.getDatabaseConnection().removeBasket(BasketDialog.this.getBasketNameToRemove());
 								getBasketListContents();
+								MotionAppletFrame.refreshBaskets();
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
