@@ -65,7 +65,7 @@ public enum EntityKind {
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
 				EntityAttribute a, boolean update) throws Exception {
-			port.setSegmentAttribute(ID, a.name, a.value.toString(), update);			
+			throw new Exception("UserBasket entity does not support generic attributes!");
 		}
 	},;
 	

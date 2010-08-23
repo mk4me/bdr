@@ -1121,6 +1121,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
+	@Deprecated
 	public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{
@@ -1138,7 +1139,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
-	
+	@Deprecated
 	public void setSessionAttribute(int sessionID, EntityAttribute a, boolean update) throws Exception
 	{
 		try{
@@ -1181,6 +1182,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 	
 
+	@Deprecated
 	public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{
@@ -1197,7 +1199,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-
+	@Deprecated
 	public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try {
@@ -1213,7 +1215,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-	
+	@Deprecated
 	public void setSegmentAttribute(int segmentID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{	
@@ -1229,7 +1231,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 		}
 	}
 
-
+	@Deprecated
 	public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{	
