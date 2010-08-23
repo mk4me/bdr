@@ -120,6 +120,7 @@ public class AppletToolBar extends JToolBar {
 									for (int i = 0; i < selectedRecords.length; i++) {
 										WebServiceInstance.getDatabaseConnection().removeEntityFromBasket(
 												basketName, selectedRecords[i], entity);
+										MotionAppletFrame.getCurrentTable().removeCheckedRecords();
 									}
 								}
 							}

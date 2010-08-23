@@ -2,6 +2,7 @@ package motion.applet.tables;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -458,5 +459,19 @@ public class BasicTable extends AbstractTableModel {
 		}
 		
 		return Arrays.copyOf(checkedRecordIds, j);
+	}
+	
+	public void removeCheckedRecords() {
+		Iterator<ArrayList<Object>> i = this.contents.iterator();
+		Iterator<Integer> j = this.recordIds.iterator();
+		while (i.hasNext()) {
+			ArrayList<Object> row = i.next();
+			j.next();
+			if ((Boolean) row.get(CHECKBOX_COLUMN) == Boolean.TRUE) {
+				i.remove();
+				j.remove();
+			}
+		}
+		this.fireTableDataChanged();
 	}
 }
