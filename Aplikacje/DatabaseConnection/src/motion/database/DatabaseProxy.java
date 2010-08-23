@@ -220,6 +220,6 @@ public interface DatabaseProxy {
 
 	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception;
 
-	public DbElementsList<UserBasket>  listUserBaskets(String basketName) throws Exception;
+	public DbElementsList<UserBasket>  listUserBaskets() throws Exception;
 
 }

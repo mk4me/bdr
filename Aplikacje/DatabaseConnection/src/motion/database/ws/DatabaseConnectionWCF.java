@@ -1464,7 +1464,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	}
 
 	
-	public DbElementsList<UserBasket>  listUserBaskets(String basketName) throws Exception
+	public DbElementsList<UserBasket>  listUserBaskets() throws Exception
 	{
 		try {
 			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listUserBaskets", this );
