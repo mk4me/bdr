@@ -1419,7 +1419,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public void removeBasket(String basketName) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "removeBasket", this );
 			port.removeBasket(basketName);
 		
 		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
@@ -1435,7 +1435,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public void updateStoredFilters(motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate filter) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "updateStiredFilters", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "updateStoredFilters", this );
 			port.updateStoredFilters(filter);
 		
 		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
@@ -1451,7 +1451,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public List<motion.database.ws.userPersonalSpaceWCF.FilterList.FilterPredicate> listStoredFilters() throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "updateStiredFilters", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listStoredFilters", this );
 			return port.listStoredFilters().getFilterList().getFilterPredicate();
 		
 		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
@@ -1491,7 +1491,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listBasketPerformersWithAttributes", this );
 			ListBasketPerformersWithAttributesXMLResult result = port.listBasketPerformersWithAttributesXML(basketName);
 		
 			DbElementsList<Performer> output = new DbElementsList<Performer>();
@@ -1515,7 +1515,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listBasketSegmentsWithAttributes", this );
 			ListBasketSegmentsWithAttributesXMLResult result = port.listBasketSegmentsWithAttributesXML(basketName);
 		
 			DbElementsList<Segment> output = new DbElementsList<Segment>();
@@ -1538,7 +1538,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listBasketSessionsWithAttributes", this );
 			ListBasketSessionsWithAttributesXMLResult result = port.listBasketSessionsWithAttributesXML(basketName);
 		
 			DbElementsList<Session> output = new DbElementsList<Session>();
@@ -1562,7 +1562,7 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 	public DbElementsList<Trial>  listBasketTrialsWithAttributes(String basketName) throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "createBasket", this );
+			IUserPersonalSpaceWS port = ToolsWCF.getUserPersonalSpaceServicePort( "listBasketTrialsWithAttributes", this );
 			ListBasketTrialsWithAttributesXMLResult result = port.listBasketTrialsWithAttributesXML(basketName);
 		
 			DbElementsList<Trial> output = new DbElementsList<Trial>();
