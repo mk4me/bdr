@@ -3,7 +3,7 @@ use Motion;
 declare @filters as PredicateUdt;
 
 
-/*
+
 insert into @filters values (3, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
 	insert into @filters values (4, 3, 'GROUP', 0, 'AND', 'all', '', '', '', '');
 		insert into @filters values (5, 4, 'session', 0, '', 'SessionID', '>', '0', '', '');
@@ -13,11 +13,23 @@ insert into @filters values (3, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
 			insert into @filters values (8, 7, 'session', 0, '', 'SessionID', '<', '130', '', '');
 		insert into @filters values (9, 6, 'GROUP', 7, '', '>=2', '', '', '', '');
 			insert into @filters values (10, 9, 'session', 0, '', 'SessionID', '>=', '2', '', '');
+exec dbo.evaluate_generic_query_uniform 'habela', @filters,  0,  1,  0,  0 
+
+declare @filters as PredicateUdt;
+insert into @filters values (1, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
+	insert into @filters values (6, 1, 'GROUP', 0, 'AND', 'perfid<10', '', '', '', '');
+		insert into @filters values (8, 6, 'performer', 0, '', 'PerformerID', '<', '10', '', '');
+	insert into @filters values (5, 1, 'GROUP', 6, '', 'SIBLING', '', '', '', '');
+		insert into @filters values (7, 5, 'GROUP', 0, '', 'more_sessions', '', '', '', '');
+			insert into @filters values (9, 7, 'performer', 0, '', 'SessionID', '>', '2', 'count', 'session');
+
+exec dbo.evaluate_generic_query_uniform 'habela', @filters,  1,  0,  0,  0 
 
 
+select * from Sesja where IdPerformer < 10
 
-exec dbo.evaluate_generic_query 'habela', @filters,  0,  1,  0,  0 
-*/
+exec dbo.evaluate_generic_query_uniform 'habela', @filters,  0,  1,  0,  0 
+
 
 
 create type PredicateUdt as table
@@ -107,19 +119,6 @@ go
 /* sample calls of filter-based queries */
 
 
---declare @filters as PredicateUdt;
---insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
---insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
---insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
---insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
-
---insert into @filters values (1, 3, 'performer', 0, '', 'SessionID', '>', '0', 'count', 'session');
---insert into @filters values (3, 5, 'GROUP', 0, 'AND', 'Walk', '', '', '', '');
---insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
---insert into @filters values (4, 5, 'GROUP', 3, '', 'Walk', '', '', '', '');
---insert into @filters values (5, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
-
---exec dbo.evaluate_generic_query_uniform @filters,  0,  1,  0,  0 
 
 
 
@@ -258,10 +257,10 @@ begin
 	/* Now consider, if needed, aditional joins needed in the from clause due to the conditions included */
 	
 	
-	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' or AggregateEntity = 'performer')) set @perf = 1;
-	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' or AggregateEntity = 'session')) set @sess = 1;
-	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' or AggregateEntity = 'trial')) set @trial = 1;
-	if( @segm = 0 and exists (select * from @filter where ContextEntity = 'segment' or AggregateEntity = 'segment')) set @segm = 1;	
+	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' )) set @perf = 1;
+	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
+	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
+	if( @segm = 0 and exists (select * from @filter where ContextEntity = 'segment' )) set @segm = 1;	
 
 	if( @perf = 1) set @fromClause = @fromClause + 'Performer as p ';
 	if( @perf = 1 and (@sess=1 or @trial=1 or @segm=1)) set @fromClause = @fromClause +'join user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +') as s on p.IdPerformer = s.IdPerformer ';
@@ -484,10 +483,10 @@ begin
 	/* Now consider, if needed, aditional joins needed in the from clause due to the conditions included */
 	
 	
-	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' or AggregateEntity = 'performer')) set @perf = 1;
-	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' or AggregateEntity = 'session')) set @sess = 1;
-	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' or AggregateEntity = 'trial')) set @trial = 1;
-	if( @segm = 0 and exists (select * from @filter where ContextEntity = 'segment' or AggregateEntity = 'segment')) set @segm = 1;	
+	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' )) set @perf = 1;
+	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
+	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
+	if( @segm = 0 and exists (select * from @filter where ContextEntity = 'segment' )) set @segm = 1;	
 
 	if( @perf = 1) set @fromClause = @fromClause + 'Performer as p ';
 	if( @perf = 1 and (@sess=1 or @trial=1 or @segm=1)) set @fromClause = @fromClause + 'join user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +' ) as s on p.IdPerformer = s.IdPerformer ';
@@ -633,7 +632,7 @@ begin
 		set @sql = N''+(@selectClause+@fromClause+@whereClause);
 		-- set @sql = N'BEGIN TRY ' + (@selectClause+@fromClause+@whereClause) + ' END TRY BEGIN CATCH insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat ) values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() ) END CATCH;'
 
-		--select @sql;
+		-- select @sql;
 		exec sp_executesql @statement = @sql;
 		
 end
@@ -647,6 +646,14 @@ as
  select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
 go
 
+exec validate_session_group_id 5
+
+create procedure list_session_groups_defined
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
+for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
+go
 
 create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
 as
@@ -756,127 +763,4 @@ begin
 end
 go
 
-create procedure list_users_xml
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
-select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
-	from Uzytkownik
-    for XML PATH('UserDetails'), root ('UserList')
-go
-
-create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
-select 
-	u.Login "@Login", case us.Zapis when 0 then 'false' else 'true' end "@CanWrite"
-	from Uprawnienia_Sesja us join Uzytkownik u on us.IdUzytkownik = u.IdUzytkownik
-	where us.IdSesja = @sess_id and us.IdSesja in (select IdSesja from user_accessible_sessions_by_login(@user_login) )
-    for XML PATH('SessionPrivilege'), root ('SessionPrivilegeList')
-go
-
--- Metadata definition procedures
-
-create procedure define_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
-as
-begin
-	set @result = 0;
-  if exists ( select * from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-  if @entity not in ( 'performer', 'session', 'trial', 'file', 'segment')
-  	begin
-		set @result = 2;
-		return;
-	end;
-  insert into Grupa_atrybutow ( Nazwa, Opisywana_encja) values ( @group_name, @entity );
-end;
-go
-
--- remove attribute group ( name, entity )
-create procedure remove_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
-as
-begin
-	set @result = 0;
-	if not exists ( select * from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-	delete from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity;
-end;
-go
-
--- define attribute ( group, entity, name, type, subtype, units ) 
-create procedure define_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @storage_type varchar(20), @is_enum bit, @plugin_desc varchar(100), @data_subtype varchar(20), @unit varchar(10), @result int OUTPUT )
-as
-begin
-	declare @group_id int;
-	set @result = 0;
-	
-	if exists ( select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-	select @group_id = IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity;
-	if ( @group_id is null )
-	begin
-		set @result = 2;
-		return;
-	end;
-	if not (@storage_type in ('string', 'float', 'integer') )
-		begin
-		set @result = 3;
-		return;
-	end;
-	insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Plugin, Podtyp_danych, Jednostka)
-				values ( @group_id, @attr_name, @storage_type, @is_enum, @plugin_desc, @data_subtype, @unit );
-	
-end
-go
-
--- remove attribute ( group, entity, name )
-create procedure remove_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @result int OUTPUT  )
-as
-begin
-	declare @att_id int;
-	set @att_id = 0;
-	set @result = 0;
-	
-	select @att_id = a.IdAtrybut from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity;
-	if @att_id is null -- attribute not found
-	begin
-		set @result = 1;
-		return;
-	end;
-	
-	delete from Atrybut where IdAtrybut = @att_id;	
-end
-go
-
--- Define enum values
-create procedure add_attribute_enum_value (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @value varchar(100), @replace_all bit, @result int OUTPUT  )
-as
-begin
-	declare @att_id int;
-	set @att_id = 0;
-	set @result = 0;
-	
-	select @att_id = a.IdAtrybut from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity
-	if @att_id is null -- attribute not found
-	begin
-		set @result = 1;
-		return;
-	end;
-	if @replace_all = 1 delete from Wartosc_wyliczeniowa where IdAtrybut = @att_id;
-	if not exists ( select * from Wartosc_wyliczeniowa where IdAtrybut = @att_id and Wartosc_wyliczeniowa = @value ) and @value <> ''
-	insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa ) values ( @att_id, @value );
-	
-end
-go
-
+exec set_session_privileges 'habela', 'kaczmarski', 8, 1

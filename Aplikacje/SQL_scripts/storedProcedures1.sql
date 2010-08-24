@@ -319,7 +319,6 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdLaboratorium=@lab_id
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
-
 go
 
 -- Trial queries

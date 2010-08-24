@@ -3,62 +3,6 @@ use Motion;
 alter table Predykat drop column Nazwa;
 go
 
---insert into Predykat
---	( IdPredykat, IdRodzicPredykat,	EncjaKontekst, IdPoprzedniPredykat, NastepnyOperator, NazwaWlasciwosci, 
---	Operator, Wartosc,	FunkcjaAgregujaca,	EncjaAgregowana, IdUzytkownik )
---	values
---	( 1, 0,	'session', 0, '', 'SessionID', 
---	'=', '1',	'',	'', 1 )
-
-
-
---declare @filter as PredicateUdt;
---insert into @filter values (1, 0, 'session', 0, '', 'SessionID', '=', '1', '', '');
-
---select * from Predykat
---	delete from Predykat 
---		where IdUzytkownik = 1
---		and not exists ( select * from @filter as f where	f.PredicateID = IdPredykat and
---															f.ParentPredicate = IdRodzicPredykat and
---														f.ContextEntity = EncjaKontekst and
---														f.PreviousPredicate = IdPoprzedniPredykat and
---														f.NextOperator = NastepnyOperator and
---														f.FeatureName = NazwaWlasciwosci and
---														f.Operator = Operator and
---														f.Value = Wartosc and
---														f.AggregateFunction = FunkcjaAgregujaca and
---														f.AggregateEntity = EncjaAgregowana and
---														1 = IdUzytkownik	);
-
---create table Predykat -- czesc funkcjonalnosci UPS
---(
---	IdPredykat int not null,
---	IdRodzicPredykat int not null,
---	EncjaKontekst varchar(20) not null,
---	IdPoprzedniPredykat int not null,
---	NastepnyOperator varchar(5) not null,
---	NazwaWlasciwosci varchar(100) not null,
---	Operator varchar(5) not null,
---	Wartosc varchar(100) not null,
---	FunkcjaAgregujaca varchar(10) not null,
---	EncjaAgregowana varchar(20) not null,
---	IdUzytkownik int not null
---)
---create type PredicateUdt as table
---(
---	PredicateID int,
---	ParentPredicate int,
---	ContextEntity varchar(20),
---	PreviousPredicate int,
---	NextOperator varchar(5),
---	FeatureName varchar(100),
---	Operator varchar(5),
---	Value varchar(100),
---	AggregateFunction varchar(10),
---	AggregateEntity varchar(20)
---)
---go
-
 
 create procedure update_stored_filters(@user_login as varchar(30), @filter as PredicateUdt readonly)
 as
@@ -372,5 +316,14 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdLaboratorium=@lab_id
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
+go
 
+create procedure list_user_baskets( @user_login varchar(30) )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+select
+	Nazwa as BasketName
+from Koszyk
+where IdUzytkownik = dbo.identify_user( @user_login )
+for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
 go
