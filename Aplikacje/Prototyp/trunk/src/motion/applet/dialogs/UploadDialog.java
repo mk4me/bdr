@@ -1,6 +1,7 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -148,6 +149,8 @@ public class UploadDialog extends BasicDialog {
 		gridBagConstraints.gridy = 3;
 		
 		entityComboBox = new JComboBox();
+		entityComboBox.setSize(new Dimension(200, entityComboBox.getPreferredSize().height));
+		entityComboBox.setPreferredSize(new Dimension(200, entityComboBox.getPreferredSize().height));
 		formPanel.add(entityComboBox, gridBagConstraints);
 		
 		
@@ -173,7 +176,7 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	protected void finishUserInterface() {
-		this.setSize(460, 210);
+		this.setSize(480, 210);
 		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.tableName.getLabel() + Messages.COLON);

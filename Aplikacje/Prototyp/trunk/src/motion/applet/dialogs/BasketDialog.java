@@ -113,7 +113,7 @@ public class BasketDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
-		this.setSize(420, 350);
+		this.setSize(450, 350);
 		getBasketListContents();
 	}
 	
