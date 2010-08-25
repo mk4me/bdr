@@ -31,9 +31,9 @@ public class FilterDialog extends BasicDialog {
 	private static String FILTER_NAME = Messages.getString("Name") + Messages.COLON; //$NON-NLS-1$
 	private static String TABLE_LABEL = Messages.getString("Table") + Messages.COLON; //$NON-NLS-1$
 	private static String QUERY_LABEL = Messages.getString("FilterDialog.Query") + Messages.COLON; //$NON-NLS-1$
-	private static String ADD_FILTER = Messages.ADD;
-	private static String CANCEL_FILTER = Messages.CANCEL;
-	private static String UPDATE_FILTER = Messages.UPDATE;
+	private static String ADD_FILTER = Messages.getString("Add"); //$NON-NLS-1$
+	private static String CANCEL_FILTER = Messages.getString("Cancel"); //$NON-NLS-1$
+	private static String UPDATE_FILTER = Messages.getString("Update"); //$NON-NLS-1$
 	private static String ADD_CONDITION = Messages.ADD_SIGN;
 	private static String WELCOME_MESSAGE = Messages.getString("FilterDialog.AddNewFilter"); //$NON-NLS-1$
 	private static String MISSING_NAME_MESSAGE = Messages.getString("FilterDialog.PleaseTypeTheNameOfTheFilter"); //$NON-NLS-1$

@@ -2,40 +2,30 @@ package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
-import motion.applet.panels.PrivilegesPanel;
-import motion.applet.tables.BasicTable;
 import motion.applet.tables.EntityTableModel;
-import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.model.EntityKind;
 import motion.database.model.User;
-import motion.database.model.UserPrivileges;
 
 public class UserSelectionDialog extends BasicDialog {
 	private static String LOGIN_TITLE = Messages.getString("UserSelectionDialog.Title"); //$NON-NLS-1$
 	private static String WELCOME_TITLE = Messages.getString("UserSelectionDialog.Welcome"); //$NON-NLS-1$
+	private static String OK = Messages.getString("OK"); //$NON-NLS-1$
+	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	
 	private JButton okButton;
 	private JButton cancelButton;
@@ -85,11 +75,11 @@ public class UserSelectionDialog extends BasicDialog {
 		this.add( panel, BorderLayout.CENTER );
 		
 		// Button area
-		okButton = new JButton(Messages.OK);
+		okButton = new JButton(OK);
 		this.addToButtonPanel(okButton);
 		this.getRootPane().setDefaultButton(okButton);
 		
-		cancelButton = new JButton(Messages.CANCEL);
+		cancelButton = new JButton(CANCEL);
 		this.addToButtonPanel(cancelButton);
 		
 	}

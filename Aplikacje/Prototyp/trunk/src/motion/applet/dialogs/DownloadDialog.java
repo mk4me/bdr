@@ -3,7 +3,6 @@ package motion.applet.dialogs;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,7 +23,7 @@ public class DownloadDialog extends BasicDialog {
 	private static String DOWNLOAD_MESSAGE_ENDING = " selected file.";
 	private static String DOWNLOAD_MESSAGE_ENDING_PRURAL = " selected files.";
 	private static String CHECKBOX_LABEL ="Recreate original directory";
-	private static String CANCEL_DOWNLOAD = Messages.CANCEL;
+	private static String CANCEL_DOWNLOAD = Messages.getString("Cancel"); //$NON-NLS-1$
 	private static String DOWNLOAD_FILE = "Download";
 	private static String PATH_LABEL = "Save to: ";
 	

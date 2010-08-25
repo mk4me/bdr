@@ -21,7 +21,7 @@ import motion.database.DatabaseConnection;
 public class ExceptionDialog extends BasicDialog {
 	private static String TITLE = "Motion client";
 	private static String REPORT_MESSAGE = "Please report this occurrence.";
-	private static String CLOSE = Messages.CLOSE;
+	private static String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
 	private static String COPY = "Copy to clipboard";
 	private Exception exception;
 	private String exceptionText;

@@ -27,14 +27,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.applet.Messages;
 import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;
-import motion.database.model.EntityKind;
 
 public class FormDialog extends BasicDialog {
-	private static String CREATE = Messages.CREATE;
-	private static String CANCEL = Messages.CANCEL;
+	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
+	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	
 	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	
@@ -42,7 +40,6 @@ public class FormDialog extends BasicDialog {
 	private JButton cancelButton;
 	
 	protected JPanel formPanel;
-	//protected JPanel userPanel;
 	protected GridBagConstraints gridBagConstraints;
 	
 	public static int CREATE_PRESSED = 1;

@@ -10,19 +10,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 
 import motion.applet.Messages;
-import motion.applet.webservice.client.WebServiceInstance;
 
 public class UserDetailsDialog extends BasicDialog {
 	private static String USER_DETAILS_TITLE = Messages.getString("UserDetailsDialog.UserTitle"); //$NON-NLS-1$
 	private static String FIRSTNAME = Messages.getString("UserDetailsDialog.FirstName") + Messages.COLON; //$NON-NLS-1$
 	private static String LASTNAME = Messages.getString("UserDetailsDialog.LastName") + Messages.COLON; //$NON-NLS-1$
-	private static String OK = Messages.OK;
-	private static String CANCEL = Messages.CANCEL;
+	private static String OK = Messages.getString("OK"); //$NON-NLS-1$
+	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	private static String WELCOME_TITLE = Messages.getString("UserDetailsDialog.EnterUserDetails"); //$NON-NLS-1$
 
 	private JTextField firstNameText;

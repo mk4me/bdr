@@ -18,14 +18,14 @@ public class Messages {
 	
 	// Button labels
 	// Static labels cannot switch language?
-	public static String OK = Messages.getString("OK"); //$NON-NLS-1$
-	public static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
-	public static String ADD = Messages.getString("Add"); //$NON-NLS-1$
-	public static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
-	public static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
-	public static String REMOVE = Messages.getString("Remove"); //$NON-NLS-1$
-	public static String UPDATE = Messages.getString("Update"); //$NON-NLS-1$
-	public static String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
+	//public static String OK = Messages.getString("OK"); //$NON-NLS-1$
+	//public static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
+	//public static String ADD = Messages.getString("Add"); //$NON-NLS-1$
+	//public static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
+	//public static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
+	//public static String REMOVE = Messages.getString("Remove"); //$NON-NLS-1$
+	//public static String UPDATE = Messages.getString("Update"); //$NON-NLS-1$
+	//public static String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
 	
 //	static{
 //		RESOURCE_BUNDLE.

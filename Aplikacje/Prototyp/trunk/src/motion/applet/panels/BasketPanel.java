@@ -19,6 +19,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import motion.applet.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
@@ -38,6 +39,11 @@ public class BasketPanel extends JPanel {
 	private DefaultTreeModel treeModel;
 	public JTabbedPane tablePane = new JTabbedPane();
 	
+	private static String ADD_BASKET = Messages.getString("Add"); //$NON-NLS-1$
+	private static String REMOVE_BASKET = Messages.getString("Remove"); //$NON-NLS-1$
+	private static String VIEW_BASKET = Messages.getString("View"); //$NON-NLS-1$
+	private static String TREE_TITLE = Messages.getString("Baskets"); //$NON-NLS-1$
+	
 	public BasketPanel() {
 		super();
 		this.setLayout(new BorderLayout());
@@ -48,7 +54,7 @@ public class BasketPanel extends JPanel {
 		// Create the tool bar
 		JToolBar toolBar = new JToolBar(MotionAppletFrame.APPLET_NAME, JToolBar.HORIZONTAL);
 		toolBar.setFloatable(false);
-		JButton addButton = new JButton("Add");
+		JButton addButton = new JButton(ADD_BASKET);
 		toolBar.add(addButton);
 		addButton.addActionListener(new ActionListener() {
 			@Override
@@ -58,7 +64,7 @@ public class BasketPanel extends JPanel {
 			}
 		});
 		
-		JButton removeButton = new JButton("Remove");
+		JButton removeButton = new JButton(REMOVE_BASKET);
 		toolBar.add(removeButton);
 		removeButton.addActionListener(new ActionListener() {
 			@Override
@@ -67,7 +73,7 @@ public class BasketPanel extends JPanel {
 			}
 		});
 		
-		JButton viewButton = new JButton("View");
+		JButton viewButton = new JButton(VIEW_BASKET);
 		toolBar.add(viewButton);
 		viewButton.addActionListener(new ActionListener() {
 			@Override
@@ -102,12 +108,12 @@ public class BasketPanel extends JPanel {
 						basketList.add(b);
 						//((EntityAttribute) b.get(UserBasketStaticAttributes.basketName)).value);
 					}
-					DefaultMutableTreeNode root = new DefaultMutableTreeNode("Baskets");
+					DefaultMutableTreeNode root = new DefaultMutableTreeNode(TREE_TITLE);
 					for (UserBasket b : basketList) {
 						DefaultMutableTreeNode basket = new DefaultMutableTreeNode(b);
-						basket.add(new DefaultMutableTreeNode("Performer"));
-						basket.add(new DefaultMutableTreeNode("Session"));
-						basket.add(new DefaultMutableTreeNode("Trial"));
+						basket.add(new DefaultMutableTreeNode(TableNamesInstance.PERFORMER.getLabel()));
+						basket.add(new DefaultMutableTreeNode(TableNamesInstance.SESSION.getLabel()));
+						basket.add(new DefaultMutableTreeNode(TableNamesInstance.TRIAL.getLabel()));
 						root.add(basket);
 					}
 					BasketPanel.this.treeModel.setRoot(root);

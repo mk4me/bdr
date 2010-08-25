@@ -26,9 +26,9 @@ import motion.database.model.UserBasket;
 public class BasketDialog extends BasicDialog {
 	private static String TITLE = Messages.getString("BasketDialog.Title"); //$NON-NLS-1$
 	private static String WELCOME_MESSAGE = Messages.getString("BasketDialog.CreateNewBasket"); //$NON-NLS-1$
-	private static String CREATE = Messages.CREATE;
-	private static String CLOSE = Messages.CLOSE;
-	private static String REMOVE = Messages.REMOVE;
+	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
+	private static String CLOSE = Messages.getString("Close"); //$NON-NLS-1$
+	private static String REMOVE = Messages.getString("Remove"); //$NON-NLS-1$
 	private static String BASKET_LABEL = Messages.getString("BasketDialog.NewBasketName") + Messages.COLON; //$NON-NLS-1$
 	private static String BASKETS_LABEL = Messages.getString("Baskets") + Messages.COLON; //$NON-NLS-1$
 	private static String CREATING_MESSAGE = Messages.getString("BasketDialog.CreatingNewBasket"); //$NON-NLS-1$
