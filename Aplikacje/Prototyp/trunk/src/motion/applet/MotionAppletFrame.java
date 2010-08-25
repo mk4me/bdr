@@ -41,10 +41,11 @@ public class MotionAppletFrame extends JFrame {
 	private static String MENU_ALL_SESSIONS = Messages.getString("MotionApplet.MenuAllSessions"); //$NON-NLS-1$
 	private static String MENU_REFRESH = Messages.getString("MotionApplet.MenuRefresh"); //$NON-NLS-1$
 	private static String MENU_NEW = Messages.getString("MotionApplet.MenuNew"); //$NON-NLS-1$
+	private static String MENU_BASKET = Messages.getString("Basket"); //$NON-NLS-1$
 	private static String MENU_UPLOAD = Messages.getString("Upload"); //$NON-NLS-1$
 	private static String TAB_BROWSE = Messages.getString("MotionApplet.Browse"); //$NON-NLS-1$
 	private static String TAB_QUERY = Messages.getString("MotionApplet.Query"); //$NON-NLS-1$
-	private static String TAB_BASKETS = "Baskets";
+	private static String TAB_BASKETS = Messages.getString("Baskets"); //$NON-NLS-1$
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 	
 	private static RightSplitPanel rightPanel;
@@ -128,7 +129,7 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
-		JMenuItem createBasketItem = new JMenuItem("Basket");
+		JMenuItem createBasketItem = new JMenuItem(MENU_BASKET);
 		newMenu.add(createBasketItem);
 		createBasketItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

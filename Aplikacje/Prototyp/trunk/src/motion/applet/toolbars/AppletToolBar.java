@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 
+import motion.applet.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
@@ -28,11 +29,16 @@ public class AppletToolBar extends JToolBar {
 	private JButton removeFromBasketButton;
 	private RightSplitPanel rightPanel;
 	
+	private static String NEW_BASKET = Messages.getString("AppletToolBar.NewBasket"); //$NON-NLS-1$
+	private static String ADD_TO_BASKET = Messages.getString("AppletToolBar.AddToBasket"); //$NON-NLS-1$
+	private static String REMOVE_FROM_BASKET = Messages.getString("AppletToolBar.RemoveFromBasket"); //$NON-NLS-1$
+	private static String SELECT_BASKET = Messages.getString("AppletToolBar.SelectBasket"); //$NON-NLS-1$
+	
 	public AppletToolBar(RightSplitPanel rightPanel) {
 		super(MotionAppletFrame.APPLET_NAME, JToolBar.HORIZONTAL);
 		
 		this.rightPanel = rightPanel;
-		this.addLabComboBoxListener(rightPanel);
+		this.addLabComboBoxListener(this.rightPanel);
 		
 		FlowLayout appletToolBarLayout = new FlowLayout();
 		appletToolBarLayout.setAlignment(FlowLayout.LEADING);
@@ -42,16 +48,16 @@ public class AppletToolBar extends JToolBar {
 		this.add(labComboBox);
 		this.addSeparator();
 		
-		this.newBasketButton = new JButton("New basket");
+		this.newBasketButton = new JButton(NEW_BASKET);
 		this.add(newBasketButton);
 		
 		this.add(basketComboBox);
 		
-		this.addToBasketButton = new JButton("Add to basket");
+		this.addToBasketButton = new JButton(ADD_TO_BASKET);
 		this.addToBasketButton.setEnabled(false);
 		this.add(addToBasketButton);
 		
-		this.removeFromBasketButton = new JButton("Remove from basket");
+		this.removeFromBasketButton = new JButton(REMOVE_FROM_BASKET);
 		this.add(removeFromBasketButton);
 		
 		addListeners();
@@ -187,7 +193,7 @@ public class AppletToolBar extends JToolBar {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					AppletToolBar.this.basketComboBox.removeAllItems();
-					AppletToolBar.this.basketComboBox.addItem("--Select basket--");
+					AppletToolBar.this.basketComboBox.addItem(SELECT_BASKET);
 					DbElementsList<UserBasket> baskets = WebServiceInstance.getDatabaseConnection().listUserBaskets();
 					for (UserBasket b : baskets) {
 						AppletToolBar.this.basketComboBox.addItem(b);

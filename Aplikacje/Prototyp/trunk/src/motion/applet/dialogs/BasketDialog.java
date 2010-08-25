@@ -24,18 +24,18 @@ import motion.database.DbElementsList;
 import motion.database.model.UserBasket;
 
 public class BasketDialog extends BasicDialog {
-	private static String TITLE = "New basket";
-	private static String WELCOME_MESSAGE = "Create a new basket.";
+	private static String TITLE = Messages.getString("BasketDialog.Title"); //$NON-NLS-1$
+	private static String WELCOME_MESSAGE = Messages.getString("BasketDialog.CreateNewBasket"); //$NON-NLS-1$
 	private static String CREATE = Messages.CREATE;
 	private static String CLOSE = Messages.CLOSE;
 	private static String REMOVE = Messages.REMOVE;
-	private static String BASKET_LABEL = "New basket name:";
-	private static String BASKETS_LABEL = "Baskets:";
-	private static String CREATING_MESSAGE = "Creating a new basket...";
-	private static String REMOVING_MESSAGE = "Removing basket...";
-	private static String MISSING_BASKET_NAME = "Please type the name of the basket.";
-	private static String MISSING_BASKET_SELECTION = "Select a basket to remove.";
-	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
+	private static String BASKET_LABEL = Messages.getString("BasketDialog.NewBasketName") + Messages.COLON; //$NON-NLS-1$
+	private static String BASKETS_LABEL = Messages.getString("Baskets") + Messages.COLON; //$NON-NLS-1$
+	private static String CREATING_MESSAGE = Messages.getString("BasketDialog.CreatingNewBasket"); //$NON-NLS-1$
+	private static String REMOVING_MESSAGE = Messages.getString("BasketDialog.RemovingBasket"); //$NON-NLS-1$
+	private static String MISSING_BASKET_NAME = Messages.getString("BasketDialog.MissingBasketNameMessage"); //$NON-NLS-1$
+	private static String MISSING_BASKET_SELECTION = Messages.getString("BasketDialog.MissingBasketSelectionMessage"); //$NON-NLS-1$
+	protected static String PRESS_CREATE_MESSAGE = Messages.getString("BasketDialog.PressCreateMessage"); //$NON-NLS-1$
 	
 	private JButton createButton;
 	private JButton closeButton;

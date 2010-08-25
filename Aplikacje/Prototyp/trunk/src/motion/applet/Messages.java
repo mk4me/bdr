@@ -18,7 +18,7 @@ public class Messages {
 	
 	// Button labels
 	// Static labels cannot switch language?
-	public static String OK = Messages.getString("Ok"); //$NON-NLS-1$
+	public static String OK = Messages.getString("OK"); //$NON-NLS-1$
 	public static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	public static String ADD = Messages.getString("Add"); //$NON-NLS-1$
 	public static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
