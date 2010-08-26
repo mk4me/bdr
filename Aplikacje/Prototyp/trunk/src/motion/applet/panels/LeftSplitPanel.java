@@ -21,7 +21,7 @@ import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
-import motion.applet.tables.BasicTable;
+import motion.applet.tables.QueryTableModel;
 import motion.applet.trees.FilterNode;
 import motion.applet.trees.FilterTree;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -125,7 +125,7 @@ public class LeftSplitPanel extends JPanel {
 										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
 								
 								JTable resultTable = new JTable();
-								resultTable.setModel(new BasicTable(result));
+								resultTable.setModel(new QueryTableModel(result));
 								MotionAppletFrame.addResult(resultTable);
 							}
 							

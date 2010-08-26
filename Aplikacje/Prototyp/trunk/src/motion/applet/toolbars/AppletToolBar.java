@@ -14,7 +14,8 @@ import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
-import motion.applet.tables.BasicTable;
+import motion.applet.tables.BasicTableModel;
+import motion.applet.tables.BasketTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.UserBasket;
@@ -84,7 +85,7 @@ public class AppletToolBar extends JToolBar {
 					protected Void doInBackground() throws InterruptedException {
 						try {
 							if (AppletToolBar.this.validateSelectedBasket()) {
-								BasicTable currentTable = MotionAppletFrame.getCurrentTable();
+								BasicTableModel currentTable = MotionAppletFrame.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
 									String entity = currentTable.getTableName().getEntity();
@@ -118,7 +119,7 @@ public class AppletToolBar extends JToolBar {
 					protected Void doInBackground() throws InterruptedException {
 						try {
 							if (MotionAppletFrame.isBasketPanelVisible()) {
-								BasicTable currentTable = MotionAppletFrame.getCurrentTable();
+								BasketTableModel currentTable = (BasketTableModel) MotionAppletFrame.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
 									String entity = currentTable.getTableName().getEntity();

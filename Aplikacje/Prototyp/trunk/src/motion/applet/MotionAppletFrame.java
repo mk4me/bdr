@@ -27,7 +27,7 @@ import motion.applet.panels.BasketPanel;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
-import motion.applet.tables.BasicTable;
+import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.database.DatabaseConnection;
 import motion.widgets.TabCloseButtonWidget;
@@ -209,7 +209,7 @@ public class MotionAppletFrame extends JFrame {
 		tabCloseButtonWidget.addCloseButton();
 	}
 	
-	public static BasicTable getCurrentTable() {
+	public static BasicTableModel getCurrentTable() {
 		JTabbedPane tabbedPane = null;
 		if (isBrowsePanelVisible()) {
 			tabbedPane = rightPanel.getTabbedPane();
@@ -224,7 +224,7 @@ public class MotionAppletFrame extends JFrame {
 			if (component instanceof JScrollPane) {
 				component = ((JScrollPane) component).getViewport().getView();
 				if (component instanceof JTable) {
-					return (BasicTable) ((JTable) component).getModel();
+					return (BasicTableModel) ((JTable) component).getModel();
 				}
 			}
 		}

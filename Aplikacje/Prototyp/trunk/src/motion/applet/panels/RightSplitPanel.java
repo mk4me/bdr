@@ -35,7 +35,8 @@ import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
-import motion.applet.tables.BasicTable;
+import motion.applet.tables.AttributeTableModel;
+import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.trees.ResultTree;
 
@@ -99,13 +100,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private int getSelectedRecord( JTable table, MouseEvent e ) {
 		createSelectionAtMouse(table, e);
 		
-		return ((BasicTable) table.getModel()).getRecordId( table.getSelectedRows()[0] );
+		return ((BasicTableModel) table.getModel()).getRecordId( table.getSelectedRows()[0] );
 	}
 	
 	private int[] getSelectedRecords( JTable table, MouseEvent e ) {
 		createSelectionAtMouse(table, e);
 		
-		return ((BasicTable) table.getModel()).getCheckedRecordIds();
+		return ((BasicTableModel) table.getModel()).getCheckedRecordIds();
 	}
 	
 	/*//replaced by getSelectedRecords(JTable table)
@@ -361,7 +362,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showTable(TableName tableName) {
 
 		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new BasicTable(tableName) );
+		tables[i].setModel( new AttributeTableModel(tableName) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
@@ -369,7 +370,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private void showTable(TableName tableName, int recordId) {
 
 		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new BasicTable(tableName, recordId) );
+		tables[i].setModel( new AttributeTableModel(tableName, recordId) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
@@ -377,7 +378,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private void showTable(TableName tableName, int recordId, TableName fromTableName) {
 
 		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new BasicTable(tableName, recordId, fromTableName) );
+		tables[i].setModel( new AttributeTableModel(tableName, recordId, fromTableName) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
@@ -407,29 +408,29 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void refreshPerformerTable() {
 		TableModel tableModel = tables[0].getModel();
-		if (tableModel instanceof BasicTable) {
-			showTable(TableNamesInstance.PERFORMER, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		if (tableModel instanceof BasicTableModel) {
+			showTable(TableNamesInstance.PERFORMER, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
 		}
 	}
 	
 	private void refreshSessionTable() {
 		TableModel tableModel = tables[1].getModel();
-		if (tableModel instanceof BasicTable) {
-			showTable(TableNamesInstance.SESSION, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		if (tableModel instanceof BasicTableModel) {
+			showTable(TableNamesInstance.SESSION, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
 		}
 	}
 	
 	private void refreshTrialTable() {
 		TableModel tableModel = tables[2].getModel();
-		if (tableModel instanceof BasicTable) {
-			showTable(TableNamesInstance.TRIAL, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		if (tableModel instanceof BasicTableModel) {
+			showTable(TableNamesInstance.TRIAL, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
 		}
 	}
 	
 	private void refreshFileTable() {
 		TableModel tableModel = tables[3].getModel();
-		if (tableModel instanceof BasicTable) {
-			showTable(TableNamesInstance.FILE, ((BasicTable) tableModel).recordId, ((BasicTable) tableModel).fromTableName);
+		if (tableModel instanceof BasicTableModel) {
+			showTable(TableNamesInstance.FILE, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
 		}
 	}
 	
@@ -490,17 +491,17 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void clearSessionTable() {
 		int i = tabNameHash .get(TableNamesInstance.SESSION);
-		tables[i].setModel(new BasicTable());
+		tables[i].setModel(new BasicTableModel());
 	}
 	
 	private void clearTrialTable() {
 		int i = tabNameHash .get(TableNamesInstance.TRIAL);
-		tables[i].setModel(new BasicTable());
+		tables[i].setModel(new BasicTableModel());
 	}
 	
 	private void clearFileTable() {
 		int i = tabNameHash .get(TableNamesInstance.FILE);
-		tables[i].setModel(new BasicTable());
+		tables[i].setModel(new BasicTableModel());
 	}
 	
 	public JTabbedPane getTabbedPane() {

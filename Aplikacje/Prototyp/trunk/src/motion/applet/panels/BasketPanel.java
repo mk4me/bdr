@@ -25,7 +25,7 @@ import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
-import motion.applet.tables.BasicTable;
+import motion.applet.tables.BasketTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.Performer;
@@ -144,13 +144,13 @@ public class BasketPanel extends JPanel {
 						JTable table = new JTable();
 						if (tableName.equals(TableNamesInstance.PERFORMER)) {
 							DbElementsList<Performer> records = WebServiceInstance.getDatabaseConnection().listBasketPerformersWithAttributes(basketName);
-							table.setModel(new BasicTable(tableName, records, basketName));
+							table.setModel(new BasketTableModel(tableName, records, basketName));
 						} else if (tableName.equals(TableNamesInstance.SESSION)) {
 							DbElementsList<Session> records = WebServiceInstance.getDatabaseConnection().listBasketSessionsWithAttributes(basketName);
-							table.setModel(new BasicTable(tableName, records, basketName));
+							table.setModel(new BasketTableModel(tableName, records, basketName));
 						} else if (tableName.equals(TableNamesInstance.TRIAL)) {
 							DbElementsList<Trial> records = WebServiceInstance.getDatabaseConnection().listBasketTrialsWithAttributes(basketName);
-							table.setModel(new BasicTable(tableName, records, basketName));
+							table.setModel(new BasketTableModel(tableName, records, basketName));
 						}
 						
 						BasketPanel.this.addTab(table, basketName + " (" + entity + ")");
