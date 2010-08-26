@@ -16,17 +16,9 @@ import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.AttributeName;
-import motion.database.model.DatabaseFile;
-import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
 import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
-import motion.database.model.Performer;
-import motion.database.model.PerformerStaticAttributes;
-import motion.database.model.Session;
-import motion.database.model.SessionStaticAttributes;
-import motion.database.model.Trial;
-import motion.database.model.TrialStaticAttributes;
 
 public class BasicTable extends AbstractTableModel {
 	private ArrayList<ArrayList<Object>> contents = new ArrayList<ArrayList<Object>>();
@@ -71,7 +63,7 @@ public class BasicTable extends AbstractTableModel {
 	}
 	
 	public BasicTable() {
-		super();
+		
 	}
 	
 	public TableName getTableName() {
@@ -86,14 +78,56 @@ public class BasicTable extends AbstractTableModel {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					addCheckboxColumn(); // first column
+					DbElementsList<? extends GenericDescription<?>> records = new DbElementsList<GenericDescription<?>>();
+					ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
+					ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
+					if (selectedAttributes != null) {
+						attributes = tableName.getSelectedAttributes(selectedAttributes);
+					} else {
+						attributes = tableName.getAllAttributes();
+					}
+					for (AttributeName a : attributes) {
+						attributeNames.add(a.toString());
+						classes.add(a.getAttributeClass());
+					}
+					
 					if (tableName.equals(TableNamesInstance.PERFORMER)) {
-						listPerformers();
+						records = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 					} else if (tableName.equals(TableNamesInstance.SESSION)) {
-						listSessions();
+						if (recordId > -1) {
+							records = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(recordId);
+						} else {
+							records = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
+						}
 					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-						listTrials();
+						if (recordId > -1) {
+							records = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(recordId);
+						}
 					} else if (tableName.equals(TableNamesInstance.FILE)) {
-						listFiles();
+						if (recordId > -1 && fromTableName != null) {
+							if (fromTableName.equals(TableNamesInstance.PERFORMER)) {
+								records = WebServiceInstance.getDatabaseConnection().listPerformerFiles(recordId);
+							} else if (fromTableName.equals(TableNamesInstance.SESSION)) {
+								records = WebServiceInstance.getDatabaseConnection().listSessionFiles(recordId);
+							} else if (fromTableName.equals(TableNamesInstance.TRIAL)) {
+								records = WebServiceInstance.getDatabaseConnection().listTrialFiles(recordId);
+							}
+						}
+					}
+					
+					for (GenericDescription<?> r : records) {
+						ArrayList<Object> cellList = new ArrayList<Object>();
+						cellList.add(new Boolean(false));	// checkboxes initially unchecked
+						for (AttributeName a : attributes) {
+							EntityAttribute entityAttribute = r.get(a.toString());
+							if (entityAttribute != null) {
+								cellList.add(entityAttribute.value);
+							} else {
+								cellList.add(null);
+							}
+						}
+						recordIds.add(r.getId());
+						contents.add(cellList);
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -116,119 +150,6 @@ public class BasicTable extends AbstractTableModel {
 	private void addCheckboxColumn() {
 		this.attributeNames.add("checkbox");	// checkbox column
 		this.classes.add(Boolean.class);
-	}
-	
-	//FIXME: Use DbElementsList<? extends GenericDescription<?>> instead of DbElementsList<Performer>/DbElementsList<Session>...
-	private void listPerformers() throws Exception {
-		DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
-		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedPerformerAttributes());
-		
-		for (AttributeName a : attributes) {
-			this.attributeNames.add(a.toString());
-			this.classes.add(a.getAttributeClass());
-		}
-		for (Performer p : performers) {
-			ArrayList<Object> cellList = new ArrayList<Object>();
-			cellList.add(new Boolean(false));	// checkboxes initially unchecked
-			for (AttributeName a : attributes) {
-				EntityAttribute entityAttribute = p.get(a.toString());
-				if (entityAttribute != null) {
-					cellList.add(entityAttribute.value);
-				} else {
-					cellList.add(null);
-				}
-			}
-			this.recordIds.add(Integer.parseInt(p.get(PerformerStaticAttributes.performerID.toString()).value.toString()));
-			this.contents.add(cellList);
-		}
-	}
-	
-	private void listSessions() throws Exception {
-		DbElementsList<Session> sessions = new DbElementsList<Session>();
-		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedSessionAttributes());
-		for (AttributeName a : attributes) {
-			this.attributeNames.add(a.toString());
-			this.classes.add(a.getAttributeClass());
-		}
-		if (this.recordId > -1) {
-			sessions = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(this.recordId);
-		} else {
-			sessions = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
-		}
-		for (Session s : sessions) {
-			ArrayList<Object> cellList = new ArrayList<Object>();
-			cellList.add(new Boolean(false));	// checkboxes initially unchecked
-			for (AttributeName a : attributes) {
-				EntityAttribute entityAttribute = s.get(a.toString());
-				if (entityAttribute != null) {
-					cellList.add(entityAttribute.value);
-				} else {
-					cellList.add(null);
-				}
-			}
-			this.recordIds.add(Integer.parseInt(s.get(SessionStaticAttributes.sessionID.toString()).value.toString()));
-			this.contents.add(cellList);
-		}
-	}
-	
-	private void listTrials() throws Exception {
-		DbElementsList<Trial> trials = new DbElementsList<Trial>();
-		ArrayList<AttributeName> attributes = tableName.getSelectedAttributes(BottomSplitPanel.getCheckedTrialAttributes());
-		for (AttributeName a : attributes) {
-			this.attributeNames.add(a.toString());
-			this.classes.add(a.getAttributeClass());
-		}
-		if (this.recordId > -1) {
-			trials = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(this.recordId);
-		}
-		
-		for (Trial t : trials) {
-			ArrayList<Object> cellList = new ArrayList<Object>();
-			cellList.add(new Boolean(false));	// checkboxes initially unchecked
-			for (AttributeName a : attributes) {
-				EntityAttribute entityAttribute = t.get(a.toString());
-				if (entityAttribute != null) {
-					cellList.add(entityAttribute.value);
-				} else {
-					cellList.add(null);
-				}
-			}
-			this.recordIds.add(Integer.parseInt(t.get(TrialStaticAttributes.trialID.toString()).value.toString()));
-			this.contents.add(cellList);
-		}
-	}
-	
-	private void listFiles() throws Exception {
-		DbElementsList<DatabaseFile> files = new DbElementsList<DatabaseFile>();
-		if (this.recordId > -1 && fromTableName != null) {
-			if (fromTableName.equals(TableNamesInstance.PERFORMER)) {
-				files = WebServiceInstance.getDatabaseConnection().listPerformerFiles(this.recordId);
-			} else if (fromTableName.equals(TableNamesInstance.SESSION)) {
-				files = WebServiceInstance.getDatabaseConnection().listSessionFiles(this.recordId);
-			} else if (fromTableName.equals(TableNamesInstance.TRIAL)) {
-				files = WebServiceInstance.getDatabaseConnection().listTrialFiles(this.recordId);
-			}
-		}
-		
-		ArrayList<AttributeName> attributes = tableName.getAllAttributes();
-		for (AttributeName a : attributes) {
-			this.attributeNames.add(a.toString());
-			this.classes.add(a.getAttributeClass());
-		}
-		for (DatabaseFile f : files) {
-			ArrayList<Object> cellList = new ArrayList<Object>();
-			cellList.add(new Boolean(false));	// checkboxes initially unchecked
-			for (AttributeName a : attributes) {
-				EntityAttribute entityAttribute = f.get(a.toString());
-				if (entityAttribute != null) {
-					cellList.add(entityAttribute.value);
-				} else {
-					cellList.add(null);
-				}
-			}
-			this.recordIds.add(Integer.parseInt(f.get(DatabaseFileStaticAttributes.fileID.toString()).value.toString()));
-			this.contents.add(cellList);
-		}
 	}
 	
 	private void getTableContentsFromResult(final List<GenericResult> result) {
@@ -408,35 +329,6 @@ public class BasicTable extends AbstractTableModel {
 		
 		return (columnIndex == CHECKBOX_COLUMN);	// enable columns for editing/checkboxes  
 	}
-	
-	/*
-	@Override
-	public int getColumnCount() {
-		if (this.contents.length == 0) {
-			return 0;
-		} else {
-			return this.contents[0].length;
-		}
-	}
-
-	@Override
-	public int getRowCount() {
-		
-		return this.contents.length;
-	}
-
-	@Override
-	public Object getValueAt(int row, int column) {
-		return this.contents[row][column];
-	}
-	
-	public Class getColumnClass(int column) {
-		return this.columnClasses[column];
-	}
-	
-	public String getColumnName(int column) {
-		return this.columnNames[column];
-	}*/
 	
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {

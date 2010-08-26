@@ -1,12 +1,10 @@
 package motion.applet.tables;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 import motion.database.DbElementsList;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.UserPrivileges;
 
 public class EntityTableModel extends AbstractTableModel {
 
