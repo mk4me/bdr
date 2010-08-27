@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "UserPersonalSpace", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl")
+@WebServiceClient(name = "UserPersonalSpace", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", wsdlLocation = "http://db-bdr.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl")
 public class UserPersonalSpace
     extends Service
 {
@@ -30,9 +30,9 @@ public class UserPersonalSpace
         try {
             URL baseUrl;
             baseUrl = motion.database.ws.userPersonalSpaceWCF.UserPersonalSpace.class.getResource(".");
-            url = new URL(baseUrl, "http://dbpawell.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl");
+            url = new URL(baseUrl, "http://db-bdr.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://dbpawell.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://db-bdr.pjwstk.edu.pl/Motion/res/UserPersonalSpaceWSStandalone.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         USERPERSONALSPACE_WSDL_LOCATION = url;

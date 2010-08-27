@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "FileStoremanWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl")
+@WebServiceClient(name = "FileStoremanWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", wsdlLocation = "http://db-bdr.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl")
 public class FileStoremanWS
     extends Service
 {
@@ -30,9 +30,9 @@ public class FileStoremanWS
         try {
             URL baseUrl;
             baseUrl = motion.database.ws.fileStoremanServiceWCF.FileStoremanWS.class.getResource(".");
-            url = new URL(baseUrl, "http://dbpawell.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl");
+            url = new URL(baseUrl, "http://db-bdr.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://dbpawell.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://db-bdr.pjwstk.edu.pl/Motion/FileStoremanWS.svc?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         FILESTOREMANWS_WSDL_LOCATION = url;
