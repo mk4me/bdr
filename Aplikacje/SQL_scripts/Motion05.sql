@@ -98,7 +98,8 @@ go
         Opis_pliku          varchar(100) NOT NULL,
         Plik                varbinary(max) filestream not null,
 		rowguid				uniqueidentifier rowguidcol not null unique,
-		Nazwa_pliku         varchar(255) null
+		Nazwa_pliku         varchar(255) null,
+		Sciezka				varchar(100) null
  )
 go
  
@@ -165,28 +166,28 @@ go
 go 
 
 
-CREATE TABLE Pomiar_plik
+CREATE TABLE Wynik_pomiaru
 (
 	IdPomiar int NOT NULL,
 	IdPlik int NOT NULL
 )
 go
 
- ALTER TABLE Pomiar_plik
+ ALTER TABLE Wynik_pomiaru
         ADD FOREIGN KEY (IdPomiar)
                               REFERENCES Pomiar
 go 
- CREATE INDEX X1Pomiar_plik ON Pomiar_plik
+ CREATE INDEX X1Wynik_pomiaru ON Wynik_pomiaru
  (
         IdPomiar
  )
 go
 
- ALTER TABLE Pomiar_plik
+ ALTER TABLE Wynik_pomiaru
         ADD FOREIGN KEY (IdPlik)
                               REFERENCES Plik
 go 
- CREATE INDEX X2Pomiar_plik ON Pomiar_plik
+ CREATE INDEX X2Wynik_pomiaru ON Wynik_pomiaru
  (
         IdPlik
  )
@@ -401,7 +402,8 @@ go
         IdAtrybut            int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
  )
 go
  
@@ -416,7 +418,12 @@ go
         IdAtrybut
  )
 go
- 
+
+ CREATE INDEX X3Wartosc_atrybutu_obserwacji ON Wartosc_atrybutu_obserwacji
+ (
+        Wartosc_Id
+ )
+go
  
  ALTER TABLE Wartosc_atrybutu_obserwacji
         ADD PRIMARY KEY (IdObserwacja, IdAtrybut)
@@ -428,7 +435,8 @@ go
         IdPerformer          int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
  )
 go
  
@@ -443,7 +451,11 @@ go
         IdPerformer
  )
 go
- 
+  CREATE INDEX X3Wartosc_atrybutu_performera ON Wartosc_atrybutu_performera
+ (
+        Wartosc_Id
+ )
+go
  
  ALTER TABLE Wartosc_atrybutu_performera
         ADD PRIMARY KEY (IdAtrybut, IdPerformer)
@@ -482,7 +494,8 @@ go
         IdSesja              int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
  )
 go
  
@@ -497,6 +510,12 @@ go
         IdSesja
  )
 go
+
+ CREATE INDEX X3Wartosc_atrybutu_sesji ON Wartosc_atrybutu_sesji
+ (
+        Wartosc_Id
+ )
+go
  
  
  ALTER TABLE Wartosc_atrybutu_sesji
@@ -509,7 +528,8 @@ go
         IdAtrybut            int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
  )
 go
  
@@ -524,7 +544,12 @@ go
         IdAtrybut
  )
 go
- 
+
+ CREATE INDEX X3Wartosc_atrybutu_konfiguracji_pomiarowej ON Wartosc_atrybutu_konfiguracji_pomiarowej
+ (
+        Wartosc_Id
+ )
+go 
  
  ALTER TABLE Wartosc_atrybutu_konfiguracji_pomiarowej
         ADD PRIMARY KEY (IdKonfiguracja_pomiarowa, IdAtrybut)
@@ -547,7 +572,8 @@ go
         IdAtrybut            int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
  )
 go
  
@@ -562,7 +588,12 @@ go
         IdAtrybut
  )
 go
- 
+
+ CREATE INDEX X3Wartosc_atrybutu_pomiaru ON Wartosc_atrybutu_pomiaru
+ (
+        Wartosc_Id
+ )
+go  
  
  ALTER TABLE Wartosc_atrybutu_pomiaru
         ADD PRIMARY KEY (IdPomiar, IdAtrybut)
@@ -1050,6 +1081,31 @@ go
 ALTER TABLE Predykat
         ADD FOREIGN KEY (IdPredykat, IdUzytkownik) REFERENCES Predykat
 go
+
+
+ALTER TABLE Wartosc_Atrybutu_performera
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
+ALTER TABLE Wartosc_Atrybutu_sesji
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
+
+ALTER TABLE Wartosc_Atrybutu_obserwacji
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
+
+ALTER TABLE Wartosc_Atrybutu_konfiguracji_pomiarowej
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
+ALTER TABLE Wartosc_Atrybutu_pomiaru
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
+
 /*
 SELECT OBJECT_NAME(id) AS TableName, OBJECT_NAME(constid) AS ConstraintName
 FROM sysconstraints where OBJECT_NAME(id) = 'Uzytkownik'
