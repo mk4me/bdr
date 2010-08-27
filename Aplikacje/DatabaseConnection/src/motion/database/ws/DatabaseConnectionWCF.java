@@ -322,22 +322,23 @@ public class DatabaseConnectionWCF implements DatabaseProxy {
 			
 			HashMap<String, EntityAttributeGroup> output = new HashMap<String, EntityAttributeGroup>();
 	
-			for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
-			{	
-				EntityAttributeGroup group = output.get( a.getAttributeGroupName() );
-				if (group == null)
-				{
-					group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
-					output.put( a.getAttributeGroupName(), group );
+			if ( result!=null && result.getAttributeDefinitionList() != null)
+				for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
+				{	
+					EntityAttributeGroup group = output.get( a.getAttributeGroupName() );
+					if (group == null)
+					{
+						group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
+						output.put( a.getAttributeGroupName(), group );
+					}
+					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() );
+					attr.unit = a.getUnit();
+					attr.subtype = a.getSubtype();
+					if (a.getEnumValues() != null) {
+						attr.enumValues = a.getEnumValues().getValue();
+					}
+					group.add( attr );
 				}
-				EntityAttribute attr = new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() );
-				attr.unit = a.getUnit();
-				attr.subtype = a.getSubtype();
-				if (a.getEnumValues() != null) {
-					attr.enumValues = a.getEnumValues().getValue();
-				}
-				group.add( attr );
-			}
 		
 			return output;
 		}
