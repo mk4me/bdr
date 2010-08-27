@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
   spec="1.0+"
-  codebase="http://dbpawell.pjwstk.edu.pl/Motion-Client"
+  codebase="http://db-bdr.pjwstk.edu.pl/Motion-Client"
   href="MotionClientApplet.jnlp">
   <information>
     <title>Motion Web Client</title>
