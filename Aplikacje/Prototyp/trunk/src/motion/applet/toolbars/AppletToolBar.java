@@ -1,5 +1,6 @@
 package motion.applet.toolbars;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,6 +53,8 @@ public class AppletToolBar extends JToolBar {
 		this.newBasketButton = new JButton(NEW_BASKET);
 		this.add(newBasketButton);
 		
+		basketComboBox.setSize(new Dimension(140, basketComboBox.getPreferredSize().height));
+		basketComboBox.setPreferredSize(new Dimension(140, basketComboBox.getPreferredSize().height));
 		this.add(basketComboBox);
 		
 		this.addToBasketButton = new JButton(ADD_TO_BASKET);
