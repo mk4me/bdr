@@ -42,9 +42,12 @@ namespace MotionDBWebServices
                 SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
                 showTrialfPar.Direction = ParameterDirection.Input;
                 showTrialfPar.Value = entitiesToInclude.Contains("trial") ? 1 : 0;
-                SqlParameter showSegmPar = cmd.Parameters.Add("@segm", SqlDbType.Bit);
-                showSegmPar.Direction = ParameterDirection.Input;
-                showSegmPar.Value = entitiesToInclude.Contains("segment") ? 1 : 0;
+                SqlParameter showMeasPar = cmd.Parameters.Add("@meas", SqlDbType.Bit);
+                showMeasPar.Direction = ParameterDirection.Input;
+                showMeasPar.Value = entitiesToInclude.Contains("measurement") ? 1 : 0;
+                SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
+                showMCPar.Direction = ParameterDirection.Input;
+                showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
@@ -97,9 +100,12 @@ namespace MotionDBWebServices
                 SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
                 showTrialfPar.Direction = ParameterDirection.Input;
                 showTrialfPar.Value = entitiesToInclude.Contains("trial") ? 1 : 0;
-                SqlParameter showSegmPar = cmd.Parameters.Add("@segm", SqlDbType.Bit);
-                showSegmPar.Direction = ParameterDirection.Input;
-                showSegmPar.Value = entitiesToInclude.Contains("segment") ? 1 : 0;
+                SqlParameter showMeasPar = cmd.Parameters.Add("@meas", SqlDbType.Bit);
+                showMeasPar.Direction = ParameterDirection.Input;
+                showMeasPar.Value = entitiesToInclude.Contains("measurement") ? 1 : 0;
+                SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
+                showMCPar.Direction = ParameterDirection.Input;
+                showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
@@ -281,42 +287,7 @@ namespace MotionDBWebServices
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return xd.DocumentElement;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement GetSegmentByIdXML(int id)// UWAGA - docelowo nalezaloby zabronic pobrania danych z segmentu pochodzacego z Trial-a z niedostepnej danemu uzytkownikowi sesji!
-        {
-            XmlDocument xd = new XmlDocument();
-            bool notFound = false;
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "get_segment_by_id_xml";
-                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
-                resId.Direction = ParameterDirection.Input;
-                resId.Value = id;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                //if (dr.) notFound = true;
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                else notFound = true;
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            if (notFound)
-            {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any segment");
-                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSegmentById")));
-            }
-            //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-            return xd.DocumentElement;
-        }
+ 
 
 
 
@@ -622,80 +593,10 @@ namespace MotionDBWebServices
 
             return xd.DocumentElement;
         }
-        // SEGMENT QUERIES
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListTrialSegmentsXML(int trialID) // UWAGA! Docelowo wymaga uszczelnienia w kontekscie widocznych dla danego usera sesji!
-        {
-            XmlDocument xd = new XmlDocument();
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_trial_segments_xml";
-                SqlParameter perfId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
-                perfId.Direction = ParameterDirection.Input;
-                perfId.Value = trialID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("TrailSegmentList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-                }
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return xd.DocumentElement;
-        }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListTrialSegmentsWithAttributesXML(int trialID)// UWAGA! Docelowo wymaga uszczelnienia w kontekscie widocznych dla danego usera sesji!
-        {
-            XmlDocument xd = new XmlDocument();
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_trial_segments_attributes_xml";
-                SqlParameter perfId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
-                perfId.Direction = ParameterDirection.Input;
-                perfId.Value = trialID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("TrailSegmentWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-                }
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return xd.DocumentElement;
-        }
 
         // FILE QUERIES
-      //  [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListFilesXML(int subjectID, string subjectType)
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListFileAttributeDataXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -716,13 +617,21 @@ namespace MotionDBWebServices
                     operationName = "list_session_files_xml";
                     paramName = "@sess_id";
                     addLogin = true;
-
                     break;
                 case "trial":
                     operationName = "list_trial_files_xml";
                     paramName = "@trial_id";
                     addLogin = true;
-
+                    break;
+                case "measurement":
+                    operationName = "list_measurement_files_xml";
+                    paramName = "@meas_id";
+                    addLogin = true;
+                    break;
+                case "measurement_conf":
+                    operationName = "list_measurement_conf_files_xml";
+                    paramName = "@mc_id";
+                    addLogin = true;
                     break;
             }
             try
@@ -763,7 +672,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType)
+        public XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -788,6 +697,16 @@ namespace MotionDBWebServices
                 case "trial":
                     operationName = "list_trial_files_attributes_xml";
                     paramName = "@trial_id";
+                    addLogin = true;
+                    break;
+                case "measurement":
+                    operationName = "list_measurement_files_attributes_xml";
+                    paramName = "@meas_id";
+                    addLogin = true;
+                    break;
+                case "measurement_conf":
+                    operationName = "list_measurement_conf_files_attributes_xml";
+                    paramName = "@mc_id";
                     addLogin = true;
                     break;
             }

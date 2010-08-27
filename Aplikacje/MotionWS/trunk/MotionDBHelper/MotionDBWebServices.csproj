@@ -67,11 +67,7 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BasicQueriesService.asmx" />
     <Content Include="BasicQueriesWS.svc" />
-    <Content Include="BasicUpdatesService.asmx" />
-    <Content Include="DataDictionaryMaintenanceService.asmx" />
-    <Content Include="FileStoremanService.asmx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdministrationWS.svc.cs">
@@ -80,10 +76,6 @@
     </Compile>
     <Compile Include="AuthorizationWS.svc.cs">
       <DependentUpon>AuthorizationWS.svc</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="BasicQueriesService.asmx.cs">
-      <DependentUpon>BasicQueriesService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="BasicQueriesWS.svc.cs">
@@ -97,10 +89,6 @@
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="DatabaseAccessService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DataDictionaryMaintenanceService.asmx.cs">
-      <DependentUpon>DataDictionaryMaintenanceService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileStoremanWS.svc.cs">
@@ -118,15 +106,8 @@
     <Compile Include="IUserPersonalSpaceWS.cs" />
     <Compile Include="MDBExceptions.cs" />
     <Compile Include="PlainFileDetails.cs" />
-    <Compile Include="FileStoremanService.asmx.cs">
-      <DependentUpon>FileStoremanService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PerformerSessionListXML.cs" />
     <Compile Include="PlainSessionDetails.cs" />
-    <Compile Include="BasicUpdatesService.asmx.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="PerformerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserPersonalSpaceWS.svc.cs">
@@ -179,8 +160,8 @@
     <None Include="res\ListAttributesDefined.xsd" />
     <None Include="res\ListBasketTrialsWithAttributesXML.xsd" />
     <None Include="res\ListEnumValues.xsd" />
-    <None Include="res\ListFilesWithAttributesXML.xsd" />
-    <None Include="res\ListFilesXML.xsd" />
+    <None Include="res\ListFileAttributeDataWithAttributesXML.xsd" />
+    <None Include="res\ListFileAttributeDataXML.xsd" />
     <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
     <None Include="res\ListLabSessionsWithAttributesXML.xsd" />
     <None Include="res\ListMotionKindsDefined.xsd" />
@@ -205,7 +186,6 @@
     <None Include="res\TrialDetailsWithAttributesElement.xsd" />
     <None Include="res\UserPersonalSpaceWSStandaloneImport.wsdl" />
     <None Include="res\_PerformQuery.xsd" />
-    <None Include="_PerformQuery.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -38,10 +38,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement GetSegmentByIdXML(int id);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
         XmlElement ListPerformersXML();
 
         [OperationContract]
@@ -74,19 +70,11 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement ListTrialSegmentsXML(int trialID);
+        XmlElement ListFileAttributeDataXML(int subjectID, string subjectType);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement ListTrialSegmentsWithAttributesXML(int trialID);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListFilesXML(int subjectID, string subjectType);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType);
+        XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectType);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
