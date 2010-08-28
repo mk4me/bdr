@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AuthorizationWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", wsdlLocation = "http://db-bdr.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl")
+@WebServiceClient(name = "AuthorizationWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl")
 public class AuthorizationWS
     extends Service
 {
@@ -30,9 +30,9 @@ public class AuthorizationWS
         try {
             URL baseUrl;
             baseUrl = motion.database.ws.authorizationWCF.AuthorizationWS.class.getResource(".");
-            url = new URL(baseUrl, "http://db-bdr.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl");
+            url = new URL(baseUrl, "http://dbpawell.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://db-bdr.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://dbpawell.pjwstk.edu.pl/Motion/res/AuthorizationWSStandalone.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         AUTHORIZATIONWS_WSDL_LOCATION = url;

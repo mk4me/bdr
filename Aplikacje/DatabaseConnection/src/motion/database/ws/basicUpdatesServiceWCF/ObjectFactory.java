@@ -37,8 +37,8 @@ public class ObjectFactory {
     private final static QName _Int_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "int");
     private final static QName _QName_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "QName");
     private final static QName _UnsignedShort_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedShort");
-    private final static QName _Decimal_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "decimal");
     private final static QName _Float_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "float");
+    private final static QName _Decimal_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "decimal");
     private final static QName _Double_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "double");
     private final static QName _Long_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "long");
     private final static QName _Short_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "short");
@@ -61,6 +61,70 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreatePerformerResponse }
+     * 
+     */
+    public CreatePerformerResponse createCreatePerformerResponse() {
+        return new CreatePerformerResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttributeResponse }
+     * 
+     */
+    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
+        return new SetSessionAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link AssignSessionToGroupResponse }
+     * 
+     */
+    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
+        return new AssignSessionToGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSegmentAttribute }
+     * 
+     */
+    public SetSegmentAttribute createSetSegmentAttribute() {
+        return new SetSegmentAttribute();
+    }
+
+    /**
+     * Create an instance of {@link DefineTrialSegment }
+     * 
+     */
+    public DefineTrialSegment createDefineTrialSegment() {
+        return new DefineTrialSegment();
+    }
+
+    /**
+     * Create an instance of {@link SetTrialAttribute }
+     * 
+     */
+    public SetTrialAttribute createSetTrialAttribute() {
+        return new SetTrialAttribute();
+    }
+
+    /**
+     * Create an instance of {@link SetTrialAttributeResponse }
+     * 
+     */
+    public SetTrialAttributeResponse createSetTrialAttributeResponse() {
+        return new SetTrialAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValueResponse }
+     * 
+     */
+    public ClearAttributeValueResponse createClearAttributeValueResponse() {
+        return new ClearAttributeValueResponse();
+    }
+
+    /**
      * Create an instance of {@link CreatePerformer }
      * 
      */
@@ -69,11 +133,91 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSessionResponse }
+     * Create an instance of {@link CreateTrialResponse }
      * 
      */
-    public CreateSessionResponse createCreateSessionResponse() {
-        return new CreateSessionResponse();
+    public CreateTrialResponse createCreateTrialResponse() {
+        return new CreateTrialResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSegmentAttributeResponse }
+     * 
+     */
+    public SetSegmentAttributeResponse createSetSegmentAttributeResponse() {
+        return new SetSegmentAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetPerformerAttribute }
+     * 
+     */
+    public SetPerformerAttribute createSetPerformerAttribute() {
+        return new SetPerformerAttribute();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfInt }
+     * 
+     */
+    public ArrayOfInt createArrayOfInt() {
+        return new ArrayOfInt();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttribute }
+     * 
+     */
+    public SetSessionAttribute createSetSessionAttribute() {
+        return new SetSessionAttribute();
+    }
+
+    /**
+     * Create an instance of {@link PerformerData }
+     * 
+     */
+    public PerformerData createPerformerData() {
+        return new PerformerData();
+    }
+
+    /**
+     * Create an instance of {@link SetFileAttribute }
+     * 
+     */
+    public SetFileAttribute createSetFileAttribute() {
+        return new SetFileAttribute();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValue }
+     * 
+     */
+    public ClearAttributeValue createClearAttributeValue() {
+        return new ClearAttributeValue();
+    }
+
+    /**
+     * Create an instance of {@link SetPerformerAttributeResponse }
+     * 
+     */
+    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
+        return new SetPerformerAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link UpdateException }
+     * 
+     */
+    public UpdateException createUpdateException() {
+        return new UpdateException();
+    }
+
+    /**
+     * Create an instance of {@link CreateTrial }
+     * 
+     */
+    public CreateTrial createCreateTrial() {
+        return new CreateTrial();
     }
 
     /**
@@ -101,102 +245,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PerformerData }
-     * 
-     */
-    public PerformerData createPerformerData() {
-        return new PerformerData();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfInt }
-     * 
-     */
-    public ArrayOfInt createArrayOfInt() {
-        return new ArrayOfInt();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttributeResponse }
-     * 
-     */
-    public SetTrialAttributeResponse createSetTrialAttributeResponse() {
-        return new SetTrialAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateTrial }
-     * 
-     */
-    public CreateTrial createCreateTrial() {
-        return new CreateTrial();
-    }
-
-    /**
-     * Create an instance of {@link DefineTrialSegment }
-     * 
-     */
-    public DefineTrialSegment createDefineTrialSegment() {
-        return new DefineTrialSegment();
-    }
-
-    /**
-     * Create an instance of {@link SetSegmentAttribute }
-     * 
-     */
-    public SetSegmentAttribute createSetSegmentAttribute() {
-        return new SetSegmentAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerAttribute }
-     * 
-     */
-    public SetPerformerAttribute createSetPerformerAttribute() {
-        return new SetPerformerAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetFileAttribute }
-     * 
-     */
-    public SetFileAttribute createSetFileAttribute() {
-        return new SetFileAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttribute }
-     * 
-     */
-    public SetTrialAttribute createSetTrialAttribute() {
-        return new SetTrialAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetSessionAttributeResponse }
-     * 
-     */
-    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
-        return new SetSessionAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link AssignSessionToGroupResponse }
-     * 
-     */
-    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
-        return new AssignSessionToGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link ClearAttributeValue }
-     * 
-     */
-    public ClearAttributeValue createClearAttributeValue() {
-        return new ClearAttributeValue();
-    }
-
-    /**
      * Create an instance of {@link CreateSession }
      * 
      */
@@ -205,59 +253,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetSessionAttribute }
+     * Create an instance of {@link CreateSessionResponse }
      * 
      */
-    public SetSessionAttribute createSetSessionAttribute() {
-        return new SetSessionAttribute();
-    }
-
-    /**
-     * Create an instance of {@link CreateTrialResponse }
-     * 
-     */
-    public CreateTrialResponse createCreateTrialResponse() {
-        return new CreateTrialResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreatePerformerResponse }
-     * 
-     */
-    public CreatePerformerResponse createCreatePerformerResponse() {
-        return new CreatePerformerResponse();
-    }
-
-    /**
-     * Create an instance of {@link SetSegmentAttributeResponse }
-     * 
-     */
-    public SetSegmentAttributeResponse createSetSegmentAttributeResponse() {
-        return new SetSegmentAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerAttributeResponse }
-     * 
-     */
-    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
-        return new SetPerformerAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link UpdateException }
-     * 
-     */
-    public UpdateException createUpdateException() {
-        return new UpdateException();
-    }
-
-    /**
-     * Create an instance of {@link ClearAttributeValueResponse }
-     * 
-     */
-    public ClearAttributeValueResponse createClearAttributeValueResponse() {
-        return new ClearAttributeValueResponse();
+    public CreateSessionResponse createCreateSessionResponse() {
+        return new CreateSessionResponse();
     }
 
     /**
@@ -342,21 +342,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BigDecimal }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "decimal")
-    public JAXBElement<BigDecimal> createDecimal(BigDecimal value) {
-        return new JAXBElement<BigDecimal>(_Decimal_QNAME, BigDecimal.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Float }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "float")
     public JAXBElement<Float> createFloat(Float value) {
         return new JAXBElement<Float>(_Float_QNAME, Float.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BigDecimal }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "decimal")
+    public JAXBElement<BigDecimal> createDecimal(BigDecimal value) {
+        return new JAXBElement<BigDecimal>(_Decimal_QNAME, BigDecimal.class, null, value);
     }
 
     /**

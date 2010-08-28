@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "BasicUpdatesWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", wsdlLocation = "http://db-bdr.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl")
+@WebServiceClient(name = "BasicUpdatesWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl")
 public class BasicUpdatesWS
     extends Service
 {
@@ -30,9 +30,9 @@ public class BasicUpdatesWS
         try {
             URL baseUrl;
             baseUrl = motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS.class.getResource(".");
-            url = new URL(baseUrl, "http://db-bdr.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl");
+            url = new URL(baseUrl, "http://dbpawell.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://db-bdr.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://dbpawell.pjwstk.edu.pl/Motion/BasicUpdatesWS.svc?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         BASICUPDATESWS_WSDL_LOCATION = url;
