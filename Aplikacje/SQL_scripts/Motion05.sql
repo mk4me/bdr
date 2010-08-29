@@ -131,8 +131,7 @@ CREATE TABLE Pomiar
 (
 	IdPomiar int IDENTITY,
 	IdObserwacja int NOT NULL,
-	IdKonfiguracja_pomiarowa int NOT NULL,
-	IdPlikPodglad int
+	IdKonfiguracja_pomiarowa int NOT NULL
 )
 go
 
@@ -169,9 +168,11 @@ go
 CREATE TABLE Wynik_pomiaru
 (
 	IdPomiar int NOT NULL,
-	IdPlik int NOT NULL
+	IdPlik int NOT NULL,
+	IdPlikPodglad int NULL
 )
 go
+
 
  ALTER TABLE Wynik_pomiaru
         ADD FOREIGN KEY (IdPomiar)

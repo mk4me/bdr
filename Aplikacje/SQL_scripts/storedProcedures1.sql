@@ -439,7 +439,27 @@ as
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
 go
+create procedure get_measurement_by_id_xml ( @res_id int )
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select 
+				IdPomiar as MeasurementID,
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Pomiar MeasurementDetailsWithAttributes where IdPomiar=@res_id
+			for XML AUTO, ELEMENTS
+go
 
+create procedure get_measurement_configuration_by_id_xml ( @res_id int )
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select 
+				IdKonfiguracja_pomiarowa as MeasurementConfID,
+				Nazwa as MeasurementConfName,
+				Opis as MeasurementConfDescription,
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Konfiguracja_pomiarowa MeasurementConfDetailsWithAttributes where IdKonfiguracja_pomiarowa=@res_id
+			for XML AUTO, ELEMENTS
+go
 
 -- Performer listing queries
 -- =========================
@@ -477,6 +497,20 @@ select
 	where exists(
 	select * from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja join Sesja s  on o.IdSesja = s.IdSesja 
 	where s.IdLaboratorium = @lab_id and pp.IdPerformer = PerformerDetailsWithAttributes.IdPerformer)
+    for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
+go
+
+create procedure list_measurement_performers_attributes_xml (@meas_id int)
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select
+	IdPerformer as PerformerID,
+	Imie as FirstName,
+	Nazwisko as LastName,
+	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Performer PerformerDetailsWithAttributes
+	where exists(
+	select * from Pomiar_performer pp where pp.IdPomiar = @meas_id and PerformerDetailsWithAttributes.IdPerformer = pp.IdPerformer)
     for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
 go
 
@@ -531,6 +565,23 @@ as
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
 go
 
+create procedure list_group_sessions_attributes_xml (@user_login varchar(30), @group_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		IdRodzaj_ruchu as MotionKindID,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes 
+		where exists ( select * from Sesja_grupa_sesji sgs where sgs.IdGrupa_sesji = @group_id and sgs.IdSesja = SessionDetailsWithAttributes.IdSesja)
+      for XML AUTO, ELEMENTS, root ('GroupSessionWithAttributesList')
+go
+
 -- Trial listing queries
 -- =====================
 
@@ -562,7 +613,7 @@ go
 -- Measurement configuration listing queries
 -- =========================================
 
-create procedure list_measurement_configurations_xml(@user_login varchar(30) )
+create procedure list_measurement_configurations_xml(@user_login varchar(30) ) -- UNUSED?
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
@@ -589,7 +640,7 @@ go
 -- Measurement listing queries
 -- ===========================
 
-create procedure list_trial_measurements_xml(@user_login varchar(30), @trial_id int )
+create procedure list_trial_measurements_xml(@user_login varchar(30), @trial_id int ) -- UNUSED CURRENTLY
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
@@ -598,7 +649,7 @@ select
 	IdObserwacja TrialID
 from Pomiar MeasurementDetails
 where IdObserwacja = @trial_id
-      for XML AUTO, root ('MeasurementList')
+      for XML AUTO, root ('TrialMeasurementList')
 go
 
 create procedure list_trial_measurements_attributes_xml(@user_login varchar(30), @trial_id int )
@@ -611,8 +662,25 @@ select
 	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Pomiar MeasurementDetailsWithAttributes
 where IdPomiar = @trial_id
-    for XML AUTO, ELEMENTS, root ('MeasurementListWithAttributesList')
+    for XML AUTO, ELEMENTS, root ('TrialMeasurementWithAttributesList')
 go
+
+-- Measurement result listing queries
+-- ==================================
+
+create procedure list_measurement_results_attributes_xml(@user_login varchar(30), @meas_id int )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select 
+	IdPomiar MeasurementID,
+	IdKonfiguracja_pomiarowa MeasurementConfID,
+	IdObserwacja TrialID,
+	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Pomiar MeasurementDetailsWithAttributes
+where IdPomiar = @trial_id
+    for XML AUTO, ELEMENTS, root ('MeasureResultWithAttributesList')
+go
+
 
 
 
@@ -639,97 +707,99 @@ go
 
 -- UWAGA! W przyszlosci moze byc potrzebna takze list_file_attributes_uniform .
 
-create procedure list_performer_files_xml(@user_login varchar(30),  @perf_id int)
+-- POPRAWIÆ PONI¯SZE! ATRYBUTY I NAZWA ELEMENTU!
+
+create procedure list_measurement_result_files_attributes_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName"
-	from Plik p join Wartosc_atrybutu_performera wap on p.IdPlik = wap.Wartosc_Id join Atrybut a on a.IdAtrybut = wap.IdAtrybut where wap.IdPerformer=@perf_id
-	for XML PATH(''), root ('FileList')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath"
+	from Plik p join Wynik_pomiaru wp on p.IdPlik = wp.IdPlik where wp.IdPlik=@meas_id
+	for XML PATH('ResultFileDetailsWithAttributes'), root ('MeasurementResultFileWithAttributesList')
 go
 
 create procedure list_session_files_xml(@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName"
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
 	from Plik p join Wartosc_atrybutu_sesji was on p.IdPlik = was.Wartosc_Id join Atrybut a on a.IdAtrybut = was.IdAtrybut where was.IdSesja=@sess_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetails'), root ('FileList')
 go
 
 create procedure list_trial_files_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName"
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
 	from Plik p join Wartosc_atrybutu_obserwacji wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
 	where 
 	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
 	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdObserwacja=@trial_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetails'), root ('FileList')
 go
 
 create procedure list_measurement_conf_files_xml(@user_login varchar(30),  @mc_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName"
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
 	from Plik p join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut where wakp.IdKonfiguracja_pomiarowa=@mc_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetails'), root ('FileList')
 go
 
 create procedure list_measurement_files_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName"
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
 	from Plik p join Wartosc_atrybutu_pomiaru wap on p.IdPlik = wap.Wartosc_Id join Atrybut a on a.IdAtrybut = wap.IdAtrybut 
 	where wap.IdPomiar = @meas_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetails'), root ('FileList')
 go
 
 create procedure list_performer_files_attributes_xml(@user_login varchar(30),  @perf_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName",
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_performera wap on p.IdPlik = wap.Wartosc_Id join Atrybut a on a.IdAtrybut = wap.IdAtrybut where wap.IdPerformer=@perf_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
 create procedure list_session_files_attributes_xml(@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName",
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_sesji was on p.IdPlik = was.Wartosc_Id join Atrybut a on a.IdAtrybut = was.IdAtrybut where was.IdSesja=@sess_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
 create procedure list_trial_files_attributes_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName",
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_obserwacji wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
 	where 
 	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
 	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdObserwacja=@trial_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
 create procedure list_measurement_conf_files_attributes_xml(@user_login varchar(30),  @mc_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName",
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut where wakp.IdKonfiguracja_pomiarowa=@mc_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
 create procedure list_measurement_files_attributes_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "FileID", p.Nazwa_pliku "FileName", p.Opis_pliku "FileDescription", p.Sciezka "SubdirPath", a.Nazwa "AttributeName",
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_pomiaru wap on p.IdPlik = wap.Wartosc_Id join Atrybut a on a.IdAtrybut = wap.IdAtrybut 
 	where wap.IdPomiar = @meas_id
-	for XML PATH(''), root ('FileList')
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
 
