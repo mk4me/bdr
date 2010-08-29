@@ -38,6 +38,14 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
+        XmlElement GetMeasurementByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetMeasurementConfigurationByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
         XmlElement ListPerformersXML();
 
         [OperationContract]
@@ -50,7 +58,15 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
+        XmlElement ListMeasurementPerformersWithAttributesXML(int measurementID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
         XmlElement ListPerformerSessionsXML(int performerID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListGroupSessionsWithAttributesXML(int sessionGroupID);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
@@ -68,14 +84,31 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement ListSessionTrialsWithAttributesXML(int sessionID);
 
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListTrialMeasurementsWithAttributesXML(int trialID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListMeasurementConfigurationsWithAttributesXML();
+
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListFileAttributeDataXML(int subjectID, string subjectType);
+        
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListMeasurementResultFilesWithAttributesXML(int measurementID);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectType);
-
+/* ODLOZONE
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetAttributeFileDataXML(int resourceID, string entity, string attributeName);
+        */
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListAttributesDefined(string attributeGroupName, string entityKind);

@@ -142,6 +142,14 @@
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\ListMeasurementConfigurationsWithAttributesXML.xsd" />
+    <None Include="res\ListGroupSessionsWithAttributesXML.xsd" />
+    <None Include="res\ListMeasurementPerformersWithAttributesXML.xsd" />
+    <None Include="res\ListMeasurementResultFilesWithAttributesXML.xsd" />
+    <None Include="res\MeasurementConfDetailsWithAttributesElement.xsd" />
+    <None Include="res\GetMeasurementConfByIdXML.xsd" />
+    <None Include="res\MeasurementDetailsWithAttributesElement.xsd" />
+    <None Include="res\GetMeasurementByIdXML.xsd" />
     <None Include="res\ListUserBaskets.xsd" />
     <None Include="res\ListStoredFilters.xsd" />
     <None Include="res\UserPersonalSpaceWSStandalone.wsdl" />
@@ -160,9 +168,7 @@
     <None Include="res\ListAttributesDefined.xsd" />
     <None Include="res\ListBasketTrialsWithAttributesXML.xsd" />
     <None Include="res\ListEnumValues.xsd" />
-    <None Include="res\ListFileAttributeDataWithAttributesXML.xsd" />
     <None Include="res\ListFileAttributeDataXML.xsd" />
-    <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
     <None Include="res\ListLabSessionsWithAttributesXML.xsd" />
     <None Include="res\ListMotionKindsDefined.xsd" />
     <None Include="res\ListPerformerFilesWithAttributesXML.xsd" />
@@ -178,7 +184,6 @@
     <None Include="res\ListSessionTrialsXML.xsd" />
     <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
     <None Include="res\ListTrialFilesXML.xsd" />
-    <None Include="res\ListTrialSegmentsXML.xsd" />
     <None Include="res\ListUsers.xsd" />
     <None Include="res\PerformerDetailsWithAttributesElement.xsd" />
     <None Include="res\SegmentDetailsWithAttributesElement.xsd" />

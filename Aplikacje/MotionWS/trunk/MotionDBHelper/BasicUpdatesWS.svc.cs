@@ -56,7 +56,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateSession(int labID, string motionKindName, int performerID, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
+        public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -104,8 +104,8 @@ namespace MotionDBWebServices
 //    END CATCH;";
 
 
-                cmd.CommandText = @"BEGIN TRY insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
-                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
+                cmd.CommandText = @"BEGIN TRY insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
+                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_date, @sess_desc )
                                             set @sess_id = SCOPE_IDENTITY()     END TRY
 BEGIN CATCH
     insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat )
@@ -114,7 +114,6 @@ END CATCH;";
                 cmd.Parameters.Add("@sess_user", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
                 cmd.Parameters.Add("@motion_kind_name", SqlDbType.VarChar, 50);
-                cmd.Parameters.Add("@sess_perf", SqlDbType.Int);
                 cmd.Parameters.Add("@sess_date", SqlDbType.DateTime);
                 cmd.Parameters.Add("@sess_desc", SqlDbType.VarChar, 100);
 
@@ -126,7 +125,6 @@ END CATCH;";
                 cmd.Parameters["@sess_user"].Value = userName;
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@motion_kind_name"].Value = motionKindName;
-                cmd.Parameters["@sess_perf"].Value = performerID;
                 cmd.Parameters["@sess_date"].Value = sessionDate;
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
                 cmd.Prepare();
@@ -189,46 +187,6 @@ END CATCH;";
             }
 
             return newTrialId;
-
-        }
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int DefineTrialSegment(int trialID, string segmentName, int startTime, int endTime)
-        {
-            int newSegmentId = 0;
-            try
-            {
-                OpenConnection();
-                cmd.CommandText = @"insert into Segment ( IdObserwacja, Nazwa, Czas_poczatku, Czas_konca)
-                                    values (@segment_trial, @segment_name, @start_time, @end_time )
-                                            set @segment_id = SCOPE_IDENTITY()";
-                cmd.Parameters.Add("@segment_trial", SqlDbType.Int);
-                cmd.Parameters.Add("@segment_name", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@start_time", SqlDbType.Int);
-                cmd.Parameters.Add("@end_time", SqlDbType.Int);
-                SqlParameter segmentIdParameter =
-                    new SqlParameter("@segment_id", SqlDbType.Int);
-                segmentIdParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(segmentIdParameter);
-                cmd.Parameters["@segment_trial"].Value = trialID;
-                cmd.Parameters["@segment_name"].Value = segmentName;
-                cmd.Parameters["@start_time"].Value = startTime;
-                cmd.Parameters["@end_time"].Value = endTime;
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-                newSegmentId = (int)segmentIdParameter.Value;
-            }
-            catch (SqlException ex)
-            {
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("DefineTrialSegment")));
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return newSegmentId;
 
         }
 
@@ -484,76 +442,6 @@ END CATCH;";
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 3:
                         exc = new UpdateException("Invalid resource ID", "the " + resName + " of ID " + trialID + "not found");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 5:
-                        exc = new UpdateException("Value already exists", "value of attribute " + attributeName + " for this " + resName + " already exists, while you called this operation in no overwrite mode");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 6:
-                        exc = new UpdateException("Invalid numeric value", "the value " + attributeValue + " provided is not valid for this numeric-type attribute " + attributeName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-
-                    default:
-                        exc = new UpdateException("Unknown error", "unknown error occured");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-
-                }
-            }
-
-        }
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void SetSegmentAttribute(int segmentID, string attributeName, string attributeValue, bool update)
-        {
-            int resultCode = 0;
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "set_segment_attribute";
-                cmd.Parameters.Add("@segment_id", SqlDbType.Int);
-                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@update", SqlDbType.Bit);
-                SqlParameter resultCodeParameter =
-                    new SqlParameter("@result", SqlDbType.Int);
-                resultCodeParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(resultCodeParameter);
-
-                cmd.Parameters["@segment_id"].Value = segmentID;
-                cmd.Parameters["@attr_name"].Value = attributeName;
-                cmd.Parameters["@attr_value"].Value = attributeValue;
-                cmd.Parameters["@update"].Value = update ? 1 : 0;
-
-                cmd.ExecuteNonQuery();
-                resultCode = (int)resultCodeParameter.Value;
-
-            }
-            catch (SqlException ex)
-            {
-                // log the exception
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            if (resultCode != 0)
-            {
-                UpdateException exc;
-                string resName = "segment";
-
-                switch (resultCode)
-                {
-                    case 1:
-                        exc = new UpdateException("Invalid attribute", "Attribute of name " + attributeName + " is not applicable to " + resName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 2:
-                        exc = new UpdateException("Invalid enum value", "the value " + attributeValue + " is not valid for the enum-type attribute " + attributeName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 3:
-                        exc = new UpdateException("Invalid resource ID", "the " + resName + " of ID " + segmentID + "not found");
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 5:
                         exc = new UpdateException("Value already exists", "value of attribute " + attributeName + " for this " + resName + " already exists, while you called this operation in no overwrite mode");
