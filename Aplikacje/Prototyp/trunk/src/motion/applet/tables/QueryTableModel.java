@@ -105,4 +105,10 @@ public class QueryTableModel extends BasicTableModel {
 		};
 		worker.execute();
 	}
+	
+	public void refresh() {
+		super.refresh();
+		getTableContents();
+		fireTableStructureChanged();
+	}
 }

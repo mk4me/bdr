@@ -108,4 +108,11 @@ public class BasicTableModel extends AbstractTableModel {
 		}
 		this.fireTableDataChanged();
 	}
+	
+	public void refresh() {
+		contents.clear();
+		attributeNames.clear();
+		classes.clear();
+		recordIds.clear();
+	}
 }

@@ -69,4 +69,10 @@ public class BasketTableModel extends BasicTableModel {
 		};
 		worker.execute();
 	}
+	
+	public void refresh() {
+		super.refresh();
+		getTableContentsFromRecords();
+		fireTableStructureChanged();
+	}
 }

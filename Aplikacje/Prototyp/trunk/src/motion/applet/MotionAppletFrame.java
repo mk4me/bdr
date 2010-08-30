@@ -162,7 +162,8 @@ public class MotionAppletFrame extends JFrame {
 		viewMenu.add(viewRefreshItem);
 		viewRefreshItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.refreshAllTables();
+				//rightPanel.refreshAllTables();
+				MotionAppletFrame.getCurrentTable().refresh();
 			}
 		});
 		

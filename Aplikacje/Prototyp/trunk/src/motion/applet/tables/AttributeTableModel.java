@@ -114,4 +114,10 @@ public class AttributeTableModel extends BasicTableModel {
 		};
 		worker.execute();
 	}
+	
+	public void refresh() {
+		super.refresh();
+		getTableContents();
+		fireTableStructureChanged();
+	}
 }
