@@ -21,11 +21,23 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
+        int CreateMeasurementConfiguration(string mcName, string mcDescription);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
         int CreateTrial(int sessionID, string trialDescription, int trialDuration);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
+        int CreateMeasurement(int trialID, int mcID);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
         bool AssignSessionToGroup(int sessionID, int groupID);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        bool AddPerformerToMeasurement(int performerID, int measurementID);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
@@ -38,6 +50,14 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
         void SetTrialAttribute(int trialID, string attributeName, string attributeValue, bool update);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        void SetMeasurementAttribute(int measurementID, string attributeName, string attributeValue, bool update);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        void SetMeasurementConfAttribute(int measurementConfID, string attributeName, string attributeValue, bool update);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]

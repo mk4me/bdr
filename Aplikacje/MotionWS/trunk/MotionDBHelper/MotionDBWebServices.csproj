@@ -147,7 +147,7 @@
     <None Include="res\ListMeasurementPerformersWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementResultFilesWithAttributesXML.xsd" />
     <None Include="res\MeasurementConfDetailsWithAttributesElement.xsd" />
-    <None Include="res\GetMeasurementConfByIdXML.xsd" />
+    <None Include="res\GetMeasurementConfigurationByIdXML.xsd" />
     <None Include="res\MeasurementDetailsWithAttributesElement.xsd" />
     <None Include="res\GetMeasurementByIdXML.xsd" />
     <None Include="res\ListUserBaskets.xsd" />

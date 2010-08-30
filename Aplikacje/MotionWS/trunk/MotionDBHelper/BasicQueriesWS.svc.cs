@@ -827,7 +827,7 @@ namespace MotionDBWebServices
 
         // FILE QUERIES
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListFileAttributeDataXML(int subjectID, string subjectType)
+        public XmlElement ListFileAttributeDataXML(int subjectID, string subjectEntity)
         {
             XmlDocument xd = new XmlDocument();
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -838,7 +838,7 @@ namespace MotionDBWebServices
 
             SqlParameter usernamePar;
 
-            switch (subjectType)
+            switch (subjectEntity)
             {
                 case "performer":
                     operationName = "list_performer_files_xml";

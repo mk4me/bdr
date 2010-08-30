@@ -103,7 +103,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectType);
+        XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectEntity);
 /* ODLOZONE
         [OperationContract]
         [FaultContract(typeof(QueryException))]
