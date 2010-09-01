@@ -28,6 +28,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _AuthorizationExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", "IssueKind");
+    private final static QName _AuthorizationExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", "Details");
     private final static QName _AnyURI_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "anyURI");
     private final static QName _Char_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "char");
     private final static QName _UnsignedByte_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedByte");
@@ -50,166 +52,12 @@ public class ObjectFactory {
     private final static QName _String_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "string");
     private final static QName _UnsignedLong_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedLong");
     private final static QName _Boolean_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "boolean");
-    private final static QName _AuthorizationExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", "IssueKind");
-    private final static QName _AuthorizationExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", "Details");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.database.ws.authorizationWCF
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link UserList }
-     * 
-     */
-    public UserList createUserList() {
-        return new UserList();
-    }
-
-    /**
-     * Create an instance of {@link ListUsersResponse }
-     * 
-     */
-    public ListUsersResponse createListUsersResponse() {
-        return new ListUsersResponse();
-    }
-
-    /**
-     * Create an instance of {@link SessionPrivilegeList.SessionPrivilege }
-     * 
-     */
-    public SessionPrivilegeList.SessionPrivilege createSessionPrivilegeListSessionPrivilege() {
-        return new SessionPrivilegeList.SessionPrivilege();
-    }
-
-    /**
-     * Create an instance of {@link CheckUserAccount }
-     * 
-     */
-    public CheckUserAccount createCheckUserAccount() {
-        return new CheckUserAccount();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionPrivilegesResponse }
-     * 
-     */
-    public ListSessionPrivilegesResponse createListSessionPrivilegesResponse() {
-        return new ListSessionPrivilegesResponse();
-    }
-
-    /**
-     * Create an instance of {@link GrantSessionPrivilegesResponse }
-     * 
-     */
-    public GrantSessionPrivilegesResponse createGrantSessionPrivilegesResponse() {
-        return new GrantSessionPrivilegesResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateUserAccount }
-     * 
-     */
-    public CreateUserAccount createCreateUserAccount() {
-        return new CreateUserAccount();
-    }
-
-    /**
-     * Create an instance of {@link ListUsers }
-     * 
-     */
-    public ListUsers createListUsers() {
-        return new ListUsers();
-    }
-
-    /**
-     * Create an instance of {@link UserList.UserDetails }
-     * 
-     */
-    public UserList.UserDetails createUserListUserDetails() {
-        return new UserList.UserDetails();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionPrivilegesResponse.ListSessionPrivilegesResult }
-     * 
-     */
-    public ListSessionPrivilegesResponse.ListSessionPrivilegesResult createListSessionPrivilegesResponseListSessionPrivilegesResult() {
-        return new ListSessionPrivilegesResponse.ListSessionPrivilegesResult();
-    }
-
-    /**
-     * Create an instance of {@link AlterSessionVisibilityResponse }
-     * 
-     */
-    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
-        return new AlterSessionVisibilityResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateUserAccountResponse }
-     * 
-     */
-    public CreateUserAccountResponse createCreateUserAccountResponse() {
-        return new CreateUserAccountResponse();
-    }
-
-    /**
-     * Create an instance of {@link RemoveSessionPrivilegesResponse }
-     * 
-     */
-    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
-        return new RemoveSessionPrivilegesResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionPrivileges }
-     * 
-     */
-    public ListSessionPrivileges createListSessionPrivileges() {
-        return new ListSessionPrivileges();
-    }
-
-    /**
-     * Create an instance of {@link ListUsersResponse.ListUsersResult }
-     * 
-     */
-    public ListUsersResponse.ListUsersResult createListUsersResponseListUsersResult() {
-        return new ListUsersResponse.ListUsersResult();
-    }
-
-    /**
-     * Create an instance of {@link AlterSessionVisibility }
-     * 
-     */
-    public AlterSessionVisibility createAlterSessionVisibility() {
-        return new AlterSessionVisibility();
-    }
-
-    /**
-     * Create an instance of {@link GrantSessionPrivileges }
-     * 
-     */
-    public GrantSessionPrivileges createGrantSessionPrivileges() {
-        return new GrantSessionPrivileges();
-    }
-
-    /**
-     * Create an instance of {@link SessionPrivilegeList }
-     * 
-     */
-    public SessionPrivilegeList createSessionPrivilegeList() {
-        return new SessionPrivilegeList();
-    }
-
-    /**
-     * Create an instance of {@link CheckUserAccountResponse }
-     * 
-     */
-    public CheckUserAccountResponse createCheckUserAccountResponse() {
-        return new CheckUserAccountResponse();
     }
 
     /**
@@ -226,6 +74,176 @@ public class ObjectFactory {
      */
     public AuthorizationException createAuthorizationException() {
         return new AuthorizationException();
+    }
+
+    /**
+     * Create an instance of {@link UserList.UserDetails }
+     * 
+     */
+    public UserList.UserDetails createUserListUserDetails() {
+        return new UserList.UserDetails();
+    }
+
+    /**
+     * Create an instance of {@link GrantSessionPrivileges }
+     * 
+     */
+    public GrantSessionPrivileges createGrantSessionPrivileges() {
+        return new GrantSessionPrivileges();
+    }
+
+    /**
+     * Create an instance of {@link ListUsersResponse.ListUsersResult }
+     * 
+     */
+    public ListUsersResponse.ListUsersResult createListUsersResponseListUsersResult() {
+        return new ListUsersResponse.ListUsersResult();
+    }
+
+    /**
+     * Create an instance of {@link SessionPrivilegeList }
+     * 
+     */
+    public SessionPrivilegeList createSessionPrivilegeList() {
+        return new SessionPrivilegeList();
+    }
+
+    /**
+     * Create an instance of {@link CheckUserAccount }
+     * 
+     */
+    public CheckUserAccount createCheckUserAccount() {
+        return new CheckUserAccount();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionPrivilegesResponse.ListSessionPrivilegesResult }
+     * 
+     */
+    public ListSessionPrivilegesResponse.ListSessionPrivilegesResult createListSessionPrivilegesResponseListSessionPrivilegesResult() {
+        return new ListSessionPrivilegesResponse.ListSessionPrivilegesResult();
+    }
+
+    /**
+     * Create an instance of {@link CheckUserAccountResponse }
+     * 
+     */
+    public CheckUserAccountResponse createCheckUserAccountResponse() {
+        return new CheckUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserAccount }
+     * 
+     */
+    public CreateUserAccount createCreateUserAccount() {
+        return new CreateUserAccount();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibility }
+     * 
+     */
+    public AlterSessionVisibility createAlterSessionVisibility() {
+        return new AlterSessionVisibility();
+    }
+
+    /**
+     * Create an instance of {@link ListUsersResponse }
+     * 
+     */
+    public ListUsersResponse createListUsersResponse() {
+        return new ListUsersResponse();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibilityResponse }
+     * 
+     */
+    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
+        return new AlterSessionVisibilityResponse();
+    }
+
+    /**
+     * Create an instance of {@link GrantSessionPrivilegesResponse }
+     * 
+     */
+    public GrantSessionPrivilegesResponse createGrantSessionPrivilegesResponse() {
+        return new GrantSessionPrivilegesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionPrivilegesResponse }
+     * 
+     */
+    public ListSessionPrivilegesResponse createListSessionPrivilegesResponse() {
+        return new ListSessionPrivilegesResponse();
+    }
+
+    /**
+     * Create an instance of {@link SessionPrivilegeList.SessionPrivilege }
+     * 
+     */
+    public SessionPrivilegeList.SessionPrivilege createSessionPrivilegeListSessionPrivilege() {
+        return new SessionPrivilegeList.SessionPrivilege();
+    }
+
+    /**
+     * Create an instance of {@link RemoveSessionPrivilegesResponse }
+     * 
+     */
+    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
+        return new RemoveSessionPrivilegesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListUsers }
+     * 
+     */
+    public ListUsers createListUsers() {
+        return new ListUsers();
+    }
+
+    /**
+     * Create an instance of {@link UserList }
+     * 
+     */
+    public UserList createUserList() {
+        return new UserList();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserAccountResponse }
+     * 
+     */
+    public CreateUserAccountResponse createCreateUserAccountResponse() {
+        return new CreateUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionPrivileges }
+     * 
+     */
+    public ListSessionPrivileges createListSessionPrivileges() {
+        return new ListSessionPrivileges();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", name = "IssueKind", scope = AuthorizationException.class)
+    public JAXBElement<String> createAuthorizationExceptionIssueKind(String value) {
+        return new JAXBElement<String>(_AuthorizationExceptionIssueKind_QNAME, String.class, AuthorizationException.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", name = "Details", scope = AuthorizationException.class)
+    public JAXBElement<String> createAuthorizationExceptionDetails(String value) {
+        return new JAXBElement<String>(_AuthorizationExceptionDetails_QNAME, String.class, AuthorizationException.class, value);
     }
 
     /**
@@ -424,24 +442,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "boolean")
     public JAXBElement<Boolean> createBoolean(Boolean value) {
         return new JAXBElement<Boolean>(_Boolean_QNAME, Boolean.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", name = "IssueKind", scope = AuthorizationException.class)
-    public JAXBElement<String> createAuthorizationExceptionIssueKind(String value) {
-        return new JAXBElement<String>(_AuthorizationExceptionIssueKind_QNAME, String.class, AuthorizationException.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", name = "Details", scope = AuthorizationException.class)
-    public JAXBElement<String> createAuthorizationExceptionDetails(String value) {
-        return new JAXBElement<String>(_AuthorizationExceptionDetails_QNAME, String.class, AuthorizationException.class, value);
     }
 
 }

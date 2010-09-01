@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import motion.database.ws.DatabaseConnectionWCF;
+import motion.database.ws.DatabaseConnection2;
 
 
 public class DatabaseConnection {
@@ -76,7 +76,7 @@ public class DatabaseConnection {
 	public static DatabaseProxy getInstanceWCF()
 	{
 		if (instance==null)
-			instance = new DatabaseConnectionWCF(log);
+			instance = new DatabaseConnection2(log);
 		return instance;
 	}
 	

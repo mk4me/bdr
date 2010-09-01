@@ -39,10 +39,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                   &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *                   &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *                   &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                   &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *                   &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                   &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                   &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                   &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *                   &lt;element name="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
@@ -119,10 +119,10 @@ public class GenericQueryResult {
      *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
-     *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
-     *         &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
-     *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+     *         &lt;element name="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -146,10 +146,10 @@ public class GenericQueryResult {
         "trialID",
         "trialDescription",
         "duration",
-        "segmentID",
-        "segmentName",
-        "startTime",
-        "endTime",
+        "measurementID",
+        "measurementConfID",
+        "measurementConfName",
+        "measurementConfDescription",
         "attributes"
     })
     public static class GenericResultRow {
@@ -179,14 +179,14 @@ public class GenericQueryResult {
         protected String trialDescription;
         @XmlElement(name = "Duration")
         protected Integer duration;
-        @XmlElement(name = "SegmentID")
-        protected Integer segmentID;
-        @XmlElement(name = "SegmentName")
-        protected String segmentName;
-        @XmlElement(name = "StartTime")
-        protected Integer startTime;
-        @XmlElement(name = "EndTime")
-        protected Integer endTime;
+        @XmlElement(name = "MeasurementID")
+        protected Integer measurementID;
+        @XmlElement(name = "MeasurementConfID")
+        protected Integer measurementConfID;
+        @XmlElement(name = "MeasurementConfName")
+        protected String measurementConfName;
+        @XmlElement(name = "MeasurementConfDescription")
+        protected String measurementConfDescription;
         @XmlElement(name = "Attributes")
         protected Attributes attributes;
 
@@ -479,99 +479,99 @@ public class GenericQueryResult {
         }
 
         /**
-         * Gets the value of the segmentID property.
+         * Gets the value of the measurementID property.
          * 
          * @return
          *     possible object is
          *     {@link Integer }
          *     
          */
-        public Integer getSegmentID() {
-            return segmentID;
+        public Integer getMeasurementID() {
+            return measurementID;
         }
 
         /**
-         * Sets the value of the segmentID property.
+         * Sets the value of the measurementID property.
          * 
          * @param value
          *     allowed object is
          *     {@link Integer }
          *     
          */
-        public void setSegmentID(Integer value) {
-            this.segmentID = value;
+        public void setMeasurementID(Integer value) {
+            this.measurementID = value;
         }
 
         /**
-         * Gets the value of the segmentName property.
+         * Gets the value of the measurementConfID property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Integer }
+         *     
+         */
+        public Integer getMeasurementConfID() {
+            return measurementConfID;
+        }
+
+        /**
+         * Sets the value of the measurementConfID property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Integer }
+         *     
+         */
+        public void setMeasurementConfID(Integer value) {
+            this.measurementConfID = value;
+        }
+
+        /**
+         * Gets the value of the measurementConfName property.
          * 
          * @return
          *     possible object is
          *     {@link String }
          *     
          */
-        public String getSegmentName() {
-            return segmentName;
+        public String getMeasurementConfName() {
+            return measurementConfName;
         }
 
         /**
-         * Sets the value of the segmentName property.
+         * Sets the value of the measurementConfName property.
          * 
          * @param value
          *     allowed object is
          *     {@link String }
          *     
          */
-        public void setSegmentName(String value) {
-            this.segmentName = value;
+        public void setMeasurementConfName(String value) {
+            this.measurementConfName = value;
         }
 
         /**
-         * Gets the value of the startTime property.
+         * Gets the value of the measurementConfDescription property.
          * 
          * @return
          *     possible object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public Integer getStartTime() {
-            return startTime;
+        public String getMeasurementConfDescription() {
+            return measurementConfDescription;
         }
 
         /**
-         * Sets the value of the startTime property.
+         * Sets the value of the measurementConfDescription property.
          * 
          * @param value
          *     allowed object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public void setStartTime(Integer value) {
-            this.startTime = value;
-        }
-
-        /**
-         * Gets the value of the endTime property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
-         */
-        public Integer getEndTime() {
-            return endTime;
-        }
-
-        /**
-         * Sets the value of the endTime property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setEndTime(Integer value) {
-            this.endTime = value;
+        public void setMeasurementConfDescription(String value) {
+            this.measurementConfDescription = value;
         }
 
         /**

@@ -31,7 +31,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                 &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
- *                 &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
  *                 &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -100,7 +99,6 @@ public class PerformerSessionList {
      *       &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
-     *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
      *       &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -123,8 +121,6 @@ public class PerformerSessionList {
         protected Integer labID;
         @XmlAttribute(name = "MotionKindID")
         protected Integer motionKindID;
-        @XmlAttribute(name = "PerformerID")
-        protected Integer performerID;
         @XmlAttribute(name = "SessionDate")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar sessionDate;
@@ -227,30 +223,6 @@ public class PerformerSessionList {
          */
         public void setMotionKindID(Integer value) {
             this.motionKindID = value;
-        }
-
-        /**
-         * Gets the value of the performerID property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
-         */
-        public Integer getPerformerID() {
-            return performerID;
-        }
-
-        /**
-         * Sets the value of the performerID property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setPerformerID(Integer value) {
-            this.performerID = value;
         }
 
         /**

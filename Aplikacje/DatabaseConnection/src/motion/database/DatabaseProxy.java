@@ -12,9 +12,10 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericResult;
+import motion.database.model.Measurement;
+import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
-import motion.database.model.Segment;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
@@ -54,27 +55,6 @@ public interface DatabaseProxy {
 
 	public abstract void cancelCurrentFileTransfer();
 
-	public abstract void uploadSessionFile(int sessionId, String description,
-			String localFilePath, FileTransferListener listener)
-			throws Exception;
-
-	public abstract void uploadTrialFile(int trialId, String description,
-			String localFilePath, FileTransferListener listener)
-			throws Exception;
-
-	public abstract void uploadPerformerFile(int performerId,
-			String description, String localFilePath,
-			FileTransferListener listener) throws Exception;
-
-	public abstract void uploadSessionFiles(int sessionId, String filesPath,
-			String description, FileTransferListener listener) throws Exception;
-
-	public abstract void uploadPerformerFiles(int performerId,
-			String filesPath, String description, FileTransferListener listener) throws Exception;
-
-	public abstract void uploadTrialFiles(int trialId, String filesPath,
-			String description, FileTransferListener listener) throws Exception;
-
 	public abstract List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates,
 			String[] p_entitiesToInclude) throws Exception;
 
@@ -112,7 +92,7 @@ public interface DatabaseProxy {
 
 	public abstract Trial getTrialById(int id) throws Exception;
 
-	public abstract Segment getSegmentById(int id) throws Exception;
+//	public abstract Segment getSegmentById(int id) throws Exception;
 
 	public abstract DbElementsList<Session> listPerformerSessionsWithAttributes(
 			int performerID) throws Exception;
@@ -126,15 +106,12 @@ public interface DatabaseProxy {
 	public abstract int createPerformer(String name, String surname)
 			throws Exception;
 
-	public abstract int createSession(int performerID, int[] sessionGroupID,
+	public abstract int createSession(int[] sessionGroupID,
 			String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName)
 			throws Exception;
 
 	public abstract int createTrial(int sessionID, String trialDescription,
 			int trialDuration) throws Exception;
-
-	public abstract int defineTrialSegment(int trialID, String segmentName,
-			int startTime, int endTime) throws Exception;
 
 	/**
 	 * This is a new method for setting generic attribute value of any entity which supports generic values.
@@ -175,25 +152,20 @@ public interface DatabaseProxy {
 			throws Exception;
 
 	@Deprecated
-	public abstract void setSegmentAttribute(int segmentID,
-			String attributeName, String attributeValue, boolean update)
-			throws Exception;
-
-	@Deprecated
 	public abstract void setFileAttribute(int fileID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 	
-	public abstract DbElementsList<Segment> listTrialSegmentsWithAttributes(
-			int trialID) throws Exception;
+//	public abstract DbElementsList<Segment> listTrialSegmentsWithAttributes(
+//			int trialID) throws Exception;
 
-	public abstract DbElementsList<DatabaseFile> listSessionFiles(int sessionID)
-			throws Exception;
+//	public abstract DbElementsList<DatabaseFile> listSessionFiles(int sessionID)
+//			throws Exception;
 
-	public abstract DbElementsList<DatabaseFile> listTrialFiles(int trialID)
-			throws Exception;
+//	public abstract DbElementsList<DatabaseFile> listTrialFiles(int trialID)
+//			throws Exception;
 
-	public abstract DbElementsList<DatabaseFile> listPerformerFiles(
-			int performerID) throws Exception;
+//	public abstract DbElementsList<DatabaseFile> listPerformerFiles(
+//			int performerID) throws Exception;
 
 	public abstract String downloadFile(int fileID, String destLocalFolder,
 			FileTransferListener transferListener, boolean recreateFolder) throws Exception;
@@ -216,10 +188,22 @@ public interface DatabaseProxy {
 
 	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception;
 	
-	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception;
+//	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception;
 
 	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception;
 
 	public DbElementsList<UserBasket>  listUserBaskets() throws Exception;
+
+	public  DbElementsList<Measurement> listTrialMeasurementsWithAttributes(int trialID) throws Exception;
+
+	public  DbElementsList<MeasurementConfiguration> listTrialMeasurementConfigurationsWithAttributes(int trialID) throws Exception;
+
+	public int createMeasurement(int trialID, int measurementConfigurationID ) throws Exception;
+	
+	public int createMeasurementConfiguration(String name, String description ) throws Exception;
+	
+	public void  defineAttribute(String attributeName, String groupName, String storageType, boolean isEnum, String pluginDescriptor, String dataSubtype, String unit) throws Exception;
+	
+	public void  defineAttributeGroup(String groupName, String unit) throws Exception;
 
 }

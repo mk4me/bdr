@@ -24,7 +24,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
@@ -43,7 +42,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "userID",
     "labID",
     "motionKindID",
-    "performerID",
     "sessionDate",
     "sessionDescription",
     "attributes",
@@ -60,8 +58,6 @@ public class SessionDetailsWithAttributes {
     protected int labID;
     @XmlElement(name = "MotionKindID")
     protected int motionKindID;
-    @XmlElement(name = "PerformerID")
-    protected int performerID;
     @XmlElement(name = "SessionDate", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar sessionDate;
@@ -134,22 +130,6 @@ public class SessionDetailsWithAttributes {
      */
     public void setMotionKindID(int value) {
         this.motionKindID = value;
-    }
-
-    /**
-     * Gets the value of the performerID property.
-     * 
-     */
-    public int getPerformerID() {
-        return performerID;
-    }
-
-    /**
-     * Sets the value of the performerID property.
-     * 
-     */
-    public void setPerformerID(int value) {
-        this.performerID = value;
     }
 
     /**

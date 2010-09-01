@@ -48,7 +48,6 @@ public interface IBasicUpdatesWS {
      * @param labID
      * @param sessionGroupIDs
      * @param sessionDescription
-     * @param performerID
      * @return
      *     returns int
      * @throws IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage
@@ -62,8 +61,6 @@ public interface IBasicUpdatesWS {
         int labID,
         @WebParam(name = "motionKindName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String motionKindName,
-        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int performerID,
         @WebParam(name = "sessionDate", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         XMLGregorianCalendar sessionDate,
         @WebParam(name = "sessionDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
@@ -71,6 +68,26 @@ public interface IBasicUpdatesWS {
         @WebParam(name = "sessionGroupIDs", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         ArrayOfInt sessionGroupIDs)
         throws IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param mcDescription
+     * @param mcName
+     * @return
+     *     returns int
+     * @throws IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "CreateMeasurementConfiguration", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/CreateMeasurementConfiguration")
+    @WebResult(name = "CreateMeasurementConfigurationResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "CreateMeasurementConfiguration", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateMeasurementConfiguration")
+    @ResponseWrapper(localName = "CreateMeasurementConfigurationResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateMeasurementConfigurationResponse")
+    public int createMeasurementConfiguration(
+        @WebParam(name = "mcName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String mcName,
+        @WebParam(name = "mcDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String mcDescription)
+        throws IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage
     ;
 
     /**
@@ -98,28 +115,22 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
-     * @param startTime
-     * @param segmentName
+     * @param mcID
      * @param trialID
-     * @param endTime
      * @return
      *     returns int
-     * @throws IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage
+     * @throws IBasicUpdatesWSCreateMeasurementUpdateExceptionFaultFaultMessage
      */
-    @WebMethod(operationName = "DefineTrialSegment", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/DefineTrialSegment")
-    @WebResult(name = "DefineTrialSegmentResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    @RequestWrapper(localName = "DefineTrialSegment", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.DefineTrialSegment")
-    @ResponseWrapper(localName = "DefineTrialSegmentResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.DefineTrialSegmentResponse")
-    public int defineTrialSegment(
+    @WebMethod(operationName = "CreateMeasurement", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/CreateMeasurement")
+    @WebResult(name = "CreateMeasurementResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "CreateMeasurement", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateMeasurement")
+    @ResponseWrapper(localName = "CreateMeasurementResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreateMeasurementResponse")
+    public int createMeasurement(
         @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int trialID,
-        @WebParam(name = "segmentName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        String segmentName,
-        @WebParam(name = "startTime", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int startTime,
-        @WebParam(name = "endTime", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int endTime)
-        throws IBasicUpdatesWSDefineTrialSegmentUpdateExceptionFaultFaultMessage
+        @WebParam(name = "mcID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int mcID)
+        throws IBasicUpdatesWSCreateMeasurementUpdateExceptionFaultFaultMessage
     ;
 
     /**
@@ -140,6 +151,26 @@ public interface IBasicUpdatesWS {
         @WebParam(name = "groupID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int groupID)
         throws IBasicUpdatesWSAssignSessionToGroupUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param measurementID
+     * @param performerID
+     * @return
+     *     returns boolean
+     * @throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "AddPerformerToMeasurement", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/AddPerformerToMeasurement")
+    @WebResult(name = "AddPerformerToMeasurementResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "AddPerformerToMeasurement", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AddPerformerToMeasurement")
+    @ResponseWrapper(localName = "AddPerformerToMeasurementResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AddPerformerToMeasurementResponse")
+    public boolean addPerformerToMeasurement(
+        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int performerID,
+        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int measurementID)
+        throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
     ;
 
     /**
@@ -215,23 +246,46 @@ public interface IBasicUpdatesWS {
      * 
      * @param update
      * @param attributeName
+     * @param measurementID
      * @param attributeValue
-     * @param segmentID
-     * @throws IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage
+     * @throws IBasicUpdatesWSSetMeasurementAttributeUpdateExceptionFaultFaultMessage
      */
-    @WebMethod(operationName = "SetSegmentAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/SetSegmentAttribute")
-    @RequestWrapper(localName = "SetSegmentAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetSegmentAttribute")
-    @ResponseWrapper(localName = "SetSegmentAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetSegmentAttributeResponse")
-    public void setSegmentAttribute(
-        @WebParam(name = "segmentID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int segmentID,
+    @WebMethod(operationName = "SetMeasurementAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/SetMeasurementAttribute")
+    @RequestWrapper(localName = "SetMeasurementAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttribute")
+    @ResponseWrapper(localName = "SetMeasurementAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttributeResponse")
+    public void setMeasurementAttribute(
+        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int measurementID,
         @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String attributeName,
         @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String attributeValue,
         @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         boolean update)
-        throws IBasicUpdatesWSSetSegmentAttributeUpdateExceptionFaultFaultMessage
+        throws IBasicUpdatesWSSetMeasurementAttributeUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param update
+     * @param attributeName
+     * @param attributeValue
+     * @param measurementConfID
+     * @throws IBasicUpdatesWSSetMeasurementConfAttributeUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "SetMeasurementConfAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/SetMeasurementConfAttribute")
+    @RequestWrapper(localName = "SetMeasurementConfAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementConfAttribute")
+    @ResponseWrapper(localName = "SetMeasurementConfAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementConfAttributeResponse")
+    public void setMeasurementConfAttribute(
+        @WebParam(name = "measurementConfID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int measurementConfID,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
+        @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeValue,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update)
+        throws IBasicUpdatesWSSetMeasurementConfAttributeUpdateExceptionFaultFaultMessage
     ;
 
     /**

@@ -8,7 +8,6 @@ public enum SessionStaticAttributes{
     userID,
     labID,
     motionKindID,
-    performerID,
     sessionDate,
     sessionLabel,
     sessionDescription;

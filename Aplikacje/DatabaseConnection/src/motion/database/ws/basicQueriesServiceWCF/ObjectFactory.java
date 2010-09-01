@@ -61,115 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListFilesWithAttributesXMLResponse }
+     * Create an instance of {@link MeasurementConfListWithAttributesList }
      * 
      */
-    public ListFilesWithAttributesXMLResponse createListFilesWithAttributesXMLResponse() {
-        return new ListFilesWithAttributesXMLResponse();
+    public MeasurementConfListWithAttributesList createMeasurementConfListWithAttributesList() {
+        return new MeasurementConfListWithAttributesList();
     }
 
     /**
-     * Create an instance of {@link FileWithAttributesList }
+     * Create an instance of {@link ArrayOfFilterPredicate }
      * 
      */
-    public FileWithAttributesList createFileWithAttributesList() {
-        return new FileWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link TrialDetailsWithAttributes }
-     * 
-     */
-    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
-        return new TrialDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult }
-     * 
-     */
-    public ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResult() {
-        return new ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult }
-     * 
-     */
-    public GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult createGetSegmentByIdXMLResponseGetSegmentByIdXMLResult() {
-        return new GetSegmentByIdXMLResponse.GetSegmentByIdXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionGroupsDefinedResponse }
-     * 
-     */
-    public ListSessionGroupsDefinedResponse createListSessionGroupsDefinedResponse() {
-        return new ListSessionGroupsDefinedResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListLabSessionsWithAttributesXML }
-     * 
-     */
-    public ListLabSessionsWithAttributesXML createListLabSessionsWithAttributesXML() {
-        return new ListLabSessionsWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link GetTrialByIdXMLResponse }
-     * 
-     */
-    public GetTrialByIdXMLResponse createGetTrialByIdXMLResponse() {
-        return new GetTrialByIdXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetPerformerByIdXML }
-     * 
-     */
-    public GetPerformerByIdXML createGetPerformerByIdXML() {
-        return new GetPerformerByIdXML();
-    }
-
-    /**
-     * Create an instance of {@link ListTrialSegmentsWithAttributesXMLResponse }
-     * 
-     */
-    public ListTrialSegmentsWithAttributesXMLResponse createListTrialSegmentsWithAttributesXMLResponse() {
-        return new ListTrialSegmentsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link PerformerSessionWithAttributesList }
-     * 
-     */
-    public PerformerSessionWithAttributesList createPerformerSessionWithAttributesList() {
-        return new PerformerSessionWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link TrailSegmentList }
-     * 
-     */
-    public TrailSegmentList createTrailSegmentList() {
-        return new TrailSegmentList();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformersWithAttributesXML }
-     * 
-     */
-    public ListPerformersWithAttributesXML createListPerformersWithAttributesXML() {
-        return new ListPerformersWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupDefinitionList.AttributeGroupDefinition }
-     * 
-     */
-    public AttributeGroupDefinitionList.AttributeGroupDefinition createAttributeGroupDefinitionListAttributeGroupDefinition() {
-        return new AttributeGroupDefinitionList.AttributeGroupDefinition();
+    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
+        return new ArrayOfFilterPredicate();
     }
 
     /**
@@ -181,427 +85,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenericQueryXMLResponse }
+     * Create an instance of {@link ListPerformerSessionsXMLResponse }
      * 
      */
-    public GenericQueryXMLResponse createGenericQueryXMLResponse() {
-        return new GenericQueryXMLResponse();
+    public ListPerformerSessionsXMLResponse createListPerformerSessionsXMLResponse() {
+        return new ListPerformerSessionsXMLResponse();
     }
 
     /**
-     * Create an instance of {@link ListPerformersWithAttributesXMLResponse }
+     * Create an instance of {@link ListGroupSessionsWithAttributesXML }
      * 
      */
-    public ListPerformersWithAttributesXMLResponse createListPerformersWithAttributesXMLResponse() {
-        return new ListPerformersWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link LabPerformerWithAttributesList }
-     * 
-     */
-    public LabPerformerWithAttributesList createLabPerformerWithAttributesList() {
-        return new LabPerformerWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link PerformerWithAttributesList }
-     * 
-     */
-    public PerformerWithAttributesList createPerformerWithAttributesList() {
-        return new PerformerWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributesDefinedResponse.ListAttributesDefinedResult }
-     * 
-     */
-    public ListAttributesDefinedResponse.ListAttributesDefinedResult createListAttributesDefinedResponseListAttributesDefinedResult() {
-        return new ListAttributesDefinedResponse.ListAttributesDefinedResult();
-    }
-
-    /**
-     * Create an instance of {@link ListEnumValues }
-     * 
-     */
-    public ListEnumValues createListEnumValues() {
-        return new ListEnumValues();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult }
-     * 
-     */
-    public ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult createListPerformersWithAttributesXMLResponseListPerformersWithAttributesXMLResult() {
-        return new ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributeGroupsDefined }
-     * 
-     */
-    public ListAttributeGroupsDefined createListAttributeGroupsDefined() {
-        return new ListAttributeGroupsDefined();
-    }
-
-    /**
-     * Create an instance of {@link ListEnumValuesResponse }
-     * 
-     */
-    public ListEnumValuesResponse createListEnumValuesResponse() {
-        return new ListEnumValuesResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformersXML }
-     * 
-     */
-    public ListPerformersXML createListPerformersXML() {
-        return new ListPerformersXML();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsXML }
-     * 
-     */
-    public ListPerformerSessionsXML createListPerformerSessionsXML() {
-        return new ListPerformerSessionsXML();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionTrialsXML }
-     * 
-     */
-    public ListSessionTrialsXML createListSessionTrialsXML() {
-        return new ListSessionTrialsXML();
-    }
-
-    /**
-     * Create an instance of {@link GetSegmentByIdXMLResponse }
-     * 
-     */
-    public GetSegmentByIdXMLResponse createGetSegmentByIdXMLResponse() {
-        return new GetSegmentByIdXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link EnumValueList }
-     * 
-     */
-    public EnumValueList createEnumValueList() {
-        return new EnumValueList();
-    }
-
-    /**
-     * Create an instance of {@link ListFilesXML }
-     * 
-     */
-    public ListFilesXML createListFilesXML() {
-        return new ListFilesXML();
-    }
-
-    /**
-     * Create an instance of {@link SessionTrialList.TrialDetails }
-     * 
-     */
-    public SessionTrialList.TrialDetails createSessionTrialListTrialDetails() {
-        return new SessionTrialList.TrialDetails();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult }
-     * 
-     */
-    public ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult createListSessionGroupsDefinedResponseListSessionGroupsDefinedResult() {
-        return new ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult();
-    }
-
-    /**
-     * Create an instance of {@link GetSessionLabel }
-     * 
-     */
-    public GetSessionLabel createGetSessionLabel() {
-        return new GetSessionLabel();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResponse }
-     * 
-     */
-    public ListSessionTrialsWithAttributesXMLResponse createListSessionTrialsWithAttributesXMLResponse() {
-        return new ListSessionTrialsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributeGroupsDefinedResponse }
-     * 
-     */
-    public ListAttributeGroupsDefinedResponse createListAttributeGroupsDefinedResponse() {
-        return new ListAttributeGroupsDefinedResponse();
-    }
-
-    /**
-     * Create an instance of {@link SessionDetailsWithAttributes }
-     * 
-     */
-    public SessionDetailsWithAttributes createSessionDetailsWithAttributes() {
-        return new SessionDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult }
-     * 
-     */
-    public ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult createListAttributeGroupsDefinedResponseListAttributeGroupsDefinedResult() {
-        return new ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionGroupsDefined }
-     * 
-     */
-    public ListSessionGroupsDefined createListSessionGroupsDefined() {
-        return new ListSessionGroupsDefined();
-    }
-
-    /**
-     * Create an instance of {@link ListFilesXMLResponse }
-     * 
-     */
-    public ListFilesXMLResponse createListFilesXMLResponse() {
-        return new ListFilesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeDefinitionList.AttributeDefinition.EnumValues }
-     * 
-     */
-    public AttributeDefinitionList.AttributeDefinition.EnumValues createAttributeDefinitionListAttributeDefinitionEnumValues() {
-        return new AttributeDefinitionList.AttributeDefinition.EnumValues();
-    }
-
-    /**
-     * Create an instance of {@link Attributes.Attribute }
-     * 
-     */
-    public Attributes.Attribute createAttributesAttribute() {
-        return new Attributes.Attribute();
-    }
-
-    /**
-     * Create an instance of {@link PerformerSessionList }
-     * 
-     */
-    public PerformerSessionList createPerformerSessionList() {
-        return new PerformerSessionList();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsWithAttributesXML }
-     * 
-     */
-    public ListPerformerSessionsWithAttributesXML createListPerformerSessionsWithAttributesXML() {
-        return new ListPerformerSessionsWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionTrialsXMLResponse }
-     * 
-     */
-    public ListSessionTrialsXMLResponse createListSessionTrialsXMLResponse() {
-        return new ListSessionTrialsXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListTrialSegmentsWithAttributesXML }
-     * 
-     */
-    public ListTrialSegmentsWithAttributesXML createListTrialSegmentsWithAttributesXML() {
-        return new ListTrialSegmentsWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link GetPerformerByIdXMLResponse }
-     * 
-     */
-    public GetPerformerByIdXMLResponse createGetPerformerByIdXMLResponse() {
-        return new GetPerformerByIdXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult }
-     * 
-     */
-    public ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult createListFilesWithAttributesXMLResponseListFilesWithAttributesXMLResult() {
-        return new ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link PerformerList }
-     * 
-     */
-    public PerformerList createPerformerList() {
-        return new PerformerList();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionTrialsWithAttributesXML }
-     * 
-     */
-    public ListSessionTrialsWithAttributesXML createListSessionTrialsWithAttributesXML() {
-        return new ListSessionTrialsWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link ListLabSessionsWithAttributesXMLResponse }
-     * 
-     */
-    public ListLabSessionsWithAttributesXMLResponse createListLabSessionsWithAttributesXMLResponse() {
-        return new ListLabSessionsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeDefinitionList }
-     * 
-     */
-    public AttributeDefinitionList createAttributeDefinitionList() {
-        return new AttributeDefinitionList();
-    }
-
-    /**
-     * Create an instance of {@link SessionGroupDefinitionList.SessionGroupDefinition }
-     * 
-     */
-    public SessionGroupDefinitionList.SessionGroupDefinition createSessionGroupDefinitionListSessionGroupDefinition() {
-        return new SessionGroupDefinitionList.SessionGroupDefinition();
-    }
-
-    /**
-     * Create an instance of {@link SessionGroupDefinitionList }
-     * 
-     */
-    public SessionGroupDefinitionList createSessionGroupDefinitionList() {
-        return new SessionGroupDefinitionList();
-    }
-
-    /**
-     * Create an instance of {@link ListEnumValuesResponse.ListEnumValuesResult }
-     * 
-     */
-    public ListEnumValuesResponse.ListEnumValuesResult createListEnumValuesResponseListEnumValuesResult() {
-        return new ListEnumValuesResponse.ListEnumValuesResult();
-    }
-
-    /**
-     * Create an instance of {@link LabSessionWithAttributesList }
-     * 
-     */
-    public LabSessionWithAttributesList createLabSessionWithAttributesList() {
-        return new LabSessionWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link SessionTrialList }
-     * 
-     */
-    public SessionTrialList createSessionTrialList() {
-        return new SessionTrialList();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformersXMLResponse.ListPerformersXMLResult }
-     * 
-     */
-    public ListPerformersXMLResponse.ListPerformersXMLResult createListPerformersXMLResponseListPerformersXMLResult() {
-        return new ListPerformersXMLResponse.ListPerformersXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListFilesXMLResponse.ListFilesXMLResult }
-     * 
-     */
-    public ListFilesXMLResponse.ListFilesXMLResult createListFilesXMLResponseListFilesXMLResult() {
-        return new ListFilesXMLResponse.ListFilesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link PerformerList.PerformerDetails }
-     * 
-     */
-    public PerformerList.PerformerDetails createPerformerListPerformerDetails() {
-        return new PerformerList.PerformerDetails();
-    }
-
-    /**
-     * Create an instance of {@link ListTrialSegmentsXMLResponse.ListTrialSegmentsXMLResult }
-     * 
-     */
-    public ListTrialSegmentsXMLResponse.ListTrialSegmentsXMLResult createListTrialSegmentsXMLResponseListTrialSegmentsXMLResult() {
-        return new ListTrialSegmentsXMLResponse.ListTrialSegmentsXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult }
-     * 
-     */
-    public ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult createListLabSessionsWithAttributesXMLResponseListLabSessionsWithAttributesXMLResult() {
-        return new ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link GetSessionByIdXMLResponse.GetSessionByIdXMLResult }
-     * 
-     */
-    public GetSessionByIdXMLResponse.GetSessionByIdXMLResult createGetSessionByIdXMLResponseGetSessionByIdXMLResult() {
-        return new GetSessionByIdXMLResponse.GetSessionByIdXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult }
-     * 
-     */
-    public ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult createListSessionTrialsXMLResponseListSessionTrialsXMLResult() {
-        return new ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link GenericQueryXML }
-     * 
-     */
-    public GenericQueryXML createGenericQueryXML() {
-        return new GenericQueryXML();
-    }
-
-    /**
-     * Create an instance of {@link GetSegmentByIdXML }
-     * 
-     */
-    public GetSegmentByIdXML createGetSegmentByIdXML() {
-        return new GetSegmentByIdXML();
-    }
-
-    /**
-     * Create an instance of {@link GetSessionLabelResponse }
-     * 
-     */
-    public GetSessionLabelResponse createGetSessionLabelResponse() {
-        return new GetSessionLabelResponse();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfString }
-     * 
-     */
-    public ArrayOfString createArrayOfString() {
-        return new ArrayOfString();
-    }
-
-    /**
-     * Create an instance of {@link ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult }
-     * 
-     */
-    public ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult createListTrialSegmentsWithAttributesXMLResponseListTrialSegmentsWithAttributesXMLResult() {
-        return new ListTrialSegmentsWithAttributesXMLResponse.ListTrialSegmentsWithAttributesXMLResult();
+    public ListGroupSessionsWithAttributesXML createListGroupSessionsWithAttributesXML() {
+        return new ListGroupSessionsWithAttributesXML();
     }
 
     /**
@@ -613,67 +109,75 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetSessionByIdXMLResponse }
+     * Create an instance of {@link GetMeasurementConfigurationByIdXMLResponse }
      * 
      */
-    public GetSessionByIdXMLResponse createGetSessionByIdXMLResponse() {
-        return new GetSessionByIdXMLResponse();
+    public GetMeasurementConfigurationByIdXMLResponse createGetMeasurementConfigurationByIdXMLResponse() {
+        return new GetMeasurementConfigurationByIdXMLResponse();
     }
 
     /**
-     * Create an instance of {@link FileList }
+     * Create an instance of {@link PerformerSessionList }
      * 
      */
-    public FileList createFileList() {
-        return new FileList();
+    public PerformerSessionList createPerformerSessionList() {
+        return new PerformerSessionList();
     }
 
     /**
-     * Create an instance of {@link GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult }
+     * Create an instance of {@link ListMeasurementResultFilesWithAttributesXML }
      * 
      */
-    public GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult createGetPerformerByIdXMLResponseGetPerformerByIdXMLResult() {
-        return new GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult();
+    public ListMeasurementResultFilesWithAttributesXML createListMeasurementResultFilesWithAttributesXML() {
+        return new ListMeasurementResultFilesWithAttributesXML();
     }
 
     /**
-     * Create an instance of {@link ListPerformersXMLResponse }
+     * Create an instance of {@link ListTrialMeasurementsWithAttributesXML }
      * 
      */
-    public ListPerformersXMLResponse createListPerformersXMLResponse() {
-        return new ListPerformersXMLResponse();
+    public ListTrialMeasurementsWithAttributesXML createListTrialMeasurementsWithAttributesXML() {
+        return new ListTrialMeasurementsWithAttributesXML();
     }
 
     /**
-     * Create an instance of {@link ListTrialSegmentsXMLResponse }
+     * Create an instance of {@link ListSessionGroupsDefinedResponse }
      * 
      */
-    public ListTrialSegmentsXMLResponse createListTrialSegmentsXMLResponse() {
-        return new ListTrialSegmentsXMLResponse();
+    public ListSessionGroupsDefinedResponse createListSessionGroupsDefinedResponse() {
+        return new ListSessionGroupsDefinedResponse();
     }
 
     /**
-     * Create an instance of {@link GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult }
+     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult }
      * 
      */
-    public GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult createGenericQueryUniformXMLResponseGenericQueryUniformXMLResult() {
-        return new GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult();
+    public ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult createListPerformerSessionsWithAttributesXMLResponseListPerformerSessionsWithAttributesXMLResult() {
+        return new ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult();
     }
 
     /**
-     * Create an instance of {@link ListTrialSegmentsXML }
+     * Create an instance of {@link MeasurementResultFileWithAttributesList.ResultFileDetailsWithAttributes }
      * 
      */
-    public ListTrialSegmentsXML createListTrialSegmentsXML() {
-        return new ListTrialSegmentsXML();
+    public MeasurementResultFileWithAttributesList.ResultFileDetailsWithAttributes createMeasurementResultFileWithAttributesListResultFileDetailsWithAttributes() {
+        return new MeasurementResultFileWithAttributesList.ResultFileDetailsWithAttributes();
     }
 
     /**
-     * Create an instance of {@link GetSessionByIdXML }
+     * Create an instance of {@link ListMeasurementConfigurationsWithAttributesXML }
      * 
      */
-    public GetSessionByIdXML createGetSessionByIdXML() {
-        return new GetSessionByIdXML();
+    public ListMeasurementConfigurationsWithAttributesXML createListMeasurementConfigurationsWithAttributesXML() {
+        return new ListMeasurementConfigurationsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link LabPerformerWithAttributesList }
+     * 
+     */
+    public LabPerformerWithAttributesList createLabPerformerWithAttributesList() {
+        return new LabPerformerWithAttributesList();
     }
 
     /**
@@ -685,123 +189,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult }
-     * 
-     */
-    public ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult createListLabPerformersWithAttributesXMLResponseListLabPerformersWithAttributesXMLResult() {
-        return new ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link MotionKindDefinitionList }
-     * 
-     */
-    public MotionKindDefinitionList createMotionKindDefinitionList() {
-        return new MotionKindDefinitionList();
-    }
-
-    /**
-     * Create an instance of {@link GetTrialByIdXMLResponse.GetTrialByIdXMLResult }
-     * 
-     */
-    public GetTrialByIdXMLResponse.GetTrialByIdXMLResult createGetTrialByIdXMLResponseGetTrialByIdXMLResult() {
-        return new GetTrialByIdXMLResponse.GetTrialByIdXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListMotionKindsDefined }
-     * 
-     */
-    public ListMotionKindsDefined createListMotionKindsDefined() {
-        return new ListMotionKindsDefined();
-    }
-
-    /**
-     * Create an instance of {@link GenericQueryResult.GenericResultRow }
-     * 
-     */
-    public GenericQueryResult.GenericResultRow createGenericQueryResultGenericResultRow() {
-        return new GenericQueryResult.GenericResultRow();
-    }
-
-    /**
-     * Create an instance of {@link GenericUniformAttributesQueryResult }
-     * 
-     */
-    public GenericUniformAttributesQueryResult createGenericUniformAttributesQueryResult() {
-        return new GenericUniformAttributesQueryResult();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult }
-     * 
-     */
-    public ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult createListPerformerSessionsXMLResponseListPerformerSessionsXMLResult() {
-        return new ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributesDefined }
-     * 
-     */
-    public ListAttributesDefined createListAttributesDefined() {
-        return new ListAttributesDefined();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse }
-     * 
-     */
-    public ListPerformerSessionsWithAttributesXMLResponse createListPerformerSessionsWithAttributesXMLResponse() {
-        return new ListPerformerSessionsWithAttributesXMLResponse();
-    }
-
-    /**
      * Create an instance of {@link QueryException }
      * 
      */
     public QueryException createQueryException() {
         return new QueryException();
-    }
-
-    /**
-     * Create an instance of {@link ListFilesWithAttributesXML }
-     * 
-     */
-    public ListFilesWithAttributesXML createListFilesWithAttributesXML() {
-        return new ListFilesWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link GenericQueryXMLResponse.GenericQueryXMLResult }
-     * 
-     */
-    public GenericQueryXMLResponse.GenericQueryXMLResult createGenericQueryXMLResponseGenericQueryXMLResult() {
-        return new GenericQueryXMLResponse.GenericQueryXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link FileWithAttributesList.FileDetailsWithAttributes }
-     * 
-     */
-    public FileWithAttributesList.FileDetailsWithAttributes createFileWithAttributesListFileDetailsWithAttributes() {
-        return new FileWithAttributesList.FileDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link GenericQueryResult }
-     * 
-     */
-    public GenericQueryResult createGenericQueryResult() {
-        return new GenericQueryResult();
-    }
-
-    /**
-     * Create an instance of {@link AttributeDefinitionList.AttributeDefinition }
-     * 
-     */
-    public AttributeDefinitionList.AttributeDefinition createAttributeDefinitionListAttributeDefinition() {
-        return new AttributeDefinitionList.AttributeDefinition();
     }
 
     /**
@@ -813,11 +205,843 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TrailSegmentWithAttributesList }
+     * Create an instance of {@link MeasurementDetailsWithAttributes }
      * 
      */
-    public TrailSegmentWithAttributesList createTrailSegmentWithAttributesList() {
-        return new TrailSegmentWithAttributesList();
+    public MeasurementDetailsWithAttributes createMeasurementDetailsWithAttributes() {
+        return new MeasurementDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionGroupsDefined }
+     * 
+     */
+    public ListSessionGroupsDefined createListSessionGroupsDefined() {
+        return new ListSessionGroupsDefined();
+    }
+
+    /**
+     * Create an instance of {@link ListMotionKindsDefined }
+     * 
+     */
+    public ListMotionKindsDefined createListMotionKindsDefined() {
+        return new ListMotionKindsDefined();
+    }
+
+    /**
+     * Create an instance of {@link GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult }
+     * 
+     */
+    public GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult createGetPerformerByIdXMLResponseGetPerformerByIdXMLResult() {
+        return new GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsWithAttributesXML }
+     * 
+     */
+    public ListSessionTrialsWithAttributesXML createListSessionTrialsWithAttributesXML() {
+        return new ListSessionTrialsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link ListEnumValuesResponse }
+     * 
+     */
+    public ListEnumValuesResponse createListEnumValuesResponse() {
+        return new ListEnumValuesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementResultFilesWithAttributesXMLResponse }
+     * 
+     */
+    public ListMeasurementResultFilesWithAttributesXMLResponse createListMeasurementResultFilesWithAttributesXMLResponse() {
+        return new ListMeasurementResultFilesWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link FileWithAttributesList.FileDetailsWithAttributes }
+     * 
+     */
+    public FileWithAttributesList.FileDetailsWithAttributes createFileWithAttributesListFileDetailsWithAttributes() {
+        return new FileWithAttributesList.FileDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link PerformerList }
+     * 
+     */
+    public PerformerList createPerformerList() {
+        return new PerformerList();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsWithAttributesXMLResponse }
+     * 
+     */
+    public ListPerformerSessionsWithAttributesXMLResponse createListPerformerSessionsWithAttributesXMLResponse() {
+        return new ListPerformerSessionsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult }
+     * 
+     */
+    public GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult createGetMeasurementByIdXMLResponseGetMeasurementByIdXMLResult() {
+        return new GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link GenericUniformAttributesQueryResult }
+     * 
+     */
+    public GenericUniformAttributesQueryResult createGenericUniformAttributesQueryResult() {
+        return new GenericUniformAttributesQueryResult();
+    }
+
+    /**
+     * Create an instance of {@link FilterPredicate }
+     * 
+     */
+    public FilterPredicate createFilterPredicate() {
+        return new FilterPredicate();
+    }
+
+    /**
+     * Create an instance of {@link SessionTrialList }
+     * 
+     */
+    public SessionTrialList createSessionTrialList() {
+        return new SessionTrialList();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult }
+     * 
+     */
+    public ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult createListMeasurementConfigurationsWithAttributesXMLResponseListMeasurementConfigurationsWithAttributesXMLResult() {
+        return new ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link SessionTrialList.TrialDetails }
+     * 
+     */
+    public SessionTrialList.TrialDetails createSessionTrialListTrialDetails() {
+        return new SessionTrialList.TrialDetails();
+    }
+
+    /**
+     * Create an instance of {@link AttributeDefinitionList.AttributeDefinition.EnumValues }
+     * 
+     */
+    public AttributeDefinitionList.AttributeDefinition.EnumValues createAttributeDefinitionListAttributeDefinitionEnumValues() {
+        return new AttributeDefinitionList.AttributeDefinition.EnumValues();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributesDefinedResponse }
+     * 
+     */
+    public ListAttributesDefinedResponse createListAttributesDefinedResponse() {
+        return new ListAttributesDefinedResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetMeasurementByIdXML }
+     * 
+     */
+    public GetMeasurementByIdXML createGetMeasurementByIdXML() {
+        return new GetMeasurementByIdXML();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult }
+     * 
+     */
+    public GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult createGenericQueryUniformXMLResponseGenericQueryUniformXMLResult() {
+        return new GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementPerformersWithAttributesXML }
+     * 
+     */
+    public ListMeasurementPerformersWithAttributesXML createListMeasurementPerformersWithAttributesXML() {
+        return new ListMeasurementPerformersWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link MeasurementPerformerWithAttributesList }
+     * 
+     */
+    public MeasurementPerformerWithAttributesList createMeasurementPerformerWithAttributesList() {
+        return new MeasurementPerformerWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link SessionDetailsWithAttributes }
+     * 
+     */
+    public SessionDetailsWithAttributes createSessionDetailsWithAttributes() {
+        return new SessionDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link GetSessionByIdXMLResponse.GetSessionByIdXMLResult }
+     * 
+     */
+    public GetSessionByIdXMLResponse.GetSessionByIdXMLResult createGetSessionByIdXMLResponseGetSessionByIdXMLResult() {
+        return new GetSessionByIdXMLResponse.GetSessionByIdXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfString }
+     * 
+     */
+    public ArrayOfString createArrayOfString() {
+        return new ArrayOfString();
+    }
+
+    /**
+     * Create an instance of {@link AttributeDefinitionList }
+     * 
+     */
+    public AttributeDefinitionList createAttributeDefinitionList() {
+        return new AttributeDefinitionList();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryResult.GenericResultRow }
+     * 
+     */
+    public GenericQueryResult.GenericResultRow createGenericQueryResultGenericResultRow() {
+        return new GenericQueryResult.GenericResultRow();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult }
+     * 
+     */
+    public ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult createListSessionGroupsDefinedResponseListSessionGroupsDefinedResult() {
+        return new ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult();
+    }
+
+    /**
+     * Create an instance of {@link GetTrialByIdXMLResponse }
+     * 
+     */
+    public GetTrialByIdXMLResponse createGetTrialByIdXMLResponse() {
+        return new GetTrialByIdXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link SessionGroupDefinitionList.SessionGroupDefinition }
+     * 
+     */
+    public SessionGroupDefinitionList.SessionGroupDefinition createSessionGroupDefinitionListSessionGroupDefinition() {
+        return new SessionGroupDefinitionList.SessionGroupDefinition();
+    }
+
+    /**
+     * Create an instance of {@link GetPerformerByIdXMLResponse }
+     * 
+     */
+    public GetPerformerByIdXMLResponse createGetPerformerByIdXMLResponse() {
+        return new GetPerformerByIdXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link MotionKindDefinitionList }
+     * 
+     */
+    public MotionKindDefinitionList createMotionKindDefinitionList() {
+        return new MotionKindDefinitionList();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataWithAttributesXMLResponse.ListFileAttributeDataWithAttributesXMLResult }
+     * 
+     */
+    public ListFileAttributeDataWithAttributesXMLResponse.ListFileAttributeDataWithAttributesXMLResult createListFileAttributeDataWithAttributesXMLResponseListFileAttributeDataWithAttributesXMLResult() {
+        return new ListFileAttributeDataWithAttributesXMLResponse.ListFileAttributeDataWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialMeasurementsWithAttributesXMLResponse }
+     * 
+     */
+    public ListTrialMeasurementsWithAttributesXMLResponse createListTrialMeasurementsWithAttributesXMLResponse() {
+        return new ListTrialMeasurementsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListGroupSessionsWithAttributesXMLResponse }
+     * 
+     */
+    public ListGroupSessionsWithAttributesXMLResponse createListGroupSessionsWithAttributesXMLResponse() {
+        return new ListGroupSessionsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListLabSessionsWithAttributesXMLResponse }
+     * 
+     */
+    public ListLabSessionsWithAttributesXMLResponse createListLabSessionsWithAttributesXMLResponse() {
+        return new ListLabSessionsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersWithAttributesXML }
+     * 
+     */
+    public ListPerformersWithAttributesXML createListPerformersWithAttributesXML() {
+        return new ListPerformersWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link AttributeDefinitionList.AttributeDefinition }
+     * 
+     */
+    public AttributeDefinitionList.AttributeDefinition createAttributeDefinitionListAttributeDefinition() {
+        return new AttributeDefinitionList.AttributeDefinition();
+    }
+
+    /**
+     * Create an instance of {@link TrialDetailsWithAttributes }
+     * 
+     */
+    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
+        return new TrialDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult }
+     * 
+     */
+    public ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult createListFileAttributeDataXMLResponseListFileAttributeDataXMLResult() {
+        return new ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryResult }
+     * 
+     */
+    public GenericQueryResult createGenericQueryResult() {
+        return new GenericQueryResult();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataXMLResponse }
+     * 
+     */
+    public ListFileAttributeDataXMLResponse createListFileAttributeDataXMLResponse() {
+        return new ListFileAttributeDataXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link MeasurementConfDetailsWithAttributes }
+     * 
+     */
+    public MeasurementConfDetailsWithAttributes createMeasurementConfDetailsWithAttributes() {
+        return new MeasurementConfDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataWithAttributesXML }
+     * 
+     */
+    public ListFileAttributeDataWithAttributesXML createListFileAttributeDataWithAttributesXML() {
+        return new ListFileAttributeDataWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link TrialMeasurementWithAttributesList }
+     * 
+     */
+    public TrialMeasurementWithAttributesList createTrialMeasurementWithAttributesList() {
+        return new TrialMeasurementWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link FileList }
+     * 
+     */
+    public FileList createFileList() {
+        return new FileList();
+    }
+
+    /**
+     * Create an instance of {@link PerformerWithAttributesList }
+     * 
+     */
+    public PerformerWithAttributesList createPerformerWithAttributesList() {
+        return new PerformerWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListGroupSessionsWithAttributesXMLResponse.ListGroupSessionsWithAttributesXMLResult }
+     * 
+     */
+    public ListGroupSessionsWithAttributesXMLResponse.ListGroupSessionsWithAttributesXMLResult createListGroupSessionsWithAttributesXMLResponseListGroupSessionsWithAttributesXMLResult() {
+        return new ListGroupSessionsWithAttributesXMLResponse.ListGroupSessionsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link EnumValueList }
+     * 
+     */
+    public EnumValueList createEnumValueList() {
+        return new EnumValueList();
+    }
+
+    /**
+     * Create an instance of {@link PerformerDetailsWithAttributes }
+     * 
+     */
+    public PerformerDetailsWithAttributes createPerformerDetailsWithAttributes() {
+        return new PerformerDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersXML }
+     * 
+     */
+    public ListPerformersXML createListPerformersXML() {
+        return new ListPerformersXML();
+    }
+
+    /**
+     * Create an instance of {@link ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult }
+     * 
+     */
+    public ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult createListTrialMeasurementsWithAttributesXMLResponseListTrialMeasurementsWithAttributesXMLResult() {
+        return new ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersXMLResponse.ListPerformersXMLResult }
+     * 
+     */
+    public ListPerformersXMLResponse.ListPerformersXMLResult createListPerformersXMLResponseListPerformersXMLResult() {
+        return new ListPerformersXMLResponse.ListPerformersXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListEnumValuesResponse.ListEnumValuesResult }
+     * 
+     */
+    public ListEnumValuesResponse.ListEnumValuesResult createListEnumValuesResponseListEnumValuesResult() {
+        return new ListEnumValuesResponse.ListEnumValuesResult();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributesDefinedResponse.ListAttributesDefinedResult }
+     * 
+     */
+    public ListAttributesDefinedResponse.ListAttributesDefinedResult createListAttributesDefinedResponseListAttributesDefinedResult() {
+        return new ListAttributesDefinedResponse.ListAttributesDefinedResult();
+    }
+
+    /**
+     * Create an instance of {@link Attributes.Attribute }
+     * 
+     */
+    public Attributes.Attribute createAttributesAttribute() {
+        return new Attributes.Attribute();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersWithAttributesXMLResponse }
+     * 
+     */
+    public ListPerformersWithAttributesXMLResponse createListPerformersWithAttributesXMLResponse() {
+        return new ListPerformersWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataWithAttributesXMLResponse }
+     * 
+     */
+    public ListFileAttributeDataWithAttributesXMLResponse createListFileAttributeDataWithAttributesXMLResponse() {
+        return new ListFileAttributeDataWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementConfigurationsWithAttributesXMLResponse }
+     * 
+     */
+    public ListMeasurementConfigurationsWithAttributesXMLResponse createListMeasurementConfigurationsWithAttributesXMLResponse() {
+        return new ListMeasurementConfigurationsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link SessionTrialWithAttributesList }
+     * 
+     */
+    public SessionTrialWithAttributesList createSessionTrialWithAttributesList() {
+        return new SessionTrialWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult }
+     * 
+     */
+    public ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult createListSessionTrialsXMLResponseListSessionTrialsXMLResult() {
+        return new ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult }
+     * 
+     */
+    public ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult createListLabSessionsWithAttributesXMLResponseListLabSessionsWithAttributesXMLResult() {
+        return new ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult }
+     * 
+     */
+    public ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult createListLabPerformersWithAttributesXMLResponseListLabPerformersWithAttributesXMLResult() {
+        return new ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryUniformXML }
+     * 
+     */
+    public GenericQueryUniformXML createGenericQueryUniformXML() {
+        return new GenericQueryUniformXML();
+    }
+
+    /**
+     * Create an instance of {@link ListLabSessionsWithAttributesXML }
+     * 
+     */
+    public ListLabSessionsWithAttributesXML createListLabSessionsWithAttributesXML() {
+        return new ListLabSessionsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult }
+     * 
+     */
+    public ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult createListSessionTrialsWithAttributesXMLResponseListSessionTrialsWithAttributesXMLResult() {
+        return new ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementResultFilesWithAttributesXMLResponse.ListMeasurementResultFilesWithAttributesXMLResult }
+     * 
+     */
+    public ListMeasurementResultFilesWithAttributesXMLResponse.ListMeasurementResultFilesWithAttributesXMLResult createListMeasurementResultFilesWithAttributesXMLResponseListMeasurementResultFilesWithAttributesXMLResult() {
+        return new ListMeasurementResultFilesWithAttributesXMLResponse.ListMeasurementResultFilesWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link MeasurementResultFileWithAttributesList }
+     * 
+     */
+    public MeasurementResultFileWithAttributesList createMeasurementResultFileWithAttributesList() {
+        return new MeasurementResultFileWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link FileWithAttributesList }
+     * 
+     */
+    public FileWithAttributesList createFileWithAttributesList() {
+        return new FileWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link GetMeasurementConfigurationByIdXML }
+     * 
+     */
+    public GetMeasurementConfigurationByIdXML createGetMeasurementConfigurationByIdXML() {
+        return new GetMeasurementConfigurationByIdXML();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryXML }
+     * 
+     */
+    public GenericQueryXML createGenericQueryXML() {
+        return new GenericQueryXML();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXML }
+     * 
+     */
+    public ListPerformerSessionsXML createListPerformerSessionsXML() {
+        return new ListPerformerSessionsXML();
+    }
+
+    /**
+     * Create an instance of {@link GetTrialByIdXML }
+     * 
+     */
+    public GetTrialByIdXML createGetTrialByIdXML() {
+        return new GetTrialByIdXML();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult }
+     * 
+     */
+    public ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult createListPerformersWithAttributesXMLResponseListPerformersWithAttributesXMLResult() {
+        return new ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributesDefined }
+     * 
+     */
+    public ListAttributesDefined createListAttributesDefined() {
+        return new ListAttributesDefined();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryXMLResponse.GenericQueryXMLResult }
+     * 
+     */
+    public GenericQueryXMLResponse.GenericQueryXMLResult createGenericQueryXMLResponseGenericQueryXMLResult() {
+        return new GenericQueryXMLResponse.GenericQueryXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link GroupSessionWithAttributesList }
+     * 
+     */
+    public GroupSessionWithAttributesList createGroupSessionWithAttributesList() {
+        return new GroupSessionWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementPerformersWithAttributesXMLResponse }
+     * 
+     */
+    public ListMeasurementPerformersWithAttributesXMLResponse createListMeasurementPerformersWithAttributesXMLResponse() {
+        return new ListMeasurementPerformersWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResponse }
+     * 
+     */
+    public ListSessionTrialsWithAttributesXMLResponse createListSessionTrialsWithAttributesXMLResponse() {
+        return new ListSessionTrialsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult }
+     * 
+     */
+    public ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult createListPerformerSessionsXMLResponseListPerformerSessionsXMLResult() {
+        return new ListPerformerSessionsXMLResponse.ListPerformerSessionsXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsXMLResponse }
+     * 
+     */
+    public ListSessionTrialsXMLResponse createListSessionTrialsXMLResponse() {
+        return new ListSessionTrialsXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetTrialByIdXMLResponse.GetTrialByIdXMLResult }
+     * 
+     */
+    public GetTrialByIdXMLResponse.GetTrialByIdXMLResult createGetTrialByIdXMLResponseGetTrialByIdXMLResult() {
+        return new GetTrialByIdXMLResponse.GetTrialByIdXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformersXMLResponse }
+     * 
+     */
+    public ListPerformersXMLResponse createListPerformersXMLResponse() {
+        return new ListPerformersXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetSessionByIdXML }
+     * 
+     */
+    public GetSessionByIdXML createGetSessionByIdXML() {
+        return new GetSessionByIdXML();
+    }
+
+    /**
+     * Create an instance of {@link GetMeasurementConfigurationByIdXMLResponse.GetMeasurementConfigurationByIdXMLResult }
+     * 
+     */
+    public GetMeasurementConfigurationByIdXMLResponse.GetMeasurementConfigurationByIdXMLResult createGetMeasurementConfigurationByIdXMLResponseGetMeasurementConfigurationByIdXMLResult() {
+        return new GetMeasurementConfigurationByIdXMLResponse.GetMeasurementConfigurationByIdXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListPerformerSessionsWithAttributesXML }
+     * 
+     */
+    public ListPerformerSessionsWithAttributesXML createListPerformerSessionsWithAttributesXML() {
+        return new ListPerformerSessionsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult }
+     * 
+     */
+    public ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult createListAttributeGroupsDefinedResponseListAttributeGroupsDefinedResult() {
+        return new ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult();
+    }
+
+    /**
+     * Create an instance of {@link AttributeGroupDefinitionList.AttributeGroupDefinition }
+     * 
+     */
+    public AttributeGroupDefinitionList.AttributeGroupDefinition createAttributeGroupDefinitionListAttributeGroupDefinition() {
+        return new AttributeGroupDefinitionList.AttributeGroupDefinition();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributeGroupsDefined }
+     * 
+     */
+    public ListAttributeGroupsDefined createListAttributeGroupsDefined() {
+        return new ListAttributeGroupsDefined();
+    }
+
+    /**
+     * Create an instance of {@link ListAttributeGroupsDefinedResponse }
+     * 
+     */
+    public ListAttributeGroupsDefinedResponse createListAttributeGroupsDefinedResponse() {
+        return new ListAttributeGroupsDefinedResponse();
+    }
+
+    /**
+     * Create an instance of {@link LabSessionWithAttributesList }
+     * 
+     */
+    public LabSessionWithAttributesList createLabSessionWithAttributesList() {
+        return new LabSessionWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListMeasurementPerformersWithAttributesXMLResponse.ListMeasurementPerformersWithAttributesXMLResult }
+     * 
+     */
+    public ListMeasurementPerformersWithAttributesXMLResponse.ListMeasurementPerformersWithAttributesXMLResult createListMeasurementPerformersWithAttributesXMLResponseListMeasurementPerformersWithAttributesXMLResult() {
+        return new ListMeasurementPerformersWithAttributesXMLResponse.ListMeasurementPerformersWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link PerformerSessionList.SessionDetails }
+     * 
+     */
+    public PerformerSessionList.SessionDetails createPerformerSessionListSessionDetails() {
+        return new PerformerSessionList.SessionDetails();
+    }
+
+    /**
+     * Create an instance of {@link PerformerList.PerformerDetails }
+     * 
+     */
+    public PerformerList.PerformerDetails createPerformerListPerformerDetails() {
+        return new PerformerList.PerformerDetails();
+    }
+
+    /**
+     * Create an instance of {@link GetMeasurementByIdXMLResponse }
+     * 
+     */
+    public GetMeasurementByIdXMLResponse createGetMeasurementByIdXMLResponse() {
+        return new GetMeasurementByIdXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionTrialsXML }
+     * 
+     */
+    public ListSessionTrialsXML createListSessionTrialsXML() {
+        return new ListSessionTrialsXML();
+    }
+
+    /**
+     * Create an instance of {@link GenericQueryXMLResponse }
+     * 
+     */
+    public GenericQueryXMLResponse createGenericQueryXMLResponse() {
+        return new GenericQueryXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link PerformerSessionWithAttributesList }
+     * 
+     */
+    public PerformerSessionWithAttributesList createPerformerSessionWithAttributesList() {
+        return new PerformerSessionWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult }
+     * 
+     */
+    public ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult createListMotionKindsDefinedResponseListMotionKindsDefinedResult() {
+        return new ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult();
+    }
+
+    /**
+     * Create an instance of {@link MotionKindDefinitionList.MotionKindDefinition }
+     * 
+     */
+    public MotionKindDefinitionList.MotionKindDefinition createMotionKindDefinitionListMotionKindDefinition() {
+        return new MotionKindDefinitionList.MotionKindDefinition();
+    }
+
+    /**
+     * Create an instance of {@link GetSessionLabel }
+     * 
+     */
+    public GetSessionLabel createGetSessionLabel() {
+        return new GetSessionLabel();
+    }
+
+    /**
+     * Create an instance of {@link GetPerformerByIdXML }
+     * 
+     */
+    public GetPerformerByIdXML createGetPerformerByIdXML() {
+        return new GetPerformerByIdXML();
+    }
+
+    /**
+     * Create an instance of {@link ListFileAttributeDataXML }
+     * 
+     */
+    public ListFileAttributeDataXML createListFileAttributeDataXML() {
+        return new ListFileAttributeDataXML();
+    }
+
+    /**
+     * Create an instance of {@link GetSessionLabelResponse }
+     * 
+     */
+    public GetSessionLabelResponse createGetSessionLabelResponse() {
+        return new GetSessionLabelResponse();
+    }
+
+    /**
+     * Create an instance of {@link Attributes }
+     * 
+     */
+    public Attributes createAttributes() {
+        return new Attributes();
     }
 
     /**
@@ -837,123 +1061,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SessionTrialWithAttributesList }
+     * Create an instance of {@link SessionGroupDefinitionList }
      * 
      */
-    public SessionTrialWithAttributesList createSessionTrialWithAttributesList() {
-        return new SessionTrialWithAttributesList();
+    public SessionGroupDefinitionList createSessionGroupDefinitionList() {
+        return new SessionGroupDefinitionList();
     }
 
     /**
-     * Create an instance of {@link ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult }
+     * Create an instance of {@link ListEnumValues }
      * 
      */
-    public ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult createListSessionTrialsWithAttributesXMLResponseListSessionTrialsWithAttributesXMLResult() {
-        return new ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult();
+    public ListEnumValues createListEnumValues() {
+        return new ListEnumValues();
     }
 
     /**
-     * Create an instance of {@link FilterPredicate }
+     * Create an instance of {@link GetSessionByIdXMLResponse }
      * 
      */
-    public FilterPredicate createFilterPredicate() {
-        return new FilterPredicate();
-    }
-
-    /**
-     * Create an instance of {@link PerformerDetailsWithAttributes }
-     * 
-     */
-    public PerformerDetailsWithAttributes createPerformerDetailsWithAttributes() {
-        return new PerformerDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link GetTrialByIdXML }
-     * 
-     */
-    public GetTrialByIdXML createGetTrialByIdXML() {
-        return new GetTrialByIdXML();
-    }
-
-    /**
-     * Create an instance of {@link MotionKindDefinitionList.MotionKindDefinition }
-     * 
-     */
-    public MotionKindDefinitionList.MotionKindDefinition createMotionKindDefinitionListMotionKindDefinition() {
-        return new MotionKindDefinitionList.MotionKindDefinition();
-    }
-
-    /**
-     * Create an instance of {@link GenericQueryUniformXML }
-     * 
-     */
-    public GenericQueryUniformXML createGenericQueryUniformXML() {
-        return new GenericQueryUniformXML();
-    }
-
-    /**
-     * Create an instance of {@link Attributes }
-     * 
-     */
-    public Attributes createAttributes() {
-        return new Attributes();
-    }
-
-    /**
-     * Create an instance of {@link ListPerformerSessionsXMLResponse }
-     * 
-     */
-    public ListPerformerSessionsXMLResponse createListPerformerSessionsXMLResponse() {
-        return new ListPerformerSessionsXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfFilterPredicate }
-     * 
-     */
-    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
-        return new ArrayOfFilterPredicate();
-    }
-
-    /**
-     * Create an instance of {@link SegmentDetailsWithAttributes }
-     * 
-     */
-    public SegmentDetailsWithAttributes createSegmentDetailsWithAttributes() {
-        return new SegmentDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult }
-     * 
-     */
-    public ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult createListMotionKindsDefinedResponseListMotionKindsDefinedResult() {
-        return new ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult();
-    }
-
-    /**
-     * Create an instance of {@link PerformerSessionList.SessionDetails }
-     * 
-     */
-    public PerformerSessionList.SessionDetails createPerformerSessionListSessionDetails() {
-        return new PerformerSessionList.SessionDetails();
-    }
-
-    /**
-     * Create an instance of {@link TrailSegmentList.SegmentDetails }
-     * 
-     */
-    public TrailSegmentList.SegmentDetails createTrailSegmentListSegmentDetails() {
-        return new TrailSegmentList.SegmentDetails();
-    }
-
-    /**
-     * Create an instance of {@link ListAttributesDefinedResponse }
-     * 
-     */
-    public ListAttributesDefinedResponse createListAttributesDefinedResponse() {
-        return new ListAttributesDefinedResponse();
+    public GetSessionByIdXMLResponse createGetSessionByIdXMLResponse() {
+        return new GetSessionByIdXMLResponse();
     }
 
     /**
