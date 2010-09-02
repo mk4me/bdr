@@ -101,6 +101,7 @@ public class BasketPanel extends JPanel {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
+				DefaultMutableTreeNode root = new DefaultMutableTreeNode(TREE_TITLE);
 				try {
 					ArrayList<UserBasket> basketList = new ArrayList<UserBasket>();
 					DbElementsList<UserBasket> baskets = WebServiceInstance.getDatabaseConnection().listUserBaskets();
@@ -108,7 +109,7 @@ public class BasketPanel extends JPanel {
 						basketList.add(b);
 						//((EntityAttribute) b.get(UserBasketStaticAttributes.basketName)).value);
 					}
-					DefaultMutableTreeNode root = new DefaultMutableTreeNode(TREE_TITLE);
+					
 					for (UserBasket b : basketList) {
 						DefaultMutableTreeNode basket = new DefaultMutableTreeNode(b);
 						basket.add(new DefaultMutableTreeNode(TableNamesInstance.PERFORMER.getLabel()));
@@ -116,11 +117,11 @@ public class BasketPanel extends JPanel {
 						basket.add(new DefaultMutableTreeNode(TableNamesInstance.TRIAL.getLabel()));
 						root.add(basket);
 					}
-					BasketPanel.this.treeModel.setRoot(root);
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
 				}
+				BasketPanel.this.treeModel.setRoot(root);
 				
 				return null;
 			}
