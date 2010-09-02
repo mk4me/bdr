@@ -71,7 +71,7 @@ public class AttributeTableModel extends BasicTableModel {
 						if (recordId > -1) {
 							records = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(recordId);
 						}
-					} else if (tableName.equals(TableNamesInstance.FILE)) {
+					} else if (tableName.equals(TableNamesInstance.FILE)) {/*nf:
 						if (recordId > -1 && fromTableName != null) {
 							if (fromTableName.equals(TableNamesInstance.PERFORMER)) {
 								records = WebServiceInstance.getDatabaseConnection().listPerformerFiles(recordId);
@@ -80,7 +80,7 @@ public class AttributeTableModel extends BasicTableModel {
 							} else if (fromTableName.equals(TableNamesInstance.TRIAL)) {
 								records = WebServiceInstance.getDatabaseConnection().listTrialFiles(recordId);
 							}
-						}
+						}*/
 					}
 					
 					for (GenericDescription<?> r : records) {

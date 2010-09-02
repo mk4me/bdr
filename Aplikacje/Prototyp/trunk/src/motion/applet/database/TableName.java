@@ -63,7 +63,7 @@ public class TableName {
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.userID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.labID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.motionKindID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
+			//nf: staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDate.toString(), AttributeName.DATE_TYPE));
 			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDescription.toString(), AttributeName.STRING_TYPE));
 		} else if (this.entity.equals(TRIAL_ENTITY)) {

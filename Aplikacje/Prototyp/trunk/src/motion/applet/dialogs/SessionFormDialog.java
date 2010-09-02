@@ -57,7 +57,7 @@ public class SessionFormDialog extends FormDialog {
 							SessionFormDialog.this.createButton.setEnabled(false);
 							try {
 								int sessionID = WebServiceInstance.getDatabaseConnection().createSession(
-										SessionFormDialog.this.performerId,
+										//nf: SessionFormDialog.this.performerId,
 										new int[]{},
 										SessionFormDialog.this.getSessionDescription(),
 										AppletToolBar.getLabId(),
