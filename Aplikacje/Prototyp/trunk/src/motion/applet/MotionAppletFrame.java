@@ -163,7 +163,10 @@ public class MotionAppletFrame extends JFrame {
 		viewRefreshItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//rightPanel.refreshAllTables();
-				MotionAppletFrame.getCurrentTable().refresh();
+				BasicTableModel currentTable = MotionAppletFrame.getCurrentTable();
+				if (currentTable != null) {
+					currentTable.refresh();
+				}
 			}
 		});
 		
