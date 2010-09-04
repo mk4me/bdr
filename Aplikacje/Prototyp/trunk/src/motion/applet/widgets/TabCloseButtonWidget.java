@@ -1,4 +1,4 @@
-package motion.widgets;
+package motion.applet.widgets;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

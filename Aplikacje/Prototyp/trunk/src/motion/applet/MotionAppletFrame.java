@@ -29,8 +29,8 @@ import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.StatusBar;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
+import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DatabaseConnection;
-import motion.widgets.TabCloseButtonWidget;
 
 public class MotionAppletFrame extends JFrame {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$

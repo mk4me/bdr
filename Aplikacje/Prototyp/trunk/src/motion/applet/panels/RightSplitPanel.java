@@ -367,7 +367,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	
-	private void showTable(TableName tableName, int recordId) {
+	public void showTable(TableName tableName, int recordId) {
 
 		int i = tabNameHash .get( tableName );
 		tables[i].setModel( new AttributeTableModel(tableName, recordId) );
@@ -375,7 +375,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	
-	private void showTable(TableName tableName, int recordId, TableName fromTableName) {
+	public void showTable(TableName tableName, int recordId, TableName fromTableName) {
 
 		int i = tabNameHash .get( tableName );
 		tables[i].setModel( new AttributeTableModel(tableName, recordId, fromTableName) );
@@ -434,6 +434,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
+	//FIXME: Change to column hiding
 	public void refreshAllTables() {
 		int i = tabbedPane.getSelectedIndex();
 		refreshPerformerTable();
@@ -443,6 +444,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabbedPane.setSelectedIndex(i);
 	}
 	
+	//FIXME: Use BasicTable refresh
 	private void refreshTablesForLab() {
 		int i = tabbedPane.getSelectedIndex();
 		showTable(TableNamesInstance.PERFORMER);
@@ -494,12 +496,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[i].setModel(new BasicTableModel());
 	}
 	
-	private void clearTrialTable() {
+	public void clearTrialTable() {
 		int i = tabNameHash .get(TableNamesInstance.TRIAL);
 		tables[i].setModel(new BasicTableModel());
 	}
 	
-	private void clearFileTable() {
+	public void clearFileTable() {
 		int i = tabNameHash .get(TableNamesInstance.FILE);
 		tables[i].setModel(new BasicTableModel());
 	}

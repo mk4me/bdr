@@ -27,12 +27,12 @@ import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.tables.BasketTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DbElementsList;
 import motion.database.model.Performer;
 import motion.database.model.Session;
 import motion.database.model.Trial;
 import motion.database.model.UserBasket;
-import motion.widgets.TabCloseButtonWidget;
 
 public class BasketPanel extends JPanel {
 	private JTree tree;
