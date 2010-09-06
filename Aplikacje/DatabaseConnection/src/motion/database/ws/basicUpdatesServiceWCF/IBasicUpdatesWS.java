@@ -155,6 +155,26 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
+     * @param sessionID
+     * @param performerID
+     * @return
+     *     returns int
+     * @throws IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "AssignPerformerToSession", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/AssignPerformerToSession")
+    @WebResult(name = "AssignPerformerToSessionResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+    @RequestWrapper(localName = "AssignPerformerToSession", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AssignPerformerToSession")
+    @ResponseWrapper(localName = "AssignPerformerToSessionResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AssignPerformerToSessionResponse")
+    public int assignPerformerToSession(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int sessionID,
+        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int performerID)
+        throws IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param measurementID
      * @param performerID
      * @return

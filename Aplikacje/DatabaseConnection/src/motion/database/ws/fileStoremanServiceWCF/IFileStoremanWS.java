@@ -25,28 +25,140 @@ public interface IFileStoremanWS {
 
     /**
      * 
-     * @param measurementID
      * @param description
+     * @param mcID
      * @param path
      * @param filename
      * @return
      *     returns int
-     * @throws IFileStoremanWSStoreMeasurementResultFileFileAccessServiceExceptionFaultFaultMessage
+     * @throws IFileStoremanWSStoreMeasurementConfFileFileAccessServiceExceptionFaultFaultMessage
      */
-    @WebMethod(operationName = "StoreMeasurementResultFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreMeasurementResultFile")
-    @WebResult(name = "StoreMeasurementResultFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-    @RequestWrapper(localName = "StoreMeasurementResultFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementResultFile")
-    @ResponseWrapper(localName = "StoreMeasurementResultFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementResultFileResponse")
-    public int storeMeasurementResultFile(
-        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        int measurementID,
+    @WebMethod(operationName = "StoreMeasurementConfFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreMeasurementConfFile")
+    @WebResult(name = "StoreMeasurementConfFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StoreMeasurementConfFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementConfFile")
+    @ResponseWrapper(localName = "StoreMeasurementConfFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementConfFileResponse")
+    public int storeMeasurementConfFile(
+        @WebParam(name = "mcID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int mcID,
         @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         String path,
         @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         String description,
         @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
         String filename)
-        throws IFileStoremanWSStoreMeasurementResultFileFileAccessServiceExceptionFaultFaultMessage
+        throws IFileStoremanWSStoreMeasurementConfFileFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param sessionId
+     * @param description
+     * @param path
+     * @param filename
+     * @return
+     *     returns int
+     * @throws IFileStoremanWSStoreSessionFileFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "StoreSessionFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreSessionFile")
+    @WebResult(name = "StoreSessionFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StoreSessionFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreSessionFile")
+    @ResponseWrapper(localName = "StoreSessionFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreSessionFileResponse")
+    public int storeSessionFile(
+        @WebParam(name = "sessionId", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int sessionId,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description,
+        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String filename)
+        throws IFileStoremanWSStoreSessionFileFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param description
+     * @param path
+     * @param filename
+     * @param trialID
+     * @return
+     *     returns int
+     * @throws IFileStoremanWSStoreTrialFileFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "StoreTrialFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreTrialFile")
+    @WebResult(name = "StoreTrialFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "StoreTrialFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreTrialFile")
+    @ResponseWrapper(localName = "StoreTrialFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreTrialFileResponse")
+    public int storeTrialFile(
+        @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int trialID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description,
+        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String filename)
+        throws IFileStoremanWSStoreTrialFileFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param description
+     * @param mcID
+     * @param path
+     * @throws IFileStoremanWSStoreMeasurementConfFilesFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "StoreMeasurementConfFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreMeasurementConfFiles")
+    @RequestWrapper(localName = "StoreMeasurementConfFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementConfFiles")
+    @ResponseWrapper(localName = "StoreMeasurementConfFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreMeasurementConfFilesResponse")
+    public void storeMeasurementConfFiles(
+        @WebParam(name = "mcID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int mcID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description)
+        throws IFileStoremanWSStoreMeasurementConfFilesFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param sessionID
+     * @param description
+     * @param path
+     * @throws IFileStoremanWSStoreSessionFilesFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "StoreSessionFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreSessionFiles")
+    @RequestWrapper(localName = "StoreSessionFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreSessionFiles")
+    @ResponseWrapper(localName = "StoreSessionFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreSessionFilesResponse")
+    public void storeSessionFiles(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int sessionID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description)
+        throws IFileStoremanWSStoreSessionFilesFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param description
+     * @param path
+     * @param trialId
+     * @throws IFileStoremanWSStoreTrialFilesFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "StoreTrialFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreTrialFiles")
+    @RequestWrapper(localName = "StoreTrialFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreTrialFiles")
+    @ResponseWrapper(localName = "StoreTrialFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreTrialFilesResponse")
+    public void storeTrialFiles(
+        @WebParam(name = "trialId", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int trialId,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String description)
+        throws IFileStoremanWSStoreTrialFilesFileAccessServiceExceptionFaultFaultMessage
     ;
 
     /**

@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -94,6 +95,7 @@ public class FileList {
      *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -113,6 +115,8 @@ public class FileList {
         protected String fileDescription;
         @XmlAttribute(name = "SubdirPath")
         protected String subdirPath;
+        @XmlAttribute(name = "AttributeName")
+        protected String attributeName;
 
         /**
          * Gets the value of the fileID property.
@@ -208,6 +212,30 @@ public class FileList {
          */
         public void setSubdirPath(String value) {
             this.subdirPath = value;
+        }
+
+        /**
+         * Gets the value of the attributeName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getAttributeName() {
+            return attributeName;
+        }
+
+        /**
+         * Sets the value of the attributeName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setAttributeName(String value) {
+            this.attributeName = value;
         }
 
     }
