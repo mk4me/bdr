@@ -29,7 +29,8 @@
 			<xsd:include schemaLocation="ListTrialMeasurementsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListMeasurementConfigurationsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataXML.xsd"/>
-			<xsd:include schemaLocation="ListMeasurementResultFilesWithAttributesXML.xsd"/>
+			<xsd:include schemaLocation="ListFilesXML.xsd"/>
+			<xsd:include schemaLocation="ListFilesWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListAttributesDefined.xsd"/>
 			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
@@ -472,20 +473,42 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListMeasurementResultFilesWithAttributesXML">
+			<xsd:element name="ListFilesXML">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="measurementID" type="xsd:int"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="subjectType" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListMeasurementResultFilesWithAttributesXMLResponse">
+			<xsd:element name="ListFilesXMLResponse">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementResultFilesWithAttributesXMLResult">
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListFilesXMLResult">
 							<xsd:complexType>
 								<xsd:sequence>
-									<xsd:element ref="tns:MeasurementResultFileWithAttributesList"/>
+									<xsd:element ref="tns:FileList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListFilesWithAttributesXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="subjectType" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListFilesWithAttributesXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListFilesWithAttributesXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:FileWithAttributesList"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -629,7 +652,8 @@
 			<xsd:include schemaLocation="ListTrialMeasurementsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListMeasurementConfigurationsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataXML.xsd"/>
-			<xsd:include schemaLocation="ListMeasurementResultFilesWithAttributesXML.xsd"/>
+			<xsd:include schemaLocation="ListFilesXML.xsd"/>
+			<xsd:include schemaLocation="ListFilesWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListAttributesDefined.xsd"/>
 			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
@@ -866,13 +890,22 @@
 	<wsdl:message name="IBasicQueriesWS_ListFileAttributeDataXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementResultFilesWithAttributesXML"/>
+	<wsdl:message name="IBasicQueriesWS_ListFilesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListFilesXML"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementResultFilesWithAttributesXMLResponse"/>
+	<wsdl:message name="IBasicQueriesWS_ListFilesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListFilesXMLResponse"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_QueryExceptionFault_FaultMessage">
+	<wsdl:message name="IBasicQueriesWS_ListFilesXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListFilesWithAttributesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListFilesWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListFilesWithAttributesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListFilesWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListFilesWithAttributesXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListFileAttributeDataWithAttributesXML_InputMessage">
@@ -1035,10 +1068,15 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFileAttributeDataXMLResponse" message="tns:IBasicQueriesWS_ListFileAttributeDataXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFileAttributeDataXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListFileAttributeDataXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementResultFilesWithAttributesXML">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementResultFilesWithAttributesXML" message="tns:IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementResultFilesWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementResultFilesWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMeasurementResultFilesWithAttributesXML_QueryExceptionFault_FaultMessage"/>
+		<wsdl:operation name="ListFilesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesXML" message="tns:IBasicQueriesWS_ListFilesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesXMLResponse" message="tns:IBasicQueriesWS_ListFilesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListFilesXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesWithAttributesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesWithAttributesXML" message="tns:IBasicQueriesWS_ListFilesWithAttributesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListFilesWithAttributesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListFilesWithAttributesXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="ListFileAttributeDataWithAttributesXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFileAttributeDataWithAttributesXML" message="tns:IBasicQueriesWS_ListFileAttributeDataWithAttributesXML_InputMessage"/>
@@ -1326,8 +1364,20 @@
 				<soap:fault name="QueryExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementResultFilesWithAttributesXML">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementResultFilesWithAttributesXML" style="document"/>
+		<wsdl:operation name="ListFilesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFilesWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

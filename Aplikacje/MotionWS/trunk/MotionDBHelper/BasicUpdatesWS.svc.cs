@@ -191,16 +191,17 @@ END CATCH;";
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateMeasurementConfiguration(string mcName, string mcDescription)
+        public int CreateMeasurementConfiguration(string mcName, string mcKind, string mcDescription)
         {
             int newMeasurementConf = 0;
             try
             {
                 OpenConnection();
-                cmd.CommandText = @"insert into Konfiguracja_pomiarowa ( Nazwa, Opis)
-                                    values (@mc_name, @mc_desc )
+                cmd.CommandText = @"insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj)
+                                    values (@mc_name, @mc_desc, @mc_kind )
                                             set @mc_id = SCOPE_IDENTITY()";
                 cmd.Parameters.Add("@mc_name", SqlDbType.VarChar, 50);
+                cmd.Parameters.Add("@mc_kind", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@mc_desc", SqlDbType.VarChar, 255);
 
                 SqlParameter mcIdParameter =
@@ -208,6 +209,7 @@ END CATCH;";
                 mcIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(mcIdParameter);
                 cmd.Parameters["@mc_name"].Value = mcName;
+                cmd.Parameters["@mc_kind"].Value = mcKind;
                 cmd.Parameters["@mc_desc"].Value = mcDescription;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
@@ -300,6 +302,43 @@ END CATCH;";
             return result;
         }
 
+        // Performer to session assignment
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public int AssignPerformerToSession(int sessionID, int performerID)
+        {
+            int newPerfConfId = 0;
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandText = @"insert into Konfiguracja_performera ( IdSesja, IdPerformer)
+                                            values (@sess_id, @perf_id )
+                                    set @perf_conf_id = SCOPE_IDENTITY()";
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                SqlParameter pcIdParameter =
+                    new SqlParameter("@perf_conf_id", SqlDbType.Int);
+                pcIdParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(pcIdParameter);
+                cmd.Parameters["@sess_id"].Value = sessionID;
+                cmd.Parameters["@perf_id"].Value = performerID;
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                newPerfConfId = (int) pcIdParameter.Value;
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("unknown", "Update failed");
+                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("AssignPerformerToSession")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return newPerfConfId;
+        }
+
+        
         // Performer to measurement assignment operations
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
@@ -315,8 +354,8 @@ END CATCH;";
                                             values (@meas_id, @perf_id )";
                 cmd.Parameters.Add("@meas_id", SqlDbType.Int);
                 cmd.Parameters.Add("@perf_id", SqlDbType.Int);
-                cmd.Parameters["@meas_id"].Value = performerID;
-                cmd.Parameters["@perf_id"].Value = measurementID;
+                cmd.Parameters["@meas_id"].Value = measurementID;
+                cmd.Parameters["@perf_id"].Value = performerID;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
 
@@ -333,6 +372,7 @@ END CATCH;";
             result = true;
             return result;
         }
+
 
         // Attribute update operations
 

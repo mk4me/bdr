@@ -21,7 +21,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        int CreateMeasurementConfiguration(string mcName, string mcDescription);
+        int CreateMeasurementConfiguration(string mcName, string mcKind, string mcDescription);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
@@ -34,6 +34,10 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
         bool AssignSessionToGroup(int sessionID, int groupID);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        int AssignPerformerToSession(int sessionID, int performerID);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]

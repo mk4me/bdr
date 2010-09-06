@@ -14,7 +14,27 @@ namespace MotionDBWebServices
     {
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        int StoreMeasurementResultFile(int measurementID, string path, string description, string filename);
+        int StoreMeasurementConfFile(int mcID, string path, string description, string filename);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        int StoreSessionFile(int sessionId, string path, string description, string filename);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        int StoreTrialFile(int trialID, string path, string description, string filename);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        void StoreMeasurementConfFiles(int mcID, string path, string description);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        void StoreSessionFiles(int sessionID, string path, string description);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        void StoreTrialFiles(int trialId, string path, string description);
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]

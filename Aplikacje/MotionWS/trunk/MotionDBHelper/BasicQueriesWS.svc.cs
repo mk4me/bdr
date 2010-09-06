@@ -841,26 +841,26 @@ namespace MotionDBWebServices
             switch (subjectEntity)
             {
                 case "performer":
-                    operationName = "list_performer_files_xml";
+                    operationName = "list_performer_attr_files_xml";
                     paramName = "@perf_id";
                     break;
                 case "session":
-                    operationName = "list_session_files_xml";
+                    operationName = "list_session_attr_files_xml";
                     paramName = "@sess_id";
                     addLogin = true;
                     break;
                 case "trial":
-                    operationName = "list_trial_files_xml";
+                    operationName = "list_trial_attr_files_xml";
                     paramName = "@trial_id";
                     addLogin = true;
                     break;
                 case "measurement":
-                    operationName = "list_measurement_files_xml";
+                    operationName = "list_measurement_attr_files_xml";
                     paramName = "@meas_id";
                     addLogin = true;
                     break;
                 case "measurement_conf":
-                    operationName = "list_measurement_conf_files_xml";
+                    operationName = "list_measurement_conf_attr_files_xml";
                     paramName = "@mc_id";
                     addLogin = true;
                     break;
@@ -918,26 +918,26 @@ namespace MotionDBWebServices
             switch (subjectType)
             {
                 case "performer":
-                    operationName = "list_performer_files_attributes_xml";
+                    operationName = "list_performer_attr_files_attributes_xml";
                     paramName = "@perf_id";
                     break;
                 case "session":
-                    operationName = "list_session_files_attributes_xml";
+                    operationName = "list_session_attr_files_attributes_xml";
                     paramName = "@sess_id";
                     addLogin = true;
                     break;
                 case "trial":
-                    operationName = "list_trial_files_attributes_xml";
+                    operationName = "list_trial_attr_files_attributes_xml";
                     paramName = "@trial_id";
                     addLogin = true;
                     break;
                 case "measurement":
-                    operationName = "list_measurement_files_attributes_xml";
+                    operationName = "list_measurement_attr_files_attributes_xml";
                     paramName = "@meas_id";
                     addLogin = true;
                     break;
                 case "measurement_conf":
-                    operationName = "list_measurement_conf_files_attributes_xml";
+                    operationName = "list_measurement_conf_attr_files_attributes_xml";
                     paramName = "@mc_id";
                     addLogin = true;
                     break;
@@ -980,6 +980,142 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        public XmlElement ListFilesXML(int subjectID, string subjectType)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            string operationName = "";
+            string paramName = "";
+            bool addLogin = false;
+
+            SqlParameter usernamePar;
+
+            switch (subjectType)
+            {
+                case "measurement_configuration":
+                    operationName = "list_measurement_conf_files_xml";
+                    paramName = "@perf_id";
+                    break;
+                case "session":
+                    operationName = "list_session_files_xml";
+                    paramName = "@sess_id";
+                    addLogin = true;
+
+                    break;
+                case "trial":
+                    operationName = "list_trial_files_xml";
+                    paramName = "@trial_id";
+                    addLogin = true;
+
+                    break;
+            }
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                if (addLogin)
+                {
+                    usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                    usernamePar.Direction = ParameterDirection.Input;
+                    usernamePar.Value = userName;
+                }
+                cmd.CommandText = operationName;
+                SqlParameter sessId = cmd.Parameters.Add(paramName, SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = subjectID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("FileList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        }
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            SqlParameter usernamePar;
+            string operationName = "";
+            string paramName = "";
+
+            bool addLogin = false;
+
+            switch (subjectType)
+            {
+                case "measurement_configuration":
+                    operationName = "list_measurement_conf_files_attributes_xml";
+                    paramName = "@perf_id";
+                    break;
+                case "session":
+                    operationName = "list_session_files_attributes_xml";
+                    paramName = "@sess_id";
+                    addLogin = true;
+                    break;
+                case "trial":
+                    operationName = "list_trial_files_attributes_xml";
+                    paramName = "@trial_id";
+                    addLogin = true;
+                    break;
+            }
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = operationName;
+                if (addLogin)
+                {
+                    usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                    usernamePar.Direction = ParameterDirection.Input;
+                    usernamePar.Value = userName;
+                }
+                SqlParameter sessId = cmd.Parameters.Add(paramName, SqlDbType.Int);
+                sessId.Direction = ParameterDirection.Input;
+                sessId.Value = subjectID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("FileWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        }
+
+
+/* // Prawdopodobnie do usunięcia
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListMeasurementResultFilesWithAttributesXML(int measurementID)
         {
@@ -1023,6 +1159,9 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
+ * 
+ * /
+ 
 /* ODLOZONE
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GetAttributeFileDataXML(int resourceID, string entity, string attributeName)
