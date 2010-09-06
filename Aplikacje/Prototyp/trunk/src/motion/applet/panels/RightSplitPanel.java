@@ -97,13 +97,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		model.setSelectionInterval(row, row);
 	}
 	
-	private int getSelectedRecord( JTable table, MouseEvent e ) {
+	public int getSelectedRecord( JTable table, MouseEvent e ) {
 		createSelectionAtMouse(table, e);
 		
 		return ((BasicTableModel) table.getModel()).getRecordId( table.getSelectedRows()[0] );
 	}
 	
-	private int[] getSelectedRecords( JTable table, MouseEvent e ) {
+	public int[] getSelectedRecords( JTable table, MouseEvent e ) {
 		createSelectionAtMouse(table, e);
 		
 		return ((BasicTableModel) table.getModel()).getCheckedRecordIds();

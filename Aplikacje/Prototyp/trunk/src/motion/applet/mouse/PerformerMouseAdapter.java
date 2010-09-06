@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.database.TableName;
@@ -30,7 +31,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 	
 	public void mouseClicked(MouseEvent e) {
 		// TODO: get JTable from e
-		final int recordId = getSelectedRecord( tables[0], e );
+		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 			JPopupMenu popupMenu = new JPopupMenu();
 			
@@ -77,7 +78,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 				}
 			});
 
-			popupMenu.show( tables[0], e.getPoint().x, e.getPoint().y);
+			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
 			viewSessions(recordId);
 		}

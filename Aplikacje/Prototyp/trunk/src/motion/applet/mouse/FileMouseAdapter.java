@@ -9,6 +9,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.dialogs.DownloadDialog;
@@ -26,7 +27,7 @@ public class FileMouseAdapter extends MouseAdapter {
 		if (SwingUtilities.isRightMouseButton(e)) {
 			// TODO: get JTable from e
 			// Get checked rows.
-			final int[] recordIds = rightPanel.getSelectedRecords(tables[3], e);
+			final int[] recordIds = rightPanel.getSelectedRecords((JTable) e.getSource(), e);
 			// Upload context menu.
 			JMenuItem downloadMenuItem = new JMenuItem(MENU_DOWNLOAD);
 			popupMenu.add(downloadMenuItem);
@@ -58,7 +59,7 @@ public class FileMouseAdapter extends MouseAdapter {
 			});
 			 */
 			
-			popupMenu.show( tables[3], e.getPoint().x, e.getPoint().y);
+			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		}
 	}
 }
