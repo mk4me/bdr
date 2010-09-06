@@ -128,6 +128,18 @@ public class BottomSplitPanel extends JPanel {
 		return null;
 	}
 	
+	public static boolean isCheckedAttribute(TableName tableName, String attribute) {
+		if (tableName.equals(TableNamesInstance.PERFORMER)) {
+			return getCheckedPerformerAttributes().contains(attribute);
+		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+			return getCheckedSessionAttributes().contains(attribute);
+		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+			return getCheckedTrialAttributes().contains(attribute);
+		}
+		
+		return false;
+	}
+	
 	public void addApplyButtonListener(ActionListener actionListener) {
 		this.applySelectionButton.addActionListener(actionListener);
 	}

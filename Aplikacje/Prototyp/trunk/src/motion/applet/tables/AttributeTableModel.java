@@ -47,13 +47,13 @@ public class AttributeTableModel extends BasicTableModel {
 				try {
 					addCheckboxColumn(); // first column
 					DbElementsList<? extends GenericDescription<?>> records = new DbElementsList<GenericDescription<?>>();
-					ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
+					//ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
 					ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
-					if (selectedAttributes != null) {
-						attributes = tableName.getSelectedAttributes(selectedAttributes);
-					} else {
+					//if (selectedAttributes != null) {
+						//attributes = tableName.getSelectedAttributes(selectedAttributes);
+					//} else {
 						attributes = tableName.getAllAttributes();
-					}
+					//}
 					for (AttributeName a : attributes) {
 						attributeNames.add(a.toString());
 						classes.add(a.getAttributeClass());
@@ -119,5 +119,15 @@ public class AttributeTableModel extends BasicTableModel {
 		super.refresh();
 		getTableContents();
 		fireTableStructureChanged();
+	}
+	
+	public String getColumnName(int column) {
+		String attribute = this.attributeNames.get(column);
+		// Show/hide columns
+		if (BottomSplitPanel.isCheckedAttribute(tableName, attribute)) {
+			return attribute;
+		} else {
+			return "";
+		}
 	}
 }
