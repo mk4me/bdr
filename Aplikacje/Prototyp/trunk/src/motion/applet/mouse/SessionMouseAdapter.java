@@ -23,6 +23,12 @@ public class SessionMouseAdapter extends MouseAdapter {
 	
 	private RightSplitPanel rightPanel;
 	
+	public SessionMouseAdapter(RightSplitPanel rightPanel) {
+		super();
+		
+		this.rightPanel = rightPanel;
+	}
+	
 	public void mouseClicked(MouseEvent e) {
 		// TODO: get JTable from e
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);

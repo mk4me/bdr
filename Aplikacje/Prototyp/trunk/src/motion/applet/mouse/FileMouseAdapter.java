@@ -21,6 +21,12 @@ public class FileMouseAdapter extends MouseAdapter {
 	
 	private RightSplitPanel rightPanel;
 	
+	public FileMouseAdapter(RightSplitPanel rightPanel) {
+		super();
+		
+		this.rightPanel = rightPanel;
+	}
+	
 	public void mouseClicked(MouseEvent e) {
 		JPopupMenu popupMenu = new JPopupMenu();
 		

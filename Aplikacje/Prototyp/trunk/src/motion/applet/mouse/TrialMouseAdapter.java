@@ -20,6 +20,12 @@ public class TrialMouseAdapter extends MouseAdapter {
 	
 	private RightSplitPanel rightPanel;
 	
+	public TrialMouseAdapter(RightSplitPanel rightPanel) {
+		super();
+		
+		this.rightPanel = rightPanel;
+	}
+	
 	public void mouseClicked(MouseEvent e) {	// Right click.
 		// TODO: get JTable from e
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
