@@ -205,13 +205,7 @@ public class UploadDialog extends BasicDialog {
 	private void getEntityComboBoxContents() throws Exception {
 		if (this.selectId == false) {
 			entityComboBox.setEnabled(false);
-			if (this.tableName.equals(TableNamesInstance.SESSION)) {
-				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getSessionById(this.recordId));
-			} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
-				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getPerformerById(this.recordId));
-			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
-				entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getTrialById(this.recordId));
-			}
+			entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getById(this.recordId, tableName.toEntityKind()));
 		} else {
 			if (this.tableName.equals(TableNamesInstance.SESSION)) {
 				DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());

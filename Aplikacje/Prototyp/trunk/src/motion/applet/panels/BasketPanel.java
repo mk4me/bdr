@@ -29,6 +29,7 @@ import motion.applet.tables.BasketTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DbElementsList;
+import motion.database.model.GenericDescription;
 import motion.database.model.Performer;
 import motion.database.model.Session;
 import motion.database.model.Trial;
@@ -143,16 +144,8 @@ public class BasketPanel extends JPanel {
 					if (!entity.equals("")) {
 						TableName tableName = TableNamesInstance.toTableName(entity);
 						JTable table = new JTable();
-						if (tableName.equals(TableNamesInstance.PERFORMER)) {
-							DbElementsList<Performer> records = WebServiceInstance.getDatabaseConnection().listBasketPerformersWithAttributes(basketName);
-							table.setModel(new BasketTableModel(tableName, records, basketName));
-						} else if (tableName.equals(TableNamesInstance.SESSION)) {
-							DbElementsList<Session> records = WebServiceInstance.getDatabaseConnection().listBasketSessionsWithAttributes(basketName);
-							table.setModel(new BasketTableModel(tableName, records, basketName));
-						} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-							DbElementsList<Trial> records = WebServiceInstance.getDatabaseConnection().listBasketTrialsWithAttributes(basketName);
-							table.setModel(new BasketTableModel(tableName, records, basketName));
-						}
+						DbElementsList<? extends GenericDescription<?>> records = WebServiceInstance.getDatabaseConnection().listBasketEntitiesWithAttributes(basketName, tableName.toEntityKind());
+						table.setModel(new BasketTableModel(tableName, records, basketName));
 						
 						BasketPanel.this.addTab(table, basketName + " (" + entity + ")");
 					}
