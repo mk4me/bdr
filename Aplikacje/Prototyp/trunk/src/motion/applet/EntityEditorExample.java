@@ -12,6 +12,7 @@ import motion.applet.models.EntityEditorModel;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.model.EntityAttributeGroup;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
 import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
@@ -30,7 +31,7 @@ public class EntityEditorExample
 	database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 	database.setFTPSCredentials("dbpawell", "testUser", "testUser");
 
-	GenericDescription<?> entity = database.getPerformerById(1);
+	GenericDescription<?> entity = database.getById(1, EntityKind.performer);
 	HashMap<String,EntityAttributeGroup> g = database.listGrouppedAttributesDefined( "performer");
 	
 	entity.addEmptyGenericAttributes( g );
