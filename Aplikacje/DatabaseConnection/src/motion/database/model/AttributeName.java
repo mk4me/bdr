@@ -40,6 +40,7 @@ public class AttributeName {
 	public EntityAttribute toEntityAttribute(Object value) {
 		EntityAttribute entityAttribute = new EntityAttribute(
 				this.attribute,
+				null,
 				value,
 				this.groupName,
 				this.type);

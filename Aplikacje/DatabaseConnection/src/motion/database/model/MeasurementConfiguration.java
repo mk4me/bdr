@@ -5,7 +5,7 @@ package motion.database.model;
 public class MeasurementConfiguration extends GenericDescription<MeasurementConfigurationStaticAttributes>{
 
 	public MeasurementConfiguration() {
-		super(MeasurementConfigurationStaticAttributes.measurementConfigurationID.name(), EntityKind.measurementConfiguration);
+		super(MeasurementConfigurationStaticAttributes.measurementConfigurationID.name(), EntityKind.measurement_conf);
 	}
 	
 	public String toString() {

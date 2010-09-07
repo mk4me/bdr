@@ -5,6 +5,11 @@ import java.util.List;
 
 public class EntityAttribute {
 
+	public static final String INTEGER_TYPE = "Integer";
+	public static final String STRING_TYPE = "String";
+	public static final String DATE_TYPE = "DATE";
+	public static final String UNKNOWN_TYPE = "Unknown";
+
 	
 	public String type;
 	public String groupName;
@@ -13,13 +18,36 @@ public class EntityAttribute {
 	public String unit;
 	public String subtype;
 	public List<String> enumValues;
+	public EntityKind kind;
+	public boolean isEnum;
 	
-	public EntityAttribute(String name, Object value, String groupName, String type)
+	public EntityAttribute(String attribute, String type, String subType, String unit, List<String> enumValues, String groupName) 
+	{
+		this( attribute, null, null, groupName, type, subType, unit, enumValues!=null );
+		this.enumValues = enumValues;
+	}
+
+	
+	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type, String subType, String unit, boolean isEnum)
 	{
 		this.name = name;
 		this.value = value;
 		this.groupName = groupName;
 		this.type = type;
+		this.kind = kind;
+		this.subtype = subType;
+		this.unit = unit;
+		this.isEnum = isEnum;
+	}
+	
+	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type)
+	{
+		this(name, kind, value, groupName, type, null, null, false);
+	}
+
+	public EntityAttribute(String name, String kind)
+	{
+		this( name, EntityKind.valueOf( kind ), null, null, null );
 	}
 
 	public String toString()
@@ -30,9 +58,53 @@ public class EntityAttribute {
 	public String toStringAllContent()
 	{
 		StringBuffer result = new StringBuffer();
-		result.append( name ).append("[").append( value ).append( ", " ).
+		result.append( name ).append("(").append( kind.toString() ).append(")").append("[").append( value ).append( ", " ).
 			append( groupName ).append( ", " ).append( type ).append("]");
 		return result.toString();
+	}
+
+	public String getType() {
+		
+		return type;
+	}
+	
+	public String getSubtype() {
+		
+		return subtype;
+	}
+	
+	public String getUnit() {
+		
+		return unit;
+	}
+	
+	public List<String> getEnumValues() {
+		
+		return enumValues;
+	}
+	
+	public String[] getOperators() {
+		if (type.equals(INTEGER_TYPE)) {
+			return Predicate.integerOperators;
+		} else if (type.equals(STRING_TYPE)) {
+			return Predicate.stringOperators;
+		} else if (type.equals(DATE_TYPE)) {
+			return Predicate.dateOperators;
+		} else { // Unknown type.
+			return new String[]{UNKNOWN_TYPE};
+		}
+	}
+	
+	public Class getAttributeClass() {
+		if (type.equals(INTEGER_TYPE)) {
+			return Integer.class;
+		} else if (type.equals(STRING_TYPE)) {
+			return String.class;
+		} else if (type.equals(DATE_TYPE)) {
+			return String.class;
+		} else { // Unknown type.
+			return Object.class;
+		}
 	}
 
 	private Class<?> getTypeClass()

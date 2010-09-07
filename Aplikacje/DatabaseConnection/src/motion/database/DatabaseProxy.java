@@ -11,6 +11,7 @@ import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
 import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
@@ -23,6 +24,7 @@ import motion.database.model.User;
 import motion.database.model.UserBasket;
 import motion.database.model.UserPrivileges;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
+import motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate;
 
 public interface DatabaseProxy {
 
@@ -88,12 +90,6 @@ public interface DatabaseProxy {
 	public abstract Vector<SessionGroup> listSessionGroupsDefined()
 			throws Exception;
 
-	public abstract Session getSessionById(int id) throws Exception;
-
-	public abstract Trial getTrialById(int id) throws Exception;
-
-//	public abstract Segment getSegmentById(int id) throws Exception;
-
 	public abstract DbElementsList<Session> listPerformerSessionsWithAttributes(
 			int performerID) throws Exception;
 
@@ -155,22 +151,13 @@ public interface DatabaseProxy {
 	public abstract void setFileAttribute(int fileID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 	
-//	public abstract DbElementsList<Segment> listTrialSegmentsWithAttributes(
-//			int trialID) throws Exception;
-
-//	public abstract DbElementsList<DatabaseFile> listSessionFiles(int sessionID)
-//			throws Exception;
-
-//	public abstract DbElementsList<DatabaseFile> listTrialFiles(int trialID)
-//			throws Exception;
-
-//	public abstract DbElementsList<DatabaseFile> listPerformerFiles(
-//			int performerID) throws Exception;
+	public abstract DbElementsList<DatabaseFile> listFiles(int trialID, EntityKind kind)
+			throws Exception;
 
 	public abstract String downloadFile(int fileID, String destLocalFolder,
 			FileTransferListener transferListener, boolean recreateFolder) throws Exception;
 
-	public abstract Performer getPerformerById(int id) throws Exception;
+	public abstract GenericDescription<?> getById(int id, EntityKind kind) throws Exception;
 
 	public abstract void registerStateMessageListener(TextMessageListener listener);
 
@@ -184,26 +171,40 @@ public interface DatabaseProxy {
 	
 	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception;
 
-	public DbElementsList<Trial>  listBasketTrialsWithAttributes(String basketName) throws Exception;
-
-	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception;
-	
-//	public DbElementsList<Segment>  listBasketSegmentsWithAttributes(String basketName) throws Exception;
-
-	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception;
-
 	public DbElementsList<UserBasket>  listUserBaskets() throws Exception;
 
 	public  DbElementsList<Measurement> listTrialMeasurementsWithAttributes(int trialID) throws Exception;
-
-	public  DbElementsList<MeasurementConfiguration> listTrialMeasurementConfigurationsWithAttributes(int trialID) throws Exception;
 
 	public int createMeasurement(int trialID, int measurementConfigurationID ) throws Exception;
 	
 	public int createMeasurementConfiguration(String name, String description ) throws Exception;
 	
-	public void  defineAttribute(String attributeName, String groupName, String storageType, boolean isEnum, String pluginDescriptor, String dataSubtype, String unit) throws Exception;
-	
 	public void  defineAttributeGroup(String groupName, String unit) throws Exception;
+	
+	public String [] listMeasurementConfKinds();
+
+	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(EntityKind kind) throws Exception;
+
+	DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes(
+			int trialID) throws Exception;
+
+	void uploadFile(int resourceId, EntityKind kind, String description,
+			String localFilePath, FileTransferListener listener)
+			throws Exception;
+
+	void uploadAttributeFile(int resourceId, EntityAttribute attribute,	String description, String localFilePath,
+			FileTransferListener listener) throws Exception;
+
+	void updateStoredFilters(ArrayOfFilterPredicate filter) throws Exception;
+
+	List<motion.database.ws.userPersonalSpaceWCF.FilterList.FilterPredicate> listStoredFilters()
+			throws Exception;
+
+	DbElementsList<? extends GenericDescription<?>> listBasketEntitiesWithAttributes(String basketName, EntityKind kind) throws Exception;
+
+	void addAttributeEnumValue(EntityAttribute a, String value,	boolean clearExisting) throws Exception;
+
+	void defineAttribute(EntityAttribute a, String pluginDescriptor) throws Exception;
+
 
 }

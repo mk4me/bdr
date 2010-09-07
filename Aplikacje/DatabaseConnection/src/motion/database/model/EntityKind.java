@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.logging.Level;
 
 import motion.database.DatabaseConnection;
+import motion.database.DbElementsList;
 import motion.database.ws.ConnectionTools2;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
@@ -18,8 +20,17 @@ import motion.database.ws.basicQueriesServiceWCF.GetMeasurementByIdXMLResponse.G
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
+import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
 
 public enum EntityKind {
 
@@ -48,8 +59,34 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
+		
+		@Override
+		public DbElementsList<? extends GenericDescription<?>>  listBasketEntitiesWithAttributes(IUserPersonalSpaceWS port, String basketName) throws Exception
+		{
+			try {
+				ListBasketPerformersWithAttributesXMLResult result = port.listBasketPerformersWithAttributesXML(basketName);
+			
+				DbElementsList<Performer> output = new DbElementsList<Performer>();
+				
+				if (result.getBasketPerformerWithAttributesList() != null) 
+					for ( motion.database.ws.userPersonalSpaceWCF.PerformerDetailsWithAttributes s : result.getBasketPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+							output.add( ConnectionTools2.transformPerformerDetailsUPS(s) );
+				
+				return output;
+
+			} catch (IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ConnectionTools2.finalizeCall();
+			}
+		}
+
 	}, 
+
 	session(SessionStaticAttributes.class) {
+
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
 				EntityAttribute a, boolean update) throws Exception {
@@ -74,8 +111,43 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
+
+		@Override
+		public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
+			port.storeSessionFile(resourceId, destRemoteFolder, description, filename);
+		}
+
+		@Override
+		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+		{
+			return super.listFilesMethod(port, resourceID);
+		}
 		
+		@Override
+		public DbElementsList<? extends GenericDescription<?>>  listBasketEntitiesWithAttributes(IUserPersonalSpaceWS port, String basketName) throws Exception
+		{
+			try {
+				ListBasketSessionsWithAttributesXMLResult result = port.listBasketSessionsWithAttributesXML(basketName);
+			
+				DbElementsList<Session> output = new DbElementsList<Session>();
+				
+				if (result.getBasketSessionWithAttributesList() != null) 
+					for ( motion.database.ws.userPersonalSpaceWCF.SessionDetailsWithAttributes s : result.getBasketSessionWithAttributesList().getSessionDetailsWithAttributes() )
+							output.add( ConnectionTools2.transformSessionDetailsUPS(s) );
+				
+				return output;
+
+			} catch (IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ConnectionTools2.finalizeCall();
+			}
+		}
+
 	}, 
+
 	trial(TrialStaticAttributes.class) {
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
@@ -102,12 +174,47 @@ public enum EntityKind {
 			}
 		}
 
+		@Override
+		public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
+			port.storeTrialFile(resourceId, destRemoteFolder, description, filename);
+		}
+
+		@Override
+		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+		{
+			return super.listFilesMethod(port, resourceID);
+		}
+		
+		@Override
+		public DbElementsList<? extends GenericDescription<?>>  listBasketEntitiesWithAttributes(IUserPersonalSpaceWS port, String basketName) throws Exception
+		{
+			try {
+				ListBasketTrialsWithAttributesXMLResult result = port.listBasketTrialsWithAttributesXML(basketName);
+			
+				DbElementsList<Trial> output = new DbElementsList<Trial>();
+				
+				if (result.getBasketTrialWithAttributesList() != null) 
+					for ( motion.database.ws.userPersonalSpaceWCF.TrialDetailsWithAttributes s : result.getBasketTrialWithAttributesList().getTrialDetailsWithAttributes() )
+							output.add( ConnectionTools2.transformTrialDetailsUPS(s) );
+				
+				return output;
+
+			} catch (IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}	
+			finally{
+				ConnectionTools2.finalizeCall();
+			}
+		}
+
 	}, 
+	
 	measurement(MeasurementStaticAttributes.class) {
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
 				EntityAttribute a, boolean update) throws Exception {
-			port.setMeasurementAttribute(ID, a.name, a.value.toString(), update);			
+			port.setMeasurementAttribute(ID, a.name, a.value.toString(), update);
 		}
 		
 		@Override
@@ -129,28 +236,32 @@ public enum EntityKind {
 			}
 		}
 	}, 
-	measurementConfiguration(MeasurementConfigurationStaticAttributes.class) {
+	
+	measurement_conf(MeasurementConfigurationStaticAttributes.class) {
+
+		@Override
+		public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
+			port.storeMeasurementConfFile(resourceId, destRemoteFolder, description, filename);
+		}
+	
+		@Override
+		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+		{
+			return super.listFilesMethod(port, resourceID);
+		}
+
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
 				EntityAttribute a, boolean update) throws Exception {
-			throw new Exception("MeasurementConfiguration entity does not support generic attributes!");
+			port.setMeasurementConfAttribute(ID, a.name, a.value.toString(), update);
 		}
-		
-		@Override
-		public MeasurementConfiguration getByID(IBasicQueriesWS port, int id) throws Exception {
-			throw new Exception("MeasurementConfiguration entity does not support getting by measurementConfigurationID!");
-		}
-
 	}, 
+	
+	
 	file(DatabaseFileStaticAttributes.class) {
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			port.setFileAttribute(ID, a.name, a.value.toString(), update);			
-		}
 
 		@Override
-		public Measurement getByID(IBasicQueriesWS port, int id) throws Exception {
+		public GenericDescription<?> getByID(IBasicQueriesWS port, int id) throws Exception {
 			try{
 				GetMeasurementByIdXMLResult result = port.getMeasurementByIdXML(id);
 				MeasurementDetailsWithAttributes s = result.getMeasurementDetailsWithAttributes();
@@ -167,65 +278,31 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
-
 	}, 
-	user(UserStaticAttributes.class) {
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			throw new Exception("User entity does not support generic attributes!");
-		}
 
-		@Override
-		public User getByID(IBasicQueriesWS port, int id) throws Exception {
-			throw new Exception("User entity does not support getting by measurementConfigurationID!");
-		}
-	}, 
-	userPrivileges(UserPrivilegesStaticAttributes.class) {
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			throw new Exception("UserPrivileges entity does not support generic attributes!");
-		}
-
-		@Override
-		public UserPrivileges getByID(IBasicQueriesWS port, int id) throws Exception {
-			throw new Exception("UserPrivileges entity does not support getting by measurementConfigurationID!");
-		}
-	},
-	result(null) {
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			throw new Exception("Result entity does not support generic attributes!");
-		}
-		@Override
-		public User getByID(IBasicQueriesWS port, int id) throws Exception {
-			throw new Exception("Result entity does not support getting by measurementConfigurationID!");
-		}
-
-	}, 
-	userBasket (UserBasketStaticAttributes.class) {
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			throw new Exception("UserBasket entity does not support generic attributes!");
-		}
-
-		@Override
-		public UserBasket getByID(IBasicQueriesWS port, int id) throws Exception {
-			throw new Exception("UserBasket entity does not support getting by measurementConfigurationID!");
-		} 
-
-	},;
+	user(UserStaticAttributes.class), 
+	
+	userPrivileges(UserPrivilegesStaticAttributes.class),
+	
+	result(null), 
+	
+	userBasket (UserBasketStaticAttributes.class);
+	
+	
+	//////////////////////////////////////////////////////////////////////////
 	
 	private Class<?> staticAttributes;
+
+	//////////////////////////////////////////////////////////////////////////
 
 	EntityKind(Class<?> staticAttributes)
 	{
 		this.staticAttributes = staticAttributes;
 	}
 	
+
+
+
 	public String[] getKeys()
 	{
 		Object[] k = (staticAttributes).getEnumConstants();
@@ -235,9 +312,41 @@ public enum EntityKind {
 			result[i++] = o.toString();
 		return result;
 	}
-	
-	abstract public void setEntityAttribute(IBasicUpdatesWS port, int ID, EntityAttribute a, boolean update) throws Exception;
-	
-	abstract public GenericDescription<?> getByID(IBasicQueriesWS port, int ID) throws Exception;
-	
+
+	public void setEntityAttribute(IBasicUpdatesWS port, int ID, EntityAttribute a, boolean update) throws Exception
+	{
+		throw new Exception( this.name() + " entity does not support generic attributes!");
+	}
+
+	public GenericDescription<?> getByID(IBasicQueriesWS port, int id) throws Exception {
+		throw new Exception( this.name() + " entity does not support getting by ID!");
+	}
+
+	public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, 
+			String description, String filename) throws Exception{
+		throw new Exception( this.name() + " entity does not support file uploading outside attributes!");
+	}
+
+	public void storeAttributeFile(IFileStoremanWS port, int resourceId, EntityAttribute attribute, String destRemoteFolder, 
+			String description, String filename) throws Exception{
+		throw new Exception( this.name() + " entity does not support files in attributes!");
+	}
+
+	public  DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+	{
+		throw new Exception( this.name() + " entity does not support listing files!");
+	}
+
+	public DbElementsList<? extends GenericDescription<?>> listBasketEntitiesWithAttributes(IUserPersonalSpaceWS port, String basketName) throws Exception {
+		throw new Exception( this.name() + " entity does not support storing in baskets!");
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	private  DbElementsList<DatabaseFile> listFilesMethod(IBasicQueriesWS port, int resourceID) throws Exception
+	{
+		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(resourceID, this.name());
+		return ConnectionTools2.transformListOfFiles(result);
+	}
+
 }

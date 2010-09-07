@@ -6,16 +6,23 @@ import java.util.Vector;
 public class EntityAttributeGroup extends Vector<EntityAttribute>{
 
 	
-	public String entityKind;
+	public EntityKind kind;
 	public String name;
 
 	public EntityAttributeGroup(String name, String entityKind)
 	{
 		super();
 		this.name = name;
-		this.entityKind = entityKind;
+		this.kind = EntityKind.valueOf( entityKind );
 	}
 	
+	public EntityAttributeGroup(String name, EntityKind kind)
+	{
+		super();
+		this.name = name;
+		this.kind = kind;
+	}
+		
 	public String toString()
 	{
 		return name;

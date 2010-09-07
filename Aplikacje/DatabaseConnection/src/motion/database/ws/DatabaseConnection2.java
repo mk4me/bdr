@@ -12,14 +12,15 @@ import java.util.logging.Logger;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.TextMessageListener;
+import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
 import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
@@ -44,10 +45,7 @@ import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.GenericUniformAttributesQueryResult;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage;
-import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage;
@@ -68,9 +66,6 @@ import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesServiceWCF.AttributeGroupDefinitionList.AttributeGroupDefinition;
 import motion.database.ws.basicQueriesServiceWCF.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult;
-import motion.database.ws.basicQueriesServiceWCF.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
-import motion.database.ws.basicQueriesServiceWCF.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
-import motion.database.ws.basicQueriesServiceWCF.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult;
@@ -105,9 +100,6 @@ import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketU
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
-import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
-import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
-import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse.ListUserBasketsResult;
 
 import com.zehon.BatchTransferProgress;
@@ -139,7 +131,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	enum ConnectionState{ INITIALIZED, CONNECTED, ABORTED, CLOSED, UNINITIALIZED }
 
-	private static final String entity = null;;
+	//private static final String entity = null;;
 	
 	protected ConnectionState state;
 	protected Credentials wsCredentials = new Credentials();
@@ -210,6 +202,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	};
 
 	
+	@Override
 	public void registerStateMessageListener(TextMessageListener listener) {
 	
 		ConnectionTools2.registerActionListener(listener);
@@ -219,11 +212,20 @@ public class DatabaseConnection2 implements DatabaseProxy {
  * 	BasicQueriesServiceWCF
  *==========================================================================
  */	
+
+	@Override
+	public GenericDescription<?> getById(int id, EntityKind kind) throws Exception
+	{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getById:" + kind, this );
 	
+			return kind.getByID(port, id);	
+	}
+
 	
 ////////////////////////////////////////////////////////////////////////////
 //	Generic Result 
 	
+	@Override
 	public  List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates, String[] p_entitiesToInclude) throws Exception
 	{
 		try{
@@ -263,6 +265,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Attributes 
 
 	
+	@Override
 	public HashMap<String, String> listAttributesDefined(String group, String entityKind) throws Exception
 	{
 		try{
@@ -290,6 +293,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public List<String> listEnumValues(String attributeName, String entityKind) throws Exception
 	{
 		try{
@@ -314,6 +318,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(String entityKind) throws Exception
 	{
 		try{
@@ -332,7 +337,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 						group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
 						output.put( a.getAttributeGroupName(), group );
 					}
-					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), null, a.getAttributeGroupName(), a.getAttributeType() );
+					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), group.kind, null, a.getAttributeGroupName(), a.getAttributeType() );
 					attr.unit = a.getUnit();
 					attr.subtype = a.getSubtype();
 					if (a.getEnumValues() != null) {
@@ -354,6 +359,10 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(EntityKind kind) throws Exception
+	{
+		return listGrouppedAttributesDefined(kind.name());
+	}
 	
 	
 	
@@ -361,6 +370,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Attribute Groups
 	
 	
+	@Override
 	public Vector<String> listAttributeGroupsDefined(String entityKind) throws Exception
 	{
 		try{
@@ -390,6 +400,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Motion Kinds
 
 	
+	@Override
 	public Vector<MotionKind> listMotionKindsDefined() throws Exception
 	{
 		try{
@@ -420,28 +431,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Performer
 
 	
-	public Performer getPerformerById(int id) throws Exception
-	{
-		try{
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getPerformerById", this );
-		
-			GetPerformerByIdXMLResult result = port.getPerformerByIdXML(id);
-			PerformerDetailsWithAttributes s = result.getPerformerDetailsWithAttributes();
-	
-			return ConnectionTools2.transformPerformerDetails(s);
-		}
-		catch(IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage e)
-		{
-			DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}
-		finally
-		{
-			ConnectionTools2.finalizeCall();
-		}
-	}
-
-	
+	@Override
 	public  DbElementsList<Performer> listLabPerformersWithAttributes(int labID) throws Exception
 	{
 		try{
@@ -469,6 +459,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public  DbElementsList<Performer> listPerformersWithAttributes() throws Exception
 	{
 		try{
@@ -498,29 +489,8 @@ public class DatabaseConnection2 implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 //	Session
 	
-	
-	public Session getSessionById(int id) throws Exception
-	{
-		try{
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionById", this );
-		
-			GetSessionByIdXMLResult result = port.getSessionByIdXML(id);
-			SessionDetailsWithAttributes s = result.getSessionDetailsWithAttributes();
-	
-			return ConnectionTools2.transformSessionDetails(s);
-		}
-		catch(IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage e)
-		{
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}
-		finally
-		{
-			ConnectionTools2.finalizeCall();
-		}
-	}
 
-
+	@Override
 	public  String getSessionLabel(int sessionID) throws Exception
 	{
 		try{	
@@ -540,6 +510,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public  DbElementsList<Session> listPerformerSessionsWithAttributes(int performerID) throws Exception
 	{
 		try{
@@ -568,6 +539,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public  DbElementsList<Session> listLabSessionsWithAttributes(int labID) throws Exception
 	{
 		try {
@@ -596,6 +568,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 //	Session Groups
 	
+	@Override
 	public Vector<SessionGroup> listSessionGroupsDefined() throws Exception
 	{
 		try{
@@ -628,29 +601,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Trial
 
 	
-	public Trial getTrialById(int id) throws Exception
-	{
-		try{
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getTrialById", this );
-	
-			GetTrialByIdXMLResult result = port.getTrialByIdXML(id);
-			TrialDetailsWithAttributes s = result.getTrialDetailsWithAttributes();
-	
-			ConnectionTools2.finalizeCall();
-			return ConnectionTools2.transformTrialDetails(s);
-		} 
-		catch (IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage e) 
-		{
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}
-		finally
-		{
-			ConnectionTools2.finalizeCall();
-		}
-	}
-
-
+	@Override
 	public  DbElementsList<Trial> listSessionTrialsWithAttributes(int sessionID) throws Exception
 	{
 		try{
@@ -676,11 +627,15 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	
+////////////////////////////////////////////////////////////////////////////
+//	Measurements
 
+	@Override
 	public  DbElementsList<Measurement> listTrialMeasurementsWithAttributes(int trialID) throws Exception
 	{
 		try{
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listSessionTrialsWithAttributes", this );
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listTrialsMeasurementsWithAttributes", this );
 		
 			ListTrialMeasurementsWithAttributesXMLResult result = port.listTrialMeasurementsWithAttributesXML(trialID);
 			DbElementsList<Measurement> output = new DbElementsList<Measurement>();
@@ -702,11 +657,22 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 	
+
+////////////////////////////////////////////////////////////////////////////
+//	MesurementsConfiguration
+
+
+	@Override
+	public String [] listMeasurementConfKinds(){
+		return new String[]{"mocap", "GRF", "video", "sEMG"};
+	}
+
 	
-	public  DbElementsList<MeasurementConfiguration> listTrialMeasurementConfigurationsWithAttributes(int trialID) throws Exception
+	@Override
+	public  DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes(int trialID) throws Exception
 	{
 		try{
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listSessionTrialsWithAttributes", this );
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listMeasurementConfigurationsWithAttributes", this );
 		
 			ListMeasurementConfigurationsWithAttributesXMLResult result = port.listMeasurementConfigurationsWithAttributesXML();
 			DbElementsList<MeasurementConfiguration> output = new DbElementsList<MeasurementConfiguration>();
@@ -731,70 +697,23 @@ public class DatabaseConnection2 implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 //	File
 	
-//	
-//	public  DbElementsList<DatabaseFile> listSessionFiles(int sessionID) throws Exception
-//	{
-//		try{
-//			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listSessionFiles", this );
-//		
-//			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(sessionID, EntityKind.session.name());
-//	
-//			return ConnectionTools2.transformListOfFiles(result);
-//		} 
-//		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
-//		{
-//			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-//			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-//		}
-//		finally
-//		{
-//			ConnectionTools2.finalizeCall();
-//		}
-//	}
-//
-//	
-//
-//	public  DbElementsList<DatabaseFile> listTrialFiles(int trialID) throws Exception
-//	{
-//		try{
-//			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listTrialFiles", this );
-//	
-//			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(trialID, EntityKind.trial.name());
-//			
-//			return ConnectionTools2.transformListOfFiles(result);
-//		} 
-//		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
-//		{
-//			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-//			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-//		}
-//		finally
-//		{
-//			ConnectionTools2.finalizeCall();
-//		}
-//	}
-//
-//	
-//
-//	public  DbElementsList<DatabaseFile> listPerformerFiles(int performerID) throws Exception
-//	{
-//		try{
-//			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listPerformerFiles", this );
-//	
-//			ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(performerID, EntityKind.performer.name());
-//			
-//			return ConnectionTools2.transformListOfFiles(result);
-//		} 
-//		catch (IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage e) 
-//		{
-//			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-//			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-//		}
-//		finally
-//		{
-//			ConnectionTools2.finalizeCall();
-//		}
-//	}
+	@Override
+	public  DbElementsList<DatabaseFile> listFiles( int resourceID, EntityKind kind ) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listFiles:" + kind, this );
+			DbElementsList<DatabaseFile> result = kind.listFiles(port, resourceID);
+			return result;
+		} 
+		catch (Exception e) 
+		{
+			throw ConnectionTools2.transformWSFaultMessage(e); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
 	
 	
 	/*==========================================================================
@@ -802,6 +721,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	 *==========================================================================
 	 */	
 
+	@Override
 	public void cancelCurrentFileTransfer()
 	{
 		fileTransferSupport.cancel();
@@ -809,6 +729,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
 	public void registerFileUploadListener( FileTransferListener listener )
 	{
 		this.fileTransferSupport.registerUploadListener(listener);
@@ -870,6 +791,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Download
 	
 	
+	@Override
 	public  String downloadFile(int fileID, String destLocalFolder, FileTransferListener transferListener, boolean recreateFolder) throws Exception
 	{
 			IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "downloadFile", this );
@@ -936,9 +858,14 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
-	
-	public void uploadAttributeFile(int resourceId, EntityKind kind, String attributeName, String description, String localFilePath, FileTransferListener listener) throws Exception
+	/**
+	 * To be changed.
+	 */
+	@Override
+	public void uploadAttributeFile(int resourceId, EntityAttribute attribute, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
+		if (attribute.kind == null)
+			throw new Exception("Attribute without entity kind defined: " + attribute);
 
 		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadAttributeFile", this );
 
@@ -946,7 +873,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		putFile(localFilePath, destRemoteFolder, listener);			
 		    
 		if (!fileTransferCancelled)
-				port.storeAttributeFile(resourceId, kind.name(), attributeName, destRemoteFolder, description, new File(localFilePath).getName() );
+				port.storeAttributeFile(resourceId, attribute.kind.name(), attribute.name, destRemoteFolder, description, new File(localFilePath).getName() );
 		
 		System.out.println( destRemoteFolder + "   " + localFilePath );
 		
@@ -954,6 +881,22 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
+	public void uploadFile(int resourceId, EntityKind kind, String description, String localFilePath, FileTransferListener listener) throws Exception
+	{
+
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadFile", this );
+
+		String destRemoteFolder = getUniqueFolderName();
+		putFile(localFilePath, destRemoteFolder, listener);			
+		    
+		if (!fileTransferCancelled)
+				kind.storeFile( port, resourceId, destRemoteFolder, description, new File(localFilePath).getName() );
+		
+		//System.out.println( destRemoteFolder + "   " + localFilePath );
+		
+		ConnectionTools2.finalizeCall();
+	}
 	
 
 	/*==========================================================================
@@ -961,6 +904,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	 *==========================================================================
 	 */	
 	
+	@Override
 	public int createPerformer(String name, String surname) throws Exception
 	{
 		try{
@@ -982,6 +926,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public int createSession(int [] sessionGroupID, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
 	{
 		try {
@@ -1003,6 +948,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
 	{
 		try{
@@ -1020,6 +966,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
 	public int createMeasurement(int trialID, int measurementConfigurationID ) throws Exception
 	{
 		try{
@@ -1037,6 +984,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public int createMeasurementConfiguration(String name, String description ) throws Exception
 	{
 		try{
@@ -1055,6 +1003,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Deprecated
+	@Override
 	public void setSessionAttribute(int sessionID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{
@@ -1073,6 +1022,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Deprecated
+	@Override
 	public void setSessionAttribute(int sessionID, EntityAttribute a, boolean update) throws Exception
 	{
 		try{
@@ -1089,10 +1039,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	
+	@Override
 	public void setEntityAttribute(int ID, EntityKind kind, EntityAttribute a, boolean update) throws Exception
 	{
 		try{
-			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setEntityAttribute", this );
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setEntityAttribute:" + a , this );
 
 			if (a == null)
 			{
@@ -1116,6 +1068,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	
 
 	@Deprecated
+	@Override
 	public void setTrialAttribute(int trialID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{
@@ -1133,6 +1086,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	@Deprecated
+	@Override
 	public void setPerformerAttribute(int performerID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try {
@@ -1150,10 +1104,11 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 
 	@Deprecated
+	@Override
 	public void setFileAttribute(int fileID, String attributeName, String attributeValue, boolean update) throws Exception
 	{
 		try{	
-			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setPerformerAttribute", this );
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setFileAttribute", this );
 
 			port.setFileAttribute(fileID, attributeName, attributeValue, update);			
 		} catch (IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage e) {
@@ -1171,6 +1126,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	 *==========================================================================
 	 */	
 
+	@Override
 	public boolean checkUserAccount() throws Exception
 	{
 		try {
@@ -1186,6 +1142,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	@Override
 	public void createUserAccount(String firstName, String lastName) throws Exception
 	{
 		try {
@@ -1202,6 +1159,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
 	public DbElementsList<User> listUsers() throws Exception
 	{
 		try {
@@ -1218,6 +1176,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public void grantSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception
 	{
 		try {
@@ -1233,6 +1192,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	@Override
 	public void removeSessionPrivileges(String grantedUserLogin, int sessionID, boolean writePrivilege) throws Exception
 	{
 		try {
@@ -1249,10 +1209,11 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 	
+	@Override
 	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception
 	{
 		try {
-			IAuthorizationWS port = ConnectionTools2.getAuthorizationServicePort( "removeSessionPrivileges", this );
+			IAuthorizationWS port = ConnectionTools2.getAuthorizationServicePort( "setSessionPrivileges", this );
 			port.alterSessionVisibility(sessionID, readPrivilege, writePrivilege);
 			
 		
@@ -1265,6 +1226,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	@Override
 	public DbElementsList<UserPrivileges> listSessionPrivileges(int sessionID) throws Exception
 	{
 		try {
@@ -1286,11 +1248,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	 *==========================================================================
 	 */	
 
-	public void addEntityToBasket(String basketName, int resourceID, String entity) throws Exception
+	@Override
+	public void addEntityToBasket(String basketName, int resourceID, String entityName) throws Exception
 	{
 		try {
 			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "addEntityToBasket", this );
-			port.addEntityToBasket(basketName, resourceID, entity);
+			port.addEntityToBasket(basketName, resourceID, entityName);
 		
 		} catch (IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1302,6 +1265,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 
+	@Override
 	public void removeEntityFromBasket(String basketName, int resourceID, String entityName) throws Exception
 	{
 		try {
@@ -1318,6 +1282,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public void createBasket(String basketName) throws Exception
 	{
 		try {
@@ -1334,6 +1299,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
 	public void removeBasket(String basketName) throws Exception
 	{
 		try {
@@ -1350,6 +1316,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
 	public void updateStoredFilters(motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate filter) throws Exception
 	{
 		try {
@@ -1366,6 +1333,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 	
+	@Override
 	public List<motion.database.ws.userPersonalSpaceWCF.FilterList.FilterPredicate> listStoredFilters() throws Exception
 	{
 		try {
@@ -1382,6 +1350,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public DbElementsList<UserBasket>  listUserBaskets() throws Exception
 	{
 		try {
@@ -1405,77 +1374,15 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+
+	@Override
+	public DbElementsList<? extends GenericDescription<?>>  listBasketEntitiesWithAttributes(String basketName, EntityKind kind) throws Exception
+	{
+		IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "listBasketEntityWithAttributes", this );
+		return kind.listBasketEntitiesWithAttributes(port, basketName);
+	}
 	
-	public DbElementsList<Performer>  listBasketPerformersWithAttributes(String basketName) throws Exception
-	{
-		try {
-			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "listBasketPerformersWithAttributes", this );
-			ListBasketPerformersWithAttributesXMLResult result = port.listBasketPerformersWithAttributesXML(basketName);
-		
-			DbElementsList<Performer> output = new DbElementsList<Performer>();
-			
-			if (result.getBasketPerformerWithAttributesList() != null) 
-				for ( motion.database.ws.userPersonalSpaceWCF.PerformerDetailsWithAttributes s : result.getBasketPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
-						output.add( ConnectionTools2.transformPerformerDetailsUPS(s) );
-			
-			return output;
 
-		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}	
-		finally{
-			ConnectionTools2.finalizeCall();
-		}
-	}
-
-	
-	public DbElementsList<Session>  listBasketSessionsWithAttributes(String basketName) throws Exception
-	{
-		try {
-			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "listBasketSessionsWithAttributes", this );
-			ListBasketSessionsWithAttributesXMLResult result = port.listBasketSessionsWithAttributesXML(basketName);
-		
-			DbElementsList<Session> output = new DbElementsList<Session>();
-			
-			if (result.getBasketSessionWithAttributesList() != null) 
-				for ( motion.database.ws.userPersonalSpaceWCF.SessionDetailsWithAttributes s : result.getBasketSessionWithAttributesList().getSessionDetailsWithAttributes() )
-						output.add( ConnectionTools2.transformSessionDetailsUPS(s) );
-			
-			return output;
-
-		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}	
-		finally{
-			ConnectionTools2.finalizeCall();
-		}
-	}
-
-
-	public DbElementsList<Trial>  listBasketTrialsWithAttributes(String basketName) throws Exception
-	{
-		try {
-			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "listBasketTrialsWithAttributes", this );
-			ListBasketTrialsWithAttributesXMLResult result = port.listBasketTrialsWithAttributesXML(basketName);
-		
-			DbElementsList<Trial> output = new DbElementsList<Trial>();
-			
-			if (result.getBasketTrialWithAttributesList() != null) 
-				for ( motion.database.ws.userPersonalSpaceWCF.TrialDetailsWithAttributes s : result.getBasketTrialWithAttributesList().getTrialDetailsWithAttributes() )
-						output.add( ConnectionTools2.transformTrialDetailsUPS(s) );
-			
-			return output;
-
-		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
-			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-		}	
-		finally{
-			ConnectionTools2.finalizeCall();
-		}
-	}
 
 	/*==========================================================================
 	 * 	AdministrationWS
@@ -1483,13 +1390,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	 */	
 	
 	
-	public void  defineAttribute(String attributeName, String groupName, 
-			String storageType, boolean isEnum, String pluginDescriptor, 
-			String dataSubtype, String unit) throws Exception
+	@Override
+	public void  defineAttribute( EntityAttribute a, String pluginDescriptor ) throws Exception 
 	{
 		try {
 			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttribute", this );
-			port.defineAttribute(attributeName, groupName, entity, storageType, isEnum, pluginDescriptor, dataSubtype, unit);
+			port.defineAttribute(a.name, a.groupName, a.kind.name(), a.type, a.isEnum, pluginDescriptor, a.subtype, a.unit);
 
 		} catch (IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1501,6 +1407,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
+	@Override
 	public void  defineAttributeGroup(String groupName, String unit) throws Exception
 	{
 		try {
@@ -1517,22 +1424,16 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 
-	/**
-	 * To be changed.
-	 * 
-	 * @param a
-	 * @param attributeName
-	 * @param groupName
-	 * @param entity
-	 * @param value
-	 * @param clearExisting
-	 * @throws Exception
-	 */
-	public void  addAttributeEnumValue(EntityAttribute a, String attributeName, String groupName, String entity, String value, boolean clearExisting ) throws Exception
+	@Override
+	public void  addAttributeEnumValue(EntityAttribute a, String value, boolean clearExisting ) throws Exception
 	{
+		if (a.kind == null)
+			throw new Exception ("Attribute must have entity kind defined!" + a);
+		if (a.groupName == null)
+			throw new Exception ("Attribute must have group name defined!" + a);
 		try {
-			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttribute", this );
-			port.addAttributeEnumValue(attributeName, groupName, entity, value, clearExisting);
+			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttributeEnumValue", this );
+			port.addAttributeEnumValue(a.name, a.groupName, a.kind.name(), value, clearExisting);
 
 		} catch (IAdministrationWSDefineAttriubeGroupAdministrationOperationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

@@ -1,5 +1,8 @@
 package motion.database.ws;
 
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
 import motion.database.TextMessageListener;
@@ -238,7 +241,7 @@ public class ConnectionTools2 {
 			if (attributes.getAttribute() != null)
 				for (  motion.database.ws.basicQueriesServiceWCF.Attributes.Attribute att : attributes.getAttribute() )
 				{
-					EntityAttribute attribute = new EntityAttribute(att.getName(), att.getValue(), att.getAttributeGroup(), att.getType() );
+					EntityAttribute attribute = new EntityAttribute(att.getName(), destinationObject.entityKind, att.getValue(), att.getAttributeGroup(), att.getType() );
 					destinationObject.put(att.getName(), attribute );
 				}
 		return destinationObject;
@@ -357,7 +360,7 @@ public class ConnectionTools2 {
 				if (attributes.getAttribute() != null)
 					for (  Attribute att : attributes.getAttribute() )
 					{
-						EntityAttribute attribute = new EntityAttribute(att.getName(), att.getValue(), att.getAttributeGroup(), att.getType() );
+						EntityAttribute attribute = new EntityAttribute(att.getName(), destinationObject.entityKind, att.getValue(), att.getAttributeGroup(), att.getType() );
 						destinationObject.put(att.getName(), attribute );
 					}
 			return destinationObject;
@@ -416,5 +419,29 @@ public class ConnectionTools2 {
 		return m;
 	}
 
+	public static Exception transformWSFaultMessage( Exception e ) throws Exception
+	{
+		Class ec = e.getClass();
+		Method method = ec.getMethod( "getFaultInfo", null );
+		Object info = null;
+		String s = e.getLocalizedMessage();
+		if (method != null)
+			info = method.invoke( e );
+		if (info != null)
+			ec = info.getClass();
+		method = ec.getMethod( "getDetails", null );
+		if (method != null)
+			info = method.invoke( e );
+		if (info != null)
+			ec = info.getClass();
+		method = ec.getMethod( "getValue", null );
+		if (method != null)
+			info = method.invoke( e );
+		if (info instanceof String)
+			s = (String) info;
+		
+		DatabaseConnection.log.log( Level.SEVERE, s, e );
+		return new Exception( s, e ); 
+	}
 
 }
