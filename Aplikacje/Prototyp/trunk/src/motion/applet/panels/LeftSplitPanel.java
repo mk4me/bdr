@@ -126,7 +126,7 @@ public class LeftSplitPanel extends JPanel {
 								
 								JTable resultTable = new JTable();
 								resultTable.setModel(new QueryTableModel(result));
-								MotionAppletFrame.addResult(resultTable);
+								MotionAppletFrame.addResultTab(resultTable);
 							}
 							
 						} catch (Exception e1) {

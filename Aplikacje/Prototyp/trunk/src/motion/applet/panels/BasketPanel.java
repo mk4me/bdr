@@ -147,7 +147,7 @@ public class BasketPanel extends JPanel {
 						DbElementsList<? extends GenericDescription<?>> records = WebServiceInstance.getDatabaseConnection().listBasketEntitiesWithAttributes(basketName, tableName.toEntityKind());
 						table.setModel(new BasketTableModel(tableName, records, basketName));
 						
-						BasketPanel.this.addTab(table, basketName + " (" + entity + ")");
+						MotionAppletFrame.addBasketTab(table, basketName + " (" + entity + ")");
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -216,13 +216,6 @@ public class BasketPanel extends JPanel {
 		}
 		
 		return "";
-	}
-	
-	private void addTab(JTable table, String tabLabel) {
-		tablePane.addTab("basket records", new JScrollPane(table));
-		tablePane.setSelectedIndex(tablePane.getTabCount()-1);
-		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(tabLabel, tablePane);
-		tabCloseButtonWidget.addCloseButton();
 	}
 	
 	public JTabbedPane getTabbedPane() {

@@ -10,6 +10,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.RightSplitPanel;
@@ -60,5 +61,6 @@ public class TrialMouseAdapter extends MouseAdapter {
 	
 	private void viewFiles(int recordId, TableName tableName) {
 		rightPanel.showTable(TableNamesInstance.FILE, recordId, tableName);
+		MotionAppletFrame.setBrowsePanelVisible();
 	}
 }

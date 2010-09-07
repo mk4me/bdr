@@ -51,6 +51,8 @@ public class MotionAppletFrame extends JFrame {
 	private static String TAB_BASKETS = Messages.getString("Baskets"); //$NON-NLS-1$
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 	
+	private static JTabbedPane mainTabs;
+	
 	private static RightSplitPanel rightPanel;
 	private static BasketPanel basketPanel;
 	private static JTabbedPane queryResultsPane;
@@ -104,7 +106,7 @@ public class MotionAppletFrame extends JFrame {
 		basketSplitPane.setResizeWeight(0.1);
 		
 		// Main tabs
-		JTabbedPane mainTabs = new JTabbedPane(JTabbedPane.TOP);
+		mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab(TAB_BROWSE, rightPanel);
 		mainTabs.addTab(TAB_QUERY, leftRightSplitPane);
 		mainTabs.addTab(TAB_BASKETS, basketSplitPane);
@@ -209,19 +211,31 @@ public class MotionAppletFrame extends JFrame {
 		leftPanel.add(leftSplitPanel);
 	}
 	
-	public static void addResult(JTable resultTable) {
-		TableName tableName = ((BasicTableModel) resultTable.getModel()).getTableName();
-		if (tableName.equals(TableNamesInstance.PERFORMER)) {
-			resultTable.addMouseListener(new PerformerMouseAdapter(rightPanel));
-		} else if (tableName.equals(TableNamesInstance.SESSION)) {
-			resultTable.addMouseListener(new SessionMouseAdapter(rightPanel));
-		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-			resultTable.addMouseListener(new TrialMouseAdapter(rightPanel));
-		}
-		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
+	public static void addResultTab(JTable table) {
+		addTableMouseListeners(table);
+		queryResultsPane.addTab("query results", new JScrollPane(table));
 		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
 		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(TabCloseButtonWidget.RESULTS_TAB_LABEL, queryResultsPane);
 		tabCloseButtonWidget.addCloseButton();
+	}
+	
+	public static void addBasketTab(JTable table, String tabLabel) {
+		addTableMouseListeners(table);
+		basketPanel.getTabbedPane().addTab("basket records", new JScrollPane(table));
+		basketPanel.getTabbedPane().setSelectedIndex(basketPanel.getTabbedPane().getTabCount()-1);
+		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(tabLabel, basketPanel.getTabbedPane());
+		tabCloseButtonWidget.addCloseButton();
+	}
+	
+	private static void addTableMouseListeners(JTable table) {
+		TableName tableName = ((BasicTableModel) table.getModel()).getTableName();
+		if (tableName.equals(TableNamesInstance.PERFORMER)) {
+			table.addMouseListener(new PerformerMouseAdapter(rightPanel));
+		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+			table.addMouseListener(new SessionMouseAdapter(rightPanel));
+		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+			table.addMouseListener(new TrialMouseAdapter(rightPanel));
+		}
 	}
 	
 	public static BasicTableModel getCurrentTable() {
@@ -260,6 +274,10 @@ public class MotionAppletFrame extends JFrame {
 	public static boolean isQueryPanelVisible() {
 		
 		return queryResultsPane.isShowing();
+	}
+	
+	public static void setBrowsePanelVisible() {
+		mainTabs.setSelectedIndex(0);
 	}
 	
 	public static void refreshBaskets() {

@@ -11,6 +11,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
+import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.RightSplitPanel;
@@ -86,9 +87,11 @@ public class SessionMouseAdapter extends MouseAdapter {
 	
 	private void viewTrials(int recordId) {
 		rightPanel.showTable(TableNamesInstance.TRIAL, recordId);
+		MotionAppletFrame.setBrowsePanelVisible();
 	}
 	
 	private void viewFiles(int recordId, TableName tableName) {
 		rightPanel.showTable(TableNamesInstance.FILE, recordId, tableName);
+		MotionAppletFrame.setBrowsePanelVisible();
 	}
 }
