@@ -23,6 +23,9 @@ import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
+import motion.applet.mouse.PerformerMouseAdapter;
+import motion.applet.mouse.SessionMouseAdapter;
+import motion.applet.mouse.TrialMouseAdapter;
 import motion.applet.panels.BasketPanel;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
@@ -207,6 +210,14 @@ public class MotionAppletFrame extends JFrame {
 	}
 	
 	public static void addResult(JTable resultTable) {
+		TableName tableName = ((BasicTableModel) resultTable.getModel()).getTableName();
+		if (tableName.equals(TableNamesInstance.PERFORMER)) {
+			resultTable.addMouseListener(new PerformerMouseAdapter(rightPanel));
+		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+			resultTable.addMouseListener(new SessionMouseAdapter(rightPanel));
+		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+			resultTable.addMouseListener(new TrialMouseAdapter(rightPanel));
+		}
 		queryResultsPane.addTab("query results", new JScrollPane(resultTable));
 		queryResultsPane.setSelectedIndex(queryResultsPane.getTabCount()-1);
 		TabCloseButtonWidget tabCloseButtonWidget = new TabCloseButtonWidget(TabCloseButtonWidget.RESULTS_TAB_LABEL, queryResultsPane);
