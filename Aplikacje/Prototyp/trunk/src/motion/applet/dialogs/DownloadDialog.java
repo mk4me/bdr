@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.FileTransferListener;
 

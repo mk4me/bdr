@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.toolbars.AppletToolBar;

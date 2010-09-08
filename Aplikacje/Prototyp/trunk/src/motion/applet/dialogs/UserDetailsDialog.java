@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import motion.applet.Messages;
+import motion.Messages;
 
 public class UserDetailsDialog extends BasicDialog {
 	private static String USER_DETAILS_TITLE = Messages.getString("UserDetailsDialog.UserTitle"); //$NON-NLS-1$

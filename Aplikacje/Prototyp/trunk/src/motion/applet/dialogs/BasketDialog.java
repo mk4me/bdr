@@ -17,7 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;

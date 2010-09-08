@@ -25,7 +25,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.database.TableName;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;

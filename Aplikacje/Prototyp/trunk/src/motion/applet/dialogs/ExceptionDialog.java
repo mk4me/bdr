@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.database.DatabaseConnection;
 
 public class ExceptionDialog extends BasicDialog {

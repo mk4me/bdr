@@ -11,6 +11,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import motion.Messages;
+
 public class MotionAppletLauncher extends JApplet {
 	private JComboBox languageComboBox = new JComboBox();
 	private static String ENGLISH = "English";

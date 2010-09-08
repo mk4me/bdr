@@ -16,7 +16,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.dialogs.ExceptionDialog;

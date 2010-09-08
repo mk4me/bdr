@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.tables.EntityTableModel;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;

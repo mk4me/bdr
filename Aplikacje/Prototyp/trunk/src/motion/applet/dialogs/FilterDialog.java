@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.database.model.AttributeName;

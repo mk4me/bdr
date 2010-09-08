@@ -10,7 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;

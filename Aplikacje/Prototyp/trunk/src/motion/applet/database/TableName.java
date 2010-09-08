@@ -3,7 +3,7 @@ package motion.applet.database;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.AttributeName;

@@ -19,7 +19,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import motion.applet.Messages;
+import motion.Messages;
 import motion.applet.MotionAppletFrame;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
