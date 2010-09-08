@@ -1,8 +1,8 @@
 package motion.database.model;
 
-import java.io.File;
 import java.util.logging.Level;
 
+import motion.Messages;
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
 import motion.database.ws.ConnectionTools2;
@@ -11,7 +11,6 @@ import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementBy
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
@@ -27,7 +26,6 @@ import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
@@ -292,6 +290,8 @@ public enum EntityKind {
 	//////////////////////////////////////////////////////////////////////////
 	
 	private Class<?> staticAttributes;
+	
+	private String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -315,30 +315,40 @@ public enum EntityKind {
 
 	public void setEntityAttribute(IBasicUpdatesWS port, int ID, EntityAttribute a, boolean update) throws Exception
 	{
-		throw new Exception( this.name() + " entity does not support generic attributes!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error1")); //$NON-NLS-1$
 	}
 
 	public GenericDescription<?> getByID(IBasicQueriesWS port, int id) throws Exception {
-		throw new Exception( this.name() + " entity does not support getting by ID!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error2")); //$NON-NLS-1$
 	}
 
 	public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, 
 			String description, String filename) throws Exception{
-		throw new Exception( this.name() + " entity does not support file uploading outside attributes!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error3")); //$NON-NLS-1$
 	}
 
 	public void storeAttributeFile(IFileStoremanWS port, int resourceId, EntityAttribute attribute, String destRemoteFolder, 
 			String description, String filename) throws Exception{
-		throw new Exception( this.name() + " entity does not support files in attributes!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error4")); //$NON-NLS-1$
 	}
 
 	public  DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
 	{
-		throw new Exception( this.name() + " entity does not support listing files!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error5")); //$NON-NLS-1$
 	}
 
 	public DbElementsList<? extends GenericDescription<?>> listBasketEntitiesWithAttributes(IUserPersonalSpaceWS port, String basketName) throws Exception {
-		throw new Exception( this.name() + " entity does not support storing in baskets!");
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error6")); //$NON-NLS-1$
+	}
+
+	public String getGUIName()
+	{
+		return guiNames[ this.ordinal() ];
+	}
+	
+	public String getName()
+	{
+		return this.name();
 	}
 
 	//////////////////////////////////////////////////////////////////////////
