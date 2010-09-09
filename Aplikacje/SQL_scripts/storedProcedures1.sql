@@ -85,7 +85,7 @@ select
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
-	'session' as Entity
+	'performer' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -314,21 +314,28 @@ return
  with MeasurementConfiguration as
 ( select * from Konfiguracja_pomiarowa where IdKonfiguracja_pomiarowa=@mc_id )
 	(
-	(select 'MeasurementConfiguratoinID' as Name,
+	(select 'MeasurementConfID' as Name,
 			t.IdKonfiguracja_pomiarowa as Value,
 			'integer' as Type,
 			'_measurement_conf_static' as AttributeGroup,
 			'measurement_conf' as Entity
 	from MeasurementConfiguration t)
 	union
-	(select 'MconfigName' as Name,
+	(select 'MeasurementConfName' as Name,
 			t.Nazwa as Value,
 			'string' as Type,
 			'_measurement_conf_static' as AttributeGroup,
 			'measurement_conf' as Entity
 	from MeasurementConfiguration t)
 	union
-	(select 'MconfigDescription' as Name,
+	(select 'MeasurementConfKind' as Name,
+			t.Rodzaj as Value,
+			'string' as Type,
+			'_measurement_conf_static' as AttributeGroup,
+			'measurement_conf' as Entity
+	from MeasurementConfiguration t)
+	union	
+	(select 'MeasurementConfDescription' as Name,
 			t.Opis as Value,
 			'string' as Type,
 			'_measurement_conf_static' as AttributeGroup,
@@ -361,7 +368,7 @@ select
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
-		'measurement_conf' as Entity
+		'measurement' as Entity
 from Atrybut a 
 inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
@@ -455,6 +462,7 @@ as
 			select 
 				IdKonfiguracja_pomiarowa as MeasurementConfID,
 				Nazwa as MeasurementConfName,
+				Rodzaj as MeasurementConfKind,
 				Opis as MeasurementConfDescription,
 				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Konfiguracja_pomiarowa MeasurementConfDetailsWithAttributes where IdKonfiguracja_pomiarowa=@res_id
@@ -469,7 +477,7 @@ create procedure list_performers_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdPerformer as PerformerID, Imie as FirstName, Nazwisko as LastName
-	from Performer Performer
+	from Performer PerformerDetails
     for XML AUTO, root ('PerformerList')
 go
 
@@ -485,7 +493,7 @@ select
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
 
-create procedure list_lab_performers_attributes_xml (@lab_id int)
+create procedure list_lab_performers_attributes_xml (@lab_id int)  -- Mozna pytac o przypisania na poziomie sesji
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
@@ -511,14 +519,14 @@ select
 	from Performer PerformerDetailsWithAttributes
 	where exists(
 	select * from Pomiar_performer pp where pp.IdPomiar = @meas_id and PerformerDetailsWithAttributes.IdPerformer = pp.IdPerformer)
-    for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
+    for XML AUTO, ELEMENTS, root ('MeasurementPerformerWithAttributesList')
 go
 
 
 -- Session listing queries
 -- =======================
 
-create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int)
+create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int) -- mozna uproscic do wykorzystujacej PerformerConfiguration
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
@@ -529,7 +537,6 @@ as
       )
       for XML AUTO, root ('PerformerSessionList')
 go
-
 
 create procedure list_performer_sessions_attributes_xml (@user_login varchar(30), @perf_id int)
 as
@@ -619,6 +626,7 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select
 	IdKonfiguracja_pomiarowa MeasurementConfID,
 	Nazwa MeasurementConfName,
+	Rodzaj MeasurementConfKind,
 	Opis MeasurementConfDescription
 from Konfiguracja_pomiarowa MeasurementConfDetails
       for XML AUTO, root ('MeasurementConfList')
@@ -630,10 +638,11 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select 
 	IdKonfiguracja_pomiarowa MeasurementConfID,
 	Nazwa MeasurementConfName,
+	Rodzaj MeasurementConfKind,
 	Opis MeasurementConfDescription,
 	(select * from list_measurement_configuration_attributes(IdKonfiguracja_pomiarowa) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Konfiguracja_pomiarowa MeasurementConfDetailsWithAttributes
-    for XML AUTO, ELEMENTS, root ('MeasurementConfListWithAttributesList')
+    for XML AUTO, ELEMENTS, root ('MeasurementConfWithAttributesList')
 go
 
 
@@ -677,7 +686,7 @@ select
 	IdObserwacja TrialID,
 	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Pomiar MeasurementDetailsWithAttributes
-where IdPomiar = @trial_id
+where IdPomiar = @meas_id
     for XML AUTO, ELEMENTS, root ('MeasureResultWithAttributesList')
 go
 
@@ -708,7 +717,7 @@ go
 -- UWAGA! W przyszlosci moze byc potrzebna takze list_file_attributes_uniform .
 
 -- POPRAWIÆ PONI¯SZE! ATRYBUTY I NAZWA ELEMENTU!
-
+/*
 create procedure list_measurement_result_files_attributes_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -716,8 +725,36 @@ as
 	from Plik p join Wynik_pomiaru wp on p.IdPlik = wp.IdPlik where wp.IdPlik=@meas_id
 	for XML PATH('ResultFileDetailsWithAttributes'), root ('MeasurementResultFileWithAttributesList')
 go
+*/
 
 create procedure list_session_files_xml(@user_login varchar(30), @sess_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath"
+	from Plik p join user_accessible_sessions_by_login(@user_login) s on p.IdSesja = s.IdSesja where p.IdSesja = @sess_id
+	for XML PATH('FileDetails'), root ('FileList')
+go
+
+create procedure list_trial_files_xml(@user_login varchar(30), @trial_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath"
+	from Plik p 
+	where 
+	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
+	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and p.IdObserwacja=@trial_id
+	for XML PATH('FileDetails'), root ('FileList')
+go
+
+create procedure list_measurement_conf_files_xml(@user_login varchar(30),  @mc_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription"
+	from Plik p where p.IdKonfiguracja_pomiarowa=@mc_id
+	for XML PATH('FileDetails'), root ('FileList')
+go
+
+create procedure list_session_attr_files_xml(@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
@@ -725,7 +762,7 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
-create procedure list_trial_files_xml(@user_login varchar(30), @trial_id int)
+create procedure list_trial_attr_files_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
@@ -736,7 +773,7 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
-create procedure list_measurement_conf_files_xml(@user_login varchar(30),  @mc_id int)
+create procedure list_measurement_conf_attr_files_xml(@user_login varchar(30),  @mc_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
@@ -744,7 +781,7 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
-create procedure list_measurement_files_xml(@user_login varchar(30),  @meas_id int)
+create procedure list_measurement_attr_files_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
@@ -753,7 +790,7 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
-create procedure list_performer_files_attributes_xml(@user_login varchar(30),  @perf_id int)
+create procedure list_performer_attr_files_attributes_xml(@user_login varchar(30),  @perf_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
@@ -765,6 +802,14 @@ go
 create procedure list_session_files_attributes_xml(@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	from Plik p where p.IdSesja=@sess_id
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
+go
+create procedure list_session_attr_files_attributes_xml(@user_login varchar(30), @sess_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_sesji was on p.IdPlik = was.Wartosc_Id join Atrybut a on a.IdAtrybut = was.IdAtrybut where was.IdSesja=@sess_id
@@ -772,6 +817,18 @@ as
 go
 
 create procedure list_trial_files_attributes_xml(@user_login varchar(30), @trial_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	from Plik p 
+	where 
+	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
+	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and p.IdObserwacja=@trial_id
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
+go
+
+create procedure list_trial_attr_files_attributes_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
@@ -786,13 +843,22 @@ go
 create procedure list_measurement_conf_files_attributes_xml(@user_login varchar(30),  @mc_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription",
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	from Plik p where p.IdKonfiguracja_pomiarowa=@mc_id
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
+go
+
+create procedure list_measurement_conf_attr_files_attributes_xml(@user_login varchar(30),  @mc_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut where wakp.IdKonfiguracja_pomiarowa=@mc_id
 	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
-create procedure list_measurement_files_attributes_xml(@user_login varchar(30),  @meas_id int)
+create procedure list_measurement_attr_files_attributes_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
@@ -876,11 +942,12 @@ Output parameter "result" meaning:
 6 - the value provided is not valid for this numeric-type attribute
 
 */
+
 create procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int ;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -927,6 +994,14 @@ begin
 					else
 					insert into Wartosc_atrybutu_sesji (IdAtrybut, IdSesja, Wartosc_zmiennoprzecinkowa) values (@attr_id, @sess_id, @float_value);
 				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_sesji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdSesja = @sess_id ;
+					else
+					insert into Wartosc_atrybutu_sesji (IdAtrybut, IdSesja, Wartosc_Id) values (@attr_id, @sess_id, @id_value);
+				end;
 			else
 				begin
 					if ( @value_tuple_found = 1 )
@@ -943,7 +1018,7 @@ create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100),
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -990,6 +1065,14 @@ begin
 					else
 					insert into Wartosc_atrybutu_performera (IdAtrybut, IdPerformer, Wartosc_zmiennoprzecinkowa) values (@attr_id, @perf_id, @float_value);
 				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_performera set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPerformer = @perf_id ;
+					else
+					insert into Wartosc_atrybutu_performera (IdAtrybut, IdPerformer, Wartosc_Id) values (@attr_id, @perf_id, @id_value);
+				end;
 			else
 				begin
 					if ( @value_tuple_found = 1 )
@@ -1007,7 +1090,7 @@ create procedure set_trial_attribute (@trial_id int, @attr_name varchar(100), @a
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -1054,6 +1137,14 @@ begin
 					else
 					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_zmiennoprzecinkowa) values (@attr_id, @trial_id, @float_value);
 				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_obserwacji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					else
+					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_Id) values (@attr_id, @trial_id, @id_value);
+				end;
 			else
 				begin
 					if ( @value_tuple_found = 1 )
@@ -1070,7 +1161,7 @@ create procedure set_file_attribute (@file_id int, @attr_name varchar(100), @att
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -1133,7 +1224,7 @@ create procedure set_measurement_conf_attribute (@mc_id int, @attr_name varchar(
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -1180,6 +1271,14 @@ begin
 					else
 					insert into Wartosc_atrybutu_konfiguracji_pomiarowej (IdAtrybut, IdKonfiguracja_pomiarowa, Wartosc_zmiennoprzecinkowa) values (@attr_id, @mc_id, @float_value);
 				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_konfiguracji_pomiarowej set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdKonfiguracja_pomiarowa = @mc_id ;
+					else
+					insert into Wartosc_atrybutu_konfiguracji_pomiarowej (IdAtrybut, IdKonfiguracja_pomiarowa, Wartosc_Id) values (@attr_id, @mc_id, @id_value);
+				end;
 			else
 				begin
 					if ( @value_tuple_found = 1 )
@@ -1196,7 +1295,7 @@ create procedure set_measurement_attribute (@meas_id int, @attr_name varchar(100
 as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float ;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
@@ -1242,6 +1341,14 @@ begin
 					update Wartosc_atrybutu_pomiaru set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
 					else
 					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_zmiennoprzecinkowa) values (@attr_id, @meas_id, @float_value);
+				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_pomiaru set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
+					else
+					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_Id) values (@attr_id, @meas_id, @id_value);
 				end;
 			else
 				begin

@@ -92,9 +92,37 @@ go
         ADD PRIMARY KEY (IdPerformer)
 go
  
+ CREATE TABLE Konfiguracja_performera (
+        IdKonfiguracja_performera	int IDENTITY,
+        IdSesja                int NOT NULL,
+        IdPerformer            int NOT NULL
+ )
+go
+
+ CREATE INDEX X1Konfiguracja_performera ON Konfiguracja_performera
+ (
+        IdSesja
+ )
+go
+ 
+ CREATE INDEX X2Konfiguracja_performera ON Konfiguracja_performera
+ (
+        IdPerformer
+ )
+go
+ 
+ 
+ ALTER TABLE Konfiguracja_performera
+        ADD PRIMARY KEY (IdKonfiguracja_performera)
+go
+ 
+
  
  CREATE TABLE Plik (
         IdPlik              int NOT NULL,
+		IdKonfiguracja_pomiarowa int NULL,
+        IdSesja              int NULL,
+        IdObserwacja         int NULL,
         Opis_pliku          varchar(100) NOT NULL,
         Plik                varbinary(max) filestream not null,
 		rowguid				uniqueidentifier rowguidcol not null unique,
@@ -102,6 +130,25 @@ go
 		Sciezka				varchar(100) null
  )
 go
+
+
+ CREATE INDEX X1Plik ON Plik
+ (
+        IdObserwacja
+ )
+go
+ 
+ CREATE INDEX X2Plik ON Plik
+ (
+        IdSesja
+ )
+go
+
+ CREATE INDEX X3Plik ON Plik
+ (
+        IdKonfiguracja_pomiarowa
+ )
+go 
  
  ALTER TABLE Plik
         ADD PRIMARY KEY (IdPlik)
@@ -111,7 +158,8 @@ CREATE TABLE Konfiguracja_pomiarowa
 (
 	IdKonfiguracja_pomiarowa int IDENTITY,
 	Nazwa varchar(50) UNIQUE NOT NULL,
-	Opis varchar(255) NULL
+	Opis varchar(255) NULL,
+	Rodzaj varchar(50) NOT NULL
 )
 go
 
@@ -920,6 +968,20 @@ go
                               REFERENCES Sesja
 go
  
+ ALTER TABLE Plik
+        ADD FOREIGN KEY (IdKonfiguracja_pomiarowa)
+                              REFERENCES Konfiguracja_pomiarowa on delete cascade;
+go
+
+ ALTER TABLE Plik
+        ADD FOREIGN KEY (IdObserwacja)
+                              REFERENCES Obserwacja on delete cascade;
+go
+
+ ALTER TABLE Plik
+        ADD FOREIGN KEY (IdSesja)
+                              REFERENCES Sesja on delete cascade;
+go
  
  ALTER TABLE Uprawnienia_grupa_atrybutow
         ADD FOREIGN KEY (IdGrupa_atrybutow)
@@ -1083,7 +1145,6 @@ ALTER TABLE Predykat
         ADD FOREIGN KEY (IdPredykat, IdUzytkownik) REFERENCES Predykat
 go
 
-
 ALTER TABLE Wartosc_Atrybutu_performera
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
 go
@@ -1105,6 +1166,15 @@ go
 ALTER TABLE Wartosc_Atrybutu_pomiaru
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
 go
+
+ALTER TABLE Konfiguracja_performera
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade;
+go
+
+ALTER TABLE Konfiguracja_performera
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade;
+go
+
 
 
 /*

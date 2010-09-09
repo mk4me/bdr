@@ -1,37 +1,5 @@
 use Motion;
 
-declare @filters as PredicateUdt;
-
-
-
-insert into @filters values (3, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
-	insert into @filters values (4, 3, 'GROUP', 0, 'AND', 'all', '', '', '', '');
-		insert into @filters values (5, 4, 'session', 0, '', 'SessionID', '>', '0', '', '');
-
-	insert into @filters values (6, 3, 'GROUP', 4, '', 'SIBLING', '', '', '', '');
-		insert into @filters values (7, 6, 'GROUP', 0, 'OR', '<130', '', '', '', '');
-			insert into @filters values (8, 7, 'session', 0, '', 'SessionID', '<', '130', '', '');
-		insert into @filters values (9, 6, 'GROUP', 7, '', '>=2', '', '', '', '');
-			insert into @filters values (10, 9, 'session', 0, '', 'SessionID', '>=', '2', '', '');
-exec dbo.evaluate_generic_query_uniform 'habela', @filters,  0,  1,  0,  0 
-
-declare @filters as PredicateUdt;
-insert into @filters values (1, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
-	insert into @filters values (6, 1, 'GROUP', 0, 'AND', 'perfid<10', '', '', '', '');
-		insert into @filters values (8, 6, 'performer', 0, '', 'PerformerID', '<', '10', '', '');
-	insert into @filters values (5, 1, 'GROUP', 6, '', 'SIBLING', '', '', '', '');
-		insert into @filters values (7, 5, 'GROUP', 0, '', 'more_sessions', '', '', '', '');
-			insert into @filters values (9, 7, 'performer', 0, '', 'SessionID', '>', '2', 'count', 'session');
-
-exec dbo.evaluate_generic_query_uniform 'habela', @filters,  1,  0,  0,  0 
-
-
-select * from Sesja where IdPerformer < 10
-
-exec dbo.evaluate_generic_query_uniform 'habela', @filters,  0,  1,  0,  0 
-
-
-
 create type PredicateUdt as table
 (
 	PredicateID int,
@@ -46,23 +14,6 @@ create type PredicateUdt as table
 	AggregateEntity varchar(20)
 )
 go
-
-/* -- TEST
-CREATE TABLE PredykatTest (
-        IdPredykat            int IDENTITY,
-		PredicateID int,
-		ParentPredicate int,
-		ContextEntity varchar(20),
-		PreviousPredicate int,
-		NextOperator varchar(5),
-		FeatureName varchar(100),
-		Operator varchar(5),
-		Value varchar(100),
-		AggregateFunction varchar(10),
-		AggregateEntity varchar(20),
-		timestamp
- )
-*/
 
 create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
@@ -129,72 +80,7 @@ inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
 go
 
-/* sample calls of filter-based queries */
-
-
-
-
-
---declare @filters as PredicateUdt;
---insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
---insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
---insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
---insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
-
---insert into @filters values (1, 3, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
---insert into @filters values (3, 5, 'GROUP', 0, 'OR', 'Walk', '', '', '', '');
---insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '3', '', '');
---insert into @filters values (4, 5, 'GROUP', 3, '', 'Run', '', '', '', '');
---insert into @filters values (5, 8, 'GROUP', 7, '', 'SIBLING', '', '', '', '');
---insert into @filters values (6, 7, 'session', 0, '', 'SessionID', '<=', '10', '', '');
---insert into @filters values (7, 8, 'GROUP', 0, 'AND', 'NiskieNry', '', '', '', '');
---insert into @filters values (8, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
-
-
---exec dbo.evaluate_generic_query @filters,  1,  1,  0,  0 
-
---declare @filters as PredicateUdt;
-----insert into @filters values (1, 0, 'GROUP', 0, 'AND', '', '', '', '', '');
-----insert into @filters values (2, 1, 'performer', 0, 'OR', 'date_of_birth', '>', '1980-01-01', '', '');
-----insert into @filters values (3, 1, 'session', 2, '', 'SessionID', '=', '1', '', '');
-----insert into @filters values (4, 0, 'performer', 1, '', 'LastName', '=', 'Kowalski', '', '');
-
---insert into @filters values (1, 3, 'session', 0, '', 'MotionKindID', '=', '2', '', '');
---insert into @filters values (3, 5, 'GROUP', 0, 'OR', 'Walk', '', '', '', '');
---insert into @filters values (2, 4, 'session', 0, '', 'MotionKindID', '=', '3', '', '');
---insert into @filters values (4, 5, 'GROUP', 3, '', 'Run', '', '', '', '');
---insert into @filters values (5, 8, 'GROUP', 7, '', 'SIBLING', '', '', '', '');
---insert into @filters values (6, 7, 'session', 0, '', 'SessionID', '<=', '10', '', '');
---insert into @filters values (7, 8, 'GROUP', 0, 'AND', 'NiskieNry', '', '', '', '');
---insert into @filters values (8, 15, 'GROUP', 0, 'OR', 'BRANCH', '', '', '', '');
-
---insert into @filters values (9, 10, 'performer', 0, '', 'PerformerID', '>', '10', '', '');
---insert into @filters values (10, 11, 'GROUP', 0, '', 'PerfIDHigherTen', '', '', '', '');
---insert into @filters values (11, 14, 'GROUP', 13, '', 'SIBLING', '', '', '', '');
-
---insert into @filters values (12, 13, 'performer', 0, '', 'FirstName', '=', 'Jan', '', '');
---insert into @filters values (13, 14, 'GROUP', 0, 'AND', 'Jan', '', '', '', '');
---insert into @filters values (14, 15, 'GROUP', 8, '', 'BRANCH', '', '', '', '');
---insert into @filters values (15, 0, 'GROUP', 0, '', 'BRANCH', '', '', '', '');
-
---exec dbo.evaluate_generic_query @filters,  1,  1,  0,  0 
-
-
-
-declare @filters as PredicateUdt;
-insert into @filters values (4, 0, 'performer', 0, '', 'LastName', '=', 'Kowalski', '', '');
-exec dbo.evaluate_generic_query 'kaczmarski', @filters,  1,  1,  0,  0 
-
-
-
-
---declare @filters as PredicateUdt;
---insert into @filters values (8, 0, 'sesja', 0, '', 'sessionID', '=', '1', '', '');
---exec dbo.evaluate_generic_query_uniform @filters,  0,  1,  0,  0 
-
-
-
-alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit)
+create procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -448,7 +334,7 @@ begin
 end
 go
 
-alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit)
+create procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -707,15 +593,6 @@ as
  select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
 go
 
--- exec validate_session_group_id 5
-
-create procedure list_session_groups_defined
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
-for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
-go
-
 create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
 as
  set @result = ((select count(*) from Uzytkownik where Login = @user_login))
@@ -725,9 +602,6 @@ create procedure create_user_account (@user_login varchar(30), @user_first_name 
 as
 insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
 go
-
-
-
 
 create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
 as
@@ -770,4 +644,281 @@ begin
 end
 go
 
-exec set_session_privileges 'habela', 'kaczmarski', 8, 1
+-- UPS Procedures
+
+create procedure update_stored_filters(@user_login as varchar(30), @filter as PredicateUdt readonly)
+as
+begin
+
+	declare @user_id int;
+	set @user_id = dbo.identify_user(@user_login);
+	
+	
+		delete from Predykat 
+		where IdUzytkownik = @user_id
+		and not exists ( select * from @filter as f where	f.PredicateID = IdPredykat and
+															f.ParentPredicate = IdRodzicPredykat and
+														f.ContextEntity = EncjaKontekst and
+														f.PreviousPredicate = IdPoprzedniPredykat and
+														f.NextOperator = NastepnyOperator and
+														f.FeatureName = NazwaWlasciwosci and
+														f.Operator = Operator and
+														f.Value = Wartosc and
+														f.AggregateFunction = FunkcjaAgregujaca and
+														f.AggregateEntity = EncjaAgregowana and
+														@user_id = IdUzytkownik	);
+
+	insert into Predykat
+	( IdPredykat, IdRodzicPredykat,	EncjaKontekst, IdPoprzedniPredykat, NastepnyOperator, NazwaWlasciwosci, 
+	Operator, Wartosc,	FunkcjaAgregujaca,	EncjaAgregowana, IdUzytkownik )
+		(
+		(select * from Predykat where IdUzytkownik = @user_id)
+		except
+		(select PredicateID as IdPredykat,
+				ParentPredicate as IdRodzicPredykat,
+				ContextEntity as EncjaKontekst,
+				PreviousPredicate as IdPoprzedniPredykat,
+				NextOperator as NastepnyOperator,
+				FeatureName as NazwaWlasciwosci,
+				Operator as Operator,
+				Value as Wartosc,
+				AggregateFunction as FunkcjaAgregujaca,
+				AggregateEntity as EncjaAgregowana,
+				@user_id as IdUzytkownik	
+		from @filter )
+		);
+end
+go
+
+create procedure list_user_filters_xml ( @user_login as varchar(30) )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+select 
+				IdPredykat "PredicateID",
+				IdRodzicPredykat "ParentPredicate",
+				EncjaKontekst "ContextEntity",
+				IdPoprzedniPredykat "PreviousPredicate",
+				NastepnyOperator "NextOperator",
+				NazwaWlasciwosci "FeatureName",
+				Operator "Operator",
+				Wartosc "Value",
+				FunkcjaAgregujaca "AggregateFunction",
+				EncjaAgregowana "AggregateEntity"
+	from Predykat
+	where IdUzytkownik = dbo.identify_user(@user_login)
+    for XML PATH('Filter'), root ('FilterList')
+go
+
+create procedure create_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
+as
+begin
+	declare @user_id int;
+	set @user_id = dbo.identify_user(@user_login);
+
+
+	if @user_id is NULL 
+	begin 
+		set @result = 1;
+		return;
+	end;
+	
+	if exists ( select * from Koszyk where IdUzytkownik = @user_id and Nazwa = @basket_name )
+	begin
+		set @result = 2;
+		return;
+	end;
+	
+	insert into Koszyk ( Nazwa, IdUzytkownik ) values ( @basket_name, @user_id );
+	set @result = 0;
+end
+go
+
+create procedure remove_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
+as
+begin
+	declare @user_id int;
+	declare @basket_id int;
+	set @user_id = dbo.identify_user(@user_login);
+
+	if @user_id is NULL 
+	begin 
+		set @result = 1;
+		return;
+	end;
+	
+	select @basket_id = IdKoszyk from Koszyk where IdUzytkownik = @user_id and Nazwa = @basket_name;
+	if @basket_id is NULL
+	begin
+		set @result = 2;
+		return;
+	end;
+	
+	delete from Performer_Koszyk where IdKoszyk = @basket_id;
+	delete from Sesja_Koszyk where IdKoszyk = @basket_id;
+	delete from Obserwacja_Koszyk where IdKoszyk = @basket_id;
+	delete from Segment_Koszyk where IdKoszyk = @basket_id;
+	delete from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
+	set @result = 0;
+end
+go
+/* Error codes:
+	1 - login not found
+	2 - basket does not exist
+	3 - resource not available to the user
+	7 - entity not supported */
+create procedure add_entity_to_basket( @user_login as varchar(30), @basket_name as varchar(30), @entity as varchar(20), @res_id as int, @result int OUTPUT )
+as
+begin
+	declare @user_id int;
+	declare @basket_id int;
+	set @user_id = dbo.identify_user(@user_login);
+
+	if @user_id is NULL 
+	begin 
+		set @result = 1;
+		return;
+	end;
+	
+	select @basket_id = IdKoszyk from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
+	
+	if (@basket_id is NULL )
+	begin 
+		set @result = 2;
+		return;
+	end;	
+	if @entity = 'performer'
+		begin
+			if not exists ( select * from Performer_Koszyk where IdPerformer = @res_id and IdKoszyk = @basket_id )
+			insert into Performer_Koszyk ( IdKoszyk, IdPerformer ) values ( @basket_id, @res_id );
+		end;
+	else if @entity = 'session'
+		begin
+			if @res_id not in (select IdSesja from dbo.user_accessible_sessions(@user_id))
+				begin
+					set @result = 3;
+					return;
+				end
+			if not exists ( select * from Sesja_Koszyk where IdSesja = @res_id and IdKoszyk = @basket_id )
+			insert into Sesja_Koszyk ( IdKoszyk, IdSesja ) values ( @basket_id, @res_id );
+		end;
+	else if @entity = 'trial'
+		begin
+
+			if (select top 1 IdSesja from Obserwacja where IdObserwacja = @res_id) not in (select IdSesja from dbo.user_accessible_sessions(@user_id))
+				begin
+					set @result = 3;
+					return;
+				end
+			if not exists ( select * from Obserwacja_Koszyk where IdObserwacja = @res_id and IdKoszyk = @basket_id )
+			insert into Obserwacja_Koszyk ( IdKoszyk, IdObserwacja ) values ( @basket_id, @res_id );
+		end;
+	else if @entity = 'segment'
+		begin
+			if not exists ( select * from Segment_Koszyk where IdSegment = @res_id and IdKoszyk = @basket_id )
+			insert into Segment_Koszyk ( IdKoszyk, IdSegment ) values ( @basket_id, @res_id );
+		end;
+	else
+		begin
+			set @result = 7;
+			return;
+		end;
+	set @result = 0;
+end
+go
+/* Error codes:
+	1 - login not found
+	2 - basket does not exist
+	7 - entity not supported */
+create procedure remove_entity_from_basket( @user_login as varchar(30), @basket_name as varchar(30), @entity as varchar(20), @res_id as int, @result int OUTPUT )
+as
+begin
+	declare @user_id int;
+	declare @basket_id int;
+	
+	set @user_id = dbo.identify_user(@user_login);
+	if @user_id is NULL 
+	begin 
+		set @result = 1;
+		return;
+	end;
+	
+	select @basket_id = IdKoszyk from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
+	
+	if (@basket_id is NULL )
+	begin 
+		set @result = 2;
+		return;
+	end;	
+	if @entity = 'performer'
+		delete from Performer_Koszyk where IdKoszyk = @basket_id and IdPerformer = @res_id;
+	else if @entity = 'session'
+		delete from Sesja_Koszyk where IdKoszyk = @basket_id and IdSesja = @res_id;
+	else if @entity = 'trial'
+		delete from Obserwacja_Koszyk where IdKoszyk = @basket_id and IdObserwacja = @res_id;
+	else if @entity = 'segment'
+		delete from Segment_Koszyk where IdKoszyk = @basket_id and IdSegment = @res_id;
+	else
+		begin
+			set @result = 7;
+			return;
+		end;
+	set @result = 0;
+end
+go
+
+create procedure list_basket_performers_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+select
+	IdPerformer as PerformerID,
+	Imie as FirstName,
+	Nazwisko as LastName,
+	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Performer PerformerDetailsWithAttributes
+	where IdPerformer in (select IdPerformer from Performer_Koszyk pk join Koszyk k on pk.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
+    for XML AUTO, ELEMENTS, root ('BasketPerformerWithAttributesList')
+go
+
+create procedure list_basket_sessions_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		IdRodzaj_ruchu as MotionKindID,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdSesja in
+	(select IdSesja from Sesja_Koszyk sk join Koszyk k on sk.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
+      for XML AUTO, ELEMENTS, root ('BasketSessionWithAttributesList')
+go
+
+create procedure list_basket_trials_attributes_xml(@user_login varchar(30), @basket_name varchar(30))
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+select 
+	IdObserwacja as TrialID, 
+	IdSesja as SessionID, 
+	Opis_obserwacji as TrialDescription, 
+	Czas_trwania as Duration,
+	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) 
+	and IdObserwacja in 
+	(select IdObserwacja from Obserwacja_Koszyk ok join Koszyk k on ok.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
+    for XML AUTO, ELEMENTS, root ('BasketTrialWithAttributesList')
+go
+
+
+
+create procedure list_user_baskets( @user_login varchar(30) )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
+select
+	Nazwa as BasketName
+from Koszyk
+where IdUzytkownik = dbo.identify_user( @user_login )
+for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
+go
