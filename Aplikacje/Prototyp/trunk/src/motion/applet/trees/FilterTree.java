@@ -8,7 +8,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import motion.applet.database.TableName;
+import motion.database.model.EntityKind;
 import motion.database.model.Filter;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
@@ -17,8 +17,8 @@ public class FilterTree {
 	public DefaultTreeModel treeModel;
 	private DefaultMutableTreeNode root;
 	
-	public FilterTree(TableName tableName) {
-		root = new DefaultMutableTreeNode(tableName.getLabel() + " (filters)");
+	public FilterTree(EntityKind entityKind) {
+		root = new DefaultMutableTreeNode(entityKind.getGUIName() + " (filters)");
 		tree = new JTree(root);
 		tree.setToggleClickCount(1);
 		//tree.setRootVisible(false);

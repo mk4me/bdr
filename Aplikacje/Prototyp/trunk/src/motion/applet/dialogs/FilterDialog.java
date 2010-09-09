@@ -22,6 +22,7 @@ import motion.Messages;
 import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.database.model.AttributeName;
+import motion.database.model.EntityKind;
 import motion.database.model.Filter;
 import motion.database.model.PredicateComposition;
 import motion.database.model.SimplePredicate;
@@ -56,16 +57,16 @@ public class FilterDialog extends BasicDialog {
 	private ArrayList<ColumnCondition> columnConditions = new ArrayList<ColumnCondition>();
 	
 	// ContextEntity
-	private TableName tableName;
+	private EntityKind entityKind;
 	
-	public FilterDialog(TableName tableName) {
+	public FilterDialog(EntityKind entityKind) {
 		super(FILTER_TITLE, WELCOME_MESSAGE);
-		this.tableName = tableName;
+		this.entityKind = entityKind;
 		this.finishUserInterface();
 	}
 	
 	public FilterDialog(Filter filter) {
-		this(TableNamesInstance.toTableName(filter.getPredicate().getContextEntity()));
+		this(EntityKind.valueOf(filter.getPredicate().getContextEntity()));
 		this.nameText.setText(filter.getName());
 		this.predicate = filter.getPredicate();
 		this.addButton.setText(UPDATE_FILTER);
@@ -139,7 +140,7 @@ public class FilterDialog extends BasicDialog {
 	
 	protected void finishUserInterface() {
 		this.setSize(440, 400);
-		this.tableNameLabel.setText(this.tableName.getLabel());
+		this.tableNameLabel.setText(this.entityKind.getGUIName());
 		this.addColumnCondition(true);
 	}
 	
@@ -155,7 +156,7 @@ public class FilterDialog extends BasicDialog {
 	
 	private ColumnCondition addColumnCondition(boolean firstCondition) {
 		try {
-			ColumnCondition columnCondition = new ColumnCondition(tableName, firstCondition);
+			ColumnCondition columnCondition = new ColumnCondition(this.entityKind, firstCondition);
 			//columnCondition.setAlignmentX(Component.LEFT_ALIGNMENT);
 			conditionPanel.add(columnCondition);
 			columnConditions.add(columnCondition);
@@ -210,7 +211,7 @@ public class FilterDialog extends BasicDialog {
 	public SimplePredicate getPredicate() {
 		ColumnCondition firstColumnCondition = columnConditions.get(0);
 		SimplePredicate firstPredicate = new SimplePredicate(
-				tableName.getEntity(),
+				entityKind.getName(),
 				firstColumnCondition.getFeature(),
 				firstColumnCondition.getOperator(),
 				firstColumnCondition.getValue());
@@ -222,7 +223,7 @@ public class FilterDialog extends BasicDialog {
 				first = false;
 			} else {
 				SimplePredicate currentPredicate = new SimplePredicate(
-						tableName.getEntity(),
+						entityKind.getName(),
 						cc.getFeature(),
 						cc.getOperator(),
 						cc.getValue(),
@@ -263,28 +264,28 @@ public class FilterDialog extends BasicDialog {
 		private JComboBox operatorComboBox;
 		private JComboBox logicalComboBox;
 		private JTextField conditionText = new JTextField(10);
-		private TableName tableName;
+		private EntityKind entityKind;
 		private String REMOVE_CONDITION = Messages.REMOVE_SIGN;
 		private boolean firstCondition;
 		
 		private JButton removeButton;
 		
-		public ColumnCondition(TableName tableName, boolean firstCondition) throws SQLException {
+		public ColumnCondition(EntityKind entityKind, boolean firstCondition) throws SQLException {
 			super();
-			this.tableName = tableName;
+			this.entityKind = entityKind;
 			this.firstCondition = firstCondition;
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
 			this.operatorComboBox = new JComboBox();
-			fillOperators(this.tableName.getAllAttributes().get(0));
+			fillOperators(this.entityKind.getAllAttributes().get(0));
 			
 			if (this.firstCondition == false) {
 				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
 				this.add(logicalComboBox);
 			}
 			
-			columnComboBox = new JComboBox(this.tableName.getAllAttributes().toArray());
+			columnComboBox = new JComboBox(this.entityKind.getAllAttributes().toArray());
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
 			this.add(conditionText);

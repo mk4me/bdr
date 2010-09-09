@@ -25,6 +25,7 @@ import motion.applet.tables.QueryTableModel;
 import motion.applet.trees.FilterNode;
 import motion.applet.trees.FilterTree;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityKind;
 import motion.database.model.Filter;
 import motion.database.model.GenericResult;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
@@ -38,12 +39,12 @@ public class LeftSplitPanel extends JPanel {
 	private static String EDIT_FILTER = Messages.getString("Edit"); //$NON-NLS-1$
 	private static String START_FILTER = Messages.getString("LeftSplitPanel.Start"); //$NON-NLS-1$
 	private static String TREE_TITLE = Messages.getString("LeftSplitPanel.Filters"); //$NON-NLS-1$
-	private TableName tableName;
+	private EntityKind entityKind;
 	private JLabel messageLabel;
 	
-	public LeftSplitPanel(TableName tableName) {
+	public LeftSplitPanel(EntityKind entityKind) {
 		super();
-		this.tableName = tableName;
+		this.entityKind = entityKind;
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -55,7 +56,7 @@ public class LeftSplitPanel extends JPanel {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FilterDialog filterDialog = new FilterDialog(LeftSplitPanel.this.tableName);
+				FilterDialog filterDialog = new FilterDialog(LeftSplitPanel.this.entityKind);
 				filterDialog.setVisible(true);
 				if (filterDialog.getResult() == FilterDialog.ADD_PRESSED) {
 					FilterNode filterNode = new FilterNode(new Filter(filterDialog.getName(), filterDialog.getPredicate()));
@@ -122,7 +123,7 @@ public class LeftSplitPanel extends JPanel {
 							if (filterPredicates.isEmpty() == false) {
 								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 										filterPredicates,
-										new String[] {LeftSplitPanel.this.tableName.getEntity().toLowerCase()});
+										new String[] {LeftSplitPanel.this.entityKind.getName()});
 								
 								JTable resultTable = new JTable();
 								resultTable.setModel(new QueryTableModel(result));
@@ -164,7 +165,7 @@ public class LeftSplitPanel extends JPanel {
 		//rootNode = new DefaultMutableTreeNode(this.tableName.getLabel() + TREE_TITLE);
 		//treeModel = new DefaultTreeModel(rootNode);
 		
-		filterTree = new FilterTree(this.tableName);
+		filterTree = new FilterTree(this.entityKind);
 		JScrollPane scrollPane = new JScrollPane(filterTree.tree);
 		add(scrollPane, BorderLayout.CENTER);
 		/*
