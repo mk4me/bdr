@@ -320,8 +320,9 @@ public enum EntityKind {
 		if (genericAttributes == null)
 		{
 			genericAttributes = new ArrayList<EntityAttribute>();
-			for(Iterator<EntityAttributeGroup> i = getGenericAttributeGroups().values().iterator(); i.hasNext(); )
-				genericAttributes.addAll( i.next() );
+			if (getGenericAttributeGroups()!=null && getGenericAttributeGroups().values() != null)
+				for(Iterator<EntityAttributeGroup> i = getGenericAttributeGroups().values().iterator(); i.hasNext(); )
+					genericAttributes.addAll( i.next() );
 		}
 		
 		return genericAttributes;		
