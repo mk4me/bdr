@@ -1,5 +1,8 @@
 package motion.database.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.logging.Level;
 
 import motion.Messages;
@@ -289,23 +292,58 @@ public enum EntityKind {
 	
 	//////////////////////////////////////////////////////////////////////////
 	
-	private Class<?> staticAttributes;
-	
-	private String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+	private Class<?> staticAttributesNames;
 
+	private static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+
+	private ArrayList<EntityAttribute> genericAttributes;
+	private EntityAttribute staticAttributes;
+	private HashMap<String, EntityAttributeGroup> genericAttributeGroups;
+	
+	
 	//////////////////////////////////////////////////////////////////////////
 
 	EntityKind(Class<?> staticAttributes)
 	{
-		this.staticAttributes = staticAttributes;
+		this.staticAttributesNames = staticAttributes;
 	}
 	
+	public HashMap<String, EntityAttributeGroup> getGenericAttributeGroups() throws Exception
+	{
+		if (genericAttributeGroups==null)
+			genericAttributeGroups = DatabaseConnection.getInstanceWCF().listGrouppedAttributesDefined( this ); 
+		return genericAttributeGroups;	
+	}
+	
+	public ArrayList<EntityAttribute> getGenericAttributes() throws Exception
+	{
+		if (genericAttributes == null)
+		{
+			genericAttributes = new ArrayList<EntityAttribute>();
+			for(Iterator<EntityAttributeGroup> i = getGenericAttributeGroups().values().iterator(); i.hasNext(); )
+				genericAttributes.addAll( i.next() );
+		}
+		
+		return genericAttributes;		
+	}
+	
+	public void rescanGenericAttributeGroups() throws Exception
+	{
+		genericAttributeGroups = null;
+		getGenericAttributeGroups();
+	}
 
-
-
+	public void rescanGenericAttributes() throws Exception
+	{
+		genericAttributes = null;
+		getGenericAttributes();
+	}
+	
+	
+	
 	public String[] getKeys()
 	{
-		Object[] k = (staticAttributes).getEnumConstants();
+		Object[] k = (staticAttributesNames).getEnumConstants();
 		String [] result = new String[k.length];
 		int i = 0;
 		for( Object o : k )
