@@ -866,5 +866,65 @@ END CATCH;";
 
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void SetFileTypedAttributeValue(int resourceID, string entity, string attributeName, int fileID, bool update)
+        {
+            // UWAGA: nie dopuszczono mozliwosci wprowadzania atrybutow plikowych dla encji PLIK !
+            string operationName = "", paramName = "";
+            try
+            {
+                switch (entity)
+                {
+                    case "performer":
+                        operationName = "set_performer_attribute";
+                        paramName = "@perf_id";
+                        break;
+                    case "session":
+                        operationName = "set_session_attribute";
+                        paramName = "@sess_id";
+                        break;
+                    case "trial":
+                        operationName = "set_trial_attribute";
+                        paramName = "@trial_id";
+                        break;
+                    case "measurement":
+                        operationName = "set_measurement_attribute";
+                        paramName = "@meas_id";
+                        break;
+                    case "measurement_conf":
+                        operationName = "set_measurement_conf_attribute";
+                        paramName = "@mc_id";
+                        break;
+                }
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = operationName;
+                cmd.Parameters.Add(paramName, SqlDbType.Int);
+                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@update", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+
+                cmd.Parameters[paramName].Value = resourceID;
+                cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@attr_value"].Value = fileID.ToString();
+                cmd.Parameters["@update"].Value = update?1:0;
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("database", "Database-side failure");
+                throw new FaultException<UpdateException>(exc, "Update invocation failed: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetFileTypedAttributeValue")));
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
     }
 }

@@ -38,10 +38,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        int StoreAttributeFile(int resourceID, string entity, string attributeName, string path, string description, string filename);
-
-        [OperationContract]
-        [FaultContract(typeof(FileAccessServiceException))]
         void DownloadComplete(int fileID, string path);
 
         [OperationContract]

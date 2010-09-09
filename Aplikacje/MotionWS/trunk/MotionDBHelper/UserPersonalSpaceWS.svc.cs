@@ -461,44 +461,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }          
 
-        public XmlElement ListBasketSegmentsWithAttributesXML(string basketName)
-        {
-            XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
-            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_basket_segments_attributes_xml";
-                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                cmd.Parameters.Add("@basket_name", SqlDbType.VarChar, 30);
-                cmd.Parameters["@user_login"].Value = userName;
-                cmd.Parameters["@basket_name"].Value = basketName;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("BasketSegmentWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService"));
-                }
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                UPSException exc = new UPSException("database error", "Basked content could not be retrieved");
-                throw new FaultException<UPSException>(exc, "Basked content could not be retrieved", FaultCode.CreateReceiverFaultCode(new FaultCode("ListBasketSegmentsWithAttributesXML")));
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return xd.DocumentElement;
-        }
 
 
     }

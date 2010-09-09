@@ -15,21 +15,27 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         bool CheckUserAccount();
+
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         void CreateUserAccount(string firstName, string lastName);
-        [OperationContract]
-        [FaultContract(typeof(AuthorizationException))]
-        void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write);
-        [OperationContract]
-        [FaultContract(typeof(AuthorizationException))]
-        void RemoveSessionPrivileges(string grantedUserLogin, int sessionID);
-        [OperationContract]
-        [FaultContract(typeof(AuthorizationException))]
-        void AlterSessionVisibility(int sessionID, bool idPublic, bool isWritable);
+
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         XmlElement ListUsers();
+
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]     
+        void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write);
+
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        void RemoveSessionPrivileges(string grantedUserLogin, int sessionID);
+
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable);
+
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
         XmlElement ListSessionPrivileges(int sessionID);

@@ -52,11 +52,5 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement ListBasketTrialsWithAttributesXML(string basketName);
 
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListBasketSegmentsWithAttributesXML(string basketName);
-
-
-
     }
 }

@@ -39,6 +39,22 @@
 			<xsd:element name="CreateUserAccountResponse">
 				<xsd:complexType/>
 			</xsd:element>
+			<xsd:element name="ListUsers">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListUsersResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListUsersResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:UserList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="GrantSessionPrivileges">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -66,29 +82,13 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
-						<xsd:element minOccurs="1" maxOccurs="1" name="idPublic" type="xsd:boolean"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="isPublic" type="xsd:boolean"/>
 						<xsd:element minOccurs="1" maxOccurs="1" name="isWritable" type="xsd:boolean"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="AlterSessionVisibilityResponse">
 				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListUsers">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListUsersResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListUsersResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:UserList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="ListSessionPrivileges">
 				<xsd:complexType>
@@ -173,6 +173,15 @@
 	<wsdl:message name="IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListUsers"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListUsersResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_GrantSessionPrivileges_InputMessage">
 		<wsdl:part name="parameters" element="tns:GrantSessionPrivileges"/>
 	</wsdl:message>
@@ -200,15 +209,6 @@
 	<wsdl:message name="IAuthorizationWS_AlterSessionVisibility_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_ListUsers_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListUsers"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_ListUsers_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListUsersResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:AuthorizationException"/>
-	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_ListSessionPrivileges_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListSessionPrivileges"/>
 	</wsdl:message>
@@ -229,6 +229,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountResponse" message="tns:IAuthorizationWS_CreateUserAccount_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListUsers">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" message="tns:IAuthorizationWS_ListUsers_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersResponse" message="tns:IAuthorizationWS_ListUsers_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GrantSessionPrivileges">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivileges" message="tns:IAuthorizationWS_GrantSessionPrivileges_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivilegesResponse" message="tns:IAuthorizationWS_GrantSessionPrivileges_OutputMessage"/>
@@ -243,11 +248,6 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility" message="tns:IAuthorizationWS_AlterSessionVisibility_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibilityResponse" message="tns:IAuthorizationWS_AlterSessionVisibility_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibilityAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_AlterSessionVisibility_AuthorizationExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListUsers">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" message="tns:IAuthorizationWS_ListUsers_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersResponse" message="tns:IAuthorizationWS_ListUsers_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="ListSessionPrivileges">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivileges" message="tns:IAuthorizationWS_ListSessionPrivileges_InputMessage"/>
@@ -272,6 +272,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="CreateUserAccount">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccount" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListUsers">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -308,18 +320,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="AlterSessionVisibility">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="AuthorizationExceptionFault">
-				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListUsers">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
