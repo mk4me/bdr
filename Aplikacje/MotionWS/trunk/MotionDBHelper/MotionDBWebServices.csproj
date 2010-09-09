@@ -125,6 +125,7 @@
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="FileStoremanWS.svc" />
     <None Include="Motion.build" />
+    <Content Include="res\Motion.build.xml" />
     <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="res\StandaloneWSDLCompositor.xslt" />
@@ -143,10 +144,18 @@
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
     <None Include="res\FileListElement.xsd" />
+    <None Include="res\FileWithAttributesListElement.xsd" />
+    <None Include="res\ListFileAttributeDataWithAttributesXML.xsd" />
+    <None Include="res\ListFileAttributeDataXML.xsd" />
+    <None Include="res\ListFilesWithAttributesXML.xsd" />
+    <None Include="res\ListFilesXML.xsd" />
+    <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementConfigurationsWithAttributesXML.xsd" />
     <None Include="res\ListGroupSessionsWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementPerformersWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementResultFilesWithAttributesXML.xsd" />
+    <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
+    <None Include="res\ListTrialMeasurementsWithAttributesXML.xsd" />
     <None Include="res\MeasurementConfDetailsWithAttributesElement.xsd" />
     <None Include="res\GetMeasurementConfigurationByIdXML.xsd" />
     <None Include="res\MeasurementDetailsWithAttributesElement.xsd" />

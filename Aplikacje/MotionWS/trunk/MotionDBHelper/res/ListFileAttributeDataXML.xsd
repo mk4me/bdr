@@ -1,18 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsd:schema id="FileList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
-  <xsd:include schemaLocation="FileListType.xsd" />
-  <xsd:element name="FileList">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
-          <xsd:complexType>
-            <xsd:attribute name="FileID" type="xsd:int" />
-            <xsd:attribute name="FileName" type="xsd:string" />
-            <xsd:attribute name="FileDescription" type="xsd:string" />
-            <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
-          </xsd:complexType>
-        </xsd:element>
-      </xsd:sequence>
-    </xsd:complexType>
-  </xsd:element>
+<xsd:schema id="ListFileAttributeDataXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:include schemaLocation="FileListElement.xsd" />
 </xsd:schema>
