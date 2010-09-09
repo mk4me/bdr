@@ -24,8 +24,8 @@ public class Filter {
 		
 		return this.name;
 	}
-	@Deprecated
-	public SimplePredicate getPredicate() {	// Why deprecated?
+	
+	public SimplePredicate getPredicate() {
 		
 		return this.predicate;
 	}
