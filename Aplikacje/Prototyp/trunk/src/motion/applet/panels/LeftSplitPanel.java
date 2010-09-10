@@ -18,7 +18,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import motion.Messages;
 import motion.applet.MotionAppletFrame;
-import motion.applet.database.TableName;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
 import motion.applet.tables.QueryTableModel;

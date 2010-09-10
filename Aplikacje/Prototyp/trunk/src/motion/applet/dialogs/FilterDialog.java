@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -19,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import motion.Messages;
-import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
 import motion.database.model.Filter;

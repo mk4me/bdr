@@ -22,12 +22,11 @@ import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import motion.Messages;
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.model.EntityKind;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
@@ -65,27 +64,20 @@ public class UploadDialog extends BasicDialog {
 	
 	private JProgressBar progressBar;
 	
-	private TableName tableName;
+	private EntityKind entityKind;
 	private int recordId;
 	private boolean selectId = true;
 	
-	public UploadDialog() {
+	public UploadDialog(EntityKind entityKind) {
 		super(UPLOAD_TITLE, CHOOSE_FILE_MESSAGE);
-		this.tableName = TableNamesInstance.SESSION;
+		this.entityKind = entityKind;
 		
 		this.finishUserInterface();
 	}
 	
-	public UploadDialog(TableName tableName) {
-		super(UPLOAD_TITLE,CHOOSE_FILE_MESSAGE);
-		this.tableName = tableName;
-		
-		this.finishUserInterface();
-	}
-	
-	public UploadDialog(TableName tableName, int recordId) {
-		super(UPLOAD_TITLE,CHOOSE_FILE_MESSAGE);
-		this.tableName = tableName;
+	public UploadDialog(EntityKind entityKind, int recordId) {
+		super(UPLOAD_TITLE, CHOOSE_FILE_MESSAGE);
+		this.entityKind = entityKind;
 		this.recordId = recordId;
 		this.selectId = false;
 		
@@ -179,7 +171,7 @@ public class UploadDialog extends BasicDialog {
 		this.setSize(480, 210);
 		this.setLocation(200, 200);
 		
-		this.idLabel.setText(this.tableName.getLabel() + Messages.COLON);
+		this.idLabel.setText(this.entityKind.getGUIName() + Messages.COLON);
 		
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
@@ -205,19 +197,19 @@ public class UploadDialog extends BasicDialog {
 	private void getEntityComboBoxContents() throws Exception {
 		if (this.selectId == false) {
 			entityComboBox.setEnabled(false);
-			entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getById(this.recordId, tableName.toEntityKind()));
+			entityComboBox.addItem(WebServiceInstance.getDatabaseConnection().getById(this.recordId, entityKind));
 		} else {
-			if (this.tableName.equals(TableNamesInstance.SESSION)) {
+			if (this.entityKind.equals(EntityKind.session)) {
 				DbElementsList<Session> list = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
 				for (Session s : list) {
 					entityComboBox.addItem(s);
 				}
-			} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+			} else if (this.entityKind.equals(EntityKind.performer)) {
 				DbElementsList<Performer> list = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
 				for (Performer p : list) {
 					entityComboBox.addItem(p);
 				}
-			} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+			} else if (this.entityKind.equals(EntityKind.trial)) {
 				DbElementsList<Trial> list = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(1);
 				for (Trial t : list) {
 					entityComboBox.addItem(t);
@@ -352,15 +344,15 @@ public class UploadDialog extends BasicDialog {
 		if (this.selectId == true) {
 			if (this.entityComboBox.getSelectedItem() != null) {
 				try {
-					if (this.tableName.equals(TableNamesInstance.SESSION)) {
+					if (this.entityKind.equals(EntityKind.session)) {
 						id = Integer.parseInt(((Session) this.entityComboBox.getSelectedItem()).
 								get(SessionStaticAttributes.sessionID.toString()).
 								value.toString());
-					} else if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+					} else if (this.entityKind.equals(EntityKind.performer)) {
 						id = Integer.parseInt(((Performer) this.entityComboBox.getSelectedItem()).
 								get(PerformerStaticAttributes.performerID.toString()).
 								value.toString());
-					} else if (this.tableName.equals(TableNamesInstance.TRIAL)) {
+					} else if (this.entityKind.equals(EntityKind.trial)) {
 						id = Integer.parseInt(((Trial) this.entityComboBox.getSelectedItem()).
 								get(TrialStaticAttributes.trialID.toString()).
 								value.toString());
@@ -378,10 +370,10 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	private String getMessage() {
-		if (this.tableName.equals(TableNamesInstance.PERFORMER)) {
+		if (this.entityKind.equals(EntityKind.performer)) {
 			
 			return MISSING_PERFORMER_MESSAGE;
-		} else if (this.tableName.equals(TableNamesInstance.SESSION)) {
+		} else if (this.entityKind.equals(EntityKind.session)) {
 			
 			return MISSING_SESSION_MESSAGE;
 		} else {

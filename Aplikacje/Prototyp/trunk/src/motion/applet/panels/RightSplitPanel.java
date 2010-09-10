@@ -235,13 +235,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	public void showUploadDialog(TableName tableName, int recordId) {
-		UploadDialog uploadDialog = new UploadDialog(tableName, recordId);
+		UploadDialog uploadDialog = new UploadDialog(tableName.toEntityKind(), recordId);
 		uploadDialog.setVisible(true);
 		RightSplitPanel.this.refreshFileTable();
 	}
 	
 	public void showUploadDialog(TableName tableName) {
-		UploadDialog uploadDialog = new UploadDialog(tableName);
+		UploadDialog uploadDialog = new UploadDialog(tableName.toEntityKind());
 		uploadDialog.setVisible(true);
 		RightSplitPanel.this.refreshFileTable();
 	}
