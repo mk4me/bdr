@@ -3,6 +3,8 @@
  */
 package test.unit;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
+import motion.database.model.EntityKind;
 import motion.database.model.Session;
 
 import org.junit.Before;
@@ -40,7 +43,7 @@ public class ShortTest {
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
-		database.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
+		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 	}
 
 	class ConsoleTransferListener implements FileTransferListener
@@ -80,27 +83,45 @@ public class ShortTest {
 		
 		//database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
-		HashMap<String, EntityAttributeGroup> results = database.listGrouppedAttributesDefined("performer" );
+		EnumSet<EntityKind> set = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement_conf );
+
+		System.out.println("========Attribute Groups=========");
+		
+		for( EntityKind e : set )
 		{
+			System.out.println(e.getGUIName() + "::" );
+			HashMap<String, EntityAttributeGroup> results = e.getAllAttributeGroups();
 			for ( String ss : results.keySet() )
 			{
-				EntityAttributeGroup e = results.get(ss);
-				System.out.println( "Group: " + e.name );
-				for(EntityAttribute a : e)
+				EntityAttributeGroup g = results.get(ss);
+				System.out.println( "Group: " + g.name );
+				for(EntityAttribute a : g)
 				{
-					System.out.println( "   attribute:" + a.name );
+					System.out.println( "   attribute:" + a.toStringAllContent() );
 				}
 				
 			}
 		}
-
-		List<String> resultss = database.listEnumValues("CameraView", "file");
-
-		System.out.println("Enum values defined:");
 		
-		for (String s : resultss ) 
-			System.out.println("value: "+ s );			
+		System.out.println("========Static Attributes=========");
+		for( EntityKind e : set )
+		{
+			ArrayList<EntityAttribute> results = e.getStaticAttributes();
+			for(EntityAttribute a : results)
+			{
+				System.out.println( "   attribute:" + a.toStringAllContent() );
+			}
+		}
 
-	
+		System.out.println("========Generic Attributes=========");
+		for( EntityKind e : set )
+		{
+			ArrayList<EntityAttribute> results = e.getGenericAttributes();
+			for(EntityAttribute a : results)
+			{
+				System.out.println( "   attribute:" + a.toStringAllContent() );
+			}
+		}
+
 	}
 }

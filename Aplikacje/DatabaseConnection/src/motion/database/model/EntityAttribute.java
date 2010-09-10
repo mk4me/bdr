@@ -59,7 +59,7 @@ public class EntityAttribute {
 	{
 		StringBuffer result = new StringBuffer();
 		result.append( name ).append("(").append( kind.toString() ).append(")").append("[").append( value ).append( ", " ).
-			append( groupName ).append( ", " ).append( type ).append("]");
+			append( groupName ).append( ", " ).append( type ).append( ", " ).append( unit ).append( ", " ).append( subtype ).append("]");
 		return result.toString();
 	}
 

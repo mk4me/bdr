@@ -297,7 +297,7 @@ public enum EntityKind {
 	private static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
 
 	private ArrayList<EntityAttribute> genericAttributes;
-	private EntityAttribute staticAttributes;
+	private ArrayList<EntityAttribute> staticAttributes;
 	private HashMap<String, EntityAttributeGroup> genericAttributeGroups;
 	
 	
@@ -308,7 +308,7 @@ public enum EntityKind {
 		this.staticAttributesNames = staticAttributes;
 	}
 	
-	public HashMap<String, EntityAttributeGroup> getGenericAttributeGroups() throws Exception
+	public HashMap<String, EntityAttributeGroup> getAllAttributeGroups() throws Exception
 	{
 		if (genericAttributeGroups==null)
 			genericAttributeGroups = DatabaseConnection.getInstanceWCF().listGrouppedAttributesDefined( this ); 
@@ -320,18 +320,32 @@ public enum EntityKind {
 		if (genericAttributes == null)
 		{
 			genericAttributes = new ArrayList<EntityAttribute>();
-			if (getGenericAttributeGroups()!=null && getGenericAttributeGroups().values() != null)
-				for(Iterator<EntityAttributeGroup> i = getGenericAttributeGroups().values().iterator(); i.hasNext(); )
-					genericAttributes.addAll( i.next() );
+			staticAttributes = new ArrayList<EntityAttribute>();
+			if (getAllAttributeGroups()!=null && getAllAttributeGroups().values() != null)
+				for(Iterator<EntityAttributeGroup> i = getAllAttributeGroups().values().iterator(); i.hasNext(); )
+				{
+					EntityAttributeGroup g =  i.next();
+					if (g.name.equals("_static"))
+						staticAttributes.addAll(g);
+					else
+						genericAttributes.addAll(g);
+				}
 		}
 		
 		return genericAttributes;		
 	}
 	
+	public ArrayList<EntityAttribute> getStaticAttributes() throws Exception
+	{
+		if (staticAttributes == null)
+				getGenericAttributes();
+		return staticAttributes;
+	}
+	
 	public void rescanGenericAttributeGroups() throws Exception
 	{
 		genericAttributeGroups = null;
-		getGenericAttributeGroups();
+		getAllAttributeGroups();
 	}
 
 	public void rescanGenericAttributes() throws Exception
@@ -339,7 +353,6 @@ public enum EntityKind {
 		genericAttributes = null;
 		getGenericAttributes();
 	}
-	
 	
 	
 	public String[] getKeys()
