@@ -21,18 +21,13 @@ import javax.swing.tree.TreePath;
 
 import motion.Messages;
 import motion.applet.MotionAppletFrame;
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.tables.BasketTableModel;
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DbElementsList;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.Performer;
-import motion.database.model.Session;
-import motion.database.model.Trial;
 import motion.database.model.UserBasket;
 
 public class BasketPanel extends JPanel {
@@ -100,9 +95,10 @@ public class BasketPanel extends JPanel {
 	
 	public void getBasketTreeContents() {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			private DefaultMutableTreeNode root = new DefaultMutableTreeNode(TREE_TITLE);
+			
 			@Override
 			protected Void doInBackground() throws InterruptedException {
-				DefaultMutableTreeNode root = new DefaultMutableTreeNode(TREE_TITLE);
 				try {
 					ArrayList<UserBasket> basketList = new ArrayList<UserBasket>();
 					DbElementsList<UserBasket> baskets = WebServiceInstance.getDatabaseConnection().listUserBaskets();
@@ -113,22 +109,23 @@ public class BasketPanel extends JPanel {
 					
 					for (UserBasket b : basketList) {
 						DefaultMutableTreeNode basket = new DefaultMutableTreeNode(b);
-						basket.add(new DefaultMutableTreeNode(TableNamesInstance.PERFORMER.getLabel()));
-						basket.add(new DefaultMutableTreeNode(TableNamesInstance.SESSION.getLabel()));
-						basket.add(new DefaultMutableTreeNode(TableNamesInstance.TRIAL.getLabel()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.performer.getGUIName()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.session.getGUIName()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.trial.getGUIName()));
 						root.add(basket);
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
 				}
-				BasketPanel.this.treeModel.setRoot(root);
+				
 				
 				return null;
 			}
 			
 			@Override
 			protected void done() {
+				BasketPanel.this.treeModel.setRoot(root);
 			}
 		};
 		worker.execute();
@@ -142,10 +139,10 @@ public class BasketPanel extends JPanel {
 					String basketName = BasketPanel.this.getSelectedBasket();
 					String entity = BasketPanel.this.getSelectedEntity();
 					if (!entity.equals("")) {
-						TableName tableName = TableNamesInstance.toTableName(entity);
+						EntityKind entityKind = EntityKind.valueOf(entity);
 						JTable table = new JTable();
-						DbElementsList<? extends GenericDescription<?>> records = WebServiceInstance.getDatabaseConnection().listBasketEntitiesWithAttributes(basketName, tableName.toEntityKind());
-						table.setModel(new BasketTableModel(tableName, records, basketName));
+						DbElementsList<? extends GenericDescription<?>> records = WebServiceInstance.getDatabaseConnection().listBasketEntitiesWithAttributes(basketName, entityKind);
+						table.setModel(new BasketTableModel(entityKind, records, basketName));
 						
 						MotionAppletFrame.addBasketTab(table, basketName + " (" + entity + ")");
 					}

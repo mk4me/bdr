@@ -24,11 +24,11 @@ public class TableName {
 	protected static final String FILE_TABLE = "Plik";
 	
 	// English entity names (defined only here for the applet).
-	protected static final String PERFORMER_ENTITY = "Performer";
-	protected static final String SESSION_ENTITY = "Session";
-	protected static final String TRIAL_ENTITY = "Trial";
-	protected static final String PATIENT_ENTITY = "Patient";
-	protected static final String FILE_ENTITY = "File";
+	protected static final String PERFORMER_ENTITY = "performer";
+	protected static final String SESSION_ENTITY = "session";
+	protected static final String TRIAL_ENTITY = "trial";
+	protected static final String PATIENT_ENTITY = "patient";
+	protected static final String FILE_ENTITY = "file";
 	
 	// Translatable database table names.
 	protected static final String PERFORMER_LABEL = Messages.getString("TableName.Performer"); //$NON-NLS-1$

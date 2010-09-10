@@ -4,19 +4,20 @@ import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
-import motion.applet.database.TableName;
+import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.database.DbElementsList;
 import motion.database.model.AttributeName;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
 
 public class BasketTableModel extends BasicTableModel {
 	private DbElementsList<? extends GenericDescription<?>> records;
 	public String fromBasket;	// Used for baskets.
 	
-	public BasketTableModel(TableName tableName, DbElementsList<? extends GenericDescription<?>> records, String fromBasket) {
+	public BasketTableModel(EntityKind entityKind, DbElementsList<? extends GenericDescription<?>> records, String fromBasket) {
 		this.records = records;
-		this.tableName = tableName;
+		this.tableName =  TableNamesInstance.toTableName(entityKind.getName());;
 		this.fromBasket = fromBasket;
 		getTableContentsFromRecords();
 	}
