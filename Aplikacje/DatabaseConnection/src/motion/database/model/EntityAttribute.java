@@ -5,9 +5,9 @@ import java.util.List;
 
 public class EntityAttribute {
 
-	public static final String INTEGER_TYPE = "Integer";
-	public static final String STRING_TYPE = "String";
-	public static final String DATE_TYPE = "DATE";
+	public static final String INTEGER_TYPE = "int";
+	public static final String STRING_TYPE = "string";
+	public static final String DATE_TYPE = "DATE";	// Server uses 'string' for dates.
 	public static final String UNKNOWN_TYPE = "Unknown";
 
 	
