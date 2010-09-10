@@ -2,25 +2,25 @@ package motion.database.model;
 
 
 public class SimplePredicate extends Predicate {
-	private AttributeName feature;
+	private EntityAttribute feature;
 	private String operator;
 	private String value;
 	
-	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value) {
+	public SimplePredicate(String contextEntity, EntityAttribute feature, String operator, String value) {
 		this.contextEntity = contextEntity;
 		this.feature = feature;
 		this.operator = operator;
 		this.value = value;
 	}
 	
-	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
+	public SimplePredicate(String contextEntity, EntityAttribute feature, String operator, String value, String logicalOperator, Predicate previousPredicate) {
 		this(contextEntity, feature, operator, value);
 		if (previousPredicate != null) {	//new
 			setPreviousPredicate(logicalOperator, previousPredicate);
 		}
 	}
 	
-	public SimplePredicate(String contextEntity, AttributeName feature, String operator, String value, String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
+	public SimplePredicate(String contextEntity, EntityAttribute feature, String operator, String value, String logicalOperator, Predicate previousPredicate, Predicate parentPredicate) {
 		this(contextEntity, feature, operator, value, logicalOperator, previousPredicate);
 		this.parent = parentPredicate;
 	}
@@ -54,7 +54,7 @@ public class SimplePredicate extends Predicate {
 		return this.next;
 	}
 	
-	public AttributeName getFeature() {
+	public EntityAttribute getFeature() {
 		
 		return this.feature;
 	}
