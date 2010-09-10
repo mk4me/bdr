@@ -230,12 +230,14 @@ public class MotionAppletFrame extends JFrame {
 	
 	private static void addTableMouseListeners(JTable table) {
 		TableName tableName = ((BasicTableModel) table.getModel()).getTableName();
-		if (tableName.equals(TableNamesInstance.PERFORMER)) {
-			table.addMouseListener(new PerformerMouseAdapter(rightPanel));
-		} else if (tableName.equals(TableNamesInstance.SESSION)) {
-			table.addMouseListener(new SessionMouseAdapter(rightPanel));
-		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
-			table.addMouseListener(new TrialMouseAdapter(rightPanel));
+		if (tableName != null) {
+			if (tableName.equals(TableNamesInstance.PERFORMER)) {
+				table.addMouseListener(new PerformerMouseAdapter(rightPanel));
+			} else if (tableName.equals(TableNamesInstance.SESSION)) {
+				table.addMouseListener(new SessionMouseAdapter(rightPanel));
+			} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+				table.addMouseListener(new TrialMouseAdapter(rightPanel));
+			}
 		}
 	}
 	
