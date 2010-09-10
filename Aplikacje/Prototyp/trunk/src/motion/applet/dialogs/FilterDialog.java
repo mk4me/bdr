@@ -19,9 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import motion.Messages;
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.database.model.AttributeName;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
 import motion.database.model.Filter;
 import motion.database.model.PredicateComposition;
@@ -163,7 +162,7 @@ public class FilterDialog extends BasicDialog {
 			conditionPanel.revalidate();
 			
 			return columnCondition;
-		} catch(SQLException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -270,7 +269,7 @@ public class FilterDialog extends BasicDialog {
 		
 		private JButton removeButton;
 		
-		public ColumnCondition(EntityKind entityKind, boolean firstCondition) throws SQLException {
+		public ColumnCondition(EntityKind entityKind, boolean firstCondition) throws Exception {
 			super();
 			this.entityKind = entityKind;
 			this.firstCondition = firstCondition;
@@ -278,14 +277,14 @@ public class FilterDialog extends BasicDialog {
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
 			this.operatorComboBox = new JComboBox();
-			fillOperators(this.entityKind.getAllAttributes().get(0));
+			fillOperators(this.entityKind.getGenericAttributes().get(0));	//FIXME: all attributes.
 			
 			if (this.firstCondition == false) {
 				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
 				this.add(logicalComboBox);
 			}
 			
-			columnComboBox = new JComboBox(this.entityKind.getAllAttributes().toArray());
+			columnComboBox = new JComboBox(this.entityKind.getGenericAttributes().toArray());	//FIXME: all attributes.
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
 			this.add(conditionText);
@@ -302,13 +301,13 @@ public class FilterDialog extends BasicDialog {
 			
 			this.columnComboBox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ColumnCondition.this.fillOperators((AttributeName) ColumnCondition.this.columnComboBox.getSelectedItem());
+					ColumnCondition.this.fillOperators((EntityAttribute) ColumnCondition.this.columnComboBox.getSelectedItem());
 				}
 			});
 		}
 		
-		private void fillOperators(AttributeName attributeName) {
-			String[] operators = attributeName.getOperators();
+		private void fillOperators(EntityAttribute entityAttribute) {
+			String[] operators = entityAttribute.getOperators();
 			
 			this.operatorComboBox.removeAllItems();
 			for (int i = 0; i < operators.length; i++) {
@@ -317,9 +316,9 @@ public class FilterDialog extends BasicDialog {
 		}
 		
 		// Get ColumnCondition contents.
-		private AttributeName getFeature() {
+		private EntityAttribute getFeature() {
 			
-			return (AttributeName) columnComboBox.getSelectedItem();
+			return (EntityAttribute) columnComboBox.getSelectedItem();
 		}
 		
 		private String getOperator() {
@@ -338,7 +337,7 @@ public class FilterDialog extends BasicDialog {
 		}
 		
 		// Set ColumnCondition contents.
-		private void setFeature(AttributeName feature) {
+		private void setFeature(EntityAttribute feature) {
 			columnComboBox.setSelectedItem(feature);
 		}
 		

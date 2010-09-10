@@ -208,7 +208,7 @@ public class MotionAppletFrame extends JFrame {
 	}
 	
 	private void createLeftSplitPanel(JPanel leftPanel, TableName tableName) {
-		LeftSplitPanel leftSplitPanel = new LeftSplitPanel(tableName);
+		LeftSplitPanel leftSplitPanel = new LeftSplitPanel(tableName.toEntityKind());
 		leftPanel.add(leftSplitPanel);
 	}
 	
