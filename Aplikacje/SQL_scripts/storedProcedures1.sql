@@ -905,6 +905,8 @@ where (@entity_kind=Opisywana_encja or @entity_kind = '_ALL_ENTITIES' or @entity
 for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinitionList')
 go
 
+exec list_attribute_groups_defined '_ALL'
+
 create procedure list_motion_kinds_defined
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
