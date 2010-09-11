@@ -272,7 +272,8 @@ public class FilterDialog extends BasicDialog {
 			this.entityKind = entityKind;
 			this.firstCondition = firstCondition;
 			
-			ArrayList<EntityAttribute> allEntityAttributes = this.entityKind.getStaticAttributes();
+			ArrayList<EntityAttribute> allEntityAttributes = new ArrayList<EntityAttribute>();
+			allEntityAttributes.addAll(this.entityKind.getStaticAttributes());
 			allEntityAttributes.addAll(this.entityKind.getGenericAttributes());
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.ExceptionDialog;
-import motion.database.model.AttributeName;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericResult;
 
 public class QueryTableModel extends BasicTableModel {
@@ -28,18 +28,20 @@ public class QueryTableModel extends BasicTableModel {
 					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
 					//BasicTable.this.tableName = TableNamesInstance.SESSION;
 					if (result.get(0).keySet().contains("FirstName")) {
-						tableName = TableNamesInstance.PERFORMER;
+						entityKind = EntityKind.performer;
 					} else if (result.get(0).keySet().contains("SessionDate")) {
-						tableName = TableNamesInstance.SESSION;
+						entityKind = EntityKind.session;
 					} else if (result.get(0).keySet().contains("Duration")) {
-						tableName = TableNamesInstance.TRIAL;
+						entityKind = EntityKind.trial;
 					}
-					if (tableName != null) {
+					if (entityKind != null) {
 						// Don't filter attributes.
-						ArrayList<AttributeName> attributes = tableName.getAllAttributes();
-						for (AttributeName a : attributes) {
+						ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+						attributes.addAll(entityKind.getStaticAttributes());
+						attributes.addAll(entityKind.getGenericAttributes());
+						for (EntityAttribute a : attributes) {
 							//TODO: sessionID / SessionID
-							attributeNames.add(a.toString().toLowerCase());
+							attributeNames.add(a.name);
 							classes.add(a.getAttributeClass());
 						}
 						
@@ -75,11 +77,11 @@ public class QueryTableModel extends BasicTableModel {
 										cellList[i] = r.get(key).value;
 								}
 								//TODO: sessionID / SessionID
-								if (tableName.equals(TableNamesInstance.PERFORMER)) {
+								if (entityKind.equals(EntityKind.performer)) {
 									recordIds.add(Integer.parseInt(r.get("PerformerID").value.toString()));
-								} else if (tableName.equals(TableNamesInstance.SESSION)) {
+								} else if (entityKind.equals(EntityKind.session)) {
 									recordIds.add(Integer.parseInt(r.get("SessionID").value.toString()));
-								} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+								} else if (entityKind.equals(EntityKind.trial)) {
 									recordIds.add(Integer.parseInt(r.get("TrialID").value.toString()));
 								}
 								ArrayList<Object> list = new ArrayList<Object>();

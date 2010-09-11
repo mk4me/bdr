@@ -6,14 +6,14 @@ import java.util.Iterator;
 
 import javax.swing.table.AbstractTableModel;
 
-import motion.applet.database.TableName;
+import motion.database.model.EntityKind;
 
 public class BasicTableModel extends AbstractTableModel {
 	protected ArrayList<ArrayList<Object>> contents = new ArrayList<ArrayList<Object>>();
 	protected ArrayList<String> attributeNames = new ArrayList<String>();
 	protected ArrayList<Class> classes = new ArrayList<Class>();
 	protected ArrayList<Integer> recordIds = new ArrayList<Integer>();
-	protected TableName tableName;
+	protected EntityKind entityKind;
 	public int recordId;
 	private int CHECKBOX_COLUMN = 0;
 	
@@ -21,9 +21,9 @@ public class BasicTableModel extends AbstractTableModel {
 		
 	}
 	
-	public TableName getTableName() {
+	public EntityKind getEntityKind() {
 		
-		return this.tableName;
+		return this.entityKind;
 	}
 	
 	protected void addCheckboxColumn() {

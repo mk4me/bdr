@@ -12,9 +12,9 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.MotionAppletFrame;
-import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.RightSplitPanel;
+import motion.database.model.EntityKind;
 
 public class PerformerMouseAdapter extends MouseAdapter {
 	private static String MENU_CREATE_SESSION = "Create new session";
@@ -75,7 +75,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 			viewFilesMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					viewFiles(recordId, TableNamesInstance.PERFORMER);
+					viewFiles(recordId, EntityKind.performer);
 				}
 			});
 
@@ -86,14 +86,14 @@ public class PerformerMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewSessions(int recordId) {
-		rightPanel.showTable(TableNamesInstance.SESSION, recordId);
+		rightPanel.showTable(EntityKind.session, recordId);
 		rightPanel.clearTrialTable();
 		rightPanel.clearFileTable();
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 	
-	private void viewFiles(int recordId, TableName tableName) {
-		rightPanel.showTable(TableNamesInstance.FILE, recordId, tableName);
+	private void viewFiles(int recordId, EntityKind entityKind) {
+		rightPanel.showTable(EntityKind.session, recordId, entityKind);
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 }

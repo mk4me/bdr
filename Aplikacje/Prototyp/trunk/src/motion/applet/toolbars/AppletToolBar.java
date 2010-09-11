@@ -91,7 +91,7 @@ public class AppletToolBar extends JToolBar {
 								BasicTableModel currentTable = MotionAppletFrame.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
-									String entity = currentTable.getTableName().getEntity();
+									String entity = currentTable.getEntityKind().getName();
 									for (int i = 0; i < selectedRecords.length; i++) {
 										WebServiceInstance.getDatabaseConnection().addEntityToBasket(
 												AppletToolBar.this.getSelectedBasketName(), selectedRecords[i], entity);
@@ -125,7 +125,7 @@ public class AppletToolBar extends JToolBar {
 								BasketTableModel currentTable = (BasketTableModel) MotionAppletFrame.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
-									String entity = currentTable.getTableName().getEntity();
+									String entity = currentTable.getEntityKind().getName();
 									String basketName = currentTable.fromBasket;
 									for (int i = 0; i < selectedRecords.length; i++) {
 										WebServiceInstance.getDatabaseConnection().removeEntityFromBasket(

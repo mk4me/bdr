@@ -18,7 +18,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
 import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
@@ -31,26 +30,41 @@ import motion.applet.mouse.TrialMouseAdapter;
 import motion.applet.tables.AttributeTableModel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
+import motion.database.model.EntityKind;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
 	private JTabbedPane tabbedPane;
 	private BottomSplitPanel bottomPanel;
-	private Hashtable<TableName, Integer> tabNameHash = new Hashtable();
-	private JTable tables[] = new JTable[4];
+	private Hashtable<EntityKind, Integer> tabNameHash = new Hashtable<EntityKind, Integer>();
+	
+	private static int TABLE_SIZE = 4;
+	private static int TABLE_PERFORMER = 0;
+	private static int TABLE_SESSION = 1;
+	private static int TABLE_TRIAL = 2;
+	private static int TABLE_FILE = 3;
+	private JTable tables[] = new JTable[TABLE_SIZE];
 	
 	public RightSplitPanel() {
 		super();
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-
-		int i=0;
-		for( TableName tn : TableNamesInstance.allTableNames )
-		{
-			tabNameHash.put( tn, i );
-			tables[i] = new JTable();
-			tabbedPane.addTab( tn.getLabel(), new JScrollPane ( tables[i] ) );
-			i++;
-		}
+		
+		tabNameHash.put(EntityKind.performer, TABLE_PERFORMER);
+		tables[TABLE_PERFORMER] = new JTable();
+		tabbedPane.addTab(EntityKind.performer.getGUIName(), new JScrollPane(tables[TABLE_PERFORMER]));
+		
+		tabNameHash.put(EntityKind.session, TABLE_SESSION);
+		tables[TABLE_SESSION] = new JTable();
+		tabbedPane.addTab(EntityKind.session.getGUIName(), new JScrollPane(tables[TABLE_SESSION]));
+		
+		tabNameHash.put(EntityKind.trial, TABLE_TRIAL);
+		tables[TABLE_TRIAL] = new JTable();
+		tabbedPane.addTab(EntityKind.trial.getGUIName(), new JScrollPane(tables[TABLE_TRIAL]));
+		
+		tabNameHash.put(EntityKind.file, TABLE_FILE);
+		tables[TABLE_FILE] = new JTable();
+		tabbedPane.addTab(EntityKind.file.getGUIName(), new JScrollPane(tables[TABLE_FILE]));
+		
 		this.setLayout(new BorderLayout());
 		
 		bottomPanel = new BottomSplitPanel();
@@ -66,11 +80,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[3].addMouseListener(new FileMouseAdapter(this));
 		
 		tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-		showTable(TableNamesInstance.SESSION);
-		showTable( TableNamesInstance.PERFORMER );
+		//FIXME: double refresh
+		//showTable(EntityKind.session);
+		//showTable(EntityKind.performer);
 		
 	}
-
+	
 	private void createSelectionAtMouse( JTable table, MouseEvent e ) {
 		Point point = e.getPoint();
 		int row = table.rowAtPoint(point);
@@ -114,24 +129,24 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	*/
 	
-	public void showTable(TableName tableName) {
+	public void showTable(EntityKind entityKind) {
 
-		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new AttributeTableModel(tableName) );
+		int i = tabNameHash .get( entityKind );
+		tables[i].setModel( new AttributeTableModel(entityKind) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
-	public void showTable(TableName tableName, int recordId) {
+	public void showTable(EntityKind entityKind, int recordId) {
 
-		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new AttributeTableModel(tableName, recordId) );
+		int i = tabNameHash .get( entityKind );
+		tables[i].setModel( new AttributeTableModel(entityKind, recordId) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
-	public void showTable(TableName tableName, int recordId, TableName fromTableName) {
+	public void showTable(EntityKind entityKind, int recordId, EntityKind fromEntityKind) {
 
-		int i = tabNameHash .get( tableName );
-		tables[i].setModel( new AttributeTableModel(tableName, recordId, fromTableName) );
+		int i = tabNameHash .get( entityKind );
+		tables[i].setModel( new AttributeTableModel(entityKind, recordId, fromEntityKind) );
 		tabbedPane.setSelectedIndex( i );
 	}
 	
@@ -148,28 +163,28 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	private void refreshPerformerTable() {
-		TableModel tableModel = tables[0].getModel();
+		TableModel tableModel = tables[TABLE_PERFORMER].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshSessionTable() {
-		TableModel tableModel = tables[1].getModel();
+		TableModel tableModel = tables[TABLE_SESSION].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshTrialTable() {
-		TableModel tableModel = tables[2].getModel();
+		TableModel tableModel = tables[TABLE_TRIAL].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshFileTable() {
-		TableModel tableModel = tables[3].getModel();
+		TableModel tableModel = tables[TABLE_FILE].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
@@ -187,8 +202,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void refreshTablesForLab() {
 		int i = tabbedPane.getSelectedIndex();
-		showTable(TableNamesInstance.PERFORMER);
-		showTable(TableNamesInstance.SESSION);
+		showTable(EntityKind.performer);
+		showTable(EntityKind.session);
 		clearTrialTable();
 		clearFileTable();
 		tabbedPane.setSelectedIndex(i);
@@ -232,17 +247,17 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	private void clearSessionTable() {
-		int i = tabNameHash .get(TableNamesInstance.SESSION);
+		int i = tabNameHash.get(EntityKind.session);
 		tables[i].setModel(new BasicTableModel());
 	}
 	
 	public void clearTrialTable() {
-		int i = tabNameHash .get(TableNamesInstance.TRIAL);
+		int i = tabNameHash.get(EntityKind.trial);
 		tables[i].setModel(new BasicTableModel());
 	}
 	
 	public void clearFileTable() {
-		int i = tabNameHash .get(TableNamesInstance.FILE);
+		int i = tabNameHash.get(EntityKind.file);
 		tables[i].setModel(new BasicTableModel());
 	}
 	

@@ -4,37 +4,34 @@ import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.ExceptionDialog;
-import motion.applet.panels.BottomSplitPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
-import motion.database.model.AttributeName;
 import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
 
 public class AttributeTableModel extends BasicTableModel {
-	public TableName fromTableName;	// Used for listing files for different tables.
+	public EntityKind fromEntityKind;	// Used for listing files for different tables.
 	
-	public AttributeTableModel(TableName tableName) {
-		this.tableName = tableName;
+	public AttributeTableModel(EntityKind entityKind) {
+		this.entityKind = entityKind;
 		this.recordId = -1;
 		getTableContents();
 	}
 	
-	public AttributeTableModel(TableName tableName, int recordId) {
-		this.tableName = tableName;
+	public AttributeTableModel(EntityKind entityKind, int recordId) {
+		this.entityKind = entityKind;
 		this.recordId = recordId;
 		
 		getTableContents();
 	}
 	
-	public AttributeTableModel(TableName tableName, int recordId, TableName fromTableName) {
-		this.tableName = tableName;
+	public AttributeTableModel(EntityKind entityKind, int recordId, EntityKind fromEntityKind) {
+		this.entityKind = entityKind;
 		this.recordId = recordId;
-		this.fromTableName = fromTableName;
+		this.fromEntityKind = fromEntityKind;
 		
 		getTableContents();
 	}
@@ -48,46 +45,45 @@ public class AttributeTableModel extends BasicTableModel {
 					addCheckboxColumn(); // first column
 					DbElementsList<? extends GenericDescription<?>> records = new DbElementsList<GenericDescription<?>>();
 					//ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
-					ArrayList<AttributeName> attributes = new ArrayList<AttributeName>();
+					ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
 					//if (selectedAttributes != null) {
 						//attributes = tableName.getSelectedAttributes(selectedAttributes);
 					//} else {
-						attributes = tableName.getAllAttributes();
+						attributes.addAll(entityKind.getStaticAttributes());
+						attributes.addAll(entityKind.getGenericAttributes());
 					//}
-					for (AttributeName a : attributes) {
-						attributeNames.add(a.toString());
+					for (EntityAttribute a : attributes) {
+						attributeNames.add(a.name);
 						classes.add(a.getAttributeClass());
 					}
 					
-					if (tableName.equals(TableNamesInstance.PERFORMER)) {
+					if (entityKind.equals(EntityKind.performer)) {
 						records = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
-					} else if (tableName.equals(TableNamesInstance.SESSION)) {
+					} else if (entityKind.equals(EntityKind.session)) {
 						if (recordId > -1) {
 							records = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(recordId);
 						} else {
 							records = WebServiceInstance.getDatabaseConnection().listLabSessionsWithAttributes(AppletToolBar.getLabId());
 						}
-					} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+					} else if (entityKind.equals(EntityKind.trial)) {
 						if (recordId > -1) {
 							records = WebServiceInstance.getDatabaseConnection().listSessionTrialsWithAttributes(recordId);
 						}
-					} else if (tableName.equals(TableNamesInstance.FILE)) {/*nf:
-						if (recordId > -1 && fromTableName != null) {
-							if (fromTableName.equals(TableNamesInstance.PERFORMER)) {
-								records = WebServiceInstance.getDatabaseConnection().listPerformerFiles(recordId);
-							} else if (fromTableName.equals(TableNamesInstance.SESSION)) {
-								records = WebServiceInstance.getDatabaseConnection().listSessionFiles(recordId);
-							} else if (fromTableName.equals(TableNamesInstance.TRIAL)) {
-								records = WebServiceInstance.getDatabaseConnection().listTrialFiles(recordId);
-							}
-						}*/
+					} else if (entityKind.equals(EntityKind.file)) {
+						if (recordId > -1 && fromEntityKind != null) {
+							records = WebServiceInstance.getDatabaseConnection().listFiles(recordId, fromEntityKind);
+						}
 					}
 					
 					for (GenericDescription<?> r : records) {
 						ArrayList<Object> cellList = new ArrayList<Object>();
 						cellList.add(new Boolean(false));	// checkboxes initially unchecked
-						for (AttributeName a : attributes) {
-							EntityAttribute entityAttribute = r.get(a.toString());
+						for (EntityAttribute a : attributes) {
+							String attributeName = a.name;
+							String firstLetter = attributeName.substring(0,1);
+							String remainder   = attributeName.substring(1);
+							attributeName = firstLetter.toLowerCase() + remainder;
+							EntityAttribute entityAttribute = r.get(attributeName);
 							if (entityAttribute != null) {
 								cellList.add(entityAttribute.value);
 							} else {
@@ -101,7 +97,6 @@ public class AttributeTableModel extends BasicTableModel {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
 				}
-				
 				return null;
 			}
 			
@@ -124,10 +119,10 @@ public class AttributeTableModel extends BasicTableModel {
 	public String getColumnName(int column) {
 		String attribute = this.attributeNames.get(column);
 		// Show/hide columns
-		if (BottomSplitPanel.isCheckedAttribute(tableName, attribute)) {
+		//if (BottomSplitPanel.isCheckedAttribute(tableName, attribute)) {
 			return attribute;
-		} else {
-			return "";
-		}
+		//} else {
+			//return "";
+		//}
 	}
 }

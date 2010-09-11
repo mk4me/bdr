@@ -11,9 +11,9 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.MotionAppletFrame;
-import motion.applet.database.TableName;
 import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.RightSplitPanel;
+import motion.database.model.EntityKind;
 
 public class TrialMouseAdapter extends MouseAdapter {
 	private static String MENU_VIEW_FILES = "View files";
@@ -51,7 +51,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 			viewFilesMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					viewFiles(recordId, TableNamesInstance.TRIAL);
+					viewFiles(recordId, EntityKind.trial);
 				}
 			});
 			
@@ -59,8 +59,8 @@ public class TrialMouseAdapter extends MouseAdapter {
 		}
 	}
 	
-	private void viewFiles(int recordId, TableName tableName) {
-		rightPanel.showTable(TableNamesInstance.FILE, recordId, tableName);
+	private void viewFiles(int recordId, EntityKind entityKind) {
+		rightPanel.showTable(EntityKind.file, recordId, entityKind);
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 }

@@ -35,6 +35,7 @@ import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DatabaseConnection;
+import motion.database.model.EntityKind;
 
 public class MotionAppletFrame extends JFrame {
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
@@ -152,7 +153,7 @@ public class MotionAppletFrame extends JFrame {
 		viewMenu.add(viewAllPerformersItem);
 		viewAllPerformersItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.showTable(TableNamesInstance.PERFORMER);
+				rightPanel.showTable(EntityKind.performer);
 			}
 		});
 		
@@ -160,7 +161,7 @@ public class MotionAppletFrame extends JFrame {
 		viewMenu.add(viewAllSessionsItem);
 		viewAllSessionsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.showTable(TableNamesInstance.SESSION);
+				rightPanel.showTable(EntityKind.session);
 			}
 		});
 		
@@ -229,13 +230,13 @@ public class MotionAppletFrame extends JFrame {
 	}
 	
 	private static void addTableMouseListeners(JTable table) {
-		TableName tableName = ((BasicTableModel) table.getModel()).getTableName();
-		if (tableName != null) {
-			if (tableName.equals(TableNamesInstance.PERFORMER)) {
+		EntityKind entityKind = ((BasicTableModel) table.getModel()).getEntityKind();
+		if (entityKind != null) {
+			if (entityKind.equals(EntityKind.performer)) {
 				table.addMouseListener(new PerformerMouseAdapter(rightPanel));
-			} else if (tableName.equals(TableNamesInstance.SESSION)) {
+			} else if (entityKind.equals(EntityKind.session)) {
 				table.addMouseListener(new SessionMouseAdapter(rightPanel));
-			} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+			} else if (entityKind.equals(EntityKind.trial)) {
 				table.addMouseListener(new TrialMouseAdapter(rightPanel));
 			}
 		}
