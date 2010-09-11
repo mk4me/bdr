@@ -37,9 +37,9 @@ public class TableName {
 	protected static final String PATIENT_LABEL = Messages.getString("TableName.Patient"); //$NON-NLS-1$
 	protected static final String FILE_LABEL = Messages.getString("TableName.File"); //$NON-NLS-1$
 	
-	private final String table;	// Database table name (in Polish)
-	private final String entity;	// Entity name (in English)
-	private final String label;	// Table name (in English or in Polish depending on language setting)
+	private final String table;	// Database table MeasurementConfName (in Polish)
+	private final String entity;	// Entity MeasurementConfName (in English)
+	private final String label;	// Table MeasurementConfName (in English or in Polish depending on language setting)
 	private final ArrayList<AttributeName> staticAttributes = new ArrayList<AttributeName>();
 	//private final ArrayList<AttributeName> definedAttributes = new ArrayList<AttributeName>();
 	private final ArrayList<AttributeGroup> groupedDefinedAttributes = new ArrayList<AttributeGroup>();
@@ -55,26 +55,25 @@ public class TableName {
 	
 	private void fillStaticAttributes() {
 		if (this.entity.equals(PERFORMER_ENTITY)) {
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.firstName.toString(), AttributeName.STRING_TYPE));
-			staticAttributes.add(new AttributeName(PerformerStaticAttributes.lastName.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.PerformerID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.FirstName.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(PerformerStaticAttributes.LastName.toString(), AttributeName.STRING_TYPE));
 		} else if (this.entity.equals(SESSION_ENTITY)) {
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.userID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.labID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.motionKindID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.SessionID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.UserID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.LabID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.MotionKindID.toString(), AttributeName.INTEGER_TYPE));
 			//nf: staticAttributes.add(new AttributeName(SessionStaticAttributes.performerID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDate.toString(), AttributeName.DATE_TYPE));
-			staticAttributes.add(new AttributeName(SessionStaticAttributes.sessionDescription.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.SessionDate.toString(), AttributeName.DATE_TYPE));
+			staticAttributes.add(new AttributeName(SessionStaticAttributes.SessionDescription.toString(), AttributeName.STRING_TYPE));
 		} else if (this.entity.equals(TRIAL_ENTITY)) {
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.sessionID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.duration.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(TrialStaticAttributes.trialDescription.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.TrialID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.Duration.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(TrialStaticAttributes.TrialDescription.toString(), AttributeName.STRING_TYPE));
 		} else if (this.entity.equals(FILE_ENTITY)) {
-			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileID.toString(), AttributeName.INTEGER_TYPE));
-			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileName.toString(), AttributeName.STRING_TYPE));
-			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.fileDescription.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.FileID.toString(), AttributeName.INTEGER_TYPE));
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.FileName.toString(), AttributeName.STRING_TYPE));
+			staticAttributes.add(new AttributeName(DatabaseFileStaticAttributes.FileDescription.toString(), AttributeName.STRING_TYPE));
 		}
 	}
 	
