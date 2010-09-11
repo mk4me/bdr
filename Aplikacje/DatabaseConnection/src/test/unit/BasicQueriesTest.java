@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
@@ -15,6 +16,7 @@ import motion.database.FileTransferListener;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.GenericDescription;
 import motion.database.model.Session;
 
 import org.junit.Before;
@@ -24,14 +26,23 @@ import org.junit.Test;
  * @author Administrator
  *
  */
-public class ShortTest {
+public class BasicQueriesTest {
 
 	public void beforeTest()
 	{
-		System.out.println("============================================================");
+		log.info( "\n============================================================");
+		log.info( "\t" + Thread.currentThread().getStackTrace()[2].getMethodName() );
+		log.info( "============================================================");
 	}
 	
-	private DatabaseProxy database; 
+	public void message(String s)
+	{
+		log.info( s );
+	}
+	
+	
+	private DatabaseProxy database;
+	private Logger log; 
 	
 	
 	/**
@@ -44,6 +55,8 @@ public class ShortTest {
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
 		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+		
+		this.log = DatabaseConnection.log;
 	}
 
 	class ConsoleTransferListener implements FileTransferListener
@@ -70,12 +83,10 @@ public class ShortTest {
 	}
 	
 	@Test
-	public void test() throws Exception {
+	public void testEntityKindGetAttributes() throws Exception {
 		
 		beforeTest();
 	
-		int id = 2;
-		
 		//database.uploadSessionFiles(id, "data/uploaded", new ConsoleTransferListener() );
 
 //		DbElementsList<Session> r = database.listPerformerSessionsWithAttributes(1);
@@ -83,45 +94,60 @@ public class ShortTest {
 		
 		//database.uploadSessionFile( 1, "test nowego wgrania", "data/uploaded/Combo_1.c3d", null);
 		
-		EnumSet<EntityKind> set = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement_conf );
-
-		System.out.println("========Attribute Groups=========");
+		message("\n======== Attribute Groups =========");
 		
-		for( EntityKind e : set )
+		for( EntityKind e : EntityKind.kindsWithGenericAttributes )
 		{
-			System.out.println(e.getGUIName() + "::" );
+			message( "\n" + e.getGUIName() + "::" );
 			HashMap<String, EntityAttributeGroup> results = e.getAllAttributeGroups();
 			for ( String ss : results.keySet() )
 			{
 				EntityAttributeGroup g = results.get(ss);
-				System.out.println( "Group: " + g.name );
+				message( "Group: " + g.name );
 				for(EntityAttribute a : g)
 				{
-					System.out.println( "   attribute:" + a.toStringAllContent() );
+					message( "   attribute:" + a.toStringAllContent() );
 				}
 				
 			}
 		}
 		
-		System.out.println("========Static Attributes=========");
-		for( EntityKind e : set )
+		message("\n======== Static Attributes =========");
+		for( EntityKind e : EntityKind.kindsWithGenericAttributes )
 		{
+			message( e.getGUIName() + "::\n" );
 			ArrayList<EntityAttribute> results = e.getStaticAttributes();
 			for(EntityAttribute a : results)
 			{
-				System.out.println( "   attribute:" + a.toStringAllContent() );
+				message( "   attribute:" + a.toStringAllContent() );
 			}
 		}
 
-		System.out.println("========Generic Attributes=========");
-		for( EntityKind e : set )
+		message("\n======== Generic Attributes =========");
+		for( EntityKind e : EntityKind.kindsWithGenericAttributes )
 		{
+			message( e.getGUIName() + "::" );
 			ArrayList<EntityAttribute> results = e.getGenericAttributes();
 			for(EntityAttribute a : results)
 			{
-				System.out.println( "   attribute:" + a.toStringAllContent() );
+				message( "   attribute:" + a.toStringAllContent() );
 			}
 		}
-
 	}
+	
+	@Test
+	public void testEntityKindBetById() throws Exception {
+		
+		beforeTest();
+	
+		message("\n======== Geting for ID(1) =========");
+		
+		for( EntityKind e : EntityKind.kindsWithGetByID )
+		{
+			message( "\n" + e.getGUIName() + "::" );
+			GenericDescription<?> result = database.getById(1, e);
+			message( result.toString() + " " + result.values() );
+		}
+	}
+
 }

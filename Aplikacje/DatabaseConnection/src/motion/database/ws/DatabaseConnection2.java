@@ -156,7 +156,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			
 			protected PasswordAuthentication getPasswordAuthentication() {
 				
-				System.err.println("Serwer pyta o hasło. (Odpowiedziałem)" );
+				log.fine("[Serwer pyta o hasło. (Odpowiedziałem)]" );
 				
 				log.entering("Authenticator", "getPasswordAuthentication");
 				log.fine( "Host: " + this.getRequestingHost() );

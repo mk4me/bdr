@@ -1,6 +1,7 @@
 package motion.database.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -299,7 +300,13 @@ public enum EntityKind {
 	private ArrayList<EntityAttribute> genericAttributes;
 	private ArrayList<EntityAttribute> staticAttributes;
 	private HashMap<String, EntityAttributeGroup> genericAttributeGroups;
-	
+
+	//////////////////////////////////////////////////////////////////////////
+
+	static public EnumSet<EntityKind> kindsWithGenericAttributes = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement_conf, EntityKind.file );
+	static public EnumSet<EntityKind> kindsWithGetByID = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement );
+	static public EnumSet<EntityKind> kindsBasketStorable = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial );
+
 	
 	//////////////////////////////////////////////////////////////////////////
 
