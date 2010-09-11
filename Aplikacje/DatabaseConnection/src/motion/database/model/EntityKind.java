@@ -260,27 +260,7 @@ public enum EntityKind {
 	}, 
 	
 	
-	file(DatabaseFileStaticAttributes.class) {
-
-		@Override
-		public GenericDescription<?> getByID(IBasicQueriesWS port, int id) throws Exception {
-			try{
-				GetMeasurementByIdXMLResult result = port.getMeasurementByIdXML(id);
-				MeasurementDetailsWithAttributes s = result.getMeasurementDetailsWithAttributes();
-		
-				return ConnectionTools2.transformMeasurementDetails(s);
-			}
-			catch(IBasicQueriesWSGetMeasurementByIdXMLQueryExceptionFaultFaultMessage e)
-			{
-				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}
-			finally
-			{
-				ConnectionTools2.finalizeCall();
-			}
-		}
-	}, 
+	file(DatabaseFileStaticAttributes.class), 
 
 	user(UserStaticAttributes.class), 
 	
