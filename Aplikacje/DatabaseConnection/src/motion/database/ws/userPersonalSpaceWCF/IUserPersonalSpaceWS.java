@@ -184,21 +184,4 @@ public interface IUserPersonalSpaceWS {
         throws IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage
     ;
 
-    /**
-     * 
-     * @param basketName
-     * @return
-     *     returns motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXMLResponse.ListBasketSegmentsWithAttributesXMLResult
-     * @throws IUserPersonalSpaceWSListBasketSegmentsWithAttributesXMLQueryExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListBasketSegmentsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSegmentsWithAttributesXML")
-    @WebResult(name = "ListBasketSegmentsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
-    @RequestWrapper(localName = "ListBasketSegmentsWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXML")
-    @ResponseWrapper(localName = "ListBasketSegmentsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXMLResponse")
-    public motion.database.ws.userPersonalSpaceWCF.ListBasketSegmentsWithAttributesXMLResponse.ListBasketSegmentsWithAttributesXMLResult listBasketSegmentsWithAttributesXML(
-        @WebParam(name = "basketName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
-        String basketName)
-        throws IUserPersonalSpaceWSListBasketSegmentsWithAttributesXMLQueryExceptionFaultFaultMessage
-    ;
-
 }

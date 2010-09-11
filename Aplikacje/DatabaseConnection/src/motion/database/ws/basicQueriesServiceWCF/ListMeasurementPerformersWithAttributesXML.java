@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="measurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "measurementID"
+    "MeasurementID"
 })
 @XmlRootElement(name = "ListMeasurementPerformersWithAttributesXML")
 public class ListMeasurementPerformersWithAttributesXML {
@@ -36,7 +36,7 @@ public class ListMeasurementPerformersWithAttributesXML {
     protected int measurementID;
 
     /**
-     * Gets the value of the measurementID property.
+     * Gets the value of the MeasurementID property.
      * 
      */
     public int getMeasurementID() {
@@ -44,7 +44,7 @@ public class ListMeasurementPerformersWithAttributesXML {
     }
 
     /**
-     * Sets the value of the measurementID property.
+     * Sets the value of the MeasurementID property.
      * 
      */
     public void setMeasurementID(int value) {

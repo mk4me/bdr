@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "measurementID",
+    "MeasurementID",
     "attributes"
 })
 @XmlRootElement(name = "MeasurementDetailsWithAttributes")
@@ -42,7 +42,7 @@ public class MeasurementDetailsWithAttributes {
     protected Attributes attributes;
 
     /**
-     * Gets the value of the measurementID property.
+     * Gets the value of the MeasurementID property.
      * 
      */
     public int getMeasurementID() {
@@ -50,7 +50,7 @@ public class MeasurementDetailsWithAttributes {
     }
 
     /**
-     * Sets the value of the measurementID property.
+     * Sets the value of the MeasurementID property.
      * 
      */
     public void setMeasurementID(int value) {

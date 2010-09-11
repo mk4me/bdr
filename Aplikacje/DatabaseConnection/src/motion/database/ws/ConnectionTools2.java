@@ -225,9 +225,9 @@ public class ConnectionTools2 {
 			return null;
 		
 		Performer performer = new Performer();
-		performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
-		performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
-		performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
+		performer.put( PerformerStaticAttributes.PerformerID, s.getPerformerID() );
+		performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );
+		performer.put( PerformerStaticAttributes.LastName, s.getLastName() );
 		transformGenericAttributes( s.getAttributes(), performer );
 		return performer;
 	}
@@ -255,9 +255,9 @@ public class ConnectionTools2 {
 		for (FileDetails d: r.getFileList().getFileDetails() )
 		{
 			DatabaseFile df = new DatabaseFile();
-			df.put( DatabaseFileStaticAttributes.fileID, d.getFileID() );
-			df.put( DatabaseFileStaticAttributes.fileName, d.getFileName() );
-			df.put( DatabaseFileStaticAttributes.fileDescription, d.getFileDescription() );
+			df.put( DatabaseFileStaticAttributes.FileID, d.getFileID() );
+			df.put( DatabaseFileStaticAttributes.FileName, d.getFileName() );
+			df.put( DatabaseFileStaticAttributes.FileDescription, d.getFileDescription() );
 			list.add( df );
 		}
 
@@ -288,13 +288,13 @@ public class ConnectionTools2 {
 			return null;
 		
 		Session session = new Session();
-		session.put( SessionStaticAttributes.labID, s.getLabID() );
-		session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
-		session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
-		session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
-		session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
-		session.put( SessionStaticAttributes.userID, s.getUserID() );
-		session.put( SessionStaticAttributes.sessionLabel, s.getSessionLabel() );
+		session.put( SessionStaticAttributes.LabID, s.getLabID() );
+		session.put( SessionStaticAttributes.MotionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
+		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
+		session.put( SessionStaticAttributes.UserID, s.getUserID() );
+		session.put( SessionStaticAttributes.SessionLabel, s.getSessionLabel() );
 		
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), session );
 		return session;
@@ -307,10 +307,9 @@ public class ConnectionTools2 {
 			return null;
 
 		Trial trial = new Trial();
-		trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
-		trial.put( TrialStaticAttributes.duration, s.getDuration() );
-		trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
-		trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.Duration, s.getDuration() );
+		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
 	}
@@ -345,9 +344,9 @@ public class ConnectionTools2 {
 				return null;
 			
 			Performer performer = new Performer();
-			performer.put( PerformerStaticAttributes.performerID, s.getPerformerID() );
-			performer.put( PerformerStaticAttributes.firstName, s.getFirstName() );
-			performer.put( PerformerStaticAttributes.lastName, s.getLastName() );
+			performer.put( PerformerStaticAttributes.PerformerID, s.getPerformerID() );
+			performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );
+			performer.put( PerformerStaticAttributes.LastName, s.getLastName() );
 			transformGenericAttributes( s.getAttributes(), performer );
 
 			return performer;
@@ -372,13 +371,13 @@ public class ConnectionTools2 {
 			return null;
 		
 		Session session = new Session();
-		session.put( SessionStaticAttributes.labID, s.getLabID() );
-		session.put( SessionStaticAttributes.motionKindID, s.getMotionKindID() );
-		session.put( SessionStaticAttributes.sessionDate, s.getSessionDate() );
-		session.put( SessionStaticAttributes.sessionDescription, s.getSessionDescription() );
-		session.put( SessionStaticAttributes.sessionID, s.getSessionID() );
-		session.put( SessionStaticAttributes.userID, s.getUserID() );
-		session.put( SessionStaticAttributes.sessionLabel, s.getSessionLabel() );
+		session.put( SessionStaticAttributes.LabID, s.getLabID() );
+		session.put( SessionStaticAttributes.MotionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
+		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
+		session.put( SessionStaticAttributes.UserID, s.getUserID() );
+		session.put( SessionStaticAttributes.SessionLabel, s.getSessionLabel() );
 		
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), session );
 		return session;
@@ -387,10 +386,9 @@ public class ConnectionTools2 {
 	public static Trial transformTrialDetailsUPS(TrialDetailsWithAttributes s) {
 
 		Trial trial = new Trial();
-		trial.put( TrialStaticAttributes.trialID, s.getTrialID() );
-		trial.put( TrialStaticAttributes.duration, s.getDuration() );
-		trial.put( TrialStaticAttributes.sessionID, s.getSessionID() );
-		trial.put( TrialStaticAttributes.trialDescription, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.Duration, s.getDuration() );
+		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
 	}
@@ -404,7 +402,7 @@ public class ConnectionTools2 {
 	public static Measurement transformMeasurementDetails(
 			MeasurementDetailsWithAttributes s) {
 		Measurement m = new Measurement();
-		m.put( MeasurementStaticAttributes.measurementID, s.getMeasurementID() );
+		m.put( MeasurementStaticAttributes.MeasurementID, s.getMeasurementID() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), m );
 		return m;
 	}
@@ -412,9 +410,9 @@ public class ConnectionTools2 {
 	public static MeasurementConfiguration transformMeasurementConfigurationDetails(
 			MeasurementConfDetailsWithAttributes s) {
 		MeasurementConfiguration m = new MeasurementConfiguration();
-		m.put( MeasurementConfigurationStaticAttributes.measurementConfigurationID, s.getMeasurementConfID() );
-		m.put( MeasurementConfigurationStaticAttributes.description, s.getMeasurementConfDescription() );
-		m.put( MeasurementConfigurationStaticAttributes.name, s.getMeasurementConfName() );
+		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfigurationID, s.getMeasurementConfID() );
+		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfDescription, s.getMeasurementConfDescription() );
+		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfName, s.getMeasurementConfName() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), m );
 		return m;
 	}

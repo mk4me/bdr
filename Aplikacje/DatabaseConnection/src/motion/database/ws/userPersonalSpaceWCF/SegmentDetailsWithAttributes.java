@@ -18,11 +18,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="StartTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="EndTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="SegmentID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="SegmentName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element MeasurementConfName="StartTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="EndTime" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "segmentID",
-    "trialID",
+    "TrialID",
     "segmentName",
     "startTime",
     "endTime",
@@ -74,7 +74,7 @@ public class SegmentDetailsWithAttributes {
     }
 
     /**
-     * Gets the value of the trialID property.
+     * Gets the value of the TrialID property.
      * 
      */
     public int getTrialID() {
@@ -82,7 +82,7 @@ public class SegmentDetailsWithAttributes {
     }
 
     /**
-     * Sets the value of the trialID property.
+     * Sets the value of the TrialID property.
      * 
      */
     public void setTrialID(int value) {

@@ -17,9 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="resourceID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="entity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="attributeValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="fileID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="update" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,33 +32,59 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "MeasurementID",
+    "resourceID",
+    "entity",
     "attributeName",
-    "attributeValue",
+    "fileID",
     "update"
 })
-@XmlRootElement(name = "SetMeasurementAttribute")
-public class SetMeasurementAttribute {
+@XmlRootElement(name = "SetFileTypedAttributeValue")
+public class SetFileTypedAttributeValue {
 
-    protected int measurementID;
+    protected int resourceID;
+    protected String entity;
     protected String attributeName;
-    protected String attributeValue;
+    protected int fileID;
     protected boolean update;
 
     /**
-     * Gets the value of the MeasurementID property.
+     * Gets the value of the resourceID property.
      * 
      */
-    public int getMeasurementID() {
-        return measurementID;
+    public int getResourceID() {
+        return resourceID;
     }
 
     /**
-     * Sets the value of the MeasurementID property.
+     * Sets the value of the resourceID property.
      * 
      */
-    public void setMeasurementID(int value) {
-        this.measurementID = value;
+    public void setResourceID(int value) {
+        this.resourceID = value;
+    }
+
+    /**
+     * Gets the value of the entity property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEntity() {
+        return entity;
+    }
+
+    /**
+     * Sets the value of the entity property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEntity(String value) {
+        this.entity = value;
     }
 
     /**
@@ -85,27 +112,19 @@ public class SetMeasurementAttribute {
     }
 
     /**
-     * Gets the value of the attributeValue property.
+     * Gets the value of the fileID property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getAttributeValue() {
-        return attributeValue;
+    public int getFileID() {
+        return fileID;
     }
 
     /**
-     * Sets the value of the attributeValue property.
+     * Sets the value of the fileID property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setAttributeValue(String value) {
-        this.attributeValue = value;
+    public void setFileID(int value) {
+        this.fileID = value;
     }
 
     /**

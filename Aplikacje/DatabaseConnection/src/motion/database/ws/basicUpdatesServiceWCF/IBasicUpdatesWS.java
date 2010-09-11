@@ -74,6 +74,7 @@ public interface IBasicUpdatesWS {
      * 
      * @param mcDescription
      * @param mcName
+     * @param mcKind
      * @return
      *     returns int
      * @throws IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage
@@ -85,6 +86,8 @@ public interface IBasicUpdatesWS {
     public int createMeasurementConfiguration(
         @WebParam(name = "mcName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String mcName,
+        @WebParam(name = "mcKind", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String mcKind,
         @WebParam(name = "mcDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String mcDescription)
         throws IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage
@@ -175,7 +178,7 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
-     * @param measurementID
+     * @param MeasurementID
      * @param performerID
      * @return
      *     returns boolean
@@ -188,7 +191,7 @@ public interface IBasicUpdatesWS {
     public boolean addPerformerToMeasurement(
         @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int performerID,
-        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        @WebParam(name = "MeasurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int measurementID)
         throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
     ;
@@ -266,7 +269,7 @@ public interface IBasicUpdatesWS {
      * 
      * @param update
      * @param attributeName
-     * @param measurementID
+     * @param MeasurementID
      * @param attributeValue
      * @throws IBasicUpdatesWSSetMeasurementAttributeUpdateExceptionFaultFaultMessage
      */
@@ -274,7 +277,7 @@ public interface IBasicUpdatesWS {
     @RequestWrapper(localName = "SetMeasurementAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttribute")
     @ResponseWrapper(localName = "SetMeasurementAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttributeResponse")
     public void setMeasurementAttribute(
-        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        @WebParam(name = "MeasurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int measurementID,
         @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String attributeName,
@@ -349,6 +352,32 @@ public interface IBasicUpdatesWS {
         @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String entity)
         throws IBasicUpdatesWSClearAttributeValueUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param update
+     * @param attributeName
+     * @param fileID
+     * @param resourceID
+     * @param entity
+     * @throws IBasicUpdatesWSSetFileTypedAttributeValueUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "SetFileTypedAttributeValue", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/SetFileTypedAttributeValue")
+    @RequestWrapper(localName = "SetFileTypedAttributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetFileTypedAttributeValue")
+    @ResponseWrapper(localName = "SetFileTypedAttributeValueResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetFileTypedAttributeValueResponse")
+    public void setFileTypedAttributeValue(
+        @WebParam(name = "resourceID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int resourceID,
+        @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String entity,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
+        @WebParam(name = "fileID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int fileID,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update)
+        throws IBasicUpdatesWSSetFileTypedAttributeValueUpdateExceptionFaultFaultMessage
     ;
 
 }

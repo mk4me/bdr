@@ -5,12 +5,12 @@ package motion.database.model;
 public class Session extends GenericDescription<SessionStaticAttributes>{
 
 	public Session() {
-		super(SessionStaticAttributes.sessionID.name(), EntityKind.session);
+		super(SessionStaticAttributes.SessionID.name(), EntityKind.session);
 	}
 	
 	public String toString() {
-		if (super.get(SessionStaticAttributes.sessionLabel.toString()) != null)
-			return super.get(SessionStaticAttributes.sessionLabel.toString()).value.toString();
+		if (super.get(SessionStaticAttributes.SessionLabel.toString()) != null)
+			return super.get(SessionStaticAttributes.SessionLabel.toString()).value.toString();
 		else
 			return "Session " + super.getId() + " (no label)";
 	}

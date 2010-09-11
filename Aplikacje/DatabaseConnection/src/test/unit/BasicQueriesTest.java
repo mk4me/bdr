@@ -96,8 +96,9 @@ public class BasicQueriesTest {
 		
 		message("\n======== Attribute Groups =========");
 		
-		for( EntityKind e : EntityKind.kindsWithGenericAttributes )
+		for( EntityKind e : EntityKind.values() )
 		{
+			try{
 			message( "\n" + e.getGUIName() + "::" );
 			HashMap<String, EntityAttributeGroup> results = e.getAllAttributeGroups();
 			for ( String ss : results.keySet() )
@@ -110,6 +111,8 @@ public class BasicQueriesTest {
 				}
 				
 			}
+			}
+			catch(Exception ex){}
 		}
 		
 		message("\n======== Static Attributes =========");
@@ -136,17 +139,25 @@ public class BasicQueriesTest {
 	}
 	
 	@Test
-	public void testEntityKindBetById() throws Exception {
+	public void testEntityKindGetById() throws Exception {
 		
 		beforeTest();
 	
-		message("\n======== Geting for ID(1) =========");
+		int id1 = 1;
+		int id2 = 5;
+		message("\n======== Geting for ID(" + id1 + ") - ID(" + id2 + ") =========");
 		
-		for( EntityKind e : EntityKind.kindsWithGetByID )
+		for( EntityKind e : EntityKind.values() )
 		{
 			message( "\n" + e.getGUIName() + "::" );
-			GenericDescription<?> result = database.getById(1, e);
-			message( result.toString() + " " + result.values() );
+			for (int i = id1; i<=id2; i++)
+			{
+				try{
+				GenericDescription<?> result = database.getById(i, e);
+				message( result.toString() + " " + result.values() );
+				}
+				catch( Exception ex ){}
+			}
 		}
 	}
 

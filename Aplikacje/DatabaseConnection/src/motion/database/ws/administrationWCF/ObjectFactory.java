@@ -61,11 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineAttriubeGroup }
+     * Create an instance of {@link DefineAttributeResponse }
      * 
      */
-    public DefineAttriubeGroup createDefineAttriubeGroup() {
-        return new DefineAttriubeGroup();
+    public DefineAttributeResponse createDefineAttributeResponse() {
+        return new DefineAttributeResponse();
     }
 
     /**
@@ -77,38 +77,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttribute }
-     * 
-     */
-    public RemoveAttribute createRemoveAttribute() {
-        return new RemoveAttribute();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttributeResponse }
-     * 
-     */
-    public DefineAttributeResponse createDefineAttributeResponse() {
-        return new DefineAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link AddAttributeEnumValue }
-     * 
-     */
-    public AddAttributeEnumValue createAddAttributeEnumValue() {
-        return new AddAttributeEnumValue();
-    }
-
-    /**
-     * Create an instance of {@link AdministrationOperationException }
-     * 
-     */
-    public AdministrationOperationException createAdministrationOperationException() {
-        return new AdministrationOperationException();
-    }
-
-    /**
      * Create an instance of {@link RemoveAttributeGroupResponse }
      * 
      */
@@ -117,11 +85,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttributeGroup }
+     * Create an instance of {@link RemoveAttribute }
      * 
      */
-    public RemoveAttributeGroup createRemoveAttributeGroup() {
-        return new RemoveAttributeGroup();
+    public RemoveAttribute createRemoveAttribute() {
+        return new RemoveAttribute();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * 
+     */
+    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
+        return new AddAttributeEnumValueResponse();
     }
 
     /**
@@ -141,11 +117,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * Create an instance of {@link AdministrationOperationException }
      * 
      */
-    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
-        return new AddAttributeEnumValueResponse();
+    public AdministrationOperationException createAdministrationOperationException() {
+        return new AdministrationOperationException();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValue }
+     * 
+     */
+    public AddAttributeEnumValue createAddAttributeEnumValue() {
+        return new AddAttributeEnumValue();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeGroup }
+     * 
+     */
+    public RemoveAttributeGroup createRemoveAttributeGroup() {
+        return new RemoveAttributeGroup();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttriubeGroup }
+     * 
+     */
+    public DefineAttriubeGroup createDefineAttriubeGroup() {
+        return new DefineAttriubeGroup();
     }
 
     /**

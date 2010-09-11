@@ -5,12 +5,11 @@ package motion.database.model;
 public class Trial extends GenericDescription<TrialStaticAttributes>{
 
 	public Trial() {
-		super(TrialStaticAttributes.trialID.name(), EntityKind.trial);
+		super(TrialStaticAttributes.TrialID.name(), EntityKind.trial);
 	}
 	
 	public String toString() {
 		
-		return "Trial " + super.get(TrialStaticAttributes.trialID.toString()).value.toString() + ", Session " +
-			super.get(TrialStaticAttributes.sessionID.toString()).value.toString();
+		return "Trial " + super.get(TrialStaticAttributes.TrialID.toString()).value.toString();
 	}
 }

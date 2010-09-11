@@ -71,7 +71,7 @@ public interface DatabaseProxy {
 	
 //	@Deprecated
 //	public abstract DbElementsList<Session> listPerformerSessions(
-//			int performerID) throws Exception;
+//			int PerformerID) throws Exception;
 
 	public List<String> listEnumValues(String attributeName, String entityKind) throws Exception;
 
@@ -177,7 +177,7 @@ public interface DatabaseProxy {
 
 	public int createMeasurement(int trialID, int measurementConfigurationID ) throws Exception;
 	
-	public int createMeasurementConfiguration(String name, String description ) throws Exception;
+	public int createMeasurementConfiguration(String name, String kind, String description ) throws Exception;
 	
 	public void  defineAttributeGroup(String groupName, String unit) throws Exception;
 	

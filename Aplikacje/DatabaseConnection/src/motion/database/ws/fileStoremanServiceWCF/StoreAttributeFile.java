@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="resourceID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="entity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="path" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="filename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="resourceID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="entity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="path" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="filename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
     "entity",
     "attributeName",
     "path",
-    "description",
+    "MeasurementConfDescription",
     "filename"
 })
 @XmlRootElement(name = "StoreAttributeFile")
@@ -139,7 +139,7 @@ public class StoreAttributeFile {
     }
 
     /**
-     * Gets the value of the description property.
+     * Gets the value of the MeasurementConfDescription property.
      * 
      * @return
      *     possible object is
@@ -151,7 +151,7 @@ public class StoreAttributeFile {
     }
 
     /**
-     * Sets the value of the description property.
+     * Sets the value of the MeasurementConfDescription property.
      * 
      * @param value
      *     allowed object is

@@ -21,17 +21,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ResultFileDetailsWithAttributes" maxOccurs="unbounded" minOccurs="0">
+ *         &lt;element MeasurementConfName="ResultFileDetailsWithAttributes" maxOccurs="unbounded" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *                 &lt;/sequence>
- *                 &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
- *                 &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute MeasurementConfName="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                 &lt;attribute MeasurementConfName="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute MeasurementConfName="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute MeasurementConfName="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -96,10 +96,10 @@ public class MeasurementResultFileWithAttributesList {
      *       &lt;sequence>
      *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
      *       &lt;/sequence>
-     *       &lt;attribute name="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
-     *       &lt;attribute name="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute MeasurementConfName="FileID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute MeasurementConfName="FileName" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute MeasurementConfName="FileDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute MeasurementConfName="SubdirPath" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -149,7 +149,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Gets the value of the fileID property.
+         * Gets the value of the FileID property.
          * 
          * @return
          *     possible object is
@@ -161,7 +161,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Sets the value of the fileID property.
+         * Sets the value of the FileID property.
          * 
          * @param value
          *     allowed object is
@@ -173,7 +173,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Gets the value of the fileName property.
+         * Gets the value of the FileName property.
          * 
          * @return
          *     possible object is
@@ -185,7 +185,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Sets the value of the fileName property.
+         * Sets the value of the FileName property.
          * 
          * @param value
          *     allowed object is
@@ -197,7 +197,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Gets the value of the fileDescription property.
+         * Gets the value of the FileDescription property.
          * 
          * @return
          *     possible object is
@@ -209,7 +209,7 @@ public class MeasurementResultFileWithAttributesList {
         }
 
         /**
-         * Sets the value of the fileDescription property.
+         * Sets the value of the FileDescription property.
          * 
          * @param value
          *     allowed object is

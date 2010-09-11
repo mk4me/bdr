@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="sessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="idPublic" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="isPublic" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="isWritable" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,14 +31,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "sessionID",
-    "idPublic",
+    "isPublic",
     "isWritable"
 })
 @XmlRootElement(name = "AlterSessionVisibility")
 public class AlterSessionVisibility {
 
     protected int sessionID;
-    protected boolean idPublic;
+    protected boolean isPublic;
     protected boolean isWritable;
 
     /**
@@ -58,19 +58,19 @@ public class AlterSessionVisibility {
     }
 
     /**
-     * Gets the value of the idPublic property.
+     * Gets the value of the isPublic property.
      * 
      */
-    public boolean isIdPublic() {
-        return idPublic;
+    public boolean isIsPublic() {
+        return isPublic;
     }
 
     /**
-     * Sets the value of the idPublic property.
+     * Sets the value of the isPublic property.
      * 
      */
-    public void setIdPublic(boolean value) {
-        this.idPublic = value;
+    public void setIsPublic(boolean value) {
+        this.isPublic = value;
     }
 
     /**

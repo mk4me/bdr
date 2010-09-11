@@ -5,11 +5,11 @@ package motion.database.model;
 public class MeasurementConfiguration extends GenericDescription<MeasurementConfigurationStaticAttributes>{
 
 	public MeasurementConfiguration() {
-		super(MeasurementConfigurationStaticAttributes.measurementConfigurationID.name(), EntityKind.measurement_conf);
+		super(MeasurementConfigurationStaticAttributes.MeasurementConfigurationID.name(), EntityKind.measurement_conf);
 	}
 	
 	public String toString() {
 		
-		return "MeasurementResult " + super.get(MeasurementConfigurationStaticAttributes.measurementConfigurationID.toString()).value.toString();
+		return "MeasurementResult " + super.get(MeasurementConfigurationStaticAttributes.MeasurementConfigurationID.toString()).value.toString();
 	}
 }

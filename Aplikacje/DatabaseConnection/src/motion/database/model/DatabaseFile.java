@@ -6,6 +6,6 @@ package motion.database.model;
 public class DatabaseFile extends GenericDescription<DatabaseFileStaticAttributes>{
 
 	public DatabaseFile() {
-		super(DatabaseFileStaticAttributes.fileID.name(), EntityKind.file);
+		super(DatabaseFileStaticAttributes.FileID.name(), EntityKind.file);
 	}
 }

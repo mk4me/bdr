@@ -17,10 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="measurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="path" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="filename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element MeasurementConfName="path" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element MeasurementConfName="filename" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,9 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "measurementID",
+    "MeasurementID",
     "path",
-    "description",
+    "MeasurementConfDescription",
     "filename"
 })
 @XmlRootElement(name = "StoreMeasurementResultFile")
@@ -45,7 +45,7 @@ public class StoreMeasurementResultFile {
     protected String filename;
 
     /**
-     * Gets the value of the measurementID property.
+     * Gets the value of the MeasurementID property.
      * 
      */
     public int getMeasurementID() {
@@ -53,7 +53,7 @@ public class StoreMeasurementResultFile {
     }
 
     /**
-     * Sets the value of the measurementID property.
+     * Sets the value of the MeasurementID property.
      * 
      */
     public void setMeasurementID(int value) {
@@ -85,7 +85,7 @@ public class StoreMeasurementResultFile {
     }
 
     /**
-     * Gets the value of the description property.
+     * Gets the value of the MeasurementConfDescription property.
      * 
      * @return
      *     possible object is
@@ -97,7 +97,7 @@ public class StoreMeasurementResultFile {
     }
 
     /**
-     * Sets the value of the description property.
+     * Sets the value of the MeasurementConfDescription property.
      * 
      * @param value
      *     allowed object is

@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="MeasurementConfKind" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "measurementConfID",
     "measurementConfName",
+    "measurementConfKind",
     "measurementConfDescription",
     "attributes"
 })
@@ -44,6 +46,8 @@ public class MeasurementConfDetailsWithAttributes {
     protected int measurementConfID;
     @XmlElement(name = "MeasurementConfName", required = true)
     protected String measurementConfName;
+    @XmlElement(name = "MeasurementConfKind", required = true)
+    protected String measurementConfKind;
     @XmlElement(name = "MeasurementConfDescription", required = true)
     protected String measurementConfDescription;
     @XmlElement(name = "Attributes")
@@ -87,6 +91,30 @@ public class MeasurementConfDetailsWithAttributes {
      */
     public void setMeasurementConfName(String value) {
         this.measurementConfName = value;
+    }
+
+    /**
+     * Gets the value of the measurementConfKind property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMeasurementConfKind() {
+        return measurementConfKind;
+    }
+
+    /**
+     * Sets the value of the measurementConfKind property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMeasurementConfKind(String value) {
+        this.measurementConfKind = value;
     }
 
     /**

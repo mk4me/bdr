@@ -56,6 +56,20 @@ public interface IAuthorizationWS {
 
     /**
      * 
+     * @return
+     *     returns motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult
+     * @throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListUsers", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers")
+    @WebResult(name = "ListUsersResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+    @RequestWrapper(localName = "ListUsers", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsers")
+    @ResponseWrapper(localName = "ListUsersResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsersResponse")
+    public motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult listUsers()
+        throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param sessionID
      * @param write
      * @param grantedUserLogin
@@ -95,7 +109,7 @@ public interface IAuthorizationWS {
      * 
      * @param sessionID
      * @param isWritable
-     * @param idPublic
+     * @param isPublic
      * @throws IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "AlterSessionVisibility", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/AlterSessionVisibility")
@@ -104,25 +118,11 @@ public interface IAuthorizationWS {
     public void alterSessionVisibility(
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         int sessionID,
-        @WebParam(name = "idPublic", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
-        boolean idPublic,
+        @WebParam(name = "isPublic", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        boolean isPublic,
         @WebParam(name = "isWritable", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
         boolean isWritable)
         throws IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
-     * @return
-     *     returns motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult
-     * @throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListUsers", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers")
-    @WebResult(name = "ListUsersResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
-    @RequestWrapper(localName = "ListUsers", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsers")
-    @ResponseWrapper(localName = "ListUsersResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.ListUsersResponse")
-    public motion.database.ws.authorizationWCF.ListUsersResponse.ListUsersResult listUsers()
-        throws IAuthorizationWSListUsersAuthorizationExceptionFaultFaultMessage
     ;
 
     /**

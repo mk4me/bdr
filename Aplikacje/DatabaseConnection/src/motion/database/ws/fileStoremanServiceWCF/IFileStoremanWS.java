@@ -163,38 +163,6 @@ public interface IFileStoremanWS {
 
     /**
      * 
-     * @param attributeName
-     * @param resourceID
-     * @param description
-     * @param entity
-     * @param path
-     * @param filename
-     * @return
-     *     returns int
-     * @throws IFileStoremanWSStoreAttributeFileFileAccessServiceExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "StoreAttributeFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/StoreAttributeFile")
-    @WebResult(name = "StoreAttributeFileResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-    @RequestWrapper(localName = "StoreAttributeFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreAttributeFile")
-    @ResponseWrapper(localName = "StoreAttributeFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.StoreAttributeFileResponse")
-    public int storeAttributeFile(
-        @WebParam(name = "resourceID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        int resourceID,
-        @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String entity,
-        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String attributeName,
-        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String path,
-        @WebParam(name = "description", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String description,
-        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
-        String filename)
-        throws IFileStoremanWSStoreAttributeFileFileAccessServiceExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
      * @param fileID
      * @param path
      * @throws IFileStoremanWSDownloadCompleteFileAccessServiceExceptionFaultFaultMessage

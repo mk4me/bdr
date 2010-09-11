@@ -873,7 +873,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		putFile(localFilePath, destRemoteFolder, listener);			
 		    
 		if (!fileTransferCancelled)
-				port.storeAttributeFile(resourceId, attribute.kind.name(), attribute.name, destRemoteFolder, description, new File(localFilePath).getName() );
+				//port.storeAttributeFile(resourceId, attribute.kind.name(), attribute.name, destRemoteFolder, description, new File(localFilePath).getName() );
 		
 		System.out.println( destRemoteFolder + "   " + localFilePath );
 		
@@ -985,12 +985,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public int createMeasurementConfiguration(String name, String description ) throws Exception
+	public int createMeasurementConfiguration(String name, String kind, String description ) throws Exception
 	{
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createMeasurementConfiguration", this );
 			
-			return port.createMeasurementConfiguration(name, description);
+			return port.createMeasurementConfiguration(name, kind, description);
 		} 
 		catch ( IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1430,7 +1430,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		if (a.kind == null)
 			throw new Exception ("Attribute must have entity kind defined!" + a);
 		if (a.groupName == null)
-			throw new Exception ("Attribute must have group name defined!" + a);
+			throw new Exception ("Attribute must have group MeasurementConfName defined!" + a);
 		try {
 			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttributeEnumValue", this );
 			port.addAttributeEnumValue(a.name, a.groupName, a.kind.name(), value, clearExisting);

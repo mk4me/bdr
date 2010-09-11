@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="mcName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="mcKind" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="mcDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -30,12 +31,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "mcName",
+    "mcKind",
     "mcDescription"
 })
 @XmlRootElement(name = "CreateMeasurementConfiguration")
 public class CreateMeasurementConfiguration {
 
     protected String mcName;
+    protected String mcKind;
     protected String mcDescription;
 
     /**
@@ -60,6 +63,30 @@ public class CreateMeasurementConfiguration {
      */
     public void setMcName(String value) {
         this.mcName = value;
+    }
+
+    /**
+     * Gets the value of the mcKind property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMcKind() {
+        return mcKind;
+    }
+
+    /**
+     * Sets the value of the mcKind property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMcKind(String value) {
+        this.mcKind = value;
     }
 
     /**

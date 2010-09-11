@@ -5,11 +5,11 @@ package motion.database.model;
 public class Measurement extends GenericDescription<MeasurementStaticAttributes>{
 
 	public Measurement() {
-		super(MeasurementStaticAttributes.measurementID.name(), EntityKind.measurement);
+		super(MeasurementStaticAttributes.MeasurementID.name(), EntityKind.measurement);
 	}
 	
 	public String toString() {
 		
-		return "Measurement " + super.get(MeasurementStaticAttributes.measurementID.toString()).value.toString();
+		return "Measurement " + super.get(MeasurementStaticAttributes.MeasurementID.toString()).value.toString();
 	}
 }

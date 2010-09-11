@@ -146,7 +146,7 @@ public class GenericQueryResult {
         "trialID",
         "trialDescription",
         "duration",
-        "measurementID",
+        "MeasurementID",
         "measurementConfID",
         "measurementConfName",
         "measurementConfDescription",
@@ -479,7 +479,7 @@ public class GenericQueryResult {
         }
 
         /**
-         * Gets the value of the measurementID property.
+         * Gets the value of the MeasurementID property.
          * 
          * @return
          *     possible object is
@@ -491,7 +491,7 @@ public class GenericQueryResult {
         }
 
         /**
-         * Sets the value of the measurementID property.
+         * Sets the value of the MeasurementID property.
          * 
          * @param value
          *     allowed object is

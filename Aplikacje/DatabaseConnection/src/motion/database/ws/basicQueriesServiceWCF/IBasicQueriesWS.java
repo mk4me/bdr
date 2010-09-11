@@ -212,7 +212,7 @@ public interface IBasicQueriesWS {
 
     /**
      * 
-     * @param measurementID
+     * @param MeasurementID
      * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListMeasurementPerformersWithAttributesXMLResponse.ListMeasurementPerformersWithAttributesXMLResult
      * @throws IBasicQueriesWSListMeasurementPerformersWithAttributesXMLQueryExceptionFaultFaultMessage
@@ -222,7 +222,7 @@ public interface IBasicQueriesWS {
     @RequestWrapper(localName = "ListMeasurementPerformersWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementPerformersWithAttributesXML")
     @ResponseWrapper(localName = "ListMeasurementPerformersWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementPerformersWithAttributesXMLResponse")
     public motion.database.ws.basicQueriesServiceWCF.ListMeasurementPerformersWithAttributesXMLResponse.ListMeasurementPerformersWithAttributesXMLResult listMeasurementPerformersWithAttributesXML(
-        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        @WebParam(name = "MeasurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         int measurementID)
         throws IBasicQueriesWSListMeasurementPerformersWithAttributesXMLQueryExceptionFaultFaultMessage
     ;
