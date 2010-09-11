@@ -272,17 +272,20 @@ public class FilterDialog extends BasicDialog {
 			this.entityKind = entityKind;
 			this.firstCondition = firstCondition;
 			
+			ArrayList<EntityAttribute> allEntityAttributes = this.entityKind.getStaticAttributes();
+			allEntityAttributes.addAll(this.entityKind.getGenericAttributes());
+			
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
 			this.operatorComboBox = new JComboBox();
-			fillOperators(this.entityKind.getGenericAttributes().get(0));	//FIXME: all attributes.
+			fillOperators(allEntityAttributes.get(0));
 			
 			if (this.firstCondition == false) {
 				logicalComboBox = new JComboBox(PredicateComposition.logicalOperators);
 				this.add(logicalComboBox);
 			}
 			
-			columnComboBox = new JComboBox(this.entityKind.getGenericAttributes().toArray());	//FIXME: all attributes.
+			columnComboBox = new JComboBox(allEntityAttributes.toArray());
 			this.add(columnComboBox);
 			this.add(operatorComboBox);
 			this.add(conditionText);
