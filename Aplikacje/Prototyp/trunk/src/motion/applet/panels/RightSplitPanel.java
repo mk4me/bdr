@@ -90,20 +90,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		return ((BasicTableModel) table.getModel()).getCheckedRecordIds();
 	}
 	
-	/*//replaced by getSelectedRecords(JTable table)
-	private int[] getSelectedRecords( JTable table, MouseEvent e ) 
-	{
-		if ( table.getSelectedRowCount() == 0 )	// FIXME: always false?
-			createSelectionAtMouse(table, e);
-
-		int recordIds[] = new int[ table.getSelectedRowCount() ];
-		int i = 0;
-		for (int row : table.getSelectedRows() )
-			recordIds[i++] = ((BasicTable) table.getModel()).getRecordId(row);
-		
-		return recordIds;
-	}
-	*/
 	/*//TODO: move functionality to BasicTable
 	private void invertSelection(JTable table)
 	{
@@ -163,29 +149,29 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void refreshPerformerTable() {
 		TableModel tableModel = tables[0].getModel();
-		if (tableModel instanceof BasicTableModel) {
-			showTable(TableNamesInstance.PERFORMER, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshSessionTable() {
 		TableModel tableModel = tables[1].getModel();
-		if (tableModel instanceof BasicTableModel) {
-			showTable(TableNamesInstance.SESSION, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshTrialTable() {
 		TableModel tableModel = tables[2].getModel();
-		if (tableModel instanceof BasicTableModel) {
-			showTable(TableNamesInstance.TRIAL, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
 	private void refreshFileTable() {
 		TableModel tableModel = tables[3].getModel();
-		if (tableModel instanceof BasicTableModel) {
-			showTable(TableNamesInstance.FILE, ((BasicTableModel) tableModel).recordId, ((AttributeTableModel) tableModel).fromTableName);
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
 		}
 	}
 	
@@ -199,7 +185,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabbedPane.setSelectedIndex(i);
 	}
 	
-	//FIXME: Use BasicTable refresh
 	private void refreshTablesForLab() {
 		int i = tabbedPane.getSelectedIndex();
 		showTable(TableNamesInstance.PERFORMER);
