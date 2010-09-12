@@ -20,8 +20,6 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.Messages;
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.mouse.PerformerMouseAdapter;
@@ -91,9 +89,9 @@ public class MotionAppletFrame extends JFrame {
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-		createLeftSplitPanel(leftPanel, TableNamesInstance.PERFORMER);
-		createLeftSplitPanel(leftPanel, TableNamesInstance.SESSION);
-		createLeftSplitPanel(leftPanel, TableNamesInstance.TRIAL);
+		createLeftSplitPanel(leftPanel, EntityKind.performer);
+		createLeftSplitPanel(leftPanel, EntityKind.session);
+		createLeftSplitPanel(leftPanel, EntityKind.trial);
 		
 		// Query results
 		queryResultsPane = new JTabbedPane();
@@ -128,7 +126,7 @@ public class MotionAppletFrame extends JFrame {
 		// New menu
 		JMenu newMenu = new JMenu(MENU_NEW);
 		appletMenuBar.add(newMenu);
-		JMenuItem createPerformerItem = new JMenuItem(TableNamesInstance.PERFORMER.getLabel());
+		JMenuItem createPerformerItem = new JMenuItem(EntityKind.performer.getGUIName());
 		newMenu.add(createPerformerItem);
 		createPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -180,7 +178,7 @@ public class MotionAppletFrame extends JFrame {
 		// Upload menu
 		JMenu uploadMenu = new JMenu(MENU_UPLOAD);
 		appletMenuBar.add(uploadMenu);
-		JMenuItem uploadPerformerItem = new JMenuItem(TableNamesInstance.PERFORMER.getLabel());
+		JMenuItem uploadPerformerItem = new JMenuItem(EntityKind.performer.getGUIName());
 		uploadMenu.add(uploadPerformerItem);
 		uploadPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -188,7 +186,7 @@ public class MotionAppletFrame extends JFrame {
 				rightPanel.showUploadDialog(EntityKind.performer);
 			}
 		});
-		JMenuItem uploadSessionItem = new JMenuItem(TableNamesInstance.SESSION.getLabel());
+		JMenuItem uploadSessionItem = new JMenuItem(EntityKind.session.getGUIName());
 		uploadMenu.add(uploadSessionItem);
 		uploadSessionItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -196,7 +194,7 @@ public class MotionAppletFrame extends JFrame {
 				rightPanel.showUploadDialog(EntityKind.session);
 			}
 		});
-		JMenuItem uploadTrialItem = new JMenuItem(TableNamesInstance.TRIAL.getLabel());
+		JMenuItem uploadTrialItem = new JMenuItem(EntityKind.trial.getGUIName());
 		uploadMenu.add(uploadTrialItem);
 		uploadTrialItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -208,8 +206,8 @@ public class MotionAppletFrame extends JFrame {
 		this.setJMenuBar(appletMenuBar);
 	}
 	
-	private void createLeftSplitPanel(JPanel leftPanel, TableName tableName) {
-		LeftSplitPanel leftSplitPanel = new LeftSplitPanel(tableName.toEntityKind());
+	private void createLeftSplitPanel(JPanel leftPanel, EntityKind entityKind) {
+		LeftSplitPanel leftSplitPanel = new LeftSplitPanel(entityKind);
 		leftPanel.add(leftSplitPanel);
 	}
 	
