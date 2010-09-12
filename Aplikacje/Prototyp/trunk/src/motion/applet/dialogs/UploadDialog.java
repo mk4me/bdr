@@ -349,15 +349,15 @@ public class UploadDialog extends BasicDialog {
 				try {
 					if (this.entityKind.equals(EntityKind.session)) {
 						id = Integer.parseInt(((Session) this.entityComboBox.getSelectedItem()).
-								get(SessionStaticAttributes.sessionID.toString()).
+								get(SessionStaticAttributes.SessionID.toString()).
 								value.toString());
 					} else if (this.entityKind.equals(EntityKind.performer)) {
 						id = Integer.parseInt(((Performer) this.entityComboBox.getSelectedItem()).
-								get(PerformerStaticAttributes.performerID.toString()).
+								get(PerformerStaticAttributes.PerformerID.toString()).
 								value.toString());
 					} else if (this.entityKind.equals(EntityKind.trial)) {
 						id = Integer.parseInt(((Trial) this.entityComboBox.getSelectedItem()).
-								get(TrialStaticAttributes.trialID.toString()).
+								get(TrialStaticAttributes.TrialID.toString()).
 								value.toString());
 					}
 				} catch (NumberFormatException e) {

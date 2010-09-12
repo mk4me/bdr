@@ -79,11 +79,7 @@ public class AttributeTableModel extends BasicTableModel {
 						ArrayList<Object> cellList = new ArrayList<Object>();
 						cellList.add(new Boolean(false));	// checkboxes initially unchecked
 						for (EntityAttribute a : attributes) {
-							String attributeName = a.name;
-							String firstLetter = attributeName.substring(0,1);
-							String remainder   = attributeName.substring(1);
-							attributeName = firstLetter.toLowerCase() + remainder;
-							EntityAttribute entityAttribute = r.get(attributeName);
+							EntityAttribute entityAttribute = r.get(a.name);
 							if (entityAttribute != null) {
 								cellList.add(entityAttribute.value);
 							} else {
