@@ -11,7 +11,6 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.MotionAppletFrame;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.RightSplitPanel;
 import motion.database.model.EntityKind;
 
@@ -40,7 +39,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 			uploadMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					rightPanel.showUploadDialog(TableNamesInstance.TRIAL, recordId);
+					rightPanel.showUploadDialog(EntityKind.trial, recordId);
 				}
 			});
 			

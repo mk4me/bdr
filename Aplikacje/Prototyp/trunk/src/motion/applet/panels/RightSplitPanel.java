@@ -17,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
-import motion.applet.database.TableName;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
@@ -234,14 +233,14 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void showUploadDialog(TableName tableName, int recordId) {
-		UploadDialog uploadDialog = new UploadDialog(tableName.toEntityKind(), recordId);
+	public void showUploadDialog(EntityKind entityKind, int recordId) {
+		UploadDialog uploadDialog = new UploadDialog(entityKind, recordId);
 		uploadDialog.setVisible(true);
 		RightSplitPanel.this.refreshFileTable();
 	}
 	
-	public void showUploadDialog(TableName tableName) {
-		UploadDialog uploadDialog = new UploadDialog(tableName.toEntityKind());
+	public void showUploadDialog(EntityKind entityKind) {
+		UploadDialog uploadDialog = new UploadDialog(entityKind);
 		uploadDialog.setVisible(true);
 		RightSplitPanel.this.refreshFileTable();
 	}

@@ -185,7 +185,7 @@ public class MotionAppletFrame extends JFrame {
 		uploadPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Create the upload dialog
-				rightPanel.showUploadDialog(TableNamesInstance.PERFORMER);
+				rightPanel.showUploadDialog(EntityKind.performer);
 			}
 		});
 		JMenuItem uploadSessionItem = new JMenuItem(TableNamesInstance.SESSION.getLabel());
@@ -193,7 +193,7 @@ public class MotionAppletFrame extends JFrame {
 		uploadSessionItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Create the upload dialog
-				rightPanel.showUploadDialog(TableNamesInstance.SESSION);
+				rightPanel.showUploadDialog(EntityKind.session);
 			}
 		});
 		JMenuItem uploadTrialItem = new JMenuItem(TableNamesInstance.TRIAL.getLabel());
@@ -201,7 +201,7 @@ public class MotionAppletFrame extends JFrame {
 		uploadTrialItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Create the upload dialog
-				rightPanel.showUploadDialog(TableNamesInstance.TRIAL);
+				rightPanel.showUploadDialog(EntityKind.trial);
 			}
 		});
 		

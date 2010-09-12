@@ -109,9 +109,9 @@ public class BasketPanel extends JPanel {
 					
 					for (UserBasket b : basketList) {
 						DefaultMutableTreeNode basket = new DefaultMutableTreeNode(b);
-						basket.add(new DefaultMutableTreeNode(EntityKind.performer.getGUIName()));
-						basket.add(new DefaultMutableTreeNode(EntityKind.session.getGUIName()));
-						basket.add(new DefaultMutableTreeNode(EntityKind.trial.getGUIName()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.performer.getName()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.session.getName()));
+						basket.add(new DefaultMutableTreeNode(EntityKind.trial.getName()));
 						root.add(basket);
 					}
 				} catch (Exception e1) {
