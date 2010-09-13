@@ -9,7 +9,10 @@ public class EntityAttribute {
 	public static final String STRING_TYPE = "string";
 	public static final String DATE_TYPE = "DATE";	// Server uses 'string' for dates.
 	public static final String UNKNOWN_TYPE = "Unknown";
-
+	
+	public static final String SUBTYPE_SHORT_STRING = "shortString";
+	public static final String SUBTYPE_LONG_STRING = "longString";
+	public static final String SUBTYPE_DATE = "date";
 	
 	public String type;
 	public String groupName;
