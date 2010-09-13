@@ -390,6 +390,11 @@ public enum EntityKind {
 		return this.name();
 	}
 
+	public EntityKind fromString(String s)
+	{
+		return EntityKind.valueOf( s.toLowerCase() );
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 
 	private  DbElementsList<DatabaseFile> listFilesMethod(IBasicQueriesWS port, int resourceID) throws Exception
