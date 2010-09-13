@@ -17,6 +17,7 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
+import motion.database.model.Performer;
 import motion.database.model.Session;
 
 import org.junit.Before;
@@ -160,5 +161,51 @@ public class BasicQueriesTest {
 			}
 		}
 	}
+	
+	@Test
+	public void testSetAttribute() throws Exception
+	{
+		final class Tool
+		{ 
+			EntityAttribute showResult(int id, EntityKind kind) throws Exception
+			{
+				Performer p = (Performer) database.getById(id, kind);
+				System.out.println( p.toStringAllAttributes() );
+				EntityAttribute attr = p.get("Sex");
+				if (attr != null) 
+					System.out.println( attr.toStringAllContent() );
+				else
+					System.out.println( "attr = null" );
+				return attr;
+			}
+		}
+		
+		beforeTest();
+		
+		int id = 1;
+		EntityKind kind = EntityKind.performer;
+		EntityAttribute attr;
+		Tool t = new Tool();
+		
+		attr = t.showResult( id, kind );
+
+		attr = new EntityAttribute("Sex", kind, "M", null, null);
+		
+		
+		attr.value = "F";
+		database.setEntityAttribute( id, attr, true);
+
+		attr = t.showResult( id, kind );
+		
+		database.clearEntityAttribute( id, attr );
+
+		t.showResult( id, kind );
+	
+		attr.value = "M";
+		database.setEntityAttribute( id, attr, true);
+
+		t.showResult( id, kind );
+	}
+	
 
 }

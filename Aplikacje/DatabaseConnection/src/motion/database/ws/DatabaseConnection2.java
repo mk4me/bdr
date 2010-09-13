@@ -35,6 +35,8 @@ import motion.database.model.UserPrivileges;
 import motion.database.ws.administrationWCF.IAdministrationWS;
 import motion.database.ws.administrationWCF.IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage;
 import motion.database.ws.administrationWCF.IAdministrationWSDefineAttriubeGroupAdministrationOperationExceptionFaultFaultMessage;
+import motion.database.ws.administrationWCF.IAdministrationWSRemoveAttributeAdministrationOperationExceptionFaultFaultMessage;
+import motion.database.ws.administrationWCF.IAdministrationWSRemoveAttributeGroupAdministrationOperationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
@@ -858,24 +860,16 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
-	/**
-	 * To be changed.
-	 */
+
 	@Override
-	public void uploadAttributeFile(int resourceId, EntityAttribute attribute, String description, String localFilePath, FileTransferListener listener) throws Exception
+	public void setFileTypedAttribute(int resourceId, EntityAttribute attribute, int fileID, boolean update) throws Exception
 	{
 		if (attribute.kind == null)
 			throw new Exception("Attribute without entity kind defined: " + attribute);
 
-		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadAttributeFile", this );
+		IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "uploadAttributeFile", this );
 
-		String destRemoteFolder = getUniqueFolderName();
-		putFile(localFilePath, destRemoteFolder, listener);			
-		    
-		if (!fileTransferCancelled)
-				//port.storeAttributeFile(resourceId, attribute.kind.name(), attribute.name, destRemoteFolder, description, new File(localFilePath).getName() );
-		
-		System.out.println( destRemoteFolder + "   " + localFilePath );
+		port.setFileTypedAttributeValue(resourceId, attribute.kind.name(), attribute.name, fileID, update);
 		
 		ConnectionTools2.finalizeCall();
 	}
@@ -1039,22 +1033,39 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+
+	@Override
+	public void clearEntityAttribute(int ID, EntityAttribute a) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "clearEntityAttribute:" + a , this );
+
+			if (a != null)
+			{
+				port.clearAttributeValue( ID, a.name, a.kind.name() );			
+			}
+		} 
+		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+	
 	
 	@Override
-	public void setEntityAttribute(int ID, EntityKind kind, EntityAttribute a, boolean update) throws Exception
+	public void setEntityAttribute(int ID, EntityAttribute a, boolean update) throws Exception
 	{
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setEntityAttribute:" + a , this );
 
-			if (a == null)
-			{
-				// TODO: add clearing an attribute 
-			}
-			else
+			if (a != null && a.kind != null )
 			{
 				if (a.value == null)
 					a.emptyValue();
-				kind.setEntityAttribute( port, ID, a, update);			
+				a.kind.setEntityAttribute( port, ID, a, update);			
 			}
 		} 
 		catch ( IBasicUpdatesWSSetSessionAttributeUpdateExceptionFaultFaultMessage e) {
@@ -1406,6 +1417,22 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+	@Override
+	public void  removeAttribute( EntityAttribute a, String pluginDescriptor ) throws Exception 
+	{
+		try {
+			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "removeAttribute", this );
+			port.removeAttribute(a.name, a.groupName, a.kind.name());
+
+		} catch (IAdministrationWSRemoveAttributeAdministrationOperationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
 	
 	@Override
 	public void  defineAttributeGroup(String groupName, String unit) throws Exception
@@ -1424,6 +1451,23 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 
+	@Override
+	public void  removeAttributeGroup(String groupName, String unit) throws Exception
+	{
+		try {
+			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "removeAttributeGroup", this );
+			port.removeAttributeGroup(groupName, unit);
+
+		} catch (IAdministrationWSRemoveAttributeGroupAdministrationOperationExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+	
 	@Override
 	public void  addAttributeEnumValue(EntityAttribute a, String value, boolean clearExisting ) throws Exception
 	{

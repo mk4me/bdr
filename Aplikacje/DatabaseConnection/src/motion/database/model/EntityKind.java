@@ -260,7 +260,15 @@ public enum EntityKind {
 	}, 
 	
 	
-	file(DatabaseFileStaticAttributes.class), 
+	file(DatabaseFileStaticAttributes.class)
+	{
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setFileAttribute(ID, a.name, a.value.toString(), update);
+		}
+ 
+	},
 
 	user(UserStaticAttributes.class), 
 	

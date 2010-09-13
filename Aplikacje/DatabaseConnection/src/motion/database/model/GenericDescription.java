@@ -98,7 +98,7 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	}
 
 
-	public String toString()
+	public String toStringAllAttributes()
 	{
 		StringBuffer output = new StringBuffer();
 		
@@ -108,6 +108,16 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		for ( String key : this.keySet() )
 				output.append( key ).append('=').append( this.get(key).value ).append(System.getProperty( "line.separator" ) );
 		return output.toString();
+	}
+
+	public String toString()
+	{
+		return toStringAllAttributes();
+	}
+
+	public static final String toStringAllAttributes( GenericDescription<?> d )
+	{
+		return d.toString();
 	}
 }
 

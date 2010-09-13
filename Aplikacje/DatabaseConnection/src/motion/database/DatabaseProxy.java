@@ -121,13 +121,12 @@ public interface DatabaseProxy {
 	 * </ul>
 	 * 
 	 * @param entityID Unique database identification of an entity
-	 * @param kind kind of an entity
 	 * @param attributeValue value of an attribute. If set to null then an attribute value is removed.
 	 * @param update indicated updating action
 	 * @throws Exception
 	 */
 	public abstract void setEntityAttribute(int entityID,
-			EntityKind kind, EntityAttribute attributeValue, boolean update)
+			EntityAttribute attributeValue, boolean update)
 			throws Exception;
 	
 	@Deprecated
@@ -147,7 +146,6 @@ public interface DatabaseProxy {
 			String attributeName, String attributeValue, boolean update)
 			throws Exception;
 
-	@Deprecated
 	public abstract void setFileAttribute(int fileID, String attributeName,
 			String attributeValue, boolean update) throws Exception;
 	
@@ -192,8 +190,7 @@ public interface DatabaseProxy {
 			String localFilePath, FileTransferListener listener)
 			throws Exception;
 
-	void uploadAttributeFile(int resourceId, EntityAttribute attribute,	String description, String localFilePath,
-			FileTransferListener listener) throws Exception;
+	public void setFileTypedAttribute(int resourceId, EntityAttribute attribute, int fileID, boolean update) throws Exception;
 
 	void updateStoredFilters(ArrayOfFilterPredicate filter) throws Exception;
 
@@ -205,6 +202,13 @@ public interface DatabaseProxy {
 	void addAttributeEnumValue(EntityAttribute a, String value,	boolean clearExisting) throws Exception;
 
 	void defineAttribute(EntityAttribute a, String pluginDescriptor) throws Exception;
+
+	void clearEntityAttribute(int ID, EntityAttribute a) throws Exception;
+
+	void removeAttribute(EntityAttribute a, String pluginDescriptor)
+			throws Exception;
+
+	void removeAttributeGroup(String groupName, String unit) throws Exception;
 
 
 }

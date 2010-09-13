@@ -13,4 +13,5 @@ public class Performer extends GenericDescription<PerformerStaticAttributes>{
 		return super.get(PerformerStaticAttributes.FirstName.toString()).value.toString() + " " +
 			super.get(PerformerStaticAttributes.LastName.toString()).value.toString();
 	}
+	
 }

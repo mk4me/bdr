@@ -178,7 +178,7 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
-     * @param MeasurementID
+     * @param measurementID
      * @param performerID
      * @return
      *     returns boolean
@@ -191,7 +191,7 @@ public interface IBasicUpdatesWS {
     public boolean addPerformerToMeasurement(
         @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int performerID,
-        @WebParam(name = "MeasurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int measurementID)
         throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
     ;
@@ -269,7 +269,7 @@ public interface IBasicUpdatesWS {
      * 
      * @param update
      * @param attributeName
-     * @param MeasurementID
+     * @param measurementID
      * @param attributeValue
      * @throws IBasicUpdatesWSSetMeasurementAttributeUpdateExceptionFaultFaultMessage
      */
@@ -277,7 +277,7 @@ public interface IBasicUpdatesWS {
     @RequestWrapper(localName = "SetMeasurementAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttribute")
     @ResponseWrapper(localName = "SetMeasurementAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetMeasurementAttributeResponse")
     public void setMeasurementAttribute(
-        @WebParam(name = "MeasurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int measurementID,
         @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String attributeName,

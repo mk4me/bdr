@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="measurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="attributeValue" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="update" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "MeasurementID",
+    "measurementID",
     "attributeName",
     "attributeValue",
     "update"
@@ -45,7 +45,7 @@ public class SetMeasurementAttribute {
     protected boolean update;
 
     /**
-     * Gets the value of the MeasurementID property.
+     * Gets the value of the measurementID property.
      * 
      */
     public int getMeasurementID() {
@@ -53,7 +53,7 @@ public class SetMeasurementAttribute {
     }
 
     /**
-     * Sets the value of the MeasurementID property.
+     * Sets the value of the measurementID property.
      * 
      */
     public void setMeasurementID(int value) {
