@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
-import motion.applet.database.AttributeGroup;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 
 public class TrialFormDialog extends FormDialog {
 	private static String TITLE = "New trial";
@@ -27,12 +27,15 @@ public class TrialFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
 		
-		addFormFields();
-		
-		ArrayList<AttributeGroup> groups = TableNamesInstance.TRIAL.getGroupedAttributes();
-		for (AttributeGroup g : groups) {
-			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		try {
+			attributes.addAll(EntityKind.trial.getStaticAttributes());
+			attributes.addAll(EntityKind.trial.getGenericAttributes());
+		} catch (Exception e1) {
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+			exceptionDialog.setVisible(true);
 		}
+		addDefinedFormFields(attributes);
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -48,7 +51,7 @@ public class TrialFormDialog extends FormDialog {
 										TrialFormDialog.this.sessionId,
 										TrialFormDialog.this.getTrialDescription(),
 										TrialFormDialog.this.getDuration());
-								setDefinedAttributes(TableNamesInstance.TRIAL, trialID);
+								setDefinedAttributes(EntityKind.trial, trialID);
 								/*
 								if (!TrialFormDialog.this.getRelevance().equals("")) {
 									WebServiceInstance.getDatabaseConnection().setTrialAttribute(
@@ -75,18 +78,6 @@ public class TrialFormDialog extends FormDialog {
 				}
 			}
 		});
-	}
-	
-	private void addFormFields() {
-		addFormTextLabel("Static attributes:");
-		trialDescriptionField = new FormTextAreaField(
-				TableNamesInstance.TRIAL.getAttributeName("trialDescription"), gridBagConstraints, formPanel);
-		durationField = new FormNumberField(
-				TableNamesInstance.TRIAL.getAttributeName("duration"), gridBagConstraints, formPanel);
-		/*
-		addFormTextLabel("Defined attributes:");
-		relevanceField = new FormNumberField(
-				TableNamesInstance.TRIAL.getAttributeName("relevance"), gridBagConstraints, formPanel);*/
 	}
 	
 	private String getTrialDescription() {

@@ -1,6 +1,5 @@
 package motion.applet.dialogs;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -11,11 +10,11 @@ import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import motion.applet.database.AttributeGroup;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
 import motion.database.ws.SessionPrivilegesSetter;
 
@@ -39,12 +38,15 @@ public class SessionFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE, true);
 		this.performerId = performerId;
 		
-		addFormFields();
-		
-		ArrayList<AttributeGroup> groups = TableNamesInstance.SESSION.getGroupedAttributes();
-		for (AttributeGroup g : groups) {
-			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		try {
+			attributes.addAll(EntityKind.session.getStaticAttributes());
+			attributes.addAll(EntityKind.session.getGenericAttributes());
+		} catch (Exception e1) {
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+			exceptionDialog.setVisible(true);
 		}
+		addDefinedFormFields(attributes);
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -64,7 +66,7 @@ public class SessionFormDialog extends FormDialog {
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());
 								
-								setDefinedAttributes(TableNamesInstance.SESSION, sessionID);
+								setDefinedAttributes(EntityKind.session, sessionID);
 								
 								/*
 								WebServiceInstance.getDatabaseConnection().setSessionAttribute(
@@ -106,28 +108,6 @@ public class SessionFormDialog extends FormDialog {
 		
 		privilegesPanel = new PrivilegesPanel(this); 
 		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
-	}
-	
-	private void addFormFields() {
-		addFormTextLabel("Static attributes:");
-		sessionDateField = new FormDateField(
-				TableNamesInstance.SESSION.getAttributeName("sessionDate"), gridBagConstraints, formPanel, true);
-		sessionDescriptionField = new FormTextAreaField(
-				TableNamesInstance.SESSION.getAttributeName("sessionDescription"), gridBagConstraints, formPanel);
-		try {
-			motionKindField = new FormListField(
-					TableNamesInstance.SESSION.getAttributeName("motionKindID"), gridBagConstraints, formPanel, getMotionKinds());
-		} catch (Exception e) {
-			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
-			exceptionDialog.setVisible(true);
-		}
-		/*
-		addFormTextLabel("Defined attributes:");
-		markerSetField = new FormTextField(
-				TableNamesInstance.SESSION.getAttributeName("marker_set"), gridBagConstraints, formPanel);
-		numberOfTrialsField = new FormNumberField(
-				TableNamesInstance.SESSION.getAttributeName("number_of_trials"), gridBagConstraints, formPanel);
-				*/
 	}
 	
 	private String[] getMotionKinds() throws Exception {	//TODO: Add thread.

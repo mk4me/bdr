@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import motion.applet.database.AttributeGroup;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 
 public class PerformerFormDialog extends FormDialog {
 	private static String TITLE = "New performer";
@@ -29,15 +29,15 @@ public class PerformerFormDialog extends FormDialog {
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
-		//ArrayList<AttributeName> attributes = TableNamesInstance.PERFORMER.getStaticAttributes();
-		//addFormTextFields(attributes, "Static attributes");
-		
-		addFormFields();
-		
-		ArrayList<AttributeGroup> groups = TableNamesInstance.PERFORMER.getGroupedAttributes();
-		for (AttributeGroup g : groups) {
-			addDefinedFormFields(g.getAttributes(), g.getGroupName());
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		try {
+			attributes.addAll(EntityKind.performer.getStaticAttributes());
+			attributes.addAll(EntityKind.performer.getGenericAttributes());
+		} catch (Exception e1) {
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+			exceptionDialog.setVisible(true);
 		}
+		addDefinedFormFields(attributes);
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override
@@ -53,7 +53,7 @@ public class PerformerFormDialog extends FormDialog {
 										getFirstName(),
 										getLastName());
 								
-								setDefinedAttributes(TableNamesInstance.PERFORMER, performerID);
+								setDefinedAttributes(EntityKind.performer, performerID);
 								
 								/*
 								WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
@@ -85,19 +85,6 @@ public class PerformerFormDialog extends FormDialog {
 				}
 			}
 		});
-	}
-	private void addFormFields() {
-		addFormTextLabel("Static attributes:");
-		firstNameField = new FormTextField(
-				TableNamesInstance.PERFORMER.getAttributeName("firstName"), gridBagConstraints, formPanel);
-		lastNameField = new FormTextField(
-				TableNamesInstance.PERFORMER.getAttributeName("lastName"), gridBagConstraints, formPanel);
-		/*
-		addFormTextLabel("Defined attributes:");
-		birthDateField = new FormDateField(
-				TableNamesInstance.PERFORMER.getAttributeName("date_of_birth"), gridBagConstraints, formPanel, false);
-		diagnosisField = new FormTextAreaField(
-				TableNamesInstance.PERFORMER.getAttributeName("diagnosis"), gridBagConstraints, formPanel);*/
 	}
 	
 	private String getFirstName() {

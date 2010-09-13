@@ -26,9 +26,9 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.Messages;
-import motion.applet.database.TableName;
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.model.AttributeName;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
@@ -143,35 +143,35 @@ public class FormDialog extends BasicDialog {
 		gridBagConstraints.gridy++;
 	}
 	
-	protected void addDefinedFormFields(ArrayList<AttributeName> attributes, String groupName) {
-		addFormTextLabel("Defined attributes" +  " (" + groupName + "):");
+	protected void addDefinedFormFields(ArrayList<EntityAttribute> attributes) {	//, String groupName) {
+		addFormTextLabel("Attributes" +  " (" + "groupName" + "):");
 		
-		for (AttributeName a : attributes) {
+		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
 				FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]));
 				definedFormFields.add(field);
-			} else if (a.getType().equals(AttributeName.STRING_TYPE)) {
-				if (a.getSubType().equals("shortString")) {
+			} else if (a.getType().equals(EntityAttribute.STRING_TYPE)) {
+				if (a.getSubtype().equals(EntityAttribute.SUBTYPE_SHORT_STRING)) {
 					FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
 					definedFormFields.add(field);
-				} else if (a.getSubType().equals("longString")) {
+				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_LONG_STRING)) {
 					FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
 					definedFormFields.add(field);
-				} else if (a.getSubType().equals("date")) {	// FIXME: date as subtype
+				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: date as subtype
 					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 					definedFormFields.add(field);
 				}
-			} else if (a.getType().equals(AttributeName.INTEGER_TYPE)) {
+			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
 				definedFormFields.add(field);
-			} else if (a.getType().equals(AttributeName.DATE_TYPE)) { // FIXME: date as type
+			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: date as type
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 				definedFormFields.add(field);
 			}
 		}
 	}
 	
-	protected void setDefinedAttributes(TableName tableName, int id) throws Exception {
+	protected void setDefinedAttributes(EntityKind entityKind, int id) throws Exception {
 		for (FormField f : definedFormFields) {
 			Object attributeValue = null;
 			if (f instanceof FormTextField) {
@@ -193,10 +193,11 @@ public class FormDialog extends BasicDialog {
 				attributeValue = ((FormListField) f).getData().toString();
 			}
 			
+			f.attribute.setValueFromString(attributeValue);
 			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
 					id,
-					tableName.toEntityKind(),
-					f.attribute.toEntityAttribute(attributeValue),
+					entityKind,
+					f.attribute,
 					false);
 		}
 	}
@@ -207,9 +208,9 @@ class FormField {
 	protected JTextField text;
 	protected GridBagConstraints gridBagConstraints;
 	protected JPanel formPanel;
-	public AttributeName attribute;
+	public EntityAttribute attribute;
 	
-	public FormField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+	public FormField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super();
 		this.attribute = attribute;
 		this.gridBagConstraints = gridBagConstraints;
@@ -245,7 +246,7 @@ class FormField {
 
 class FormTextField extends FormField {
 	
-	public FormTextField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+	public FormTextField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super(attribute, gridBagConstraints, formPanel);
 		
 	}
@@ -259,7 +260,7 @@ class FormTextField extends FormField {
 class FormTextAreaField extends FormField {
 	private JTextArea textArea;
 	
-	public FormTextAreaField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+	public FormTextAreaField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super(attribute, gridBagConstraints, formPanel);
 		
 	}
@@ -286,7 +287,7 @@ class FormTextAreaField extends FormField {
 
 class FormNumberField extends FormField {
 	
-	public FormNumberField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+	public FormNumberField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 		super(attribute, gridBagConstraints, formPanel);
 		finishField();
 	}
@@ -306,7 +307,7 @@ class FormDateField extends FormField {
 	private DateFormat dateFormat;
 	private boolean fullDate = false;
 	
-	public FormDateField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean fullDate) {
+	public FormDateField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean fullDate) {
 		super(attribute, gridBagConstraints, formPanel);
 		this.fullDate = fullDate;
 		if (fullDate == true) {
@@ -346,7 +347,7 @@ class FormListField extends FormField {
 	private JComboBox comboBox;
 	private String[] list;
 	
-	public FormListField(AttributeName attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {
+	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {
 		super(attribute, gridBagConstraints, formPanel);
 		this.list = list;
 		finishField();
