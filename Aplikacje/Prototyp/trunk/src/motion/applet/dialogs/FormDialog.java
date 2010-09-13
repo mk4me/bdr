@@ -196,7 +196,6 @@ public class FormDialog extends BasicDialog {
 			f.attribute.setValueFromString(attributeValue);
 			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
 					id,
-					entityKind,
 					f.attribute,
 					false);
 		}
