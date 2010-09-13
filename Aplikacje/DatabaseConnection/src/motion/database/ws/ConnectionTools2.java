@@ -310,6 +310,7 @@ public class ConnectionTools2 {
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
 		trial.put( TrialStaticAttributes.Duration, s.getDuration() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.SessionID, s.getTrialDescription() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
 	}
@@ -389,6 +390,8 @@ public class ConnectionTools2 {
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
 		trial.put( TrialStaticAttributes.Duration, s.getDuration() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.SessionID, s.getTrialDescription() );
+
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
 	}
