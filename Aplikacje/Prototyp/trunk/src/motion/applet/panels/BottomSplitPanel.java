@@ -64,7 +64,7 @@ public class BottomSplitPanel extends JPanel {
 	private ConfigurationTree createConfigurationTree(TableName tableName, JPanel panel) {
 		JPanel treePanel = new JPanel();
 		treePanel.setLayout(new BorderLayout());
-		ConfigurationTree configurationTree = new ConfigurationTree(tableName);
+		ConfigurationTree configurationTree = new ConfigurationTree(tableName.toEntityKind());
 		JScrollPane performerScrollPane = new JScrollPane(configurationTree.tree);
 		JLabel treeLabel = new JLabel(tableName.getLabel());
 		treePanel.add(treeLabel, BorderLayout.NORTH);
