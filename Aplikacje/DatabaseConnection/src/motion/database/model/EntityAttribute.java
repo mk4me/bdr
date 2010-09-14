@@ -62,9 +62,20 @@ public class EntityAttribute {
 	{
 		StringBuffer result = new StringBuffer();
 		result.append( name ).append("(").append( kind.toString() ).append(")").append("[").append( value ).append( ", " ).
-			append( groupName ).append( ", " ).append( type ).append( ", " ).append( unit ).append( ", " ).append( subtype ).append("]");
+			append( groupName ).append( ", " ).append( type ).append( ", " ).append( unit ).append( ", " ).append( subtype ).
+			append(", ").append( isEnum?getEnumInfo():"").append("]");
 		return result.toString();
 	}
+
+	private String getEnumInfo() {
+		StringBuffer result = new StringBuffer("enum[ ");
+		for(String v:enumValues)
+			result.append(v).append(",");
+		result.setLength( result.length()-1 );
+		result.append(" ]");
+		return result.toString();
+	}
+
 
 	public String getType() {
 		
