@@ -342,6 +342,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), group.kind, null, a.getAttributeGroupName(), a.getAttributeType() );
 					attr.unit = a.getUnit();
 					attr.subtype = a.getSubtype();
+					attr.isEnum = a.getAttributeEnum()==1;
 					if (a.getEnumValues() != null) {
 						attr.enumValues = a.getEnumValues().getValue();
 					}
