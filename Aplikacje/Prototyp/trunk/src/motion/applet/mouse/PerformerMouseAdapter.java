@@ -19,7 +19,8 @@ public class PerformerMouseAdapter extends MouseAdapter {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
 	private static String MENU_VIEW_FILES = "View files";
-	private static String MENU_UPLOAD = "Upload file";
+	// No performer file uploading since v.1.3
+	//private static String MENU_UPLOAD = "Upload file";
 	
 	private RightSplitPanel rightPanel;
 	
@@ -57,15 +58,15 @@ public class PerformerMouseAdapter extends MouseAdapter {
 			
 			popupMenu.add(new JSeparator());
 			// Upload context menu.
-			JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
-			popupMenu.add(uploadMenuItem);
-			
-			uploadMenuItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					rightPanel.showUploadDialog(EntityKind.performer, recordId);
-				}
-			});
+//			JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
+//			popupMenu.add(uploadMenuItem);
+//			
+//			uploadMenuItem.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					rightPanel.showUploadDialog(EntityKind.performer, recordId);
+//				}
+//			});
 			
 			// View files context menu
 			JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
