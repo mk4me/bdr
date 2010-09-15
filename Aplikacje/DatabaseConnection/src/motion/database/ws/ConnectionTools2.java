@@ -43,7 +43,9 @@ import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttribute
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.FileList.FileDetails;
+import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.fileStoremanServiceWCF.FileStoremanWS;
@@ -251,16 +253,17 @@ public class ConnectionTools2 {
 	public static DbElementsList<DatabaseFile> transformListOfFiles(Object result) {
 
 		DbElementsList<DatabaseFile> list = new DbElementsList<DatabaseFile>();
-		ListFileAttributeDataXMLResult r = (ListFileAttributeDataXMLResult) result;
-		for (FileDetails d: r.getFileList().getFileDetails() )
+		ListFilesWithAttributesXMLResult r = (ListFilesWithAttributesXMLResult) result;
+		for (FileDetailsWithAttributes d: r.getFileWithAttributesList().getFileDetailsWithAttributes() )
 		{
 			DatabaseFile df = new DatabaseFile();
 			df.put( DatabaseFileStaticAttributes.FileID, d.getFileID() );
 			df.put( DatabaseFileStaticAttributes.FileName, d.getFileName() );
 			df.put( DatabaseFileStaticAttributes.FileDescription, d.getFileDescription() );
+			df.put( DatabaseFileStaticAttributes.SubdirPath, d.getSubdirPath() );
+			ConnectionTools2.transformGenericAttributes( d.getAttributes(), df );
 			list.add( df );
 		}
-
 		return list;
 	}
 
@@ -420,26 +423,32 @@ public class ConnectionTools2 {
 		return m;
 	}
 
-	public static Exception transformWSFaultMessage( Exception e ) throws Exception
+	public static Exception transformWSFaultMessage( Exception e )
 	{
-		Class ec = e.getClass();
-		Method method = ec.getMethod( "getFaultInfo", null );
-		Object info = null;
 		String s = e.getLocalizedMessage();
-		if (method != null)
-			info = method.invoke( e );
-		if (info != null)
-			ec = info.getClass();
-		method = ec.getMethod( "getDetails", null );
-		if (method != null)
-			info = method.invoke( e );
-		if (info != null)
-			ec = info.getClass();
-		method = ec.getMethod( "getValue", null );
-		if (method != null)
-			info = method.invoke( e );
-		if (info instanceof String)
-			s = (String) info;
+		try{
+			Class<?> ec = e.getClass();
+			Method method = ec.getMethod( "getFaultInfo" );
+			Object info = null;
+			if (method != null)
+				info = method.invoke( e );
+			if (info != null)
+				ec = info.getClass();
+			method = ec.getMethod( "getDetails" );
+			if (method != null)
+				info = method.invoke( e );
+			if (info != null)
+				ec = info.getClass();
+			method = ec.getMethod( "getValue" );
+			if (method != null)
+				info = method.invoke( e );
+			if (info instanceof String)
+				s = (String) info;
+		}
+		catch(Exception ex)
+		{
+			
+		}
 		
 		DatabaseConnection.log.log( Level.SEVERE, s, e );
 		return new Exception( s, e ); 
