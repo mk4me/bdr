@@ -44,7 +44,7 @@ public class FilterDialog extends BasicDialog {
 	public static int CANCEL_PRESSED = 0;
 	private int result = CANCEL_PRESSED;
 	
-	private JLabel tableNameLabel;
+	private JLabel entityLabel;
 	
 	private JPanel conditionPanel;
 	
@@ -96,10 +96,10 @@ public class FilterDialog extends BasicDialog {
 		gridBagConstraints.gridy = 1;
 		formPanel.add(tableLabel, gridBagConstraints);
 		
-		tableNameLabel = new JLabel();
+		entityLabel = new JLabel();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
-		formPanel.add(tableNameLabel, gridBagConstraints);
+		formPanel.add(entityLabel, gridBagConstraints);
 		
 		JLabel queryLabel = new JLabel(QUERY_LABEL);
 		gridBagConstraints.gridx = 0;
@@ -137,7 +137,7 @@ public class FilterDialog extends BasicDialog {
 	
 	protected void finishUserInterface() {
 		this.setSize(440, 400);
-		this.tableNameLabel.setText(this.entityKind.getGUIName());
+		this.entityLabel.setText(this.entityKind.getGUIName());
 		this.addColumnCondition(true);
 	}
 	

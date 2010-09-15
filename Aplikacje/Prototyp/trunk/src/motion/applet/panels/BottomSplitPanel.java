@@ -18,10 +18,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import motion.Messages;
-import motion.applet.database.TableName;
-import motion.applet.database.TableNamesInstance;
 import motion.applet.trees.CheckBoxNode;
 import motion.applet.trees.ConfigurationTree;
+import motion.database.model.EntityKind;
 
 public class BottomSplitPanel extends JPanel {
 	private static final String BORDER_TITLE = Messages.getString("BottomSplitPanel.ViewConfiguration"); //$NON-NLS-1$
@@ -42,9 +41,9 @@ public class BottomSplitPanel extends JPanel {
 		JPanel configurationPanel = new JPanel();
 		configurationPanel.setLayout(new BoxLayout(configurationPanel, BoxLayout.X_AXIS));
 		
-		performerTree = createConfigurationTree(TableNamesInstance.PERFORMER, configurationPanel);
-		sessionTree = createConfigurationTree(TableNamesInstance.SESSION, configurationPanel);
-		trialTree = createConfigurationTree(TableNamesInstance.TRIAL, configurationPanel);
+		performerTree = createConfigurationTree(EntityKind.performer, configurationPanel);
+		sessionTree = createConfigurationTree(EntityKind.session, configurationPanel);
+		trialTree = createConfigurationTree(EntityKind.trial, configurationPanel);
 		
 		this.add(configurationPanel, BorderLayout.CENTER);
 		
@@ -61,12 +60,12 @@ public class BottomSplitPanel extends JPanel {
 		this.add(buttonPanel, BorderLayout.PAGE_END);
 	}
 	
-	private ConfigurationTree createConfigurationTree(TableName tableName, JPanel panel) {
+	private ConfigurationTree createConfigurationTree(EntityKind entityKind, JPanel panel) {
 		JPanel treePanel = new JPanel();
 		treePanel.setLayout(new BorderLayout());
-		ConfigurationTree configurationTree = new ConfigurationTree(tableName.toEntityKind());
+		ConfigurationTree configurationTree = new ConfigurationTree(entityKind);
 		JScrollPane performerScrollPane = new JScrollPane(configurationTree.tree);
-		JLabel treeLabel = new JLabel(tableName.getLabel());
+		JLabel treeLabel = new JLabel(entityKind.getGUIName());
 		treePanel.add(treeLabel, BorderLayout.NORTH);
 		treePanel.add(performerScrollPane, BorderLayout.CENTER);
 		panel.add(treePanel);
@@ -116,24 +115,24 @@ public class BottomSplitPanel extends JPanel {
 		return checkedItems;
 	}
 	
-	public static ArrayList<String> getCheckedAttributes(TableName tableName) {
-		if (tableName.equals(TableNamesInstance.PERFORMER)) {
+	public static ArrayList<String> getCheckedAttributes(EntityKind entityKind) {
+		if (entityKind.equals(EntityKind.performer)) {
 			return getCheckedPerformerAttributes();
-		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+		} else if (entityKind.equals(EntityKind.session)) {
 			return getCheckedSessionAttributes();
-		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+		} else if (entityKind.equals(EntityKind.trial)) {
 			return getCheckedTrialAttributes();
 		}
 		
 		return null;
 	}
 	
-	public static boolean isCheckedAttribute(TableName tableName, String attribute) {
-		if (tableName.equals(TableNamesInstance.PERFORMER)) {
+	public static boolean isCheckedAttribute(EntityKind entityKind, String attribute) {
+		if (entityKind.equals(EntityKind.performer)) {
 			return getCheckedPerformerAttributes().contains(attribute);
-		} else if (tableName.equals(TableNamesInstance.SESSION)) {
+		} else if (entityKind.equals(EntityKind.session)) {
 			return getCheckedSessionAttributes().contains(attribute);
-		} else if (tableName.equals(TableNamesInstance.TRIAL)) {
+		} else if (entityKind.equals(EntityKind.trial)) {
 			return getCheckedTrialAttributes().contains(attribute);
 		}
 		
