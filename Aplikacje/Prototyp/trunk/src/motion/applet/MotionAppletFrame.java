@@ -178,7 +178,7 @@ public class MotionAppletFrame extends JFrame {
 		// Upload menu
 		JMenu uploadMenu = new JMenu(MENU_UPLOAD);
 		appletMenuBar.add(uploadMenu);
-		JMenuItem uploadPerformerItem = new JMenuItem(EntityKind.performer.getGUIName());
+/*		JMenuItem uploadPerformerItem = new JMenuItem(EntityKind.performer.getGUIName());
 		uploadMenu.add(uploadPerformerItem);
 		uploadPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -186,7 +186,7 @@ public class MotionAppletFrame extends JFrame {
 				rightPanel.showUploadDialog(EntityKind.performer);
 			}
 		});
-		JMenuItem uploadSessionItem = new JMenuItem(EntityKind.session.getGUIName());
+*/		JMenuItem uploadSessionItem = new JMenuItem(EntityKind.session.getGUIName());
 		uploadMenu.add(uploadSessionItem);
 		uploadSessionItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

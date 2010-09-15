@@ -56,7 +56,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 				}
 			});
 			
-			popupMenu.add(new JSeparator());
+//			popupMenu.add(new JSeparator());
 			// Upload context menu.
 //			JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
 //			popupMenu.add(uploadMenuItem);
@@ -69,15 +69,15 @@ public class PerformerMouseAdapter extends MouseAdapter {
 //			});
 			
 			// View files context menu
-			JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
-			popupMenu.add(viewFilesMenuItem);
-			
-			viewFilesMenuItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					viewFiles(recordId, EntityKind.performer);
-				}
-			});
+//			JMenuItem viewFilesMenuItem = new JMenuItem(MENU_VIEW_FILES);
+//			popupMenu.add(viewFilesMenuItem);
+//			
+//			viewFilesMenuItem.addActionListener(new ActionListener() {
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					viewFiles(recordId, EntityKind.performer);
+//				}
+//			});
 
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
