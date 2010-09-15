@@ -93,7 +93,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewFiles(int recordId, EntityKind entityKind) {
-		rightPanel.showTable(EntityKind.session, recordId, entityKind);
+		rightPanel.showTable(EntityKind.file, recordId, entityKind);
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 }

@@ -3,13 +3,14 @@ package motion.applet.dialogs;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 
 public class PerformerFormDialog extends FormDialog {
@@ -29,15 +30,16 @@ public class PerformerFormDialog extends FormDialog {
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
-		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
 		try {
-			attributes.addAll(EntityKind.performer.getStaticAttributes());
-			attributes.addAll(EntityKind.performer.getGenericAttributes());
+			Iterator i = EntityKind.performer.getAllAttributeGroups().entrySet().iterator();
+			while (i.hasNext()) {
+				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
+				addDefinedFormFields(attributeGroup, attributeGroup.name);
+			}
 		} catch (Exception e1) {
 			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 			exceptionDialog.setVisible(true);
 		}
-		addDefinedFormFields(attributes);
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override

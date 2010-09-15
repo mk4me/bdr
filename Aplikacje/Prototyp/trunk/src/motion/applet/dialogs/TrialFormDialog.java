@@ -2,12 +2,13 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.SwingWorker;
 
 import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 
 public class TrialFormDialog extends FormDialog {
@@ -27,15 +28,16 @@ public class TrialFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
 		
-		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
 		try {
-			attributes.addAll(EntityKind.trial.getStaticAttributes());
-			attributes.addAll(EntityKind.trial.getGenericAttributes());
+			Iterator i = EntityKind.trial.getAllAttributeGroups().entrySet().iterator();
+			while (i.hasNext()) {
+				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
+				addDefinedFormFields(attributeGroup, attributeGroup.name);
+			}
 		} catch (Exception e1) {
 			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 			exceptionDialog.setVisible(true);
 		}
-		addDefinedFormFields(attributes);
 		
 		createButton.addActionListener(new ActionListener() {
 			@Override

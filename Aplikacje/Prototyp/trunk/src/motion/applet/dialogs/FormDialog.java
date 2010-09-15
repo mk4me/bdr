@@ -28,6 +28,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 
 public class FormDialog extends BasicDialog {
@@ -143,8 +144,8 @@ public class FormDialog extends BasicDialog {
 		gridBagConstraints.gridy++;
 	}
 	
-	protected void addDefinedFormFields(ArrayList<EntityAttribute> attributes) {	//, String groupName) {
-		addFormTextLabel("Attributes" +  " (" + "groupName" + "):");
+	protected void addDefinedFormFields(EntityAttributeGroup attributes, String groupName) {
+		addFormTextLabel(groupName + ":");
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
