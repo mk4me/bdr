@@ -36,15 +36,8 @@ public class SessionFormDialog extends FormDialog {
 	public SessionFormDialog() {
 		super(TITLE, WELCOME_MESSAGE, true);
 		
-		try {
-			Iterator i = EntityKind.session.getAllAttributeGroups().entrySet().iterator();
-			while (i.hasNext()) {
-				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
-				addDefinedFormFields(attributeGroup, attributeGroup.name);
-			}
-		} catch (Exception e1) {
-			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-			exceptionDialog.setVisible(true);
+		for (EntityAttributeGroup g : EntityKind.session.getGroupedAttributeCopies()) {
+			addDefinedFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {

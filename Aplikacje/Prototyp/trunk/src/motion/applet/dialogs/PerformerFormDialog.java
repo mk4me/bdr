@@ -30,15 +30,8 @@ public class PerformerFormDialog extends FormDialog {
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
-		try {
-			Iterator i = EntityKind.performer.getAllAttributeGroups().entrySet().iterator();
-			while (i.hasNext()) {
-				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
-				addDefinedFormFields(attributeGroup, attributeGroup.name);
-			}
-		} catch (Exception e1) {
-			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-			exceptionDialog.setVisible(true);
+		for (EntityAttributeGroup g : EntityKind.performer.getGroupedAttributeCopies()) {
+			addDefinedFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {

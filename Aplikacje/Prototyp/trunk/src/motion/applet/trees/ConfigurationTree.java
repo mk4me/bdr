@@ -47,13 +47,11 @@ public class ConfigurationTree {
 			//}
 			//groupVector.add(group2);
 			
-			Iterator it = entityKind.getAllAttributeGroups().entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry pairs = (Map.Entry)it.next();
-				//System.out.println(pairs.getKey() + " = " + pairs.getValue());
+			
+			for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) {
 				Vector groupA = new Vector();
-				groupA.add(((EntityAttributeGroup) pairs.getValue()).name);
-				groupA.addAll(((EntityAttributeGroup) pairs.getValue()));
+				groupA.add(g.name);
+				groupA.addAll(g);
 				groupVector.add(groupA);
 			}
 			

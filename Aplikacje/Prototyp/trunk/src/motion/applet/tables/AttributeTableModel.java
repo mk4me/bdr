@@ -45,12 +45,12 @@ public class AttributeTableModel extends BasicTableModel {
 					addCheckboxColumn(); // first column
 					DbElementsList<? extends GenericDescription<?>> records = new DbElementsList<GenericDescription<?>>();
 					//ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
-					ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+					ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
 					//if (selectedAttributes != null) {
 						//attributes = tableName.getSelectedAttributes(selectedAttributes);
 					//} else {
-						attributes.addAll(entityKind.getStaticAttributes());
-						attributes.addAll(entityKind.getGenericAttributes());
+						//attributes.addAll(entityKind.getStaticAttributes());
+						//attributes.addAll(entityKind.getGenericAttributes());
 					//}
 					for (EntityAttribute a : attributes) {
 						attributeNames.add(a.name);

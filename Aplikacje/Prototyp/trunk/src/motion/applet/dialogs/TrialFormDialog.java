@@ -28,15 +28,8 @@ public class TrialFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
 		
-		try {
-			Iterator i = EntityKind.trial.getAllAttributeGroups().entrySet().iterator();
-			while (i.hasNext()) {
-				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
-				addDefinedFormFields(attributeGroup, attributeGroup.name);
-			}
-		} catch (Exception e1) {
-			ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-			exceptionDialog.setVisible(true);
+		for (EntityAttributeGroup g : EntityKind.trial.getGroupedAttributeCopies()) {
+			addDefinedFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {

@@ -28,9 +28,7 @@ public class BasketTableModel extends BasicTableModel {
 				try {
 					addCheckboxColumn(); // first column
 					// Don't filter attributes.
-					ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
-					attributes.addAll(entityKind.getStaticAttributes());
-					attributes.addAll(entityKind.getGenericAttributes());
+					ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
 					
 					for (EntityAttribute a : attributes) {
 						//TODO: sessionID / SessionID
