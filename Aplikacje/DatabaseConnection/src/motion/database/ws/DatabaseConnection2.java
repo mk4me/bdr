@@ -893,6 +893,29 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		ConnectionTools2.finalizeCall();
 	}
 	
+	@Override
+	public void uploadDirectory(int resourceId, EntityKind kind, String description, String filesPath, FileTransferListener listener) throws Exception
+	{
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadDirectory", this );
+
+		String destRemoteFolder = getUniqueFolderName();
+
+		File dir = new File(filesPath);
+		if ( dir.isDirectory() )
+		{
+			int filesNo = dir.list().length;
+			createRemoteFolder( dir.getName(), destRemoteFolder );
+			FTPs.sendFolder( filesPath, destRemoteFolder+dir.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+		
+			kind.storeFiles(port, resourceId, destRemoteFolder, description);
+		}
+		else
+			throw new Exception( filesPath + " is not a directory. Cannot perform batch upload.");
+		
+		ConnectionTools2.finalizeCall();
+	}
+
+	
 
 	/*==========================================================================
 	 * 	BasicUpdateServiceWCF

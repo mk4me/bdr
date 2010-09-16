@@ -120,6 +120,11 @@ public enum EntityKind {
 		}
 
 		@Override
+		public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
+			port.storeSessionFiles(resourceId, destRemoteFolder, description);
+		}
+
+		@Override
 		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
 		{
 			return super.listFilesMethod(port, resourceID);
@@ -181,6 +186,11 @@ public enum EntityKind {
 			port.storeTrialFile(resourceId, destRemoteFolder, description, filename);
 		}
 
+		@Override
+		public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
+			port.storeTrialFiles(resourceId, destRemoteFolder, description);
+		}
+		
 		@Override
 		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
 		{
@@ -246,6 +256,11 @@ public enum EntityKind {
 			port.storeMeasurementConfFile(resourceId, destRemoteFolder, description, filename);
 		}
 	
+		@Override
+		public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
+			port.storeMeasurementConfFiles(resourceId, destRemoteFolder, description);
+		}
+
 		@Override
 		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
 		{
@@ -373,6 +388,12 @@ public enum EntityKind {
 			String description, String filename) throws Exception{
 		throw new Exception( this.name() + Messages.getString("EntityKind.Error3")); //$NON-NLS-1$
 	}
+
+	public void storeFiles(IFileStoremanWS port, int resourceId,
+			String destRemoteFolder, String description) throws Exception {
+		throw new Exception( this.name() + Messages.getString("EntityKind.Error3")); //$NON-NLS-1$
+	}
+
 
 	public void storeAttributeFile(IFileStoremanWS port, int resourceId, EntityAttribute attribute, String destRemoteFolder, 
 			String description, String filename) throws Exception{

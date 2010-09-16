@@ -18,6 +18,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		this.entityKind = entityKind;
 	}
 	
+	public String getIdAttributeName()
+	{
+		return idAttributeName;
+	}
 	
 	public Object get(T key) {
 		return super.get(key.name());

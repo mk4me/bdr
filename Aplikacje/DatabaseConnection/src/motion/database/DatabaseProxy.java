@@ -210,5 +210,7 @@ public interface DatabaseProxy {
 
 	void removeAttributeGroup(String groupName, String unit) throws Exception;
 
+	void uploadDirectory(int resourceId, EntityKind kind, String description, String filesPath,	FileTransferListener listener) throws Exception;
+
 
 }
