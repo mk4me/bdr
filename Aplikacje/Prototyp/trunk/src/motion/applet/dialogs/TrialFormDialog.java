@@ -8,6 +8,8 @@ import javax.swing.SwingWorker;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.SessionStaticAttributes;
+import motion.database.model.TrialStaticAttributes;
 
 public class TrialFormDialog extends FormDialog {
 	private static String TITLE = "New trial";
@@ -17,11 +19,11 @@ public class TrialFormDialog extends FormDialog {
 	private static String CREATING_MESSAGE = "Creating a new trial...";
 	
 	private int sessionId;
-	
+	/*
 	private FormTextAreaField trialDescriptionField;
 	private FormNumberField durationField;
 	private FormNumberField relevanceField;
-	
+	*/
 	public TrialFormDialog(int sessionId) {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
@@ -75,21 +77,19 @@ public class TrialFormDialog extends FormDialog {
 	
 	private String getTrialDescription() {
 		
-		return trialDescriptionField.getData();
+		return (String) getAttributeValue(EntityKind.trial, TrialStaticAttributes.TrialDescription.toString());
 	}
 	
 	private int getDuration() {
 		int duration = -1;
-		
-		try {
-			duration = durationField.getData();
-		} catch (NumberFormatException e) {
-			this.messageLabel.setText(MISSING_DURATION);
+		Object value = getAttributeValue(EntityKind.trial, TrialStaticAttributes.Duration.toString());
+		if (value != null) {
+			duration = (Integer) value;
 		}
 		
-		return duration;
+		return duration; 
 	}
-	
+	/*
 	private String getRelevance() {
 		String relevance = "";
 		try {
@@ -99,7 +99,7 @@ public class TrialFormDialog extends FormDialog {
 		
 		return relevance;
 	}
-	
+	*/
 	private boolean validateResult() {
 		if (getTrialDescription().equals("")) {
 			this.messageLabel.setText(MISSING_TRIAL_DESCRIPTION);

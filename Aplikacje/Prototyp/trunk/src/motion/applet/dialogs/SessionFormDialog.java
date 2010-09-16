@@ -15,6 +15,8 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
@@ -27,8 +29,8 @@ public class SessionFormDialog extends FormDialog {
 	private FormDateField sessionDateField;
 	private FormTextAreaField sessionDescriptionField;
 	private FormListField motionKindField;
-	private FormTextField markerSetField;
-	private FormNumberField numberOfTrialsField;
+	/*private FormTextField markerSetField;
+	private FormNumberField numberOfTrialsField;*/
 	private PrivilegesPanel privilegesPanel;
 	
 	public SessionFormDialog() {
@@ -113,25 +115,24 @@ public class SessionFormDialog extends FormDialog {
 	}
 	
 	private XMLGregorianCalendar getSessionDate() {
-		try {
-			return sessionDateField.getData();
-		} catch (ParseException e) {
-		} catch (DatatypeConfigurationException e) {
-		}
 		
-		return null;
+		return (XMLGregorianCalendar) getAttributeValue(EntityKind.session, SessionStaticAttributes.SessionDate.toString());
 	}
 	
 	private String getSessionDescription() {
 		
-		return sessionDescriptionField.getData();
+		return (String) getAttributeValue(EntityKind.session, SessionStaticAttributes.SessionDescription.toString());
 	}
 	
-	private String getMotionKind() {
+	private String getMotionKind() {	//TODO: show motion kinds in form
+		try {
+			return getMotionKinds()[0];
+		} catch (Exception e) {
+		}
 		
-		return motionKindField.getData();
+		return "";
 	}
-	
+	/*
 	private String getMarkerSet() {
 		
 		return markerSetField.getData();
@@ -146,8 +147,8 @@ public class SessionFormDialog extends FormDialog {
 		
 		return numberOfTrials;
 	}
-	
-	private boolean validateResult() {
+	*/
+	private boolean validateResult() {/*
 		if (getSessionDate() == null) {
 			this.messageLabel.setText(MISSING_SESSION_DATE);
 			
@@ -157,7 +158,7 @@ public class SessionFormDialog extends FormDialog {
 			
 			return false;
 		}
-		
+		*/
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
 		return true;

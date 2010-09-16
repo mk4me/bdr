@@ -212,6 +212,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		PerformerFormDialog performerFormDialog = new PerformerFormDialog();
 		performerFormDialog.setVisible(true);
 		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_PERFORMER);
 			RightSplitPanel.this.refreshPerformerTable();
 		}
 	}
@@ -221,6 +222,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		sessionFormDialog.pack();	// TODO: is this needed?
 		sessionFormDialog.setVisible(true);
 		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_SESSION);
 			RightSplitPanel.this.refreshSessionTable();
 		}
 	}
@@ -229,6 +231,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
 		trialFormDialog.setVisible(true);
 		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_TRIAL);
 			RightSplitPanel.this.refreshTrialTable();
 		}
 	}

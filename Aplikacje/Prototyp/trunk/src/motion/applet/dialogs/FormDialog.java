@@ -161,8 +161,11 @@ public class FormDialog extends BasicDialog {
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: date as subtype
 					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 					definedFormFields.add(field);
+				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE_TIME)) {
+					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
+					definedFormFields.add(field);
 				}
-			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE)) {
+			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE) || a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
 				definedFormFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: date as type
@@ -185,7 +188,7 @@ public class FormDialog extends BasicDialog {
 			}
 		} else if (f instanceof FormDateField) {
 			try {
-				attributeValue = ((FormDateField) f).getData().toString();
+				attributeValue = ((FormDateField) f).getData();
 			} catch (ParseException e) {
 			} catch (DatatypeConfigurationException e) {
 			}
@@ -200,11 +203,13 @@ public class FormDialog extends BasicDialog {
 	
 	protected void setDefinedAttributes(EntityKind entityKind, int id) throws Exception {	//TODO: remove entityKind.
 		for (FormField f : definedFormFields) {
-			setAttributeValue(f);
-			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
-					id,
-					f.attribute,
-					false);
+			if (!f.attribute.groupName.equals("_static")){
+				setAttributeValue(f);
+				WebServiceInstance.getDatabaseConnection().setEntityAttribute(
+						id,
+						f.attribute,
+						false);
+			}
 		}
 	}
 	
