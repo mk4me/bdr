@@ -3,8 +3,6 @@ package motion.applet.dialogs;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -12,21 +10,22 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.PerformerStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
 	private static String TITLE = "New performer";
 	private static String WELCOME_MESSAGE = "Create a new performer.";
 	private static String MISSING_FIRST_NAME = "Please input performer's first name.";
 	private static String MISSING_LAST_NAME = "Please input performer's last name.";
-	private static String MISSING_BIRTH_DATE = "Missing or incorrect birth date";
+	//private static String MISSING_BIRTH_DATE = "Missing or incorrect birth date";
 	private static String CREATING_MESSAGE = "Creating a new performer...";
-	
+	/*
 	private FormTextField firstNameField;
 	private FormTextField lastNameField;
 	
 	private FormDateField birthDateField;
 	private FormTextAreaField diagnosisField;
-	
+	*/
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
@@ -84,14 +83,14 @@ public class PerformerFormDialog extends FormDialog {
 	
 	private String getFirstName() {
 		
-		return firstNameField.getData();
+		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.FirstName.toString());
 	}
 	
 	private String getLastName() {
 		
-		return lastNameField.getData();
+		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.LastName.toString());
 	}
-	
+	/*
 	private String getBirthDate() {
 		String birthDate = "";
 		try {
@@ -107,7 +106,7 @@ public class PerformerFormDialog extends FormDialog {
 		
 		return diagnosisField.getData();
 	}
-	
+	*/
 	private boolean validateResult() {
 		if (getFirstName().equals("")) {
 			this.messageLabel.setText(MISSING_FIRST_NAME);

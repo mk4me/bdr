@@ -3,8 +3,6 @@ package motion.applet.dialogs;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.SwingWorker;

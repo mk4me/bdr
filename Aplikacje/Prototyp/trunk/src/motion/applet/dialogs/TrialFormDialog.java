@@ -2,8 +2,6 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.swing.SwingWorker;
 

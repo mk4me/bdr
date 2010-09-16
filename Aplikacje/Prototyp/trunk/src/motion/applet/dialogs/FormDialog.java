@@ -172,34 +172,52 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
-	protected void setDefinedAttributes(EntityKind entityKind, int id) throws Exception {
-		for (FormField f : definedFormFields) {
-			Object attributeValue = null;
-			if (f instanceof FormTextField) {
-				attributeValue = ((FormTextField) f).getData();
-			} else if (f instanceof FormTextAreaField) {
-				attributeValue = ((FormTextAreaField) f).getData();
-			} else if (f instanceof FormNumberField) {
-				try {
-					attributeValue = ((FormNumberField) f).getData();
-				} catch (NumberFormatException e) {
-				}
-			} else if (f instanceof FormDateField) {
-				try {
-					attributeValue = ((FormDateField) f).getData().toString();
-				} catch (ParseException e) {
-				} catch (DatatypeConfigurationException e) {
-				}
-			} else if (f instanceof FormListField) {
-				attributeValue = ((FormListField) f).getData().toString();
+	private void setAttributeValue(FormField f) {
+		Object attributeValue = null;
+		if (f instanceof FormTextField) {
+			attributeValue = ((FormTextField) f).getData();
+		} else if (f instanceof FormTextAreaField) {
+			attributeValue = ((FormTextAreaField) f).getData();
+		} else if (f instanceof FormNumberField) {
+			try {
+				attributeValue = ((FormNumberField) f).getData();
+			} catch (NumberFormatException e) {
 			}
-			
+		} else if (f instanceof FormDateField) {
+			try {
+				attributeValue = ((FormDateField) f).getData().toString();
+			} catch (ParseException e) {
+			} catch (DatatypeConfigurationException e) {
+			}
+		} else if (f instanceof FormListField) {
+			attributeValue = ((FormListField) f).getData().toString();
+		}
+		
+		if (attributeValue != null) {
 			f.attribute.setValueFromString(attributeValue);
+		}
+	}
+	
+	protected void setDefinedAttributes(EntityKind entityKind, int id) throws Exception {	//TODO: remove entityKind.
+		for (FormField f : definedFormFields) {
+			setAttributeValue(f);
 			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
 					id,
 					f.attribute,
 					false);
 		}
+	}
+	
+	protected Object getAttributeValue(EntityKind entityKind, String attribute) {
+		for (FormField f : definedFormFields) {
+			if (f.attribute.name.equals(attribute)) {
+				setAttributeValue(f);
+				
+				return f.attribute.value;
+			}
+		}
+		
+		return null;
 	}
 }
 
