@@ -298,26 +298,13 @@ public class UploadDialog extends BasicDialog {
 			}
 			
 			private void uploadFile(int id, String path, String description) throws Exception {
-				/*nf:if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
-					WebServiceInstance.getDatabaseConnection().uploadSessionFile(id, description, path, new UploadTransferListener());
-				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)) {
-					WebServiceInstance.getDatabaseConnection().uploadPerformerFile(id, description, path, new UploadTransferListener());
-				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)) {
-					WebServiceInstance.getDatabaseConnection().uploadTrialFile(id, description, path, new UploadTransferListener());
-				}*/
 				
 				WebServiceInstance.getDatabaseConnection().uploadFile(id, UploadDialog.this.entityKind, description, path, new UploadTransferListener());
 			}
 			
 			private void uploadDirectory(int id, String path, String description) throws Exception {
-				/*nf:if (UploadDialog.this.tableName.equals(TableNamesInstance.SESSION)) {
-					WebServiceInstance.getDatabaseConnection().uploadSessionFiles(id, path, description, new UploadTransferListener());
-				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.PERFORMER)){
-					WebServiceInstance.getDatabaseConnection().uploadPerformerFiles(id, path, description, new UploadTransferListener());
-				} else if (UploadDialog.this.tableName.equals(TableNamesInstance.TRIAL)){
-					WebServiceInstance.getDatabaseConnection().uploadTrialFiles(id, path, description, new UploadTransferListener());
-				}*/
-				//TODO: upload directory.
+
+				WebServiceInstance.getDatabaseConnection().uploadDirectory(id, UploadDialog.this.entityKind, description, path, new UploadTransferListener());
 			}
 		});
 		
