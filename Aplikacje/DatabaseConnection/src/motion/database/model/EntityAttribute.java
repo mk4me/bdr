@@ -5,7 +5,8 @@ import java.util.List;
 
 public class EntityAttribute {
 
-	public static final String INTEGER_TYPE = "int";
+	public static final String INTEGER_TYPE_SHORT = "int";
+	public static final String INTEGER_TYPE = "integer";
 	public static final String STRING_TYPE = "string";
 	public static final String DATE_TYPE = "DATE";	// Server uses 'string' for dates.
 	public static final String UNKNOWN_TYPE = "Unknown";
@@ -13,6 +14,7 @@ public class EntityAttribute {
 	public static final String SUBTYPE_SHORT_STRING = "shortString";
 	public static final String SUBTYPE_LONG_STRING = "longString";
 	public static final String SUBTYPE_DATE = "date";
+	public static final String SUBTYPE_DATE_TIME = "dateTime";
 	
 	public String type;
 	public String groupName;
@@ -98,7 +100,7 @@ public class EntityAttribute {
 	}
 	
 	public String[] getOperators() {
-		if (type.equals(INTEGER_TYPE)) {
+		if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
 			return Predicate.integerOperators;
 		} else if (type.equals(STRING_TYPE)) {
 			return Predicate.stringOperators;
@@ -110,7 +112,7 @@ public class EntityAttribute {
 	}
 	
 	public Class getAttributeClass() {
-		if (type.equals(INTEGER_TYPE)) {
+		if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
 			return Integer.class;
 		} else if (type.equals(STRING_TYPE)) {
 			return String.class;
