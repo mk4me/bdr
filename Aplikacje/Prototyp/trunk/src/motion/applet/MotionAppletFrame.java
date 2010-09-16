@@ -134,6 +134,14 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
+		JMenuItem createSessionItem = new JMenuItem(EntityKind.session.getGUIName());
+		newMenu.add(createSessionItem);
+		createSessionItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.showSessionDialog();
+			}
+		});
+		
 		JMenuItem createBasketItem = new JMenuItem(MENU_BASKET);
 		newMenu.add(createBasketItem);
 		createBasketItem.addActionListener(new ActionListener() {

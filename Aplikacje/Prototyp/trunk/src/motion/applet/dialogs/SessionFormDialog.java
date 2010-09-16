@@ -33,11 +33,8 @@ public class SessionFormDialog extends FormDialog {
 	private FormNumberField numberOfTrialsField;
 	private PrivilegesPanel privilegesPanel;
 	
-	private int performerId;
-	
-	public SessionFormDialog(int performerId) {
+	public SessionFormDialog() {
 		super(TITLE, WELCOME_MESSAGE, true);
-		this.performerId = performerId;
 		
 		try {
 			Iterator i = EntityKind.session.getAllAttributeGroups().entrySet().iterator();
@@ -61,7 +58,6 @@ public class SessionFormDialog extends FormDialog {
 							SessionFormDialog.this.createButton.setEnabled(false);
 							try {
 								int sessionID = WebServiceInstance.getDatabaseConnection().createSession(
-										//nf: SessionFormDialog.this.performerId,
 										new int[]{},
 										SessionFormDialog.this.getSessionDescription(),
 										AppletToolBar.getLabId(),

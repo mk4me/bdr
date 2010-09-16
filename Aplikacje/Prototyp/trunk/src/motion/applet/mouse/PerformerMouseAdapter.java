@@ -40,7 +40,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 			createSessionMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					rightPanel.showSessionDialog(recordId);
+					rightPanel.showSessionDialog();
 				}
 			});
 			// View Performer sessions context menu
