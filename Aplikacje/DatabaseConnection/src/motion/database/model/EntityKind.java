@@ -395,6 +395,17 @@ public enum EntityKind {
 		return new ArrayList<EntityAttributeGroup>(groups);
 	}
 	
+	public EntityAttribute getEntityAttributeCopy(String attribute) {
+		for (EntityAttribute a : getAllAttributeCopies()) {
+			if (a.name.equals(attribute)) {
+				
+				return a;
+			}
+		}
+		
+		return null;
+	}
+	
 	public void rescanGenericAttributeGroups() throws Exception
 	{
 		genericAttributeGroups = null;
