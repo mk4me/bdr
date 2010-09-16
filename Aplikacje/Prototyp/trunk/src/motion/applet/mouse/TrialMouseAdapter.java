@@ -27,7 +27,6 @@ public class TrialMouseAdapter extends MouseAdapter {
 	}
 	
 	public void mouseClicked(MouseEvent e) {	// Right click.
-		// TODO: get JTable from e
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {
 			JPopupMenu popupMenu = new JPopupMenu();

@@ -18,6 +18,7 @@ import motion.database.model.EntityKind;
 public class SessionMouseAdapter extends MouseAdapter {
 	private static String MENU_CREATE_TRIAL = "Create new trial";
 	private static String MENU_VIEW_TRIALS = "View trials";
+	private static String MENU_VIEW_PERFORMERS = "View performers";
 	private static String MENU_VIEW_FILES = "View files";
 	private static String MENU_UPLOAD = "Upload file";
 	
@@ -30,7 +31,6 @@ public class SessionMouseAdapter extends MouseAdapter {
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		// TODO: get JTable from e
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 			JPopupMenu popupMenu = new JPopupMenu();
@@ -52,6 +52,16 @@ public class SessionMouseAdapter extends MouseAdapter {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					viewTrials(recordId);
+				}
+			});
+			// View Session performers context menu
+			JMenuItem viewPerformersMenuItem = new JMenuItem(MENU_VIEW_PERFORMERS);
+			popupMenu.add(viewPerformersMenuItem);
+			
+			viewPerformersMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					viewPerformers(recordId);
 				}
 			});
 			
@@ -86,6 +96,11 @@ public class SessionMouseAdapter extends MouseAdapter {
 	
 	private void viewTrials(int recordId) {
 		rightPanel.showTable(EntityKind.trial, recordId);
+		MotionAppletFrame.setBrowsePanelVisible();
+	}
+	
+	private void viewPerformers(int recordId) {
+		rightPanel.showTable(EntityKind.session, recordId);
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 	

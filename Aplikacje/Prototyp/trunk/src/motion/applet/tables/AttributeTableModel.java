@@ -58,7 +58,11 @@ public class AttributeTableModel extends BasicTableModel {
 					}
 					
 					if (entityKind.equals(EntityKind.performer)) {
-						records = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
+						if (recordId > -1) {
+							//records = WebServiceInstance.getDatabaseConnection().listSessionPerformersWithAttributes(recordId);
+						} else {
+							records = WebServiceInstance.getDatabaseConnection().listLabPerformersWithAttributes(AppletToolBar.getLabId());
+						}
 					} else if (entityKind.equals(EntityKind.session)) {
 						if (recordId > -1) {
 							records = WebServiceInstance.getDatabaseConnection().listPerformerSessionsWithAttributes(recordId);
