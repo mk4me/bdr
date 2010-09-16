@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 
 import motion.Messages;
@@ -350,6 +351,48 @@ public enum EntityKind {
 		if (staticAttributes == null)
 				getGenericAttributes();
 		return staticAttributes;
+	}
+	
+	public ArrayList<EntityAttribute> getGenericAttributeCopies() {
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		try {
+			attributes.addAll(getGenericAttributes());
+		} catch (Exception e) {
+		}
+		
+		return new ArrayList<EntityAttribute>(attributes);
+	}
+	
+	public ArrayList<EntityAttribute> getStaticAttributeCopies() {
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		try {
+			attributes.addAll(getStaticAttributes());
+		} catch (Exception e) {
+		}
+		
+		return new ArrayList<EntityAttribute>(attributes);
+	}
+	
+	public ArrayList<EntityAttribute> getAllAttributeCopies() {
+		ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+		attributes.addAll(getStaticAttributeCopies());
+		attributes.addAll(getGenericAttributeCopies());
+		
+		return attributes;
+	}
+	
+	public ArrayList<EntityAttributeGroup> getGroupedAttributeCopies() {
+		ArrayList<EntityAttributeGroup> groups = new ArrayList<EntityAttributeGroup>();
+		try {
+			Iterator i = getAllAttributeGroups().entrySet().iterator();
+			while (i.hasNext()) {
+				EntityAttributeGroup attributeGroup = (EntityAttributeGroup) (((Map.Entry) i.next()).getValue());
+				groups.add(attributeGroup);
+			}
+		} catch (Exception e) {
+		}
+		
+		return new ArrayList<EntityAttributeGroup>(groups);
 	}
 	
 	public void rescanGenericAttributeGroups() throws Exception
