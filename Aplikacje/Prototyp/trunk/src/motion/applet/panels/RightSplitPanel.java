@@ -36,11 +36,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private BottomSplitPanel bottomPanel;
 	private Hashtable<EntityKind, Integer> tabNameHash = new Hashtable<EntityKind, Integer>();
 	
-	private static int TABLE_SIZE = 4;
+	private static int TABLE_SIZE = 5;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
 	private static int TABLE_TRIAL = 2;
 	private static int TABLE_FILE = 3;
+	private static int TABLE_MEASUREMENT_CONFIGURATION = 4;
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	
 	public RightSplitPanel() {
@@ -64,6 +65,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_FILE] = new JTable();
 		tabbedPane.addTab(EntityKind.file.getGUIName(), new JScrollPane(tables[TABLE_FILE]));
 		
+		tabNameHash.put(EntityKind.measurement_conf, TABLE_MEASUREMENT_CONFIGURATION);
+		tables[TABLE_MEASUREMENT_CONFIGURATION] = new JTable();
+		tabbedPane.addTab(EntityKind.measurement_conf.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT_CONFIGURATION]));
+		
 		this.setLayout(new BorderLayout());
 		
 		bottomPanel = new BottomSplitPanel();
@@ -77,6 +82,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[1].addMouseListener(new SessionMouseAdapter(this));
 		tables[2].addMouseListener(new TrialMouseAdapter(this));
 		tables[3].addMouseListener(new FileMouseAdapter(this));
+		//TODO: measurement_conf
 		
 		tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh

@@ -8,7 +8,6 @@ import javax.swing.SwingWorker;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
-import motion.database.model.SessionStaticAttributes;
 import motion.database.model.TrialStaticAttributes;
 
 public class TrialFormDialog extends FormDialog {
