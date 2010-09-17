@@ -679,9 +679,10 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		
 			ListMeasurementConfigurationsWithAttributesXMLResult result = port.listMeasurementConfigurationsWithAttributesXML();
 			DbElementsList<MeasurementConfiguration> output = new DbElementsList<MeasurementConfiguration>();
-			
-			for ( MeasurementConfDetailsWithAttributes s : result.getMeasurementConfListWithAttributesList().getMeasurementConfDetailsWithAttributes() )
-				output.add( ConnectionTools2.transformMeasurementConfigurationDetails(s) );
+			if (result.getMeasurementConfListWithAttributesList() != null) {
+				for ( MeasurementConfDetailsWithAttributes s : result.getMeasurementConfListWithAttributesList().getMeasurementConfDetailsWithAttributes() )
+					output.add( ConnectionTools2.transformMeasurementConfigurationDetails(s) );
+			}
 				
 			ConnectionTools2.finalizeCall();
 			return output;
