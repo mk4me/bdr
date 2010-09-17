@@ -417,6 +417,25 @@ public enum EntityKind {
 		}
 	}
 	
+	public ArrayList<EntityAttributeGroup> getDeselectedAttributeGroupCopies(ArrayList<String> deselectedAttributes) {
+		if (deselectedAttributes.isEmpty()) {
+			
+			return getGroupedAttributeCopies();
+		} else {
+			ArrayList<EntityAttributeGroup> groups = getGroupedAttributeCopies();
+			for (EntityAttributeGroup attributeGroup : groups) {
+				Iterator i = attributeGroup.iterator();
+				while (i.hasNext()) {
+					if (deselectedAttributes.contains(((EntityAttribute) i.next()).name)) {
+						i.remove();
+					}
+				}
+			}
+			
+			return groups;
+		}
+	}
+	
 	public EntityAttribute getEntityAttributeCopy(String attribute) {
 		for (EntityAttribute a : getAllAttributeCopies()) {
 			if (a.name.equals(attribute)) {
