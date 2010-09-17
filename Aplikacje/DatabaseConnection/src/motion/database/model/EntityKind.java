@@ -395,6 +395,28 @@ public enum EntityKind {
 		return new ArrayList<EntityAttributeGroup>(groups);
 	}
 	
+	public ArrayList<EntityAttribute> getSelectedAttributeCopies(ArrayList<String> selectedAttributes) {
+		if (selectedAttributes.isEmpty()) {
+			
+			return new ArrayList<EntityAttribute>();
+		} else {
+			ArrayList<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
+			for (EntityAttribute a : getStaticAttributeCopies()) {
+				if (selectedAttributes.contains(a.toString())) {
+					attributes.add(a);
+				}
+			}
+			
+			for (EntityAttribute a : getGenericAttributeCopies()) {
+				if (selectedAttributes.contains(a.toString())) {
+					attributes.add(a);
+				}
+			}
+			
+			return new ArrayList<EntityAttribute>(attributes);
+		}
+	}
+	
 	public EntityAttribute getEntityAttributeCopy(String attribute) {
 		for (EntityAttribute a : getAllAttributeCopies()) {
 			if (a.name.equals(attribute)) {
