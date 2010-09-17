@@ -27,7 +27,7 @@ public class BasicTableModel extends AbstractTableModel {
 	}
 	
 	protected void addCheckboxColumn() {
-		this.attributeNames.add("checkbox");	// checkbox column
+		this.attributeNames.add("");	// checkbox column
 		this.classes.add(Boolean.class);
 	}
 	

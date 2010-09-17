@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.panels.BottomSplitPanel;
 import motion.database.DbElementsList;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
@@ -27,11 +28,15 @@ public class BasketTableModel extends BasicTableModel {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					addCheckboxColumn(); // first column
-					// Don't filter attributes.
-					ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
+					ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(entityKind);
+					ArrayList<EntityAttribute> attributes;
+					if (selectedAttributes != null) {
+						attributes = entityKind.getSelectedAttributeCopies(selectedAttributes);
+					} else {
+						attributes = entityKind.getAllAttributeCopies();
+					}
 					
 					for (EntityAttribute a : attributes) {
-						//TODO: sessionID / SessionID
 						attributeNames.add(a.name);
 						classes.add(a.getAttributeClass());
 					}

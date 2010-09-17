@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.panels.BottomSplitPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
@@ -44,14 +45,14 @@ public class AttributeTableModel extends BasicTableModel {
 				try {
 					addCheckboxColumn(); // first column
 					DbElementsList<? extends GenericDescription<?>> records = new DbElementsList<GenericDescription<?>>();
-					//ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(tableName);
-					ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
-					//if (selectedAttributes != null) {
-						//attributes = tableName.getSelectedAttributes(selectedAttributes);
-					//} else {
-						//attributes.addAll(entityKind.getStaticAttributes());
-						//attributes.addAll(entityKind.getGenericAttributes());
-					//}
+					ArrayList<String> selectedAttributes = BottomSplitPanel.getCheckedAttributes(entityKind);
+					ArrayList<EntityAttribute> attributes;
+					if (selectedAttributes != null) {
+						attributes = entityKind.getSelectedAttributeCopies(selectedAttributes);
+					} else {
+						attributes = entityKind.getAllAttributeCopies();
+					}
+					
 					for (EntityAttribute a : attributes) {
 						attributeNames.add(a.name);
 						classes.add(a.getAttributeClass());

@@ -82,9 +82,9 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[1].addMouseListener(new SessionMouseAdapter(this));
 		tables[2].addMouseListener(new TrialMouseAdapter(this));
 		tables[3].addMouseListener(new FileMouseAdapter(this));
-		//TODO: measurement_conf
+		//TODO: Add measurement conf mouse listener.
 		
-		tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
 		//showTable(EntityKind.session);
 		//showTable(EntityKind.performer);
@@ -201,7 +201,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		refreshPerformerTable();
 		refreshSessionTable();
 		refreshTrialTable();
-		refreshFileTable();
+		//refreshFileTable();	// No view configuration for File.
 		tabbedPane.setSelectedIndex(i);
 	}
 	
