@@ -31,7 +31,7 @@ public class SessionFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE, true);
 		
 		boolean motionKindsSet = false;
-		for (EntityAttributeGroup g : EntityKind.session.getGroupedAttributeCopies()) {
+		for (EntityAttributeGroup g : EntityKind.session.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
 			if (motionKindsSet == false) {
 				motionKindsSet = setMotionKinds(g);
 			}
@@ -113,6 +113,15 @@ public class SessionFormDialog extends FormDialog {
 		}
 		
 		return motionKindStrings;
+	}
+	
+	private ArrayList<String> getDeselectedAttributes() {
+		ArrayList<String> attributes = new ArrayList<String>();
+		attributes.add(SessionStaticAttributes.SessionID.toString());
+		attributes.add(SessionStaticAttributes.LabID.toString());
+		attributes.add(SessionStaticAttributes.UserID.toString());
+		
+		return attributes;
 	}
 	
 	private XMLGregorianCalendar getSessionDate() {

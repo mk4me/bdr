@@ -2,12 +2,14 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.SessionStaticAttributes;
 import motion.database.model.TrialStaticAttributes;
 
 public class TrialFormDialog extends FormDialog {
@@ -23,7 +25,7 @@ public class TrialFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
 		
-		for (EntityAttributeGroup g : EntityKind.trial.getGroupedAttributeCopies()) {
+		for (EntityAttributeGroup g : EntityKind.trial.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
 			addDefinedFormFields(g, g.name);
 		}
 		
@@ -60,6 +62,13 @@ public class TrialFormDialog extends FormDialog {
 				}
 			}
 		});
+	}
+	
+	private ArrayList<String> getDeselectedAttributes() {
+		ArrayList<String> attributes = new ArrayList<String>();
+		attributes.add(TrialStaticAttributes.TrialID.toString());
+		
+		return attributes;
 	}
 	
 	private String getTrialDescription() {

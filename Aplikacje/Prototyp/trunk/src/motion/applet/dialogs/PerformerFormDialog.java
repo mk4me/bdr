@@ -2,6 +2,7 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
@@ -9,6 +10,7 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
 	private static String TITLE = "New performer";
@@ -20,7 +22,7 @@ public class PerformerFormDialog extends FormDialog {
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
-		for (EntityAttributeGroup g : EntityKind.performer.getGroupedAttributeCopies()) {
+		for (EntityAttributeGroup g : EntityKind.performer.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
 			addDefinedFormFields(g, g.name);
 		}
 		
@@ -57,6 +59,13 @@ public class PerformerFormDialog extends FormDialog {
 				}
 			}
 		});
+	}
+	
+	private ArrayList<String> getDeselectedAttributes() {
+		ArrayList<String> attributes = new ArrayList<String>();
+		attributes.add(PerformerStaticAttributes.PerformerID.toString());
+		
+		return attributes;
 	}
 	
 	private String getFirstName() {
