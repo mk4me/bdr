@@ -132,7 +132,7 @@ public class EntityAttribute {
 			return Float.class;
 		else if (typeL.contains( "double" ))
 			return Double.class;
-		else if (typeL.contains( "integer" ))
+		else if (typeL.contains( "integer" ) || typeL.contains( "int" ))
 			return Integer.class;
 		else if (typeL.contains( "calendar" ))
 			return GregorianCalendar.class;
@@ -143,13 +143,25 @@ public class EntityAttribute {
 		
 		if ( getTypeClass() == String.class)
 			this.value = newValue;
-		else if ( getTypeClass() == Integer.class)
-			this.value = Integer.parseInt( (String) newValue );
-		else if ( getTypeClass() == Float.class)
-			this.value = Float.parseFloat( (String) newValue );
-		else if ( getTypeClass() == Double.class)
-			this.value = Double.parseDouble( (String) newValue );
-		else if ( getTypeClass() == GregorianCalendar.class)
+		else if ( getTypeClass() == Integer.class) {
+			if (newValue instanceof String) {
+				this.value = Integer.parseInt( (String) newValue );
+			} else {
+				this.value = newValue;
+			}
+		} else if ( getTypeClass() == Float.class) {
+			if (newValue instanceof String) {
+				this.value = Float.parseFloat( (String) newValue );
+			} else {
+				this.value = newValue;
+			}
+		} else if ( getTypeClass() == Double.class) {
+			if (newValue instanceof String) {
+				this.value = Double.parseDouble( (String) newValue );
+			} else {
+				this.value = newValue;
+			}
+		} else if ( getTypeClass() == GregorianCalendar.class)
 			this.value = GregorianCalendar.getInstance();
 		else	
 			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() + " new value:" + newValue );
