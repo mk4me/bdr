@@ -2,6 +2,7 @@ package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.SwingWorker;
@@ -10,6 +11,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
@@ -23,17 +25,16 @@ public class SessionFormDialog extends FormDialog {
 	private static String MISSING_MOTION_KIND = "Missing motion kind.";
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
-	private FormDateField sessionDateField;
-	private FormTextAreaField sessionDescriptionField;
-	private FormListField motionKindField;
-	/*private FormTextField markerSetField;
-	private FormNumberField numberOfTrialsField;*/
 	private PrivilegesPanel privilegesPanel;
 	
 	public SessionFormDialog() {
 		super(TITLE, WELCOME_MESSAGE, true);
 		
+		boolean motionKindsSet = false;
 		for (EntityAttributeGroup g : EntityKind.session.getGroupedAttributeCopies()) {
+			if (motionKindsSet == false) {
+				motionKindsSet = setMotionKinds(g);
+			}
 			addDefinedFormFields(g, g.name);
 		}
 		
@@ -54,21 +55,7 @@ public class SessionFormDialog extends FormDialog {
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());
 								
-								setDefinedAttributes(EntityKind.session, sessionID);
-								
-								/*
-								WebServiceInstance.getDatabaseConnection().setSessionAttribute(
-										sessionID,
-										"marker_set",
-										SessionFormDialog.this.getMarkerSet(),
-										false);
-								if (!SessionFormDialog.this.getNumberOfTrials().equals("")) {
-									WebServiceInstance.getDatabaseConnection().setSessionAttribute(
-											sessionID,
-											"number_of_trials",
-											SessionFormDialog.this.getNumberOfTrials(),
-											false);
-								}*/
+								setDefinedAttributes(sessionID);
 								
 								//privileges
 								SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionID, privilegesPanel.getResult() );
@@ -98,17 +85,34 @@ public class SessionFormDialog extends FormDialog {
 		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
 	}
 	
-	private String[] getMotionKinds() throws Exception {	//TODO: Add thread.
-		Vector<MotionKind> motionKinds = WebServiceInstance.getDatabaseConnection().listMotionKindsDefined();
-		String[] motionKindsStrings = new String[motionKinds.size()];
+	private boolean setMotionKinds(EntityAttributeGroup group) {
+		for (EntityAttribute a : group) {
+			if (a.name.equals(SessionStaticAttributes.MotionKindID.toString())) {
+				a.enumValues = getMotionKinds();
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private ArrayList<String> getMotionKinds() {	//TODO: Add thread.
+		Vector<MotionKind> motionKinds = new Vector<MotionKind>();
+		try {
+			motionKinds = WebServiceInstance.getDatabaseConnection().listMotionKindsDefined();
+		} catch (Exception e) {
+			
+		}
+		ArrayList<String> motionKindStrings = new ArrayList<String>();
 		
 		int i = 0;
 		for (MotionKind m : motionKinds) {
-			motionKindsStrings[i] = m.name;
+			motionKindStrings.add(m.name);
 			i++;
 		}
 		
-		return motionKindsStrings;
+		return motionKindStrings;
 	}
 	
 	private XMLGregorianCalendar getSessionDate() {
@@ -121,41 +125,12 @@ public class SessionFormDialog extends FormDialog {
 		return (String) getAttributeValue(EntityKind.session, SessionStaticAttributes.SessionDescription.toString());
 	}
 	
-	private String getMotionKind() {	//TODO: show motion kinds in form
-		try {
-			return getMotionKinds()[0];
-		} catch (Exception e) {
-		}
+	private String getMotionKind() {
 		
-		return "";
-	}
-	/*
-	private String getMarkerSet() {
-		
-		return markerSetField.getData();
+		return getMotionKinds().get((Integer) getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKindID.toString()));
 	}
 	
-	private String getNumberOfTrials() {
-		String numberOfTrials = "";
-		try {
-			numberOfTrials = "" + numberOfTrialsField.getData();
-		} catch (NumberFormatException e) {
-		}
-		
-		return numberOfTrials;
-	}
-	*/
-	private boolean validateResult() {/*
-		if (getSessionDate() == null) {
-			this.messageLabel.setText(MISSING_SESSION_DATE);
-			
-			return false;
-		} else if (getMotionKind().equals("")) {
-			this.messageLabel.setText(MISSING_MOTION_KIND);
-			
-			return false;
-		}
-		*/
+	private boolean validateResult() {
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
 		return true;

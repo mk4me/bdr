@@ -15,15 +15,8 @@ public class PerformerFormDialog extends FormDialog {
 	private static String WELCOME_MESSAGE = "Create a new performer.";
 	private static String MISSING_FIRST_NAME = "Please input performer's first name.";
 	private static String MISSING_LAST_NAME = "Please input performer's last name.";
-	//private static String MISSING_BIRTH_DATE = "Missing or incorrect birth date";
 	private static String CREATING_MESSAGE = "Creating a new performer...";
-	/*
-	private FormTextField firstNameField;
-	private FormTextField lastNameField;
 	
-	private FormDateField birthDateField;
-	private FormTextAreaField diagnosisField;
-	*/
 	public PerformerFormDialog() {
 		super(TITLE, WELCOME_MESSAGE);
 		
@@ -45,20 +38,7 @@ public class PerformerFormDialog extends FormDialog {
 										getFirstName(),
 										getLastName());
 								
-								setDefinedAttributes(EntityKind.performer, performerID);
-								
-								/*
-								WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
-										performerID,
-										"date_of_birth",
-										getBirthDate(),
-										false);
-								WebServiceInstance.getDatabaseConnection().setPerformerAttribute(
-										performerID,
-										"diagnosis",
-										getDiagnosis(),
-										false);
-										*/
+								setDefinedAttributes(performerID);
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -88,23 +68,7 @@ public class PerformerFormDialog extends FormDialog {
 		
 		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.LastName.toString());
 	}
-	/*
-	private String getBirthDate() {
-		String birthDate = "";
-		try {
-			birthDate = birthDateField.getData().toString();
-		} catch (ParseException e) {
-		} catch (DatatypeConfigurationException e) {
-		}
-		
-		return birthDate;
-	}
 	
-	private String getDiagnosis() {
-		
-		return diagnosisField.getData();
-	}
-	*/
 	private boolean validateResult() {
 		if (getFirstName().equals("")) {
 			this.messageLabel.setText(MISSING_FIRST_NAME);
@@ -114,11 +78,7 @@ public class PerformerFormDialog extends FormDialog {
 			this.messageLabel.setText(MISSING_LAST_NAME);
 			
 			return false;
-		}/* else if (getBirthDate().equals("")) {
-			this.messageLabel.setText(MISSING_BIRTH_DATE);
-			
-			return false;
-		}*/
+		}
 		
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		

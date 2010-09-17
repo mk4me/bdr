@@ -149,8 +149,13 @@ public class FormDialog extends BasicDialog {
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
-				FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]));
-				definedFormFields.add(field);
+				if (a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
+					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
+					definedFormFields.add(field);
+				} else {
+					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), false);
+					definedFormFields.add(field);
+				}
 			} else if (a.getType().equals(EntityAttribute.STRING_TYPE)) {
 				if (a.getSubtype().equals(EntityAttribute.SUBTYPE_SHORT_STRING)) {
 					FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
@@ -201,7 +206,7 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
-	protected void setDefinedAttributes(EntityKind entityKind, int id) throws Exception {	//TODO: remove entityKind.
+	protected void setDefinedAttributes(int id) throws Exception {
 		for (FormField f : definedFormFields) {
 			if (!f.attribute.groupName.equals("_static")){
 				setAttributeValue(f);
@@ -369,16 +374,23 @@ class FormDateField extends FormField {
 class FormListField extends FormField {
 	private JComboBox comboBox;
 	private String[] list;
+	private boolean dataAsIndex = false;
 	
-	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {
+	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list, boolean dataAsIndex) {
 		super(attribute, gridBagConstraints, formPanel);
 		this.list = list;
+		this.dataAsIndex = dataAsIndex;
 		finishField();
 	}
 	
 	public String getData() {
-		
-		return comboBox.getSelectedItem().toString();
+		if (dataAsIndex == false) {
+			
+			return comboBox.getSelectedItem().toString();
+		} else {
+			
+			return "" + comboBox.getSelectedIndex();
+		}
 	}
 	
 	protected void prepareField() {

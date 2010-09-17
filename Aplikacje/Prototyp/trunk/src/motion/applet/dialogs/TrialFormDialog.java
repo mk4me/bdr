@@ -18,11 +18,7 @@ public class TrialFormDialog extends FormDialog {
 	private static String CREATING_MESSAGE = "Creating a new trial...";
 	
 	private int sessionId;
-	/*
-	private FormTextAreaField trialDescriptionField;
-	private FormNumberField durationField;
-	private FormNumberField relevanceField;
-	*/
+	
 	public TrialFormDialog(int sessionId) {
 		super(TITLE, WELCOME_MESSAGE);
 		this.sessionId = sessionId;
@@ -45,15 +41,7 @@ public class TrialFormDialog extends FormDialog {
 										TrialFormDialog.this.sessionId,
 										TrialFormDialog.this.getTrialDescription(),
 										TrialFormDialog.this.getDuration());
-								setDefinedAttributes(EntityKind.trial, trialID);
-								/*
-								if (!TrialFormDialog.this.getRelevance().equals("")) {
-									WebServiceInstance.getDatabaseConnection().setTrialAttribute(
-											trialID,
-											"relevance",
-											TrialFormDialog.this.getRelevance(),
-											false);
-								}*/
+								setDefinedAttributes(trialID);
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -88,17 +76,7 @@ public class TrialFormDialog extends FormDialog {
 		
 		return duration; 
 	}
-	/*
-	private String getRelevance() {
-		String relevance = "";
-		try {
-			relevance = "" + relevanceField.getData();
-		} catch (NumberFormatException e) {
-		}
-		
-		return relevance;
-	}
-	*/
+	
 	private boolean validateResult() {
 		if (getTrialDescription().equals("")) {
 			this.messageLabel.setText(MISSING_TRIAL_DESCRIPTION);
