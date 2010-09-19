@@ -104,6 +104,99 @@ insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_performer_attributes'), 'DateOfBirth', 'string', 0, 'date', NULL)    
 go
 
+insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'Medical_performer_data', 'performer' )
+go
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Medical_performer_data'), 'Diagnosis', 'string', 0, 'shortString', NULL)
+go
+
+insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'Anthropometric_data', 'performer_conf' )
+go
+-- waga [kg]					// BodyMass
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'BodyMass', 'integer', 0, 'nonNegativeInteger', 'kg')    
+go
+-- wzrost [mm]				// Height 
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'Height', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+
+
+-- opis/notatki				// Notes
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_performer_attributes'), 'Notes', 'string', 0, 'longString', NULL)    
+go
+
+-- iloœæ markerów				// MarkerCount
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'MarkerCount', 'integer', 0, 'nonNegativeInteger', NULL)    
+go
+-- d³ugoœæ lewej nogi [mm]	// LeftLegLength
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'LeftLegLength', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go 
+-- d³ugoœæ prawej nogi [mm]	// RightLegLength 
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'RightLegLength', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+-- szerokoœæ nasad kolanowych dla lewej nogi [mm]	// LeftKneeWidth
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'LeftKneeWidth', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+-- szerokoœæ nasad kolanowych dla prawej nogi [mm]	// RightKneeWidth
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'RightKneeWidth', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+-- odleg³oœæ kostki bocznej od przyœrodkowej dla lewej nogi [mm]	// LeftAnkleWidth
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'LeftAnkleWidth', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+-- odleg³oœæ kostki bocznej od przyœrodkowej dla prawej nogi [mm]  // RightAnkleWidth
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric_data'), 'RightAnkleWidth', 'integer', 0, 'nonNegativeInteger', 'mm')    
+go
+insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'General_session_attributes', 'session' )
+go
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'SessionName', 'string', 0, 'shortString', NULL)    
+go
+-- iloœæ aktorów // PerformerCount
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'PerformerCount', 'integer', 0, 'nonNegativeInteger', NULL)    
+go
+-- czas trwania (frames, timecode) // Duration ???
+--  FTP // ???
+-- opis (jest)
+-- notatki // Notes
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'Notes', 'string', 0, 'longString', NULL)    
+go
+-- zakresy ruchowe (run, jump, hop, sit, trot, dance, ...) -> IdRodzajRuchu
+insert into Rodzaj_ruchu ( Nazwa ) values ('run')
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('walk') -- uwaga - dubluja sie z czyms dodanym wczesniej...
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('jump')
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('hop')
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('sit')
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('trot')
+go
+insert into Rodzaj_ruchu ( Nazwa ) values ('dance')
+go
+
+select * from Rodzaj_ruchu
+
+-- temperatura otoczenia
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'Temperature', 'integer', 0, 'nonNegativeInteger', 'C')    
+go
+
+
+-- ------------------------------------------------------------------  powyzsze Wgrane 2010-09-11
 
 exec list_group_sessions_attributes_xml 'applet_user', 1
 

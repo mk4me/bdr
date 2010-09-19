@@ -116,10 +116,10 @@ go
         ADD PRIMARY KEY (IdKonfiguracja_performera)
 go
  
-
+ 
  
  CREATE TABLE Plik (
-        IdPlik              int NOT NULL,
+        IdPlik              int IDENTITY,
 		IdKonfiguracja_pomiarowa int NULL,
         IdSesja              int NULL,
         IdObserwacja         int NULL,

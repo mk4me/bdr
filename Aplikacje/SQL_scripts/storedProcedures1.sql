@@ -492,6 +492,21 @@ select
 	from Performer PerformerDetailsWithAttributes
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
+-- 2010-09-19
+create procedure list_session_performers_attributes_xml (@user_login varchar(30), @sess_id int)
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select
+	IdPerformer as PerformerID,
+	Imie as FirstName,
+	Nazwisko as LastName,
+	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from Performer PerformerDetailsWithAttributes
+	where exists ( select * from user_accessible_sessions_by_login (@user_login) where IdSesja = @sess_id) 
+	and exists ( select * from Konfiguracja_performera where IdSesja = @sess_id and IdPerformer = PerformerDetailsWithAttributes.IdPerformer )
+    for XML AUTO, ELEMENTS, root ('SessionPerformerWithAttributesList')
+go
+
 
 create procedure list_lab_performers_attributes_xml (@lab_id int)  -- Mozna pytac o przypisania na poziomie sesji
 as
