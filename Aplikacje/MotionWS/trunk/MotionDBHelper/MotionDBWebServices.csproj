@@ -143,6 +143,7 @@
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\ListSessionPerformersWithAttributesXML.xsd" />
     <None Include="res\FileListElement.xsd" />
     <None Include="res\FileWithAttributesListElement.xsd" />
     <None Include="res\ListFileAttributeDataWithAttributesXML.xsd" />

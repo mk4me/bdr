@@ -145,6 +145,14 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="SessionPerformerWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="LabPerformerWithAttributesList">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -560,6 +568,26 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:PerformerWithAttributesList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionPerformersWithAttributesXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionPerformersWithAttributesXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionPerformersWithAttributesXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionPerformerWithAttributesList"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -1073,6 +1101,15 @@
 	<wsdl:message name="IBasicQueriesWS_ListPerformersWithAttributesXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionPerformersWithAttributesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionPerformersWithAttributesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionPerformersWithAttributesXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListLabPerformersWithAttributesXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXML"/>
 	</wsdl:message>
@@ -1295,6 +1332,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListPerformersWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListPerformersWithAttributesXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListPerformersWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListPerformersWithAttributesXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListSessionPerformersWithAttributesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformersWithAttributesXML" message="tns:IBasicQueriesWS_ListSessionPerformersWithAttributesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformersWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListSessionPerformersWithAttributesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformersWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionPerformersWithAttributesXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="ListLabPerformersWithAttributesXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXML" message="tns:IBasicQueriesWS_ListLabPerformersWithAttributesXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListLabPerformersWithAttributesXML_OutputMessage"/>
@@ -1504,6 +1546,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListPerformersWithAttributesXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformersWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

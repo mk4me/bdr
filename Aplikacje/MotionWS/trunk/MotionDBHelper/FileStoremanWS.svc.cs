@@ -233,8 +233,6 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
                 cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
-                SqlParameter fileIdParameter =
-                    new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
                 cmd.Parameters["@mc_id"].Value = mcID;
 
@@ -279,7 +277,7 @@ namespace MotionDBWebServices
                 }
 
 
-                Directory.Delete(di.FullName);
+                Directory.Delete(di.FullName, true);
 
             }
             catch (SqlException ex)
@@ -321,8 +319,6 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
                 cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
-                SqlParameter fileIdParameter =
-                    new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
                 cmd.Parameters["@sess_id"].Value = sessionID;
 
@@ -392,7 +388,6 @@ namespace MotionDBWebServices
             string subdirPath = "";
             string fileName = "";
 
-
             if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
             if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
             dirLocation = baseLocalFilePath + path;
@@ -409,8 +404,6 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
                 cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
-                SqlParameter fileIdParameter =
-                    new SqlParameter("@file_id", SqlDbType.Int);
                 // can be used for recoring of several files
                 cmd.Parameters["@trial_id"].Value = trialId;
 
@@ -455,7 +448,7 @@ namespace MotionDBWebServices
                 }
 
 
-                Directory.Delete(di.FullName);
+                Directory.Delete(di.FullName, true);
 
             }
             catch (SqlException ex)

@@ -54,6 +54,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionPerformersWithAttributesXML(int sessionID);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
         XmlElement ListLabPerformersWithAttributesXML(int labID);
 
         [OperationContract]
