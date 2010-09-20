@@ -34,7 +34,7 @@ public class SessionFormDialog extends FormDialog {
 			if (motionKindsSet == false) {
 				motionKindsSet = setMotionKinds(g);
 			}
-			addDefinedFormFields(g, g.name);
+			addFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {

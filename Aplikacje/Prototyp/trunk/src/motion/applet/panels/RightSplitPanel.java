@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
 import motion.applet.dialogs.FormDialog;
+import motion.applet.dialogs.MeasurementConfigurationFormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
@@ -188,6 +189,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
+	private void refreshMeasurementConfigurationTable() {
+		TableModel tableModel = tables[TABLE_MEASUREMENT_CONFIGURATION].getModel();
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
+		}
+	}
+	
 	private void refreshFileTable() {
 		TableModel tableModel = tables[TABLE_FILE].getModel();
 		if (tableModel instanceof AttributeTableModel) {
@@ -239,6 +247,15 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_TRIAL);
 			RightSplitPanel.this.refreshTrialTable();
+		}
+	}
+	
+	public void showMeasurementConfigurationDialog() {
+		MeasurementConfigurationFormDialog measurementConfigurationDialog = new MeasurementConfigurationFormDialog();
+		measurementConfigurationDialog.setVisible(true);
+		if (measurementConfigurationDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT_CONFIGURATION);
+			RightSplitPanel.this.refreshMeasurementConfigurationTable();
 		}
 	}
 	

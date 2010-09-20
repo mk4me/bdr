@@ -144,7 +144,7 @@ public class FormDialog extends BasicDialog {
 		gridBagConstraints.gridy++;
 	}
 	
-	protected void addDefinedFormFields(EntityAttributeGroup attributes, String groupName) {
+	protected void addFormFields(EntityAttributeGroup attributes, String groupName) {
 		addFormTextLabel(groupName + ":");
 		
 		for (EntityAttribute a : attributes) {

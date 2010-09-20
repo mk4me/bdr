@@ -22,7 +22,7 @@ public class PerformerFormDialog extends FormDialog {
 		super(TITLE, WELCOME_MESSAGE);
 		
 		for (EntityAttributeGroup g : EntityKind.performer.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
-			addDefinedFormFields(g, g.name);
+			addFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {

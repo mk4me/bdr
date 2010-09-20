@@ -142,6 +142,14 @@ public class MotionAppletFrame extends JFrame {
 			}
 		});
 		
+		JMenuItem createMeasurementConfigurationItem = new JMenuItem(EntityKind.measurement_conf.getGUIName());
+		newMenu.add(createMeasurementConfigurationItem);
+		createMeasurementConfigurationItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.showMeasurementConfigurationDialog();
+			}
+		});
+		
 		JMenuItem createBasketItem = new JMenuItem(MENU_BASKET);
 		newMenu.add(createBasketItem);
 		createBasketItem.addActionListener(new ActionListener() {

@@ -25,7 +25,7 @@ public class TrialFormDialog extends FormDialog {
 		this.sessionId = sessionId;
 		
 		for (EntityAttributeGroup g : EntityKind.trial.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
-			addDefinedFormFields(g, g.name);
+			addFormFields(g, g.name);
 		}
 		
 		createButton.addActionListener(new ActionListener() {
