@@ -86,6 +86,11 @@ public enum EntityKind {
 			}
 		}
 
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new Performer();
+		}
 	}, 
 
 	session(SessionStaticAttributes.class) {
@@ -154,6 +159,11 @@ public enum EntityKind {
 			}
 		}
 
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new Session();
+		}
 	}, 
 
 	trial(TrialStaticAttributes.class) {
@@ -221,6 +231,11 @@ public enum EntityKind {
 			}
 		}
 
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new Trial();
+		}
 	}, 
 	
 	measurement(MeasurementStaticAttributes.class) {
@@ -248,6 +263,12 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
+
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new Measurement();
+		}
 	}, 
 	
 	measurement_conf(MeasurementConfigurationStaticAttributes.class) {
@@ -273,6 +294,12 @@ public enum EntityKind {
 				EntityAttribute a, boolean update) throws Exception {
 			port.setMeasurementConfAttribute(ID, a.name, a.value.toString(), update);
 		}
+		
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new MeasurementConfiguration();
+		}
 	}, 
 	
 	
@@ -283,16 +310,49 @@ public enum EntityKind {
 				EntityAttribute a, boolean update) throws Exception {
 			port.setFileAttribute(ID, a.name, a.value.toString(), update);
 		}
- 
+
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new DatabaseFile();
+		}
 	},
 
-	user(UserStaticAttributes.class), 
+	user(UserStaticAttributes.class)
+	{
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new User();
+		}
+	}, 
 	
-	userPrivileges(UserPrivilegesStaticAttributes.class),
+	userPrivileges(UserPrivilegesStaticAttributes.class)
+	{
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new UserPrivileges();
+		}
+	},
 	
-	result(null), 
+	result(null)
+	{
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new GenericResult();
+		}
+	},
 	
-	userBasket (UserBasketStaticAttributes.class);
+	userBasket (UserBasketStaticAttributes.class)
+	{
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new UserBasket();
+		}
+	};
 	
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -514,6 +574,9 @@ public enum EntityKind {
 		return this.name();
 	}
 
+	public abstract GenericDescription newEntity();
+
+	
 	public EntityKind fromString(String s)
 	{
 		return EntityKind.valueOf( s.toLowerCase() );

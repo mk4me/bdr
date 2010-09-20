@@ -78,6 +78,7 @@ import motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.
 import motion.database.ws.basicQueriesServiceWCF.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult;
+import motion.database.ws.basicQueriesServiceWCF.ListSessionPerformersWithAttributesXMLResponse.ListSessionPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.MotionKindDefinition;
@@ -228,7 +229,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Generic Result 
 	
 	@Override
-	public  List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates, String[] p_entitiesToInclude) throws Exception
+	public  List<GenericDescription> execGenericQuery(ArrayList<FilterPredicate> filterPredicates, String[] p_entitiesToInclude) throws Exception
 	{
 		try{
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "execGenericQuery", this );
@@ -244,10 +245,23 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					arrayOfFilterPredicate,	entitiesToInclude );
 	
 			
-			DbElementsList<GenericResult> output = new DbElementsList<GenericResult>();
+			DbElementsList<GenericDescription> output = new DbElementsList<GenericDescription>();
+			
 			GenericUniformAttributesQueryResult ss = result.getGenericUniformAttributesQueryResult();
+
+			EntityKind resultKind = null;
 			for (Attributes aa : ss.getAttributes() )
-				output.add( ConnectionTools2.transformGenericAttributes( aa, new GenericResult() ) );
+			{
+				resultKind = ConnectionTools2.inferEntityType( aa ); 
+				if ( resultKind != null )
+					break;
+			}
+			if (resultKind == null)
+				resultKind = EntityKind.result;
+			
+			
+			for (Attributes aa : ss.getAttributes() )
+				output.add( ConnectionTools2.transformGenericAttributes( aa, resultKind.newEntity() ) );
 			
 			return output;
 		}
@@ -488,6 +502,32 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+
+	@Override
+	public  DbElementsList<Performer> listSessionPerformersWithAttributes(int sessionID) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listPerformersWithAttributes", this );
+	
+			ListSessionPerformersWithAttributesXMLResult result = port.listSessionPerformersWithAttributesXML(sessionID);
+	
+			DbElementsList<Performer> output = new DbElementsList<Performer>();
+			
+			for ( PerformerDetailsWithAttributes s : result.getSessionPerformerWithAttributesList().getPerformerDetailsWithAttributes() )
+				output.add( ConnectionTools2.transformPerformerDetails(s) );
+			
+			return output;
+		}
+		catch(IBasicQueriesWSListPerformersWithAttributesXMLQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
 	
 ////////////////////////////////////////////////////////////////////////////
 //	Session

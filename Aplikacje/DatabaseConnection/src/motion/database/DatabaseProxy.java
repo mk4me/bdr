@@ -57,7 +57,7 @@ public interface DatabaseProxy {
 
 	public abstract void cancelCurrentFileTransfer();
 
-	public abstract List<GenericResult> execGenericQuery(ArrayList<FilterPredicate> filterPredicates,
+	public abstract List<GenericDescription> execGenericQuery(ArrayList<FilterPredicate> filterPredicates,
 			String[] p_entitiesToInclude) throws Exception;
 
 	public abstract DbElementsList<Performer> listPerformersWithAttributes()
@@ -211,6 +211,8 @@ public interface DatabaseProxy {
 	void removeAttributeGroup(String groupName, String unit) throws Exception;
 
 	void uploadDirectory(int resourceId, EntityKind kind, String description, String filesPath,	FileTransferListener listener) throws Exception;
+
+	DbElementsList<Performer> listSessionPerformersWithAttributes(int sessionID) throws Exception;
 
 
 }

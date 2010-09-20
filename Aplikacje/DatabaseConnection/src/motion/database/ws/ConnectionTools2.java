@@ -1,6 +1,7 @@
 package motion.database.ws;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.logging.Level;
 
 import motion.database.DatabaseConnection;
@@ -9,6 +10,7 @@ import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
 import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
@@ -249,6 +251,17 @@ public class ConnectionTools2 {
 		return destinationObject;
 	}
 
+	public static EntityKind inferEntityType(Attributes attributes) {
+		
+		if (attributes != null)
+			if (attributes.getAttribute() != null)
+				for (  motion.database.ws.basicQueriesServiceWCF.Attributes.Attribute att : attributes.getAttribute() )
+				{
+					return EntityKind.valueOf( att.getEntity() );
+				}
+
+		return null;
+	}
 	
 	public static DbElementsList<DatabaseFile> transformListOfFiles(Object result) {
 
