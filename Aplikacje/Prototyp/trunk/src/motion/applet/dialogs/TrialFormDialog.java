@@ -9,7 +9,6 @@ import javax.swing.SwingWorker;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
-import motion.database.model.SessionStaticAttributes;
 import motion.database.model.TrialStaticAttributes;
 
 public class TrialFormDialog extends FormDialog {
@@ -67,6 +66,7 @@ public class TrialFormDialog extends FormDialog {
 	private ArrayList<String> getDeselectedAttributes() {
 		ArrayList<String> attributes = new ArrayList<String>();
 		attributes.add(TrialStaticAttributes.TrialID.toString());
+		attributes.add(TrialStaticAttributes.SessionID.toString());
 		
 		return attributes;
 	}
@@ -83,10 +83,10 @@ public class TrialFormDialog extends FormDialog {
 			duration = (Integer) value;
 		}
 		
-		return duration; 
+		return duration;
 	}
 	
-	private boolean validateResult() {
+	protected boolean validateResult() {
 		if (getTrialDescription().equals("")) {
 			this.messageLabel.setText(MISSING_TRIAL_DESCRIPTION);
 			
@@ -99,6 +99,6 @@ public class TrialFormDialog extends FormDialog {
 		
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
-		return true;
+		return super.validateResult();
 	}
 }

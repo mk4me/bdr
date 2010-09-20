@@ -22,7 +22,6 @@ public class SessionFormDialog extends FormDialog {
 	private static String TITLE = "New session";
 	private static String WELCOME_MESSAGE = "Create a new session.";
 	private static String MISSING_SESSION_DATE = "Missing or incorrect session date.";
-	private static String MISSING_MOTION_KIND = "Missing motion kind.";
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
 	private PrivilegesPanel privilegesPanel;
@@ -139,9 +138,15 @@ public class SessionFormDialog extends FormDialog {
 		return getMotionKinds().get((Integer) getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKindID.toString()));
 	}
 	
-	private boolean validateResult() {
+	protected boolean validateResult() {
+		if (getSessionDate() == null) {
+			this.messageLabel.setText(MISSING_SESSION_DATE);
+			
+			return false;
+		}
+		
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
-		return true;
+		return super.validateResult();
 	}
 }

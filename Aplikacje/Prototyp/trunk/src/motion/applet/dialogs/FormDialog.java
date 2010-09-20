@@ -163,7 +163,7 @@ public class FormDialog extends BasicDialog {
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_LONG_STRING)) {
 					FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
 					definedFormFields.add(field);
-				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: date as subtype
+				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: duplicate date as subtype
 					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 					definedFormFields.add(field);
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE_TIME)) {
@@ -173,14 +173,14 @@ public class FormDialog extends BasicDialog {
 			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE) || a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
 				definedFormFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: date as type
+			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: duplicate date as type
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 				definedFormFields.add(field);
 			}
 		}
 	}
 	
-	private void setAttributeValue(FormField f) {
+	protected boolean setAttributeValue(FormField f) {
 		Object attributeValue = null;
 		if (f instanceof FormTextField) {
 			attributeValue = ((FormTextField) f).getData();
@@ -190,12 +190,21 @@ public class FormDialog extends BasicDialog {
 			try {
 				attributeValue = ((FormNumberField) f).getData();
 			} catch (NumberFormatException e) {
+				this.messageLabel.setText("Incorrect number in the field " + f.attribute.name + ".");
+				
+				return false;
 			}
 		} else if (f instanceof FormDateField) {
 			try {
 				attributeValue = ((FormDateField) f).getData();
 			} catch (ParseException e) {
+				this.messageLabel.setText("Incorrect date in the field " + f.attribute.name + ".");
+				
+				return false;
 			} catch (DatatypeConfigurationException e) {
+				this.messageLabel.setText("Incorrect date in the field " + f.attribute.name + ".");
+				
+				return false;
 			}
 		} else if (f instanceof FormListField) {
 			attributeValue = ((FormListField) f).getData().toString();
@@ -204,6 +213,8 @@ public class FormDialog extends BasicDialog {
 		if (attributeValue != null) {
 			f.attribute.setValueFromString(attributeValue);
 		}
+		
+		return true;
 	}
 	
 	protected void setDefinedAttributes(int id) throws Exception {
@@ -228,6 +239,21 @@ public class FormDialog extends BasicDialog {
 		}
 		
 		return null;
+	}
+	
+	protected boolean validateResult() {
+		for (FormField f : definedFormFields) {
+			if (!f.attribute.groupName.equals("_static")){
+				if (setAttributeValue(f) == false) {
+					
+					return false;
+				}
+			}
+		}
+		
+		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
+		
+		return true;
 	}
 }
 

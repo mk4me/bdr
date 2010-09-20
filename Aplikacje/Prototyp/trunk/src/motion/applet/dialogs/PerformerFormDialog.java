@@ -10,7 +10,6 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.PerformerStaticAttributes;
-import motion.database.model.SessionStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
 	private static String TITLE = "New performer";
@@ -78,7 +77,7 @@ public class PerformerFormDialog extends FormDialog {
 		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.LastName.toString());
 	}
 	
-	private boolean validateResult() {
+	protected boolean validateResult() {
 		if (getFirstName().equals("")) {
 			this.messageLabel.setText(MISSING_FIRST_NAME);
 			
@@ -89,8 +88,6 @@ public class PerformerFormDialog extends FormDialog {
 			return false;
 		}
 		
-		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
-		
-		return true;
+		return super.validateResult();
 	}
 }
