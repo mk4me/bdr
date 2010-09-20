@@ -8,12 +8,13 @@ import javax.swing.SwingWorker;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
+import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
 
 public class QueryTableModel extends BasicTableModel {
-	private List<GenericResult> result;
+	private List<GenericDescription> result;
 	
-	public QueryTableModel(List<GenericResult> result) {
+	public QueryTableModel(List<GenericDescription> result) {
 		this.result = result;
 		getTableContents();
 	}
@@ -65,7 +66,7 @@ public class QueryTableModel extends BasicTableModel {
 							}
 							*/
 							
-							for (GenericResult r : result) {
+							for (GenericDescription<?> r : result) {
 								Object[] cellList = new Object[attributeNames.size()];
 								
 								for (String key : r.keySet()) {

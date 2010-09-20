@@ -26,6 +26,7 @@ import motion.applet.trees.FilterTree;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityKind;
 import motion.database.model.Filter;
+import motion.database.model.GenericDescription;
 import motion.database.model.GenericResult;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
@@ -120,7 +121,7 @@ public class LeftSplitPanel extends JPanel {
 							}
 							
 							if (filterPredicates.isEmpty() == false) {
-								List<GenericResult> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
+								List<GenericDescription> result = WebServiceInstance.getDatabaseConnection().execGenericQuery(
 										filterPredicates,
 										new String[] {LeftSplitPanel.this.entityKind.getName()});
 								
