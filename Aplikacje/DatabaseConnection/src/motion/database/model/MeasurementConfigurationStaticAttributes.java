@@ -4,7 +4,7 @@
 package motion.database.model;
 
 public enum MeasurementConfigurationStaticAttributes {
-	MeasurementConfigurationID, 
+	MeasurementConfID, 
 	MeasurementConfName,
 	MeasurementConfKind,
 	MeasurementConfDescription;

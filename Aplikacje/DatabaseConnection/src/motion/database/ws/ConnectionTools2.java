@@ -416,7 +416,7 @@ public class ConnectionTools2 {
 	public static MeasurementConfiguration transformMeasurementConfigurationDetails(
 			MeasurementConfDetailsWithAttributes s) {
 		MeasurementConfiguration m = new MeasurementConfiguration();
-		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfigurationID, s.getMeasurementConfID() );
+		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfID, s.getMeasurementConfID() );
 		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfDescription, s.getMeasurementConfDescription() );
 		m.put( MeasurementConfigurationStaticAttributes.MeasurementConfName, s.getMeasurementConfName() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), m );
