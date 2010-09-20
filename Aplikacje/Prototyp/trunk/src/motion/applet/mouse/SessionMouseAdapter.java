@@ -100,7 +100,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewPerformers(int recordId) {
-		rightPanel.showTable(EntityKind.session, recordId);
+		rightPanel.showTable(EntityKind.performer, recordId);
 		MotionAppletFrame.setBrowsePanelVisible();
 	}
 	
