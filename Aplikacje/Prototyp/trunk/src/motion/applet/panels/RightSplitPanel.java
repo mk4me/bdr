@@ -88,7 +88,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
 		//showTable(EntityKind.session);
-		//showTable(EntityKind.performer);
+		showTable(EntityKind.performer);	// Performers not grouped by labs.
 		
 	}
 	
@@ -215,7 +215,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	private void refreshTablesForLab() {
 		int i = tabbedPane.getSelectedIndex();
-		showTable(EntityKind.performer);
+		//showTable(EntityKind.performer);	// Performers not grouped by labs.
 		showTable(EntityKind.session);
 		clearTrialTable();
 		clearFileTable();
