@@ -182,8 +182,9 @@ go
 
 use Motion;
 declare @filters as PredicateUdt;
-insert into @filters values (4, 0, 'performer', 0, '', 'LastName', '=', 'Kowalski', '', '');
-exec dbo.evaluate_generic_query 'applet_user', @filters, 1, 1, 0, 0, 0
+insert into @filters values (3, 0, 'GROUP', 0, '', 'AllPerformers','','','','');
+insert into @filters values (4, 3, 'performer', 0, '', 'PerformerID', '>', '0', '', '');
+exec dbo.evaluate_generic_query 'applet_user', @filters, 1, 0, 0, 0, 0
 
 
 
@@ -507,15 +508,15 @@ begin
 	
 	
 	set @selectClause = @selectClause + ' (select * from ( ';
-	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes (p.IdPerformer) ';
+	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes_uniform (p.IdPerformer) ';
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause + 'union ';	
-	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes (s.IdSesja) ';
+	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes_uniform (s.IdSesja) ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +'union ';
-	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes (t.IdObserwacja)  ';
+	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes_uniform (t.IdObserwacja)  ';
 	if(@trial = 1 and ( @mc=1 or @meas=1 )) set @selectClause = @selectClause + 'union ';
-	if(@mc = 1) set @selectClause = @selectClause + 'select * from list_measurement_configuration_attributes(c.IdKonfiguracja_pomiarowa) ';
+	if(@mc = 1) set @selectClause = @selectClause + 'select * from list_measurement_configuration_attributes_uniform(c.IdKonfiguracja_pomiarowa) ';
 	if(@mc = 1 and @meas=1) set @selectClause = @selectClause + 'union ';
-	if(@meas = 1) set @selectClause = @selectClause + 'select * from list_measurement_attributes(m.IdPomiar) ';
+	if(@meas = 1) set @selectClause = @selectClause + 'select * from list_measurement_attributes_uniform(m.IdPomiar) ';
 
 	set @selectClause = @selectClause + ') Attribute FOR XML AUTO, TYPE ) ';
 	

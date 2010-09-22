@@ -80,7 +80,7 @@ inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
 go
 
-create procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit)
+alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -163,7 +163,7 @@ begin
 	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
 	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
 	if( @mc = 0 and exists (select * from @filter where ContextEntity = 'measurement_conf' )) set @mc = 1;	
-	if( @meas = 0 and exists (select * from @filter where ContextEntity = 'measurement' )) set @meas = 1;	
+	if( @meas = 0 and ( exists (select * from @filter where ContextEntity = 'measurement' )) or (@perf=1 and @mc =1)) set @meas = 1;	
 
 
 	if( @sess = 1) set @fromClause = @fromClause + 'user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +') as s ';
@@ -183,10 +183,20 @@ begin
 		 set @fromClause = @fromClause + 'Pomiar as m ';
 		 set @meas = 1;
 		end;
-	if( (@meas = 1 and @mc=1)  )
-		 set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
-	if( (@meas = 1 and @perf=1)  )
-		 set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
+
+	if (@meas = 1)
+		begin
+		if(  @mc=1)  
+			set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
+		if( @perf=1)
+			set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
+		end	
+	else
+		begin	
+			if( @perf=1)  set @fromClause = @fromClause + 'Performer as p ';	
+			if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
+		end;
+
 
 	select @predicatesLeft = count(PredicateID) from @filter
 	select @predicatesLeft = @predicatesLeft + count(PredicateID) from @filter where ContextEntity = 'GROUP' -- NOWE
@@ -334,7 +344,7 @@ begin
 end
 go
 
-create procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit)
+alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -393,15 +403,15 @@ begin
 	
 	
 	set @selectClause = @selectClause + ' (select * from ( ';
-	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes (p.IdPerformer) ';
+	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes_uniform (p.IdPerformer) ';
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause + 'union ';	
-	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes (s.IdSesja) ';
+	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes_uniform (s.IdSesja) ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +'union ';
-	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes (t.IdObserwacja)  ';
+	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes_uniform (t.IdObserwacja)  ';
 	if(@trial = 1 and ( @mc=1 or @meas=1 )) set @selectClause = @selectClause + 'union ';
-	if(@mc = 1) set @selectClause = @selectClause + 'select * from list_measurement_configuration_attributes(c.IdKonfiguracja_pomiarowa) ';
+	if(@mc = 1) set @selectClause = @selectClause + 'select * from list_measurement_configuration_attributes_uniform(c.IdKonfiguracja_pomiarowa) ';
 	if(@mc = 1 and @meas=1) set @selectClause = @selectClause + 'union ';
-	if(@meas = 1) set @selectClause = @selectClause + 'select * from list_measurement_attributes(m.IdPomiar) ';
+	if(@meas = 1) set @selectClause = @selectClause + 'select * from list_measurement_attributes_uniform(m.IdPomiar) ';
 
 	set @selectClause = @selectClause + ') Attribute FOR XML AUTO, TYPE ) ';
 	
@@ -412,7 +422,7 @@ begin
 	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
 	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
 	if( @mc = 0 and exists (select * from @filter where ContextEntity = 'measurement_conf' )) set @mc = 1;	
-	if( @meas = 0 and exists (select * from @filter where ContextEntity = 'measurement' )) set @meas = 1;	
+	if( @meas = 0 and ( exists (select * from @filter where ContextEntity = 'measurement' )) or (@perf=1 and @mc =1)) set @meas = 1;	
 
 
 	if( @sess = 1) set @fromClause = @fromClause + 'user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +') as s ';
@@ -432,11 +442,19 @@ begin
 		 set @fromClause = @fromClause + 'Pomiar as m ';
 		 set @meas = 1;
 		end;
-	if( (@meas = 1 and @mc=1)  )
-		 set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
-	if( (@meas = 1 and @perf=1)  )
-		 set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
-
+		
+	if (@meas = 1)
+		begin
+		if( @mc=1)  
+			set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
+		if( @perf=1) 
+			set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
+		end	
+	else
+		begin	
+			if( @perf=1)  set @fromClause = @fromClause + 'Performer as p ';	
+			if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
+		end;
 
 
 	select @predicatesLeft = count(PredicateID) from @filter
@@ -579,8 +597,8 @@ begin
 		set @sql = N''+(@selectClause+@fromClause+@whereClause);
 		-- set @sql = N'BEGIN TRY ' + (@selectClause+@fromClause+@whereClause) + ' END TRY BEGIN CATCH insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat ) values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() ) END CATCH;'
 
-		-- select @sql;
-		exec sp_executesql @statement = @sql;
+		select @sql;
+		--exec sp_executesql @statement = @sql;
 		
 end
 go

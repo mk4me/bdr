@@ -195,8 +195,10 @@ insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'Temperature', 'integer', 0, 'nonNegativeInteger', 'C')    
 go
 
+insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj) values ( 'FullBody1', 'Standardowy zestaw markerow dla gait', 'mocap')
+go
 
--- ------------------------------------------------------------------  powyzsze Wgrane 2010-09-11
+-- ------------------------------------------------------------------  powyzsze Wgrane do 2010-09-20
 
 exec list_group_sessions_attributes_xml 'applet_user', 1
 
