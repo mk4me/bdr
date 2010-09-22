@@ -31,7 +31,6 @@ public class FileMouseAdapter extends MouseAdapter {
 		JPopupMenu popupMenu = new JPopupMenu();
 		
 		if (SwingUtilities.isRightMouseButton(e)) {
-			// TODO: get JTable from e
 			// Get checked rows.
 			final int[] recordIds = rightPanel.getSelectedRecords((JTable) e.getSource(), e);
 			// Upload context menu.

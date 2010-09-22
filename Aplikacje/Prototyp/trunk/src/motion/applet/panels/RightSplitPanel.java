@@ -107,8 +107,14 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	
 	public int[] getSelectedRecords( JTable table, MouseEvent e ) {
 		createSelectionAtMouse(table, e);
+		int[] checkedRecords = ((BasicTableModel) table.getModel()).getCheckedRecordIds();
+		if (checkedRecords.length == 0) {
+			
+			return new int[]{getSelectedRecord(table, e)};
+		} else {
 		
-		return ((BasicTableModel) table.getModel()).getCheckedRecordIds();
+			return checkedRecords;
+		}
 	}
 	
 	/*//TODO: move functionality to BasicTable

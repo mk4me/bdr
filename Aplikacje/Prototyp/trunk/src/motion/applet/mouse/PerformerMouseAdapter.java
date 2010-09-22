@@ -11,13 +11,15 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
 import motion.applet.MotionAppletFrame;
+import motion.applet.dialogs.SessionAssignmentDialog;
 import motion.applet.panels.RightSplitPanel;
 import motion.database.model.EntityKind;
 
 public class PerformerMouseAdapter extends MouseAdapter {
 	private static String MENU_CREATE_SESSION = "Create new session";
 	private static String MENU_VIEW_SESSIONS = "View sessions";
-	private static String MENU_VIEW_FILES = "View files";
+	//private static String MENU_VIEW_FILES = "View files";
+	private static String MENU_ASSIGN_TO_SESSION = "Assign to session";
 	// No performer file uploading since v.1.3
 	//private static String MENU_UPLOAD = "Upload file";
 	
@@ -31,6 +33,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 	
 	public void mouseClicked(MouseEvent e) {
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
+		final int[] recordIds = rightPanel.getSelectedRecords((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 			JPopupMenu popupMenu = new JPopupMenu();
 			
@@ -51,6 +54,17 @@ public class PerformerMouseAdapter extends MouseAdapter {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					viewSessions(recordId);
+				}
+			});
+			// Assign Performer to session context menu
+			JMenuItem assignToSessionMenuItem = new JMenuItem(MENU_ASSIGN_TO_SESSION);
+			popupMenu.add(assignToSessionMenuItem);
+			
+			assignToSessionMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SessionAssignmentDialog sessionAssignmentDialog = new SessionAssignmentDialog(recordIds);
+					sessionAssignmentDialog.setVisible(true);
 				}
 			});
 			
