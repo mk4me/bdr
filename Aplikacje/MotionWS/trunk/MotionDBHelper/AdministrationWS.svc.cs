@@ -7,6 +7,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Permissions;
+using System.IO;
 
 namespace MotionDBWebServices
 {
@@ -302,6 +303,55 @@ namespace MotionDBWebServices
 
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        public void DownloadAreaCleanup(int olderThanMinutes)
+        {
+            string fileLocation = "";
+
+            try
+            {
+
+
+                OpenConnection();
+                cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where DATEDIFF( MINUTE, Data_udostepnienia, GETDATE()) > @minutes";
+                cmd.Parameters.Add("@minutes", SqlDbType.Int);
+                cmd.Parameters["@minutes"].Value = olderThanMinutes;
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+
+
+                while (reader.Read())
+                {
+                    fileLocation = (string)reader.GetValue(0);
+                    if (Directory.Exists(baseLocalFilePath + fileLocation))
+                        Directory.Delete(baseLocalFilePath + fileLocation, true);
+
+                }
+                reader.Close();
+
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("@minutes", SqlDbType.Int);
+                cmd.Parameters["@minutes"].Value = olderThanMinutes;
+                cmd.CommandText = @"delete from Plik_udostepniony 
+                                        where DATEDIFF( MINUTE, Data_udostepnienia, GETDATE()) > @minutes + 1";
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                FileAccessServiceException exc = new FileAccessServiceException("database", "Cleanup failed at database layer");
+                throw new FaultException<FileAccessServiceException>(exc, "SQL error", FaultCode.CreateReceiverFaultCode(new FaultCode("DownloadAreaCleanup")));
+
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+        }
 
     }
 }

@@ -30,7 +30,11 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
-        void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting); 
+        void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting);
+
+        [OperationContract]
+        [FaultContract(typeof(AdministrationOperationException))]
+        void DownloadAreaCleanup(int olderThanMinutes);
 
     }
 }

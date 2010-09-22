@@ -15,7 +15,7 @@ namespace MotionDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
     public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
-        string baseLocalFilePath = @"C:\FTPShare\";
+
         int maxFileSize = 10000000;
         byte[] fileData = null;
 
@@ -717,6 +717,7 @@ namespace MotionDBWebServices
             fData.SubdirPath = filePath;
             return fData;
         }
+
 
 
     }
