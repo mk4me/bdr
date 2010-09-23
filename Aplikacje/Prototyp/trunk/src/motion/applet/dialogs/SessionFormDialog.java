@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import motion.applet.panels.PerformerAssignmentPanel;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -25,6 +26,7 @@ public class SessionFormDialog extends FormDialog {
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
 	private PrivilegesPanel privilegesPanel;
+	private PerformerAssignmentPanel performerAssignmentPanel;
 	
 	public SessionFormDialog() {
 		super(TITLE, WELCOME_MESSAGE, true);
@@ -61,6 +63,13 @@ public class SessionFormDialog extends FormDialog {
 								sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
 								sessionPrivileges.performDatabaseUpdate();
 								
+								//performers
+								int[] selectedPerformers = performerAssignmentPanel.getSelectedPerformers();
+								for (int i = 0; i < selectedPerformers.length; i++) {
+									WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionID, selectedPerformers[i]);
+								}
+								
+								
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -82,6 +91,8 @@ public class SessionFormDialog extends FormDialog {
 		
 		privilegesPanel = new PrivilegesPanel(this); 
 		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
+		performerAssignmentPanel = new PerformerAssignmentPanel();
+		this.getFormTabbedPane().addTab("Performers", performerAssignmentPanel);
 	}
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {

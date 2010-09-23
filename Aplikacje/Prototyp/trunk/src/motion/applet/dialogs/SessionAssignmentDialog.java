@@ -121,7 +121,6 @@ public class SessionAssignmentDialog extends BasicDialog {
 									get(SessionStaticAttributes.SessionID.toString()).
 									value.toString());
 							for (int i = 0; i < performerIds.length; i++) {
-								System.out.println("assigning");
 								WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionId, performerIds[i]);
 							}
 						} catch (Exception e1) {
