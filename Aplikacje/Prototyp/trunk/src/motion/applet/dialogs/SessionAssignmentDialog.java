@@ -24,6 +24,7 @@ import motion.database.model.SessionStaticAttributes;
 public class SessionAssignmentDialog extends BasicDialog {
 	private static String TITLE = "Assign session";
 	private static String WELCOME_MESSAGE = "Assign selected performers to a session.";
+	private static String ASSIGNING_MESSAGE = "Assigning to session...";
 	
 	private static String ASSIGN = "Assign";
 	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
@@ -113,11 +114,16 @@ public class SessionAssignmentDialog extends BasicDialog {
 					
 					@Override
 					protected Void doInBackground() throws InterruptedException {
+						SessionAssignmentDialog.this.messageLabel.setText(ASSIGNING_MESSAGE);
+						SessionAssignmentDialog.this.assignButton.setEnabled(false);
 						try {
 							int sessionId = Integer.parseInt(((Session) sessionComboBox.getSelectedItem()).
 									get(SessionStaticAttributes.SessionID.toString()).
 									value.toString());
-							//TODO: WebServiceInstance.getDatabaseConnection().
+							for (int i = 0; i < performerIds.length; i++) {
+								System.out.println("assigning");
+								WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionId, performerIds[i]);
+							}
 						} catch (Exception e1) {
 							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 							exceptionDialog.setVisible(true);
