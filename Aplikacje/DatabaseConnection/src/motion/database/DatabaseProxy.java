@@ -214,5 +214,9 @@ public interface DatabaseProxy {
 
 	DbElementsList<Performer> listSessionPerformersWithAttributes(int sessionID) throws Exception;
 
+	int assignPerformerToSession(int sessionID, int performerID) throws Exception;
+
+	boolean addPerformerToMeasurement(int performerID, int measurementID) throws Exception;
+
 
 }

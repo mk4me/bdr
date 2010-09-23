@@ -85,6 +85,8 @@ import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.Motion
 import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinitionList.SessionGroupDefinition;
 import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateMeasurementUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage;
@@ -976,6 +978,42 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			return port.createPerformer(performerData);
 		} 
 		catch ( IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+
+	@Override
+	public int assignPerformerToSession(int sessionID, int performerID) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "assignPerformerToSession", this );
+
+			return port.assignPerformerToSession(sessionID, performerID);
+		} 
+		catch ( IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+
+	@Override
+	public boolean addPerformerToMeasurement(int performerID, int measurementID) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "addPerformerToMeasurement", this );
+
+			return port.addPerformerToMeasurement(performerID, measurementID);
+		} 
+		catch ( IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 		}	

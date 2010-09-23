@@ -137,4 +137,18 @@ public interface IAdministrationWS {
         throws IAdministrationWSAddAttributeEnumValueAdministrationOperationExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param olderThanMinutes
+     * @throws IAdministrationWSDownloadAreaCleanupAdministrationOperationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "DownloadAreaCleanup", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService/IAdministrationWS/DownloadAreaCleanup")
+    @RequestWrapper(localName = "DownloadAreaCleanup", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService", className = "motion.database.ws.administrationWCF.DownloadAreaCleanup")
+    @ResponseWrapper(localName = "DownloadAreaCleanupResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService", className = "motion.database.ws.administrationWCF.DownloadAreaCleanupResponse")
+    public void downloadAreaCleanup(
+        @WebParam(name = "olderThanMinutes", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
+        int olderThanMinutes)
+        throws IAdministrationWSDownloadAreaCleanupAdministrationOperationExceptionFaultFaultMessage
+    ;
+
 }
