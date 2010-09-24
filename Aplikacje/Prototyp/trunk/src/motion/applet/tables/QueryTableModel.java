@@ -7,14 +7,21 @@ import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
 import motion.database.model.EntityAttribute;
+import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
+import motion.database.model.PerformerStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
+import motion.database.model.TrialStaticAttributes;
 
 public class QueryTableModel extends BasicTableModel {
 	private List<GenericDescription> result;
 	
 	public QueryTableModel(List<GenericDescription> result) {
 		this.result = result;
-		getTableContents();
+		if (result.size() > 0) {
+			this.entityKind = result.get(0).entityKind;
+			getTableContents();
+		}
 	}
 	
 	private void getTableContents() {
@@ -26,8 +33,7 @@ public class QueryTableModel extends BasicTableModel {
 					//TODO: Needs improvement.
 					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
 					//BasicTable.this.tableName = TableNamesInstance.SESSION;
-					if (result.size() > 0) {
-						entityKind = result.get(0).entityKind;
+					if (entityKind != null) {
 						// Don't filter attributes.
 						ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
 						for (EntityAttribute a : attributes) {
@@ -67,7 +73,16 @@ public class QueryTableModel extends BasicTableModel {
 										cellList.add(null);
 									}
 								}
-								recordIds.add(r.getId());
+								
+								if (entityKind.equals(EntityKind.performer)) {
+									recordIds.add(Integer.parseInt(r.get(PerformerStaticAttributes.PerformerID.toString()).value.toString()));
+								} else if (entityKind.equals(EntityKind.session)) {
+									recordIds.add(Integer.parseInt(r.get(SessionStaticAttributes.SessionID.toString()).value.toString()));
+								} else if (entityKind.equals(EntityKind.trial)) {
+									recordIds.add(Integer.parseInt(r.get(TrialStaticAttributes.TrialID.toString()).value.toString()));
+								}
+								// Incorrect IDs?
+								//recordIds.add(r.getId());
 								contents.add(cellList);
 							}
 						}
