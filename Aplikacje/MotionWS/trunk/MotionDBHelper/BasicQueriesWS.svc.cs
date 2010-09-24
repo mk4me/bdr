@@ -48,6 +48,12 @@ namespace MotionDBWebServices
                 SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
                 showMCPar.Direction = ParameterDirection.Input;
                 showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
+                SqlParameter showPCPar = cmd.Parameters.Add("@pc", SqlDbType.Bit);
+                showPCPar.Direction = ParameterDirection.Input;
+                showPCPar.Value = entitiesToInclude.Contains("performer_conf") ? 1 : 0;
+                SqlParameter showSGPar = cmd.Parameters.Add("@sg", SqlDbType.Bit);
+                showSGPar.Direction = ParameterDirection.Input;
+                showSGPar.Value = entitiesToInclude.Contains("session_group") ? 1 : 0;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
@@ -106,6 +112,12 @@ namespace MotionDBWebServices
                 SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
                 showMCPar.Direction = ParameterDirection.Input;
                 showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
+                SqlParameter showPCPar = cmd.Parameters.Add("@pc", SqlDbType.Bit);
+                showPCPar.Direction = ParameterDirection.Input;
+                showPCPar.Value = entitiesToInclude.Contains("performer_conf") ? 1 : 0;
+                SqlParameter showSGPar = cmd.Parameters.Add("@sg", SqlDbType.Bit);
+                showSGPar.Direction = ParameterDirection.Input;
+                showSGPar.Value = entitiesToInclude.Contains("session_group") ? 1 : 0;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {

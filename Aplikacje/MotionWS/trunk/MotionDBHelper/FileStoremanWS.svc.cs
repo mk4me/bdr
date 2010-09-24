@@ -397,8 +397,8 @@ namespace MotionDBWebServices
             {
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
-                                        values (@trial_id, @file_desc, @file_data, @file_name)";
+                cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
+                                        values (@trial_id, @file_desc, @file_data, @file_name, @file_path)";
                 cmd.Parameters.Add("@trial_id", SqlDbType.Int);
                 cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
