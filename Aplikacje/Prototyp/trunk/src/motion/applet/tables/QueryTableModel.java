@@ -7,9 +7,7 @@ import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
 import motion.database.model.EntityAttribute;
-import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.GenericResult;
 
 public class QueryTableModel extends BasicTableModel {
 	private List<GenericDescription> result;
@@ -28,18 +26,11 @@ public class QueryTableModel extends BasicTableModel {
 					//TODO: Needs improvement.
 					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
 					//BasicTable.this.tableName = TableNamesInstance.SESSION;
-					if (result.get(0).keySet().contains("FirstName")) {
-						entityKind = EntityKind.performer;
-					} else if (result.get(0).keySet().contains("SessionDate")) {
-						entityKind = EntityKind.session;
-					} else if (result.get(0).keySet().contains("Duration")) {
-						entityKind = EntityKind.trial;
-					}
-					if (entityKind != null) {
+					if (result.size() > 0) {
+						entityKind = result.get(0).entityKind;
 						// Don't filter attributes.
 						ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
 						for (EntityAttribute a : attributes) {
-							//TODO: sessionID / SessionID
 							attributeNames.add(a.name);
 							classes.add(a.getAttributeClass());
 						}
@@ -65,30 +56,19 @@ public class QueryTableModel extends BasicTableModel {
 								}
 							}
 							*/
-							
 							for (GenericDescription<?> r : result) {
-								Object[] cellList = new Object[attributeNames.size()];
-								
-								for (String key : r.keySet()) {
-									//TODO: sessionID / SessionID
-									int i = attributeNames.indexOf(key.toLowerCase());
-									if (i >= 0)
-										cellList[i] = r.get(key).value;
+								ArrayList<Object> cellList = new ArrayList<Object>();
+								cellList.add(new Boolean(false));	// checkboxes initially unchecked
+								for (EntityAttribute a : attributes) {
+									EntityAttribute entityAttribute = r.get(a.name);
+									if (entityAttribute != null) {
+										cellList.add(entityAttribute.value);
+									} else {
+										cellList.add(null);
+									}
 								}
-								//TODO: sessionID / SessionID
-								if (entityKind.equals(EntityKind.performer)) {
-									recordIds.add(Integer.parseInt(r.get("PerformerID").value.toString()));
-								} else if (entityKind.equals(EntityKind.session)) {
-									recordIds.add(Integer.parseInt(r.get("SessionID").value.toString()));
-								} else if (entityKind.equals(EntityKind.trial)) {
-									recordIds.add(Integer.parseInt(r.get("TrialID").value.toString()));
-								}
-								ArrayList<Object> list = new ArrayList<Object>();
-								list.add(new Boolean(false));	// checkboxes initially unchecked
-								for (int i = 1; i < cellList.length; i++) {
-									list.add(cellList[i]);
-								}
-								contents.add(list);
+								recordIds.add(r.getId());
+								contents.add(cellList);
 							}
 						}
 					}

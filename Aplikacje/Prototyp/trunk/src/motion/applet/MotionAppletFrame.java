@@ -245,6 +245,7 @@ public class MotionAppletFrame extends JFrame {
 	
 	private static void addTableMouseListeners(JTable table) {
 		EntityKind entityKind = ((BasicTableModel) table.getModel()).getEntityKind();
+		System.out.println("sa = " + entityKind);
 		if (entityKind != null) {
 			if (entityKind.equals(EntityKind.performer)) {
 				table.addMouseListener(new PerformerMouseAdapter(rightPanel));
