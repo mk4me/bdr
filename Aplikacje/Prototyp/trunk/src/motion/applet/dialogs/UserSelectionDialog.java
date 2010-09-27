@@ -48,6 +48,7 @@ public class UserSelectionDialog extends BasicDialog {
 			usersList = DatabaseConnection.getInstance().listUsers();
 		} catch (Exception e) {
 			usersList = new DbElementsList<User>();
+			usersList.add( new User() );
 			e.printStackTrace();
 		}
 		

@@ -73,16 +73,7 @@ public class QueryTableModel extends BasicTableModel {
 										cellList.add(null);
 									}
 								}
-								
-								if (entityKind.equals(EntityKind.performer)) {
-									recordIds.add(Integer.parseInt(r.get(PerformerStaticAttributes.PerformerID.toString()).value.toString()));
-								} else if (entityKind.equals(EntityKind.session)) {
-									recordIds.add(Integer.parseInt(r.get(SessionStaticAttributes.SessionID.toString()).value.toString()));
-								} else if (entityKind.equals(EntityKind.trial)) {
-									recordIds.add(Integer.parseInt(r.get(TrialStaticAttributes.TrialID.toString()).value.toString()));
-								}
-								// Incorrect IDs?
-								//recordIds.add(r.getId());
+								recordIds.add(r.getId());
 								contents.add(cellList);
 							}
 						}
