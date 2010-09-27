@@ -241,6 +241,26 @@ public class FilterDialog extends BasicDialog {
 			return false;
 		}
 		
+		for (ColumnCondition cc : columnConditions) {
+			if (cc.getValue().equals("")) {
+				this.messageLabel.setText("Missing value for attribute " + cc.getFeature().toString() + ".");
+				
+				return false;
+			}
+			if (cc.getFeature().type.equals(EntityAttribute.INTEGER_TYPE) ||
+					cc.getFeature().type.equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
+				try {
+					Integer.parseInt(cc.getValue());
+				} catch (Exception e) {
+					this.messageLabel.setText("Incorrect value for attribute " + cc.getFeature().toString() + ".");
+					
+					return false;
+				}
+			}
+		}
+		
+		this.messageLabel.setText(WELCOME_MESSAGE);
+		
 		return true;
 	}
 	
