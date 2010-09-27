@@ -3,6 +3,8 @@ go
 -- non-XML queries
 -- ==================================
 
+-- wersja oparta na szczegolowych powiazaniach na poziomie measurement
+/*
 create procedure list_performer_sessions @perf_id int
 as
 	select distinct s.IdSesja as SessionID, s.IdUzytkownik as UserID, s.IdLaboratorium as LabID, 
@@ -10,6 +12,17 @@ as
       from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja join Sesja s on o.IdSesja = s.IdSesja 
       where pp.IdPerformer=@perf_id
 go
+*/
+
+create procedure list_performer_sessions @perf_id int
+as
+	select s.IdSesja as SessionID, s.IdUzytkownik as UserID, s.IdLaboratorium as LabID, 
+      s.IdRodzaj_ruchu as MotionKindID, s.Data as SessionDate, s.Opis_sesji as SessionDescription  
+      from Konfiguracja_performera kp join Sesja s on kp.IdSesja = s.IdSesja 
+      where kp.IdPerformer=@perf_id
+go
+
+
 
 -- Accessibilty mechanism behavior
 -- ===============================
@@ -492,7 +505,7 @@ select
 	from Performer PerformerDetailsWithAttributes
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
--- 2010-09-19
+
 create procedure list_session_performers_attributes_xml (@user_login varchar(30), @sess_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -547,8 +560,9 @@ as
 	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
       IdRodzaj_ruchu as MotionKindID, Data as SessionDate, 
       Opis_sesji as SessionDescription, (select * from session_label(@user_login,IdSesja)) as SessionLabel
-      from user_accessible_sessions_by_login(@user_login) SessionDetails where exists (
-		select * from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja where pp.IdPerformer=@perf_id
+      from user_accessible_sessions_by_login(@user_login) SessionDetails
+      where exists (
+		select * from Konfiguracja_performera kp where kp.IdPerformer = @perf_id and kp.IdSesja = SessionDetails.IdSesja
       )
       for XML AUTO, root ('PerformerSessionList')
 go
@@ -565,11 +579,13 @@ as
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where exists (
-		select * from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja where pp.IdPerformer=@perf_id
-      )
+		from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+		where exists (
+			select * from Konfiguracja_performera kp where kp.IdPerformer = @perf_id and kp.IdSesja = SessionDetailsWithAttributes.IdSesja
+		)
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
 go
+
 
 create procedure list_lab_sessions_attributes_xml (@user_login varchar(30), @lab_id int)
 as

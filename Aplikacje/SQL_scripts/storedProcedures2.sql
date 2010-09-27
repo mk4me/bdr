@@ -15,72 +15,87 @@ create type PredicateUdt as table
 )
 go
 
-create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
+alter function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
 as return
 select
 	(case a.Typ_danych 
 		when 'string' then wap.Wartosc_tekst
-		when 'integer' then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+			else cast (cast ( wap.Wartosc_liczba as int ) as varchar(100)) end
+		)
 		else cast ( cast ( wap.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPerformer = @perf_id and a.Nazwa = @attributeName
 go
 
-create function sess_attr_value(@sess_id int, @attributeName as varchar(100))
+alter function sess_attr_value(@sess_id int, @attributeName as varchar(100))
 returns table
 as return
 select
 	(case a.Typ_danych 
 		when 'string' then was.Wartosc_tekst
-		when 'integer' then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+			else cast (cast ( was.Wartosc_liczba as int ) as varchar(100)) end
+		)
 		else cast ( cast ( was.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 where was.IdSesja = @sess_id and a.Nazwa = @attributeName
 go
 
-create function trial_attr_value(@trial_id int, @attributeName as varchar(100))
+alter function trial_attr_value(@trial_id int, @attributeName as varchar(100))
 returns table
 as return
 select
 	(case a.Typ_danych 
 		when 'string' then wao.Wartosc_tekst
-		when 'integer' then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+			else cast (cast ( wao.Wartosc_liczba as int ) as varchar(100)) end
+		)
 		else cast ( cast ( wao.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 where wao.IdObserwacja = @trial_id and a.Nazwa = @attributeName
 go
 
-create function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
+alter function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
 returns table
 as return
 select
 	(case a.Typ_danych 
 		when 'string' then wakp.Wartosc_tekst
-		when 'integer' then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+			else cast (cast ( wakp.Wartosc_liczba as int ) as varchar(100)) end
+		)
 		else cast ( cast ( wakp.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
 inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdAtrybut
 where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Nazwa = @attributeName
 go
 
-create function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
+alter function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
 returns table
 as return
 select
 	(case a.Typ_danych 
 		when 'string' then wap.Wartosc_tekst
-		when 'integer' then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
+			else cast (cast ( wap.Wartosc_liczba as int ) as varchar(100)) end
+		)
 		else cast ( cast ( wap.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
 inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
 go
 
-alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit)
+alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -133,6 +148,8 @@ begin
 	
 	/* Determine the content of the select clause */
 	
+	if(@sg = 1) set @selectClause = @selectClause + 'sg.Nazwa as SessionGroup ';
+	if(@sg = 1) and (@perf=1 or @sess=1 or @trial=1 or @mc=1 or @meas=1) set @selectClause = @selectClause + ', ';
 	if(@perf = 1) set @selectClause = @selectClause + 'p.IdPerformer as PerformerID, p.Imie as FirstName,	p.Nazwisko as LastName ';
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +', ';
 	if(@sess = 1) set @selectClause = @selectClause + 's.IdSesja as SessionID, s.IdLaboratorium as LabID, s.IdRodzaj_ruchu as MotionKindID,	s.Data as SessionDate,	s.Opis_sesji as SessionDescription ';
@@ -141,11 +158,14 @@ begin
 	if(@trial = 1 and (@mc=1 or @meas=1)) set @selectClause = @selectClause + ', ';
 	if(@mc = 1) set @selectClause = @selectClause + 'c.IdKonfiguracja_pomiarowa as MeasurementConfID,	c.Nazwa as MeasureConfName, c.Opis as MeasureConfDescription ';
 	if(@mc = 1 and  @meas=1) set @selectClause = @selectClause + ', ';
-	if(@mc = 1) set @selectClause = @selectClause + 'm.IdPomiar as MeasurementID ';
+	if(@meas = 1) set @selectClause = @selectClause + 'm.IdPomiar as MeasurementID ';
+
 	
 	set @selectClause = @selectClause + ' , (select * from ( ';
 	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes (p.IdPerformer) ';
-	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause + 'union ';	
+	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1 or @pc=1)) set @selectClause = @selectClause + 'union ';
+	-- TODO: if(@pc=1) set @selectClause = @selectClause + 'select * from list_performer_configuration_attributes (p.IdPerformer) ';
+	if(@pc = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1 or @pc=1)) set @selectClause = @selectClause + 'union ';
 	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes (s.IdSesja) ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +'union ';
 	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes (t.IdObserwacja)  ';
@@ -162,20 +182,28 @@ begin
 	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' )) set @perf = 1;
 	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
 	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
+	if( @pc = 0 and exists (select * from @filter where ContextEntity = 'performer_conf' )) set @pc = 1;
+	if( @sg = 0 and exists (select * from @filter where ContextEntity = 'session_group' )) set @sg = 1;
 	if( @mc = 0 and exists (select * from @filter where ContextEntity = 'measurement_conf' )) set @mc = 1;	
 	if( @meas = 0 and ( exists (select * from @filter where ContextEntity = 'measurement' )) or (@perf=1 and @mc =1)) set @meas = 1;	
 
-
+	if( @sess = 1 and @perf=1 and @meas=0) set @pc = 1;
 	if( @sess = 1) set @fromClause = @fromClause + 'user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +') as s ';
-	if( @sess = 1 and (@trial=1 or @mc=1 or @meas=1 or @perf=1) )
+	if( @sess = 1 and (@trial=1 or @mc=1 or @meas=1) )
 		begin
 		 set @fromClause = @fromClause + 'join Obserwacja as t on t.IdSesja = s.IdSesja ';
 		 set @trial = 1;
 		end;
-	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
-	if( @trial = 1 and (@mc=1 or @meas=1 or @perf=1))
+	if(@pc = 1) 
 		begin
-		 set @fromClause = @fromClause + 'join Pomiar as m on p.IdObserwacja = t.IdObserwacja ';
+			if(@sess = 1) set @fromClause = @fromClause + 'join Konfiguracja_performera pc on s.IdSesja = pc.IdSesja ';
+			else set @fromClause = @fromClause + 'Konfiguracja_performera pc ';
+		end;
+	
+	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
+	if( @trial = 1 and (@mc=1 or @meas=1))
+		begin
+		 set @fromClause = @fromClause + 'join Pomiar as m on m.IdObserwacja = t.IdObserwacja ';
 		 set @meas = 1;
 		end;
 	if( @trial = 0 and (@meas = 1 or (@perf = 1 and @mc =1))) 
@@ -193,7 +221,11 @@ begin
 		end	
 	else
 		begin	
-			if( @perf=1)  set @fromClause = @fromClause + 'Performer as p ';	
+			if( @perf=1)  
+				begin
+					if(@pc = 0) set @fromClause = @fromClause + 'Performer as p ';	
+					else set @fromClause = @fromClause + 'join Performer p on pc.IdPerformer = p.IdPerformer ';
+				end
 			if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
 		end;
 
@@ -236,9 +268,9 @@ begin
 		else
 			begin
 			
---Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
 			set @leftOperandCode = (
 			case ( case @currentAggregateEntity  when '' then @currentContextEntity else @currentAggregateEntity end )
+	-- TODO: session_group i performer_conf		
 			when 'performer' then (
 				case @currentFeatureName 
 					when 'FirstName' then 'p.Imie'
@@ -344,7 +376,7 @@ begin
 end
 go
 
-alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit)
+alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -403,8 +435,11 @@ begin
 	
 	
 	set @selectClause = @selectClause + ' (select * from ( ';
-	if(@perf =1) set @selectClause = @selectClause + 'select * from list_performer_attributes_uniform (p.IdPerformer) ';
-	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause + 'union ';	
+-- TODO:		if(@sg = 1) set @selectClause = @selectClause + 'sg.Nazwa as SessionGroup ';
+	-- TODO: if(@sg = 1) and (@perf=1 or @sess=1 or @trial=1 or @mc=1 or @meas=1) set @selectClause = @selectClause + ', ';
+	if(@perf = 1) set @selectClause = @selectClause + 'select * from list_performer_attributes_uniform (p.IdPerformer) ';
+	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1 or @pc=1)) set @selectClause = @selectClause + 'union ';
+	-- TODO: if(@pc = 1) set @selectClause = @selectClause + 'select * from list_performer_conf_attributes_uniform (p.IdPerformer) ';
 	if(@sess = 1) set @selectClause = @selectClause + 'select * from list_session_attributes_uniform (s.IdSesja) ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +'union ';
 	if(@trial = 1) set @selectClause = @selectClause +'select * from list_trial_attributes_uniform (t.IdObserwacja)  ';
@@ -421,20 +456,28 @@ begin
 	if( @perf = 0 and exists (select * from @filter where ContextEntity = 'performer' )) set @perf = 1;
 	if( @sess = 0 and exists (select * from @filter where ContextEntity = 'session' )) set @sess = 1;
 	if( @trial = 0 and exists (select * from @filter where ContextEntity = 'trial' )) set @trial = 1;
+	if( @pc = 0 and exists (select * from @filter where ContextEntity = 'performer_conf' )) set @pc = 1;
+	if( @sg = 0 and exists (select * from @filter where ContextEntity = 'session_group' )) set @sg = 1;
 	if( @mc = 0 and exists (select * from @filter where ContextEntity = 'measurement_conf' )) set @mc = 1;	
 	if( @meas = 0 and ( exists (select * from @filter where ContextEntity = 'measurement' )) or (@perf=1 and @mc =1)) set @meas = 1;	
 
-
+	if( @sess = 1 and @perf=1 and @meas=0) set @pc = 1;
 	if( @sess = 1) set @fromClause = @fromClause + 'user_accessible_sessions('+ cast ( @user_id as VARCHAR ) +') as s ';
-	if( @sess = 1 and (@trial=1 or @mc=1 or @meas=1 or @perf=1) )
+	if( @sess = 1 and (@trial=1 or @mc=1 or @meas=1) )
 		begin
 		 set @fromClause = @fromClause + 'join Obserwacja as t on t.IdSesja = s.IdSesja ';
 		 set @trial = 1;
 		end;
-	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
-	if( @trial = 1 and (@mc=1 or @meas=1 or @perf=1))
+	if(@pc = 1) 
 		begin
-		 set @fromClause = @fromClause + 'join Pomiar as m on p.IdObserwacja = t.IdObserwacja ';
+			if(@sess = 1) set @fromClause = @fromClause + 'join Konfiguracja_performera pc on s.IdSesja = pc.IdSesja ';
+			else set @fromClause = @fromClause + 'Konfiguracja_performera pc ';
+		end;
+	
+	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Obserwacja as t ';
+	if( @trial = 1 and (@mc=1 or @meas=1))
+		begin
+		 set @fromClause = @fromClause + 'join Pomiar as m on m.IdObserwacja = t.IdObserwacja ';
 		 set @meas = 1;
 		end;
 	if( @trial = 0 and (@meas = 1 or (@perf = 1 and @mc =1))) 
@@ -442,19 +485,24 @@ begin
 		 set @fromClause = @fromClause + 'Pomiar as m ';
 		 set @meas = 1;
 		end;
-		
+
 	if (@meas = 1)
 		begin
-		if( @mc=1)  
+		if(  @mc=1)  
 			set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
-		if( @perf=1) 
+		if( @perf=1)
 			set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
 		end	
 	else
 		begin	
-			if( @perf=1)  set @fromClause = @fromClause + 'Performer as p ';	
+			if( @perf=1)  
+				begin
+					if(@pc = 0) set @fromClause = @fromClause + 'Performer as p ';	
+					else set @fromClause = @fromClause + 'join Performer p on pc.IdPerformer = p.IdPerformer ';
+				end
 			if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
 		end;
+
 
 
 	select @predicatesLeft = count(PredicateID) from @filter
@@ -495,9 +543,9 @@ begin
 		else
 			begin
 			
---Id<ContextEntity> in ( select Id<ContextEntity> from <AggregateEntity> group by Id<ContextEntity> having <AggregateFunction>(<FeatureName>) <Operator> <Value> )	
 			set @leftOperandCode = (
 			case ( case @currentAggregateEntity  when '' then @currentContextEntity else @currentAggregateEntity end )
+-- TODO: performer_conf i session_group
 			when 'performer' then (
 				case @currentFeatureName 
 					when 'FirstName' then 'p.Imie'
@@ -597,8 +645,8 @@ begin
 		set @sql = N''+(@selectClause+@fromClause+@whereClause);
 		-- set @sql = N'BEGIN TRY ' + (@selectClause+@fromClause+@whereClause) + ' END TRY BEGIN CATCH insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat ) values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() ) END CATCH;'
 
-		select @sql;
-		--exec sp_executesql @statement = @sql;
+		-- select @sql;
+		exec sp_executesql @statement = @sql;
 		
 end
 go
@@ -930,7 +978,6 @@ from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja f
 go
 
 
-
 create procedure list_user_baskets( @user_login varchar(30) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
@@ -939,4 +986,24 @@ select
 from Koszyk
 where IdUzytkownik = dbo.identify_user( @user_login )
 for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
+go
+
+-- PRIVILEGE AND USER MANAGEMENT
+
+create procedure list_users_xml
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
+select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
+	from Uzytkownik
+    for XML PATH('UserDetails'), root ('UserList')
+go
+
+create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
+select 
+	u.Login "@Login", case us.Zapis when 0 then 'false' else 'true' end "@CanWrite"
+	from Uprawnienia_Sesja us join Uzytkownik u on us.IdUzytkownik = u.IdUzytkownik
+	where us.IdSesja = @sess_id and us.IdSesja in (select IdSesja from user_accessible_sessions_by_login(@user_login) )
+    for XML PATH('SessionPrivilege'), root ('SessionPrivilegeList')
 go

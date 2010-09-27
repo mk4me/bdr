@@ -184,7 +184,7 @@ use Motion;
 declare @filters as PredicateUdt;
 insert into @filters values (3, 0, 'GROUP', 0, '', 'AllPerformers','','','','');
 insert into @filters values (4, 3, 'performer', 0, '', 'PerformerID', '>', '0', '', '');
-exec dbo.evaluate_generic_query 'applet_user', @filters, 1, 0, 0, 0, 0
+exec dbo.evaluate_generic_query_uniform 'applet_user', @filters, 1, 1, 0, 0, 0, 0, 0
 
 
 
