@@ -65,12 +65,21 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 
 	public int getId()
 	{
-		if ( get(idAttributeName) != null )
-		{
-			if (get( idAttributeName ).value instanceof Integer)
-				return (Integer)get( idAttributeName ).value;
-			else if (get( idAttributeName ).value instanceof String)
-				return ((String)get( idAttributeName ).value).hashCode();
+		try {
+			if ( get(idAttributeName) != null )
+			{
+				if (get( idAttributeName ).type.equals( EntityAttribute.INTEGER_TYPE ))
+				{
+					if ( get( idAttributeName ).value instanceof String )
+						return Integer.parseInt( (String)get( idAttributeName ).value );
+					else
+						return (Integer)get( idAttributeName ).value;
+				}
+				else if (get( idAttributeName ).type.equals( EntityAttribute.STRING_TYPE ))
+					return ((String)get( idAttributeName ).value).hashCode();
+			}
+		} catch (NumberFormatException e) {
+			return -1;
 		}
 		return -1;
 	}

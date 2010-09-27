@@ -352,6 +352,15 @@ public enum EntityKind {
 		{
 			return new UserBasket();
 		}
+	}, 
+	
+	sessionGroup (SessionGroupStaticAttributes.class)
+	{
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new SessionGroup();
+		}
 	};
 	
 	

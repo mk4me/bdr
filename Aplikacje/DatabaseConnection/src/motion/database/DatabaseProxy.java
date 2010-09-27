@@ -87,8 +87,7 @@ public interface DatabaseProxy {
 	public abstract Vector<MotionKind> listMotionKindsDefined()
 			throws Exception;
 
-	public abstract Vector<SessionGroup> listSessionGroupsDefined()
-			throws Exception;
+	public DbElementsList<SessionGroup> listSessionGroupsDefined() throws Exception;
 
 	public abstract DbElementsList<Session> listPerformerSessionsWithAttributes(
 			int performerID) throws Exception;

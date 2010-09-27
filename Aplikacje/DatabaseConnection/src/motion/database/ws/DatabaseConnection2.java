@@ -614,14 +614,14 @@ public class DatabaseConnection2 implements DatabaseProxy {
 //	Session Groups
 	
 	@Override
-	public Vector<SessionGroup> listSessionGroupsDefined() throws Exception
+	public DbElementsList<SessionGroup> listSessionGroupsDefined() throws Exception
 	{
 		try{
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listSessionGroupsDefined", this );
 			
 			ListSessionGroupsDefinedResult result = port.listSessionGroupsDefined();
 			
-			Vector<SessionGroup> output = new Vector<SessionGroup>();
+			DbElementsList<SessionGroup> output = new DbElementsList<SessionGroup>();
 	
 			for (SessionGroupDefinition a : result.getSessionGroupDefinitionList().getSessionGroupDefinition() )
 				output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
