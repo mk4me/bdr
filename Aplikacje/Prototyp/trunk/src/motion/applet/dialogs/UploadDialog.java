@@ -37,12 +37,10 @@ import motion.database.model.TrialStaticAttributes;
 public class UploadDialog extends BasicDialog {
 	private static String UPLOAD_TITLE = Messages.getString("UploadDialog.UploadTitle"); //$NON-NLS-1$
 	private static String UPLOAD_FILE = Messages.getString("Upload"); //$NON-NLS-1$
-	private static String FILE_PATH = Messages.getString("File"); //$NON-NLS-1$
-	private static String DIRECTORY_PATH = Messages.getString("Directory"); //$NON-NLS-1$
+	private static String LABEL_PATH = Messages.getString("UploadDialog.LabelPath"); //$NON-NLS-1$
 	private static String DESCRIPTION = Messages.getString("Description") + Messages.COLON; //$NON-NLS-1$
 	private static String CANCEL_UPLOAD = Messages.getString("Cancel"); //$NON-NLS-1$
 	private static String CHOOSE_FILE_MESSAGE = Messages.getString("UploadDialog.ChooseAFileToUpload"); //$NON-NLS-1$
-	private static String CHOOSE_DIRECTORY_MESSAGE = Messages.getString("UploadDialog.ChooseADirectoryToUpload"); //$NON-NLS-1$
 	private static String MISSING_FILE_PATH_MESSAGE = Messages.getString("UploadDialog.NoFileSelected"); //$NON-NLS-1$
 	private static String MISSING_PERFORMER_MESSAGE = Messages.getString("UploadDialog.NoPerformerSelected"); //$NON-NLS-1$
 	private static String MISSING_SESSION_MESSAGE = Messages.getString("UploadDialog.NoSessionSelected"); //$NON-NLS-1$
@@ -50,8 +48,6 @@ public class UploadDialog extends BasicDialog {
 	private static String PRESS_UPLOAD_MESSAGE = Messages.getString("UploadDialog.PressUploadToSendFile"); //$NON-NLS-1$
 	private static String BROWSE = Messages.getString("Browse"); //$NON-NLS-1$
 	
-	private JRadioButton fileRadioButton;
-	private JRadioButton directoryRadioButton;
 	private JButton browseButton;
 	private JButton uploadButton;
 	private JButton cancelButton;
@@ -60,13 +56,12 @@ public class UploadDialog extends BasicDialog {
 	private JLabel idLabel;
 	private JComboBox entityComboBox;
 	
-	private boolean directoryUpload;
-	
 	private JProgressBar progressBar;
 	
 	private EntityKind entityKind;
 	private int recordId;
 	private boolean selectId = true;
+	protected File[] selectedFiles;
 	
 	public UploadDialog(EntityKind entityKind) {
 		super(UPLOAD_TITLE, CHOOSE_FILE_MESSAGE);
@@ -94,26 +89,10 @@ public class UploadDialog extends BasicDialog {
 		gridBagConstraints.ipadx = 10;
 		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
 		
-		// File
-		fileRadioButton = new JRadioButton(FILE_PATH);
-		fileRadioButton.setSelected(true);
-		directoryUpload = false;
+		// Path
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		formPanel.add(fileRadioButton, gridBagConstraints);
-		
-		// Directory
-		directoryRadioButton = new JRadioButton(DIRECTORY_PATH);
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
-		formPanel.add(directoryRadioButton, gridBagConstraints);
-		
-		// Radio button group
-		ButtonGroup group = new ButtonGroup();
-		group.add(fileRadioButton);
-		group.add(directoryRadioButton);
-		
-		// Path
+		formPanel.add( new JLabel(LABEL_PATH), gridBagConstraints);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		this.filePathText = new JTextField(20);
@@ -216,48 +195,24 @@ public class UploadDialog extends BasicDialog {
 				}
 			}
 		}
-	}
-	
+	}	
+
 	protected void addListeners() {
-		this.fileRadioButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (UploadDialog.this.directoryUpload != false) {
-					UploadDialog.this.filePathText.setText("");
-					//UploadDialog.this.descriptionText.setEditable(true);
-					UploadDialog.this.messageLabel.setText(CHOOSE_FILE_MESSAGE);
-				}
-				UploadDialog.this.directoryUpload = false;
-			}
-		});
-		
-		this.directoryRadioButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (UploadDialog.this.directoryUpload != true) {
-					UploadDialog.this.filePathText.setText("");
-					//UploadDialog.this.descriptionText.setEditable(false);
-					UploadDialog.this.messageLabel.setText(CHOOSE_DIRECTORY_MESSAGE);
-				}
-				UploadDialog.this.directoryUpload = true;
-			}
-		});
-		
 		this.browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				if (UploadDialog.this.directoryUpload == false) {
-					fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
-					fileChooser.setAcceptAllFileFilterUsed(true);
-				} else {
-					fileChooser.setAcceptAllFileFilterUsed(false);
-					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				}
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
+				fileChooser.setMultiSelectionEnabled(true);
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fileChooser.showOpenDialog(UploadDialog.this);
 				
-				File file = fileChooser.getSelectedFile();
-				if (file != null) {
-					UploadDialog.this.filePathText.setText(file.toString());
+				File[] files = fileChooser.getSelectedFiles();
+				if (files.length > 0 ) {
+					StringBuffer sb = new StringBuffer();
+					for (File f : files)
+						sb.append(' ').append('\"').append( f.getName()).append('\"');
+					UploadDialog.this.filePathText.setText( sb.toString());
+					UploadDialog.this.selectedFiles = files;
 					UploadDialog.this.validateResult();
 				}
 			}
@@ -274,13 +229,8 @@ public class UploadDialog extends BasicDialog {
 						protected Void doInBackground() throws InterruptedException {
 							try {
 								int id = UploadDialog.this.getId();
-								String path = UploadDialog.this.getFilePath();
 								String description = UploadDialog.this.getDescription();
-								if (UploadDialog.this.directoryUpload == false) {
-									uploadFile(id, path, description);
-								} else {
-									uploadDirectory(id, path, description);
-								}
+								uploadFilesDirectories( id, selectedFiles, description );
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
@@ -298,15 +248,11 @@ public class UploadDialog extends BasicDialog {
 				}
 			}
 			
-			private void uploadFile(int id, String path, String description) throws Exception {
+			private void uploadFilesDirectories(int id, File[] selectedFiles, String description) throws Exception {
 				
-				WebServiceInstance.getDatabaseConnection().uploadFile(id, UploadDialog.this.entityKind, description, path, new UploadTransferListener());
+				WebServiceInstance.getDatabaseConnection().uploadFilesDirectories(id, UploadDialog.this.entityKind, description, selectedFiles, new UploadTransferListener());
 			}
-			
-			private void uploadDirectory(int id, String path, String description) throws Exception {
 
-				WebServiceInstance.getDatabaseConnection().uploadDirectory(id, UploadDialog.this.entityKind, description, path, new UploadTransferListener());
-			}
 		});
 		
 		this.cancelButton.addActionListener(new ActionListener() {
@@ -317,11 +263,6 @@ public class UploadDialog extends BasicDialog {
 				UploadDialog.this.dispose();
 			}
 		});
-	}
-	
-	private String getFilePath() {
-		
-		return this.filePathText.getText();
 	}
 	
 	private String getDescription() {
@@ -374,13 +315,13 @@ public class UploadDialog extends BasicDialog {
 	}
 	
 	private boolean validateResult() {
-		if (this.getFilePath().equals("")) { //$NON-NLS-1$
+		if (this.selectedFiles == null || this.selectedFiles.length == 0 ) 
+		{ 
 			this.messageLabel.setText(MISSING_FILE_PATH_MESSAGE);
-			
 			return false;
-		} else if (this.getId() < 0) {
+		} 
+		else if (this.getId() < 0) {
 			this.messageLabel.setText(getMessage());
-			
 			return false;
 		}
 		
