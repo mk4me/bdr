@@ -248,6 +248,7 @@ public class UploadDialog extends BasicDialog {
 				JFileChooser fileChooser = new JFileChooser();
 				if (UploadDialog.this.directoryUpload == false) {
 					fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
+					fileChooser.setAcceptAllFileFilterUsed(true);
 				} else {
 					fileChooser.setAcceptAllFileFilterUsed(false);
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
