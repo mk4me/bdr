@@ -53,6 +53,7 @@ public class FormDialog extends BasicDialog {
 	protected ArrayList<FormField> definedFormFields = new ArrayList<FormField>();
 	
 	private static String STATIC_ATTRIBUTE_GROUP = "_static";
+	private static String ATTRIBUTES_TAB_NAME = "Attributes";
 	
 	public FormDialog(String title, String message) {
 		super(title, message);
@@ -96,7 +97,7 @@ public class FormDialog extends BasicDialog {
 		
 		if (showTabs == true) {
 			formTabs = new JTabbedPane();
-			formTabs.addTab("Form", scrollPane);
+			formTabs.addTab(ATTRIBUTES_TAB_NAME, scrollPane);
 			this.add(formTabs, BorderLayout.CENTER);
 		} else {
 			this.add(scrollPane, BorderLayout.CENTER);
