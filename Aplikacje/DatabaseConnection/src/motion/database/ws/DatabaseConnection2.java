@@ -958,6 +958,34 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		ConnectionTools2.finalizeCall();
 	}
 
+	@Override
+	public void uploadFilesDirectories(int resourceId, EntityKind kind, String description, File[] filesPath, FileTransferListener listener) throws Exception
+	{
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadDirectory", this );
+
+		String destRemoteFolder = getUniqueFolderName();
+
+		for (File path : filesPath)
+		{
+			if ( path.isDirectory() )
+			{
+				int filesNo = path.list().length;
+				createRemoteFolder( path.getName(), destRemoteFolder );
+				FTPs.sendFolder( path.getAbsolutePath(), destRemoteFolder+path.getName(), new BatchTransferProgressObserver(listener, filesNo), ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+			
+				if (!fileTransferCancelled)
+					kind.storeFiles(port, resourceId, destRemoteFolder, description);
+			}
+			else
+			{
+				putFile(path.getAbsolutePath(), destRemoteFolder, listener);			
+			    
+				if (!fileTransferCancelled)
+						kind.storeFile( port, resourceId, destRemoteFolder, description, path.getName() );
+			}
+		}
+		ConnectionTools2.finalizeCall();
+	}
 	
 
 	/*==========================================================================

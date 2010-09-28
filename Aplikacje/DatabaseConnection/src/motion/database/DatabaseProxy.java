@@ -1,5 +1,6 @@
 package motion.database;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -216,6 +217,10 @@ public interface DatabaseProxy {
 	int assignPerformerToSession(int sessionID, int performerID) throws Exception;
 
 	boolean addPerformerToMeasurement(int performerID, int measurementID) throws Exception;
+
+	void uploadFilesDirectories(int resourceId, EntityKind kind,
+			String description, File[] files,
+			FileTransferListener listener) throws Exception;
 
 
 }
