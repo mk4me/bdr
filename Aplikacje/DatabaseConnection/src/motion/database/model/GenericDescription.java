@@ -2,6 +2,10 @@ package motion.database.model;
 
 import java.util.HashMap;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import motion.database.DatabaseConnection;
+
 //TODO: co z metod� equals() ?
 @SuppressWarnings("serial")
 public abstract class GenericDescription<T extends Enum<T>> extends HashMap<String, EntityAttribute>
@@ -9,7 +13,7 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	String idAttributeName;
 	public EntityKind entityKind;
 	public HashMap<String, EntityAttributeGroup> groups;
-	public Class clazz;
+	//public Class clazz;
 	
 	public GenericDescription(String name, EntityKind entityKind)
 	{
@@ -58,30 +62,34 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	public Object put(T key, Object arg) {
 		
 		if (arg != null && key != null)
-			return this.put( key.name(), new EntityAttribute( key.name(), this.entityKind, arg, "static", arg.getClass().getName() ) );
+			return this.put( key.name(), new EntityAttribute( key.name(), this.entityKind, arg, "static", EntityAttribute.getTypeName(arg) ) );
 		else
 			return null;
 	}
 
 	public int getId()
 	{
-		try {
-			if ( get(idAttributeName) != null )
+		if ( get(idAttributeName) != null )
+		{
+			if ( get( idAttributeName ).value instanceof Integer )
+				return (Integer)get( idAttributeName ).value;
+			else if (get( idAttributeName ).type.equals( EntityAttribute.INTEGER_TYPE ) 
+					&& get( idAttributeName ).value instanceof String)
+				return Integer.parseInt( (String)get( idAttributeName ).value );
+			else if (get( idAttributeName ).type.equals( EntityAttribute.STRING_TYPE ))
+				return ((String)get( idAttributeName ).value).hashCode();
+			else
 			{
-				if (get( idAttributeName ).type.equals( EntityAttribute.INTEGER_TYPE ))
-				{
-					if ( get( idAttributeName ).value instanceof String )
-						return Integer.parseInt( (String)get( idAttributeName ).value );
-					else
-						return (Integer)get( idAttributeName ).value;
-				}
-				else if (get( idAttributeName ).type.equals( EntityAttribute.STRING_TYPE ))
-					return ((String)get( idAttributeName ).value).hashCode();
+				DatabaseConnection.log.severe("Cannot return ID value of unconvertable type: " + 
+						get( idAttributeName ).type);
+				return -1;
 			}
-		} catch (NumberFormatException e) {
+		}
+		else
+		{
+			DatabaseConnection.log.severe("No ID attribute for this entity!");
 			return -1;
 		}
-		return -1;
 	}
 	
 	public void addEmptyGenericAttributes( HashMap<String, EntityAttributeGroup> newGroups )
@@ -116,10 +124,14 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		StringBuffer output = new StringBuffer();
 		
 		output.append( this.getClass().getName() );
-		if ( this.getId()!=-1)
-			output.append( '(' ).append( this.getId() ).append(')').append(System.getProperty( "line.separator" ) );
-		for ( String key : this.keySet() )
-				output.append( key ).append('=').append( this.get(key).value ).append(System.getProperty( "line.separator" ) );
+		try {
+			if ( this.getId()!=-1)
+				output.append( '(' ).append( this.getId() ).append(')').append(System.getProperty( "line.separator" ) );
+			for ( String key : this.keySet() )
+					output.append( key ).append('=').append( this.get(key).value ).append(System.getProperty( "line.separator" ) );
+		} catch (Exception e) {
+			DatabaseConnection.log.severe( e.getMessage() );
+		}
 		return output.toString();
 	}
 

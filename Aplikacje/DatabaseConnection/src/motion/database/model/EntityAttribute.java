@@ -3,11 +3,14 @@ package motion.database.model;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
 public class EntityAttribute {
 
 	public static final String INTEGER_TYPE_SHORT = "int";
 	public static final String INTEGER_TYPE = "integer";
 	public static final String STRING_TYPE = "string";
+	public static final String FLOAT_TYPE = "float";
 	public static final String DATE_TYPE = "DATE";	// Server uses 'string' for dates.
 	public static final String UNKNOWN_TYPE = "Unknown";
 	
@@ -176,9 +179,23 @@ public class EntityAttribute {
 			this.value = 0;
 		else if ( getTypeClass() == Double.class)
 			this.value = 0;
-		else if ( getTypeClass() == GregorianCalendar.class)
+		else if ( getTypeClass() == XMLGregorianCalendar.class || getTypeClass() == GregorianCalendar.class)
 			this.value = GregorianCalendar.getInstance();
 		else	
 			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() );
+	}
+
+
+	public static String getTypeName(Object arg) {
+		if ( arg instanceof String)
+			return STRING_TYPE;
+		else if ( arg instanceof Integer)
+			return INTEGER_TYPE;
+		else if ( arg instanceof Float || arg instanceof Double)
+			return FLOAT_TYPE;
+		else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar)
+			return DATE_TYPE;
+		else	
+			throw new RuntimeException("TODO: Unknown value type." + arg );
 	}
 }
