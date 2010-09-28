@@ -91,7 +91,7 @@ public class FormDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
-		this.setSize(460, 400);
+		this.setSize(480, 400);
 		
 		JScrollPane scrollPane = new JScrollPane(formPanel);
 		
