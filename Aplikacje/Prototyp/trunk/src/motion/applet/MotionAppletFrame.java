@@ -18,6 +18,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableModel;
 
 import motion.Messages;
 import motion.applet.dialogs.BasketDialog;
@@ -271,7 +272,11 @@ public class MotionAppletFrame extends JFrame {
 			if (component instanceof JScrollPane) {
 				component = ((JScrollPane) component).getViewport().getView();
 				if (component instanceof JTable) {
-					return (BasicTableModel) ((JTable) component).getModel();
+					TableModel tableModel = ((JTable) component).getModel();
+					if (tableModel instanceof BasicTableModel) {
+						
+						return (BasicTableModel) tableModel;
+					}
 				}
 			}
 		}
