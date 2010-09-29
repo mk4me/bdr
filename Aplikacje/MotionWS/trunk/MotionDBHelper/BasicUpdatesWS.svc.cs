@@ -178,7 +178,7 @@ END CATCH;";
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateTrial")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateTrial")));
 
             }
             finally

@@ -44,7 +44,7 @@ namespace MotionDBWebServices
 		public bool HandleError(Exception error)
 		{
             if (!EventLog.SourceExists("BDR_WS" ))
-                EventLog.CreateEventSource("BDR_WS", "Application");
+                EventLog.CreateEventSource("BDR_WS", "MotionWS");
 
             EventLog.WriteEntry("BDR_WS", error.Message + error.StackTrace, EventLogEntryType.Error);
 

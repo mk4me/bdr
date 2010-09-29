@@ -626,7 +626,9 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // report exception
+                QueryException exc = new QueryException("database", "Other error in DBMS layer");
+                throw new FaultException<QueryException>(exc, "Query invocation failure: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("ListPerformerSessionsWithAttributesXML")));
+
             }
             finally
             {

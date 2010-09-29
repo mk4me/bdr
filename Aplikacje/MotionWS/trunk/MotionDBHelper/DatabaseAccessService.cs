@@ -12,7 +12,7 @@ namespace MotionDBWebServices
         protected SqlConnection conn = null;
         protected SqlCommand cmd = null;
         protected const bool debug = false;
-        protected string baseLocalFilePath = @"C:\FTPShare\";
+        protected string baseLocalFilePath = @"F:\FTPShare\";
 
         protected void OpenConnection()
         {
