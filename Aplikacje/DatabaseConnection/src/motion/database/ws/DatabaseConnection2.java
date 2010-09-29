@@ -926,6 +926,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadFile", this );
 
 		String destRemoteFolder = getUniqueFolderName();
+		createRemoteFolder( destRemoteFolder, "" );
 		putFile(localFilePath, destRemoteFolder, listener);			
 		    
 		if (!fileTransferCancelled)
@@ -963,10 +964,10 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	{
 		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadDirectory", this );
 
-		String destRemoteFolder = getUniqueFolderName();
 
 		for (File path : filesPath)
 		{
+			String destRemoteFolder = getUniqueFolderName();
 			if ( path.isDirectory() )
 			{
 				int filesNo = path.list().length;
