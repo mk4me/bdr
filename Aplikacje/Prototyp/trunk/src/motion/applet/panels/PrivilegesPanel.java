@@ -129,7 +129,7 @@ public class PrivilegesPanel extends JPanel {
 			gridBagConstraints.gridx = 1;
 			centerPanel.add(new JLabel( buttonExplanations[i] ), gridBagConstraints );
 		}
-		buttons[0].setSelected( true );
+		buttons[1].setSelected( true );
 		//buttons[3].setEnabled( false );
 		
 		Border border = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
