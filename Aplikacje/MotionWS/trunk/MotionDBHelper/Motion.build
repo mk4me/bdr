@@ -15,7 +15,7 @@
   </target> -->
   <target name="wsdl">
     <echo message="Assembling WSDL for BasicQueries" />
-    <get src="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc?wsdl" dest="res/BasicQueriesWS.wsdl"></get>
+    <get src="http://83.230.112.43/Motion/BasicQueriesWS.svc?wsdl" dest="res/BasicQueriesWS.wsdl"></get>
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\PreciseXSDWeaverWCF.xslt /in res/BasicQueriesWS.wsdl /out res/BasicQueriesWS.wsdl" />
 
     <copy file="res/BasicQueriesWS.wsdl" tofile="res\BasicQueriesWSStandalone.wsdl" inputencoding="utf-8" outputencoding="utf-8" overwrite="true" />
@@ -25,7 +25,7 @@
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\StandaloneWSDLCompositor.xslt /in res\BasicQueriesWSStandalone.wsdl /out res\BasicQueriesWSStandalone.wsdl" />
 
     <echo message="Assembling WSDL for Authorization" />
-    <get src="http://v21.pjwstk.edu.pl/Motion/AuthorizationWS.svc?wsdl" dest="res/AuthorizationWS.wsdl"></get>
+    <get src="http://83.230.112.43/Motion/AuthorizationWS.svc?wsdl" dest="res/AuthorizationWS.wsdl"></get>
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\PreciseXSDWeaverWCF.xslt /in res/AuthorizationWS.wsdl /out res/AuthorizationWS.wsdl" />
 
     <copy file="res/AuthorizationWS.wsdl" tofile="res/AuthorizationWSStandalone.wsdl" inputencoding="utf-8" outputencoding="utf-8" overwrite="true" />
@@ -35,7 +35,7 @@
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\StandaloneWSDLCompositor.xslt /in res\AuthorizationWSStandalone.wsdl /out res\AuthorizationWSStandalone.wsdl" />
 
     <echo message="Assembling WSDL for UserPersonalSpace" />
-    <get src="http://v21.pjwstk.edu.pl/Motion/UserPersonalSpaceWS.svc?wsdl" dest="res/UserPersonalSpaceWS.wsdl"></get>
+    <get src="http://83.230.112.43/Motion/UserPersonalSpaceWS.svc?wsdl" dest="res/UserPersonalSpaceWS.wsdl"></get>
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\PreciseXSDWeaverWCF.xslt /in res/UserPersonalSpaceWS.wsdl /out res/UserPersonalSpaceWS.wsdl" />
     <copy file="res/UserPersonalSpaceWS.wsdl" tofile="res/UserPersonalSpaceWSStandalone.wsdl" inputencoding="utf-8" outputencoding="utf-8" overwrite="true" />
 
