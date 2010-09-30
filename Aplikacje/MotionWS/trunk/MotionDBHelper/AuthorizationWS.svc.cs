@@ -112,7 +112,7 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant by "+userName+" to "+grantedUserLogin+" failed");
                 throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             }
             finally
