@@ -4,6 +4,9 @@ use Motion;
 insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('_static', 'trial');
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'TrialID', 'integer', 0, 'ID', NULL) 
+-- Czy klucze obce powinnismy uwzgledniac?
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'SessionID', 'integer', 0, 'ID', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'TrialDescription', 'string', 0, 'longString', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -70,10 +73,7 @@ go
 go
  insert into Uzytkownik (Login, Imie, Nazwisko) values ( 'wiktor', 'Wiktor', 'Filipowicz')
 go
-insert into Rodzaj_ruchu (Nazwa) values ('walk')
-go
-insert into Rodzaj_ruchu (Nazwa) values ('run')
-go
+
 insert into Performer (Imie, Nazwisko) values ( 'Jan', 'Kowalski')
 go
 insert into Performer (Imie, Nazwisko) values ( 'Anna', 'Nowak')
@@ -175,8 +175,7 @@ go
 -- zakresy ruchowe (run, jump, hop, sit, trot, dance, ...) -> IdRodzajRuchu
 insert into Rodzaj_ruchu ( Nazwa ) values ('run')
 go
-insert into Rodzaj_ruchu ( Nazwa ) values ('walk') -- uwaga - dubluja sie z czyms dodanym wczesniej...
-go
+insert into Rodzaj_ruchu ( Nazwa ) values ('walk') 
 insert into Rodzaj_ruchu ( Nazwa ) values ('jump')
 go
 insert into Rodzaj_ruchu ( Nazwa ) values ('hop')
@@ -195,10 +194,8 @@ insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'Temperature', 'integer', 0, 'nonNegativeInteger', 'C')    
 go
 
-insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj) values ( 'FullBody1', 'Standardowy zestaw markerow dla gait', 'mocap')
-go
 
--- ------------------------------------------------------------------  powyzsze Wgrane do 2010-09-20
+-- ------------------------------------------------------------------  powyzsze Wgrane 2010-09-11
 
 exec list_group_sessions_attributes_xml 'applet_user', 1
 

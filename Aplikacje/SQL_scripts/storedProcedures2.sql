@@ -15,7 +15,7 @@ create type PredicateUdt as table
 )
 go
 
-alter function perf_attr_value(@perf_id int, @attributeName as varchar(100))
+create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
 as return
 select
@@ -31,7 +31,7 @@ inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPerformer = @perf_id and a.Nazwa = @attributeName
 go
 
-alter function sess_attr_value(@sess_id int, @attributeName as varchar(100))
+create function sess_attr_value(@sess_id int, @attributeName as varchar(100))
 returns table
 as return
 select
@@ -47,7 +47,7 @@ inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 where was.IdSesja = @sess_id and a.Nazwa = @attributeName
 go
 
-alter function trial_attr_value(@trial_id int, @attributeName as varchar(100))
+create function trial_attr_value(@trial_id int, @attributeName as varchar(100))
 returns table
 as return
 select
@@ -63,7 +63,7 @@ inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 where wao.IdObserwacja = @trial_id and a.Nazwa = @attributeName
 go
 
-alter function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
+create function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
 returns table
 as return
 select
@@ -79,7 +79,7 @@ inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdA
 where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Nazwa = @attributeName
 go
 
-alter function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
+create function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
 returns table
 as return
 select
@@ -95,7 +95,7 @@ inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
 go
 
-alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
+create procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -376,7 +376,7 @@ begin
 end
 go
 
-alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
+create procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -659,56 +659,8 @@ as
  select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
 go
 
-create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
-as
- set @result = ((select count(*) from Uzytkownik where Login = @user_login))
-go
 
-create procedure create_user_account (@user_login varchar(30), @user_first_name varchar(30), @user_last_name varchar(50))
-as
-insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
-go
 
-create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
-as
-begin
-	declare @granted_user int;
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	begin
-		set @granted_user = dbo.identify_user(@granted_user_login);
-		if @granted_user is NULL 
-			begin
-				RAISERROR ('Granted user does not exist', 12, 1 )
-				return;
-			end
-		else
-		update Uprawnienia_sesja set Zapis = @write where IdSesja = @sess_id and IdUzytkownik = @granted_user;
-		if @@ROWCOUNT = 0
-		insert into Uprawnienia_sesja ( IdSesja, IdUzytkownik, Zapis) values (@sess_id, @granted_user, @write);
-	end
-end
-go
-
-create procedure unset_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int)
-as
-begin
-
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	delete from Uprawnienia_sesja  where IdUzytkownik = dbo.identify_user(@granted_user_login) and IdSesja = @sess_id;
-end
-go
-
-create procedure alter_session_visibility (@granting_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
-as
-begin
-
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	update Sesja set Publiczna = @public, PublicznaZapis = @writeable where IdSesja = @sess_id;
-end
-go
 
 -- UPS Procedures
 
@@ -1006,4 +958,55 @@ select
 	from Uprawnienia_Sesja us join Uzytkownik u on us.IdUzytkownik = u.IdUzytkownik
 	where us.IdSesja = @sess_id and us.IdSesja in (select IdSesja from user_accessible_sessions_by_login(@user_login) )
     for XML PATH('SessionPrivilege'), root ('SessionPrivilegeList')
+go
+
+create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
+as
+ set @result = ((select count(*) from Uzytkownik where Login = @user_login))
+go
+
+create procedure create_user_account (@user_login varchar(30), @user_first_name varchar(30), @user_last_name varchar(50))
+as
+insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
+go
+
+create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
+as
+begin
+	declare @granted_user int;
+	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
+	else
+	begin
+		set @granted_user = dbo.identify_user(@granted_user_login);
+		if @granted_user is NULL 
+			begin
+				RAISERROR ('Granted user does not exist', 12, 1 )
+				return;
+			end
+		else
+		update Uprawnienia_sesja set Zapis = @write where IdSesja = @sess_id and IdUzytkownik = @granted_user;
+		if @@ROWCOUNT = 0
+		insert into Uprawnienia_sesja ( IdSesja, IdUzytkownik, Zapis) values (@sess_id, @granted_user, @write);
+	end
+end
+go
+
+create procedure unset_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int)
+as
+begin
+
+	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
+	else
+	delete from Uprawnienia_sesja  where IdUzytkownik = dbo.identify_user(@granted_user_login) and IdSesja = @sess_id;
+end
+go
+
+create procedure alter_session_visibility (@granting_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
+as
+begin
+
+	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
+	else
+	update Sesja set Publiczna = @public, PublicznaZapis = @writeable where IdSesja = @sess_id;
+end
 go
