@@ -10,10 +10,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import motion.applet.MotionAppletFrame;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityKind;
+import motion.database.model.Session;
 
 public class SessionMouseAdapter extends MouseAdapter {
 	private static String MENU_CREATE_TRIAL = "Create new trial";
@@ -21,6 +25,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 	private static String MENU_VIEW_PERFORMERS = "View performers";
 	private static String MENU_VIEW_FILES = "View files";
 	private static String MENU_UPLOAD = "Upload file";
+	private static String MENU_EDIT = "Edit";
 	
 	private RightSplitPanel rightPanel;
 	
@@ -88,6 +93,19 @@ public class SessionMouseAdapter extends MouseAdapter {
 				}
 			});
 			
+			popupMenu.add(new JSeparator());
+			
+			// Edit
+			JMenuItem editMenuItem = new JMenuItem(MENU_EDIT);
+			popupMenu.add(editMenuItem);
+			
+			editMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					edit(recordId);
+				}
+			});
+			
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
 			viewTrials(recordId);
@@ -107,5 +125,26 @@ public class SessionMouseAdapter extends MouseAdapter {
 	private void viewFiles(int recordId, EntityKind entityKind) {
 		rightPanel.showTable(EntityKind.file, recordId, entityKind);
 		MotionAppletFrame.setBrowsePanelVisible();
+	}
+	
+	private void edit(final int recordId) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					Session session = (Session) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.session);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+			}
+		};
+		worker.execute();
 	}
 }

@@ -30,6 +30,7 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.GenericDescription;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
@@ -50,7 +51,7 @@ public class FormDialog extends BasicDialog {
 	private boolean showTabs = false;
 	private JTabbedPane formTabs;
 	
-	protected ArrayList<FormField> definedFormFields = new ArrayList<FormField>();
+	protected ArrayList<FormField> formFields = new ArrayList<FormField>();
 	
 	private static String STATIC_ATTRIBUTE_GROUP = "_static";
 	private static String ATTRIBUTES_TAB_NAME = "Attributes";
@@ -156,31 +157,31 @@ public class FormDialog extends BasicDialog {
 			if (a.getEnumValues() != null) {
 				if (a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
 					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
-					definedFormFields.add(field);
+					formFields.add(field);
 				} else {
 					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), false);
-					definedFormFields.add(field);
+					formFields.add(field);
 				}
 			} else if (a.getType().equals(EntityAttribute.STRING_TYPE)) {
 				if (a.getSubtype().equals(EntityAttribute.SUBTYPE_SHORT_STRING)) {
 					FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
-					definedFormFields.add(field);
+					formFields.add(field);
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_LONG_STRING)) {
 					FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
-					definedFormFields.add(field);
+					formFields.add(field);
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: duplicate date as subtype
 					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
-					definedFormFields.add(field);
+					formFields.add(field);
 				} else if (a.getSubtype().equals(EntityAttribute.SUBTYPE_DATE_TIME)) {
 					FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
-					definedFormFields.add(field);
+					formFields.add(field);
 				}
 			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE) || a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
-				definedFormFields.add(field);
+				formFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: duplicate date as type
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
-				definedFormFields.add(field);
+				formFields.add(field);
 			}
 		}
 	}
@@ -223,7 +224,7 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void setDefinedAttributes(int id) throws Exception {
-		for (FormField f : definedFormFields) {
+		for (FormField f : formFields) {
 			if (!f.attribute.groupName.equals(STATIC_ATTRIBUTE_GROUP)) {
 				setAttributeValue(f);
 				WebServiceInstance.getDatabaseConnection().setEntityAttribute(
@@ -235,7 +236,7 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected Object getAttributeValue(EntityKind entityKind, String attribute) {
-		for (FormField f : definedFormFields) {
+		for (FormField f : formFields) {
 			if (f.attribute.name.equals(attribute)) {
 				setAttributeValue(f);
 				
@@ -246,8 +247,14 @@ public class FormDialog extends BasicDialog {
 		return null;
 	}
 	
+	protected void fillFormFields(GenericDescription<?> record) {
+		for (FormField f : formFields) {
+			// f.setData...
+		}
+	}
+	
 	protected boolean validateResult() {
-		for (FormField f : definedFormFields) {
+		for (FormField f : formFields) {
 			if (!f.attribute.groupName.equals(STATIC_ATTRIBUTE_GROUP)) {
 				if (setAttributeValue(f) == false) {
 					

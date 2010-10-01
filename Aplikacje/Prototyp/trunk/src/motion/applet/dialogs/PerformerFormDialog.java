@@ -9,6 +9,7 @@ import javax.swing.SwingWorker;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
@@ -58,6 +59,11 @@ public class PerformerFormDialog extends FormDialog {
 				}
 			}
 		});
+	}
+	
+	public PerformerFormDialog(Performer performer) {
+		this();
+		
 	}
 	
 	private ArrayList<String> getDeselectedAttributes() {
