@@ -25,6 +25,7 @@
 			<xsd:include schemaLocation="ListGroupSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListPerformerSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListLabSessionsWithAttributesXML.xsd"/>
+			<xsd:include schemaLocation="ListSessionSessionGroups.xsd"/>
 			<xsd:include schemaLocation="ListSessionTrialsXML.xsd"/>
 			<xsd:include schemaLocation="ListSessionTrialsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListTrialMeasurementsWithAttributesXML.xsd"/>
@@ -397,6 +398,26 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="ListSessionSessionGroups">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionSessionGroupsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionSessionGroupsResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionSessionGroupList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="ListSessionTrialsXML">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -669,6 +690,7 @@
 			<xsd:include schemaLocation="ListGroupSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListPerformerSessionsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListLabSessionsWithAttributesXML.xsd"/>
+			<xsd:include schemaLocation="ListSessionSessionGroups.xsd"/>
 			<xsd:include schemaLocation="ListSessionTrialsXML.xsd"/>
 			<xsd:include schemaLocation="ListSessionTrialsWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListTrialMeasurementsWithAttributesXML.xsd"/>
@@ -876,6 +898,15 @@
 	<wsdl:message name="IBasicQueriesWS_ListLabSessionsWithAttributesXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionSessionGroups_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionSessionGroups"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionSessionGroups_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionSessionGroupsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionSessionGroups_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListSessionTrialsXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListSessionTrialsXML"/>
 	</wsdl:message>
@@ -1078,6 +1109,11 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabSessionsWithAttributesXML" message="tns:IBasicQueriesWS_ListLabSessionsWithAttributesXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabSessionsWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListLabSessionsWithAttributesXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabSessionsWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListLabSessionsWithAttributesXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionSessionGroups">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionSessionGroups" message="tns:IBasicQueriesWS_ListSessionSessionGroups_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionSessionGroupsResponse" message="tns:IBasicQueriesWS_ListSessionSessionGroups_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionSessionGroupsQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionSessionGroups_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="ListSessionTrialsXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionTrialsXML" message="tns:IBasicQueriesWS_ListSessionTrialsXML_InputMessage"/>
@@ -1352,6 +1388,18 @@
 				<soap:fault name="QueryExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
+		<wsdl:operation name="ListSessionSessionGroups">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionSessionGroups" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
 		<wsdl:operation name="ListSessionTrialsXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionTrialsXML" style="document"/>
 			<wsdl:input>
@@ -1511,7 +1559,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://db-bdr.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
