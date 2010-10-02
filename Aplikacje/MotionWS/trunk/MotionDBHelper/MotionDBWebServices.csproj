@@ -155,6 +155,7 @@
     <None Include="res\ListGroupSessionsWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementPerformersWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementResultFilesWithAttributesXML.xsd" />
+    <None Include="res\ListSessionSessionGroups.xsd" />
     <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
     <None Include="res\ListTrialMeasurementsWithAttributesXML.xsd" />
     <None Include="res\MeasurementConfDetailsWithAttributesElement.xsd" />
@@ -163,6 +164,7 @@
     <None Include="res\GetMeasurementByIdXML.xsd" />
     <None Include="res\ListUserBaskets.xsd" />
     <None Include="res\ListStoredFilters.xsd" />
+    <None Include="res\SessionGroupDefinitionElement.xsd" />
     <None Include="res\UserPersonalSpaceWSStandalone.wsdl" />
     <None Include="res\UserPersonalSpaceWS.wsdl" />
     <None Include="res\ListBasketSegmentsWithAttributesXML.xsd" />
@@ -188,7 +190,6 @@
     <None Include="res\ListPerformersXML.xsd" />
     <None Include="res\ListSessionFilesWithAttributesXML.xsd" />
     <None Include="res\ListSessionFilesXML.xsd" />
-    <None Include="res\ListSessionGroupsDefined.xsd" />
     <None Include="res\ListSessionPrivileges.xsd" />
     <None Include="res\ListSessionTrialsXML.xsd" />
     <None Include="res\ListTrialFilesWithAttributesXML.xsd" />
@@ -196,7 +197,6 @@
     <None Include="res\ListUsers.xsd" />
     <None Include="res\PerformerDetailsWithAttributesElement.xsd" />
     <None Include="res\SegmentDetailsWithAttributesElement.xsd" />
-    <None Include="res\SessionDetailsWithAttributesElement.xsd" />
     <None Include="res\TrialDetailsWithAttributesElement.xsd" />
     <None Include="res\UserPersonalSpaceWSStandaloneImport.wsdl" />
     <None Include="res\_PerformQuery.xsd" />

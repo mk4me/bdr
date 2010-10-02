@@ -366,7 +366,7 @@
 	</wsdl:binding>
 	<wsdl:service name="AuthorizationWS">
 		<wsdl:port name="BasicHttpBinding_IAuthorizationWS" binding="tns:BasicHttpBinding_IAuthorizationWS">
-			<soap:address location="http://83.230.112.43/Motion/AuthorizationWS.svc"/>
+			<soap:address location="http://db-bdr.pjwstk.edu.pl/Motion/AuthorizationWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
