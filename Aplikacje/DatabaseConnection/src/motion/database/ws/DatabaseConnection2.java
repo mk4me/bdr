@@ -64,6 +64,8 @@ import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttribute
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerSessionWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinitionList;
+import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinition;
 import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesServiceWCF.AttributeGroupDefinitionList.AttributeGroupDefinition;
@@ -71,6 +73,7 @@ import motion.database.ws.basicQueriesServiceWCF.GenericQueryUniformXMLResponse.
 import motion.database.ws.basicQueriesServiceWCF.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult;
+import motion.database.ws.basicQueriesServiceWCF.ListGroupSessionsWithAttributesXMLResponse.ListGroupSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult;
@@ -79,10 +82,10 @@ import motion.database.ws.basicQueriesServiceWCF.ListPerformerSessionsWithAttrib
 import motion.database.ws.basicQueriesServiceWCF.ListPerformersWithAttributesXMLResponse.ListPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionPerformersWithAttributesXMLResponse.ListSessionPerformersWithAttributesXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsResponse.ListSessionSessionGroupsResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.MotionKindDefinition;
-import motion.database.ws.basicQueriesServiceWCF.SessionGroupDefinitionList.SessionGroupDefinition;
 import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage;
@@ -640,7 +643,57 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+	@Override
+	public DbElementsList<Session> listGroupSessions(int sessionGroupID) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listGroupSessions", this );
+			
+			ListGroupSessionsWithAttributesXMLResult result = port.listGroupSessionsWithAttributesXML(sessionGroupID);
+			
+			DbElementsList<Session> output = new DbElementsList<Session>();
 	
+			for (SessionDetailsWithAttributes a : result.getGroupSessionWithAttributesList().getSessionDetailsWithAttributes() )
+				output.add( ConnectionTools2.transformSessionDetails(a) );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+	
+	@Override
+	public DbElementsList<SessionGroup> listSessionSessionGroups(int sessionID) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listSessionSessionGroups", this );
+			
+			ListSessionSessionGroupsResult result = port.listSessionSessionGroups(sessionID);
+			
+			DbElementsList<SessionGroup> output = new DbElementsList<SessionGroup>();
+	
+			for (SessionGroupDefinition a : result.getSessionSessionGroupList().getSessionGroupDefinition() )
+				output.add( new SessionGroup( a.getSessionGroupID(), a.getSessionGroupName() ) );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////
 //	Trial

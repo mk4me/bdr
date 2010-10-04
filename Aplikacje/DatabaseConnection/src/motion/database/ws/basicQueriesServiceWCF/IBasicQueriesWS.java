@@ -316,6 +316,23 @@ public interface IBasicQueriesWS {
      * 
      * @param sessionID
      * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsResponse.ListSessionSessionGroupsResult
+     * @throws IBasicQueriesWSListSessionSessionGroupsQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListSessionSessionGroups", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionSessionGroups")
+    @WebResult(name = "ListSessionSessionGroupsResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListSessionSessionGroups", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroups")
+    @ResponseWrapper(localName = "ListSessionSessionGroupsResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsResponse.ListSessionSessionGroupsResult listSessionSessionGroups(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int sessionID)
+        throws IBasicQueriesWSListSessionSessionGroupsQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param sessionID
+     * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionTrialsXMLResponse.ListSessionTrialsXMLResult
      * @throws IBasicQueriesWSListSessionTrialsXMLQueryExceptionFaultFaultMessage
      */

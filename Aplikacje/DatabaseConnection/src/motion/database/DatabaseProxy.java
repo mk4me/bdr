@@ -222,5 +222,9 @@ public interface DatabaseProxy {
 			String description, File[] files,
 			FileTransferListener listener) throws Exception;
 
+	DbElementsList<Session> listGroupSessions(int sessionGroupID) throws Exception;
+
+	DbElementsList<SessionGroup> listSessionSessionGroups(int sessionID) throws Exception;
+
 
 }

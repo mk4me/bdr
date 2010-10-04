@@ -33,8 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "sessionGroupDefinition"
 })
-@XmlRootElement(name = "SessionGroupDefinitionList")
-public class SessionGroupDefinitionList {
+@XmlRootElement(name = "SessionSessionGroupList")
+public class SessionSessionGroupList {
 
     @XmlElement(name = "SessionGroupDefinition")
     protected List<SessionGroupDefinition> sessionGroupDefinition;
