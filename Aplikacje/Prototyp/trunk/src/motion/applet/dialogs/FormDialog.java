@@ -252,6 +252,8 @@ public class FormDialog extends BasicDialog {
 			EntityAttribute attribute = record.get(f.attribute.name);
 			if (attribute != null) {
 				f.setData(attribute.value);
+			} else {
+				f.setData("");
 			}
 		}
 	}
@@ -458,6 +460,10 @@ class FormListField extends FormField {
 	}
 	
 	public void setData(Object value) {
-		//TODO
+		for (int i = 0; i < comboBox.getItemCount(); i++) {
+			if (comboBox.getItemAt(i).toString().equals(value.toString())) {
+				comboBox.setSelectedIndex(i);
+			}
+		}
 	}
 }
