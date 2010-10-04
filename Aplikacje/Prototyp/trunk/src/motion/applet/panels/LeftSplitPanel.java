@@ -17,6 +17,7 @@ import javax.swing.SwingWorker;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import motion.Messages;
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FilterDialog;
@@ -127,7 +128,7 @@ public class LeftSplitPanel extends JPanel {
 								
 								JTable resultTable = new JTable();
 								resultTable.setModel(new QueryTableModel(result));
-								MotionAppletFrame.addResultTab(resultTable);
+								MotionApplet.addResultTab(resultTable);
 							}
 							
 						} catch (Exception e1) {

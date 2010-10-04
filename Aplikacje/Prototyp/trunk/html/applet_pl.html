@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Motion Web Client</title>
+	<script type="text/javascript">
+	var IE = /*@cc_on!@*/false;
+	function setSizing(){
+	if (IE) {
+		document.getElementById("ap").setAttribute("width",document.body.clientWidth-25);
+		document.getElementById("ap").setAttribute("height",document.body.clientHeight-35);
+	
+	     }
+	else {
+		document.getElementById("ap").setAttribute("width",window.innerWidth-20);
+		document.getElementById("ap").setAttribute("height",window.innerHeight-20);
+	     }
+	}
+	</script>
+</head>
+
+<body onload="setSizing()" onresize="setSizing()">
+<!--
+<p style="text-align: center; font-family: sans-serif;"><img
+ src="logo.png" height="35">&nbsp;<big>
+<big style="font-weight: bold; color: rgb(204, 0, 0);"><big><big>Web
+Client
+</big></big></big></big></p>
+<div style="text-align: center; font-family: sans-serif;">
+-->
+
+<applet id="ap" type="application/x-java-applet" code="motion.applet.MotionApplet" archive="MotionClient.jar" width="200" height="200" >
+<param name="language" value="Polish"/>
+</applet>
+
+<!--
+<br clear="all">
+</div>
+<div style="text-align: center; font-family: sans-serif;"><img
+ style="width: 800px; height: 124px;" alt="" src="bottom.png"><br>
+</div>
+<br style="font-family: sans-serif;">
+<br style="font-family: sans-serif;">
+-->
+</body>
+</html>

@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.SessionAssignmentDialog;
@@ -120,12 +121,12 @@ public class PerformerMouseAdapter extends MouseAdapter {
 		rightPanel.showTable(EntityKind.session, recordId);
 		rightPanel.clearTrialTable();
 		rightPanel.clearFileTable();
-		MotionAppletFrame.setBrowsePanelVisible();
+		MotionApplet.setBrowsePanelVisible();
 	}
 	
 	private void viewFiles(int recordId, EntityKind entityKind) {
 		rightPanel.showTable(EntityKind.file, recordId, entityKind);
-		MotionAppletFrame.setBrowsePanelVisible();
+		MotionApplet.setBrowsePanelVisible();
 	}
 	
 	private void edit(final int recordId) {

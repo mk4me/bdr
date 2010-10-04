@@ -20,6 +20,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import motion.Messages;
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
@@ -144,7 +145,7 @@ public class BasketPanel extends JPanel {
 						DbElementsList<? extends GenericDescription<?>> records = WebServiceInstance.getDatabaseConnection().listBasketEntitiesWithAttributes(basketName, entityKind);
 						table.setModel(new BasketTableModel(entityKind, records, basketName));
 						
-						MotionAppletFrame.addBasketTab(table, basketName + " (" + entity + ")");
+						MotionApplet.addBasketTab(table, basketName + " (" + entity + ")");
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -169,7 +170,7 @@ public class BasketPanel extends JPanel {
 				try {
 					String basketName = BasketPanel.this.getSelectedBasket();
 					WebServiceInstance.getDatabaseConnection().removeBasket(basketName);
-					MotionAppletFrame.refreshBaskets();
+					MotionApplet.refreshBaskets();
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);

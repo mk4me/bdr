@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
@@ -114,17 +115,17 @@ public class SessionMouseAdapter extends MouseAdapter {
 	
 	private void viewTrials(int recordId) {
 		rightPanel.showTable(EntityKind.trial, recordId);
-		MotionAppletFrame.setBrowsePanelVisible();
+		MotionApplet.setBrowsePanelVisible();
 	}
 	
 	private void viewPerformers(int recordId) {
 		rightPanel.showTable(EntityKind.performer, recordId);
-		MotionAppletFrame.setBrowsePanelVisible();
+		MotionApplet.setBrowsePanelVisible();
 	}
 	
 	private void viewFiles(int recordId, EntityKind entityKind) {
 		rightPanel.showTable(EntityKind.file, recordId, entityKind);
-		MotionAppletFrame.setBrowsePanelVisible();
+		MotionApplet.setBrowsePanelVisible();
 	}
 	
 	private void edit(final int recordId) {

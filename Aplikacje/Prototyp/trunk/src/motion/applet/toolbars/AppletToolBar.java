@@ -11,6 +11,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingWorker;
 
 import motion.Messages;
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.ExceptionDialog;
@@ -88,7 +89,7 @@ public class AppletToolBar extends JToolBar {
 					protected Void doInBackground() throws InterruptedException {
 						try {
 							if (AppletToolBar.this.validateSelectedBasket()) {
-								BasicTableModel currentTable = MotionAppletFrame.getCurrentTable();
+								BasicTableModel currentTable = MotionApplet.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
 									String entity = currentTable.getEntityKind().getName();
@@ -121,8 +122,8 @@ public class AppletToolBar extends JToolBar {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
-							if (MotionAppletFrame.isBasketPanelVisible()) {
-								BasketTableModel currentTable = (BasketTableModel) MotionAppletFrame.getCurrentTable();
+							if (MotionApplet.isBasketPanelVisible()) {
+								BasketTableModel currentTable = (BasketTableModel) MotionApplet.getCurrentTable();
 								if (currentTable != null) {
 									int[] selectedRecords = currentTable.getCheckedRecordIds();
 									String entity = currentTable.getEntityKind().getName();
@@ -130,7 +131,7 @@ public class AppletToolBar extends JToolBar {
 									for (int i = 0; i < selectedRecords.length; i++) {
 										WebServiceInstance.getDatabaseConnection().removeEntityFromBasket(
 												basketName, selectedRecords[i], entity);
-										MotionAppletFrame.getCurrentTable().removeCheckedRecords();
+										MotionApplet.getCurrentTable().removeCheckedRecords();
 									}
 								}
 							}
