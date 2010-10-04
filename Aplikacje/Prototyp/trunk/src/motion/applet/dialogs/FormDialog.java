@@ -249,7 +249,10 @@ public class FormDialog extends BasicDialog {
 	
 	protected void fillFormFields(GenericDescription<?> record) {
 		for (FormField f : formFields) {
-			// f.setData...
+			EntityAttribute attribute = record.get(f.attribute.name);
+			if (attribute != null) {
+				f.setData(attribute.value);
+			}
 		}
 	}
 	
@@ -269,7 +272,7 @@ public class FormDialog extends BasicDialog {
 	}
 }
 
-class FormField {
+abstract class FormField {
 	protected JLabel label;
 	protected JTextField text;
 	protected GridBagConstraints gridBagConstraints;
@@ -307,6 +310,10 @@ class FormField {
 		
 		gridBagConstraints.gridx++;
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+	}
+	
+	public void setData(Object value) {
+		text.setText(value.toString());
 	}
 }
 
@@ -348,6 +355,10 @@ class FormTextAreaField extends FormField {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy++;
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+	}
+	
+	public void setData(Object value) {
+		textArea.setText(value.toString());
 	}
 }
 
@@ -444,5 +455,9 @@ class FormListField extends FormField {
 		gridBagConstraints.gridy++;
 		
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+	}
+	
+	public void setData(Object value) {
+		//TODO
 	}
 }

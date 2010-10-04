@@ -131,7 +131,7 @@ public class MotionAppletFrame extends JFrame {
 		newMenu.add(createPerformerItem);
 		createPerformerItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.showPerformerDialog();
+				rightPanel.showPerformerDialog(null);
 			}
 		});
 		
@@ -139,7 +139,7 @@ public class MotionAppletFrame extends JFrame {
 		newMenu.add(createSessionItem);
 		createSessionItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.showSessionDialog();
+				rightPanel.showSessionDialog(null);
 			}
 		});
 		
@@ -147,7 +147,7 @@ public class MotionAppletFrame extends JFrame {
 		newMenu.add(createMeasurementConfigurationItem);
 		createMeasurementConfigurationItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				rightPanel.showMeasurementConfigurationDialog();
+				rightPanel.showMeasurementConfigurationDialog(null);
 			}
 		});
 		

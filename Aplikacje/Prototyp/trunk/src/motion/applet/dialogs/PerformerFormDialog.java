@@ -63,7 +63,7 @@ public class PerformerFormDialog extends FormDialog {
 	
 	public PerformerFormDialog(Performer performer) {
 		this();
-		
+		fillFormFields(performer);
 	}
 	
 	private ArrayList<String> getDeselectedAttributes() {

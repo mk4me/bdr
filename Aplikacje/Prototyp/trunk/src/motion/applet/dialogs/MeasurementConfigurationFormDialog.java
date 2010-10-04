@@ -9,6 +9,7 @@ import javax.swing.SwingWorker;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
+import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementConfigurationStaticAttributes;
 
 public class MeasurementConfigurationFormDialog extends FormDialog {
@@ -59,6 +60,11 @@ public class MeasurementConfigurationFormDialog extends FormDialog {
 				}
 			}
 		});
+	}
+	
+	public MeasurementConfigurationFormDialog(MeasurementConfiguration measurementConfiguration) {
+		this();
+		fillFormFields(measurementConfiguration);
 	}
 	
 	private ArrayList<String> getDeselectedAttributes() {

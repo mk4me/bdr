@@ -46,7 +46,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 			createTrialMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					rightPanel.showTrialDialog(recordId);
+					rightPanel.showTrialDialog(recordId, null);
 				}
 			});
 			// View Session trials context menu
@@ -133,6 +133,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					Session session = (Session) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.session);
+					rightPanel.showSessionDialog(session);
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);

@@ -49,7 +49,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 			createSessionMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					rightPanel.showSessionDialog();
+					rightPanel.showSessionDialog(null);
 				}
 			});
 			// View Performer sessions context menu
@@ -134,6 +134,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					Performer performer = (Performer) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.performer);
+					rightPanel.showPerformerDialog(performer);
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);

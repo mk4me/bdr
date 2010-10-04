@@ -16,6 +16,7 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
+import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
 
@@ -93,6 +94,11 @@ public class SessionFormDialog extends FormDialog {
 		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
 		performerAssignmentPanel = new PerformerAssignmentPanel();
 		this.getFormTabbedPane().addTab("Performers", performerAssignmentPanel);
+	}
+	
+	public SessionFormDialog(Session session) {
+		this();
+		fillFormFields(session);
 	}
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {

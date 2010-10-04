@@ -31,6 +31,10 @@ import motion.applet.tables.AttributeTableModel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.database.model.EntityKind;
+import motion.database.model.MeasurementConfiguration;
+import motion.database.model.Performer;
+import motion.database.model.Session;
+import motion.database.model.Trial;
 
 public class RightSplitPanel extends JPanel implements ActionListener {
 	private JTabbedPane tabbedPane;
@@ -228,8 +232,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabbedPane.setSelectedIndex(i);
 	}
 	
-	public void showPerformerDialog() {
-		PerformerFormDialog performerFormDialog = new PerformerFormDialog();
+	public void showPerformerDialog(Performer performer) {
+		PerformerFormDialog performerFormDialog;
+		if (performer == null) {
+			performerFormDialog = new PerformerFormDialog();
+		} else {
+			performerFormDialog = new PerformerFormDialog(performer);
+		}
 		performerFormDialog.setVisible(true);
 		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_PERFORMER);
@@ -237,8 +246,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void showSessionDialog() {
-		SessionFormDialog sessionFormDialog = new SessionFormDialog();
+	public void showSessionDialog(Session session) {
+		SessionFormDialog sessionFormDialog;
+		if (session == null) {
+			sessionFormDialog = new SessionFormDialog();
+		} else {
+			sessionFormDialog = new SessionFormDialog(session);
+		}
 		sessionFormDialog.pack();	// TODO: is this needed?
 		sessionFormDialog.setVisible(true);
 		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
@@ -247,8 +261,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void showTrialDialog(int recordId) {
-		TrialFormDialog trialFormDialog = new TrialFormDialog(recordId);
+	public void showTrialDialog(int recordId, Trial trial) {
+		TrialFormDialog trialFormDialog;
+		if (trial == null) {
+			trialFormDialog = new TrialFormDialog(recordId);
+		} else {
+			trialFormDialog = new TrialFormDialog(recordId, trial);
+		}
 		trialFormDialog.setVisible(true);
 		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_TRIAL);
@@ -256,8 +275,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void showMeasurementConfigurationDialog() {
-		MeasurementConfigurationFormDialog measurementConfigurationDialog = new MeasurementConfigurationFormDialog();
+	public void showMeasurementConfigurationDialog(MeasurementConfiguration measurementConfiguration) {
+		MeasurementConfigurationFormDialog measurementConfigurationDialog;
+		if (measurementConfiguration == null) {
+			measurementConfigurationDialog = new MeasurementConfigurationFormDialog();
+		} else {
+			measurementConfigurationDialog = new MeasurementConfigurationFormDialog(measurementConfiguration);
+		}
 		measurementConfigurationDialog.setVisible(true);
 		if (measurementConfigurationDialog.getResult() == FormDialog.CREATE_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT_CONFIGURATION);

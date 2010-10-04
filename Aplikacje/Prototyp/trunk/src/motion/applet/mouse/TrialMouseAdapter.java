@@ -107,6 +107,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					Trial trial = (Trial) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.trial);
+					rightPanel.showTrialDialog(recordId, trial);
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
