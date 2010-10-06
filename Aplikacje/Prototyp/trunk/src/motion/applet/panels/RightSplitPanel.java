@@ -25,6 +25,7 @@ import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.mouse.FileMouseAdapter;
 import motion.applet.mouse.PerformerMouseAdapter;
+import motion.applet.mouse.SessionGroupMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
 import motion.applet.mouse.TrialMouseAdapter;
 import motion.applet.tables.AttributeTableModel;
@@ -41,12 +42,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private BottomSplitPanel bottomPanel;
 	private Hashtable<EntityKind, Integer> tabNameHash = new Hashtable<EntityKind, Integer>();
 	
-	private static int TABLE_SIZE = 5;
+	private static int TABLE_SIZE = 6;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
 	private static int TABLE_TRIAL = 2;
 	private static int TABLE_FILE = 3;
 	private static int TABLE_MEASUREMENT_CONFIGURATION = 4;
+	private static int TABLE_SESSION_GROUP = 5;
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	
 	public RightSplitPanel() {
@@ -74,6 +76,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_MEASUREMENT_CONFIGURATION] = new JTable();
 		tabbedPane.addTab(EntityKind.measurement_conf.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT_CONFIGURATION]));
 		
+		tabNameHash.put(EntityKind.sessionGroup, TABLE_SESSION_GROUP);
+		tables[TABLE_SESSION_GROUP] = new JTable();
+		tabbedPane.addTab(EntityKind.sessionGroup.getGUIName(), new JScrollPane(tables[TABLE_SESSION_GROUP]));
+		
 		this.setLayout(new BorderLayout());
 		
 		bottomPanel = new BottomSplitPanel();
@@ -88,12 +94,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[2].addMouseListener(new TrialMouseAdapter(this));
 		tables[3].addMouseListener(new FileMouseAdapter(this));
 		//TODO: Add measurement conf mouse listener.
+		tables[5].addMouseListener(new SessionGroupMouseAdapter(this));
 		
 		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
 		//showTable(EntityKind.session);
+		showTable(EntityKind.sessionGroup);
 		showTable(EntityKind.performer);	// Performers not grouped by labs.
-		
 	}
 	
 	private void createSelectionAtMouse( JTable table, MouseEvent e ) {

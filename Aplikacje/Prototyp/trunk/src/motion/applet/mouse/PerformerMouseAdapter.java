@@ -13,7 +13,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import motion.applet.MotionApplet;
-import motion.applet.MotionAppletFrame;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.SessionAssignmentDialog;
 import motion.applet.panels.RightSplitPanel;

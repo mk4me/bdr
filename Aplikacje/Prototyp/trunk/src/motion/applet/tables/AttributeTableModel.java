@@ -83,6 +83,12 @@ public class AttributeTableModel extends BasicTableModel {
 						if (recordId > -1) {
 							records = WebServiceInstance.getDatabaseConnection().listMeasurementConfigurationsWithAttributes(recordId);
 						}
+					} else if (entityKind.equals(EntityKind.sessionGroup)) {
+						if (recordId > -1) {
+							records = WebServiceInstance.getDatabaseConnection().listSessionSessionGroups(recordId);
+						} else {
+							records = WebServiceInstance.getDatabaseConnection().listSessionGroupsDefined();
+						}
 					}
 					
 					for (GenericDescription<?> r : records) {
