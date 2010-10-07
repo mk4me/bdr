@@ -35,6 +35,7 @@ import motion.database.model.GenericDescription;
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
 	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
+	private static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
 	
 	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	
@@ -248,6 +249,7 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void fillFormFields(GenericDescription<?> record) {
+		makeEditButton();
 		for (FormField f : formFields) {
 			EntityAttribute attribute = record.get(f.attribute.name);
 			if (attribute != null) {
@@ -256,6 +258,20 @@ public class FormDialog extends BasicDialog {
 				f.setData("");
 			}
 		}
+	}
+	
+	private void makeEditButton() {
+		createButton.setText(EDIT);
+		ActionListener[] actionListeners = createButton.getActionListeners();
+		for (int i = 0; i < actionListeners.length; i++) {
+			createButton.removeActionListener(actionListeners[i]);
+		}
+		
+		createButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//FormDialog.this.setResult(CREATE_PRESSED);
+			}
+		});
 	}
 	
 	protected boolean validateResult() {
