@@ -12,10 +12,12 @@ import motion.applet.panels.PerformerAssignmentPanel;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DbElementsList;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
+import motion.database.model.Performer;
 import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
@@ -99,6 +101,34 @@ public class SessionFormDialog extends FormDialog {
 	public SessionFormDialog(Session session) {
 		this();
 		fillFormFields(session);
+		fillSessionPerformers(session);
+	}
+	
+	private void fillSessionPerformers(final Session session) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					DbElementsList<Performer> performers = WebServiceInstance.getDatabaseConnection().listSessionPerformersWithAttributes(session.getId());
+					int[] recordIds = new int[performers.size()];
+					int i = 0;
+					for (Performer p : performers) {
+						recordIds[i] = p.getId();
+					}
+					performerAssignmentPanel.setSelectedPerformers(recordIds);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+			}
+		};
+		worker.execute();
 	}
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {

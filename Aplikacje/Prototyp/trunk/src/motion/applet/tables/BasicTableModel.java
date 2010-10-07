@@ -95,6 +95,18 @@ public class BasicTableModel extends AbstractTableModel {
 		return Arrays.copyOf(checkedRecordIds, j);
 	}
 	
+	public void setCheckedRecords(int[] recordIds) {
+		int j = 0;
+		for (int id : recordIds) {
+			for (int i = 0; i < recordIds.length; i++) {
+				if (recordIds[i] == id) {
+					contents.get(j).set(CHECKBOX_COLUMN, Boolean.TRUE);
+				}
+			}
+			j++;
+		}
+	}
+	
 	public void removeCheckedRecords() {
 		Iterator<ArrayList<Object>> i = this.contents.iterator();
 		Iterator<Integer> j = this.recordIds.iterator();

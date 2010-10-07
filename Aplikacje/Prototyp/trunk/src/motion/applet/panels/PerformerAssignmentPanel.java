@@ -23,4 +23,8 @@ public class PerformerAssignmentPanel extends JPanel {
 		
 		return ((BasicTableModel) performerTable.getModel()).getCheckedRecordIds();
 	}
+	
+	public void setSelectedPerformers(int[] recordIds) {
+		((BasicTableModel) performerTable.getModel()).setCheckedRecords(recordIds);
+	}
 }
