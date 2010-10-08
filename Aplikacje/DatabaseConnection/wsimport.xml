@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="wsimport all Motion services" basedir="." default="wsimport-all-services">
+	<description>
+		Motion WSDL importer for all services.
+	</description>
+
+	<property name="wsimport_path" value="/usr/lib/jvm/java-6-sun-1.6.0.20/bin/" />
+	<property name="server_address_b" value="http://dbpawell.pjwstk.edu.pl" />
+	<property name="server_address" value="http://83.230.112.43" />
+	<property name="server_address_c" value="http://db-bdr.pjwstk.edu.pl" />
+
+	<macrodef name="run-wsimport">
+		<attribute name="wsdl"/>
+		<attribute name="package"/>
+		<sequential>
+			<echo message="wsimport: ${server_address}/Motion/@{wsdl} into: @{package}" /> 
+			<exec executable="${wsimport_path}wsimport">
+		    	<arg value="-d" />
+				<arg value="bin" />
+				<arg value="-keep" />
+				<arg value="-s" />
+				<arg value="src" />
+				<!-- arg value="-verbose" /-->
+				<arg value="${server_address}/Motion/@{wsdl}" />
+				<arg value="-p" />
+				<arg value="@{package}" />
+		  	</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="wsimport-all-services">
+		<run-wsimport wsdl="AdministrationWS.svc?wsdl" package="motion.database.ws.administrationWCF"/>
+		<run-wsimport wsdl="res/AuthorizationWSStandalone.wsdl" package="motion.database.ws.authorizationWCF"/>
+		<run-wsimport wsdl="res/BasicQueriesWSStandalone.wsdl" package="motion.database.ws.basicQueriesServiceWCF"/>
+		<run-wsimport wsdl="BasicUpdatesWS.svc?wsdl" package="motion.database.ws.basicUpdatesServiceWCF"/>
+		<run-wsimport wsdl="FileStoremanWS.svc?wsdl" package="motion.database.ws.fileStoremanServiceWCF"/>
+		<run-wsimport wsdl="res/UserPersonalSpaceWSStandalone.wsdl" package="motion.database.ws.userPersonalSpaceWCF"/>
+	</target>
+	
+
+</project>
