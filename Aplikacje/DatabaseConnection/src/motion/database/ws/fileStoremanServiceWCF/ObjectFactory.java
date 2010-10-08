@@ -61,19 +61,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link FileData }
+     * 
+     */
+    public FileData createFileData() {
+        return new FileData();
+    }
+
+    /**
      * Create an instance of {@link StoreTrialFile }
      * 
      */
     public StoreTrialFile createStoreTrialFile() {
         return new StoreTrialFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreMeasurementConfFileResponse }
-     * 
-     */
-    public StoreMeasurementConfFileResponse createStoreMeasurementConfFileResponse() {
-        return new StoreMeasurementConfFileResponse();
     }
 
     /**
@@ -85,11 +85,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFiles }
+     * Create an instance of {@link StoreMeasurementConfFiles }
      * 
      */
-    public StoreTrialFiles createStoreTrialFiles() {
-        return new StoreTrialFiles();
+    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
+        return new StoreMeasurementConfFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFileResponse }
+     * 
+     */
+    public StoreTrialFileResponse createStoreTrialFileResponse() {
+        return new StoreTrialFileResponse();
     }
 
     /**
@@ -109,19 +117,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreMeasurementConfFiles }
+     * Create an instance of {@link RetrieveFileResponse }
      * 
      */
-    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
-        return new StoreMeasurementConfFiles();
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
     }
 
     /**
-     * Create an instance of {@link StoreSessionFilesResponse }
+     * Create an instance of {@link RetrieveFile }
      * 
      */
-    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
-        return new StoreSessionFilesResponse();
+    public RetrieveFile createRetrieveFile() {
+        return new RetrieveFile();
     }
 
     /**
@@ -133,19 +141,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FileData }
+     * Create an instance of {@link StoreMeasurementConfFileResponse }
      * 
      */
-    public FileData createFileData() {
-        return new FileData();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFileResponse }
-     * 
-     */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
+    public StoreMeasurementConfFileResponse createStoreMeasurementConfFileResponse() {
+        return new StoreMeasurementConfFileResponse();
     }
 
     /**
@@ -157,27 +157,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFileResponse }
+     * Create an instance of {@link StoreSessionFilesResponse }
      * 
      */
-    public StoreTrialFileResponse createStoreTrialFileResponse() {
-        return new StoreTrialFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreMeasurementConfFilesResponse }
-     * 
-     */
-    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
-        return new StoreMeasurementConfFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFiles }
-     * 
-     */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
+    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
+        return new StoreSessionFilesResponse();
     }
 
     /**
@@ -197,11 +181,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RetrieveFile }
+     * Create an instance of {@link StoreTrialFiles }
      * 
      */
-    public RetrieveFile createRetrieveFile() {
-        return new RetrieveFile();
+    public StoreTrialFiles createStoreTrialFiles() {
+        return new StoreTrialFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreMeasurementConfFilesResponse }
+     * 
+     */
+    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
+        return new StoreMeasurementConfFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFiles }
+     * 
+     */
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
     }
 
     /**
