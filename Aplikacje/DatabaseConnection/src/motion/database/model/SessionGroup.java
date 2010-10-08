@@ -9,10 +9,7 @@ public class SessionGroup extends GenericDescription<SessionGroupStaticAttribute
 	}
 	
 	public String toString() {
-		if (super.get(SessionStaticAttributes.SessionLabel.toString()) != null)
-			return super.get(SessionStaticAttributes.SessionLabel.toString()).value.toString();
-		else
-			return "Session " + super.getId() + " (no label)";
+			return "Session Group " + ((EntityAttribute)get( SessionGroupStaticAttributes.SessionGroupID ) ).value + " " + ((EntityAttribute)get( SessionGroupStaticAttributes.Name)).value;
 	}
 
 	public SessionGroup(int sessionGroupID, String name) {

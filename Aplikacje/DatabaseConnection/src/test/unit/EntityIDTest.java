@@ -20,6 +20,7 @@ import motion.database.model.GenericDescription;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
+import motion.database.model.SessionGroup;
 import motion.database.ws.ConnectionTools2;
 import motion.database.ws.DatabaseConnection2;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
@@ -83,8 +84,18 @@ public class EntityIDTest {
 		
 		System.out.println( p );
 		System.out.println( p.getId() );
-		
-		
+	}
+	
+	@Test
+	public void testListSessionGroupsDefined() throws Exception
+	{
+		beforeTest();
+		IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "execGenericQuery", database);
+	
+		DbElementsList<SessionGroup> res = database.listSessionGroupsDefined();
+	
+		for (SessionGroup sg : res)
+			System.out.println( sg );
 		
 	}
 }
