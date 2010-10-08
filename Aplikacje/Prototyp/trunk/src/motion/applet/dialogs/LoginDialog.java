@@ -36,7 +36,9 @@ public class LoginDialog extends BasicDialog {
 	public static int LOGIN_SUCCESSFUL = 1;
 	public static int LOGIN_UNSUCCESSFUL = 2;
 	public static int CANCEL_PRESSED = 0;
-	private int result = CANCEL_PRESSED;
+	public static int UNKNOWN = 3;
+	private int result = UNKNOWN;
+	public boolean finished = false;
 	
 	public LoginDialog() {
 		super(LOGIN_TITLE, WELCOME_TITLE);
@@ -112,52 +114,38 @@ public class LoginDialog extends BasicDialog {
 	
 	protected void addListeners() {
 		this.loginButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent ev) {
 				
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					
-					@Override
-					protected Void doInBackground() throws InterruptedException {
-						LoginDialog.this.loginButton.setEnabled(false);
-						WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
-						WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+				LoginDialog.this.loginButton.setEnabled(false);
+				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
+				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
+
+				// Check user credentials
+				try {
+					boolean exists = WebServiceInstance.getDatabaseConnection().checkUserAccount();
+					if (!exists)
+					{
+						// Login dialog
+						UserDetailsDialog userDetailsDialog = new UserDetailsDialog();
+						userDetailsDialog.setVisible(true);
 						
-						return null;
+						// Check if login was successful
+						if (userDetailsDialog.getResult() == UserDetailsDialog.OK_PRESSED)									
+							WebServiceInstance.getDatabaseConnection().createUserAccount(
+									userDetailsDialog.getFirstName(), userDetailsDialog.getLastName());
 					}
+					setResult(LOGIN_SUCCESSFUL);
 					
-					@Override
-					protected void done() {
-
-						LoginDialog.this.setVisible(false);
-
-						// Check user credentials
-						try {
-							boolean exists = WebServiceInstance.getDatabaseConnection().checkUserAccount();
-							if (!exists)
-							{
-								// Login dialog
-								UserDetailsDialog userDetailsDialog = new UserDetailsDialog();
-								userDetailsDialog.setVisible(true);
-								
-								// Check if login was successful
-								if (userDetailsDialog.getResult() == UserDetailsDialog.OK_PRESSED)									
-									WebServiceInstance.getDatabaseConnection().createUserAccount(
-											userDetailsDialog.getFirstName(), userDetailsDialog.getLastName());
-							}
-							LoginDialog.this.setResult(LOGIN_SUCCESSFUL);
-							
-						} catch (Exception e) {
-							
-							DatabaseConnection.log.severe( e.getMessage() );
-							LoginDialog.this.setResult(LOGIN_UNSUCCESSFUL);
-						}
-						
-						// Login always successful, add login check
-
-						LoginDialog.this.dispose();
-					}
-				};
-				worker.execute();
+				} catch (Exception e) {
+					
+					DatabaseConnection.log.severe( e.getMessage() );
+					setResult(LOGIN_UNSUCCESSFUL);
+				}
+				
+				// Login always successful, add login check
+				LoginDialog.this.finished = true;
+				LoginDialog.this.setVisible(false);
+				LoginDialog.this.dispose();
 			}
 		});
 		
@@ -166,6 +154,7 @@ public class LoginDialog extends BasicDialog {
 				LoginDialog.this.setResult(CANCEL_PRESSED);
 				
 				LoginDialog.this.setVisible(false);
+				LoginDialog.this.finished = true;
 				LoginDialog.this.dispose();
 			}
 		});

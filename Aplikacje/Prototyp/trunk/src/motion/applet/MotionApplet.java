@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -37,7 +35,9 @@ import motion.applet.widgets.TabCloseButtonWidget;
 import motion.database.DatabaseConnection;
 import motion.database.model.EntityKind;
 
+@SuppressWarnings("serial")
 public class MotionApplet extends JApplet {
+	
 	public static String APPLET_NAME = Messages.getString("MotionApplet.AppletName"); //$NON-NLS-1$
 	public static int APPLET_HEIGHT = 600;
 	public static int APPLET_WIDTH = 800;
@@ -318,15 +318,19 @@ public class MotionApplet extends JApplet {
 			Messages.setLanguagePolish();
 		}else
 			Messages.setLanguageEnglish();
-
 		
 		// Login dialog
 		LoginDialog loginDialog = new LoginDialog();
 		loginDialog.setVisible(true);
+
+		// Wait for login dialog to complete
+		while (!loginDialog.finished);
 		
 		// Check if login was successful
-		if (loginDialog.getResult() == LoginDialog.LOGIN_SUCCESSFUL) {	
-			System.err.println("Login unsuccesfull!");
+		if (loginDialog.getResult() != LoginDialog.LOGIN_SUCCESSFUL) {	
+			DatabaseConnection.log.severe("Login dialog was unsuccesfull!");
+			this.add(new JLabel("Login Unsuccessfull!"));
+			return;
 		}
 
 		// Create the status bar

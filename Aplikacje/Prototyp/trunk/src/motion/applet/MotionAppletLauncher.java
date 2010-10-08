@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import motion.Messages;
 
+@SuppressWarnings("serial")
 public class MotionAppletLauncher extends JApplet {
 	private JComboBox languageComboBox = new JComboBox();
 	private static String ENGLISH = "English";
