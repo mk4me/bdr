@@ -367,7 +367,7 @@ public enum EntityKind {
 		{
 			if (this.genericAttributeGroups==null)
 			{	
-				EntityAttributeGroup group = new EntityAttributeGroup("_static", this);
+				EntityAttributeGroup group = new EntityAttributeGroup(STATIC_ATTRIBUTE_GROUP, this);
 				group.add( new EntityAttribute(SessionGroupStaticAttributes.SessionGroupID.name(), this, null, group.name, EntityAttribute.INTEGER_TYPE) );
 				group.add( new EntityAttribute(SessionGroupStaticAttributes.Name.name(), this, null, group.name, EntityAttribute.STRING_TYPE) );
 				this.genericAttributeGroups = new HashMap<String, EntityAttributeGroup>();
@@ -381,6 +381,7 @@ public enum EntityKind {
 	//////////////////////////////////////////////////////////////////////////
 	
 	protected Class<?> staticAttributesNames;
+	public static String STATIC_ATTRIBUTE_GROUP = "_static";
 
 	protected static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9"), Messages.getString("EntityKind.10")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-10$
 
