@@ -27,7 +27,10 @@ public class BottomSplitPanel extends JPanel {
 	private static final String APPLY_SELECTION = Messages.getString("BottomSplitPanel.ApplySelection"); //$NON-NLS-1$
 	private static ConfigurationTree performerTree;
 	private static ConfigurationTree sessionTree;
+	private static ConfigurationTree sessionGroupTree;
 	private static ConfigurationTree trialTree;
+	private static ConfigurationTree fileTree;
+	private static ConfigurationTree measurementConfigurationTree;
 	private JButton applySelectionButton;
 	
 	public BottomSplitPanel() {
@@ -43,7 +46,10 @@ public class BottomSplitPanel extends JPanel {
 		
 		performerTree = createConfigurationTree(EntityKind.performer, configurationPanel);
 		sessionTree = createConfigurationTree(EntityKind.session, configurationPanel);
+		sessionGroupTree = createConfigurationTree(EntityKind.sessionGroup, configurationPanel);
 		trialTree = createConfigurationTree(EntityKind.trial, configurationPanel);
+		fileTree = createConfigurationTree(EntityKind.file, configurationPanel);
+		measurementConfigurationTree = createConfigurationTree(EntityKind.measurement_conf, configurationPanel);
 		
 		this.add(configurationPanel, BorderLayout.CENTER);
 		
@@ -107,9 +113,33 @@ public class BottomSplitPanel extends JPanel {
 		return checkedItems;
 	}
 	
+	public static ArrayList<String> getCheckedSessionGroupAttributes() {
+		ArrayList<String> checkedItems = new ArrayList<String>();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) sessionGroupTree.tree.getModel().getRoot();
+		getCheckedItems(node, checkedItems);
+		
+		return checkedItems;
+	}
+	
 	public static ArrayList<String> getCheckedTrialAttributes() {
 		ArrayList<String> checkedItems = new ArrayList<String>();
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) trialTree.tree.getModel().getRoot();
+		getCheckedItems(node, checkedItems);
+		
+		return checkedItems;
+	}
+	
+	public static ArrayList<String> getCheckedFileAttributes() {
+		ArrayList<String> checkedItems = new ArrayList<String>();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileTree.tree.getModel().getRoot();
+		getCheckedItems(node, checkedItems);
+		
+		return checkedItems;
+	}
+	
+	public static ArrayList<String> getCheckedMeasurementConfigurationAttributes() {
+		ArrayList<String> checkedItems = new ArrayList<String>();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) measurementConfigurationTree.tree.getModel().getRoot();
 		getCheckedItems(node, checkedItems);
 		
 		return checkedItems;
@@ -120,8 +150,14 @@ public class BottomSplitPanel extends JPanel {
 			return getCheckedPerformerAttributes();
 		} else if (entityKind.equals(EntityKind.session)) {
 			return getCheckedSessionAttributes();
+		} else if (entityKind.equals(EntityKind.sessionGroup)) {
+			return getCheckedSessionGroupAttributes();
 		} else if (entityKind.equals(EntityKind.trial)) {
 			return getCheckedTrialAttributes();
+		} else if (entityKind.equals(EntityKind.file)) {
+			return getCheckedFileAttributes();
+		} else if (entityKind.equals(EntityKind.measurement_conf)) {
+			return getCheckedMeasurementConfigurationAttributes();
 		}
 		
 		return null;
@@ -132,8 +168,14 @@ public class BottomSplitPanel extends JPanel {
 			return getCheckedPerformerAttributes().contains(attribute);
 		} else if (entityKind.equals(EntityKind.session)) {
 			return getCheckedSessionAttributes().contains(attribute);
+		} else if (entityKind.equals(EntityKind.sessionGroup)) {
+			return getCheckedSessionGroupAttributes().contains(attribute);
 		} else if (entityKind.equals(EntityKind.trial)) {
 			return getCheckedTrialAttributes().contains(attribute);
+		} else if (entityKind.equals(EntityKind.file)) {
+			return getCheckedFileAttributes().contains(attribute);
+		} else if (entityKind.equals(EntityKind.measurement_conf)) {
+			return getCheckedMeasurementConfigurationAttributes().contains(attribute);
 		}
 		
 		return false;

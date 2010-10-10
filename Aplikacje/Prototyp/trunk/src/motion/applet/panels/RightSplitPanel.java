@@ -45,10 +45,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static int TABLE_SIZE = 6;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
-	private static int TABLE_TRIAL = 2;
-	private static int TABLE_FILE = 3;
-	private static int TABLE_MEASUREMENT_CONFIGURATION = 4;
-	private static int TABLE_SESSION_GROUP = 5;
+	private static int TABLE_SESSION_GROUP = 2;
+	private static int TABLE_TRIAL = 3;
+	private static int TABLE_FILE = 4;
+	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	
 	public RightSplitPanel() {
@@ -64,6 +64,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_SESSION] = new JTable();
 		tabbedPane.addTab(EntityKind.session.getGUIName(), new JScrollPane(tables[TABLE_SESSION]));
 		
+		tabNameHash.put(EntityKind.sessionGroup, TABLE_SESSION_GROUP);
+		tables[TABLE_SESSION_GROUP] = new JTable();
+		tabbedPane.addTab(EntityKind.sessionGroup.getGUIName(), new JScrollPane(tables[TABLE_SESSION_GROUP]));
+		
 		tabNameHash.put(EntityKind.trial, TABLE_TRIAL);
 		tables[TABLE_TRIAL] = new JTable();
 		tabbedPane.addTab(EntityKind.trial.getGUIName(), new JScrollPane(tables[TABLE_TRIAL]));
@@ -76,10 +80,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_MEASUREMENT_CONFIGURATION] = new JTable();
 		tabbedPane.addTab(EntityKind.measurement_conf.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT_CONFIGURATION]));
 		
-		tabNameHash.put(EntityKind.sessionGroup, TABLE_SESSION_GROUP);
-		tables[TABLE_SESSION_GROUP] = new JTable();
-		tabbedPane.addTab(EntityKind.sessionGroup.getGUIName(), new JScrollPane(tables[TABLE_SESSION_GROUP]));
-		
 		this.setLayout(new BorderLayout());
 		
 		bottomPanel = new BottomSplitPanel();
@@ -89,12 +89,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 		bottomPanel.addApplyButtonListener(this);
 		
-		tables[0].addMouseListener(new PerformerMouseAdapter(this)); 
-		tables[1].addMouseListener(new SessionMouseAdapter(this));
-		tables[2].addMouseListener(new TrialMouseAdapter(this));
-		tables[3].addMouseListener(new FileMouseAdapter(this));
+		tables[TABLE_PERFORMER].addMouseListener(new PerformerMouseAdapter(this)); 
+		tables[TABLE_SESSION].addMouseListener(new SessionMouseAdapter(this));
+		tables[TABLE_TRIAL].addMouseListener(new TrialMouseAdapter(this));
+		tables[TABLE_FILE].addMouseListener(new FileMouseAdapter(this));
 		//TODO: Add measurement conf mouse listener.
-		tables[5].addMouseListener(new SessionGroupMouseAdapter(this));
+		tables[TABLE_SESSION_GROUP].addMouseListener(new SessionGroupMouseAdapter(this));
 		
 		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
@@ -199,6 +199,13 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
+	private void refreshSessionGroupTable() {
+		TableModel tableModel = tables[TABLE_SESSION_GROUP].getModel();
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
+		}
+	}
+	
 	private void refreshTrialTable() {
 		TableModel tableModel = tables[TABLE_TRIAL].getModel();
 		if (tableModel instanceof AttributeTableModel) {
@@ -220,13 +227,22 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
+	private void refreshMeasurementFileTable() {
+		TableModel tableModel = tables[TABLE_MEASUREMENT_CONFIGURATION].getModel();
+		if (tableModel instanceof AttributeTableModel) {
+			((AttributeTableModel) tableModel).refresh();
+		}
+	}
+	
 	//FIXME: Change to column hiding
 	public void refreshAllTables() {
 		int i = tabbedPane.getSelectedIndex();
 		refreshPerformerTable();
 		refreshSessionTable();
+		refreshSessionGroupTable();
 		refreshTrialTable();
-		//refreshFileTable();	// No view configuration for File.
+		refreshFileTable();
+		refreshMeasurementFileTable();
 		tabbedPane.setSelectedIndex(i);
 	}
 	

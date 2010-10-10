@@ -54,7 +54,6 @@ public class FormDialog extends BasicDialog {
 	
 	protected ArrayList<FormField> formFields = new ArrayList<FormField>();
 	
-	private static String STATIC_ATTRIBUTE_GROUP = "_static";
 	private static String ATTRIBUTES_TAB_NAME = "Attributes";
 	
 	public FormDialog(String title, String message) {
@@ -150,7 +149,7 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void addFormFields(EntityAttributeGroup attributes, String groupName) {
-		if (!groupName.equals(STATIC_ATTRIBUTE_GROUP)) {
+		if (!groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 			addFormTextLabel(groupName + ":");
 		}
 		
@@ -226,7 +225,7 @@ public class FormDialog extends BasicDialog {
 	
 	protected void setDefinedAttributes(int id) throws Exception {
 		for (FormField f : formFields) {
-			if (!f.attribute.groupName.equals(STATIC_ATTRIBUTE_GROUP)) {
+			if (!f.attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 				setAttributeValue(f);
 				WebServiceInstance.getDatabaseConnection().setEntityAttribute(
 						id,
@@ -276,7 +275,7 @@ public class FormDialog extends BasicDialog {
 	
 	protected boolean validateResult() {
 		for (FormField f : formFields) {
-			if (!f.attribute.groupName.equals(STATIC_ATTRIBUTE_GROUP)) {
+			if (!f.attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 				if (setAttributeValue(f) == false) {
 					
 					return false;
