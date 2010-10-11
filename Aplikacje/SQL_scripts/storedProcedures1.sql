@@ -1,5 +1,11 @@
 use Motion;
 go
+
+-- TODO:
+
+-- set_performer_conf_attribute
+
+
 -- non-XML queries
 -- ==================================
 
@@ -279,13 +285,6 @@ return
 			'_trial_static' as AttributeGroup,
 			'trial' as Entity
 	from Trial t)
-	union
-	(select 'Duration' as Name,
-			t.Czas_trwania as Value,
-			'integer' as Type,
-			'_trial_static' as AttributeGroup,
-			'trial' as Entity
-	from Trial t)
 	)
 union
 (	select a.Nazwa as Name, 
@@ -454,7 +453,6 @@ as
 				IdObserwacja as TrialID, 
 				IdSesja as SessionID, 
 				Opis_obserwacji as TrialDescription, 
-				Czas_trwania as Duration,
 				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
@@ -620,6 +618,19 @@ as
       for XML AUTO, ELEMENTS, root ('GroupSessionWithAttributesList')
 go
 
+-- Session's session group listing
+-- ===============================
+create procedure list_session_session_groups_xml (@user_login varchar(30), @sess_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji SessionGroupDefinition
+	where (@sess_id in ( select IdSesja from user_accessible_sessions_by_login(@user_login) ))
+	and SessionGroupDefinition.IdGrupa_sesji in 
+	( select sgs.IdGrupa_sesji from Sesja_grupa_sesji sgs where IdSesja = @sess_id)
+	for XML AUTO, ELEMENTS, root ('SessionGroupDefinitionList')
+go
+
+
 -- Trial listing queries
 -- =====================
 
@@ -629,8 +640,7 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select
 	IdObserwacja as TrialID,
 	IdSesja as SessionID,
-	Opis_obserwacji as TrialDescription,
-	Czas_trwania as Duration
+	Opis_obserwacji as TrialDescription
 from Obserwacja TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
@@ -642,7 +652,6 @@ select
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
 	Opis_obserwacji as TrialDescription, 
-	Czas_trwania as Duration,
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
@@ -983,7 +992,37 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int ;
 	declare @value_tuple_found as bit = 0;	
 
+	/*
+	Current static non-id attributes:
+		'LabID', 'int', 0, 'ID'
+		'MotionKindID', 'int', 0, 'ID'
+		'SessionDate', 'string', 0, 'dateTime'
+		'SessionDescription', 'string', 0, 'longString'
+
+	*/
+
 	set @result = 6; -- result 3 = type casting error
+
+	if(@attr_name = 'LabID' or @attr_name = 'MotionKindID' or @attr_name = 'SessionDate' or @attr_name = 'SessionDescription' )
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'LabID')
+			begin
+				update Sesja set IdLaboratorium  = cast ( @attr_value as int ) where IdSesja = @sess_id;
+			end;
+		else if(@attr_name = 'MotionKindID')
+			update Sesja set IdRodzaj_ruchu  =  cast ( @attr_value as int ) where IdSesja = @sess_id;
+		else if(@attr_name = 'SessionDate')
+			update Sesja set Data  =  cast ( @attr_value as datetime ) where IdSesja = @sess_id;
+		else if(@attr_name = 'SessionDescription')
+			update Sesja set Opis_sesji  = @attr_value where IdSesja = @sess_id;
+		set @result = 0;
+		return;
+	end;
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'session';
@@ -1047,6 +1086,7 @@ begin
 end;
 go
 
+
 create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1054,7 +1094,30 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
+	/*
+	Current static non-id attributes:
+	'FirstName', 'string', 0, 'shortString'
+	'LastName', 'string', 0, 'shortString'
+
+	*/
+
 	set @result = 6; -- result 3 = type casting error
+
+	if(@attr_name = 'FirstName' or @attr_name = 'LastName')
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'FirstName')
+			update Performer set Imie  = @attr_value where IdPerformer = @perf_id;
+		if(@attr_name = 'LastName')
+			update Performer set Nazwisko  = @attr_value where IdPerformer = @perf_id;
+		set @result = 0;
+		return;
+	end;
+
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'performer';
@@ -1126,7 +1189,29 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	set @result = 6; -- result 3 = type casting error
+
+	/*
+	Current static non-id attributes:
+	'TrialDescription', 'string', 0, 'longString'
+
+	*/
+
+	set @result = 6; -- result 6 = type casting error
+
+	if(@attr_name = 'TrialDescription')
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'TrialDescription')
+			update Obserwacja set Opis_obserwacji  = @attr_value where IdObserwacja = @trial_id;
+
+		set @result = 0;
+		return;
+	end;
+
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'trial';
@@ -1197,7 +1282,32 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
+	/*
+	Current static non-id attributes:
+		'FileName', 'string', 0, 'shortString'
+		'FileDescription', 'string', 0, 'longString'
+		'SubdirPath', 'string', 0, 'shortString'
+	*/
+
 	set @result = 6; -- result 3 = type casting error
+
+	if(@attr_name = 'FileName' or @attr_name = 'FileDescription' or @attr_name = 'SubdirPath' )
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'FileName')
+			update Plik set Nazwa_pliku  = @attr_value where IdPlik = @file_id;
+		else if(@attr_name = 'Sciezka')
+			update Plik set Nazwa_pliku  =  @attr_value where IdPlik = @file_id;
+		else if(@attr_name = 'SubdirPath')
+			update Plik set Opis_pliku  = @attr_value where IdPlik = @file_id;
+		set @result = 0;
+		return;
+	end;
+
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'file';
@@ -1253,6 +1363,7 @@ begin
 end;
 go
 
+
 create procedure set_measurement_conf_attribute (@mc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1260,7 +1371,32 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	set @result = 6; -- result 3 = type casting error
+	/*
+	Current static non-id attributes:
+	'MeasurementConfName', 'string', 0, 'shortString'
+	'MeasurementConfKind', 'string', 0, 'shortString'
+	'MeasurementConfDescription', 'string', 0, 'longString'
+
+	*/
+
+	set @result = 6; -- result 6 = type casting error
+
+	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'MeasurementConfName')
+			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfKind')
+			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfDescription')
+			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		set @result = 0;
+		return;
+	end;
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement_conf';
@@ -1322,7 +1458,7 @@ begin
 			set @result = 0;
 		end;
 end;
-go
+go	
 
 create procedure set_measurement_attribute (@meas_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
@@ -1331,8 +1467,31 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	set @result = 6; -- result 3 = type casting error
+	/*
+	Current static non-id attributes:
 	
+
+	*/
+
+	set @result = 6; -- result 6 = type casting error
+	/*
+	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'MeasurementConfName')
+			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfKind')
+			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfDescription')
+			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		set @result = 0;
+		return;
+	end;
+	*/
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement_conf';
 	if @@rowcount = 0 

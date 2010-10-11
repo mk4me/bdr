@@ -10,7 +10,8 @@ values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'TrialDescription', 'string', 0, 'longString', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'Duration', 'int', 0, 'nonNegativeInteger', 'second') 
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='trial'), 'TrialName', 'string', 0, 'shortString', NULL) 
+
 
 insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('_static', 'performer');
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -159,6 +160,13 @@ insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'General_session_a
 go
 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='session'), 'SessionName', 'string', 0, 'shortString', NULL) 
+go
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='session'), 'Tags', 'string', 0, 'shortString', NULL) 
+go
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'SessionName', 'string', 0, 'shortString', NULL)    
 go
 -- iloœæ aktorów // PerformerCount
@@ -187,7 +195,13 @@ go
 insert into Rodzaj_ruchu ( Nazwa ) values ('dance')
 go
 
+insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('General_trial_attributes', 'trial');
+
+
 select * from Rodzaj_ruchu
+
+
+
 
 -- temperatura otoczenia
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -208,3 +222,15 @@ delete from Konfiguracja_pomiarowa
 select * from Pomiar
 
 select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+
+select * from Sesja
+
+insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji, Publiczna, PublicznaZapis)
+values ( 1, 1, 1, '2010-10-11 12:00:00', 'Sesja testowa', 1, 0 )
+
+insert into Laboratorium (Nazwa) values ('Tester')
+go
+
+insert into Obserwacja ( IdSesja, Opis_obserwacji ) values ( 1, '--')
+
+insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj ) values ( 'Nazwa', 'Opis', 'Rodzaj');

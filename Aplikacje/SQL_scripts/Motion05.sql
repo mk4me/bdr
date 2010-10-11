@@ -1,5 +1,5 @@
 use Motion;
- 
+go 
  CREATE TABLE Atrybut (
         IdAtrybut            int IDENTITY,
         IdGrupa_atrybutow    int NOT NULL,
@@ -63,8 +63,7 @@ go
  CREATE TABLE Obserwacja (
         IdObserwacja         int IDENTITY,
         IdSesja              int NOT NULL,
-        Opis_obserwacji      varchar(100) NOT NULL,
-        Czas_trwania         int NOT NULL
+        Opis_obserwacji      varchar(100) NOT NULL
  )
 go
  

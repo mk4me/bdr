@@ -154,7 +154,7 @@ begin
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +', ';
 	if(@sess = 1) set @selectClause = @selectClause + 's.IdSesja as SessionID, s.IdLaboratorium as LabID, s.IdRodzaj_ruchu as MotionKindID,	s.Data as SessionDate,	s.Opis_sesji as SessionDescription ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +', ';
-	if(@trial = 1) set @selectClause = @selectClause +'t.IdObserwacja as TrialID, t.Opis_obserwacji as TrialDescription, t.Czas_trwania as TrialDuration ';
+	if(@trial = 1) set @selectClause = @selectClause +'t.IdObserwacja as TrialID, t.Opis_obserwacji as TrialDescription ';
 	if(@trial = 1 and (@mc=1 or @meas=1)) set @selectClause = @selectClause + ', ';
 	if(@mc = 1) set @selectClause = @selectClause + 'c.IdKonfiguracja_pomiarowa as MeasurementConfID,	c.Nazwa as MeasureConfName, c.Opis as MeasureConfDescription ';
 	if(@mc = 1 and  @meas=1) set @selectClause = @selectClause + ', ';
@@ -291,7 +291,6 @@ begin
 				case @currentFeatureName
 					when 'TrialID' then	't.IdObserwacja'
 					when 'TrialDescription' then 't.Opis_obserwacji'
-					when 'Duration' then 't.Czas_trwania'
 					else '(select top 1 * from trial_attr_value(t.IdObserwacja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement' then (
 				case @currentFeatureName
@@ -566,7 +565,6 @@ begin
 				case @currentFeatureName
 					when 'TrialID' then	't.IdObserwacja'
 					when 'TrialDescription' then 't.Opis_obserwacji'
-					when 'Duration' then 't.Czas_trwania'
 					else '(select top 1 * from trial_attr_value(t.IdObserwacja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement' then (
 				case @currentFeatureName
@@ -921,7 +919,6 @@ select
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
 	Opis_obserwacji as TrialDescription, 
-	Czas_trwania as Duration,
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) 
 	and IdObserwacja in 
