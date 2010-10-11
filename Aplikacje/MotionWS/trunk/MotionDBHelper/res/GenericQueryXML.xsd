@@ -18,7 +18,6 @@
             <xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
-            <xsd:element name="Duration" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfName" type="xsd:string" minOccurs="0" maxOccurs="1"  />

@@ -7,7 +7,6 @@
           <xsd:element name="TrialID" type="xsd:int" />
           <xsd:element name="SessionID" type="xsd:int" />
           <xsd:element name="TrialDescription" type="xsd:string" />
-          <xsd:element name="Duration" type="xsd:int" />
           <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
       </xsd:complexType>

@@ -51,7 +51,6 @@
 									<xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-									<xsd:element name="Duration" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -100,7 +99,6 @@
 						<xsd:element name="TrialID" type="xsd:int"/>
 						<xsd:element name="SessionID" type="xsd:int"/>
 						<xsd:element name="TrialDescription" type="xsd:string"/>
-						<xsd:element name="Duration" type="xsd:int"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -233,7 +231,6 @@
 								<xsd:attribute name="TrialID" type="xsd:int"/>
 								<xsd:attribute name="SessionID" type="xsd:int"/>
 								<xsd:attribute name="TrialDescription" type="xsd:string"/>
-								<xsd:attribute name="Duration" type="xsd:int"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>

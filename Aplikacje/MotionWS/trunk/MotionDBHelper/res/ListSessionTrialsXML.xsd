@@ -9,7 +9,6 @@
                 <xsd:attribute name="TrialID" type="xsd:int" />
                 <xsd:attribute name="SessionID" type="xsd:int" />
                 <xsd:attribute name="TrialDescription" type="xsd:string" />
-                <xsd:attribute name="Duration" type="xsd:int" />
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>
