@@ -1157,7 +1157,6 @@ ALTER TABLE Wartosc_Atrybutu_obserwacji
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
 go
 
-
 ALTER TABLE Wartosc_Atrybutu_konfiguracji_pomiarowej
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
 go
@@ -1173,6 +1172,56 @@ go
 ALTER TABLE Konfiguracja_performera
         ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade;
 go
+
+----------- NEW
+
+  CREATE TABLE Wartosc_atrybutu_konfiguracji_performera (
+        IdKonfiguracja_performera         int NOT NULL,
+        IdAtrybut            int NOT NULL,
+        Wartosc_tekst        varchar(100) NULL,
+        Wartosc_liczba       numeric(10,2) NULL,
+        Wartosc_zmiennoprzecinkowa float NULL,
+        Wartosc_Id int NULL
+ )
+go
+ 
+ CREATE INDEX X1Wartosc_atrybutu_konfiguracji_performera ON Wartosc_atrybutu_konfiguracji_performera
+ (
+        IdKonfiguracja_performera
+ )
+go
+ 
+ CREATE INDEX X2Wartosc_atrybutu_konfiguracji_performera ON Wartosc_atrybutu_konfiguracji_performera
+ (
+        IdAtrybut
+ )
+go
+
+ CREATE INDEX X3Wartosc_atrybutu_konfiguracji_performera ON Wartosc_atrybutu_konfiguracji_performera
+ (
+        Wartosc_Id
+ )
+go 
+ 
+ ALTER TABLE Wartosc_atrybutu_konfiguracji_performera
+        ADD PRIMARY KEY (IdKonfiguracja_performera, IdAtrybut)
+go
+ 
+ 
+  ALTER TABLE Wartosc_atrybutu_konfiguracji_performera
+        ADD FOREIGN KEY (IdAtrybut)
+                              REFERENCES Atrybut on delete cascade;
+go
+ 
+ 
+ ALTER TABLE Wartosc_atrybutu_konfiguracji_performera
+        ADD FOREIGN KEY (IdKonfiguracja_performera)
+                              REFERENCES Konfiguracja_performera on delete cascade;
+go
+ALTER TABLE Wartosc_Atrybutu_konfiguracji_performera
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+go
+
 
 
 

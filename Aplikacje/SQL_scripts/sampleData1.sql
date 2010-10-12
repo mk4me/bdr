@@ -166,9 +166,6 @@ insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='session'), 'Tags', 'string', 0, 'shortString', NULL) 
 go
 
-insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'SessionName', 'string', 0, 'shortString', NULL)    
-go
 -- iloœæ aktorów // PerformerCount
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'PerformerCount', 'integer', 0, 'nonNegativeInteger', NULL)    
@@ -234,3 +231,13 @@ go
 insert into Obserwacja ( IdSesja, Opis_obserwacji ) values ( 1, '--')
 
 insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj ) values ( 'Nazwa', 'Opis', 'Rodzaj');
+
+declare @id_count int;
+select @id_count = COUNT(s.IdSesja) from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji );
+while @id_count > 0
+begin
+	insert into Sesja_grupa_sesji ( IdGrupa_sesji, IdSesja ) values ( 1, (
+	 select top 1 s.IdSesja from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji )));
+	 select @id_count = COUNT(s.IdSesja) from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji );
+end;
+go

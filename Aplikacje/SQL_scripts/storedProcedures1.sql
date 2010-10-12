@@ -480,6 +480,20 @@ as
 			for XML AUTO, ELEMENTS
 go
 
+create procedure get_performer_configuration_by_id_xml ( @res_id int )
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select 
+				IdKonfiguracja_performera as PerformerConfID,
+				IdSesja as SessionID,
+				IdPerformer as PerformerID,
+				Opis as MeasurementConfDescription,
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Konfiguracja_performera PerformerConfDetailsWithAttributes where IdKonfiguracja_pomiarowa=@res_id
+			for XML AUTO, ELEMENTS
+go
+
+
 -- Performer listing queries
 -- =========================
 
@@ -713,6 +727,24 @@ from Pomiar MeasurementDetailsWithAttributes
 where IdPomiar = @trial_id
     for XML AUTO, ELEMENTS, root ('TrialMeasurementWithAttributesList')
 go
+
+-- Performer conf listing queries
+-- ==============================
+
+
+create procedure list_session_performer_configurations_attributes_xml(@user_login varchar(30), @sess_id int)
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select 
+	IdKonfiguracja_performera as PerformerConfID, 
+	IdSesja as SessionID, 
+	IdPerformer as PerformerID, 
+	(select * from list_performer_con_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Konfiguracja_performera PerformerConfDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
+    for XML AUTO, ELEMENTS, root ('SessionPerformerConfWithAttributesList')
+go
+
+
 
 -- Measurement result listing queries
 -- ==================================
