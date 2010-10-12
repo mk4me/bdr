@@ -151,18 +151,17 @@ END CATCH;";
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateTrial(int sessionID, string trialDescription, int trialDuration)
+        public int CreateTrial(int sessionID, string trialDescription)
         {
             int newTrialId = 0;
             try
             {
                 OpenConnection();
-                cmd.CommandText = @"insert into Obserwacja ( IdSesja, Opis_obserwacji, Czas_trwania)
-                                    values (@trial_session, @trial_desc, @trial_duration )
+                cmd.CommandText = @"insert into Obserwacja ( IdSesja, Opis_obserwacji)
+                                    values (@trial_session, @trial_desc )
                                             set @trial_id = SCOPE_IDENTITY()";
                 cmd.Parameters.Add("@trial_session", SqlDbType.Int);
                 cmd.Parameters.Add("@trial_desc", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@trial_duration", SqlDbType.Int);
 
                 SqlParameter trialIdParameter =
                     new SqlParameter("@trial_id", SqlDbType.Int);
@@ -170,7 +169,6 @@ END CATCH;";
                 cmd.Parameters.Add(trialIdParameter);
                 cmd.Parameters["@trial_session"].Value = sessionID;
                 cmd.Parameters["@trial_desc"].Value = trialDescription;
-                cmd.Parameters["@trial_duration"].Value = trialDuration;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
                 newTrialId = (int)trialIdParameter.Value;

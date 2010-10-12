@@ -25,7 +25,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        int CreateTrial(int sessionID, string trialDescription, int trialDuration);
+        int CreateTrial(int sessionID, string trialDescription);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]

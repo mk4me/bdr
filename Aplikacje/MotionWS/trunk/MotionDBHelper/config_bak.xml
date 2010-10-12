@@ -1,4 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿
+
+
+<?xml version="1.0"?>
+<!-- IP-URL enforced version -->
 <configuration>
 
   <configSections>
@@ -17,12 +21,12 @@
   <appSettings/>
   <connectionStrings/>
   <system.web>
-    <!-- 
-            Set compilation debug="true" to insert debugging 
+
+    <!--Set compilation debug="true" to insert debugging 
             symbols into the compiled page. Because this 
             affects performance, set this value to true only 
-            during development.
-        -->
+            during development.-->
+
     <compilation debug="true">
       <assemblies>
         <add assembly="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
@@ -31,29 +35,28 @@
         <add assembly="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
       </assemblies>
     </compilation>
-    <!--
-            The <authentication> section enables configuration 
+
+    <!--The <authentication> section enables configuration 
             of the security authentication mode used by 
-            ASP.NET to identify an incoming user. 
-        -->
+            ASP.NET to identify an incoming user.-->
+
     <authentication mode="Windows" />
-    <authorization>
+    <!--<authorization>
       <allow users="V21\MotionUsers"/>
       <deny users="*"/>
-    </authorization>
-    <!--
-            The <customErrors> section enables configuration 
+    </authorization>-->
+
+    <!--The <customErrors> section enables configuration 
             of what to do if/when an unhandled error occurs 
             during the execution of a request. Specifically, 
             it enables developers to configure html error pages 
-            to be displayed in place of a error stack trace.
+            to be displayed in place of a error stack trace.-->
 
-        <customErrors mode="RemoteOnly" defaultRedirect="GenericErrorPage.htm">
-            <error statusCode="403" redirect="NoAccess.htm" />
-            <error statusCode="404" redirect="FileNotFound.htm" />
-        </customErrors>
-        -->
-    <customErrors mode="Off"></customErrors>
+    <customErrors mode="RemoteOnly" defaultRedirect="GenericErrorPage.htm">
+      <error statusCode="403" redirect="NoAccess.htm" />
+      <error statusCode="404" redirect="FileNotFound.htm" />
+    </customErrors>
+
     <pages>
       <controls>
         <add tagPrefix="asp" namespace="System.Web.UI" assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35"/>
@@ -78,10 +81,10 @@
       </compiler>
     </compilers>
   </system.codedom>
-  <!-- 
-        The system.webServer section is required for running ASP.NET AJAX under Internet
-        Information Services 7.0.  It is not necessary for previous version of IIS.
-    -->
+
+  <!--The system.webServer section is required for running ASP.NET AJAX under Internet
+        Information Services 7.0.  It is not necessary for previous version of IIS.-->
+
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false"/>
     <modules>
@@ -111,13 +114,20 @@
     </assemblyBinding>
   </runtime>
   <system.serviceModel>
-    <!--<serviceHostingEnvironment aspNetCompatibilityEnabled="true"></serviceHostingEnvironment>-->
+    <!-- <serviceHostingEnvironment aspNetCompatibilityEnabled="true"></serviceHostingEnvironment> -->
+    <serviceHostingEnvironment>
+      <baseAddressPrefixFilters>
 
+        <add prefix="http://83.230.112.43"/>
 
+      </baseAddressPrefixFilters>
+
+    </serviceHostingEnvironment>
     <services>
       <service behaviorConfiguration="ServiceFacadeServiceBehavior"
         name="MotionDBWebServices.BasicQueriesWS">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
+        <endpoint address="http://83.230.112.43/Motion/BasicQueriesWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
           bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"
           contract="MotionDBWebServices.IBasicQueriesWS">
           <identity>
@@ -127,84 +137,106 @@
       </service>
       <service behaviorConfiguration="MotionDBWebServices.BasicUpdatesWSBehavior"
         name="MotionDBWebServices.BasicUpdatesWS">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
+        <endpoint address="http://83.230.112.43/Motion/BasicUpdatesWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
           bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService"
           contract="MotionDBWebServices.IBasicUpdatesWS">
           <identity>
             <dns value="localhost" />
           </identity>
         </endpoint>
-        <!--<endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange" />-->
+
       </service>
       <service behaviorConfiguration="MotionDBWebServices.FileStoremanWSBehavior"
         name="MotionDBWebServices.FileStoremanWS">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
+        <endpoint address="http://83.230.112.43/Motion/FileStoremanWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
           bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService"
           contract="MotionDBWebServices.IFileStoremanWS">
           <identity>
             <dns value="localhost" />
           </identity>
         </endpoint>
-        <!--<endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange" />-->
+
       </service>
       <service behaviorConfiguration="MotionDBWebServices.AuthorizationWSBehavior"
         name="MotionDBWebServices.AuthorizationWS">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
+        <endpoint address="http://83.230.112.43/Motion/AuthorizationWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
           bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"
           contract="MotionDBWebServices.IAuthorizationWS">
           <identity>
             <dns value="localhost" />
           </identity>
         </endpoint>
-        <!--<endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange" />-->
+
       </service>
       <service behaviorConfiguration="MotionDBWebServices.UserPersonalSpaceBehavior"
         name="MotionDBWebServices.UserPersonalSpace">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
+        <endpoint address="http://83.230.112.43/Motion/UserPersonalSpaceWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
           bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService"
           contract="MotionDBWebServices.IUserPersonalSpaceWS">
           <identity>
             <dns value="localhost" />
           </identity>
         </endpoint>
-        <!--<endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange" />-->
+
       </service>
       <service behaviorConfiguration="MotionDBWebServices.AdministrationWSBehavior"
         name="MotionDBWebServices.AdministrationWS">
-        <endpoint address="" binding="basicHttpBinding" bindingConfiguration="MyBinding"
-                  bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService"
-                  contract="MotionDBWebServices.IAdministrationWS">
+        <endpoint address="http://83.230.112.43/Motion/AdministrationWS.svc"
+          binding="basicHttpBinding" bindingConfiguration="MyBinding"
+          bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService"
+          contract="MotionDBWebServices.IAdministrationWS">
           <identity>
             <dns value="localhost" />
           </identity>
         </endpoint>
-        <!--<endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange" />-->
+
+      </service>
+      <service behaviorConfiguration="MotionDBWebServices.SampleOpsWSBehavior"
+        name="MotionDBWebServices.SampleOpsWS">
+        <endpoint address="http://83.230.112.43/Motion/SampleOpsWS.svc"
+                  binding="basicHttpBinding"
+                  bindingConfiguration="MyBinding"
+                  bindingNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/SampleOpsService"
+                  contract="MotionDBWebServices.ISampleOpsWS">
+          <identity>
+            <dns value="localhost" />
+          </identity>
+        </endpoint>
+
       </service>
     </services>
     <behaviors>
       <serviceBehaviors>
         <behavior name="ServiceFacadeServiceBehavior">
-          <serviceMetadata httpGetEnabled="true"  />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/BasicQueriesWS.svc" />
           <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
         <behavior name="MotionDBWebServices.BasicUpdatesWSBehavior">
-          <serviceMetadata httpGetEnabled="true"  />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/BasicUpdatesWS.svc" />
           <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
         <behavior name="MotionDBWebServices.FileStoremanWSBehavior">
-          <serviceMetadata httpGetEnabled="true"   />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/FileStoremanWS.svc" />
           <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
         <behavior name="MotionDBWebServices.AuthorizationWSBehavior">
-          <serviceMetadata httpGetEnabled="true"  />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/AuthorizationWS.svc" />
           <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
         <behavior name="MotionDBWebServices.UserPersonalSpaceBehavior">
-          <serviceMetadata httpGetEnabled="true"  />
-          <serviceDebug includeExceptionDetailInFaults="false"  />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/UserPersonalSpaceWS.svc" />
+          <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
         <behavior name="MotionDBWebServices.AdministrationWSBehavior">
-          <serviceMetadata httpGetEnabled="true"  />
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/AdministrationWS.svc" />
+          <serviceDebug includeExceptionDetailInFaults="false" />
+        </behavior>
+        <behavior name="MotionDBWebServices.SampleOpsWSBehavior">
+          <serviceMetadata httpGetEnabled="true" httpGetUrl="http://83.230.112.43/Motion/SampleOpsWS.svc" />
           <serviceDebug includeExceptionDetailInFaults="false" />
         </behavior>
       </serviceBehaviors>
@@ -222,4 +254,5 @@
 
   </system.serviceModel>
 </configuration>
+
 
