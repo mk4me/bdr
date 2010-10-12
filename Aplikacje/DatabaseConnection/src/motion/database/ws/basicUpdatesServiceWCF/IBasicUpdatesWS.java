@@ -97,7 +97,6 @@ public interface IBasicUpdatesWS {
      * 
      * @param trialDescription
      * @param sessionID
-     * @param trialDuration
      * @return
      *     returns int
      * @throws IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage
@@ -110,9 +109,7 @@ public interface IBasicUpdatesWS {
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int sessionID,
         @WebParam(name = "trialDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        String trialDescription,
-        @WebParam(name = "trialDuration", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int trialDuration)
+        String trialDescription)
         throws IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage
     ;
 

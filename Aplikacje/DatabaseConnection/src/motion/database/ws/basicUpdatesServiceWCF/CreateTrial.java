@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="sessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="trialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="trialDuration" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,15 +30,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "sessionID",
-    "trialDescription",
-    "trialDuration"
+    "trialDescription"
 })
 @XmlRootElement(name = "CreateTrial")
 public class CreateTrial {
 
     protected int sessionID;
     protected String trialDescription;
-    protected int trialDuration;
 
     /**
      * Gets the value of the sessionID property.
@@ -79,22 +76,6 @@ public class CreateTrial {
      */
     public void setTrialDescription(String value) {
         this.trialDescription = value;
-    }
-
-    /**
-     * Gets the value of the trialDuration property.
-     * 
-     */
-    public int getTrialDuration() {
-        return trialDuration;
-    }
-
-    /**
-     * Sets the value of the trialDuration property.
-     * 
-     */
-    public void setTrialDuration(int value) {
-        this.trialDuration = value;
     }
 
 }

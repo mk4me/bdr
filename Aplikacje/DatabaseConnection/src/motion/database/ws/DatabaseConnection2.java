@@ -1133,7 +1133,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createTrial", this );
 			
-			return port.createTrial(sessionID, trialDescription, 0);
+			return port.createTrial(sessionID, trialDescription);
 		} 
 		catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
