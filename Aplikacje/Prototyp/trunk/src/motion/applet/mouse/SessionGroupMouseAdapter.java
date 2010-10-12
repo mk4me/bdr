@@ -48,7 +48,7 @@ public class SessionGroupMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewSessions(int recordId) {
-		rightPanel.showTable(EntityKind.session, recordId);
+		rightPanel.showTable(EntityKind.session, recordId, EntityKind.sessionGroup);
 		MotionApplet.setBrowsePanelVisible();
 	}
 }
