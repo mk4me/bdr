@@ -38,7 +38,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                   &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                   &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -118,7 +117,6 @@ public class GenericQueryResult {
      *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -145,7 +143,6 @@ public class GenericQueryResult {
         "sessionDescription",
         "trialID",
         "trialDescription",
-        "duration",
         "measurementID",
         "measurementConfID",
         "measurementConfName",
@@ -177,8 +174,6 @@ public class GenericQueryResult {
         protected Integer trialID;
         @XmlElement(name = "TrialDescription")
         protected String trialDescription;
-        @XmlElement(name = "Duration")
-        protected Integer duration;
         @XmlElement(name = "MeasurementID")
         protected Integer measurementID;
         @XmlElement(name = "MeasurementConfID")
@@ -452,30 +447,6 @@ public class GenericQueryResult {
          */
         public void setTrialDescription(String value) {
             this.trialDescription = value;
-        }
-
-        /**
-         * Gets the value of the duration property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
-         */
-        public Integer getDuration() {
-            return duration;
-        }
-
-        /**
-         * Sets the value of the duration property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setDuration(Integer value) {
-            this.duration = value;
         }
 
         /**

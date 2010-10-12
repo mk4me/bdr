@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  *                 &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -93,7 +92,6 @@ public class SessionTrialList {
      *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="Duration" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -111,8 +109,6 @@ public class SessionTrialList {
         protected Integer sessionID;
         @XmlAttribute(name = "TrialDescription")
         protected String trialDescription;
-        @XmlAttribute(name = "Duration")
-        protected Integer duration;
 
         /**
          * Gets the value of the trialID property.
@@ -184,30 +180,6 @@ public class SessionTrialList {
          */
         public void setTrialDescription(String value) {
             this.trialDescription = value;
-        }
-
-        /**
-         * Gets the value of the duration property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
-         */
-        public Integer getDuration() {
-            return duration;
-        }
-
-        /**
-         * Sets the value of the duration property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setDuration(Integer value) {
-            this.duration = value;
         }
 
     }

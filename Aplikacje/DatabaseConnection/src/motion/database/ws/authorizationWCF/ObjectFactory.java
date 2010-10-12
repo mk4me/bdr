@@ -125,14 +125,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AlterSessionVisibilityResponse }
-     * 
-     */
-    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
-        return new AlterSessionVisibilityResponse();
-    }
-
-    /**
      * Create an instance of {@link RemoveSessionPrivilegesResponse }
      * 
      */
@@ -194,6 +186,14 @@ public class ObjectFactory {
      */
     public ListSessionPrivilegesResponse.ListSessionPrivilegesResult createListSessionPrivilegesResponseListSessionPrivilegesResult() {
         return new ListSessionPrivilegesResponse.ListSessionPrivilegesResult();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibilityResponse }
+     * 
+     */
+    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
+        return new AlterSessionVisibilityResponse();
     }
 
     /**

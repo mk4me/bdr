@@ -106,8 +106,7 @@ public interface DatabaseProxy {
 			String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName)
 			throws Exception;
 
-	public abstract int createTrial(int sessionID, String trialDescription,
-			int trialDuration) throws Exception;
+	public abstract int createTrial(int sessionID, String trialDescription) throws Exception;
 
 	/**
 	 * This is a new method for setting generic attribute value of any entity which supports generic values.

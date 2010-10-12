@@ -141,19 +141,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineAttriubeGroup }
-     * 
-     */
-    public DefineAttriubeGroup createDefineAttriubeGroup() {
-        return new DefineAttriubeGroup();
-    }
-
-    /**
      * Create an instance of {@link DefineAttributeResponse }
      * 
      */
     public DefineAttributeResponse createDefineAttributeResponse() {
         return new DefineAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttriubeGroup }
+     * 
+     */
+    public DefineAttriubeGroup createDefineAttriubeGroup() {
+        return new DefineAttriubeGroup();
     }
 
     /**

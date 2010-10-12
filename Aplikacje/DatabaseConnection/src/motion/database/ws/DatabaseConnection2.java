@@ -1128,12 +1128,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public int createTrial(int sessionID, String trialDescription, int trialDuration ) throws Exception
+	public int createTrial(int sessionID, String trialDescription ) throws Exception
 	{
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createTrial", this );
 			
-			return port.createTrial(sessionID, trialDescription, trialDuration);
+			return port.createTrial(sessionID, trialDescription, 0);
 		} 
 		catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

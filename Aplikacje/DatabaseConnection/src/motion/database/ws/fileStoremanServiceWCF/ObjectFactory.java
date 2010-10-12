@@ -61,11 +61,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFile }
+     * Create an instance of {@link StoreSessionFiles }
      * 
      */
-    public StoreTrialFile createStoreTrialFile() {
-        return new StoreTrialFile();
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreMeasurementConfFilesResponse }
+     * 
+     */
+    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
+        return new StoreMeasurementConfFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link DownloadCompleteResponse }
+     * 
+     */
+    public DownloadCompleteResponse createDownloadCompleteResponse() {
+        return new DownloadCompleteResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFilesResponse }
+     * 
+     */
+    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
+        return new StoreTrialFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link DownloadComplete }
+     * 
+     */
+    public DownloadComplete createDownloadComplete() {
+        return new DownloadComplete();
+    }
+
+    /**
+     * Create an instance of {@link FileAccessServiceException }
+     * 
+     */
+    public FileAccessServiceException createFileAccessServiceException() {
+        return new FileAccessServiceException();
     }
 
     /**
@@ -85,35 +125,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFiles }
+     * Create an instance of {@link StoreMeasurementConfFile }
      * 
      */
-    public StoreTrialFiles createStoreTrialFiles() {
-        return new StoreTrialFiles();
+    public StoreMeasurementConfFile createStoreMeasurementConfFile() {
+        return new StoreMeasurementConfFile();
     }
 
     /**
-     * Create an instance of {@link StoreSessionFile }
+     * Create an instance of {@link StoreTrialFile }
      * 
      */
-    public StoreSessionFile createStoreSessionFile() {
-        return new StoreSessionFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFilesResponse }
-     * 
-     */
-    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
-        return new StoreTrialFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreMeasurementConfFiles }
-     * 
-     */
-    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
-        return new StoreMeasurementConfFiles();
+    public StoreTrialFile createStoreTrialFile() {
+        return new StoreTrialFile();
     }
 
     /**
@@ -125,19 +149,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreMeasurementConfFile }
+     * Create an instance of {@link StoreTrialFiles }
      * 
      */
-    public StoreMeasurementConfFile createStoreMeasurementConfFile() {
-        return new StoreMeasurementConfFile();
-    }
-
-    /**
-     * Create an instance of {@link FileData }
-     * 
-     */
-    public FileData createFileData() {
-        return new FileData();
+    public StoreTrialFiles createStoreTrialFiles() {
+        return new StoreTrialFiles();
     }
 
     /**
@@ -149,14 +165,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadComplete }
-     * 
-     */
-    public DownloadComplete createDownloadComplete() {
-        return new DownloadComplete();
-    }
-
-    /**
      * Create an instance of {@link StoreTrialFileResponse }
      * 
      */
@@ -165,43 +173,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreMeasurementConfFilesResponse }
-     * 
-     */
-    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
-        return new StoreMeasurementConfFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFiles }
-     * 
-     */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
-    }
-
-    /**
-     * Create an instance of {@link DownloadCompleteResponse }
-     * 
-     */
-    public DownloadCompleteResponse createDownloadCompleteResponse() {
-        return new DownloadCompleteResponse();
-    }
-
-    /**
-     * Create an instance of {@link FileAccessServiceException }
-     * 
-     */
-    public FileAccessServiceException createFileAccessServiceException() {
-        return new FileAccessServiceException();
-    }
-
-    /**
      * Create an instance of {@link RetrieveFile }
      * 
      */
     public RetrieveFile createRetrieveFile() {
         return new RetrieveFile();
+    }
+
+    /**
+     * Create an instance of {@link StoreMeasurementConfFiles }
+     * 
+     */
+    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
+        return new StoreMeasurementConfFiles();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFile }
+     * 
+     */
+    public StoreSessionFile createStoreSessionFile() {
+        return new StoreSessionFile();
+    }
+
+    /**
+     * Create an instance of {@link FileData }
+     * 
+     */
+    public FileData createFileData() {
+        return new FileData();
     }
 
     /**

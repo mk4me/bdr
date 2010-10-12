@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="Duration" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -36,7 +35,6 @@ import javax.xml.bind.annotation.XmlType;
     "trialID",
     "sessionID",
     "trialDescription",
-    "duration",
     "attributes"
 })
 @XmlRootElement(name = "TrialDetailsWithAttributes")
@@ -48,8 +46,6 @@ public class TrialDetailsWithAttributes {
     protected int sessionID;
     @XmlElement(name = "TrialDescription", required = true)
     protected String trialDescription;
-    @XmlElement(name = "Duration")
-    protected int duration;
     @XmlElement(name = "Attributes")
     protected Attributes attributes;
 
@@ -107,22 +103,6 @@ public class TrialDetailsWithAttributes {
      */
     public void setTrialDescription(String value) {
         this.trialDescription = value;
-    }
-
-    /**
-     * Gets the value of the duration property.
-     * 
-     */
-    public int getDuration() {
-        return duration;
-    }
-
-    /**
-     * Sets the value of the duration property.
-     * 
-     */
-    public void setDuration(int value) {
-        this.duration = value;
     }
 
     /**
