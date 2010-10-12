@@ -16,7 +16,6 @@ public class TrialFormDialog extends FormDialog {
 	private static String TITLE = "New trial";
 	private static String WELCOME_MESSAGE = "Create a new trial.";
 	private static String MISSING_TRIAL_DESCRIPTION = "Missing trial description.";
-	private static String MISSING_DURATION = "Missing or incorrect duration.";
 	private static String CREATING_MESSAGE = "Creating a new trial...";
 	
 	private int sessionId;
@@ -41,8 +40,9 @@ public class TrialFormDialog extends FormDialog {
 							try {
 								int trialID = WebServiceInstance.getDatabaseConnection().createTrial(
 										TrialFormDialog.this.sessionId,
-										TrialFormDialog.this.getTrialDescription(),
-										TrialFormDialog.this.getDuration());
+										TrialFormDialog.this.getTrialDescription()
+//										TrialFormDialog.this.getDuration()
+										);
 								setDefinedAttributes(trialID);
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -82,7 +82,7 @@ public class TrialFormDialog extends FormDialog {
 		return (String) getAttributeValue(EntityKind.trial, TrialStaticAttributes.TrialDescription.toString());
 	}
 	
-	private int getDuration() {
+/*	private int getDuration() {
 		int duration = -1;
 		Object value = getAttributeValue(EntityKind.trial, TrialStaticAttributes.Duration.toString());
 		if (value != null) {
@@ -91,17 +91,13 @@ public class TrialFormDialog extends FormDialog {
 		
 		return duration;
 	}
-	
+	*/
 	protected boolean validateResult() {
 		if (getTrialDescription().equals("")) {
 			this.messageLabel.setText(MISSING_TRIAL_DESCRIPTION);
 			
 			return false;
-		} else if (getDuration() < 0) {
-			this.messageLabel.setText(MISSING_DURATION);
-			
-			return false;
-		}
+		} 
 		
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
