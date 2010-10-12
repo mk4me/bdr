@@ -841,6 +841,48 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        // PERFORMER CONFIGURATION QUERIES
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListSessionPerformerConfsWithAttributesXML(int sessionID)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_session_performer_confs_attributes_xml"; // SPRAWDZIC !!!
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                SqlParameter perfId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = sessionID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("SessionPerformerConfWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
+        
         // MEASUREMENT LISTING QUERY
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]

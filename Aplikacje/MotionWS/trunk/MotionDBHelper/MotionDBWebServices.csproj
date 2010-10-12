@@ -149,6 +149,9 @@
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\ListSessionPerformerConfsWithAttributesXML.xsd" />
+    <None Include="res\PerformerConfDetailsWithAttributesElement.xsd" />
+    <None Include="res\GetPerformerConfigurationByIdXML.xsd" />
     <None Include="res\ListSessionPerformersWithAttributesXML.xsd" />
     <None Include="res\FileListElement.xsd" />
     <None Include="res\FileWithAttributesListElement.xsd" />
@@ -165,7 +168,6 @@
     <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
     <None Include="res\ListTrialMeasurementsWithAttributesXML.xsd" />
     <None Include="res\MeasurementConfDetailsWithAttributesElement.xsd" />
-    <None Include="res\GetMeasurementConfigurationByIdXML.xsd" />
     <None Include="res\MeasurementDetailsWithAttributesElement.xsd" />
     <None Include="res\GetMeasurementByIdXML.xsd" />
     <None Include="res\ListUserBaskets.xsd" />

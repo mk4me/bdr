@@ -46,6 +46,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
+        XmlElement GetPerformerConfigurationByIdXML(int id);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
         XmlElement ListPerformersXML();
 
         [OperationContract]
@@ -92,6 +96,9 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement ListSessionTrialsWithAttributesXML(int sessionID);
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionPerformerConfsWithAttributesXML(int sessionID);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]

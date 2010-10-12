@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema id="MeasurementConfWithAttributesList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <xsd:include schemaLocation="MeasurementConfDetailsWithAttributesElement.xsd" />
-  <xsd:element name="MeasurementConfWithAttributesList">
+  <xsd:include schemaLocation="PerformerConfDetailsWithAttributesElement.xsd" />
+  <xsd:element name="SessionPerformerConfWithAttributesList">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="MeasurementConfDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        <xsd:element ref="PerformerConfDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
         </xsd:element>
       </xsd:sequence>
     </xsd:complexType>
