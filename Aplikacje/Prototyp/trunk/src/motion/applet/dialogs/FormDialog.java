@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -38,6 +39,7 @@ public class FormDialog extends BasicDialog {
 	private static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
 	
 	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
+	protected static String UPDATING_MESSAGE = "Updating attributes...";
 	
 	protected JButton createButton;
 	private JButton cancelButton;
@@ -45,8 +47,10 @@ public class FormDialog extends BasicDialog {
 	protected JPanel formPanel;
 	protected GridBagConstraints gridBagConstraints;
 	
-	public static int CREATE_PRESSED = 1;
 	public static int CANCEL_PRESSED = 0;
+	public static int CREATE_PRESSED = 1;
+	public static int EDIT_PRESSED = 2;
+	
 	private int result = CANCEL_PRESSED;
 	
 	private boolean showTabs = false;
@@ -235,6 +239,16 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
+	protected void updateAttributes(int id) throws Exception {
+		for (FormField f : formFields) {
+			setAttributeValue(f);
+			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
+					id,
+					f.attribute,
+					true);
+		}
+	}
+	
 	protected Object getAttributeValue(EntityKind entityKind, String attribute) {
 		for (FormField f : formFields) {
 			if (f.attribute.name.equals(attribute)) {
@@ -248,7 +262,7 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void fillFormFields(GenericDescription<?> record) {
-		makeEditButton();
+		makeEditButton(record.getId());
 		for (FormField f : formFields) {
 			EntityAttribute attribute = record.get(f.attribute.name);
 			if (attribute != null) {
@@ -259,7 +273,7 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
-	private void makeEditButton() {
+	private void makeEditButton(final int recordId) {
 		createButton.setText(EDIT);
 		ActionListener[] actionListeners = createButton.getActionListeners();
 		for (int i = 0; i < actionListeners.length; i++) {
@@ -268,7 +282,31 @@ public class FormDialog extends BasicDialog {
 		
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//FormDialog.this.setResult(CREATE_PRESSED);
+				if (validateResult() == true) {
+					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						@Override
+						protected Void doInBackground() throws InterruptedException {
+							messageLabel.setText(UPDATING_MESSAGE);
+							createButton.setEnabled(false);
+							FormDialog.this.setResult(EDIT_PRESSED);
+							try {
+								updateAttributes(recordId);
+							} catch (Exception e1) {
+								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+								exceptionDialog.setVisible(true);
+							}
+							
+							return null;
+						}
+						
+						@Override
+						protected void done() {
+							setVisible(false);
+							dispose();
+						}
+					};
+					worker.execute();
+				}
 			}
 		});
 	}

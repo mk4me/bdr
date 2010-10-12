@@ -263,7 +263,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			performerFormDialog = new PerformerFormDialog(performer);
 		}
 		performerFormDialog.setVisible(true);
-		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
+				performerFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_PERFORMER);
 			RightSplitPanel.this.refreshPerformerTable();
 		}
@@ -278,7 +279,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 		sessionFormDialog.pack();	// TODO: is this needed?
 		sessionFormDialog.setVisible(true);
-		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
+				sessionFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_SESSION);
 			RightSplitPanel.this.refreshSessionTable();
 		}
@@ -292,7 +294,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			trialFormDialog = new TrialFormDialog(recordId, trial);
 		}
 		trialFormDialog.setVisible(true);
-		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
+				trialFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_TRIAL);
 			RightSplitPanel.this.refreshTrialTable();
 		}
@@ -306,7 +309,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			measurementConfigurationDialog = new MeasurementConfigurationFormDialog(measurementConfiguration);
 		}
 		measurementConfigurationDialog.setVisible(true);
-		if (measurementConfigurationDialog.getResult() == FormDialog.CREATE_PRESSED) {
+		if (measurementConfigurationDialog.getResult() == FormDialog.CREATE_PRESSED ||
+				measurementConfigurationDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT_CONFIGURATION);
 			RightSplitPanel.this.refreshMeasurementConfigurationTable();
 		}
