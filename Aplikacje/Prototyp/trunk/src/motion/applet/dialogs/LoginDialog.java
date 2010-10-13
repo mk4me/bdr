@@ -142,7 +142,6 @@ public class LoginDialog extends BasicDialog {
 					setResult(LOGIN_UNSUCCESSFUL);
 				}
 				
-				// Login always successful, add login check
 				LoginDialog.this.finished = true;
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.dispose();
