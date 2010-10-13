@@ -231,10 +231,12 @@ public class FormDialog extends BasicDialog {
 		for (FormField f : formFields) {
 			if (!f.attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 				setAttributeValue(f);
-				WebServiceInstance.getDatabaseConnection().setEntityAttribute(
-						id,
-						f.attribute,
-						false);
+				if (f.attribute.value != null) {
+					WebServiceInstance.getDatabaseConnection().setEntityAttribute(
+							id,
+							f.attribute,
+							false);
+				}
 			}
 		}
 	}
@@ -242,10 +244,13 @@ public class FormDialog extends BasicDialog {
 	protected void updateAttributes(int id) throws Exception {
 		for (FormField f : formFields) {
 			setAttributeValue(f);
-			WebServiceInstance.getDatabaseConnection().setEntityAttribute(
-					id,
-					f.attribute,
-					true);
+			if (f.attribute.value != null) {
+				WebServiceInstance.getDatabaseConnection().setEntityAttribute(
+						id,
+						f.attribute,
+						true);
+				
+			}
 		}
 	}
 	
@@ -428,9 +433,15 @@ class FormNumberField extends FormField {
 		text.setColumns(5);
 	}
 	
-	public int getData() throws NumberFormatException {
+	public Integer getData() throws NumberFormatException {
+		String value = text.getText();
+		if (value.equals("")) {
+			
+			return null;
+		} else {
 		
-		return Integer.parseInt(text.getText());
+			return Integer.parseInt(text.getText());
+		}
 	}
 }
 
@@ -472,6 +483,10 @@ class FormDateField extends FormField {
 		}
 		
 		return data;
+	}
+	
+	public void setData(Object value) {
+		text.setText(value.toString().replace('T', ' '));
 	}
 }
 
