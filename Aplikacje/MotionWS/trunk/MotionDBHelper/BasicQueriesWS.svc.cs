@@ -263,6 +263,7 @@ namespace MotionDBWebServices
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return res; // +"(retrieved by: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name + ")";
         }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GetTrialByIdXML(int id)  // UWAGA - docelowo nalezaloby zabronic pobrania danych Trial-a z niedostepnej danemu uzytkownikowi sesji!
         {
@@ -371,6 +372,42 @@ namespace MotionDBWebServices
             {
                 QueryException exc = new QueryException(id.ToString(), "The id provided does not match any measurement configuration");
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMeasurementConfigurationByIdXML")));
+            }
+            return xd.DocumentElement;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement GetPerformerConfigurationByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+            bool notFound = false;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_performer_configuration_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                //if (dr.) notFound = true;
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                else notFound = true;
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (notFound)
+            {
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any performer configuration");
+                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetPerformerConfigurationByIdXML")));
             }
             return xd.DocumentElement;
         }
@@ -637,6 +674,7 @@ namespace MotionDBWebServices
 
             return xd.DocumentElement;
         }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListLabSessionsWithAttributesXML(int labID)
         {
@@ -677,7 +715,49 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+
+       
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement  ListMeasurementConfSessionsWithAttributesXML(int labID)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_measurement_conf_sessions_attributes_xml";
+                SqlParameter perfId = cmd.Parameters.Add("@mc_id", SqlDbType.Int);
+                perfId.Direction = ParameterDirection.Input;
+                perfId.Value = labID;
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("MeasurementConfSessionWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
         
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListGroupSessionsWithAttributesXML(int sessionGroupID)
         {
@@ -926,6 +1006,46 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListMeasurementConfMeasurementsWithAttributesXML(int measurementConfID)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_measurement_conf_measurements_attributes_xml";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                SqlParameter resfId = cmd.Parameters.Add("@mc_id", SqlDbType.Int);
+                resfId.Direction = ParameterDirection.Input;
+                resfId.Value = measurementConfID;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("MeasurementConfMeasurementWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
         // MEASUREMENT CONFIGURATION LISTING QUERY
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListMeasurementConfigurationsWithAttributesXML() // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
