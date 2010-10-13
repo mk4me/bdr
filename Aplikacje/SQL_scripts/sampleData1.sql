@@ -10,8 +10,7 @@ values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'TrialDescription', 'string', 0, 'longString', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='trial'), 'TrialName', 'string', 0, 'shortString', NULL) 
-
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='trial'), 'Duration', 'int', 0, 'nonNegativeInteger', 'second') 
 
 insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('_static', 'performer');
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -160,12 +159,8 @@ insert into Grupa_atrybutow (Nazwa, Opisywana_encja) values ( 'General_session_a
 go
 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='session'), 'SessionName', 'string', 0, 'shortString', NULL) 
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'SessionName', 'string', 0, 'shortString', NULL)    
 go
-insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes' and Opisywana_encja='session'), 'Tags', 'string', 0, 'shortString', NULL) 
-go
-
 -- iloœæ aktorów // PerformerCount
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'General_session_attributes'), 'PerformerCount', 'integer', 0, 'nonNegativeInteger', NULL)    
@@ -192,13 +187,7 @@ go
 insert into Rodzaj_ruchu ( Nazwa ) values ('dance')
 go
 
-insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('General_trial_attributes', 'trial');
-
-
 select * from Rodzaj_ruchu
-
-
-
 
 -- temperatura otoczenia
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -208,36 +197,36 @@ go
 
 -- ------------------------------------------------------------------  powyzsze Wgrane 2010-09-11
 
-exec list_group_sessions_attributes_xml 'applet_user', 1
+insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('TestingPC', 'performer_conf');
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'TestingPC' and Opisywana_encja='performer_conf'), 
+'Weight', 'integer', 0, 'nonNegativeInteger', NULL) 
 
-select * from Grupa_sesji
-
-select * from Pomiar_performer
-
-delete from Konfiguracja_pomiarowa
+insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('TestingMeasurement', 'measurement');
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'TestingMeasurement' and Opisywana_encja='measurement'), 
+'Relevance', 'integer', 0, 'nonNegativeInteger', NULL) 
 
 select * from Pomiar
 
-select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+perf = 1, sesja = 1 atr = 45 kp = 1
 
-select * from Sesja
-
-insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji, Publiczna, PublicznaZapis)
-values ( 1, 1, 1, '2010-10-11 12:00:00', 'Sesja testowa', 1, 0 )
-
-insert into Laboratorium (Nazwa) values ('Tester')
-go
-
-insert into Obserwacja ( IdSesja, Opis_obserwacji ) values ( 1, '--')
-
-insert into Konfiguracja_pomiarowa ( Nazwa, Opis, Rodzaj ) values ( 'Nazwa', 'Opis', 'Rodzaj');
-
-declare @id_count int;
-select @id_count = COUNT(s.IdSesja) from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji );
-while @id_count > 0
-begin
-	insert into Sesja_grupa_sesji ( IdGrupa_sesji, IdSesja ) values ( 1, (
-	 select top 1 s.IdSesja from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji )));
-	 select @id_count = COUNT(s.IdSesja) from Sesja s where s.IdSesja not in (select distinct IdSesja from Sesja_grupa_sesji );
-end;
-go
+insert into Wartosc_atrybutu_konfiguracji_performera (IdKonfiguracja_performera, IdAtrybut, Wartosc_liczba ) values (1, 45, 80 )
+insert into Wartosc_atrybutu_pomiaru ( IdPomiar, IdAtrybut, Wartosc_liczba ) values ( 1, 46, 5 )
+       
+       select * from Wartosc_atrybutu_konfiguracji_performera
+       
+       exec get_performer_configuration_by_id_xml 1
+       exec get_session_by_id_xml 'habela', 3
+       
+       exec list_session_performer_configurations_attributes_xml 'habela', 1
+       
+       select * from Pomiar
+       
+       exec list_measurement_conf_measurements_attributes_xml 'habela', 2
+       
+       exec list_measurement_conf_sessions_attributes_xml 'habela', 2
+       
+       select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+       declare @res int;
+       exec set_session_attribute 1, 'SessionName','Pierwsza',1,@res

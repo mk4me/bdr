@@ -49,8 +49,6 @@ ALTER TABLE Wartosc_Atrybutu_konfiguracji_performera
 go
 
 
--- WPROWADZIC DO PLIKU GLOWNEGO !!!
-
 
 create function list_performer_configuration_attributes ( @pc_id int )
 returns TABLE as
@@ -117,4 +115,38 @@ select
 	(select * from list_performer_configuration_attributes ( IdKonfiguracja_performera ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Konfiguracja_performera PerformerConfDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionPerformerConfWithAttributesList')
+go
+
+create procedure list_measurement_conf_sessions_attributes_xml (@user_login varchar(30), @mc_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		IdRodzaj_ruchu as MotionKindID,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+		from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+		where exists (
+			select * from Pomiar p join Obserwacja o on p.IdObserwacja = o.IdObserwacja 
+			where p.IdKonfiguracja_pomiarowa = @mc_id and o.IdSesja = SessionDetailsWithAttributes.IdSesja
+		)
+      for XML AUTO, ELEMENTS, root ('MeasurementConfSessionWithAttributesList')
+go
+
+create procedure list_measurement_conf_measurements_attributes_xml(@user_login varchar(30), @mc_id int )
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select 
+	IdPomiar MeasurementID,
+	IdKonfiguracja_pomiarowa MeasurementConfID,
+	IdObserwacja TrialID,
+	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Pomiar MeasurementDetailsWithAttributes
+where MeasurementDetailsWithAttributes.IdKonfiguracja_pomiarowa = @mc_id
+and MeasurementDetailsWithAttributes.IdObserwacja in (select o.IdObserwacja from user_accessible_sessions_by_login(@user_login) s join Obserwacja o on s.IdSesja = s.IdSesja)
+    for XML AUTO, ELEMENTS, root ('MeasurementConfMeasurementWithAttributesList')
 go
