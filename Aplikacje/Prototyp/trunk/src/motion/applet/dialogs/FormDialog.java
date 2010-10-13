@@ -508,7 +508,7 @@ class FormListField extends FormField {
 			return comboBox.getSelectedItem().toString();
 		} else {
 			
-			return "" + comboBox.getSelectedIndex();
+			return "" + (comboBox.getSelectedIndex()+1);
 		}
 	}
 	
@@ -528,9 +528,16 @@ class FormListField extends FormField {
 	}
 	
 	public void setData(Object value) {
-		for (int i = 0; i < comboBox.getItemCount(); i++) {
-			if (comboBox.getItemAt(i).toString().equals(value.toString())) {
-				comboBox.setSelectedIndex(i);
+		try {
+			int i = Integer.parseInt(value.toString());
+			if (i >= 0) {
+				comboBox.setSelectedIndex(i-1);
+			}
+		} catch (NumberFormatException e) {
+			for (int i = 0; i < comboBox.getItemCount(); i++) {
+				if (comboBox.getItemAt(i).toString().equals(value.toString())) {
+					comboBox.setSelectedIndex(i);
+				}
 			}
 		}
 	}
