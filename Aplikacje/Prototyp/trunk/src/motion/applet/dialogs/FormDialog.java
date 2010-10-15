@@ -28,6 +28,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.applet.widgets.CalendarWidget;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
@@ -449,6 +450,7 @@ class FormDateField extends FormField {
 	//private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private DateFormat dateFormat;
 	private boolean fullDate = false;
+	private JButton setDateTimeButton;
 	
 	public FormDateField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean fullDate) {
 		super(attribute, gridBagConstraints, formPanel);
@@ -459,6 +461,7 @@ class FormDateField extends FormField {
 			this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		}
 		setCurrentDate();
+		finishField();
 	}
 	
 	private void setCurrentDate() {
@@ -483,6 +486,35 @@ class FormDateField extends FormField {
 		}
 		
 		return data;
+	}
+	
+	protected void prepareField() {
+		addLabel();
+		text = new JTextField(20);
+		label.setLabelFor(text);
+		formPanel.add(text, gridBagConstraints);
+		
+		gridBagConstraints.gridx++;
+	}
+	
+	protected void finishField() {
+		setDateTimeButton = new JButton("Set");
+		setDateTimeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CalendarWidget calendarWidget = new CalendarWidget();
+				calendarWidget.setVisible(true);
+				if (calendarWidget.getDate() != null) {
+					String date = dateFormat.format(calendarWidget.getDate()).toString();
+					text.setText(date);
+				}
+			}
+		});
+		formPanel.add(setDateTimeButton, gridBagConstraints);
+		
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy++;
+		
+		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
 	}
 	
 	public void setData(Object value) {
@@ -530,7 +562,7 @@ class FormListField extends FormField {
 	public void setData(Object value) {
 		try {
 			int i = Integer.parseInt(value.toString());
-			if (i >= 0) {
+			if (i > 0 && i <= comboBox.getItemCount()) {
 				comboBox.setSelectedIndex(i-1);
 			}
 		} catch (NumberFormatException e) {
