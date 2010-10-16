@@ -5,10 +5,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.sql.Savepoint;
+import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -26,6 +31,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import motion.Messages;
+import motion.applet.MotionAppletFrame;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.trees.AttributeTree;
 import motion.applet.trees.ConfigurationTree;
@@ -33,6 +39,8 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.model.EntityAttribute;
+import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
@@ -47,13 +55,17 @@ public class AttributeEditDialog extends BasicDialog {
 	private static String NORMAL_MESSAGE = "Press Save to permanently store entity attributes";
 	private static String TITLE = "Editing generic attributes and groups"; //$NON-NLS-1$
 	
-	private JButton groupAddButton;
 	private AttributeTree tree;
 	private JPanel formPanel;
+	private JButton saveButton;
+	private JButton cancelButton;
+	
 	private EntityKind entityKind;
+	
 	
 	public AttributeEditDialog(EntityKind entityKind) {
 		super(TITLE, NORMAL_MESSAGE);
+		
 		this.entityKind = entityKind;
 
 		this.finishUserInterface();
@@ -61,28 +73,32 @@ public class AttributeEditDialog extends BasicDialog {
 	
 	protected void constructUserInterface() {
 	
-		// buttons
-		this.groupAddButton = new JButton("New Group");
-		
 		// Form area
-		formPanel = new JPanel();
-		formPanel.setLayout(new GridBagLayout());
-		
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		gridBagConstraints.gridx = 11;
-		gridBagConstraints.gridy = 3;
+		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		gridBagConstraints.ipadx = 10;
 		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
-		formPanel.add(groupAddButton, gridBagConstraints);
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		
+		gridBagConstraints.gridwidth = 10; 
+		
+		formPanel = new JPanel();
+		formPanel.setLayout( new BorderLayout());
 
-		gridBagConstraints.gridx = 10;
-		formPanel.add( new JPanel(), gridBagConstraints);
-
-		this.add(formPanel, BorderLayout.CENTER);
+		JPanel container = new JPanel ( new BorderLayout() );
+		container.add(formPanel, BorderLayout.CENTER );
+		container.add( new JPanel(), BorderLayout.NORTH );
+		container.add( new JPanel(), BorderLayout.WEST );
+		container.add( new JPanel(), BorderLayout.EAST );
+		container.add( new JPanel(), BorderLayout.SOUTH );
+		this.add( container );
 		
 		// Button area
-		this.addToButtonPanel( new JButton("Save") );
-		this.addToButtonPanel( new JButton("Cancel") );
+		saveButton = new JButton("Save");
+		this.addToButtonPanel( saveButton );
+		cancelButton = new JButton("Cancel");
+		this.addToButtonPanel( cancelButton );
 	}
 	
 	protected void finishUserInterface() {
@@ -90,46 +106,59 @@ public class AttributeEditDialog extends BasicDialog {
 		this.setLocation(200, 200);
 		this.tree = new AttributeTree(entityKind);
 
-		// Tree 
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.gridx = 0;
+		// Labels
 		JLabel label1 = new JLabel( entityKind.getGUIName() );		
-		this.formPanel.add( label1, gridBagConstraints);
-
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.gridx = 0;
 		JLabel label2 = new JLabel("generic properties:");
-		this.formPanel.add( label2, gridBagConstraints);
-		gridBagConstraints.gridy = 2;
-		this.formPanel.add( new JPanel() );
+		JPanel topPanel = new JPanel( new GridLayout(3,1) );
+		topPanel.add( label1 );
+		topPanel.add( label2 );
+		this.formPanel.add( topPanel, BorderLayout.NORTH );
 		
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 3;
-		gridBagConstraints.gridheight = 8;
-		gridBagConstraints.gridwidth = 8;
+		
+		// Tree 
 		JScrollPane treeScrollPane = new JScrollPane(tree.tree);
-		this.formPanel.add( treeScrollPane, gridBagConstraints);
+		this.formPanel.add( treeScrollPane, BorderLayout.CENTER);
 
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws InterruptedException {
-				return null;
-			}
-			
-			@Override
-			protected void done() {
-			}
-		};
-		worker.execute();
+		this.pack();
 	}
 
 	@Override
 	protected void addListeners() {
-		// TODO Auto-generated method stub
-		
+
+			this.saveButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					System.out.println( "I will modify groups:" );
+					printVector( tree.modifyGroups );
+
+					System.out.println( "I will remove groups:" );
+					printVector( tree.removeGroups );
+
+					System.out.println( "I will create new groups:" );
+					printVector( tree.newGroups );
+					
+					System.out.println( "Just kidding! No database functionality yet!");
+					
+					AttributeEditDialog.this.setVisible(false);
+					AttributeEditDialog.this.dispose();
+				}
+
+				private void printVector(
+						Vector<EntityAttributeGroup> modifyGroups) {
+					
+					for ( Object o : modifyGroups )
+						System.out.println( o );
+				}
+			});
+
+			this.cancelButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					AttributeEditDialog.this.setVisible(false);
+					AttributeEditDialog.this.dispose();
+				}
+			});
 	}
 
 	public static void main(String [] args)
