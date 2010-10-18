@@ -476,7 +476,7 @@ class FormDateField extends FormField {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		data.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-		data.setMonth(calendar.get(Calendar.MONTH));
+		data.setMonth(calendar.get(Calendar.MONTH)+1);	// Adjust to proper month.
 		data.setYear(calendar.get(Calendar.YEAR));
 		
 		if (fullDate == true) {
@@ -540,7 +540,7 @@ class FormListField extends FormField {
 			return comboBox.getSelectedItem().toString();
 		} else {
 			
-			return "" + (comboBox.getSelectedIndex()+1);
+			return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
 		}
 	}
 	
