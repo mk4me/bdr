@@ -100,7 +100,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -109,6 +112,7 @@ from Atrybut a
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id and a.Typ_danych <> 'file'
+go
 go
 
 
@@ -145,7 +149,10 @@ union
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -170,7 +177,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -236,7 +246,10 @@ union
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -254,7 +267,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -290,7 +306,10 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -308,7 +327,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -358,7 +380,10 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -376,7 +401,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -405,7 +433,10 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -423,7 +454,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -907,6 +941,15 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
+create procedure list_performer_conf_attr_files_xml(@user_login varchar(30),  @pc_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
+	from Plik p join Wartosc_atrybutu_konfiguracji_performera wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut
+	where wakp.IdKonfiguracja_performera=@pc_id
+	for XML PATH('FileDetails'), root ('FileList')
+go
+
 create procedure list_measurement_attr_files_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -994,6 +1037,16 @@ as
 	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
+create procedure list_performer_conf_attr_files_attributes_xml(@user_login varchar(30),  @pc_id int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	from Plik p join Wartosc_atrybutu_konfiguracji_performera wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut 
+	where wakp.IdKonfiguracja_performera=@pc_id
+	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
+go
+
 
 -- Metadata queries
 -- ===================
@@ -1068,6 +1121,7 @@ Output parameter "result" meaning:
 4 - (not assigned)
 5 - value of this attribute for this session exists, whille you called this operation in "no overwrite" mode
 6 - the value provided is not valid for this numeric-type attribute
+7 - wrong identifier for file-typed attribute value
 
 */
 
@@ -1155,6 +1209,11 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_sesji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdSesja = @sess_id ;
 					else
@@ -1250,6 +1309,11 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_performera set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPerformer = @perf_id ;
 					else
@@ -1344,6 +1408,11 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_obserwacji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
 					else
@@ -1529,6 +1598,11 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_konfiguracji_pomiarowej set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdKonfiguracja_pomiarowa = @mc_id ;
 					else
@@ -1623,6 +1697,11 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_pomiaru set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
 					else
@@ -1634,6 +1713,105 @@ begin
 					update Wartosc_atrybutu_pomiaru set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
 					else
 					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_tekst) values (@attr_id, @meas_id, @attr_value);
+				end;
+			set @result = 0;
+		end;
+end;
+go
+
+create procedure set_performer_conf_attribute (@pc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
+as
+begin
+	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
+	declare @integer_value numeric(10,2), @float_value float, @id_value int;
+	declare @value_tuple_found as bit = 0;	
+
+	/*
+	Current static non-id attributes:
+	
+
+	*/
+
+	set @result = 6; -- result 6 = type casting error
+	/*
+	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
+	begin
+		if(@update = 0)
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;	
+		if(@attr_name = 'MeasurementConfName')
+			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfKind')
+			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfDescription')
+			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		set @result = 0;
+		return;
+	end;
+	*/
+	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'performer_conf';
+	if @@rowcount = 0 
+	begin
+		set @result = 1 -- result 1 = attribute of this name not applicable here
+		return;
+	end;
+	if not exists ( select * from Konfiguracja_performera where IdKonfiguracja_performera = @pc_id )
+		begin
+			set @result = 3;
+			return;
+		end;
+	else
+		begin
+			if exists ( select * from Wartosc_atrybutu_konfiguracji_performera where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ) set @value_tuple_found = 1;
+			if @update = 0 and @value_tuple_found = 1
+				begin
+					set @result = 5; -- result 5 = value exists while update has not been allowed
+					return;
+				end;
+			if(@attr_enum = 1) 
+			begin
+				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
+				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
+			end;
+			if @attr_type = 'integer'
+				begin
+					set @integer_value = cast ( @attr_value as numeric(10,2) );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
+					else
+					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_liczba) values (@attr_id, @pc_id, @integer_value);
+				end;
+			
+			else if @attr_type = 'float'
+				begin
+					set @float_value = cast ( @attr_value as float );
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
+					else
+					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_zmiennoprzecinkowa) values (@attr_id, @pc_id, @float_value);
+				end;
+			else if @attr_type = 'file'
+				begin
+					set @id_value = cast ( @attr_value as int );
+					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
+					begin
+						set @result = 7;
+						return;
+					end;
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
+					else
+					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_Id) values (@attr_id, @pc_id, @id_value);
+				end;
+			else
+				begin
+					if ( @value_tuple_found = 1 )
+					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
+					else
+					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_tekst) values (@attr_id, @pc_id, @attr_value);
 				end;
 			set @result = 0;
 		end;
@@ -1696,7 +1874,17 @@ begin
 			set @result = 1;
 			return;
 		end;
-	delete from wa from Wartosc_atrybutu_konfiguracji_pomiarowej wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_pomiarowa = @res_id and a.Nazwa = @attr_name;
+		delete from wa from Wartosc_atrybutu_konfiguracji_pomiarowej wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_pomiarowa = @res_id and a.Nazwa = @attr_name;
+	end
+	else if (@entity = 'performer_conf')
+	begin
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_konfiguracji_performera wakp on a.IdAtrybut = wakp.IdAtrybut
+				where a.Nazwa = @attr_name and wakp.IdKonfiguracja_performera = @res_id )
+		begin
+			set @result = 1;
+			return;
+		end;
+		delete from wa from Wartosc_atrybutu_konfiguracji_performera wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_performera= @res_id and a.Nazwa = @attr_name;
 	end
 	else if (@entity = 'measurement')
 	begin
