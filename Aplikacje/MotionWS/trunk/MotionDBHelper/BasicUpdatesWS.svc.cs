@@ -499,7 +499,7 @@ END CATCH;";
             {
                 // log the exception
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionAttribute")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionAttribute")));
             }
             finally
             {
@@ -892,6 +892,10 @@ END CATCH;";
                     case "measurement_conf":
                         operationName = "set_measurement_conf_attribute";
                         paramName = "@mc_id";
+                        break;
+                    case "performer_conf":
+                        operationName = "set_performer_conf_attribute";
+                        paramName = "@pc_id";
                         break;
                 }
                 cmd.CommandType = CommandType.StoredProcedure;

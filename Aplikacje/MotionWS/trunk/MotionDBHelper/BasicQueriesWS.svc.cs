@@ -932,7 +932,7 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_session_performer_confs_attributes_xml"; // SPRAWDZIC !!!
+                cmd.CommandText = "list_session_performer_confs_attributes_xml"; 
                 SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 usernamePar.Direction = ParameterDirection.Input;
                 usernamePar.Value = userName;
@@ -1123,6 +1123,11 @@ namespace MotionDBWebServices
                     paramName = "@mc_id";
                     addLogin = true;
                     break;
+                case "performer_conf":
+                    operationName = "list_performer_conf_attr_files_xml";
+                    paramName = "@pc_id";
+                    addLogin = true;
+                    break;
             }
             try
             {
@@ -1198,6 +1203,11 @@ namespace MotionDBWebServices
                 case "measurement_conf":
                     operationName = "list_measurement_conf_attr_files_attributes_xml";
                     paramName = "@mc_id";
+                    addLogin = true;
+                    break;
+                case "performer_conf":
+                    operationName = "list_performer_conf_attr_files_attributes_xml";
+                    paramName = "@pc_id";
                     addLogin = true;
                     break;
             }

@@ -118,15 +118,15 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement ListFileAttributeDataXML(int subjectID, string subjectType);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
         XmlElement ListFilesXML(int subjectID, string subjectType);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListFileAttributeDataXML(int subjectID, string subjectType);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
