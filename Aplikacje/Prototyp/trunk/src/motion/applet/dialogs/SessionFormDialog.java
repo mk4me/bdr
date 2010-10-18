@@ -31,6 +31,8 @@ public class SessionFormDialog extends FormDialog {
 	private PrivilegesPanel privilegesPanel;
 	private PerformerAssignmentPanel performerAssignmentPanel;
 	
+	private ArrayList<String> motionKinds;
+	
 	public SessionFormDialog() {
 		super(TITLE, WELCOME_MESSAGE, true);
 		
@@ -143,22 +145,27 @@ public class SessionFormDialog extends FormDialog {
 		return false;
 	}
 	
-	private ArrayList<String> getMotionKinds() {	//TODO: Add thread.
-		Vector<MotionKind> motionKinds = new Vector<MotionKind>();
-		try {
-			motionKinds = WebServiceInstance.getDatabaseConnection().listMotionKindsDefined();
-		} catch (Exception e) {
+	private ArrayList<String> getMotionKinds() {
+		if (motionKinds != null) {
 			
+			return motionKinds;
+		} else {
+			Vector<MotionKind> motionKindsDefined = new Vector<MotionKind>();
+			try {
+				motionKindsDefined = WebServiceInstance.getDatabaseConnection().listMotionKindsDefined();
+			} catch (Exception e) {
+				
+			}
+			motionKinds = new ArrayList<String>();
+			
+			int i = 0;
+			for (MotionKind m : motionKindsDefined) {
+				motionKinds.add(m.name);
+				i++;
+			}
+			
+			return motionKinds;
 		}
-		ArrayList<String> motionKindStrings = new ArrayList<String>();
-		
-		int i = 0;
-		for (MotionKind m : motionKinds) {
-			motionKindStrings.add(m.name);
-			i++;
-		}
-		
-		return motionKindStrings;
 	}
 	
 	private ArrayList<String> getDeselectedAttributes() {

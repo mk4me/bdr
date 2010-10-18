@@ -56,25 +56,6 @@ public class BasketTableModel extends BasicTableModel {
 							recordIds.add(r.getId());
 							contents.add(cellList);
 						}
-						/* same as above for loop?
-						for (GenericDescription<?> r : records) {
-							Object[] cellList = new Object[attributeNames.size()];
-							
-							for (String key : r.keySet()) {
-								//TODO: sessionID / SessionID
-								int i = attributeNames.indexOf(key);
-								if (i >= 0)
-									cellList[i] = r.get(key).value;
-							}
-							recordIds.add(r.getId());
-							ArrayList<Object> list = new ArrayList<Object>();
-							list.add(new Boolean(false));	// checkboxes initially unchecked
-							for (int i = 1; i < cellList.length; i++) {
-								list.add(cellList[i]);
-							}
-							contents.add(list);
-						}
-						*/
 					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);

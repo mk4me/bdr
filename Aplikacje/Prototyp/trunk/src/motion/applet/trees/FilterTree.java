@@ -38,22 +38,21 @@ public class FilterTree {
 					CheckBoxNode newCBN = (CheckBoxNode) newValue;
 					if (!editedNode.isLeaf() && newCBN.isSelected() == false) {	// TODO: select parents up to root
 						unCheckAllChildren(editedNode);
-					}
-					else {
-						boolean isAllChiledSelected = true;
+					} else {
+						boolean isAllChildSelected = true;
 						for (int i = 0; i < editedNode.getParent().getChildCount(); i++) {
 							DefaultMutableTreeNode node = (DefaultMutableTreeNode) editedNode.getParent().getChildAt(i);
 							CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
 							if(!cbn.isSelected()) {
-								isAllChiledSelected = false;
+								isAllChildSelected = false;
 							}
 						}
-						if(isAllChiledSelected) {
+						if (isAllChildSelected) {
 							DefaultMutableTreeNode node = (DefaultMutableTreeNode)editedNode.getParent();
 							// No parent group exception.
 							if (!(node.getUserObject() instanceof String)) {
 								CheckBoxNode cbn = (CheckBoxNode) node.getUserObject();
-								cbn.setSelected(isAllChiledSelected);
+								cbn.setSelected(isAllChildSelected);
 							}
 						}
 					}

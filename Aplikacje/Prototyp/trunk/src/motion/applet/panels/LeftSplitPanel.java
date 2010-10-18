@@ -28,12 +28,9 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityKind;
 import motion.database.model.Filter;
 import motion.database.model.GenericDescription;
-import motion.database.model.GenericResult;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 
 public class LeftSplitPanel extends JPanel {
-	//private DefaultMutableTreeNode rootNode;
-	//private DefaultTreeModel treeModel;
 	private FilterTree filterTree;
 	private static String ADD_FILTER = Messages.getString("Add"); //$NON-NLS-1$
 	private static String REMOVE_FILTER = Messages.getString("Remove"); //$NON-NLS-1$
@@ -145,58 +142,13 @@ public class LeftSplitPanel extends JPanel {
 					}
 				};
 				worker.execute();
-				
-				//TreeNode root = (TreeNode) tree.getModel().getRoot();
 			}
-			/*
-			private ArrayList<SimplePredicate> getChildPredicates(TreeNode node) {
-				//ArrayList<SimplePredicate> predicates
-				Enumeration children = node.children();
-				while(children.hasMoreElements()) {
-					TreeNode currentNode = (TreeNode) children.nextElement();
-					
-				}
-			}*/
 		});
 		toolBar.add(startButton);
-		
 		add(toolBar);
-		
-		// Create the tree
-		//rootNode = new DefaultMutableTreeNode(this.tableName.getLabel() + TREE_TITLE);
-		//treeModel = new DefaultTreeModel(rootNode);
 		
 		filterTree = new FilterTree(this.entityKind);
 		JScrollPane scrollPane = new JScrollPane(filterTree.tree);
 		add(scrollPane, BorderLayout.CENTER);
-		/*
-		filterTree.treeModel.addTreeModelListener(new TreeModelListener() {
-			@Override
-			public void treeNodesChanged(TreeModelEvent e) {
-				DefaultMutableTreeNode node;
-				node = (DefaultMutableTreeNode)(e.getTreePath().getLastPathComponent());
-				int index = e.getChildIndices()[0];
-				node = (DefaultMutableTreeNode)(node.getChildAt(index));
-				((FilterNode) node.getUserObject()).getFilter().getPredicate().printPredicate();
-			}
-			
-			@Override
-			public void treeNodesInserted(TreeModelEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void treeNodesRemoved(TreeModelEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void treeStructureChanged(TreeModelEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});*/
 	}
 }

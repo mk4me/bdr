@@ -7,11 +7,7 @@ import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
 import motion.database.model.EntityAttribute;
-import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.PerformerStaticAttributes;
-import motion.database.model.SessionStaticAttributes;
-import motion.database.model.TrialStaticAttributes;
 
 public class QueryTableModel extends BasicTableModel {
 	private List<GenericDescription> result;
@@ -30,9 +26,6 @@ public class QueryTableModel extends BasicTableModel {
 			protected Void doInBackground() throws InterruptedException {
 				try {
 					addCheckboxColumn(); // first column
-					//TODO: Needs improvement.
-					//BasicTable.this.tableName = TableNamesInstance.toTableName(result.get(0).entityKind.toString());
-					//BasicTable.this.tableName = TableNamesInstance.SESSION;
 					if (entityKind != null) {
 						// Don't filter attributes.
 						ArrayList<EntityAttribute> attributes = entityKind.getAllAttributeCopies();
