@@ -65,6 +65,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
+        void SetPerformerConfAttribute(int performerConfID, string attributeName, string attributeValue, bool update);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
         void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update);
 
         [OperationContract]

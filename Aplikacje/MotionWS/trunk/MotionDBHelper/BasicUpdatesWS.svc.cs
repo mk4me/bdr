@@ -749,6 +749,76 @@ END CATCH;";
 
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void SetPerformerConfAttribute(int performerConfID, string attributeName, string attributeValue, bool update)
+        {
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "set_performer_conf_attribute";
+                cmd.Parameters.Add("@pc_id", SqlDbType.Int);
+                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@update", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+
+                cmd.Parameters["@pc_id"].Value = performerConfID;
+                cmd.Parameters["@attr_name"].Value = attributeName;
+                cmd.Parameters["@attr_value"].Value = attributeValue;
+                cmd.Parameters["@update"].Value = update ? 1 : 0;
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                UpdateException exc = new UpdateException("unknown", "Update failed");
+                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (resultCode != 0)
+            {
+                UpdateException exc;
+                string resName = "performer_conf";
+
+                switch (resultCode)
+                {
+                    case 1:
+                        exc = new UpdateException("Invalid attribute", "Attribute of name " + attributeName + " is not applicable to " + resName);
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+                    case 2:
+                        exc = new UpdateException("Invalid enum value", "the value " + attributeValue + " is not valid for the enum-type attribute " + attributeName);
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+                    case 3:
+                        exc = new UpdateException("Invalid resource ID", "the " + resName + " of ID " + performerConfID + "not found");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+                    case 5:
+                        exc = new UpdateException("Value already exists", "value of attribute " + attributeName + " for this " + resName + " already exists, while you called this operation in no overwrite mode");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+                    case 6:
+                        exc = new UpdateException("Invalid numeric value", "the value " + attributeValue + " provided is not valid for this numeric-type attribute " + attributeName);
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+
+                    default:
+                        exc = new UpdateException("Unknown error", "unknown error occured");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerConfAttribute")));
+
+                }
+            }
+
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
