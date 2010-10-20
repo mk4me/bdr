@@ -279,8 +279,9 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 		sessionFormDialog.pack();	// TODO: is this needed?
 		sessionFormDialog.setVisible(true);
-		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
-				sessionFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
+		if (sessionFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			showTable(EntityKind.session);	// Show newly created sessions by viewing all sessions.
+		} else if (sessionFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_SESSION);
 			RightSplitPanel.this.refreshSessionTable();
 		}
@@ -294,12 +295,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			trialFormDialog = new TrialFormDialog(recordId, trial);
 		}
 		trialFormDialog.setVisible(true);
-		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
-				trialFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
-			
-			//tabbedPane.setSelectedIndex(TABLE_TRIAL);
-			showTable(EntityKind.trial, recordId);	// Show created trials for the session.
-			//RightSplitPanel.this.refreshTrialTable();
+		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			showTable(EntityKind.trial, recordId);	// Show newly created trial for the session.
+		} else if (trialFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_TRIAL);
+			RightSplitPanel.this.refreshTrialTable();
 		}
 	}
 	
