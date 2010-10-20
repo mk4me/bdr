@@ -37,7 +37,7 @@ import motion.database.model.GenericDescription;
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
 	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
-	private static String EDIT = Messages.getString("Edit"); //$NON-NLS-1$
+	private static String EDIT = Messages.getString("OK"); //$NON-NLS-1$
 	
 	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	protected static String UPDATING_MESSAGE = "Updating attributes...";

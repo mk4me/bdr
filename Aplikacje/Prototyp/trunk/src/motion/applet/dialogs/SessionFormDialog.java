@@ -23,8 +23,10 @@ import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
-	private static String TITLE = "New session";
-	private static String WELCOME_MESSAGE = "Create a new session.";
+	public static String TITLE = "New session";
+	private static String TITLE_EDIT = "Edit session";
+	public static String WELCOME_MESSAGE = "Create a new session.";
+	private static String WELCOME_MESSAGE_EDIT = "Edit session attribute values.";
 	private static String MISSING_SESSION_DATE = "Missing or incorrect session date.";
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
@@ -33,8 +35,8 @@ public class SessionFormDialog extends FormDialog {
 	
 	private ArrayList<String> motionKinds;
 	
-	public SessionFormDialog() {
-		super(TITLE, WELCOME_MESSAGE, true);
+	public SessionFormDialog(String title, String welcomeMessage) {
+		super(title, welcomeMessage, true);
 		
 		boolean motionKindsSet = false;
 		for (EntityAttributeGroup g : EntityKind.session.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
@@ -101,7 +103,7 @@ public class SessionFormDialog extends FormDialog {
 	}
 	
 	public SessionFormDialog(Session session) {
-		this();
+		this(TITLE_EDIT, WELCOME_MESSAGE_EDIT);
 		fillFormFields(session);
 		fillSessionPerformers(session);
 	}

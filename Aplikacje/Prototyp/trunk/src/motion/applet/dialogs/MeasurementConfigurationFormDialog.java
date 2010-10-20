@@ -13,15 +13,17 @@ import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementConfigurationStaticAttributes;
 
 public class MeasurementConfigurationFormDialog extends FormDialog {
-	private static String TITLE = "New measurement configuration";
-	private static String WELCOME_MESSAGE = "Create a new measurement configuration.";
+	public static String TITLE = "New measurement configuration";
+	private static String TITLE_EDIT = "Edit measurement configuration";
+	public static String WELCOME_MESSAGE = "Create a new measurement configuration.";
+	private static String WELCOME_MESSAGE_EDIT = "Edit measurement configuration attribute values.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_NAME = "Missing measurement configuration name.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_KIND = "Missing measurement configuration kind.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_DESCRIPTION = "Missing measurement configuration description.";
 	private static String CREATING_MESSAGE = "Creating a new measurement configuration...";
 	
-	public MeasurementConfigurationFormDialog() {
-		super(TITLE, WELCOME_MESSAGE);
+	public MeasurementConfigurationFormDialog(String title, String welcomeMessage) {
+		super(title, welcomeMessage);
 		
 		for (EntityAttributeGroup g : EntityKind.measurement_conf.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
 			addFormFields(g, g.name);
@@ -63,7 +65,7 @@ public class MeasurementConfigurationFormDialog extends FormDialog {
 	}
 	
 	public MeasurementConfigurationFormDialog(MeasurementConfiguration measurementConfiguration) {
-		this();
+		this(TITLE_EDIT, WELCOME_MESSAGE_EDIT);
 		fillFormFields(measurementConfiguration);
 	}
 	

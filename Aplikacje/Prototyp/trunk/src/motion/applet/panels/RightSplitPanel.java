@@ -258,7 +258,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showPerformerDialog(Performer performer) {
 		PerformerFormDialog performerFormDialog;
 		if (performer == null) {
-			performerFormDialog = new PerformerFormDialog();
+			performerFormDialog = new PerformerFormDialog(PerformerFormDialog.TITLE, PerformerFormDialog.WELCOME_MESSAGE);
 		} else {
 			performerFormDialog = new PerformerFormDialog(performer);
 		}
@@ -273,7 +273,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showSessionDialog(Session session) {
 		SessionFormDialog sessionFormDialog;
 		if (session == null) {
-			sessionFormDialog = new SessionFormDialog();
+			sessionFormDialog = new SessionFormDialog(SessionFormDialog.TITLE, SessionFormDialog.WELCOME_MESSAGE);
 		} else {
 			sessionFormDialog = new SessionFormDialog(session);
 		}
@@ -289,7 +289,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showTrialDialog(int recordId, Trial trial) {
 		TrialFormDialog trialFormDialog;
 		if (trial == null) {
-			trialFormDialog = new TrialFormDialog(recordId);
+			trialFormDialog = new TrialFormDialog(TrialFormDialog.TITLE, TrialFormDialog.WELCOME_MESSAGE, recordId);
 		} else {
 			trialFormDialog = new TrialFormDialog(recordId, trial);
 		}
@@ -304,7 +304,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public void showMeasurementConfigurationDialog(MeasurementConfiguration measurementConfiguration) {
 		MeasurementConfigurationFormDialog measurementConfigurationDialog;
 		if (measurementConfiguration == null) {
-			measurementConfigurationDialog = new MeasurementConfigurationFormDialog();
+			measurementConfigurationDialog = new MeasurementConfigurationFormDialog(MeasurementConfigurationFormDialog.TITLE, MeasurementConfigurationFormDialog.WELCOME_MESSAGE);
 		} else {
 			measurementConfigurationDialog = new MeasurementConfigurationFormDialog(measurementConfiguration);
 		}

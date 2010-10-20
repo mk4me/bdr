@@ -13,14 +13,16 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
-	private static String TITLE = "New performer";
-	private static String WELCOME_MESSAGE = "Create a new performer.";
+	public static String TITLE = "New performer";
+	private static String TITLE_EDIT = "Edit performer";
+	public static String WELCOME_MESSAGE = "Create a new performer.";
+	private static String WELCOME_MESSAGE_EDIT = "Edit performer attribute values.";
 	private static String MISSING_FIRST_NAME = "Please input performer's first name.";
 	private static String MISSING_LAST_NAME = "Please input performer's last name.";
 	private static String CREATING_MESSAGE = "Creating a new performer...";
 	
-	public PerformerFormDialog() {
-		super(TITLE, WELCOME_MESSAGE);
+	public PerformerFormDialog(String title, String welcomeMessage) {
+		super(title, welcomeMessage);
 		
 		for (EntityAttributeGroup g : EntityKind.performer.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
 			addFormFields(g, g.name);
@@ -62,7 +64,7 @@ public class PerformerFormDialog extends FormDialog {
 	}
 	
 	public PerformerFormDialog(Performer performer) {
-		this();
+		this(TITLE_EDIT, WELCOME_MESSAGE_EDIT);
 		fillFormFields(performer);
 	}
 	
