@@ -1,101 +1,52 @@
 use Motion;
-
-create type PredicateUdt as table
-(
-	PredicateID int,
-	ParentPredicate int,
-	ContextEntity varchar(20),
-	PreviousPredicate int,
-	NextOperator varchar(5),
-	FeatureName varchar(100),
-	Operator varchar(5),
-	Value varchar(100),
-	AggregateFunction varchar(10),
-	AggregateEntity varchar(20)
-)
 go
 
-create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
-returns table
-as return
-select
-	(case a.Typ_danych 
-		when 'string' then wap.Wartosc_tekst
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
-			else cast (cast ( wap.Wartosc_liczba as int ) as varchar(100)) end
-		)
-		else cast ( cast ( wap.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
-from Atrybut a 
-inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
-where wap.IdPerformer = @perf_id and a.Nazwa = @attributeName
+create procedure create_session (	@sess_user varchar(20), @sess_lab int, @mk_name varchar(50), @sess_date DateTime, @sess_desc varchar(100), 
+									@sess_id int OUTPUT, @result int OUTPUT )
+as
+begin
+	declare @mc_id as int;
+
+	set @result = 2;
+	if (select COUNT(*) from Rodzaj_ruchu where Nazwa = @mk_name )!=1
+	begin
+		set @mc_id = 1;
+		return;
+	end;
+	
+	insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
+		values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @mk_name), 
+		@sess_date, @sess_desc ) set @sess_id = SCOPE_IDENTITY() ;
+	set @result = 0;
+
+end;
 go
 
-create function sess_attr_value(@sess_id int, @attributeName as varchar(100))
-returns table
-as return
-select
-	(case a.Typ_danych 
-		when 'string' then was.Wartosc_tekst
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as varchar(100))
-			else cast (cast ( was.Wartosc_liczba as int ) as varchar(100)) end
-		)
-		else cast ( cast ( was.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
-from Atrybut a 
-inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
-where was.IdSesja = @sess_id and a.Nazwa = @attributeName
+create function motion_kind_name( @mk_id int )
+returns varchar(50)
+as
+begin
+	return ( select top 1 Nazwa from Rodzaj_ruchu where IdRodzaj_ruchu = @mk_id );
+end
 go
 
-create function trial_attr_value(@trial_id int, @attributeName as varchar(100))
-returns table
-as return
-select
-	(case a.Typ_danych 
-		when 'string' then wao.Wartosc_tekst
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as varchar(100))
-			else cast (cast ( wao.Wartosc_liczba as int ) as varchar(100)) end
-		)
-		else cast ( cast ( wao.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
-from Atrybut a 
-inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
-where wao.IdObserwacja = @trial_id and a.Nazwa = @attributeName
+alter procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select
+				IdSesja as SessionID,
+				IdUzytkownik as UserID,
+				IdLaboratorium as LabID,
+				dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+				Data as SessionDate,
+				Opis_sesji as SessionDescription,
+				(select * from list_session_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdSesja=@res_id
+			for XML AUTO, ELEMENTS
 go
 
-create function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
-returns table
-as return
-select
-	(case a.Typ_danych 
-		when 'string' then wakp.Wartosc_tekst
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as varchar(100))
-			else cast (cast ( wakp.Wartosc_liczba as int ) as varchar(100)) end
-		)
-		else cast ( cast ( wakp.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
-from Atrybut a 
-inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdAtrybut
-where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Nazwa = @attributeName
-go
 
-create function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
-returns table
-as return
-select
-	(case a.Typ_danych 
-		when 'string' then wap.Wartosc_tekst
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as varchar(100))
-			else cast (cast ( wap.Wartosc_liczba as int ) as varchar(100)) end
-		)
-		else cast ( cast ( wap.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
-from Atrybut a 
-inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
-where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
-go
-
-create procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
+alter procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -375,7 +326,7 @@ begin
 end
 go
 
-create procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
+alter procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
 as
 begin
 	/* Assumed validity constraints of the filter structure:
@@ -649,253 +600,75 @@ begin
 end
 go
 
-
--- Utility procedures 
-
-create procedure validate_session_group_id( @group_id int )
-as
- select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
+alter function list_session_attributes_uniform ( @sess_id int )
+returns TABLE as
+return 
+(
+ with Sess as
+( select * from Sesja where IdSesja=@sess_id )
+	(
+	(select 'SessionID' as Name,
+			s.IdSesja as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	union
+	(select 'UserID' as Name,
+			s.IdUzytkownik as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	union
+	(select 'LabID' as Name,
+			s.IdLaboratorium as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	union
+	(select 'MotionKind' as Name,
+			dbo.motion_kind_name(s.IdRodzaj_ruchu) as Value,
+			'integer' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	union
+	(select 'SessionDate' as Name,
+			s.Data as Value,
+			'string' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	union
+	(select 'SessionDescription' as Name,
+			s.Opis_sesji as Value,
+			'string' as Type,
+			'_session_static' as AttributeGroup,
+			'session' as Entity
+	from Sess s)
+	)
+union
+(select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
+		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup,
+		'session' as Entity
+from Atrybut a 
+inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where was.IdSesja = @sess_id and a.Typ_danych <> 'file' ));
 go
 
-
-
-
--- UPS Procedures
-
-create procedure update_stored_filters(@user_login as varchar(30), @filter as PredicateUdt readonly)
-as
-begin
-
-	declare @user_id int;
-	set @user_id = dbo.identify_user(@user_login);
-	
-	
-		delete from Predykat 
-		where IdUzytkownik = @user_id
-		and not exists ( select * from @filter as f where	f.PredicateID = IdPredykat and
-															f.ParentPredicate = IdRodzicPredykat and
-														f.ContextEntity = EncjaKontekst and
-														f.PreviousPredicate = IdPoprzedniPredykat and
-														f.NextOperator = NastepnyOperator and
-														f.FeatureName = NazwaWlasciwosci and
-														f.Operator = Operator and
-														f.Value = Wartosc and
-														f.AggregateFunction = FunkcjaAgregujaca and
-														f.AggregateEntity = EncjaAgregowana and
-														@user_id = IdUzytkownik	);
-
-	insert into Predykat
-	( IdPredykat, IdRodzicPredykat,	EncjaKontekst, IdPoprzedniPredykat, NastepnyOperator, NazwaWlasciwosci, 
-	Operator, Wartosc,	FunkcjaAgregujaca,	EncjaAgregowana, IdUzytkownik )
-		(
-		(select * from Predykat where IdUzytkownik = @user_id)
-		except
-		(select PredicateID as IdPredykat,
-				ParentPredicate as IdRodzicPredykat,
-				ContextEntity as EncjaKontekst,
-				PreviousPredicate as IdPoprzedniPredykat,
-				NextOperator as NastepnyOperator,
-				FeatureName as NazwaWlasciwosci,
-				Operator as Operator,
-				Value as Wartosc,
-				AggregateFunction as FunkcjaAgregujaca,
-				AggregateEntity as EncjaAgregowana,
-				@user_id as IdUzytkownik	
-		from @filter )
-		);
-end
-go
-
-create procedure list_user_filters_xml ( @user_login as varchar(30) )
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
-select 
-				IdPredykat "PredicateID",
-				IdRodzicPredykat "ParentPredicate",
-				EncjaKontekst "ContextEntity",
-				IdPoprzedniPredykat "PreviousPredicate",
-				NastepnyOperator "NextOperator",
-				NazwaWlasciwosci "FeatureName",
-				Operator "Operator",
-				Wartosc "Value",
-				FunkcjaAgregujaca "AggregateFunction",
-				EncjaAgregowana "AggregateEntity"
-	from Predykat
-	where IdUzytkownik = dbo.identify_user(@user_login)
-    for XML PATH('Filter'), root ('FilterList')
-go
-
-create procedure create_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
-as
-begin
-	declare @user_id int;
-	set @user_id = dbo.identify_user(@user_login);
-
-
-	if @user_id is NULL 
-	begin 
-		set @result = 1;
-		return;
-	end;
-	
-	if exists ( select * from Koszyk where IdUzytkownik = @user_id and Nazwa = @basket_name )
-	begin
-		set @result = 2;
-		return;
-	end;
-	
-	insert into Koszyk ( Nazwa, IdUzytkownik ) values ( @basket_name, @user_id );
-	set @result = 0;
-end
-go
-
-create procedure remove_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
-as
-begin
-	declare @user_id int;
-	declare @basket_id int;
-	set @user_id = dbo.identify_user(@user_login);
-
-	if @user_id is NULL 
-	begin 
-		set @result = 1;
-		return;
-	end;
-	
-	select @basket_id = IdKoszyk from Koszyk where IdUzytkownik = @user_id and Nazwa = @basket_name;
-	if @basket_id is NULL
-	begin
-		set @result = 2;
-		return;
-	end;
-	
-	delete from Performer_Koszyk where IdKoszyk = @basket_id;
-	delete from Sesja_Koszyk where IdKoszyk = @basket_id;
-	delete from Obserwacja_Koszyk where IdKoszyk = @basket_id;
-	delete from Segment_Koszyk where IdKoszyk = @basket_id;
-	delete from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
-	set @result = 0;
-end
-go
-/* Error codes:
-	1 - login not found
-	2 - basket does not exist
-	3 - resource not available to the user
-	7 - entity not supported */
-create procedure add_entity_to_basket( @user_login as varchar(30), @basket_name as varchar(30), @entity as varchar(20), @res_id as int, @result int OUTPUT )
-as
-begin
-	declare @user_id int;
-	declare @basket_id int;
-	set @user_id = dbo.identify_user(@user_login);
-
-	if @user_id is NULL 
-	begin 
-		set @result = 1;
-		return;
-	end;
-	
-	select @basket_id = IdKoszyk from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
-	
-	if (@basket_id is NULL )
-	begin 
-		set @result = 2;
-		return;
-	end;	
-	if @entity = 'performer'
-		begin
-			if not exists ( select * from Performer_Koszyk where IdPerformer = @res_id and IdKoszyk = @basket_id )
-			insert into Performer_Koszyk ( IdKoszyk, IdPerformer ) values ( @basket_id, @res_id );
-		end;
-	else if @entity = 'session'
-		begin
-			if @res_id not in (select IdSesja from dbo.user_accessible_sessions(@user_id))
-				begin
-					set @result = 3;
-					return;
-				end
-			if not exists ( select * from Sesja_Koszyk where IdSesja = @res_id and IdKoszyk = @basket_id )
-			insert into Sesja_Koszyk ( IdKoszyk, IdSesja ) values ( @basket_id, @res_id );
-		end;
-	else if @entity = 'trial'
-		begin
-
-			if (select top 1 IdSesja from Obserwacja where IdObserwacja = @res_id) not in (select IdSesja from dbo.user_accessible_sessions(@user_id))
-				begin
-					set @result = 3;
-					return;
-				end
-			if not exists ( select * from Obserwacja_Koszyk where IdObserwacja = @res_id and IdKoszyk = @basket_id )
-			insert into Obserwacja_Koszyk ( IdKoszyk, IdObserwacja ) values ( @basket_id, @res_id );
-		end;
-	else if @entity = 'segment'
-		begin
-			if not exists ( select * from Segment_Koszyk where IdSegment = @res_id and IdKoszyk = @basket_id )
-			insert into Segment_Koszyk ( IdKoszyk, IdSegment ) values ( @basket_id, @res_id );
-		end;
-	else
-		begin
-			set @result = 7;
-			return;
-		end;
-	set @result = 0;
-end
-go
-/* Error codes:
-	1 - login not found
-	2 - basket does not exist
-	7 - entity not supported */
-create procedure remove_entity_from_basket( @user_login as varchar(30), @basket_name as varchar(30), @entity as varchar(20), @res_id as int, @result int OUTPUT )
-as
-begin
-	declare @user_id int;
-	declare @basket_id int;
-	
-	set @user_id = dbo.identify_user(@user_login);
-	if @user_id is NULL 
-	begin 
-		set @result = 1;
-		return;
-	end;
-	
-	select @basket_id = IdKoszyk from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
-	
-	if (@basket_id is NULL )
-	begin 
-		set @result = 2;
-		return;
-	end;	
-	if @entity = 'performer'
-		delete from Performer_Koszyk where IdKoszyk = @basket_id and IdPerformer = @res_id;
-	else if @entity = 'session'
-		delete from Sesja_Koszyk where IdKoszyk = @basket_id and IdSesja = @res_id;
-	else if @entity = 'trial'
-		delete from Obserwacja_Koszyk where IdKoszyk = @basket_id and IdObserwacja = @res_id;
-	else if @entity = 'segment'
-		delete from Segment_Koszyk where IdKoszyk = @basket_id and IdSegment = @res_id;
-	else
-		begin
-			set @result = 7;
-			return;
-		end;
-	set @result = 0;
-end
-go
-
-create procedure list_basket_performers_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
-select
-	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
-	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from Performer PerformerDetailsWithAttributes
-	where IdPerformer in (select IdPerformer from Performer_Koszyk pk join Koszyk k on pk.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
-    for XML AUTO, ELEMENTS, root ('BasketPerformerWithAttributesList')
-go
-
-create procedure list_basket_sessions_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
+alter procedure list_basket_sessions_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
 	select
@@ -912,205 +685,87 @@ as
       for XML AUTO, ELEMENTS, root ('BasketSessionWithAttributesList')
 go
 
-create procedure list_basket_trials_attributes_xml(@user_login varchar(30), @basket_name varchar(30))
+alter procedure list_group_sessions_attributes_xml (@user_login varchar(30), @group_id int)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
-select 
-	IdObserwacja as TrialID, 
-	IdSesja as SessionID, 
-	Opis_obserwacji as TrialDescription, 
-	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) 
-	and IdObserwacja in 
-	(select IdObserwacja from Obserwacja_Koszyk ok join Koszyk k on ok.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
-    for XML AUTO, ELEMENTS, root ('BasketTrialWithAttributesList')
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes 
+		where exists ( select * from Sesja_grupa_sesji sgs where sgs.IdGrupa_sesji = @group_id and sgs.IdSesja = SessionDetailsWithAttributes.IdSesja)
+      for XML AUTO, ELEMENTS, root ('GroupSessionWithAttributesList')
 go
 
-
-create procedure list_user_baskets( @user_login varchar(30) )
+alter procedure list_measurement_conf_sessions_attributes_xml (@user_login varchar(30), @mc_id int)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
-select
-	Nazwa as BasketName
-from Koszyk
-where IdUzytkownik = dbo.identify_user( @user_login )
-for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+		from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+		where exists (
+			select * from Pomiar p join Obserwacja o on p.IdObserwacja = o.IdObserwacja 
+			where p.IdKonfiguracja_pomiarowa = @mc_id and o.IdSesja = SessionDetailsWithAttributes.IdSesja
+		)
+      for XML AUTO, ELEMENTS, root ('MeasurementConfSessionWithAttributesList')
 go
 
--- PRIVILEGE AND USER MANAGEMENT
-
-create procedure list_users_xml
+alter procedure list_lab_sessions_attributes_xml (@user_login varchar(30), @lab_id int)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
-select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
-	from Uzytkownik
-    for XML PATH('UserDetails'), root ('UserList')
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdLaboratorium=@lab_id
+      for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
 go
 
-create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
+alter procedure list_performer_sessions_attributes_xml (@user_login varchar(30), @perf_id int)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
-select 
-	u.Login "@Login", case us.Zapis when 0 then 'false' else 'true' end "@CanWrite"
-	from Uprawnienia_Sesja us join Uzytkownik u on us.IdUzytkownik = u.IdUzytkownik
-	where us.IdSesja = @sess_id and us.IdSesja in (select IdSesja from user_accessible_sessions_by_login(@user_login) )
-    for XML PATH('SessionPrivilege'), root ('SessionPrivilegeList')
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+		from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+		where exists (
+			select * from Konfiguracja_performera kp where kp.IdPerformer = @perf_id and kp.IdSesja = SessionDetailsWithAttributes.IdSesja
+		)
+      for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
 go
 
-create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
+alter procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int) -- mozna uproscic do wykorzystujacej PerformerConfiguration
 as
- set @result = ((select count(*) from Uzytkownik where Login = @user_login))
-go
-
-create procedure create_user_account (@user_login varchar(30), @user_first_name varchar(30), @user_last_name varchar(50))
-as
-insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
-go
-
-create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
-as
-begin
-	declare @granted_user int;
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	begin
-		set @granted_user = dbo.identify_user(@granted_user_login);
-		if @granted_user is NULL 
-			begin
-				RAISERROR ('Granted user does not exist', 12, 1 )
-				return;
-			end
-		else
-		update Uprawnienia_sesja set Zapis = @write where IdSesja = @sess_id and IdUzytkownik = @granted_user;
-		if @@ROWCOUNT = 0
-		insert into Uprawnienia_sesja ( IdSesja, IdUzytkownik, Zapis) values (@sess_id, @granted_user, @write);
-	end
-end
-go
-
-create procedure unset_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int)
-as
-begin
-
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	delete from Uprawnienia_sesja  where IdUzytkownik = dbo.identify_user(@granted_user_login) and IdSesja = @sess_id;
-end
-go
-
-create procedure alter_session_visibility (@granting_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
-as
-begin
-
-	if (select COUNT(*) from user_sessions_by_login(@granting_user_login) where IdSesja = @sess_id)<>1 RAISERROR ('Session not owned by granting user', 12, 1 )
-	else
-	update Sesja set Publiczna = @public, PublicznaZapis = @writeable where IdSesja = @sess_id;
-end
-go
-
-
--- Metadata definition procedures
-
-create procedure define_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
-as
-begin
-	set @result = 0;
-  if exists ( select * from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-  if @entity not in ( 'performer', 'session', 'trial', 'measurement', 'measurement_conf', 'performer_conf')
-  	begin
-		set @result = 2;
-		return;
-	end;
-  insert into Grupa_atrybutow ( Nazwa, Opisywana_encja) values ( @group_name, @entity );
-end;
-go
-
--- remove attribute group ( name, entity )
-create procedure remove_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
-as
-begin
-	set @result = 0;
-	if not exists ( select * from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-	delete from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity;
-end;
-go
-
--- define attribute ( group, entity, name, type, subtype, units ) / GROUP !!!!
-create procedure define_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @storage_type varchar(20), @is_enum bit, @plugin_desc varchar(100), @data_subtype varchar(20), @unit varchar(10), @result int OUTPUT )
-as
-begin
-	declare @group_id int;
-	set @result = 0;
-	
-	if exists ( select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity )
-	begin
-		set @result = 1;
-		return;
-	end;
-	select @group_id = IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = @group_name and Opisywana_encja = @entity;
-	if ( @group_id is null )
-	begin
-		set @result = 2;
-		return;
-	end;
-	if not (@storage_type in ('string', 'float', 'integer') )
-		begin
-		set @result = 3;
-		return;
-	end;
-	insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Plugin, Podtyp_danych, Jednostka)
-				values ( @group_id, @attr_name, @storage_type, @is_enum, @plugin_desc, @data_subtype, @unit );
-	
-end
-go
-
--- remove attribute ( group, entity, name )
-create procedure remove_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @result int OUTPUT  )
-as
-begin
-	declare @att_id int;
-	set @att_id = 0;
-	set @result = 0;
-	
-	select @att_id = a.IdAtrybut from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity;
-	if @att_id is null -- attribute not found
-	begin
-		set @result = 1;
-		return;
-	end;
-	
-	delete from Atrybut where IdAtrybut = @att_id;	
-end
-go
-
--- Define enum values
-create procedure add_attribute_enum_value (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @value varchar(100), @replace_all bit, @result int OUTPUT  )
-as
-begin
-	declare @att_id int;
-	set @att_id = 0;
-	set @result = 0;
-	
-	select @att_id = a.IdAtrybut from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
-				where a.Nazwa = @attr_name and ga.Nazwa = @group_name and ga.Opisywana_encja = @entity
-	if @att_id is null -- attribute not found
-	begin
-		set @result = 1;
-		return;
-	end;
-	if @replace_all = 1 delete from Wartosc_wyliczeniowa where IdAtrybut = @att_id;
-	if not exists ( select * from Wartosc_wyliczeniowa where IdAtrybut = @att_id and Wartosc_wyliczeniowa = @value ) and @value <> ''
-	insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa ) values ( @att_id, @value );
-	
-end
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
+      dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind, Data as SessionDate, 
+      Opis_sesji as SessionDescription, (select * from session_label(@user_login,IdSesja)) as SessionLabel
+      from user_accessible_sessions_by_login(@user_login) SessionDetails
+      where exists (
+		select * from Konfiguracja_performera kp where kp.IdPerformer = @perf_id and kp.IdSesja = SessionDetails.IdSesja
+      )
+      for XML AUTO, root ('PerformerSessionList')
 go

@@ -220,8 +220,8 @@ return
 			'session' as Entity
 	from Sess s)
 	union
-	(select 'MotionKindID' as Name,
-			s.IdRodzaj_ruchu as Value,
+	(select 'MotionKind' as Name,
+			dbo.motion_kind_name(s.IdRodzaj_ruchu) as Value,
 			'integer' as Type,
 			'_session_static' as AttributeGroup,
 			'session' as Entity
@@ -474,6 +474,14 @@ go
 -- Resource By-ID retrieval
 -- ========================
 
+create function motion_kind_name( @mk_id int )
+returns varchar(50)
+as
+begin
+	return ( select top 1 Nazwa from Rodzaj_ruchu where IdRodzaj_ruchu = @mk_id );
+end
+go
+
 create procedure get_performer_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -486,14 +494,14 @@ as
 			for XML AUTO, ELEMENTS
 go
 
-create procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
+alter procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
 				IdSesja as SessionID,
 				IdUzytkownik as UserID,
 				IdLaboratorium as LabID,
-				IdRodzaj_ruchu as MotionKindID,
+				dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 				Data as SessionDate,
 				Opis_sesji as SessionDescription,
 				(select * from list_session_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
@@ -623,7 +631,7 @@ create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id 
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdSesja as SessionID, IdUzytkownik as UserID, IdLaboratorium as LabID, 
-      IdRodzaj_ruchu as MotionKindID, Data as SessionDate, 
+      dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind, Data as SessionDate, 
       Opis_sesji as SessionDescription, (select * from session_label(@user_login,IdSesja)) as SessionLabel
       from user_accessible_sessions_by_login(@user_login) SessionDetails
       where exists (
@@ -639,7 +647,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		IdRodzaj_ruchu as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
@@ -659,7 +667,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		IdRodzaj_ruchu as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
@@ -675,7 +683,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		IdRodzaj_ruchu as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
@@ -692,7 +700,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		IdRodzaj_ruchu as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
@@ -1108,6 +1116,41 @@ from Wartosc_wyliczeniowa ww join Atrybut a on ww.IdAtrybut = a.IdAtrybut join G
 where a.Nazwa = @att_name and ga.Opisywana_encja = @entity_kind
 for XML PATH(''), root ('EnumValueList')
 go
+
+-- Create session operation
+-- ========================
+
+/*
+Output parameter "result" meaning:
+0 - session created
+1 - motion kind of this name is not valid
+2 - other error
+
+
+*/
+
+create procedure create_session (	@sess_user varchar(20), @sess_lab int, @mk_name varchar(50), @sess_date DateTime, @sess_desc varchar(100), 
+									@sess_id int OUTPUT, @result int OUTPUT )
+as
+begin
+	declare @mc_id as int;
+
+	set @result = 2;
+	if (select COUNT(*) from Rodzaj_ruchu where Nazwa = @mk_name )!=1
+	begin
+		set @mc_id = 1;
+		return;
+	end;
+	
+	insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
+		values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @mk_name), 
+		@sess_date, @sess_desc ) set @sess_id = SCOPE_IDENTITY() ;
+	set @result = 0;
+
+end;
+go
+
+
 
 -- Attribute setting operations
 -- ============================
