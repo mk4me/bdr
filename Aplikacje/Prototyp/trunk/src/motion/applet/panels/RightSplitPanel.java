@@ -296,8 +296,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		trialFormDialog.setVisible(true);
 		if (trialFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
 				trialFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
-			tabbedPane.setSelectedIndex(TABLE_TRIAL);
-			RightSplitPanel.this.refreshTrialTable();
+			
+			//tabbedPane.setSelectedIndex(TABLE_TRIAL);
+			showTable(EntityKind.trial, recordId);	// Show created trials for the session.
+			//RightSplitPanel.this.refreshTrialTable();
 		}
 	}
 	
