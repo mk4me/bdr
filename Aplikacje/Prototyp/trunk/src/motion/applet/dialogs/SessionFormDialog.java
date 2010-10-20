@@ -137,7 +137,7 @@ public class SessionFormDialog extends FormDialog {
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {
 		for (EntityAttribute a : group) {
-			if (a.name.equals(SessionStaticAttributes.MotionKindID.toString())) {
+			if (a.name.equals(SessionStaticAttributes.MotionKind.toString())) {
 				a.enumValues = getMotionKinds();
 				
 				return true;
@@ -191,7 +191,7 @@ public class SessionFormDialog extends FormDialog {
 	
 	private String getMotionKind() {
 		
-		return getMotionKinds().get((Integer) getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKindID.toString()));
+		return getMotionKinds().get((Integer) getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKind.toString()));
 	}
 	
 	protected boolean validateResult() {
