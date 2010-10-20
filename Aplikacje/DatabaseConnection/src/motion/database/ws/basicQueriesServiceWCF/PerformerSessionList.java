@@ -30,7 +30,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                 &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
- *                 &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                 &lt;attribute name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
  *                 &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -98,7 +98,7 @@ public class PerformerSessionList {
      *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
-     *       &lt;attribute name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
      *       &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -119,8 +119,8 @@ public class PerformerSessionList {
         protected Integer userID;
         @XmlAttribute(name = "LabID")
         protected Integer labID;
-        @XmlAttribute(name = "MotionKindID")
-        protected Integer motionKindID;
+        @XmlAttribute(name = "MotionKind")
+        protected String motionKind;
         @XmlAttribute(name = "SessionDate")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar sessionDate;
@@ -202,27 +202,27 @@ public class PerformerSessionList {
         }
 
         /**
-         * Gets the value of the motionKindID property.
+         * Gets the value of the motionKind property.
          * 
          * @return
          *     possible object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public Integer getMotionKindID() {
-            return motionKindID;
+        public String getMotionKind() {
+            return motionKind;
         }
 
         /**
-         * Sets the value of the motionKindID property.
+         * Sets the value of the motionKind property.
          * 
          * @param value
          *     allowed object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public void setMotionKindID(Integer value) {
-            this.motionKindID = value;
+        public void setMotionKind(String value) {
+            this.motionKind = value;
         }
 
         /**

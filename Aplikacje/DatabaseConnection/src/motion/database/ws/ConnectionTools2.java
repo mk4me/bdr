@@ -305,7 +305,7 @@ public class ConnectionTools2 {
 		
 		Session session = new Session();
 		session.put( SessionStaticAttributes.LabID, s.getLabID() );
-		session.put( SessionStaticAttributes.MotionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
@@ -388,7 +388,7 @@ public class ConnectionTools2 {
 		
 		Session session = new Session();
 		session.put( SessionStaticAttributes.LabID, s.getLabID() );
-		session.put( SessionStaticAttributes.MotionKindID, s.getMotionKindID() );
+		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );

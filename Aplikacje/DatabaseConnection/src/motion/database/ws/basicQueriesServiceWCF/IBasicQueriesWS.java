@@ -25,6 +25,54 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult
+     * @throws IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListSessionGroupsDefined", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined")
+    @WebResult(name = "ListSessionGroupsDefinedResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListSessionGroupsDefined", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefined")
+    @ResponseWrapper(localName = "ListSessionGroupsDefinedResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult listSessionGroupsDefined()
+        throws IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult
+     * @throws IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListMotionKindsDefined", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined")
+    @WebResult(name = "ListMotionKindsDefinedResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListMotionKindsDefined", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefined")
+    @ResponseWrapper(localName = "ListMotionKindsDefinedResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult listMotionKindsDefined()
+        throws IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param attributeName
+     * @param entityKind
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult
+     * @throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListEnumValues", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues")
+    @WebResult(name = "ListEnumValuesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListEnumValues", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValues")
+    @ResponseWrapper(localName = "ListEnumValuesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult listEnumValues(
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        String attributeName,
+        @WebParam(name = "entityKind", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        String entityKind)
+        throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param entitiesToInclude
      * @param filter
      * @return
@@ -163,6 +211,23 @@ public interface IBasicQueriesWS {
         @WebParam(name = "id", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         int id)
         throws IBasicQueriesWSGetMeasurementConfigurationByIdXMLQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse.GetPerformerConfigurationByIdXMLResult
+     * @throws IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "GetPerformerConfigurationByIdXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetPerformerConfigurationByIdXML")
+    @WebResult(name = "GetPerformerConfigurationByIdXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "GetPerformerConfigurationByIdXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXML")
+    @ResponseWrapper(localName = "GetPerformerConfigurationByIdXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse")
+    public motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse.GetPerformerConfigurationByIdXMLResult getPerformerConfigurationByIdXML(
+        @WebParam(name = "id", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int id)
+        throws IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage
     ;
 
     /**
@@ -314,6 +379,23 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @param measurementConfID
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfSessionsWithAttributesXMLResponse.ListMeasurementConfSessionsWithAttributesXMLResult
+     * @throws IBasicQueriesWSListMeasurementConfSessionsWithAttributesXMLQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListMeasurementConfSessionsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfSessionsWithAttributesXML")
+    @WebResult(name = "ListMeasurementConfSessionsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListMeasurementConfSessionsWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfSessionsWithAttributesXML")
+    @ResponseWrapper(localName = "ListMeasurementConfSessionsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfSessionsWithAttributesXMLResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfSessionsWithAttributesXMLResponse.ListMeasurementConfSessionsWithAttributesXMLResult listMeasurementConfSessionsWithAttributesXML(
+        @WebParam(name = "measurementConfID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int measurementConfID)
+        throws IBasicQueriesWSListMeasurementConfSessionsWithAttributesXMLQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param sessionID
      * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsResponse.ListSessionSessionGroupsResult
@@ -365,6 +447,23 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @param sessionID
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse.ListSessionPerformerConfsWithAttributesXMLResult
+     * @throws IBasicQueriesWSListSessionPerformerConfsWithAttributesXMLQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListSessionPerformerConfsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformerConfsWithAttributesXML")
+    @WebResult(name = "ListSessionPerformerConfsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListSessionPerformerConfsWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXML")
+    @ResponseWrapper(localName = "ListSessionPerformerConfsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse.ListSessionPerformerConfsWithAttributesXMLResult listSessionPerformerConfsWithAttributesXML(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int sessionID)
+        throws IBasicQueriesWSListSessionPerformerConfsWithAttributesXMLQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param trialID
      * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult
@@ -382,6 +481,23 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @param trialID
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse.ListMeasurementConfMeasurementsWithAttributesXMLResult
+     * @throws IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListMeasurementConfMeasurementsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfMeasurementsWithAttributesXML")
+    @WebResult(name = "ListMeasurementConfMeasurementsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListMeasurementConfMeasurementsWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXML")
+    @ResponseWrapper(localName = "ListMeasurementConfMeasurementsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse.ListMeasurementConfMeasurementsWithAttributesXMLResult listMeasurementConfMeasurementsWithAttributesXML(
+        @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int trialID)
+        throws IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult
      * @throws IBasicQueriesWSListMeasurementConfigurationsWithAttributesXMLQueryExceptionFaultFaultMessage
@@ -392,26 +508,6 @@ public interface IBasicQueriesWS {
     @ResponseWrapper(localName = "ListMeasurementConfigurationsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfigurationsWithAttributesXMLResponse")
     public motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult listMeasurementConfigurationsWithAttributesXML()
         throws IBasicQueriesWSListMeasurementConfigurationsWithAttributesXMLQueryExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
-     * @param subjectID
-     * @param subjectType
-     * @return
-     *     returns motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult
-     * @throws IBasicQueriesWSListFileAttributeDataXMLQueryExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListFileAttributeDataXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFileAttributeDataXML")
-    @WebResult(name = "ListFileAttributeDataXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    @RequestWrapper(localName = "ListFileAttributeDataXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXML")
-    @ResponseWrapper(localName = "ListFileAttributeDataXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse")
-    public motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult listFileAttributeDataXML(
-        @WebParam(name = "subjectID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        int subjectID,
-        @WebParam(name = "subjectType", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        String subjectType)
-        throws IBasicQueriesWSListFileAttributeDataXMLQueryExceptionFaultFaultMessage
     ;
 
     /**
@@ -452,6 +548,26 @@ public interface IBasicQueriesWS {
         @WebParam(name = "subjectType", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         String subjectType)
         throws IBasicQueriesWSListFilesWithAttributesXMLQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param subjectID
+     * @param subjectType
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult
+     * @throws IBasicQueriesWSListFileAttributeDataXMLQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListFileAttributeDataXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListFileAttributeDataXML")
+    @WebResult(name = "ListFileAttributeDataXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListFileAttributeDataXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXML")
+    @ResponseWrapper(localName = "ListFileAttributeDataXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult listFileAttributeDataXML(
+        @WebParam(name = "subjectID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int subjectID,
+        @WebParam(name = "subjectType", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        String subjectType)
+        throws IBasicQueriesWSListFileAttributeDataXMLQueryExceptionFaultFaultMessage
     ;
 
     /**
@@ -509,54 +625,6 @@ public interface IBasicQueriesWS {
         @WebParam(name = "entityKind", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
         String entityKind)
         throws IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
-     * @return
-     *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult
-     * @throws IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListSessionGroupsDefined", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined")
-    @WebResult(name = "ListSessionGroupsDefinedResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    @RequestWrapper(localName = "ListSessionGroupsDefined", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefined")
-    @ResponseWrapper(localName = "ListSessionGroupsDefinedResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse")
-    public motion.database.ws.basicQueriesServiceWCF.ListSessionGroupsDefinedResponse.ListSessionGroupsDefinedResult listSessionGroupsDefined()
-        throws IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
-     * @return
-     *     returns motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult
-     * @throws IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListMotionKindsDefined", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined")
-    @WebResult(name = "ListMotionKindsDefinedResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    @RequestWrapper(localName = "ListMotionKindsDefined", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefined")
-    @ResponseWrapper(localName = "ListMotionKindsDefinedResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse")
-    public motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult listMotionKindsDefined()
-        throws IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
-     * @param attributeName
-     * @param entityKind
-     * @return
-     *     returns motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult
-     * @throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "ListEnumValues", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues")
-    @WebResult(name = "ListEnumValuesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-    @RequestWrapper(localName = "ListEnumValues", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValues")
-    @ResponseWrapper(localName = "ListEnumValuesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse")
-    public motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult listEnumValues(
-        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        String attributeName,
-        @WebParam(name = "entityKind", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        String entityKind)
-        throws IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage
     ;
 
 }

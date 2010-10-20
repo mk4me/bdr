@@ -61,6 +61,70 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DefineAttriubeGroup }
+     * 
+     */
+    public DefineAttriubeGroup createDefineAttriubeGroup() {
+        return new DefineAttriubeGroup();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * 
+     */
+    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
+        return new AddAttributeEnumValueResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeGroup }
+     * 
+     */
+    public RemoveAttributeGroup createRemoveAttributeGroup() {
+        return new RemoveAttributeGroup();
+    }
+
+    /**
+     * Create an instance of {@link AdministrationOperationException }
+     * 
+     */
+    public AdministrationOperationException createAdministrationOperationException() {
+        return new AdministrationOperationException();
+    }
+
+    /**
+     * Create an instance of {@link DownloadAreaCleanupResponse }
+     * 
+     */
+    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
+        return new DownloadAreaCleanupResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttributeResponse }
+     * 
+     */
+    public DefineAttributeResponse createDefineAttributeResponse() {
+        return new DefineAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttriubeGroupResponse }
+     * 
+     */
+    public DefineAttriubeGroupResponse createDefineAttriubeGroupResponse() {
+        return new DefineAttriubeGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeResponse }
+     * 
+     */
+    public RemoveAttributeResponse createRemoveAttributeResponse() {
+        return new RemoveAttributeResponse();
+    }
+
+    /**
      * Create an instance of {@link RemoveAttribute }
      * 
      */
@@ -85,62 +149,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineAttributeResponse }
-     * 
-     */
-    public DefineAttributeResponse createDefineAttributeResponse() {
-        return new DefineAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeResponse }
-     * 
-     */
-    public RemoveAttributeResponse createRemoveAttributeResponse() {
-        return new RemoveAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttribute }
-     * 
-     */
-    public DefineAttribute createDefineAttribute() {
-        return new DefineAttribute();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttriubeGroup }
-     * 
-     */
-    public DefineAttriubeGroup createDefineAttriubeGroup() {
-        return new DefineAttriubeGroup();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeGroup }
-     * 
-     */
-    public RemoveAttributeGroup createRemoveAttributeGroup() {
-        return new RemoveAttributeGroup();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttriubeGroupResponse }
-     * 
-     */
-    public DefineAttriubeGroupResponse createDefineAttriubeGroupResponse() {
-        return new DefineAttriubeGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link DownloadAreaCleanupResponse }
-     * 
-     */
-    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
-        return new DownloadAreaCleanupResponse();
-    }
-
-    /**
      * Create an instance of {@link AddAttributeEnumValue }
      * 
      */
@@ -149,19 +157,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * Create an instance of {@link DefineAttribute }
      * 
      */
-    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
-        return new AddAttributeEnumValueResponse();
-    }
-
-    /**
-     * Create an instance of {@link AdministrationOperationException }
-     * 
-     */
-    public AdministrationOperationException createAdministrationOperationException() {
-        return new AdministrationOperationException();
+    public DefineAttribute createDefineAttribute() {
+        return new DefineAttribute();
     }
 
     /**

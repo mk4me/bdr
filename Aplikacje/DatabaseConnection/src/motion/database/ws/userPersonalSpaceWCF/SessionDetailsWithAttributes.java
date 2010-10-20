@@ -23,7 +23,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService}Attributes" minOccurs="0"/>
@@ -41,7 +41,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "sessionID",
     "userID",
     "labID",
-    "motionKindID",
+    "motionKind",
     "sessionDate",
     "sessionDescription",
     "attributes",
@@ -56,8 +56,8 @@ public class SessionDetailsWithAttributes {
     protected int userID;
     @XmlElement(name = "LabID")
     protected int labID;
-    @XmlElement(name = "MotionKindID")
-    protected int motionKindID;
+    @XmlElement(name = "MotionKind", required = true)
+    protected String motionKind;
     @XmlElement(name = "SessionDate", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar sessionDate;
@@ -117,19 +117,27 @@ public class SessionDetailsWithAttributes {
     }
 
     /**
-     * Gets the value of the motionKindID property.
+     * Gets the value of the motionKind property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public int getMotionKindID() {
-        return motionKindID;
+    public String getMotionKind() {
+        return motionKind;
     }
 
     /**
-     * Sets the value of the motionKindID property.
+     * Sets the value of the motionKind property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setMotionKindID(int value) {
-        this.motionKindID = value;
+    public void setMotionKind(String value) {
+        this.motionKind = value;
     }
 
     /**

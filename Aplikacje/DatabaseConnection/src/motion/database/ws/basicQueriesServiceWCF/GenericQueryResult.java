@@ -33,7 +33,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                   &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *                   &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                   &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *                   &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -112,7 +112,7 @@ public class GenericQueryResult {
      *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
-     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
      *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -138,7 +138,7 @@ public class GenericQueryResult {
         "sessionID",
         "userID",
         "labID",
-        "motionKindID",
+        "motionKind",
         "sessionDate",
         "sessionDescription",
         "trialID",
@@ -163,8 +163,8 @@ public class GenericQueryResult {
         protected Integer userID;
         @XmlElement(name = "LabID")
         protected Integer labID;
-        @XmlElement(name = "MotionKindID")
-        protected Integer motionKindID;
+        @XmlElement(name = "MotionKind")
+        protected String motionKind;
         @XmlElement(name = "SessionDate")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar sessionDate;
@@ -330,27 +330,27 @@ public class GenericQueryResult {
         }
 
         /**
-         * Gets the value of the motionKindID property.
+         * Gets the value of the motionKind property.
          * 
          * @return
          *     possible object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public Integer getMotionKindID() {
-            return motionKindID;
+        public String getMotionKind() {
+            return motionKind;
         }
 
         /**
-         * Sets the value of the motionKindID property.
+         * Sets the value of the motionKind property.
          * 
          * @param value
          *     allowed object is
-         *     {@link Integer }
+         *     {@link String }
          *     
          */
-        public void setMotionKindID(Integer value) {
-            this.motionKindID = value;
+        public void setMotionKind(String value) {
+            this.motionKind = value;
         }
 
         /**

@@ -312,6 +312,29 @@ public interface IBasicUpdatesWS {
      * 
      * @param update
      * @param attributeName
+     * @param attributeValue
+     * @param performerConfID
+     * @throws IBasicUpdatesWSSetPerformerConfAttributeUpdateExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "SetPerformerConfAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/SetPerformerConfAttribute")
+    @RequestWrapper(localName = "SetPerformerConfAttribute", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetPerformerConfAttribute")
+    @ResponseWrapper(localName = "SetPerformerConfAttributeResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.SetPerformerConfAttributeResponse")
+    public void setPerformerConfAttribute(
+        @WebParam(name = "performerConfID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int performerConfID,
+        @WebParam(name = "attributeName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeName,
+        @WebParam(name = "attributeValue", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String attributeValue,
+        @WebParam(name = "update", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        boolean update)
+        throws IBasicUpdatesWSSetPerformerConfAttributeUpdateExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param update
+     * @param attributeName
      * @param fileID
      * @param attributeValue
      * @throws IBasicUpdatesWSSetFileAttributeUpdateExceptionFaultFaultMessage

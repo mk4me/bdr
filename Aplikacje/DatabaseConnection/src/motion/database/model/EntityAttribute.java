@@ -196,6 +196,6 @@ public class EntityAttribute {
 		else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar)
 			return DATE_TYPE;
 		else	
-			throw new RuntimeException("TODO: Unknown value type." + arg );
+			throw new RuntimeException("TODO: Unknown value type: " + arg );
 	}
 }

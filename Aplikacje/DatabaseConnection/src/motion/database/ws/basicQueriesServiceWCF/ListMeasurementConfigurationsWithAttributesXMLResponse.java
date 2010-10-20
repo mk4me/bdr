@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}MeasurementConfListWithAttributesList"/>
+ *                   &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}MeasurementConfWithAttributesList"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -82,7 +82,7 @@ public class ListMeasurementConfigurationsWithAttributesXMLResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}MeasurementConfListWithAttributesList"/>
+     *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}MeasurementConfWithAttributesList"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -93,35 +93,35 @@ public class ListMeasurementConfigurationsWithAttributesXMLResponse {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "measurementConfListWithAttributesList"
+        "measurementConfWithAttributesList"
     })
     public static class ListMeasurementConfigurationsWithAttributesXMLResult {
 
-        @XmlElement(name = "MeasurementConfListWithAttributesList", required = true)
-        protected MeasurementConfListWithAttributesList measurementConfListWithAttributesList;
+        @XmlElement(name = "MeasurementConfWithAttributesList", required = true)
+        protected MeasurementConfWithAttributesList measurementConfWithAttributesList;
 
         /**
-         * Gets the value of the measurementConfListWithAttributesList property.
+         * Gets the value of the measurementConfWithAttributesList property.
          * 
          * @return
          *     possible object is
-         *     {@link MeasurementConfListWithAttributesList }
+         *     {@link MeasurementConfWithAttributesList }
          *     
          */
-        public MeasurementConfListWithAttributesList getMeasurementConfListWithAttributesList() {
-            return measurementConfListWithAttributesList;
+        public MeasurementConfWithAttributesList getMeasurementConfWithAttributesList() {
+            return measurementConfWithAttributesList;
         }
 
         /**
-         * Sets the value of the measurementConfListWithAttributesList property.
+         * Sets the value of the measurementConfWithAttributesList property.
          * 
          * @param value
          *     allowed object is
-         *     {@link MeasurementConfListWithAttributesList }
+         *     {@link MeasurementConfWithAttributesList }
          *     
          */
-        public void setMeasurementConfListWithAttributesList(MeasurementConfListWithAttributesList value) {
-            this.measurementConfListWithAttributesList = value;
+        public void setMeasurementConfWithAttributesList(MeasurementConfWithAttributesList value) {
+            this.measurementConfWithAttributesList = value;
         }
 
     }
