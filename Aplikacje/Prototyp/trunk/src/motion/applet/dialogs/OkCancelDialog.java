@@ -33,6 +33,7 @@ public class OkCancelDialog extends BasicDialog {
 	
 	private JButton okButton;
 	private JButton cancelButton;
+	private FormValidator validator;
 
 	
 	public OkCancelDialog(String message) {
@@ -54,6 +55,12 @@ public class OkCancelDialog extends BasicDialog {
 		this.pack();
 	}
 	
+	public void setMessage(String message)
+	{
+		this.messageLabel.setText( message );
+		this.messageLabel.invalidate();
+	}
+	
 	protected void constructUserInterface() {
 		
 		// Button area
@@ -71,11 +78,18 @@ public class OkCancelDialog extends BasicDialog {
 	protected void addListeners() {
 		this.okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				
-				setResult(OK_PRESSED);
-				OkCancelDialog.this.finished = true;
-				OkCancelDialog.this.setVisible(false);
-				OkCancelDialog.this.dispose();
+				if (validator!=null && validator.validate())
+				{
+					setResult(OK_PRESSED);
+					OkCancelDialog.this.finished = true;
+					OkCancelDialog.this.setVisible(false);
+					OkCancelDialog.this.dispose();
+				}
+				else
+				{
+					if (validator.getErrorMessage() != null)
+						OkCancelDialog.this.setMessage( validator.getErrorMessage() );	
+				}
 			}
 		});
 		
@@ -98,5 +112,10 @@ public class OkCancelDialog extends BasicDialog {
 	public int getResult() {
 		
 		return this.result;
+	}
+
+	public void setValidator(FormValidator formValidator) {
+		this.validator = formValidator;
+		
 	}
 }

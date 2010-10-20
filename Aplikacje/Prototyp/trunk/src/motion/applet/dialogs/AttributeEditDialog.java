@@ -129,26 +129,61 @@ public class AttributeEditDialog extends BasicDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					System.out.println( "I will modify groups:" );
-					printVector( tree.modifyGroups );
-
-					System.out.println( "I will remove groups:" );
-					printVector( tree.removeGroups );
-
-					System.out.println( "I will create new groups:" );
-					printVector( tree.newGroups );
+					StringBuffer message = new StringBuffer();
+					message.append("<html>");
+					if (tree.removeGroups.size() != 0)
+						message.append("Groups to be removed:<br>").append(asString( tree.removeGroups ));
+					if (tree.newGroups.size() != 0)
+						message.append("Groups to be created:<br>").append(asString( tree.newGroups ));
+					if (tree.removeAttributes.size() != 0)
+						message.append("Attributes to be removed:<br>").append(asString( tree.removeAttributes ));
+					if (tree.newAttributes.size() != 0)
+						message.append("Attributes to be created:<br>").append(asString( tree.newAttributes ));
+					if (tree.removeAttributes.size() == 0 &&
+							tree.removeGroups.size() == 0 &&
+							tree.newAttributes.size() == 0 &&
+							tree.removeAttributes.size() == 0 )
+						message.append("Nothing to do!");
 					
-					System.out.println( "Just kidding! No database functionality yet!");
+					message.append("</html>");
 					
+					JLabel label = new JLabel( message.toString() );
+
+					OkCancelDialog question = new OkCancelDialog( label );
+					question.setVisible( true );
+					
+					if (question.getResult() == question.OK_PRESSED)
+					{
+						try {
+							for (EntityAttributeGroup g:tree.removeGroups)
+								DatabaseConnection.getInstanceWCF().removeAttributeGroup(g.name, g.kind.getName());
+							for (EntityAttribute g:tree.removeAttributes)
+								DatabaseConnection.getInstanceWCF().removeAttribute(g, null);
+							for (EntityAttribute g:tree.newAttributes)
+								DatabaseConnection.getInstanceWCF().defineAttribute(g, null);
+							for (EntityAttributeGroup g:tree.newGroups)
+								DatabaseConnection.getInstanceWCF().defineAttributeGroup(g.name, g.kind.getName());
+						} catch (Exception e1) {
+							
+							e1.printStackTrace();
+							DatabaseConnection.log.severe( e1.getMessage() );
+						}
+					}
 					AttributeEditDialog.this.setVisible(false);
 					AttributeEditDialog.this.dispose();
 				}
 
-				private void printVector(
-						Vector<EntityAttributeGroup> modifyGroups) {
+				private void printVector( Vector<?> modifyGroups) {
 					
 					for ( Object o : modifyGroups )
 						System.out.println( o );
+				}
+
+				private String asString( Vector<?> modifyGroups) {
+					StringBuffer res = new StringBuffer();
+					for ( Object o : modifyGroups )
+						res.append( o.toString() ).append( "<br>" );
+					return res.toString();
 				}
 			});
 
