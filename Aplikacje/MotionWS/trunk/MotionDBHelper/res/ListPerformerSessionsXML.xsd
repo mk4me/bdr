@@ -8,7 +8,7 @@
                 <xsd:attribute name="SessionID" type="xsd:int" />
                 <xsd:attribute name="UserID" type="xsd:int" />
                 <xsd:attribute name="LabID" type="xsd:int" />
-                <xsd:attribute name="MotionKindID" type="xsd:int" />
+                <xsd:attribute name="MotionKind" type="xsd:string" />
                 <xsd:attribute name="SessionDate" type="xsd:dateTime" />
                 <xsd:attribute name="SessionDescription" type="xsd:string" />
                 <xsd:attribute name="SessionLabel" type="xsd:string" use="optional" />

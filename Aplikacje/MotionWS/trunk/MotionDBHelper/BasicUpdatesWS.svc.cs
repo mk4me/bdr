@@ -59,6 +59,7 @@ namespace MotionDBWebServices
         public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
+            int result = 0;
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
 
 
@@ -91,29 +92,10 @@ namespace MotionDBWebServices
                 //
                 cmd.Parameters.Remove(idPar);
 
-                cmd.CommandType = CommandType.Text;
-
-
-//                @"BEGIN TRY
-//    insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, IdPerformer, Data, Opis_sesji)
-//                                            values (@sess_user, @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_perf, @sess_date, @sess_desc )
-//                                            set @sess_id = SCOPE_IDENTITY()END TRY
-//    BEGIN CATCH
-//        insert into Blad ( TekstBledu ) 
-//        values (' Message: '+ERROR_MESSAGE() )
-//    END CATCH;";
-
-
-                cmd.CommandText = @"BEGIN TRY insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
-                                            values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @motion_kind_name), @sess_date, @sess_desc )
-                                            set @sess_id = SCOPE_IDENTITY()     END TRY
-BEGIN CATCH
-    insert into Blad ( NrBledu, Dotkliwosc, Stan, Procedura, Linia, Komunikat )
-    values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() )
-END CATCH;";
+                cmd.CommandText = "create_session";
                 cmd.Parameters.Add("@sess_user", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
-                cmd.Parameters.Add("@motion_kind_name", SqlDbType.VarChar, 50);
+                cmd.Parameters.Add("@mk_name", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@sess_date", SqlDbType.DateTime);
                 cmd.Parameters.Add("@sess_desc", SqlDbType.VarChar, 100);
 
@@ -121,14 +103,28 @@ END CATCH;";
                     new SqlParameter("@sess_id", SqlDbType.Int);
                 sessionIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(sessionIdParameter);
+                SqlParameter resultParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
                 userName = userName.Substring(userName.LastIndexOf('\\')+1);
                 cmd.Parameters["@sess_user"].Value = userName;
                 cmd.Parameters["@sess_lab"].Value = labID;
-                cmd.Parameters["@motion_kind_name"].Value = motionKindName;
+                cmd.Parameters["@mk_name"].Value = motionKindName;
                 cmd.Parameters["@sess_date"].Value = sessionDate;
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
+                result = (int) resultParameter.Value;
+                if(result==1) {
+                       UpdateException exc = new UpdateException("Wrong motion kind name" , "Motion kind"+motionKindName+" not found");
+                        throw new FaultException<UpdateException>(exc, "Illegal motion kind", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                   }
+                else if(result==2) {
+                       UpdateException exc = new UpdateException("DB-side" , "DB-side failure");
+                        throw new FaultException<UpdateException>(exc, "DB-side failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                   }
+
                 newSessionId = (int)sessionIdParameter.Value;
 
 

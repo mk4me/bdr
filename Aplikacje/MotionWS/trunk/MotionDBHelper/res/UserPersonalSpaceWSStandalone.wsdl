@@ -93,7 +93,7 @@
 						<xsd:element name="SessionID" type="xsd:int"/>
 						<xsd:element name="UserID" type="xsd:int"/>
 						<xsd:element name="LabID" type="xsd:int"/>
-						<xsd:element name="MotionKindID" type="xsd:int"/>
+						<xsd:element name="MotionKind" type="xsd:string"/>
 						<xsd:element name="SessionDate" type="xsd:dateTime"/>
 						<xsd:element name="SessionDescription" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
