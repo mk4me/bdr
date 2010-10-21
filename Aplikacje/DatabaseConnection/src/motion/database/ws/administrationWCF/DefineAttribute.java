@@ -20,10 +20,9 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="attributeName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="groupName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="entity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="storageType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="isEnum" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="pluginDescriptor" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="dataSubtype" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="unit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -38,10 +37,9 @@ import javax.xml.bind.annotation.XmlType;
     "attributeName",
     "groupName",
     "entity",
-    "storageType",
     "isEnum",
     "pluginDescriptor",
-    "dataSubtype",
+    "type",
     "unit"
 })
 @XmlRootElement(name = "DefineAttribute")
@@ -50,10 +48,9 @@ public class DefineAttribute {
     protected String attributeName;
     protected String groupName;
     protected String entity;
-    protected String storageType;
     protected boolean isEnum;
     protected String pluginDescriptor;
-    protected String dataSubtype;
+    protected String type;
     protected String unit;
 
     /**
@@ -129,30 +126,6 @@ public class DefineAttribute {
     }
 
     /**
-     * Gets the value of the storageType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStorageType() {
-        return storageType;
-    }
-
-    /**
-     * Sets the value of the storageType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStorageType(String value) {
-        this.storageType = value;
-    }
-
-    /**
      * Gets the value of the isEnum property.
      * 
      */
@@ -193,27 +166,27 @@ public class DefineAttribute {
     }
 
     /**
-     * Gets the value of the dataSubtype property.
+     * Gets the value of the type property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getDataSubtype() {
-        return dataSubtype;
+    public String getType() {
+        return type;
     }
 
     /**
-     * Sets the value of the dataSubtype property.
+     * Sets the value of the type property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setDataSubtype(String value) {
-        this.dataSubtype = value;
+    public void setType(String value) {
+        this.type = value;
     }
 
     /**

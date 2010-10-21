@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlType;
  *                   &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                   &lt;element name="Subtype" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="Unit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="EnumValues" minOccurs="0">
  *                     &lt;complexType>
@@ -109,7 +108,6 @@ public class AttributeDefinitionList {
      *         &lt;element name="AttributeType" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
-     *         &lt;element name="Subtype" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="Unit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="EnumValues" minOccurs="0">
      *           &lt;complexType>
@@ -136,7 +134,6 @@ public class AttributeDefinitionList {
         "attributeType",
         "attributeEnum",
         "attributeGroupName",
-        "subtype",
         "unit",
         "enumValues"
     })
@@ -150,8 +147,6 @@ public class AttributeDefinitionList {
         protected Integer attributeEnum;
         @XmlElement(name = "AttributeGroupName", required = true)
         protected String attributeGroupName;
-        @XmlElement(name = "Subtype")
-        protected String subtype;
         @XmlElement(name = "Unit")
         protected String unit;
         @XmlElement(name = "EnumValues")
@@ -251,30 +246,6 @@ public class AttributeDefinitionList {
          */
         public void setAttributeGroupName(String value) {
             this.attributeGroupName = value;
-        }
-
-        /**
-         * Gets the value of the subtype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getSubtype() {
-            return subtype;
-        }
-
-        /**
-         * Sets the value of the subtype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setSubtype(String value) {
-            this.subtype = value;
         }
 
         /**

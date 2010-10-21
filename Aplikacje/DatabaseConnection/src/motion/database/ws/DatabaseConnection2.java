@@ -360,7 +360,6 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					}
 					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), group.kind, null, a.getAttributeGroupName(), a.getAttributeType() );
 					attr.unit = a.getUnit();
-					attr.subtype = a.getSubtype();
 					attr.isEnum = a.getAttributeEnum()==1;
 					if (a.getEnumValues() != null) {
 						attr.enumValues = a.getEnumValues().getValue();
@@ -1591,7 +1590,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	{
 		try {
 			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttribute", this );
-			port.defineAttribute(a.name, a.groupName, a.kind.name(), a.type, a.isEnum, pluginDescriptor, a.subtype, a.unit);
+			port.defineAttribute(a.name, a.groupName, a.kind.name(), a.isEnum, pluginDescriptor, a.type, a.unit);
 
 		} catch (IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

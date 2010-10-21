@@ -64,35 +64,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link motion.database.ws.userPersonalSpaceWCF.FilterPredicate }
-     * 
-     */
-    public motion.database.ws.userPersonalSpaceWCF.FilterPredicate createFilterPredicate() {
-        return new motion.database.ws.userPersonalSpaceWCF.FilterPredicate();
-    }
-
-    /**
      * Create an instance of {@link ListBasketTrialsWithAttributesXMLResponse }
      * 
      */
     public ListBasketTrialsWithAttributesXMLResponse createListBasketTrialsWithAttributesXMLResponse() {
         return new ListBasketTrialsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link UpdateStoredFilters }
-     * 
-     */
-    public UpdateStoredFilters createUpdateStoredFilters() {
-        return new UpdateStoredFilters();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfFilterPredicate }
-     * 
-     */
-    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
-        return new ArrayOfFilterPredicate();
     }
 
     /**
@@ -112,19 +88,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Attributes }
-     * 
-     */
-    public Attributes createAttributes() {
-        return new Attributes();
-    }
-
-    /**
      * Create an instance of {@link ListStoredFiltersResponse.ListStoredFiltersResult }
      * 
      */
     public ListStoredFiltersResponse.ListStoredFiltersResult createListStoredFiltersResponseListStoredFiltersResult() {
         return new ListStoredFiltersResponse.ListStoredFiltersResult();
+    }
+
+    /**
+     * Create an instance of {@link UpdateStoredFilters }
+     * 
+     */
+    public UpdateStoredFilters createUpdateStoredFilters() {
+        return new UpdateStoredFilters();
     }
 
     /**
@@ -152,6 +128,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BasketSessionWithAttributesList }
+     * 
+     */
+    public BasketSessionWithAttributesList createBasketSessionWithAttributesList() {
+        return new BasketSessionWithAttributesList();
+    }
+
+    /**
      * Create an instance of {@link RemoveEntityFromBasket }
      * 
      */
@@ -176,11 +160,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TrialDetailsWithAttributes }
+     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult }
      * 
      */
-    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
-        return new TrialDetailsWithAttributes();
+    public ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult createListBasketSessionsWithAttributesXMLResponseListBasketSessionsWithAttributesXMLResult() {
+        return new ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link BasketTrialWithAttributesList }
+     * 
+     */
+    public BasketTrialWithAttributesList createBasketTrialWithAttributesList() {
+        return new BasketTrialWithAttributesList();
     }
 
     /**
@@ -189,6 +181,14 @@ public class ObjectFactory {
      */
     public RemoveEntityFromBasketResponse createRemoveEntityFromBasketResponse() {
         return new RemoveEntityFromBasketResponse();
+    }
+
+    /**
+     * Create an instance of {@link Attributes.Attribute }
+     * 
+     */
+    public Attributes.Attribute createAttributesAttribute() {
+        return new Attributes.Attribute();
     }
 
     /**
@@ -224,14 +224,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BasketTrialWithAttributesList }
-     * 
-     */
-    public BasketTrialWithAttributesList createBasketTrialWithAttributesList() {
-        return new BasketTrialWithAttributesList();
-    }
-
-    /**
      * Create an instance of {@link QueryException }
      * 
      */
@@ -261,14 +253,6 @@ public class ObjectFactory {
      */
     public SessionDetailsWithAttributes createSessionDetailsWithAttributes() {
         return new SessionDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult }
-     * 
-     */
-    public ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult createListBasketSessionsWithAttributesXMLResponseListBasketSessionsWithAttributesXMLResult() {
-        return new ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult();
     }
 
     /**
@@ -304,6 +288,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TrialDetailsWithAttributes }
+     * 
+     */
+    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
+        return new TrialDetailsWithAttributes();
+    }
+
+    /**
      * Create an instance of {@link ListUserBasketsResponse }
      * 
      */
@@ -328,19 +320,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Attributes.Attribute }
-     * 
-     */
-    public Attributes.Attribute createAttributesAttribute() {
-        return new Attributes.Attribute();
-    }
-
-    /**
      * Create an instance of {@link ListStoredFilters }
      * 
      */
     public ListStoredFilters createListStoredFilters() {
         return new ListStoredFilters();
+    }
+
+    /**
+     * Create an instance of {@link Attributes }
+     * 
+     */
+    public Attributes createAttributes() {
+        return new Attributes();
     }
 
     /**
@@ -357,6 +349,22 @@ public class ObjectFactory {
      */
     public AddEntityToBasketResponse createAddEntityToBasketResponse() {
         return new AddEntityToBasketResponse();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfFilterPredicate }
+     * 
+     */
+    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
+        return new ArrayOfFilterPredicate();
+    }
+
+    /**
+     * Create an instance of {@link motion.database.ws.userPersonalSpaceWCF.FilterPredicate }
+     * 
+     */
+    public motion.database.ws.userPersonalSpaceWCF.FilterPredicate createFilterPredicate() {
+        return new motion.database.ws.userPersonalSpaceWCF.FilterPredicate();
     }
 
     /**
@@ -381,14 +389,6 @@ public class ObjectFactory {
      */
     public RemoveBasket createRemoveBasket() {
         return new RemoveBasket();
-    }
-
-    /**
-     * Create an instance of {@link BasketSessionWithAttributesList }
-     * 
-     */
-    public BasketSessionWithAttributesList createBasketSessionWithAttributesList() {
-        return new BasketSessionWithAttributesList();
     }
 
     /**

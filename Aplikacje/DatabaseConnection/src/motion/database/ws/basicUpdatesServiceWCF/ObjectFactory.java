@@ -93,11 +93,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreateMeasurementResponse }
+     * 
+     */
+    public CreateMeasurementResponse createCreateMeasurementResponse() {
+        return new CreateMeasurementResponse();
+    }
+
+    /**
      * Create an instance of {@link CreatePerformerResponse }
      * 
      */
     public CreatePerformerResponse createCreatePerformerResponse() {
         return new CreatePerformerResponse();
+    }
+
+    /**
+     * Create an instance of {@link PerformerData }
+     * 
+     */
+    public PerformerData createPerformerData() {
+        return new PerformerData();
     }
 
     /**
@@ -109,27 +125,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSessionResponse }
-     * 
-     */
-    public CreateSessionResponse createCreateSessionResponse() {
-        return new CreateSessionResponse();
-    }
-
-    /**
      * Create an instance of {@link SetPerformerAttribute }
      * 
      */
     public SetPerformerAttribute createSetPerformerAttribute() {
         return new SetPerformerAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetMeasurementConfAttribute }
-     * 
-     */
-    public SetMeasurementConfAttribute createSetMeasurementConfAttribute() {
-        return new SetMeasurementConfAttribute();
     }
 
     /**
@@ -170,6 +170,14 @@ public class ObjectFactory {
      */
     public CreateTrialResponse createCreateTrialResponse() {
         return new CreateTrialResponse();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValue }
+     * 
+     */
+    public ClearAttributeValue createClearAttributeValue() {
+        return new ClearAttributeValue();
     }
 
     /**
@@ -229,11 +237,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateMeasurementResponse }
+     * Create an instance of {@link SetMeasurementAttribute }
      * 
      */
-    public CreateMeasurementResponse createCreateMeasurementResponse() {
-        return new CreateMeasurementResponse();
+    public SetMeasurementAttribute createSetMeasurementAttribute() {
+        return new SetMeasurementAttribute();
     }
 
     /**
@@ -245,19 +253,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetMeasurementAttribute }
+     * Create an instance of {@link CreatePerformer }
      * 
      */
-    public SetMeasurementAttribute createSetMeasurementAttribute() {
-        return new SetMeasurementAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttribute }
-     * 
-     */
-    public SetTrialAttribute createSetTrialAttribute() {
-        return new SetTrialAttribute();
+    public CreatePerformer createCreatePerformer() {
+        return new CreatePerformer();
     }
 
     /**
@@ -269,11 +269,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetMeasurementConfAttribute }
+     * 
+     */
+    public SetMeasurementConfAttribute createSetMeasurementConfAttribute() {
+        return new SetMeasurementConfAttribute();
+    }
+
+    /**
      * Create an instance of {@link AssignSessionToGroupResponse }
      * 
      */
     public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
         return new AssignSessionToGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateSessionResponse }
+     * 
+     */
+    public CreateSessionResponse createCreateSessionResponse() {
+        return new CreateSessionResponse();
     }
 
     /**
@@ -317,27 +333,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreatePerformer }
+     * Create an instance of {@link SetTrialAttribute }
      * 
      */
-    public CreatePerformer createCreatePerformer() {
-        return new CreatePerformer();
-    }
-
-    /**
-     * Create an instance of {@link ClearAttributeValue }
-     * 
-     */
-    public ClearAttributeValue createClearAttributeValue() {
-        return new ClearAttributeValue();
-    }
-
-    /**
-     * Create an instance of {@link PerformerData }
-     * 
-     */
-    public PerformerData createPerformerData() {
-        return new PerformerData();
+    public SetTrialAttribute createSetTrialAttribute() {
+        return new SetTrialAttribute();
     }
 
     /**

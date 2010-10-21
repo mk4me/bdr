@@ -24,33 +24,32 @@ public class EntityAttribute {
 	public Object value;
 	public String name;
 	public String unit;
-	public String subtype;
+	//public String subtype;
 	public List<String> enumValues;
 	public EntityKind kind;
 	public boolean isEnum;
 	
-	public EntityAttribute(String attribute, String type, String subType, String unit, List<String> enumValues, String groupName) 
+	public EntityAttribute(String attribute, String type, String unit, List<String> enumValues, String groupName) 
 	{
-		this( attribute, null, null, groupName, type, subType, unit, enumValues!=null );
+		this( attribute, null, null, groupName, type, unit, enumValues!=null );
 		this.enumValues = enumValues;
 	}
 
 	
-	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type, String subType, String unit, boolean isEnum)
+	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type, String unit, boolean isEnum)
 	{
 		this.name = name;
 		this.value = value;
 		this.groupName = groupName;
 		this.type = type;
 		this.kind = kind;
-		this.subtype = subType;
 		this.unit = unit;
 		this.isEnum = isEnum;
 	}
 	
 	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type)
 	{
-		this(name, kind, value, groupName, type, null, null, false);
+		this(name, kind, value, groupName, type, null, false);
 	}
 
 	public EntityAttribute(String name, String kind)
@@ -67,7 +66,7 @@ public class EntityAttribute {
 	{
 		StringBuffer result = new StringBuffer();
 		result.append( name ).append("(").append( kind.toString() ).append(")").append("[").append( value ).append( ", " ).
-			append( groupName ).append( ", " ).append( type ).append( ", " ).append( unit ).append( ", " ).append( subtype ).
+			append( groupName ).append( ", " ).append( type ).append( ", " ).append( unit ).
 			append(", ").append( isEnum?getEnumInfo():"").append("]");
 		return result.toString();
 	}
@@ -85,11 +84,6 @@ public class EntityAttribute {
 	public String getType() {
 		
 		return type;
-	}
-	
-	public String getSubtype() {
-		
-		return subtype;
 	}
 	
 	public String getUnit() {

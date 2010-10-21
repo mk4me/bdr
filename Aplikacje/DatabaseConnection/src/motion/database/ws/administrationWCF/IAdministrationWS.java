@@ -62,10 +62,9 @@ public interface IAdministrationWS {
      * @param unit
      * @param groupName
      * @param pluginDescriptor
-     * @param storageType
      * @param entity
      * @param isEnum
-     * @param dataSubtype
+     * @param type
      * @throws IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "DefineAttribute", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService/IAdministrationWS/DefineAttribute")
@@ -78,14 +77,12 @@ public interface IAdministrationWS {
         String groupName,
         @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
         String entity,
-        @WebParam(name = "storageType", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
-        String storageType,
         @WebParam(name = "isEnum", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
         boolean isEnum,
         @WebParam(name = "pluginDescriptor", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
         String pluginDescriptor,
-        @WebParam(name = "dataSubtype", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
-        String dataSubtype,
+        @WebParam(name = "type", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
+        String type,
         @WebParam(name = "unit", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")
         String unit)
         throws IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage

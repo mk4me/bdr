@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *                   &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *                   &lt;element name="MotionKindName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
@@ -90,7 +90,7 @@ public class MotionKindDefinitionList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}int"/>
+     *         &lt;element name="MotionKindID" type="{http://www.w3.org/2001/XMLSchema}int"/>
      *         &lt;element name="MotionKindName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
@@ -107,7 +107,7 @@ public class MotionKindDefinitionList {
     })
     public static class MotionKindDefinition {
 
-        @XmlElement(name = "MotionKind")
+        @XmlElement(name = "MotionKindID")
         protected int motionKindID;
         @XmlElement(name = "MotionKindName", required = true)
         protected String motionKindName;
