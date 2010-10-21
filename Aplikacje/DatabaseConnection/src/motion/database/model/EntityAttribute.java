@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 public class EntityAttribute {
-
+/*
 	public static final String INTEGER_TYPE_SHORT = "int";
 	public static final String INTEGER_TYPE = "integer";
 	public static final String STRING_TYPE = "string";
@@ -18,7 +18,25 @@ public class EntityAttribute {
 	public static final String SUBTYPE_LONG_STRING = "longString";
 	public static final String SUBTYPE_DATE = "date";
 	public static final String SUBTYPE_DATE_TIME = "dateTime";
+	*/
 	
+	public static final String TYPE_INT = "int";
+	public static final String TYPE_DECIMAL = "decimal";
+	public static final String TYPE_NON_NEGATIVE_INTEGER = "nonNegativeInteger";
+	public static final String TYPE_NON_NEGATIVE_DECIMAL = "nonNegativeDecimal";
+	public static final String TYPE_FLOAT = "float";
+	public static final String TYPE_SHORT_STRING = "shortString";
+	public static final String TYPE_LONG_STRING = "longString";
+	public static final String TYPE_DATE = "date";
+	public static final String TYPE_DATE_TIME = "dateTime";
+	public static final String TYPE_TIME_CODE = "TIMECODE";
+	public static final String TYPE_UNKNOWN = "unknown";
+	
+	public static final String DB_TYPE_INTEGER = "integer";
+	public static final String DB_TYPE_FLOAT = "float";
+	public static final String DB_TYPE_STRING = "string";
+	public static final String DB_TYPE_DATE = "DATE";
+			
 	public String type;
 	public String groupName;
 	public Object value;
@@ -97,32 +115,35 @@ public class EntityAttribute {
 	}
 	
 	public String[] getOperators() {
-		if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
+		if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER) ||
+				type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) ||
+				type.equals(TYPE_FLOAT)) {
 			return Predicate.integerOperators;
-		} else if (type.equals(STRING_TYPE)) {
+		} else if (type.equals(TYPE_SHORT_STRING) || type.equals(TYPE_LONG_STRING)) {
 			return Predicate.stringOperators;
-		} else if (type.equals(DATE_TYPE)) {
+		} else if (type.equals(TYPE_DATE) || type.equals(TYPE_DATE_TIME) || type.equals(TYPE_TIME_CODE)) {
 			return Predicate.dateOperators;
 		} else { // Unknown type.
-			return new String[]{UNKNOWN_TYPE};
+			return new String[]{TYPE_UNKNOWN};
 		}
 	}
 	
 	public Class getAttributeClass() {
-		// FIXME: change to subtypes
 		if (type == null) {
 			return Object.class;
-		} else if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
+		} else if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER)) {
 			return Integer.class;
-		} else if (type.equals(STRING_TYPE)) {
+		} else if (type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) || type.equals(TYPE_FLOAT)) {
+			return Float.class;
+		} else if (type.equals(TYPE_SHORT_STRING) || type.equals(TYPE_LONG_STRING)) {
 			return String.class;
-		} else if (type.equals(DATE_TYPE)) {
+		} else if (type.equals(TYPE_DATE) || type.equals(TYPE_DATE_TIME) || type.equals(TYPE_TIME_CODE)) {
 			return String.class;
 		} else { // Unknown type.
 			return Object.class;
 		}
 	}
-
+	//FIXME: is this needed?
 	private Class<?> getTypeClass()
 	{
 		String typeL = type.toLowerCase();
@@ -182,16 +203,16 @@ public class EntityAttribute {
 			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() );
 	}
 
-
+	//FIXME: subtype/type, is this needed?
 	public static String getTypeName(Object arg) {
 		if ( arg instanceof String)
-			return STRING_TYPE;
+			return DB_TYPE_STRING;//STRING_TYPE;
 		else if ( arg instanceof Integer)
-			return INTEGER_TYPE;
+			return DB_TYPE_INTEGER;//INTEGER_TYPE;
 		else if ( arg instanceof Float || arg instanceof Double)
-			return FLOAT_TYPE;
+			return DB_TYPE_FLOAT;//FLOAT_TYPE;
 		else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar)
-			return DATE_TYPE;
+			return DB_TYPE_DATE;//DATE_TYPE;
 		else	
 			throw new RuntimeException("TODO: Unknown value type: " + arg );
 	}

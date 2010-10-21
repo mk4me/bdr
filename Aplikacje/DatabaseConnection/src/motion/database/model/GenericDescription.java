@@ -73,10 +73,10 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 		{
 			if ( get( idAttributeName ).value instanceof Integer )
 				return (Integer)get( idAttributeName ).value;
-			else if (get( idAttributeName ).type.equals( EntityAttribute.INTEGER_TYPE ) 
+			else if (get( idAttributeName ).type.equals( EntityAttribute.DB_TYPE_INTEGER ) 
 					&& get( idAttributeName ).value instanceof String)
 				return Integer.parseInt( (String)get( idAttributeName ).value );
-			else if (get( idAttributeName ).type.equals( EntityAttribute.STRING_TYPE ))
+			else if (get( idAttributeName ).type.equals( EntityAttribute.DB_TYPE_STRING ))
 				return ((String)get( idAttributeName ).value).hashCode();
 			else
 			{

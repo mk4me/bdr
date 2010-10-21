@@ -368,8 +368,8 @@ public enum EntityKind {
 			if (this.genericAttributeGroups==null)
 			{	
 				EntityAttributeGroup group = new EntityAttributeGroup(STATIC_ATTRIBUTE_GROUP, this);
-				group.add( new EntityAttribute(SessionGroupStaticAttributes.SessionGroupID.name(), this, null, group.name, EntityAttribute.INTEGER_TYPE) );
-				group.add( new EntityAttribute(SessionGroupStaticAttributes.Name.name(), this, null, group.name, EntityAttribute.STRING_TYPE) );
+				group.add( new EntityAttribute(SessionGroupStaticAttributes.SessionGroupID.name(), this, null, group.name, EntityAttribute.DB_TYPE_INTEGER) );
+				group.add( new EntityAttribute(SessionGroupStaticAttributes.Name.name(), this, null, group.name, EntityAttribute.DB_TYPE_STRING) );
 				this.genericAttributeGroups = new HashMap<String, EntityAttributeGroup>();
 				this.genericAttributeGroups.put(group.name, group);
 			}
