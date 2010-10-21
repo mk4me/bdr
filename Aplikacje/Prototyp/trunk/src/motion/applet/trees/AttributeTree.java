@@ -279,7 +279,7 @@ public class AttributeTree {
 				
 				if (okCancel.getResult() == okCancel.OK_PRESSED)
 				{
-					EntityAttribute attribute = new EntityAttribute( panel.getValue(0), comboPanel.getValue(0), comboPanel.getValue(1), panel.getValue(2), null, group.name);
+					EntityAttribute attribute = null;//new EntityAttribute( panel.getValue(0), comboPanel.getValue(0), comboPanel.getValue(1), panel.getValue(2), null, group.name);
 					attribute.kind = AttributeTree.this.entityKind;
 					if (enumValuesPanel.isEnum.isSelected())
 					{
