@@ -1074,7 +1074,7 @@ create procedure list_attributes_defined_with_enums( @att_group varchar(100), @e
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	a.Nazwa as AttributeName, a.Typ_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName, a.Podtyp_danych as Subtype, a.Jednostka as Unit,
+	a.Nazwa as AttributeName, a.Podtyp_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName, a.Jednostka as Unit,
 	(select Wartosc_wyliczeniowa as Value from Wartosc_wyliczeniowa ww where ww.IdAtrybut = a.IdAtrybut for XML RAW(''), TYPE, ELEMENTS) "EnumValues"
 from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
 where (@entity_kind=ga.Opisywana_encja or @entity_kind = '_ALL') and ( @att_group = '_ALL' or ga.Nazwa = @att_group )

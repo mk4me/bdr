@@ -1043,11 +1043,17 @@ begin
 end;
 go
 
--- define attribute ( group, entity, name, type, subtype, units ) / GROUP !!!!
-create procedure define_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @storage_type varchar(20), @is_enum bit, @plugin_desc varchar(100), @data_subtype varchar(20), @unit varchar(10), @result int OUTPUT )
+/* define attribute ( group, entity, name, type, subtype, units )
+	0 - success
+	1 - attribute already exists
+	2 - group name not recognized
+	3 - illegal type
+*/ 
+create procedure define_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @is_enum bit, @plugin_desc varchar(100), @type varchar(20), @unit varchar(10), @result int OUTPUT )
 as
 begin
 	declare @group_id int;
+	declare @storage_type varchar(20);
 	set @result = 0;
 	
 	if exists ( select * from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
@@ -1062,13 +1068,17 @@ begin
 		set @result = 2;
 		return;
 	end;
-	if not (@storage_type in ('string', 'float', 'integer') )
+	if @type = 'float'
+		set @storage_type = 'float';
+	else if @type in ('int', 'decimal', 'nonNegativeInteger', 'nonNegativeDecimal') set @storage_type = 'integer';
+	else if @type in ( 'dateTime', 'date', 'TIMECODE' ) set @storage_type = 'string';
+	else
 		begin
-		set @result = 3;
-		return;
-	end;
+			set @result = 3;
+			return;
+		end;
 	insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Plugin, Podtyp_danych, Jednostka)
-				values ( @group_id, @attr_name, @storage_type, @is_enum, @plugin_desc, @data_subtype, @unit );
+				values ( @group_id, @attr_name, @storage_type, @is_enum, @plugin_desc, @type, @unit );
 	
 end
 go
