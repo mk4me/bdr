@@ -21,8 +21,8 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
-        void DefineAttribute(string attributeName, string groupName, string entity, string storageType, bool isEnum, string pluginDescriptor, 
-            string dataSubtype, string unit);
+        void DefineAttribute(string attributeName, string groupName, string entity, bool isEnum, string pluginDescriptor, 
+            string type, string unit);
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
