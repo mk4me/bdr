@@ -247,8 +247,9 @@ public class FilterDialog extends BasicDialog {
 				
 				return false;
 			}
-			if (cc.getFeature().type.equals(EntityAttribute.INTEGER_TYPE) ||
-					cc.getFeature().type.equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
+			if (cc.getFeature().type.equals(EntityAttribute.TYPE_INT) //||	// FIXME: type/subtype
+					//cc.getFeature().type.equals(EntityAttribute.INTEGER_TYPE_SHORT)
+							) {
 				try {
 					Integer.parseInt(cc.getValue());
 				} catch (Exception e) {

@@ -160,30 +160,27 @@ public class FormDialog extends BasicDialog {
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
-				if (a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
-					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
-					formFields.add(field);
-				} else {
+				//if (a.getType().equals(EntityAttribute.TYPE_INT)) {
+					//FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
+					//formFields.add(field);
+				//} else {
 					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), false);
 					formFields.add(field);
-				}
-			} else if (a.getType().equals(EntityAttribute.SUBTYPE_SHORT_STRING)) {
-				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
-				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.SUBTYPE_LONG_STRING)) {
-				FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
-				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.SUBTYPE_DATE)) {	// FIXME: duplicate date as subtype
-				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
-				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.SUBTYPE_DATE_TIME)) {
-				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
-				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.INTEGER_TYPE) || a.getType().equals(EntityAttribute.INTEGER_TYPE_SHORT)) {
+				//}
+			} else if (a.getType().equals(EntityAttribute.TYPE_INT)) {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
 				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.DATE_TYPE)) { // FIXME: duplicate date as type
+			} else if (a.getType().equals(EntityAttribute.TYPE_SHORT_STRING)) {
+				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
+				formFields.add(field);
+			} else if (a.getType().equals(EntityAttribute.TYPE_LONG_STRING)) {
+				FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
+				formFields.add(field);
+			} else if (a.getType().equals(EntityAttribute.TYPE_DATE)) {	// FIXME: duplicate date as subtype
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
+				formFields.add(field);
+			} else if (a.getType().equals(EntityAttribute.TYPE_DATE_TIME)) {
+				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
 				formFields.add(field);
 			}
 		}
