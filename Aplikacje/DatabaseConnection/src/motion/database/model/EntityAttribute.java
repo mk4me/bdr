@@ -109,7 +109,10 @@ public class EntityAttribute {
 	}
 	
 	public Class getAttributeClass() {
-		if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
+		// FIXME: change to subtypes
+		if (type == null) {
+			return Object.class;
+		} else if (type.equals(INTEGER_TYPE) || type.equals(INTEGER_TYPE_SHORT)) {
 			return Integer.class;
 		} else if (type.equals(STRING_TYPE)) {
 			return String.class;
