@@ -246,6 +246,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabbedPane.setSelectedIndex(i);
 	}
 	
+	public void refreshAttributes() {
+		bottomPanel.refreshConfigurationTrees();
+		refreshAllTables();
+	}
+	
 	private void refreshTablesForLab() {
 		int i = tabbedPane.getSelectedIndex();
 		//showTable(EntityKind.performer);	// Performers not grouped by labs.

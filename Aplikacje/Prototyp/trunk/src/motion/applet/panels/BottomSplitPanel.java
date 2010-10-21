@@ -79,6 +79,15 @@ public class BottomSplitPanel extends JPanel {
 		return configurationTree;
 	}
 	
+	public void refreshConfigurationTrees() {
+		performerTree.getTreeContents();
+		sessionTree.getTreeContents();
+		sessionGroupTree.getTreeContents();
+		trialTree.getTreeContents();
+		fileTree.getTreeContents();
+		measurementConfigurationTree.getTreeContents();
+	}
+	
 	private static void getCheckedItems(DefaultMutableTreeNode node, ArrayList<String> checkedItems) {
 		Enumeration children = node.children();
 		while(children.hasMoreElements()) {

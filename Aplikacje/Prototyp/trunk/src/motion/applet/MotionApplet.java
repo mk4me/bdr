@@ -325,6 +325,10 @@ public class MotionApplet extends JApplet {
 		basketPanel.getBasketTreeContents();
 	}
 	
+	public static void refreshTables() {
+		rightPanel.refreshAttributes();
+	}
+	
 	@Override
 	public void init () {
 		

@@ -11,24 +11,13 @@ import motion.database.model.EntityKind;
 
 public class ConfigurationTree {
 	public JTree tree;
+	private DefaultMutableTreeNode root;
+	public EntityKind entityKind;
 
 	public ConfigurationTree(EntityKind entityKind) {
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
-		
-		for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) {
-			if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
-				for (EntityAttribute a : g) {
-					root.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
-				}
-			} else {
-				DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(new CheckBoxNode(g.name, true));
-				for (EntityAttribute a : g) {
-					groupNode.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
-				}
-				root.add(groupNode);
-			}
-		}
-		
+		this.entityKind = entityKind;
+		root = new DefaultMutableTreeNode("Root");
+		getTreeContents();
 		tree = new JTree(root);
 		tree.setToggleClickCount(1);
 		tree.setRootVisible(false);
@@ -81,5 +70,26 @@ public class ConfigurationTree {
 				}
 			}
 		});
+	}
+	
+	public void getTreeContents() {
+		root.removeAllChildren();
+		for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) {
+			if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
+				for (EntityAttribute a : g) {
+					root.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
+				}
+			} else {
+				DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(new CheckBoxNode(g.name, true));
+				for (EntityAttribute a : g) {
+					groupNode.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
+				}
+				root.add(groupNode);
+			}
+		}
+		
+		if (tree != null) {
+			((DefaultTreeModel) tree.getModel()).reload();
+		}
 	}
 }
