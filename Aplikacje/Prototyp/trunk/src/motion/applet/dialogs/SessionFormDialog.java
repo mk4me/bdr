@@ -191,7 +191,7 @@ public class SessionFormDialog extends FormDialog {
 	
 	private String getMotionKind() {
 		
-		return getMotionKinds().get((Integer) getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKind.toString()));
+		return getAttributeValue(EntityKind.session, SessionStaticAttributes.MotionKind.toString()).toString();
 	}
 	
 	protected boolean validateResult() {

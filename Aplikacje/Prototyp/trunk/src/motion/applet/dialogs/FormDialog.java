@@ -160,15 +160,19 @@ public class FormDialog extends BasicDialog {
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
+				System.out.println("sdfdddddd");
 				//if (a.getType().equals(EntityAttribute.TYPE_INT)) {
 					//FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
 					//formFields.add(field);
 				//} else {
-					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), false);
+					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]));//, false);
 					formFields.add(field);
 				//}
 			} else if (a.getType().equals(EntityAttribute.TYPE_INT)) {
-				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel);
+				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel, false);
+				formFields.add(field);
+			} else if (a.getType().equals(EntityAttribute.TYPE_NON_NEGATIVE_INTEGER)) {
+				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel, true);
 				formFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.TYPE_SHORT_STRING)) {
 				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
@@ -419,9 +423,11 @@ class FormTextAreaField extends FormField {
 }
 
 class FormNumberField extends FormField {
+	private boolean nonNegative = false;
 	
-	public FormNumberField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+	public FormNumberField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean nonNegative) {
 		super(attribute, gridBagConstraints, formPanel);
+		this.nonNegative = nonNegative;
 		finishField();
 	}
 	
@@ -435,8 +441,17 @@ class FormNumberField extends FormField {
 			
 			return null;
 		} else {
-		
-			return Integer.parseInt(text.getText());
+			int number = Integer.parseInt(text.getText());
+			if (nonNegative == false) {
+				
+				return number;
+			} else {
+				if (number >= 0) {
+					return number;
+				} else {
+					throw(new NumberFormatException());
+				}
+			}
 		}
 	}
 }
@@ -520,23 +535,23 @@ class FormDateField extends FormField {
 class FormListField extends FormField {
 	private JComboBox comboBox;
 	private String[] list;
-	private boolean dataAsIndex = false;
+	//private boolean dataAsIndex = false;
 	
-	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list, boolean dataAsIndex) {
+	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {//, boolean dataAsIndex) {
 		super(attribute, gridBagConstraints, formPanel);
 		this.list = list;
-		this.dataAsIndex = dataAsIndex;
+		//this.dataAsIndex = dataAsIndex;
 		finishField();
 	}
 	
 	public String getData() {
-		if (dataAsIndex == false) {
+		//if (dataAsIndex == false) {
 			
 			return comboBox.getSelectedItem().toString();
-		} else {
+		//} else {
 			
-			return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
-		}
+			//return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
+		//}
 	}
 	
 	protected void prepareField() {
