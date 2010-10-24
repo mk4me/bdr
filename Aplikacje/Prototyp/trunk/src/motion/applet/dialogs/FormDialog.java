@@ -160,7 +160,6 @@ public class FormDialog extends BasicDialog {
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
-				System.out.println("sdfdddddd");
 				//if (a.getType().equals(EntityAttribute.TYPE_INT)) {
 					//FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
 					//formFields.add(field);
@@ -180,7 +179,7 @@ public class FormDialog extends BasicDialog {
 			} else if (a.getType().equals(EntityAttribute.TYPE_LONG_STRING)) {
 				FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
 				formFields.add(field);
-			} else if (a.getType().equals(EntityAttribute.TYPE_DATE)) {	// FIXME: duplicate date as subtype
+			} else if (a.getType().equals(EntityAttribute.TYPE_DATE)) {
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, false);
 				formFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.TYPE_DATE_TIME)) {
