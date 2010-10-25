@@ -114,6 +114,7 @@ public class EntityAttribute {
 		return enumValues;
 	}
 	
+	// Used by applet for filters.
 	public String[] getOperators() {
 		if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER) ||
 				type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) ||
@@ -128,7 +129,8 @@ public class EntityAttribute {
 		}
 	}
 	
-	public Class getAttributeClass() {
+	// Used by applet for table cell format.
+	public Class<?> getAttributeClass() {
 		if (type == null) {
 			return Object.class;
 		} else if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER)) {
@@ -138,82 +140,66 @@ public class EntityAttribute {
 		} else if (type.equals(TYPE_SHORT_STRING) || type.equals(TYPE_LONG_STRING)) {
 			return String.class;
 		} else if (type.equals(TYPE_DATE) || type.equals(TYPE_DATE_TIME) || type.equals(TYPE_TIME_CODE)) {
-			return String.class;
+			return GregorianCalendar.class;
 		} else { // Unknown type.
 			return Object.class;
 		}
 	}
-	//FIXME: is this needed?
-	private Class<?> getTypeClass()
-	{
-		String typeL = type.toLowerCase();
-		if (typeL.contains( "string" ))
-			return String.class;
-		else if (typeL.contains( "float" ))
-			return Float.class;
-		else if (typeL.contains( "double" ))
-			return Double.class;
-		else if (typeL.contains( "integer" ) || typeL.contains( "int" ))
-			return Integer.class;
-		else if (typeL.contains( "calendar" ))
-			return GregorianCalendar.class;
-		else return null;
-	}
 	
 	public void setValueFromString(Object newValue) {
+		Class<?> attributeClass = getAttributeClass();
 		
-		if ( getTypeClass() == String.class)
+		if (attributeClass == String.class) {
 			this.value = newValue;
-		else if ( getTypeClass() == Integer.class) {
+		} else if (attributeClass == Integer.class) {
 			if (newValue instanceof String) {
 				this.value = Integer.parseInt( (String) newValue );
 			} else {
 				this.value = newValue;
 			}
-		} else if ( getTypeClass() == Float.class) {
+		} else if (attributeClass == Float.class) {
 			if (newValue instanceof String) {
 				this.value = Float.parseFloat( (String) newValue );
 			} else {
 				this.value = newValue;
 			}
-		} else if ( getTypeClass() == Double.class) {
-			if (newValue instanceof String) {
-				this.value = Double.parseDouble( (String) newValue );
-			} else {
-				this.value = newValue;
-			}
-		} else if ( getTypeClass() == GregorianCalendar.class)
-			this.value = GregorianCalendar.getInstance();
-		else	
-			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() + " new value:" + newValue );
+		} else if (attributeClass == GregorianCalendar.class) {
+			this.value = newValue;
+		} else if (attributeClass == Object.class) {
+			this.value = newValue.toString();
+		} else {
+			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() + " new value:" + newValue);
+		}
 	}
 
 	public void emptyValue() {
-		if ( getTypeClass() == String.class)
+		Class<?> attributeClass = getAttributeClass();
+		
+		if (attributeClass == String.class) {
 			this.value = "";
-		else if ( getTypeClass() == Integer.class)
+		} else if (attributeClass == Integer.class) {
 			this.value = 0;
-		else if ( getTypeClass() == Float.class)
+		} else if (attributeClass == Float.class) {
 			this.value = 0;
-		else if ( getTypeClass() == Double.class)
-			this.value = 0;
-		else if ( getTypeClass() == XMLGregorianCalendar.class || getTypeClass() == GregorianCalendar.class)
+		} else if (attributeClass == XMLGregorianCalendar.class || getAttributeClass() == GregorianCalendar.class) {
 			this.value = GregorianCalendar.getInstance();
-		else	
-			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass() );
+		} else {
+			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass());
+		}
 	}
 
 	//FIXME: subtype/type, is this needed?
 	public static String getTypeName(Object arg) {
-		if ( arg instanceof String)
+		if (arg instanceof String) {
 			return DB_TYPE_STRING;//STRING_TYPE;
-		else if ( arg instanceof Integer)
+		} else if (arg instanceof Integer) {
 			return DB_TYPE_INTEGER;//INTEGER_TYPE;
-		else if ( arg instanceof Float || arg instanceof Double)
+		} else if ( arg instanceof Float || arg instanceof Double) {
 			return DB_TYPE_FLOAT;//FLOAT_TYPE;
-		else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar)
+		} else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar) {
 			return DB_TYPE_DATE;//DATE_TYPE;
-		else	
-			throw new RuntimeException("TODO: Unknown value type: " + arg );
+		} else {
+			throw new RuntimeException("TODO: Unknown value type: " + arg);
+		}
 	}
 }
