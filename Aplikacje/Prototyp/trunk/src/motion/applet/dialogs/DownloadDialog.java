@@ -107,6 +107,8 @@ public class DownloadDialog extends BasicDialog {
 					@Override
 					protected Void doInBackground() throws InterruptedException {
 						try {
+							DownloadDialog.this.downloadButton.setEnabled( false );
+
 							progressBar.setVisible(true);
 							totalProgressBar.setVisible(true);
 

@@ -228,6 +228,7 @@ public class UploadDialog extends BasicDialog {
 						@Override
 						protected Void doInBackground() throws InterruptedException {
 							try {
+								UploadDialog.this.uploadButton.setEnabled( false );
 								int id = UploadDialog.this.getId();
 								String description = UploadDialog.this.getDescription();
 								uploadFilesDirectories( id, selectedFiles, description );
