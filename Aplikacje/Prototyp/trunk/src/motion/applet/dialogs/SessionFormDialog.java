@@ -5,10 +5,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import motion.applet.panels.PerformerAssignmentPanel;
+import motion.applet.panels.EntityAssignmentPanel;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -31,7 +32,8 @@ public class SessionFormDialog extends FormDialog {
 	private static String CREATING_MESSAGE = "Creating a new session...";
 	
 	private PrivilegesPanel privilegesPanel;
-	private PerformerAssignmentPanel performerAssignmentPanel;
+	private EntityAssignmentPanel performerAssignmentPanel;
+	private EntityAssignmentPanel sessionGroupAssignmentPanel;
 	
 	private ArrayList<String> motionKinds;
 	
@@ -56,12 +58,15 @@ public class SessionFormDialog extends FormDialog {
 							SessionFormDialog.this.messageLabel.setText(CREATING_MESSAGE);
 							SessionFormDialog.this.createButton.setEnabled(false);
 							try {
+								//session groups
+								int[] selectedSessionGroups = sessionGroupAssignmentPanel.getSelectedRecords();
+								
 								int sessionID = WebServiceInstance.getDatabaseConnection().createSession(
-										new int[]{},
+										selectedSessionGroups,
 										SessionFormDialog.this.getSessionDescription(),
 										AppletToolBar.getLabId(),
 										SessionFormDialog.this.getSessionDate(),
-										SessionFormDialog.this.getMotionKind());
+										"run");
 								
 								setDefinedAttributes(sessionID);
 								
@@ -71,11 +76,10 @@ public class SessionFormDialog extends FormDialog {
 								sessionPrivileges.performDatabaseUpdate();
 								
 								//performers
-								int[] selectedPerformers = performerAssignmentPanel.getSelectedPerformers();
+								int[] selectedPerformers = performerAssignmentPanel.getSelectedRecords();
 								for (int i = 0; i < selectedPerformers.length; i++) {
 									WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionID, selectedPerformers[i]);
 								}
-								
 								
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -98,8 +102,10 @@ public class SessionFormDialog extends FormDialog {
 		
 		privilegesPanel = new PrivilegesPanel(this); 
 		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
-		performerAssignmentPanel = new PerformerAssignmentPanel();
+		performerAssignmentPanel = new EntityAssignmentPanel(EntityKind.performer);
 		this.getFormTabbedPane().addTab("Performers", performerAssignmentPanel);
+		sessionGroupAssignmentPanel = new EntityAssignmentPanel(EntityKind.sessionGroup);
+		this.getFormTabbedPane().addTab("Groups", sessionGroupAssignmentPanel);
 	}
 	
 	public SessionFormDialog(Session session) {
@@ -119,7 +125,7 @@ public class SessionFormDialog extends FormDialog {
 					for (Performer p : performers) {
 						recordIds[i] = p.getId();
 					}
-					performerAssignmentPanel.setSelectedPerformers(recordIds);
+					performerAssignmentPanel.setSelectedRecords(recordIds);
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
