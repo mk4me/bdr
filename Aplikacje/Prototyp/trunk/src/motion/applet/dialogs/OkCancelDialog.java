@@ -78,18 +78,23 @@ public class OkCancelDialog extends BasicDialog {
 	protected void addListeners() {
 		this.okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				if (validator!=null && validator.validate())
+				if (validator!=null)
 				{
-					setResult(OK_PRESSED);
-					OkCancelDialog.this.finished = true;
-					OkCancelDialog.this.setVisible(false);
-					OkCancelDialog.this.dispose();
-				}
-				else
-				{
-					if (validator.getErrorMessage() != null)
+					if (validator.validate())
+						finish();
+					else if (validator.getErrorMessage() != null)
 						OkCancelDialog.this.setMessage( validator.getErrorMessage() );	
 				}
+				else 
+					finish();
+			}
+			
+			private void finish()
+			{
+				setResult(OK_PRESSED);
+				OkCancelDialog.this.finished = true;
+				OkCancelDialog.this.setVisible(false);
+				OkCancelDialog.this.dispose();
 			}
 		});
 		

@@ -31,6 +31,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import motion.Messages;
+import motion.applet.MotionApplet;
 import motion.applet.MotionAppletFrame;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.trees.AttributeTree;
@@ -142,7 +143,7 @@ public class AttributeEditDialog extends BasicDialog {
 					if (tree.removeAttributes.size() == 0 &&
 							tree.removeGroups.size() == 0 &&
 							tree.newAttributes.size() == 0 &&
-							tree.removeAttributes.size() == 0 )
+							tree.newGroups.size() == 0 )
 						message.append("Nothing to do!");
 					
 					message.append("</html>");
@@ -159,10 +160,14 @@ public class AttributeEditDialog extends BasicDialog {
 								DatabaseConnection.getInstanceWCF().removeAttributeGroup(g.name, g.kind.getName());
 							for (EntityAttribute g:tree.removeAttributes)
 								DatabaseConnection.getInstanceWCF().removeAttribute(g, null);
-							for (EntityAttribute g:tree.newAttributes)
-								DatabaseConnection.getInstanceWCF().defineAttribute(g, null);
 							for (EntityAttributeGroup g:tree.newGroups)
 								DatabaseConnection.getInstanceWCF().defineAttributeGroup(g.name, g.kind.getName());
+							for (EntityAttribute g:tree.newAttributes)
+								DatabaseConnection.getInstanceWCF().defineAttribute(g, null);
+
+							AttributeEditDialog.this.entityKind.rescanGenericAttributeGroups();
+							MotionApplet.refreshTables();
+						
 						} catch (Exception e1) {
 							
 							e1.printStackTrace();
