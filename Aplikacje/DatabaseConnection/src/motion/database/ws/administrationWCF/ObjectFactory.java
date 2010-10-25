@@ -61,19 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * Create an instance of {@link RemoveAttributeGroupResponse }
      * 
      */
-    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
-        return new AddAttributeEnumValueResponse();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttribute }
-     * 
-     */
-    public DefineAttribute createDefineAttribute() {
-        return new DefineAttribute();
+    public RemoveAttributeGroupResponse createRemoveAttributeGroupResponse() {
+        return new RemoveAttributeGroupResponse();
     }
 
     /**
@@ -85,59 +77,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttributeResponse }
-     * 
-     */
-    public RemoveAttributeResponse createRemoveAttributeResponse() {
-        return new RemoveAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeGroup }
-     * 
-     */
-    public RemoveAttributeGroup createRemoveAttributeGroup() {
-        return new RemoveAttributeGroup();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttribute }
-     * 
-     */
-    public RemoveAttribute createRemoveAttribute() {
-        return new RemoveAttribute();
-    }
-
-    /**
-     * Create an instance of {@link AddAttributeEnumValue }
-     * 
-     */
-    public AddAttributeEnumValue createAddAttributeEnumValue() {
-        return new AddAttributeEnumValue();
-    }
-
-    /**
-     * Create an instance of {@link DownloadAreaCleanupResponse }
-     * 
-     */
-    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
-        return new DownloadAreaCleanupResponse();
-    }
-
-    /**
      * Create an instance of {@link DefineAttriubeGroupResponse }
      * 
      */
     public DefineAttriubeGroupResponse createDefineAttriubeGroupResponse() {
         return new DefineAttriubeGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeGroupResponse }
-     * 
-     */
-    public RemoveAttributeGroupResponse createRemoveAttributeGroupResponse() {
-        return new RemoveAttributeGroupResponse();
     }
 
     /**
@@ -157,11 +101,67 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RemoveAttributeGroup }
+     * 
+     */
+    public RemoveAttributeGroup createRemoveAttributeGroup() {
+        return new RemoveAttributeGroup();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValue }
+     * 
+     */
+    public AddAttributeEnumValue createAddAttributeEnumValue() {
+        return new AddAttributeEnumValue();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeResponse }
+     * 
+     */
+    public RemoveAttributeResponse createRemoveAttributeResponse() {
+        return new RemoveAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttribute }
+     * 
+     */
+    public RemoveAttribute createRemoveAttribute() {
+        return new RemoveAttribute();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * 
+     */
+    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
+        return new AddAttributeEnumValueResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttribute }
+     * 
+     */
+    public DefineAttribute createDefineAttribute() {
+        return new DefineAttribute();
+    }
+
+    /**
      * Create an instance of {@link DefineAttriubeGroup }
      * 
      */
     public DefineAttriubeGroup createDefineAttriubeGroup() {
         return new DefineAttriubeGroup();
+    }
+
+    /**
+     * Create an instance of {@link DownloadAreaCleanupResponse }
+     * 
+     */
+    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
+        return new DownloadAreaCleanupResponse();
     }
 
     /**

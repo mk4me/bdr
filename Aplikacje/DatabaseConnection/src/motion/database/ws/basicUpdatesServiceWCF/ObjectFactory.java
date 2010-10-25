@@ -69,6 +69,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AddPerformerToMeasurement }
+     * 
+     */
+    public AddPerformerToMeasurement createAddPerformerToMeasurement() {
+        return new AddPerformerToMeasurement();
+    }
+
+    /**
      * Create an instance of {@link ClearAttributeValueResponse }
      * 
      */
@@ -77,19 +85,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetMeasurementConfAttributeResponse }
-     * 
-     */
-    public SetMeasurementConfAttributeResponse createSetMeasurementConfAttributeResponse() {
-        return new SetMeasurementConfAttributeResponse();
-    }
-
-    /**
      * Create an instance of {@link AssignPerformerToSessionResponse }
      * 
      */
     public AssignPerformerToSessionResponse createAssignPerformerToSessionResponse() {
         return new AssignPerformerToSessionResponse();
+    }
+
+    /**
+     * Create an instance of {@link AddPerformerToMeasurementResponse }
+     * 
+     */
+    public AddPerformerToMeasurementResponse createAddPerformerToMeasurementResponse() {
+        return new AddPerformerToMeasurementResponse();
     }
 
     /**
@@ -109,14 +117,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PerformerData }
-     * 
-     */
-    public PerformerData createPerformerData() {
-        return new PerformerData();
-    }
-
-    /**
      * Create an instance of {@link SetFileAttribute }
      * 
      */
@@ -125,11 +125,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetPerformerAttribute }
+     * Create an instance of {@link SetMeasurementConfAttribute }
      * 
      */
-    public SetPerformerAttribute createSetPerformerAttribute() {
-        return new SetPerformerAttribute();
+    public SetMeasurementConfAttribute createSetMeasurementConfAttribute() {
+        return new SetMeasurementConfAttribute();
     }
 
     /**
@@ -141,19 +141,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetPerformerAttribute }
+     * 
+     */
+    public SetPerformerAttribute createSetPerformerAttribute() {
+        return new SetPerformerAttribute();
+    }
+
+    /**
      * Create an instance of {@link SetPerformerConfAttribute }
      * 
      */
     public SetPerformerConfAttribute createSetPerformerConfAttribute() {
         return new SetPerformerConfAttribute();
-    }
-
-    /**
-     * Create an instance of {@link AddPerformerToMeasurement }
-     * 
-     */
-    public AddPerformerToMeasurement createAddPerformerToMeasurement() {
-        return new AddPerformerToMeasurement();
     }
 
     /**
@@ -170,14 +170,6 @@ public class ObjectFactory {
      */
     public CreateTrialResponse createCreateTrialResponse() {
         return new CreateTrialResponse();
-    }
-
-    /**
-     * Create an instance of {@link ClearAttributeValue }
-     * 
-     */
-    public ClearAttributeValue createClearAttributeValue() {
-        return new ClearAttributeValue();
     }
 
     /**
@@ -221,19 +213,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreateMeasurementConfiguration }
+     * 
+     */
+    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
+        return new CreateMeasurementConfiguration();
+    }
+
+    /**
      * Create an instance of {@link SetMeasurementAttributeResponse }
      * 
      */
     public SetMeasurementAttributeResponse createSetMeasurementAttributeResponse() {
         return new SetMeasurementAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link AddPerformerToMeasurementResponse }
-     * 
-     */
-    public AddPerformerToMeasurementResponse createAddPerformerToMeasurementResponse() {
-        return new AddPerformerToMeasurementResponse();
     }
 
     /**
@@ -245,19 +237,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateMeasurementConfiguration }
+     * Create an instance of {@link SetTrialAttribute }
      * 
      */
-    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
-        return new CreateMeasurementConfiguration();
-    }
-
-    /**
-     * Create an instance of {@link CreatePerformer }
-     * 
-     */
-    public CreatePerformer createCreatePerformer() {
-        return new CreatePerformer();
+    public SetTrialAttribute createSetTrialAttribute() {
+        return new SetTrialAttribute();
     }
 
     /**
@@ -269,19 +253,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetMeasurementConfAttribute }
-     * 
-     */
-    public SetMeasurementConfAttribute createSetMeasurementConfAttribute() {
-        return new SetMeasurementConfAttribute();
-    }
-
-    /**
      * Create an instance of {@link AssignSessionToGroupResponse }
      * 
      */
     public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
         return new AssignSessionToGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetMeasurementConfAttributeResponse }
+     * 
+     */
+    public SetMeasurementConfAttributeResponse createSetMeasurementConfAttributeResponse() {
+        return new SetMeasurementConfAttributeResponse();
     }
 
     /**
@@ -333,11 +317,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetTrialAttribute }
+     * Create an instance of {@link CreatePerformer }
      * 
      */
-    public SetTrialAttribute createSetTrialAttribute() {
-        return new SetTrialAttribute();
+    public CreatePerformer createCreatePerformer() {
+        return new CreatePerformer();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValue }
+     * 
+     */
+    public ClearAttributeValue createClearAttributeValue() {
+        return new ClearAttributeValue();
+    }
+
+    /**
+     * Create an instance of {@link PerformerData }
+     * 
+     */
+    public PerformerData createPerformerData() {
+        return new PerformerData();
     }
 
     /**
