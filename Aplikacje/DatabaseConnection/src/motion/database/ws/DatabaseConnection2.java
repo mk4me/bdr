@@ -344,10 +344,17 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	{
 		try{
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listGrouppedAttributesDefined", this );
-	
-			ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
-			
+
 			HashMap<String, EntityAttributeGroup> output = new HashMap<String, EntityAttributeGroup>();
+			ListAttributeGroupsDefinedResult resultg = port.listAttributeGroupsDefined(entityKind);
+			if ( resultg!=null && resultg.getAttributeGroupDefinitionList() != null)
+				for (AttributeGroupDefinition a : resultg.getAttributeGroupDefinitionList().getAttributeGroupDefinition() )
+				{
+					EntityAttributeGroup group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
+					output.put( group.name, group);
+				}
+			
+			ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
 	
 			if ( result!=null && result.getAttributeDefinitionList() != null)
 				for (AttributeDefinition a : result.getAttributeDefinitionList().getAttributeDefinition() )
