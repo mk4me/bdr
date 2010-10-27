@@ -107,8 +107,11 @@ import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBa
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration;
+import motion.database.ws.userPersonalSpaceWCF.AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView;
 import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
 import motion.database.ws.userPersonalSpaceWCF.ListUserBasketsResponse.ListUserBasketsResult;
+import motion.database.ws.userPersonalSpaceWCF.ListViewConfigurationResponse.ListViewConfigurationResult;
 
 import com.zehon.BatchTransferProgress;
 import com.zehon.FileTransferStatus;
@@ -1518,6 +1521,32 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
+/*	@Override
+	public void readAttributeViewConfiguration() throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "removeBasket", this );
+			ListViewConfigurationResult r = port.listViewConfiguration();
+		
+			for ( AttributeGroupViewConfiguration v : r.getAttributeGroupViewConfigurationList().getAttributeGroupViewConfiguration() )
+			{
+				for( AttributeView a : v.getAttributeViewList().getAttributeView() )
+				{
+					
+				}
+					
+			}
+			
+		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+*/
+	
 	@Override
 	public void updateStoredFilters(motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate filter) throws Exception
 	{

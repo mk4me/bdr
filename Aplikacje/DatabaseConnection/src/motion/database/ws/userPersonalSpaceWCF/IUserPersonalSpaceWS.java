@@ -138,7 +138,7 @@ public interface IUserPersonalSpaceWS {
      * @param basketName
      * @return
      *     returns motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult
-     * @throws IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage
+     * @throws IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLUPSExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "ListBasketPerformersWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketPerformersWithAttributesXML")
     @WebResult(name = "ListBasketPerformersWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
@@ -147,7 +147,7 @@ public interface IUserPersonalSpaceWS {
     public motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult listBasketPerformersWithAttributesXML(
         @WebParam(name = "basketName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
         String basketName)
-        throws IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage
+        throws IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLUPSExceptionFaultFaultMessage
     ;
 
     /**
@@ -155,7 +155,7 @@ public interface IUserPersonalSpaceWS {
      * @param basketName
      * @return
      *     returns motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult
-     * @throws IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage
+     * @throws IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLUPSExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "ListBasketSessionsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSessionsWithAttributesXML")
     @WebResult(name = "ListBasketSessionsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
@@ -164,7 +164,7 @@ public interface IUserPersonalSpaceWS {
     public motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult listBasketSessionsWithAttributesXML(
         @WebParam(name = "basketName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
         String basketName)
-        throws IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage
+        throws IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLUPSExceptionFaultFaultMessage
     ;
 
     /**
@@ -172,7 +172,7 @@ public interface IUserPersonalSpaceWS {
      * @param basketName
      * @return
      *     returns motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult
-     * @throws IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage
+     * @throws IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLUPSExceptionFaultFaultMessage
      */
     @WebMethod(operationName = "ListBasketTrialsWithAttributesXML", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketTrialsWithAttributesXML")
     @WebResult(name = "ListBasketTrialsWithAttributesXMLResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
@@ -181,7 +181,38 @@ public interface IUserPersonalSpaceWS {
     public motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult listBasketTrialsWithAttributesXML(
         @WebParam(name = "basketName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
         String basketName)
-        throws IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage
+        throws IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLUPSExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param attrViewSettings
+     * @param attrGroupViewSettings
+     * @throws IUserPersonalSpaceWSUpdateViewConfigurationUPSExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "UpdateViewConfiguration", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateViewConfiguration")
+    @RequestWrapper(localName = "UpdateViewConfiguration", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.UpdateViewConfiguration")
+    @ResponseWrapper(localName = "UpdateViewConfigurationResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.UpdateViewConfigurationResponse")
+    public void updateViewConfiguration(
+        @WebParam(name = "attrGroupViewSettings", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
+        ArrayOfAttributeGroupViewSetting attrGroupViewSettings,
+        @WebParam(name = "attrViewSettings", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
+        ArrayOfAttributeViewSetting attrViewSettings)
+        throws IUserPersonalSpaceWSUpdateViewConfigurationUPSExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @return
+     *     returns motion.database.ws.userPersonalSpaceWCF.ListViewConfigurationResponse.ListViewConfigurationResult
+     * @throws IUserPersonalSpaceWSListViewConfigurationUPSExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListViewConfiguration", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListViewConfiguration")
+    @WebResult(name = "ListViewConfigurationResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")
+    @RequestWrapper(localName = "ListViewConfiguration", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListViewConfiguration")
+    @ResponseWrapper(localName = "ListViewConfigurationResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService", className = "motion.database.ws.userPersonalSpaceWCF.ListViewConfigurationResponse")
+    public motion.database.ws.userPersonalSpaceWCF.ListViewConfigurationResponse.ListViewConfigurationResult listViewConfiguration()
+        throws IUserPersonalSpaceWSListViewConfigurationUPSExceptionFaultFaultMessage
     ;
 
 }

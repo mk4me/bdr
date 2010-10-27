@@ -1,5 +1,7 @@
 package motion.database.ws;
 
+import com.jcraft.jsch.Session;
+
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
@@ -97,5 +99,12 @@ public class SessionPrivilegesSetter {
 
 			}
 		}
+	}
+
+	public static void getPrivileges(int sessionID) throws Exception
+	{
+		DatabaseProxy db = DatabaseConnection.getInstance();
+
+		
 	}
 }

@@ -198,7 +198,10 @@ public class EntityAttribute {
 			return DB_TYPE_FLOAT;//FLOAT_TYPE;
 		} else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar) {
 			return DB_TYPE_DATE;//DATE_TYPE;
-		} else {
+		} else if ( arg instanceof Boolean) {
+			return DB_TYPE_INTEGER;//DATE_TYPE;
+		}	
+		else {
 			throw new RuntimeException("TODO: Unknown value type: " + arg);
 		}
 	}

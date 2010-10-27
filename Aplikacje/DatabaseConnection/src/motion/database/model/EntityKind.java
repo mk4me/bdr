@@ -28,9 +28,9 @@ import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLRespo
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
-import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
@@ -77,7 +77,7 @@ public enum EntityKind {
 				
 				return output;
 
-			} catch (IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+			} catch (IUserPersonalSpaceWSListBasketPerformersWithAttributesXMLUPSExceptionFaultFaultMessage e) {
 				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 			}	
@@ -150,7 +150,7 @@ public enum EntityKind {
 				
 				return output;
 
-			} catch (IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+			} catch (IUserPersonalSpaceWSListBasketSessionsWithAttributesXMLUPSExceptionFaultFaultMessage e) {
 				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 			}	
@@ -222,7 +222,7 @@ public enum EntityKind {
 				
 				return output;
 
-			} catch (IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLQueryExceptionFaultFaultMessage e) {
+			} catch (IUserPersonalSpaceWSListBasketTrialsWithAttributesXMLUPSExceptionFaultFaultMessage e) {
 				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 			}	

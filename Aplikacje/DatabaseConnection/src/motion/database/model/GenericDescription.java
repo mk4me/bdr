@@ -62,7 +62,7 @@ public abstract class GenericDescription<T extends Enum<T>> extends HashMap<Stri
 	public Object put(T key, Object arg) {
 		
 		if (arg != null && key != null)
-			return this.put( key.name(), new EntityAttribute( key.name(), this.entityKind, arg, "static", EntityAttribute.getTypeName(arg) ) );
+			return this.put( key.name(), new EntityAttribute( key.name(), this.entityKind, arg, "_static", EntityAttribute.getTypeName(arg) ) );
 		else
 			return null;
 	}

@@ -27,5 +27,15 @@ public class EntityAttributeGroup extends Vector<EntityAttribute>{
 	{
 		return name;
 	}
-
+	
+	public boolean equals(Object o)
+	{
+		if( o instanceof EntityAttributeGroup)
+		{
+			EntityAttributeGroup g = (EntityAttributeGroup) o;
+			return ( this.name.equals(g.name) && this.kind.equals(g.kind) );
+		}
+		else
+			return false;
+	}
 }

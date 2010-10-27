@@ -26,8 +26,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
- *         &lt;element name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -44,8 +44,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "motionKind",
     "sessionDate",
     "sessionDescription",
-    "attributes",
-    "sessionLabel"
+    "sessionLabel",
+    "attributes"
 })
 @XmlRootElement(name = "SessionDetailsWithAttributes")
 public class SessionDetailsWithAttributes {
@@ -63,10 +63,10 @@ public class SessionDetailsWithAttributes {
     protected XMLGregorianCalendar sessionDate;
     @XmlElement(name = "SessionDescription", required = true)
     protected String sessionDescription;
+    @XmlElement(name = "SessionLabel", required = true)
+    protected String sessionLabel;
     @XmlElement(name = "Attributes")
     protected Attributes attributes;
-    @XmlElement(name = "SessionLabel")
-    protected String sessionLabel;
 
     /**
      * Gets the value of the sessionID property.
@@ -189,30 +189,6 @@ public class SessionDetailsWithAttributes {
     }
 
     /**
-     * Gets the value of the attributes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Attributes }
-     *     
-     */
-    public Attributes getAttributes() {
-        return attributes;
-    }
-
-    /**
-     * Sets the value of the attributes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Attributes }
-     *     
-     */
-    public void setAttributes(Attributes value) {
-        this.attributes = value;
-    }
-
-    /**
      * Gets the value of the sessionLabel property.
      * 
      * @return
@@ -234,6 +210,30 @@ public class SessionDetailsWithAttributes {
      */
     public void setSessionLabel(String value) {
         this.sessionLabel = value;
+    }
+
+    /**
+     * Gets the value of the attributes property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Attributes }
+     *     
+     */
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    /**
+     * Sets the value of the attributes property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Attributes }
+     *     
+     */
+    public void setAttributes(Attributes value) {
+        this.attributes = value;
     }
 
 }
