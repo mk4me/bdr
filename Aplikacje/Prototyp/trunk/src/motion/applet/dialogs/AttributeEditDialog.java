@@ -163,7 +163,7 @@ public class AttributeEditDialog extends BasicDialog {
 							for (EntityAttributeGroup g:tree.newGroups)
 								DatabaseConnection.getInstanceWCF().defineAttributeGroup(g.name, g.kind.getName());
 							for (EntityAttribute g:tree.newAttributes)
-								DatabaseConnection.getInstanceWCF().defineAttribute(g, null);
+								DatabaseConnection.getInstanceWCF().defineAttribute(g, "");
 
 							AttributeEditDialog.this.entityKind.rescanGenericAttributeGroups();
 							MotionApplet.refreshTables();
