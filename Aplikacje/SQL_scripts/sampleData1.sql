@@ -41,8 +41,25 @@ insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='session'), 'UserID', 'int', 0, 'ID', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='session'), 'LabID', 'int', 0, 'ID', NULL) 
+
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
-values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='session'), 'MotionKindID', 'int', 0, 'ID', NULL) 
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='session'), 'MotionKind', 'string', 1, 'shortString', NULL) 
+
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'walk') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'run') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'jump') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'hop') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'sit') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'trot') 
+insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)
+values ( (select IdAtrybut from Atrybut where Nazwa = 'MotionKind'), 'dance') 
+
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='session'), 'SessionDate', 'string', 0, 'dateTime', NULL) 
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
@@ -51,6 +68,7 @@ values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' 
 insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('_static', 'measurement');
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
 values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = '_static' and Opisywana_encja='measurement'), 'MeasurementID', 'int', 0, 'ID', NULL) 
+
 
 insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('_static', 'file');
 insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)

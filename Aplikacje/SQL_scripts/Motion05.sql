@@ -1223,6 +1223,76 @@ ALTER TABLE Wartosc_Atrybutu_konfiguracji_performera
 go
 
 
+CREATE TABLE Widocznosc_atrybutu (
+        IdUzytkownik         int NOT NULL,
+        IdAtrybut            int NOT NULL,
+        Wyswietlic        bit,
+ )
+go
+ 
+CREATE INDEX X1Widocznosc_atrybutu ON Widocznosc_atrybutu
+ (
+        IdUzytkownik
+ )
+go
+ 
+CREATE INDEX X2Widocznosc_atrybutu ON Widocznosc_atrybutu
+ (
+        IdAtrybut
+ )
+go
+
+ALTER TABLE Widocznosc_atrybutu
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut)
+go
+ 
+ 
+ALTER TABLE Widocznosc_atrybutu
+        ADD FOREIGN KEY (IdAtrybut)
+                              REFERENCES Atrybut on delete cascade;
+go
+ 
+ 
+ALTER TABLE Widocznosc_atrybutu
+        ADD FOREIGN KEY (IdUzytkownik)
+                              REFERENCES Uzytkownik on delete cascade;
+go
+
+CREATE TABLE Widocznosc_grupy_atrybutow (
+        IdUzytkownik         int NOT NULL,
+        IdGrupa_atrybutow            int NOT NULL,
+        Wyswietlic        bit,
+ )
+go
+ 
+CREATE INDEX X1Widocznosc_grupy_atrybutow ON Widocznosc_grupy_atrybutow
+ (
+        IdUzytkownik
+ )
+go
+ 
+CREATE INDEX X2Widocznosc_grupy_atrybutow ON Widocznosc_grupy_atrybutow
+ (
+        IdGrupa_atrybutow
+ )
+go
+
+ALTER TABLE Widocznosc_grupy_atrybutow
+        ADD PRIMARY KEY (IdUzytkownik, IdGrupa_atrybutow)
+go
+ 
+ 
+ALTER TABLE Widocznosc_grupy_atrybutow
+        ADD FOREIGN KEY (IdGrupa_atrybutow)
+                              REFERENCES Grupa_atrybutow on delete cascade;
+go
+ 
+ 
+ALTER TABLE Widocznosc_grupy_atrybutow
+        ADD FOREIGN KEY (IdUzytkownik)
+                              REFERENCES Uzytkownik on delete cascade;
+go
+
 
 
 /*

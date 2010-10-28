@@ -1173,7 +1173,11 @@ as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int ;
-	declare @value_tuple_found as bit = 0;	
+	declare @value_tuple_found as bit = 0;
+	declare @calculated_id as int;	
+
+
+
 
 	/*
 	Current static non-id attributes:
@@ -1186,27 +1190,7 @@ begin
 
 	set @result = 6; -- result 3 = type casting error
 
-	if(@attr_name = 'LabID' or @attr_name = 'MotionKindID' or @attr_name = 'SessionDate' or @attr_name = 'SessionDescription' )
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'LabID')
-			begin
-				update Sesja set IdLaboratorium  = cast ( @attr_value as int ) where IdSesja = @sess_id;
-			end;
-		else if(@attr_name = 'MotionKindID')
-			update Sesja set IdRodzaj_ruchu  =  cast ( @attr_value as int ) where IdSesja = @sess_id;
-		else if(@attr_name = 'SessionDate')
-			update Sesja set Data  =  cast ( @attr_value as datetime ) where IdSesja = @sess_id;
-		else if(@attr_name = 'SessionDescription')
-			update Sesja set Opis_sesji  = @attr_value where IdSesja = @sess_id;
-		set @result = 0;
-		return;
-	end;
-	
+
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'session';
 	if @@rowcount = 0 
@@ -1214,6 +1198,7 @@ begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
 		return;
 	end;
+
 	if not exists ( select * from Sesja where IdSesja = @sess_id )
 		begin
 			set @result = 3;
@@ -1221,6 +1206,34 @@ begin
 		end;
 	else
 		begin
+
+
+			if(@attr_name = 'LabID' or @attr_name = 'MotionKind' or @attr_name = 'SessionDate' or @attr_name = 'SessionDescription' )
+			begin
+				if(@update = 0)
+						begin
+							set @result = 5; -- result 5 = value exists while update has not been allowed
+							return;
+						end;	
+				if(@attr_name = 'LabID')
+					begin
+						update Sesja set IdLaboratorium  = cast ( @attr_value as int ) where IdSesja = @sess_id;
+					end;
+				else if(@attr_name = 'MotionKind')
+					begin
+						select top(1) @calculated_id = IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa=@attr_value ;
+						if (@calculated_id is null) begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
+						update Sesja set IdRodzaj_ruchu  =  @calculated_id where IdSesja = @sess_id;
+					end
+				else if(@attr_name = 'SessionDate')
+					update Sesja set Data  =  cast ( @attr_value as datetime ) where IdSesja = @sess_id;
+				else if(@attr_name = 'SessionDescription')
+					update Sesja set Opis_sesji  = @attr_value where IdSesja = @sess_id;
+				set @result = 0;
+				return;
+			end;
+	
+
 			if exists ( select * from Wartosc_atrybutu_sesji where IdAtrybut = @attr_id and IdSesja = @sess_id ) set @value_tuple_found = 1;
 			if @update = 0 and @value_tuple_found = 1
 				begin
