@@ -334,12 +334,12 @@ public class FormDialog extends BasicDialog {
 abstract class FormField {
 	protected JLabel label;
 	protected JTextField text;
+	protected JButton clearButton;
 	protected GridBagConstraints gridBagConstraints;
 	protected JPanel formPanel;
 	public EntityAttribute attribute;
 	
 	public FormField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
-		super();
 		this.attribute = attribute;
 		this.gridBagConstraints = gridBagConstraints;
 		this.formPanel = formPanel;
@@ -353,6 +353,7 @@ abstract class FormField {
 		text = new JTextField(20);
 		label.setLabelFor(text);
 		formPanel.add(text, gridBagConstraints);
+		addClearButton();
 		
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy++;
@@ -369,6 +370,38 @@ abstract class FormField {
 		
 		gridBagConstraints.gridx++;
 		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+	}
+	
+	protected void addClearButton() {
+		gridBagConstraints.gridx++;
+		
+		clearButton = new JButton("Clear");
+		formPanel.add(clearButton, gridBagConstraints);
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws InterruptedException {
+						clearButton.setEnabled(false);
+						try {
+							//WebServiceInstance.getDatabaseConnection().clearEntityAttribute(ID, attribute)
+							setData("");
+						} catch (Exception e1) {
+							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+							exceptionDialog.setVisible(true);
+						}
+						
+						return null;
+					}
+					
+					@Override
+					protected void done() {
+						clearButton.setEnabled(true);
+					}
+				};
+				worker.execute();
+			}
+		});
 	}
 	
 	public void setData(Object value) {
@@ -410,6 +443,8 @@ class FormTextAreaField extends FormField {
 		textArea.setWrapStyleWord(true);
 		label.setLabelFor(textArea);
 		formPanel.add(textAreaScroll, gridBagConstraints);
+		
+		addClearButton();
 		
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy++;
