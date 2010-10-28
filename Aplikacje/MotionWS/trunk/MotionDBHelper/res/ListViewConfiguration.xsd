@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="AttributeGroupViewConfigurationList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="AttributeGroupViewConfigurationList" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AttributeGroupViewConfiguration" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="AttributeViewList">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="AttributeView" maxOccurs="unbounded">
+                      <xsd:complexType>
+                        <xsd:attribute name="AttributeGroupName" type="xsd:string" />
+                        <xsd:attribute name="DescribedEntity" type="xsd:string" />
+                        <xsd:attribute name="Show" type="xsd:string" />
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

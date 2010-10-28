@@ -124,8 +124,8 @@
 						<xsd:element name="MotionKind" type="xsd:string"/>
 						<xsd:element name="SessionDate" type="xsd:dateTime"/>
 						<xsd:element name="SessionDescription" type="xsd:string"/>
+						<xsd:element name="SessionLabel" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-						<xsd:element name="SessionLabel" type="xsd:string" minOccurs="0"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>

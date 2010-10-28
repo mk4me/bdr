@@ -461,8 +461,99 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }          
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public void UpdateViewConfiguration(AttributeGroupViewSettingCollection attrGroupViewSettings, AttributeViewSettingCollection attrViewSettings)
+        {
+            int result = 0;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "update_view_configuration";
+                //cmd.CommandText = "check_user_account";
+                
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+
+                SqlParameter attrPar = cmd.Parameters.Add("@att_vis", SqlDbType.Structured);
+                attrPar.Direction = ParameterDirection.Input;
+                attrPar.Value = attrViewSettings; 
+  
+                SqlParameter attrGroupPar = cmd.Parameters.Add("@grp_vis", SqlDbType.Structured);
+                attrGroupPar.Direction = ParameterDirection.Input;
+                attrGroupPar.Value = attrGroupViewSettings;
+                
+                SqlParameter resultParameter = new SqlParameter("@result", SqlDbType.Int);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
+   
+                cmd.ExecuteNonQuery();
+
+                // result = (int)resultParameter.Value;
 
 
+            }
+            catch (SqlException ex)
+            {
+                UPSException exc = new UPSException("database", "Unknown DB-side error");
+                throw new FaultException<UPSException>(exc, "Update execution error: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("UpdateViewConfiguration")));
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            if (result == 1)
+            {
+                UPSException exc = new UPSException("User not found", "User " + userName + " could not be found");
+                throw new FaultException<UPSException>(exc, "User not found ", FaultCode.CreateReceiverFaultCode(new FaultCode("UpdateViewConfiguration")));
+            }
+
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListViewConfiguration()
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_view_configuration_xml";
+  
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("AttributeGroupViewConfigurationList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        } 
 
     }
 }

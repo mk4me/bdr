@@ -41,16 +41,23 @@ namespace MotionDBWebServices
         void RemoveEntityFromBasket(string basketName, int resourceID, string entity);
 
         [OperationContract]
-        [FaultContract(typeof(QueryException))]
+        [FaultContract(typeof(UPSException))]
         XmlElement ListBasketPerformersWithAttributesXML(string basketName);
 
         [OperationContract]
-        [FaultContract(typeof(QueryException))]
+        [FaultContract(typeof(UPSException))]
         XmlElement ListBasketSessionsWithAttributesXML(string basketName);
 
         [OperationContract]
-        [FaultContract(typeof(QueryException))]
+        [FaultContract(typeof(UPSException))]
         XmlElement ListBasketTrialsWithAttributesXML(string basketName);
 
+        [OperationContract]
+        [FaultContract(typeof(UPSException))]
+        void UpdateViewConfiguration(AttributeGroupViewSettingCollection attrGroupViewSettings, AttributeViewSettingCollection attrViewSettings);
+
+        [OperationContract]
+        [FaultContract(typeof(UPSException))]
+        XmlElement ListViewConfiguration(); 
     }
 }
