@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -20,6 +19,7 @@ import motion.database.model.EntityKind;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
 import motion.database.model.Session;
+import motion.database.model.SessionGroup;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
 
@@ -112,6 +112,7 @@ public class SessionFormDialog extends FormDialog {
 		this(TITLE_EDIT, WELCOME_MESSAGE_EDIT);
 		fillFormFields(session);
 		fillSessionPerformers(session);
+		fillSessionGroups(session);
 	}
 	
 	private void fillSessionPerformers(final Session session) {
@@ -136,6 +137,35 @@ public class SessionFormDialog extends FormDialog {
 			
 			@Override
 			protected void done() {
+				performerAssignmentPanel.doLayout();
+			}
+		};
+		worker.execute();
+	}
+	
+	private void fillSessionGroups(final Session session) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					DbElementsList<SessionGroup> sessionGroups = WebServiceInstance.getDatabaseConnection().listSessionSessionGroups(session.getId());
+					int[] recordIds = new int[sessionGroups.size()];
+					int i = 0;
+					for (SessionGroup s : sessionGroups) {
+						recordIds[i] = s.getId();
+					}
+					sessionGroupAssignmentPanel.setSelectedRecords(recordIds);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				sessionGroupAssignmentPanel.doLayout();
 			}
 		};
 		worker.execute();
