@@ -66,7 +66,7 @@ public class SessionFormDialog extends FormDialog {
 										SessionFormDialog.this.getSessionDescription(),
 										AppletToolBar.getLabId(),
 										SessionFormDialog.this.getSessionDate(),
-										"run");
+										SessionFormDialog.this.getMotionKind());
 								
 								setDefinedAttributes(sessionID);
 								
