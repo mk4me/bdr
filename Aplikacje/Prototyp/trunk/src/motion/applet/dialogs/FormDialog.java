@@ -42,6 +42,8 @@ public class FormDialog extends BasicDialog {
 	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
 	protected static String UPDATING_MESSAGE = "Updating attributes...";
 	
+	private static String ATTRIBUTES_TAB_NAME = "Attributes";
+	
 	protected JButton createButton;
 	private JButton cancelButton;
 	
@@ -59,7 +61,7 @@ public class FormDialog extends BasicDialog {
 	
 	protected ArrayList<FormField> formFields = new ArrayList<FormField>();
 	
-	private static String ATTRIBUTES_TAB_NAME = "Attributes";
+	private int recordId = -1;
 	
 	public FormDialog(String title, String message) {
 		super(title, message);
@@ -266,7 +268,8 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void fillFormFields(GenericDescription<?> record) {
-		makeEditButton(record.getId());
+		recordId = record.getId();
+		makeEditButton();
 		for (FormField f : formFields) {
 			EntityAttribute attribute = record.get(f.attribute.name);
 			if (attribute != null) {
@@ -277,7 +280,7 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
-	private void makeEditButton(final int recordId) {
+	private void makeEditButton() {
 		createButton.setText(EDIT);
 		ActionListener[] actionListeners = createButton.getActionListeners();
 		for (int i = 0; i < actionListeners.length; i++) {
@@ -329,290 +332,295 @@ public class FormDialog extends BasicDialog {
 		
 		return true;
 	}
-}
 
-abstract class FormField {
-	protected JLabel label;
-	protected JTextField text;
-	protected JButton clearButton;
-	protected GridBagConstraints gridBagConstraints;
-	protected JPanel formPanel;
-	public EntityAttribute attribute;
-	
-	public FormField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
-		this.attribute = attribute;
-		this.gridBagConstraints = gridBagConstraints;
-		this.formPanel = formPanel;
-		//System.out.println(attribute.toString() + " " + attribute.getType() + " " + attribute.getSubType() + " " + attribute.getUnit() + " " + attribute.getEnumValues());
-		prepareField();
-	}
-	
-	protected void prepareField() {
-		addLabel();
+	private abstract class FormField {
+		protected JLabel label;
+		protected JTextField text;
+		protected JButton clearButton;
+		protected GridBagConstraints gridBagConstraints;
+		protected JPanel formPanel;
+		public EntityAttribute attribute;
 		
-		text = new JTextField(20);
-		label.setLabelFor(text);
-		formPanel.add(text, gridBagConstraints);
-		addClearButton();
-		
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
-	}
-	
-	protected void addLabel() {
-		if (attribute.getUnit() != null) {
-			label = new JLabel(attribute.toString() + " (" + attribute.getUnit() + ") " + ":");
-		} else {
-			label = new JLabel(attribute.toString() + ":");
+		public FormField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+			this.attribute = attribute;
+			this.gridBagConstraints = gridBagConstraints;
+			this.formPanel = formPanel;
+			//System.out.println(attribute.toString() + " " + attribute.getType() + " " + attribute.getSubType() + " " + attribute.getUnit() + " " + attribute.getEnumValues());
+			prepareField();
 		}
-		formPanel.add(label, gridBagConstraints);
 		
-		gridBagConstraints.gridx++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
-	}
-	
-	protected void addClearButton() {
-		gridBagConstraints.gridx++;
-		
-		clearButton = new JButton("Clear");
-		formPanel.add(clearButton, gridBagConstraints);
-		clearButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					@Override
-					protected Void doInBackground() throws InterruptedException {
-						clearButton.setEnabled(false);
-						try {
-							//WebServiceInstance.getDatabaseConnection().clearEntityAttribute(ID, attribute)
-							setData("");
-						} catch (Exception e1) {
-							ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-							exceptionDialog.setVisible(true);
-						}
-						
-						return null;
-					}
-					
-					@Override
-					protected void done() {
-						clearButton.setEnabled(true);
-					}
-				};
-				worker.execute();
-			}
-		});
-	}
-	
-	public void setData(Object value) {
-		text.setText(value.toString());
-	}
-}
-
-class FormTextField extends FormField {
-	
-	public FormTextField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
-		super(attribute, gridBagConstraints, formPanel);
-		
-	}
-	
-	public String getData() {
-		
-		return text.getText();
-	}
-}
-
-class FormTextAreaField extends FormField {
-	private JTextArea textArea;
-	
-	public FormTextAreaField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
-		super(attribute, gridBagConstraints, formPanel);
-		
-	}
-	
-	public String getData() {
-		
-		return textArea.getText();
-	}
-	
-	protected void prepareField() {
-		addLabel();
-		
-		JScrollPane textAreaScroll = new JScrollPane(textArea = new JTextArea(5, 20));
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
-		label.setLabelFor(textArea);
-		formPanel.add(textAreaScroll, gridBagConstraints);
-		
-		addClearButton();
-		
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy++;
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
-	}
-	
-	public void setData(Object value) {
-		textArea.setText(value.toString());
-	}
-}
-
-class FormNumberField extends FormField {
-	private boolean nonNegative = false;
-	
-	public FormNumberField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean nonNegative) {
-		super(attribute, gridBagConstraints, formPanel);
-		this.nonNegative = nonNegative;
-		finishField();
-	}
-	
-	private void finishField() {
-		text.setColumns(5);
-	}
-	
-	public Integer getData() throws NumberFormatException {
-		String value = text.getText();
-		if (value.equals("")) {
+		protected void prepareField() {
+			addLabel();
 			
-			return null;
-		} else {
-			int number = Integer.parseInt(text.getText());
-			if (nonNegative == false) {
-				
-				return number;
+			text = new JTextField(20);
+			label.setLabelFor(text);
+			formPanel.add(text, gridBagConstraints);
+			addClearButton();
+			
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy++;
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		}
+		
+		protected void addLabel() {
+			if (attribute.getUnit() != null) {
+				label = new JLabel(attribute.toString() + " (" + attribute.getUnit() + ") " + ":");
 			} else {
-				if (number >= 0) {
+				label = new JLabel(attribute.toString() + ":");
+			}
+			formPanel.add(label, gridBagConstraints);
+			
+			gridBagConstraints.gridx++;
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_LEADING;
+		}
+		
+		protected void addClearButton() {
+			if (!attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
+				gridBagConstraints.gridx++;
+				
+				clearButton = new JButton("Clear");
+				formPanel.add(clearButton, gridBagConstraints);
+				clearButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+							@Override
+							protected Void doInBackground() throws InterruptedException {
+								clearButton.setEnabled(false);
+								try {
+									if (recordId > -1) {
+										cancelButton.setEnabled(false);
+										WebServiceInstance.getDatabaseConnection().clearEntityAttribute(recordId, attribute);
+									}
+									setData("");
+								} catch (Exception e1) {
+									ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+									exceptionDialog.setVisible(true);
+								}
+								
+								return null;
+							}
+							
+							@Override
+							protected void done() {
+								clearButton.setEnabled(true);
+							}
+						};
+						worker.execute();
+					}
+				});
+			}
+		}
+		
+		public void setData(Object value) {
+			text.setText(value.toString());
+		}
+	}
+	
+	private class FormTextField extends FormField {
+		
+		public FormTextField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+			super(attribute, gridBagConstraints, formPanel);
+			
+		}
+		
+		public String getData() {
+			
+			return text.getText();
+		}
+	}
+	
+	private class FormTextAreaField extends FormField {
+		private JTextArea textArea;
+		
+		public FormTextAreaField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+			super(attribute, gridBagConstraints, formPanel);
+			
+		}
+		
+		public String getData() {
+			
+			return textArea.getText();
+		}
+		
+		protected void prepareField() {
+			addLabel();
+			
+			JScrollPane textAreaScroll = new JScrollPane(textArea = new JTextArea(5, 20));
+			textArea.setLineWrap(true);
+			textArea.setWrapStyleWord(true);
+			label.setLabelFor(textArea);
+			formPanel.add(textAreaScroll, gridBagConstraints);
+			
+			addClearButton();
+			
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy++;
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		}
+		
+		public void setData(Object value) {
+			textArea.setText(value.toString());
+		}
+	}
+	
+	private class FormNumberField extends FormField {
+		private boolean nonNegative = false;
+		
+		public FormNumberField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean nonNegative) {
+			super(attribute, gridBagConstraints, formPanel);
+			this.nonNegative = nonNegative;
+			finishField();
+		}
+		
+		private void finishField() {
+			text.setColumns(5);
+		}
+		
+		public Integer getData() throws NumberFormatException {
+			String value = text.getText();
+			if (value.equals("")) {
+				
+				return null;
+			} else {
+				int number = Integer.parseInt(text.getText());
+				if (nonNegative == false) {
+					
 					return number;
 				} else {
-					throw(new NumberFormatException());
+					if (number >= 0) {
+						return number;
+					} else {
+						throw(new NumberFormatException());
+					}
 				}
 			}
 		}
 	}
-}
-
-class FormDateField extends FormField {
-	//private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private DateFormat dateFormat;
-	private boolean fullDate = false;
-	private JButton setDateTimeButton;
 	
-	public FormDateField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean fullDate) {
-		super(attribute, gridBagConstraints, formPanel);
-		this.fullDate = fullDate;
-		if (fullDate == true) {
-			dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		} else {
-			this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		}
-		setCurrentDate();
-		finishField();
-	}
-	
-	private void setCurrentDate() {
-		String date = dateFormat.format(Calendar.getInstance().getTime()).toString();
-		text.setText(date);
-	}
-	
-	public XMLGregorianCalendar getData() throws ParseException, DatatypeConfigurationException {
-		Date date = dateFormat.parse(text.getText());
-		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
-		XMLGregorianCalendar data = datatypeFactory.newXMLGregorianCalendar();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		data.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-		data.setMonth(calendar.get(Calendar.MONTH)+1);	// Adjust to proper month.
-		data.setYear(calendar.get(Calendar.YEAR));
+	private class FormDateField extends FormField {
+		//private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		private DateFormat dateFormat;
+		private boolean fullDate = false;
+		private JButton setDateTimeButton;
 		
-		if (fullDate == true) {
-			data.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-			data.setMinute(calendar.get(Calendar.MINUTE));
-			data.setSecond(calendar.get(Calendar.SECOND));
+		public FormDateField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, boolean fullDate) {
+			super(attribute, gridBagConstraints, formPanel);
+			this.fullDate = fullDate;
+			if (fullDate == true) {
+				dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			} else {
+				this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			}
+			setCurrentDate();
+			finishField();
 		}
 		
-		return data;
-	}
-	
-	protected void prepareField() {
-		addLabel();
-		text = new JTextField(20);
-		label.setLabelFor(text);
-		formPanel.add(text, gridBagConstraints);
+		private void setCurrentDate() {
+			String date = dateFormat.format(Calendar.getInstance().getTime()).toString();
+			text.setText(date);
+		}
 		
-		gridBagConstraints.gridx++;
-	}
-	
-	protected void finishField() {
-		setDateTimeButton = new JButton("Set");
-		setDateTimeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CalendarWidget calendarWidget = new CalendarWidget();
-				calendarWidget.setVisible(true);
-				if (calendarWidget.getDate() != null) {
-					String date = dateFormat.format(calendarWidget.getDate()).toString();
-					text.setText(date);
+		public XMLGregorianCalendar getData() throws ParseException, DatatypeConfigurationException {
+			Date date = dateFormat.parse(text.getText());
+			DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+			XMLGregorianCalendar data = datatypeFactory.newXMLGregorianCalendar();
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			data.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+			data.setMonth(calendar.get(Calendar.MONTH)+1);	// Adjust to proper month.
+			data.setYear(calendar.get(Calendar.YEAR));
+			
+			if (fullDate == true) {
+				data.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+				data.setMinute(calendar.get(Calendar.MINUTE));
+				data.setSecond(calendar.get(Calendar.SECOND));
+			}
+			
+			return data;
+		}
+		
+		protected void prepareField() {
+			addLabel();
+			text = new JTextField(20);
+			label.setLabelFor(text);
+			formPanel.add(text, gridBagConstraints);
+			
+			gridBagConstraints.gridx++;
+		}
+		
+		protected void finishField() {
+			setDateTimeButton = new JButton("Set");
+			setDateTimeButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CalendarWidget calendarWidget = new CalendarWidget();
+					calendarWidget.setVisible(true);
+					if (calendarWidget.getDate() != null) {
+						String date = dateFormat.format(calendarWidget.getDate()).toString();
+						text.setText(date);
+					}
 				}
-			}
-		});
-		formPanel.add(setDateTimeButton, gridBagConstraints);
-		
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy++;
-		
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
-	}
-	
-	public void setData(Object value) {
-		text.setText(value.toString().replace('T', ' '));
-	}
-}
-
-class FormListField extends FormField {
-	private JComboBox comboBox;
-	private String[] list;
-	//private boolean dataAsIndex = false;
-	
-	public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {//, boolean dataAsIndex) {
-		super(attribute, gridBagConstraints, formPanel);
-		this.list = list;
-		//this.dataAsIndex = dataAsIndex;
-		finishField();
-	}
-	
-	public String getData() {
-		//if (dataAsIndex == false) {
+			});
+			formPanel.add(setDateTimeButton, gridBagConstraints);
 			
-			return comboBox.getSelectedItem().toString();
-		//} else {
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy++;
 			
-			//return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
-		//}
-	}
-	
-	protected void prepareField() {
-		addLabel();
-	}
-	
-	protected void finishField() {
-		comboBox = new JComboBox(list);
-		label.setLabelFor(comboBox);
-		formPanel.add(comboBox, gridBagConstraints);
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		}
 		
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy++;
-		
-		gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		public void setData(Object value) {
+			text.setText(value.toString().replace('T', ' '));
+		}
 	}
 	
-	public void setData(Object value) {
-		try {
-			int i = Integer.parseInt(value.toString());
-			if (i > 0 && i <= comboBox.getItemCount()) {
-				comboBox.setSelectedIndex(i-1);
-			}
-		} catch (NumberFormatException e) {
-			for (int i = 0; i < comboBox.getItemCount(); i++) {
-				if (comboBox.getItemAt(i).toString().equals(value.toString())) {
-					comboBox.setSelectedIndex(i);
+	private class FormListField extends FormField {
+		private JComboBox comboBox;
+		private String[] list;
+		//private boolean dataAsIndex = false;
+		
+		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {//, boolean dataAsIndex) {
+			super(attribute, gridBagConstraints, formPanel);
+			this.list = list;
+			//this.dataAsIndex = dataAsIndex;
+			finishField();
+		}
+		
+		public String getData() {
+			//if (dataAsIndex == false) {
+				
+				return comboBox.getSelectedItem().toString();
+			//} else {
+				
+				//return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
+			//}
+		}
+		
+		protected void prepareField() {
+			addLabel();
+		}
+		
+		protected void finishField() {
+			comboBox = new JComboBox(list);
+			label.setLabelFor(comboBox);
+			formPanel.add(comboBox, gridBagConstraints);
+			
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy++;
+			
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
+		}
+		
+		public void setData(Object value) {
+			try {
+				int i = Integer.parseInt(value.toString());
+				if (i > 0 && i <= comboBox.getItemCount()) {
+					comboBox.setSelectedIndex(i-1);
+				}
+			} catch (NumberFormatException e) {
+				for (int i = 0; i < comboBox.getItemCount(); i++) {
+					if (comboBox.getItemAt(i).toString().equals(value.toString())) {
+						comboBox.setSelectedIndex(i);
+					}
 				}
 			}
 		}
