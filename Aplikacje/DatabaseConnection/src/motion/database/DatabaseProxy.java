@@ -225,5 +225,7 @@ public interface DatabaseProxy {
 
 	DbElementsList<SessionGroup> listSessionSessionGroups(int sessionID) throws Exception;
 
+	void saveAttributeViewConfiguration() throws Exception;
+
 
 }

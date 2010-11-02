@@ -103,11 +103,16 @@ import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSSetTrialAttribut
 import motion.database.ws.basicUpdatesServiceWCF.PerformerData;
 import motion.database.ws.fileStoremanServiceWCF.FileData;
 import motion.database.ws.fileStoremanServiceWCF.IFileStoremanWS;
+import motion.database.ws.userPersonalSpaceWCF.ArrayOfAttributeGroupViewSetting;
+import motion.database.ws.userPersonalSpaceWCF.ArrayOfAttributeViewSetting;
+import motion.database.ws.userPersonalSpaceWCF.AttributeGroupViewSetting;
+import motion.database.ws.userPersonalSpaceWCF.AttributeViewSetting;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWS;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSAddEntityToBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSCreateBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSRemoveEntityFromBasketUPSExceptionFaultFaultMessage;
+import motion.database.ws.userPersonalSpaceWCF.IUserPersonalSpaceWSUpdateViewConfigurationUPSExceptionFaultFaultMessage;
 import motion.database.ws.userPersonalSpaceWCF.AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration;
 import motion.database.ws.userPersonalSpaceWCF.AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView;
 import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
@@ -1528,14 +1533,15 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	public void readAttributeViewConfiguration() throws Exception
 	{
 		try {
-			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "removeBasket", this );
+			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "readAttributeViewConfiguration", this );
 			ListViewConfigurationResult r = port.listViewConfiguration();
 		
 			for ( AttributeGroupViewConfiguration v : r.getAttributeGroupViewConfigurationList().getAttributeGroupViewConfiguration() )
 			{
-				for( AttributeView a : v.getAttributeViewList().getAttributeView() )
+				for ( AttributeView s : v.getAttributeViewList().getAttributeView())
 				{
-					
+					EntityKind kind = Enum.valueOf( EntityKind.class, s.getDescribedEntity() );
+					kind.getAllAttributeGroups().get( s.getAttributeGroupName() );
 				}
 					
 			}
@@ -1549,6 +1555,46 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 */
+	
+	@Override
+	public void saveAttributeViewConfiguration() throws Exception
+	{
+		try {
+			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "saveAttributeViewConfiguration", this );
+		
+			ArrayOfAttributeGroupViewSetting groupView = new ArrayOfAttributeGroupViewSetting();
+			ArrayOfAttributeViewSetting attributeView = new ArrayOfAttributeViewSetting();
+		
+			for(EntityKind kind : EntityKind.values())
+				for (EntityAttributeGroup group: kind.getAllAttributeGroups().values())
+					if (group.name != EntityKind.STATIC_ATTRIBUTE_GROUP)
+					{
+						AttributeGroupViewSetting groupSetting = new AttributeGroupViewSetting();
+						groupSetting.setDescribedEntity( kind.getName() );
+						groupSetting.setAttributeGroupName( group.name );
+						groupSetting.setShow( group.isVisible );
+						groupView.getAttributeGroupViewSetting().add( groupSetting );
+	
+						for (EntityAttribute attr : group)
+						{
+							AttributeViewSetting attrSetting = new AttributeViewSetting();
+							attrSetting.setAttributeName( attr.name );
+							attrSetting.setDescribedEntity( kind.getName() );
+							attrSetting.setShow( attr.isVisible );
+						}
+					}
+			
+			port.updateViewConfiguration( groupView, attributeView );
+			
+		} catch (IUserPersonalSpaceWSUpdateViewConfigurationUPSExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+	
 	
 	@Override
 	public void updateStoredFilters(motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate filter) throws Exception
