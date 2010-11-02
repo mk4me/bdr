@@ -47,6 +47,8 @@ public class EntityAttribute {
 	public EntityKind kind;
 	public boolean isEnum;
 	
+	public boolean isVisible;
+	
 	public EntityAttribute(String attribute, String type, String unit, List<String> enumValues, String groupName) 
 	{
 		this( attribute, null, null, groupName, type, unit, enumValues!=null );
@@ -63,6 +65,7 @@ public class EntityAttribute {
 		this.kind = kind;
 		this.unit = unit;
 		this.isEnum = isEnum;
+		this.isVisible = true;
 	}
 	
 	public EntityAttribute(String name, EntityKind kind, Object value, String groupName, String type)

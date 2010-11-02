@@ -15,6 +15,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
+import motion.database.SessionPrivileges;
 import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
@@ -371,6 +372,8 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), group.kind, null, a.getAttributeGroupName(), a.getAttributeType() );
 					attr.unit = a.getUnit();
 					attr.isEnum = a.getAttributeEnum()==1;
+					// TODO: add attribute visibility
+					//attr.isVisible = a.get
 					if (a.getEnumValues() != null) {
 						attr.enumValues = a.getEnumValues().getValue();
 					}
@@ -1432,7 +1435,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	@Override
-	public DbElementsList<UserPrivileges> listSessionPrivileges(int sessionID) throws Exception
+	public SessionPrivileges listSessionPrivileges(int sessionID) throws Exception
 	{
 		try {
 			IAuthorizationWS port = ConnectionTools2.getAuthorizationServicePort( "listSessionPrivileges", this );

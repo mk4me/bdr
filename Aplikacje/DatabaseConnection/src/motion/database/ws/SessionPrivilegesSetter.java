@@ -61,15 +61,26 @@ public class SessionPrivilegesSetter {
 		
 		switch(privileges)
 		{
-			case PRIVATE: 
-				db.setSessionPrivileges(this.sessionID, false, false); break;
+			case PRIVATE:
+			{
+				db.setSessionPrivileges(this.sessionID, false, false); 
+				DbElementsList<UserPrivileges> actualPrivileges = db.listSessionPrivileges(sessionID);
+				for (UserPrivileges actual : actualPrivileges)
+				{
+					db.removeSessionPrivileges(
+								(String)((EntityAttribute)actual.get( UserPrivilegesStaticAttributes.login)).value, 
+								sessionID, 
+								(Boolean)((EntityAttribute)actual.get( UserPrivilegesStaticAttributes.canWrite)).value );
+				}
+			}break;
 			case PUBLIC_READ: 
 				db.setSessionPrivileges( this.sessionID, true, false); break;
 			case PUBLIC_WRITE: 
 				db.setSessionPrivileges( this.sessionID, true, true); break;
 			case CUSTOM: 
 			{
-				DbElementsList<UserPrivileges> actualPrivileges = DatabaseConnection.getInstance().listSessionPrivileges(sessionID);
+				db.setSessionPrivileges( this.sessionID, false, false); 
+				DbElementsList<UserPrivileges> actualPrivileges = db.listSessionPrivileges(sessionID);
 				UserPrivileges wanted;
 				for (UserPrivileges actual : actualPrivileges)
 				{

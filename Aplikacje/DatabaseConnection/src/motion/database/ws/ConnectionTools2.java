@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
+import motion.database.SessionPrivileges;
 import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
@@ -335,22 +336,26 @@ public class ConnectionTools2 {
 		textMessageListener = listener;
 	}
 
-	public static DbElementsList<UserPrivileges> transformListOfPrivileges(
+	public static SessionPrivileges transformListOfPrivileges(
 			int sessionId,
 			ListSessionPrivilegesResult listSessionPrivileges) 
 	{
-		DbElementsList<UserPrivileges> list = new DbElementsList<UserPrivileges>();
+		SessionPrivileges list = new SessionPrivileges();
+		list.sessionID = sessionId;
 		if (listSessionPrivileges!=null && listSessionPrivileges.getSessionPrivilegeList() != null)
-		for (SessionPrivilege d: listSessionPrivileges.getSessionPrivilegeList().getSessionPrivilege() )
 		{
-			UserPrivileges df = new UserPrivileges();
-			df.put( UserPrivilegesStaticAttributes.login, d.getLogin() );
-			df.put( UserPrivilegesStaticAttributes.canRead, true );
-			df.put( UserPrivilegesStaticAttributes.canWrite, d.isCanWrite() );
-			df.put( UserPrivilegesStaticAttributes.sessionId, sessionId );
-			list.add( df );
+			list.publicRead = listSessionPrivileges.getSessionPrivilegeList().getIsPublic()!=0;
+			list.publicWrite = listSessionPrivileges.getSessionPrivilegeList().getIsPublicWritable()!=0;
+			for (SessionPrivilege d: listSessionPrivileges.getSessionPrivilegeList().getSessionPrivilege() )
+			{
+				UserPrivileges df = new UserPrivileges();
+				df.put( UserPrivilegesStaticAttributes.login, d.getLogin() );
+				df.put( UserPrivilegesStaticAttributes.canRead, true );
+				df.put( UserPrivilegesStaticAttributes.canWrite, d.isCanWrite() );
+				df.put( UserPrivilegesStaticAttributes.sessionId, sessionId );
+				list.add( df );
+			}
 		}
-
 		return list;
 	}
 

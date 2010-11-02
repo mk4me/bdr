@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/complexType>
  *         &lt;/element>
  *       &lt;/sequence>
+ *       &lt;attribute name="IsPublic" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="IsPublicWritable" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -48,6 +50,10 @@ public class SessionPrivilegeList {
 
     @XmlElement(name = "SessionPrivilege")
     protected List<SessionPrivilegeList.SessionPrivilege> sessionPrivilege;
+    @XmlAttribute(name = "IsPublic")
+    protected Integer isPublic;
+    @XmlAttribute(name = "IsPublicWritable")
+    protected Integer isPublicWritable;
 
     /**
      * Gets the value of the sessionPrivilege property.
@@ -76,6 +82,54 @@ public class SessionPrivilegeList {
             sessionPrivilege = new ArrayList<SessionPrivilegeList.SessionPrivilege>();
         }
         return this.sessionPrivilege;
+    }
+
+    /**
+     * Gets the value of the isPublic property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getIsPublic() {
+        return isPublic;
+    }
+
+    /**
+     * Sets the value of the isPublic property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setIsPublic(Integer value) {
+        this.isPublic = value;
+    }
+
+    /**
+     * Gets the value of the isPublicWritable property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getIsPublicWritable() {
+        return isPublicWritable;
+    }
+
+    /**
+     * Sets the value of the isPublicWritable property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setIsPublicWritable(Integer value) {
+        this.isPublicWritable = value;
     }
 
 

@@ -77,6 +77,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RetrieveFileResponse }
+     * 
+     */
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
+    }
+
+    /**
      * Create an instance of {@link StoreSessionFileResponse }
      * 
      */
@@ -138,14 +146,6 @@ public class ObjectFactory {
      */
     public FileData createFileData() {
         return new FileData();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFileResponse }
-     * 
-     */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
     }
 
     /**
