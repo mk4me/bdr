@@ -13,6 +13,7 @@ import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
+import motion.database.SessionPrivileges;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
@@ -21,6 +22,7 @@ import motion.database.model.Performer;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.SessionStaticAttributes;
+import motion.database.model.UserPrivileges;
 import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
@@ -106,12 +108,38 @@ public class SessionFormDialog extends FormDialog {
 		this.getFormTabbedPane().addTab("Performers", performerAssignmentPanel);
 		sessionGroupAssignmentPanel = new EntityAssignmentPanel(EntityKind.sessionGroup);
 		this.getFormTabbedPane().addTab("Groups", sessionGroupAssignmentPanel);
+		
 	}
 	
-	public SessionFormDialog(Session session) {
+	public SessionFormDialog(final Session session) {
 		this(TITLE_EDIT, WELCOME_MESSAGE_EDIT);
 		fillFormFields(session);
 		fillSessionPerformers(session);
+		privilegesPanel.fillPrivilegesListPanel(session.getId());
+
+		createButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (SessionFormDialog.this.validateResult() == true) {
+					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						@Override
+						protected Void doInBackground() throws InterruptedException {
+								//privileges
+								try {
+									SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(session.getId(), privilegesPanel.getResult() );
+									sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
+									sessionPrivileges.performDatabaseUpdate();
+								} catch (Exception e1) {
+									ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+									exceptionDialog.setVisible(true);
+								}
+								return null;
+						}
+					};
+					worker.execute();
+				}
+			}
+		});
 		fillSessionGroups(session);
 	}
 	
@@ -170,6 +198,7 @@ public class SessionFormDialog extends FormDialog {
 		};
 		worker.execute();
 	}
+
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {
 		for (EntityAttribute a : group) {

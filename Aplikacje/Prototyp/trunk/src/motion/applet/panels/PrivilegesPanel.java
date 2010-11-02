@@ -30,6 +30,7 @@ import motion.applet.tables.EntityTableModel;
 import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
+import motion.database.SessionPrivileges;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
 import motion.database.model.Privileges;
@@ -54,9 +55,12 @@ public class PrivilegesPanel extends JPanel {
 							Privileges.PUBLIC_WRITE,
 							Privileges.CUSTOM };
 
-	DbElementsList<UserPrivileges> privileges;
+	String columnNames[] = { "user login", "can read?", "can write?" };
+	String visibleColumnNames[] = {"login", "canRead", "canWrite"};
+
+	SessionPrivileges privileges;
 	
-	public DbElementsList<UserPrivileges> getPrivileges() {
+	public SessionPrivileges getPrivileges() {
 		return privileges;
 	}
 
@@ -151,31 +155,55 @@ public class PrivilegesPanel extends JPanel {
 		
 	}
 	
+	public void fillPrivilegesListPanel(int sessionId)
+	{
+		try {
+			privileges = DatabaseConnection.getInstance().listSessionPrivileges(sessionId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			privileges = new SessionPrivileges();
+		}
+		privList.setModel( new EntityTableModel(privileges, visibleColumnNames ) );
+		
+		if (privileges.size()!=0)
+		{
+			buttons[3].setSelected(true);
+			bottomPanel.setVisible( true );
+			this.frame.pack();
+		}
+		else if (privileges.publicWrite)
+			buttons[2].setSelected(true);
+		else if (privileges.publicRead)
+			buttons[1].setSelected(true);
+		else 
+			buttons[0].setSelected(true);
+	}
+	
+	
 	private JPanel createPrivilegesListPanel(int sessionId)
 	{
-		String columns[] = { "user login", "can read?", "can write?" };
-		String data [][] = { {"", "", "" } };
+//		String data [][] = { {"", "", "" } };
 
 		if(sessionId!=-1)
 			try {
 				privileges = DatabaseConnection.getInstance().listSessionPrivileges(sessionId);
-				data = new String[privileges.size()][];
+//				data = new String[privileges.size()][];
 				int i = 0;
-				for (UserPrivileges p : privileges)
-					data[i++] = p.toStringArray();
+//				for (UserPrivileges p : privileges)
+//					data[i++] = p.toStringArray();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				privileges = new DbElementsList<UserPrivileges>();
+				privileges = new SessionPrivileges();
 			}
 		else
-			privileges = new DbElementsList<UserPrivileges>();
+			privileges = new SessionPrivileges();
 		
 		
 		JPanel panel = new JPanel();
 		panel.setLayout( new BorderLayout());
 
-		EntityTableModel model = new EntityTableModel(privileges, new String[]{"login", "canRead", "canWrite"} ); 
+		EntityTableModel model = new EntityTableModel(privileges, visibleColumnNames ); 
 		privList = new JTable( model );
 		model.addTableModelListener( privList );
 		Dimension tableSize = new Dimension();
@@ -183,8 +211,8 @@ public class PrivilegesPanel extends JPanel {
 		tableSize.height = 150;
 		privList.setPreferredScrollableViewportSize(tableSize);
 		
-		for (int i=0; i<columns.length; i++)
-			privList.getColumnModel().getColumn(i).setHeaderValue( columns[i] );
+		for (int i=0; i<columnNames.length; i++)
+			privList.getColumnModel().getColumn(i).setHeaderValue( columnNames[i] );
 		
 		JScrollPane pane = new JScrollPane( privList );
 		

@@ -69,7 +69,7 @@ public class BasicTableModel extends AbstractTableModel {
 	
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		
-		return (columnIndex == CHECKBOX_COLUMN);	// enable columns for editing/checkboxes  
+		return (columnIndex == CHECKBOX_COLUMN);	// enable columnNames for editing/checkboxes  
 	}
 	
 	@Override

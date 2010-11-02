@@ -134,7 +134,7 @@ public class AttributeTableModel extends BasicTableModel {
 	
 	public String getColumnName(int column) {
 		String attribute = this.attributeNames.get(column);
-		// Show/hide columns
+		// Show/hide columnNames
 		//if (BottomSplitPanel.isCheckedAttribute(tableName, attribute)) {
 			return attribute;
 		//} else {

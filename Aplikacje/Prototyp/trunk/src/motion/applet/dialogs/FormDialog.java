@@ -33,6 +33,7 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
+import motion.database.ws.SessionPrivilegesSetter;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$

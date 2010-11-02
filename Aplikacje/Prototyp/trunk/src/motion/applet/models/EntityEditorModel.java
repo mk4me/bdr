@@ -56,10 +56,10 @@ import motion.database.model.SessionStaticAttributes;
 public class EntityEditorModel extends AbstractTreeTableModel 
                              implements TreeTableModel {
 
-    // Names of the columns.
+    // Names of the columnNames.
     static protected String[]  cNames = {"Name", "Value", "Type"};
 
-    // Types of the columns.
+    // Types of the columnNames.
     static protected Class[]  cTypes = {TreeTableModel.class, String.class, String.class};
 
     GenericDescription<?> entity;
