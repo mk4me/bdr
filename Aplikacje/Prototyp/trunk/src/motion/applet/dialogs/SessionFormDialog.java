@@ -13,7 +13,6 @@ import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
-import motion.database.SessionPrivileges;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
@@ -22,7 +21,6 @@ import motion.database.model.Performer;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.SessionStaticAttributes;
-import motion.database.model.UserPrivileges;
 import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
@@ -73,9 +71,7 @@ public class SessionFormDialog extends FormDialog {
 								setDefinedAttributes(sessionID);
 								
 								//privileges
-								SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionID, privilegesPanel.getResult() );
-								sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
-								sessionPrivileges.performDatabaseUpdate();
+								setPrivileges(sessionID);
 								
 								//performers
 								int[] selectedPerformers = performerAssignmentPanel.getSelectedRecords();
@@ -117,30 +113,39 @@ public class SessionFormDialog extends FormDialog {
 		fillSessionPerformers(session);
 		privilegesPanel.fillPrivilegesListPanel(session.getId());
 
+		
+		fillSessionGroups(session);
+	}
+	
+	protected void makeEditButton() {
+		super.makeEditButton();
 		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (SessionFormDialog.this.validateResult() == true) {
-					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-						@Override
-						protected Void doInBackground() throws InterruptedException {
-								//privileges
-								try {
-									SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(session.getId(), privilegesPanel.getResult() );
-									sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
-									sessionPrivileges.performDatabaseUpdate();
-								} catch (Exception e1) {
-									ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-									exceptionDialog.setVisible(true);
-								}
-								return null;
-						}
-					};
-					worker.execute();
+					setPrivileges(recordId);
 				}
 			}
 		});
-		fillSessionGroups(session);
+	}
+	
+	private void setPrivileges(final int sessionId) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+					//privileges
+					try {
+						SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionId, privilegesPanel.getResult());
+						sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
+						sessionPrivileges.performDatabaseUpdate();
+					} catch (Exception e1) {
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						exceptionDialog.setVisible(true);
+					}
+					return null;
+			}
+		};
+		worker.execute();
 	}
 	
 	private void fillSessionPerformers(final Session session) {

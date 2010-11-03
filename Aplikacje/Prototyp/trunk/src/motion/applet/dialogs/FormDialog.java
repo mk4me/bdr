@@ -33,7 +33,6 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.ws.SessionPrivilegesSetter;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
@@ -62,7 +61,7 @@ public class FormDialog extends BasicDialog {
 	
 	protected ArrayList<FormField> formFields = new ArrayList<FormField>();
 	
-	private int recordId = -1;
+	protected int recordId = -1;
 	
 	public FormDialog(String title, String message) {
 		super(title, message);
@@ -281,7 +280,7 @@ public class FormDialog extends BasicDialog {
 		}
 	}
 	
-	private void makeEditButton() {
+	protected void makeEditButton() {
 		createButton.setText(EDIT);
 		ActionListener[] actionListeners = createButton.getActionListeners();
 		for (int i = 0; i < actionListeners.length; i++) {
