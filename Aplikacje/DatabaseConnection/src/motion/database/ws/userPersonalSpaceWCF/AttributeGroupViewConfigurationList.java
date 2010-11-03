@@ -35,9 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  *                               &lt;complexType>
  *                                 &lt;complexContent>
  *                                   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                                     &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                                     &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                                     &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                                   &lt;/restriction>
  *                                 &lt;/complexContent>
  *                               &lt;/complexType>
@@ -48,6 +47,9 @@ import javax.xml.bind.annotation.XmlType;
  *                     &lt;/complexType>
  *                   &lt;/element>
  *                 &lt;/sequence>
+ *                 &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -119,9 +121,8 @@ public class AttributeGroupViewConfigurationList {
      *                     &lt;complexType>
      *                       &lt;complexContent>
      *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-     *                           &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *                           &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *                           &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *                           &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *                           &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
      *                         &lt;/restriction>
      *                       &lt;/complexContent>
      *                     &lt;/complexType>
@@ -132,6 +133,9 @@ public class AttributeGroupViewConfigurationList {
      *           &lt;/complexType>
      *         &lt;/element>
      *       &lt;/sequence>
+     *       &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -147,6 +151,12 @@ public class AttributeGroupViewConfigurationList {
 
         @XmlElement(name = "AttributeViewList", required = true)
         protected AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList attributeViewList;
+        @XmlAttribute(name = "AttributeGroupName")
+        protected String attributeGroupName;
+        @XmlAttribute(name = "DescribedEntity")
+        protected String describedEntity;
+        @XmlAttribute(name = "Show")
+        protected Integer show;
 
         /**
          * Gets the value of the attributeViewList property.
@@ -172,6 +182,78 @@ public class AttributeGroupViewConfigurationList {
             this.attributeViewList = value;
         }
 
+        /**
+         * Gets the value of the attributeGroupName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getAttributeGroupName() {
+            return attributeGroupName;
+        }
+
+        /**
+         * Sets the value of the attributeGroupName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setAttributeGroupName(String value) {
+            this.attributeGroupName = value;
+        }
+
+        /**
+         * Gets the value of the describedEntity property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getDescribedEntity() {
+            return describedEntity;
+        }
+
+        /**
+         * Sets the value of the describedEntity property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setDescribedEntity(String value) {
+            this.describedEntity = value;
+        }
+
+        /**
+         * Gets the value of the show property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Integer }
+         *     
+         */
+        public Integer getShow() {
+            return show;
+        }
+
+        /**
+         * Sets the value of the show property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Integer }
+         *     
+         */
+        public void setShow(Integer value) {
+            this.show = value;
+        }
+
 
         /**
          * <p>Java class for anonymous complex type.
@@ -187,9 +269,8 @@ public class AttributeGroupViewConfigurationList {
          *           &lt;complexType>
          *             &lt;complexContent>
          *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-         *                 &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
-         *                 &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
-         *                 &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}string" />
+         *                 &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
+         *                 &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
          *               &lt;/restriction>
          *             &lt;/complexContent>
          *           &lt;/complexType>
@@ -250,9 +331,8 @@ public class AttributeGroupViewConfigurationList {
              * &lt;complexType>
              *   &lt;complexContent>
              *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
-             *       &lt;attribute name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string" />
-             *       &lt;attribute name="DescribedEntity" type="{http://www.w3.org/2001/XMLSchema}string" />
-             *       &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}string" />
+             *       &lt;attribute name="AttributeName" type="{http://www.w3.org/2001/XMLSchema}string" />
+             *       &lt;attribute name="Show" type="{http://www.w3.org/2001/XMLSchema}int" />
              *     &lt;/restriction>
              *   &lt;/complexContent>
              * &lt;/complexType>
@@ -264,59 +344,33 @@ public class AttributeGroupViewConfigurationList {
             @XmlType(name = "")
             public static class AttributeView {
 
-                @XmlAttribute(name = "AttributeGroupName")
-                protected String attributeGroupName;
-                @XmlAttribute(name = "DescribedEntity")
-                protected String describedEntity;
+                @XmlAttribute(name = "AttributeName")
+                protected String attributeName;
                 @XmlAttribute(name = "Show")
-                protected String show;
+                protected Integer show;
 
                 /**
-                 * Gets the value of the attributeGroupName property.
+                 * Gets the value of the attributeName property.
                  * 
                  * @return
                  *     possible object is
                  *     {@link String }
                  *     
                  */
-                public String getAttributeGroupName() {
-                    return attributeGroupName;
+                public String getAttributeName() {
+                    return attributeName;
                 }
 
                 /**
-                 * Sets the value of the attributeGroupName property.
+                 * Sets the value of the attributeName property.
                  * 
                  * @param value
                  *     allowed object is
                  *     {@link String }
                  *     
                  */
-                public void setAttributeGroupName(String value) {
-                    this.attributeGroupName = value;
-                }
-
-                /**
-                 * Gets the value of the describedEntity property.
-                 * 
-                 * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
-                 */
-                public String getDescribedEntity() {
-                    return describedEntity;
-                }
-
-                /**
-                 * Sets the value of the describedEntity property.
-                 * 
-                 * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
-                 */
-                public void setDescribedEntity(String value) {
-                    this.describedEntity = value;
+                public void setAttributeName(String value) {
+                    this.attributeName = value;
                 }
 
                 /**
@@ -324,10 +378,10 @@ public class AttributeGroupViewConfigurationList {
                  * 
                  * @return
                  *     possible object is
-                 *     {@link String }
+                 *     {@link Integer }
                  *     
                  */
-                public String getShow() {
+                public Integer getShow() {
                     return show;
                 }
 
@@ -336,10 +390,10 @@ public class AttributeGroupViewConfigurationList {
                  * 
                  * @param value
                  *     allowed object is
-                 *     {@link String }
+                 *     {@link Integer }
                  *     
                  */
-                public void setShow(String value) {
+                public void setShow(Integer value) {
                     this.show = value;
                 }
 

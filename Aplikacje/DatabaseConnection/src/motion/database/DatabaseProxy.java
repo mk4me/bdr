@@ -227,5 +227,7 @@ public interface DatabaseProxy {
 
 	void saveAttributeViewConfiguration() throws Exception;
 
+	void readAttributeViewConfiguration() throws Exception;
+
 
 }

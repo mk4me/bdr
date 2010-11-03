@@ -1529,7 +1529,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
-/*	@Override
+	@Override
 	public void readAttributeViewConfiguration() throws Exception
 	{
 		try {
@@ -1538,12 +1538,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		
 			for ( AttributeGroupViewConfiguration v : r.getAttributeGroupViewConfigurationList().getAttributeGroupViewConfiguration() )
 			{
+				
 				for ( AttributeView s : v.getAttributeViewList().getAttributeView())
 				{
-					EntityKind kind = Enum.valueOf( EntityKind.class, s.getDescribedEntity() );
-					kind.getAllAttributeGroups().get( s.getAttributeGroupName() );
+					EntityKind kind = Enum.valueOf( EntityKind.class, v.getDescribedEntity() );
+					kind.getAllAttributeGroups().get( s.getAttributeName() ).isVisible = (s.getShow()==1);
 				}
-					
 			}
 			
 		} catch (IUserPersonalSpaceWSRemoveBasketUPSExceptionFaultFaultMessage e) {
@@ -1554,7 +1554,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-*/
+
 	
 	@Override
 	public void saveAttributeViewConfiguration() throws Exception
