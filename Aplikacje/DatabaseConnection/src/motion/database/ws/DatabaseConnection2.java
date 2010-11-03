@@ -1565,7 +1565,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ArrayOfAttributeGroupViewSetting groupView = new ArrayOfAttributeGroupViewSetting();
 			ArrayOfAttributeViewSetting attributeView = new ArrayOfAttributeViewSetting();
 		
-			for(EntityKind kind : EntityKind.values())
+			for(EntityKind kind : EntityKind.kindsWithGenericAttributes)
 				for (EntityAttributeGroup group: kind.getAllAttributeGroups().values())
 					if (group.name != EntityKind.STATIC_ATTRIBUTE_GROUP)
 					{
