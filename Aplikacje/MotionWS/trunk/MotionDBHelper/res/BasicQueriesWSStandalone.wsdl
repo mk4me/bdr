@@ -58,7 +58,9 @@
 											<xsd:enumeration value="performer"/>
 											<xsd:enumeration value="session"/>
 											<xsd:enumeration value="trial"/>
-											<xsd:enumeration value="segment"/>
+											<xsd:enumeration value="performer_conf"/>
+											<xsd:enumeration value="measurement_conf"/>
+											<xsd:enumeration value="measurement"/>
 											<xsd:enumeration value="file"/>
 										</xsd:restriction>
 									</xsd:simpleType>
@@ -127,6 +129,8 @@
 						<xsd:element name="SessionLabel" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
+					<!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="TrialDetailsWithAttributes">
@@ -366,6 +370,7 @@
 									<xsd:element name="AttributeEnum" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="AttributeGroupName" type="xsd:string"/>
 									<xsd:element name="Unit" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="EnumValues" minOccurs="0" maxOccurs="1">
 										<xsd:complexType>
 											<xsd:sequence>
@@ -387,6 +392,7 @@
 								<xsd:sequence>
 									<xsd:element name="AttributeGroupName" type="xsd:string"/>
 									<xsd:element name="DescribedEntity" type="xsd:string"/>
+									<xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>

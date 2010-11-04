@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+  <xsd:element name="SessionContent">
+    <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="SessionID" type="xsd:int" />
+              <xsd:element name="UserID" type="xsd:int" />
+              <xsd:element name="LabID" type="xsd:int" />
+              <xsd:element name="MotionKind" type="xsd:string" />
+              <xsd:element name="SessionDate" type="xsd:dateTime" />
+              <xsd:element name="SessionDescription" type="xsd:string" />
+              <xsd:element name="SessionLabel" type="xsd:string" />
+              <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+              <!-- Session Files -->
+                <!-- File attributes -->
+              <!-- Session Trials -->
+                <!-- Attributes -->
+              <!-- Trial Attributes -->
+              <!-- Trial Files -->
+
+              <!-- Trial files -->
+                    <!-- File attributes -->
+            </xsd:sequence>
+    <!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

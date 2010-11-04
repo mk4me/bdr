@@ -10,6 +10,8 @@
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>
+          <xsd:attribute name="IsPublic" type="xsd:int" />
+          <xsd:attribute name="IsPublicWritable" type="xsd:int" />
         </xsd:complexType>
       </xsd:element>
 </xsd:schema>

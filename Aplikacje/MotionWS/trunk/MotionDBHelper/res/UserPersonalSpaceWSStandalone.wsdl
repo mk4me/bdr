@@ -57,7 +57,9 @@
 											<xsd:enumeration value="performer"/>
 											<xsd:enumeration value="session"/>
 											<xsd:enumeration value="trial"/>
-											<xsd:enumeration value="segment"/>
+											<xsd:enumeration value="performer_conf"/>
+											<xsd:enumeration value="measurement_conf"/>
+											<xsd:enumeration value="measurement"/>
 											<xsd:enumeration value="file"/>
 										</xsd:restriction>
 									</xsd:simpleType>
@@ -99,6 +101,8 @@
 						<xsd:element name="SessionLabel" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
+					<!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="BasketSessionWithAttributesList">
@@ -138,15 +142,17 @@
 											<xsd:sequence>
 												<xsd:element name="AttributeView" maxOccurs="unbounded">
 													<xsd:complexType>
-														<xsd:attribute name="AttributeGroupName" type="xsd:string"/>
-														<xsd:attribute name="DescribedEntity" type="xsd:string"/>
-														<xsd:attribute name="Show" type="xsd:string"/>
+														<xsd:attribute name="AttributeName" type="xsd:string"/>
+														<xsd:attribute name="Show" type="xsd:int"/>
 													</xsd:complexType>
 												</xsd:element>
 											</xsd:sequence>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
+								<xsd:attribute name="AttributeGroupName" type="xsd:string"/>
+								<xsd:attribute name="DescribedEntity" type="xsd:string"/>
+								<xsd:attribute name="Show" type="xsd:int"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>

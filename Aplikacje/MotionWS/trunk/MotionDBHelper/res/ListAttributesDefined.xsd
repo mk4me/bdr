@@ -11,6 +11,7 @@
               <xsd:element name="AttributeEnum" type="xsd:int" minOccurs="0" maxOccurs="1" />
               <xsd:element name="AttributeGroupName" type="xsd:string" />
               <xsd:element name="Unit" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1" />
               <xsd:element name="EnumValues" minOccurs="0" maxOccurs="1">
                 <xsd:complexType>
                   <xsd:sequence>

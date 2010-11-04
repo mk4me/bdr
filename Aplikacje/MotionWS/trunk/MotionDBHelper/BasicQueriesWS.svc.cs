@@ -1509,6 +1509,9 @@ namespace MotionDBWebServices
         public XmlElement ListAttributesDefined(string attributeGroupName, string entityKind)
         {
             XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
             try
             {
                 OpenConnection();
@@ -1516,6 +1519,12 @@ namespace MotionDBWebServices
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "list_attributes_defined_with_enums";
+
+                SqlParameter usernamePar;
+                usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+
                 cmd.Parameters.Add("@att_group", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@entity_kind", SqlDbType.VarChar, 20);
                 cmd.Parameters["@att_group"].Value = attributeGroupName;
@@ -1546,6 +1555,9 @@ namespace MotionDBWebServices
         public XmlElement ListAttributeGroupsDefined(string entityKind)
         {
             XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
             try
             {
                 OpenConnection();
@@ -1553,6 +1565,12 @@ namespace MotionDBWebServices
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "list_attribute_groups_defined";
+
+                SqlParameter usernamePar;
+                usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+
                 cmd.Parameters.Add("@entity_kind", SqlDbType.VarChar, 20);
                 cmd.Parameters["@entity_kind"].Value = entityKind;
                 XmlReader dr = cmd.ExecuteXmlReader();

@@ -8,6 +8,7 @@
             <xsd:sequence>
               <xsd:element name="AttributeGroupName" type="xsd:string" />
               <xsd:element name="DescribedEntity" type="xsd:string" />
+              <xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1" />
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>

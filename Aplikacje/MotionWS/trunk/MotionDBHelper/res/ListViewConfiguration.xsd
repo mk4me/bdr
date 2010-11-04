@@ -11,15 +11,17 @@
                   <xsd:sequence>
                     <xsd:element name="AttributeView" maxOccurs="unbounded">
                       <xsd:complexType>
-                        <xsd:attribute name="AttributeGroupName" type="xsd:string" />
-                        <xsd:attribute name="DescribedEntity" type="xsd:string" />
-                        <xsd:attribute name="Show" type="xsd:string" />
+                        <xsd:attribute name="AttributeName" type="xsd:string" />
+                        <xsd:attribute name="Show" type="xsd:int" />
                       </xsd:complexType>
                     </xsd:element>
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
+            <xsd:attribute name="AttributeGroupName" type="xsd:string" />
+            <xsd:attribute name="DescribedEntity" type="xsd:string" />
+            <xsd:attribute name="Show" type="xsd:int" />
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>

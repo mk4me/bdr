@@ -13,7 +13,9 @@
                   <xsd:enumeration value="performer" />
                   <xsd:enumeration value="session" />
                   <xsd:enumeration value="trial" />
-                  <xsd:enumeration value="segment" />
+                  <xsd:enumeration value="performer_conf" />
+                  <xsd:enumeration value="measurement_conf" />
+                  <xsd:enumeration value="measurement" />
                   <xsd:enumeration value="file" />
                 </xsd:restriction>
               </xsd:simpleType>
