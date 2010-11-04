@@ -74,15 +74,15 @@ public class ConfigurationTree {
 	
 	public void getTreeContents() {
 		root.removeAllChildren();
-		for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) {
+		for (EntityAttributeGroup g : entityKind.getGroupedAttributes()) {	//entityKind.getGroupedAttributeCopies
 			if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 				for (EntityAttribute a : g) {
-					root.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
+					root.add(new DefaultMutableTreeNode(new AttributeCheckBoxNode(a.name, a.isVisible, a)));
 				}
 			} else {
-				DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(new CheckBoxNode(g.name, true));
+				DefaultMutableTreeNode groupNode = new DefaultMutableTreeNode(new AttributeGroupCheckBoxNode(g.name, g.isVisible, g));
 				for (EntityAttribute a : g) {
-					groupNode.add(new DefaultMutableTreeNode(new CheckBoxNode(a.name, true)));
+					groupNode.add(new DefaultMutableTreeNode(new AttributeCheckBoxNode(a.name, a.isVisible, a)));
 				}
 				root.add(groupNode);
 			}

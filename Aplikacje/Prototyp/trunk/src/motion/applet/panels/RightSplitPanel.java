@@ -15,8 +15,10 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.table.TableModel;
 
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.MeasurementConfigurationFormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
@@ -31,6 +33,7 @@ import motion.applet.mouse.TrialMouseAdapter;
 import motion.applet.tables.AttributeTableModel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityKind;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.Performer;
@@ -181,7 +184,26 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			AppletToolBar.setLabId(comboBox.getSelectedIndex());
 			refreshTablesForLab();
 		} else if (actionEvent.getSource() instanceof JButton) {	// The source is the Apply selection button.
-			 refreshAllTables();
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws InterruptedException {
+					try {
+						WebServiceInstance.getDatabaseConnection().saveAttributeViewConfiguration();
+					} catch (Exception e1) {
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						exceptionDialog.setVisible(true);
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void done() {
+				}
+			};
+			worker.execute();
+			
+			refreshAllTables();
 		}
 	}
 	
