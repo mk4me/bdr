@@ -465,7 +465,7 @@ public enum EntityKind {
 		return attributes;
 	}
 	
-	public ArrayList<EntityAttributeGroup> getGroupedAttributeCopies() {
+	public ArrayList<EntityAttributeGroup> getGroupedAttributes() {
 		ArrayList<EntityAttributeGroup> groups = new ArrayList<EntityAttributeGroup>();
 		try {
 			Iterator i = getAllAttributeGroups().entrySet().iterator();
@@ -475,6 +475,12 @@ public enum EntityKind {
 			}
 		} catch (Exception e) {
 		}
+		
+		return groups;
+	}
+	
+	public ArrayList<EntityAttributeGroup> getGroupedAttributeCopies() {
+		ArrayList<EntityAttributeGroup> groups = getGroupedAttributes();
 		
 		return new ArrayList<EntityAttributeGroup>(groups);
 	}
