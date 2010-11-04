@@ -155,6 +155,17 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListEnumValues(string attributeName, string entityKind);
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListSessionContents(int pageSize, int pageNo);
+
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetSessionContent(int sessionID);
+
+
     }
 
 }

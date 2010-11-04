@@ -45,6 +45,41 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="SessionContent">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionID" type="xsd:int"/>
+						<xsd:element name="UserID" type="xsd:int"/>
+						<xsd:element name="LabID" type="xsd:int"/>
+						<xsd:element name="MotionKind" type="xsd:string"/>
+						<xsd:element name="SessionDate" type="xsd:dateTime"/>
+						<xsd:element name="SessionDescription" type="xsd:string"/>
+						<xsd:element name="SessionLabel" type="xsd:string"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+						<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+						<xsd:element name="TrialContentList">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TrialID" type="xsd:int"/>
+									<xsd:element name="SessionID" type="xsd:int"/>
+									<xsd:element name="TrialDescription" type="xsd:string"/>
+									<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+									<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SessionContentList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SessionContent" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="Attributes">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -140,6 +175,7 @@
 						<xsd:element name="SessionID" type="xsd:int"/>
 						<xsd:element name="TrialDescription" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+						<!-- <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" /> -->
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -453,6 +489,47 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:EnumValueList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionContents">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="pageSize" type="xsd:int"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="pageNo" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionContentsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionContentsResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionContentList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetSessionContent">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetSessionContentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="GetSessionContentResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionContent"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -1182,6 +1259,24 @@
 	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionContents_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionContents"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionContents_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionContentsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionContents_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetSessionContent_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetSessionContent"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetSessionContent_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetSessionContentResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GenericQueryXML"/>
 	</wsdl:message>
@@ -1486,6 +1581,16 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListSessionContents">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" message="tns:IBasicQueriesWS_ListSessionContents_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContentsResponse" message="tns:IBasicQueriesWS_ListSessionContents_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContentsQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionContents_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionContent">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContent" message="tns:IBasicQueriesWS_GetSessionContent_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentResponse" message="tns:IBasicQueriesWS_GetSessionContent_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1676,6 +1781,30 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListEnumValues">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionContents">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionContent">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContent" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

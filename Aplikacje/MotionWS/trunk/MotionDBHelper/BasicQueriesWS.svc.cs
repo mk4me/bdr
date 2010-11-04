@@ -265,6 +265,49 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement GetSessionContent(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            bool notFound = false;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_session_content_xml";
+                SqlParameter userLogin = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                SqlParameter resId = cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                userLogin.Value = userName;
+                resId.Value = id;
+
+
+                XmlReader dr = cmd.ExecuteXmlReader();
+
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                else notFound = true;
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (notFound)
+            {
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any measurement");
+                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMeasurementByIdXML")));
+            }
+            return xd.DocumentElement;
+        }
+
+
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement GetTrialByIdXML(int id)  // UWAGA - docelowo nalezaloby zabronic pobrania danych Trial-a z niedostepnej danemu uzytkownikowi sesji!
         {
             XmlDocument xd = new XmlDocument();
@@ -798,6 +841,45 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement ListSessionContents(int pageSize, int pageNo)
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_session_contents_xml";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                SqlParameter pageSizePar = cmd.Parameters.Add("@page_size", SqlDbType.Int);
+                SqlParameter pageNoPar = cmd.Parameters.Add("@page_no", SqlDbType.Int);
+                pageSizePar.Value = pageSize;
+                pageNoPar.Value = pageNo;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("SessionContentList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+        }
 
         
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
