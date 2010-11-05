@@ -73,6 +73,43 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @param pageNo
+     * @param pageSize
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ListSessionContentsResponse.ListSessionContentsResult
+     * @throws IBasicQueriesWSListSessionContentsQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ListSessionContents", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents")
+    @WebResult(name = "ListSessionContentsResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ListSessionContents", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionContents")
+    @ResponseWrapper(localName = "ListSessionContentsResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListSessionContentsResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ListSessionContentsResponse.ListSessionContentsResult listSessionContents(
+        @WebParam(name = "pageSize", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int pageSize,
+        @WebParam(name = "pageNo", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int pageNo)
+        throws IBasicQueriesWSListSessionContentsQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @param sessionID
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.GetSessionContentResponse.GetSessionContentResult
+     * @throws IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "GetSessionContent", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContent")
+    @WebResult(name = "GetSessionContentResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "GetSessionContent", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.GetSessionContent")
+    @ResponseWrapper(localName = "GetSessionContentResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.GetSessionContentResponse")
+    public motion.database.ws.basicQueriesServiceWCF.GetSessionContentResponse.GetSessionContentResult getSessionContent(
+        @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int sessionID)
+        throws IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param entitiesToInclude
      * @param filter
      * @return

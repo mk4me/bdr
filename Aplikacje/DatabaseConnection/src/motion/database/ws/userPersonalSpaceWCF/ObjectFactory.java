@@ -64,139 +64,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateBasket }
+     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView }
      * 
      */
-    public CreateBasket createCreateBasket() {
-        return new CreateBasket();
+    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView createAttributeGroupViewConfigurationListAttributeGroupViewConfigurationAttributeViewListAttributeView() {
+        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView();
     }
 
     /**
-     * Create an instance of {@link ListStoredFiltersResponse.ListStoredFiltersResult }
+     * Create an instance of {@link FileWithAttributesList.FileDetailsWithAttributes }
      * 
      */
-    public ListStoredFiltersResponse.ListStoredFiltersResult createListStoredFiltersResponseListStoredFiltersResult() {
-        return new ListStoredFiltersResponse.ListStoredFiltersResult();
-    }
-
-    /**
-     * Create an instance of {@link SessionDetailsWithAttributes }
-     * 
-     */
-    public SessionDetailsWithAttributes createSessionDetailsWithAttributes() {
-        return new SessionDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link CreateBasketResponse }
-     * 
-     */
-    public CreateBasketResponse createCreateBasketResponse() {
-        return new CreateBasketResponse();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfAttributeGroupViewSetting }
-     * 
-     */
-    public ArrayOfAttributeGroupViewSetting createArrayOfAttributeGroupViewSetting() {
-        return new ArrayOfAttributeGroupViewSetting();
-    }
-
-    /**
-     * Create an instance of {@link UpdateStoredFiltersResponse }
-     * 
-     */
-    public UpdateStoredFiltersResponse createUpdateStoredFiltersResponse() {
-        return new UpdateStoredFiltersResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult }
-     * 
-     */
-    public ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult createListBasketSessionsWithAttributesXMLResponseListBasketSessionsWithAttributesXMLResult() {
-        return new ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link RemoveBasket }
-     * 
-     */
-    public RemoveBasket createRemoveBasket() {
-        return new RemoveBasket();
-    }
-
-    /**
-     * Create an instance of {@link ListStoredFilters }
-     * 
-     */
-    public ListStoredFilters createListStoredFilters() {
-        return new ListStoredFilters();
-    }
-
-    /**
-     * Create an instance of {@link Attributes.Attribute }
-     * 
-     */
-    public Attributes.Attribute createAttributesAttribute() {
-        return new Attributes.Attribute();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration }
-     * 
-     */
-    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration createAttributeGroupViewConfigurationListAttributeGroupViewConfiguration() {
-        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketTrialsWithAttributesXML }
-     * 
-     */
-    public ListBasketTrialsWithAttributesXML createListBasketTrialsWithAttributesXML() {
-        return new ListBasketTrialsWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link BasketTrialWithAttributesList }
-     * 
-     */
-    public BasketTrialWithAttributesList createBasketTrialWithAttributesList() {
-        return new BasketTrialWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link UPSException }
-     * 
-     */
-    public UPSException createUPSException() {
-        return new UPSException();
-    }
-
-    /**
-     * Create an instance of {@link RemoveEntityFromBasketResponse }
-     * 
-     */
-    public RemoveEntityFromBasketResponse createRemoveEntityFromBasketResponse() {
-        return new RemoveEntityFromBasketResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList }
-     * 
-     */
-    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList createAttributeGroupViewConfigurationListAttributeGroupViewConfigurationAttributeViewList() {
-        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult }
-     * 
-     */
-    public ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult createListBasketPerformersWithAttributesXMLResponseListBasketPerformersWithAttributesXMLResult() {
-        return new ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult();
+    public FileWithAttributesList.FileDetailsWithAttributes createFileWithAttributesListFileDetailsWithAttributes() {
+        return new FileWithAttributesList.FileDetailsWithAttributes();
     }
 
     /**
@@ -208,179 +88,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributeViewSetting }
+     * Create an instance of {@link ListStoredFiltersResponse.ListStoredFiltersResult }
      * 
      */
-    public AttributeViewSetting createAttributeViewSetting() {
-        return new AttributeViewSetting();
-    }
-
-    /**
-     * Create an instance of {@link UpdateViewConfiguration }
-     * 
-     */
-    public UpdateViewConfiguration createUpdateViewConfiguration() {
-        return new UpdateViewConfiguration();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketPerformersWithAttributesXML }
-     * 
-     */
-    public ListBasketPerformersWithAttributesXML createListBasketPerformersWithAttributesXML() {
-        return new ListBasketPerformersWithAttributesXML();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketPerformersWithAttributesXMLResponse }
-     * 
-     */
-    public ListBasketPerformersWithAttributesXMLResponse createListBasketPerformersWithAttributesXMLResponse() {
-        return new ListBasketPerformersWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupViewConfigurationList }
-     * 
-     */
-    public AttributeGroupViewConfigurationList createAttributeGroupViewConfigurationList() {
-        return new AttributeGroupViewConfigurationList();
-    }
-
-    /**
-     * Create an instance of {@link RemoveEntityFromBasket }
-     * 
-     */
-    public RemoveEntityFromBasket createRemoveEntityFromBasket() {
-        return new RemoveEntityFromBasket();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfAttributeViewSetting }
-     * 
-     */
-    public ArrayOfAttributeViewSetting createArrayOfAttributeViewSetting() {
-        return new ArrayOfAttributeViewSetting();
-    }
-
-    /**
-     * Create an instance of {@link BasketDefinitionList.BasketDefinition }
-     * 
-     */
-    public BasketDefinitionList.BasketDefinition createBasketDefinitionListBasketDefinition() {
-        return new BasketDefinitionList.BasketDefinition();
-    }
-
-    /**
-     * Create an instance of {@link ListUserBasketsResponse.ListUserBasketsResult }
-     * 
-     */
-    public ListUserBasketsResponse.ListUserBasketsResult createListUserBasketsResponseListUserBasketsResult() {
-        return new ListUserBasketsResponse.ListUserBasketsResult();
-    }
-
-    /**
-     * Create an instance of {@link BasketSessionWithAttributesList }
-     * 
-     */
-    public BasketSessionWithAttributesList createBasketSessionWithAttributesList() {
-        return new BasketSessionWithAttributesList();
-    }
-
-    /**
-     * Create an instance of {@link AddEntityToBasketResponse }
-     * 
-     */
-    public AddEntityToBasketResponse createAddEntityToBasketResponse() {
-        return new AddEntityToBasketResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListViewConfiguration }
-     * 
-     */
-    public ListViewConfiguration createListViewConfiguration() {
-        return new ListViewConfiguration();
-    }
-
-    /**
-     * Create an instance of {@link QueryException }
-     * 
-     */
-    public QueryException createQueryException() {
-        return new QueryException();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse }
-     * 
-     */
-    public ListBasketSessionsWithAttributesXMLResponse createListBasketSessionsWithAttributesXMLResponse() {
-        return new ListBasketSessionsWithAttributesXMLResponse();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupViewSetting }
-     * 
-     */
-    public AttributeGroupViewSetting createAttributeGroupViewSetting() {
-        return new AttributeGroupViewSetting();
-    }
-
-    /**
-     * Create an instance of {@link ListUserBasketsResponse }
-     * 
-     */
-    public ListUserBasketsResponse createListUserBasketsResponse() {
-        return new ListUserBasketsResponse();
-    }
-
-    /**
-     * Create an instance of {@link TrialDetailsWithAttributes }
-     * 
-     */
-    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
-        return new TrialDetailsWithAttributes();
-    }
-
-    /**
-     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView }
-     * 
-     */
-    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView createAttributeGroupViewConfigurationListAttributeGroupViewConfigurationAttributeViewListAttributeView() {
-        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList.AttributeView();
-    }
-
-    /**
-     * Create an instance of {@link ListViewConfigurationResponse }
-     * 
-     */
-    public ListViewConfigurationResponse createListViewConfigurationResponse() {
-        return new ListViewConfigurationResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult }
-     * 
-     */
-    public ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult createListBasketTrialsWithAttributesXMLResponseListBasketTrialsWithAttributesXMLResult() {
-        return new ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfFilterPredicate }
-     * 
-     */
-    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
-        return new ArrayOfFilterPredicate();
-    }
-
-    /**
-     * Create an instance of {@link PerformerDetailsWithAttributes }
-     * 
-     */
-    public PerformerDetailsWithAttributes createPerformerDetailsWithAttributes() {
-        return new PerformerDetailsWithAttributes();
+    public ListStoredFiltersResponse.ListStoredFiltersResult createListStoredFiltersResponseListStoredFiltersResult() {
+        return new ListStoredFiltersResponse.ListStoredFiltersResult();
     }
 
     /**
@@ -392,14 +104,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FilterList.FilterPredicate }
-     * 
-     */
-    public FilterList.FilterPredicate createFilterListFilterPredicate() {
-        return new FilterList.FilterPredicate();
-    }
-
-    /**
      * Create an instance of {@link UpdateStoredFilters }
      * 
      */
@@ -408,11 +112,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Attributes }
+     * Create an instance of {@link ListBasketPerformersWithAttributesXMLResponse }
      * 
      */
-    public Attributes createAttributes() {
-        return new Attributes();
+    public ListBasketPerformersWithAttributesXMLResponse createListBasketPerformersWithAttributesXMLResponse() {
+        return new ListBasketPerformersWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link FileWithAttributesList }
+     * 
+     */
+    public FileWithAttributesList createFileWithAttributesList() {
+        return new FileWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link AddEntityToBasket }
+     * 
+     */
+    public AddEntityToBasket createAddEntityToBasket() {
+        return new AddEntityToBasket();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult }
+     * 
+     */
+    public ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult createListBasketPerformersWithAttributesXMLResponseListBasketPerformersWithAttributesXMLResult() {
+        return new ListBasketPerformersWithAttributesXMLResponse.ListBasketPerformersWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link AttributeGroupViewConfigurationList }
+     * 
+     */
+    public AttributeGroupViewConfigurationList createAttributeGroupViewConfigurationList() {
+        return new AttributeGroupViewConfigurationList();
+    }
+
+    /**
+     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList }
+     * 
+     */
+    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList createAttributeGroupViewConfigurationListAttributeGroupViewConfigurationAttributeViewList() {
+        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration.AttributeViewList();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfAttributeViewSetting }
+     * 
+     */
+    public ArrayOfAttributeViewSetting createArrayOfAttributeViewSetting() {
+        return new ArrayOfAttributeViewSetting();
+    }
+
+    /**
+     * Create an instance of {@link UpdateViewConfiguration }
+     * 
+     */
+    public UpdateViewConfiguration createUpdateViewConfiguration() {
+        return new UpdateViewConfiguration();
+    }
+
+    /**
+     * Create an instance of {@link ListUserBaskets }
+     * 
+     */
+    public ListUserBaskets createListUserBaskets() {
+        return new ListUserBaskets();
+    }
+
+    /**
+     * Create an instance of {@link UpdateStoredFiltersResponse }
+     * 
+     */
+    public UpdateStoredFiltersResponse createUpdateStoredFiltersResponse() {
+        return new UpdateStoredFiltersResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListUserBasketsResponse.ListUserBasketsResult }
+     * 
+     */
+    public ListUserBasketsResponse.ListUserBasketsResult createListUserBasketsResponseListUserBasketsResult() {
+        return new ListUserBasketsResponse.ListUserBasketsResult();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult }
+     * 
+     */
+    public ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult createListBasketSessionsWithAttributesXMLResponseListBasketSessionsWithAttributesXMLResult() {
+        return new ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult();
     }
 
     /**
@@ -432,35 +224,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FilterList }
+     * Create an instance of {@link Attributes.Attribute }
      * 
      */
-    public FilterList createFilterList() {
-        return new FilterList();
+    public Attributes.Attribute createAttributesAttribute() {
+        return new Attributes.Attribute();
     }
 
     /**
-     * Create an instance of {@link ListBasketSessionsWithAttributesXML }
+     * Create an instance of {@link AddEntityToBasketResponse }
      * 
      */
-    public ListBasketSessionsWithAttributesXML createListBasketSessionsWithAttributesXML() {
-        return new ListBasketSessionsWithAttributesXML();
+    public AddEntityToBasketResponse createAddEntityToBasketResponse() {
+        return new AddEntityToBasketResponse();
     }
 
     /**
-     * Create an instance of {@link AddEntityToBasket }
+     * Create an instance of {@link ListViewConfigurationResponse }
      * 
      */
-    public AddEntityToBasket createAddEntityToBasket() {
-        return new AddEntityToBasket();
-    }
-
-    /**
-     * Create an instance of {@link motion.database.ws.userPersonalSpaceWCF.FilterPredicate }
-     * 
-     */
-    public motion.database.ws.userPersonalSpaceWCF.FilterPredicate createFilterPredicate() {
-        return new motion.database.ws.userPersonalSpaceWCF.FilterPredicate();
+    public ListViewConfigurationResponse createListViewConfigurationResponse() {
+        return new ListViewConfigurationResponse();
     }
 
     /**
@@ -472,19 +256,139 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListUserBaskets }
+     * Create an instance of {@link motion.database.ws.userPersonalSpaceWCF.FilterPredicate }
      * 
      */
-    public ListUserBaskets createListUserBaskets() {
-        return new ListUserBaskets();
+    public motion.database.ws.userPersonalSpaceWCF.FilterPredicate createFilterPredicate() {
+        return new motion.database.ws.userPersonalSpaceWCF.FilterPredicate();
     }
 
     /**
-     * Create an instance of {@link ListBasketTrialsWithAttributesXMLResponse }
+     * Create an instance of {@link AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration }
      * 
      */
-    public ListBasketTrialsWithAttributesXMLResponse createListBasketTrialsWithAttributesXMLResponse() {
-        return new ListBasketTrialsWithAttributesXMLResponse();
+    public AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration createAttributeGroupViewConfigurationListAttributeGroupViewConfiguration() {
+        return new AttributeGroupViewConfigurationList.AttributeGroupViewConfiguration();
+    }
+
+    /**
+     * Create an instance of {@link FilterList.FilterPredicate }
+     * 
+     */
+    public FilterList.FilterPredicate createFilterListFilterPredicate() {
+        return new FilterList.FilterPredicate();
+    }
+
+    /**
+     * Create an instance of {@link ListViewConfiguration }
+     * 
+     */
+    public ListViewConfiguration createListViewConfiguration() {
+        return new ListViewConfiguration();
+    }
+
+    /**
+     * Create an instance of {@link BasketDefinitionList.BasketDefinition }
+     * 
+     */
+    public BasketDefinitionList.BasketDefinition createBasketDefinitionListBasketDefinition() {
+        return new BasketDefinitionList.BasketDefinition();
+    }
+
+    /**
+     * Create an instance of {@link FilterList }
+     * 
+     */
+    public FilterList createFilterList() {
+        return new FilterList();
+    }
+
+    /**
+     * Create an instance of {@link ListStoredFilters }
+     * 
+     */
+    public ListStoredFilters createListStoredFilters() {
+        return new ListStoredFilters();
+    }
+
+    /**
+     * Create an instance of {@link BasketTrialWithAttributesList }
+     * 
+     */
+    public BasketTrialWithAttributesList createBasketTrialWithAttributesList() {
+        return new BasketTrialWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketSessionsWithAttributesXMLResponse }
+     * 
+     */
+    public ListBasketSessionsWithAttributesXMLResponse createListBasketSessionsWithAttributesXMLResponse() {
+        return new ListBasketSessionsWithAttributesXMLResponse();
+    }
+
+    /**
+     * Create an instance of {@link ListUserBasketsResponse }
+     * 
+     */
+    public ListUserBasketsResponse createListUserBasketsResponse() {
+        return new ListUserBasketsResponse();
+    }
+
+    /**
+     * Create an instance of {@link BasketSessionWithAttributesList }
+     * 
+     */
+    public BasketSessionWithAttributesList createBasketSessionWithAttributesList() {
+        return new BasketSessionWithAttributesList();
+    }
+
+    /**
+     * Create an instance of {@link CreateBasket }
+     * 
+     */
+    public CreateBasket createCreateBasket() {
+        return new CreateBasket();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketTrialsWithAttributesXML }
+     * 
+     */
+    public ListBasketTrialsWithAttributesXML createListBasketTrialsWithAttributesXML() {
+        return new ListBasketTrialsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link QueryException }
+     * 
+     */
+    public QueryException createQueryException() {
+        return new QueryException();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketSessionsWithAttributesXML }
+     * 
+     */
+    public ListBasketSessionsWithAttributesXML createListBasketSessionsWithAttributesXML() {
+        return new ListBasketSessionsWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link TrialDetailsWithAttributes }
+     * 
+     */
+    public TrialDetailsWithAttributes createTrialDetailsWithAttributes() {
+        return new TrialDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link UPSException }
+     * 
+     */
+    public UPSException createUPSException() {
+        return new UPSException();
     }
 
     /**
@@ -493,6 +397,118 @@ public class ObjectFactory {
      */
     public BasketDefinitionList createBasketDefinitionList() {
         return new BasketDefinitionList();
+    }
+
+    /**
+     * Create an instance of {@link CreateBasketResponse }
+     * 
+     */
+    public CreateBasketResponse createCreateBasketResponse() {
+        return new CreateBasketResponse();
+    }
+
+    /**
+     * Create an instance of {@link AttributeGroupViewSetting }
+     * 
+     */
+    public AttributeGroupViewSetting createAttributeGroupViewSetting() {
+        return new AttributeGroupViewSetting();
+    }
+
+    /**
+     * Create an instance of {@link RemoveEntityFromBasketResponse }
+     * 
+     */
+    public RemoveEntityFromBasketResponse createRemoveEntityFromBasketResponse() {
+        return new RemoveEntityFromBasketResponse();
+    }
+
+    /**
+     * Create an instance of {@link Attributes }
+     * 
+     */
+    public Attributes createAttributes() {
+        return new Attributes();
+    }
+
+    /**
+     * Create an instance of {@link RemoveEntityFromBasket }
+     * 
+     */
+    public RemoveEntityFromBasket createRemoveEntityFromBasket() {
+        return new RemoveEntityFromBasket();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfFilterPredicate }
+     * 
+     */
+    public ArrayOfFilterPredicate createArrayOfFilterPredicate() {
+        return new ArrayOfFilterPredicate();
+    }
+
+    /**
+     * Create an instance of {@link AttributeViewSetting }
+     * 
+     */
+    public AttributeViewSetting createAttributeViewSetting() {
+        return new AttributeViewSetting();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfAttributeGroupViewSetting }
+     * 
+     */
+    public ArrayOfAttributeGroupViewSetting createArrayOfAttributeGroupViewSetting() {
+        return new ArrayOfAttributeGroupViewSetting();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult }
+     * 
+     */
+    public ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult createListBasketTrialsWithAttributesXMLResponseListBasketTrialsWithAttributesXMLResult() {
+        return new ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketPerformersWithAttributesXML }
+     * 
+     */
+    public ListBasketPerformersWithAttributesXML createListBasketPerformersWithAttributesXML() {
+        return new ListBasketPerformersWithAttributesXML();
+    }
+
+    /**
+     * Create an instance of {@link RemoveBasket }
+     * 
+     */
+    public RemoveBasket createRemoveBasket() {
+        return new RemoveBasket();
+    }
+
+    /**
+     * Create an instance of {@link SessionDetailsWithAttributes }
+     * 
+     */
+    public SessionDetailsWithAttributes createSessionDetailsWithAttributes() {
+        return new SessionDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link PerformerDetailsWithAttributes }
+     * 
+     */
+    public PerformerDetailsWithAttributes createPerformerDetailsWithAttributes() {
+        return new PerformerDetailsWithAttributes();
+    }
+
+    /**
+     * Create an instance of {@link ListBasketTrialsWithAttributesXMLResponse }
+     * 
+     */
+    public ListBasketTrialsWithAttributesXMLResponse createListBasketTrialsWithAttributesXMLResponse() {
+        return new ListBasketTrialsWithAttributesXMLResponse();
     }
 
     /**

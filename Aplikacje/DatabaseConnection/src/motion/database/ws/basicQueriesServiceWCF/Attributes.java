@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlType;
  *                       &lt;enumeration value="performer"/>
  *                       &lt;enumeration value="session"/>
  *                       &lt;enumeration value="trial"/>
- *                       &lt;enumeration value="segment"/>
+ *                       &lt;enumeration value="performer_conf"/>
+ *                       &lt;enumeration value="measurement_conf"/>
+ *                       &lt;enumeration value="measurement"/>
  *                       &lt;enumeration value="file"/>
  *                     &lt;/restriction>
  *                   &lt;/simpleType>
@@ -109,7 +111,9 @@ public class Attributes {
      *             &lt;enumeration value="performer"/>
      *             &lt;enumeration value="session"/>
      *             &lt;enumeration value="trial"/>
-     *             &lt;enumeration value="segment"/>
+     *             &lt;enumeration value="performer_conf"/>
+     *             &lt;enumeration value="measurement_conf"/>
+     *             &lt;enumeration value="measurement"/>
      *             &lt;enumeration value="file"/>
      *           &lt;/restriction>
      *         &lt;/simpleType>

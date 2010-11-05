@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  *                   &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                   &lt;element name="Unit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *                   &lt;element name="Show" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="EnumValues" minOccurs="0">
  *                     &lt;complexType>
  *                       &lt;complexContent>
@@ -109,6 +110,7 @@ public class AttributeDefinitionList {
      *         &lt;element name="AttributeEnum" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="AttributeGroupName" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *         &lt;element name="Unit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+     *         &lt;element name="Show" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="EnumValues" minOccurs="0">
      *           &lt;complexType>
      *             &lt;complexContent>
@@ -135,6 +137,7 @@ public class AttributeDefinitionList {
         "attributeEnum",
         "attributeGroupName",
         "unit",
+        "show",
         "enumValues"
     })
     public static class AttributeDefinition {
@@ -149,6 +152,8 @@ public class AttributeDefinitionList {
         protected String attributeGroupName;
         @XmlElement(name = "Unit")
         protected String unit;
+        @XmlElement(name = "Show")
+        protected Integer show;
         @XmlElement(name = "EnumValues")
         protected AttributeDefinitionList.AttributeDefinition.EnumValues enumValues;
 
@@ -270,6 +275,30 @@ public class AttributeDefinitionList {
          */
         public void setUnit(String value) {
             this.unit = value;
+        }
+
+        /**
+         * Gets the value of the show property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Integer }
+         *     
+         */
+        public Integer getShow() {
+            return show;
+        }
+
+        /**
+         * Sets the value of the show property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Integer }
+         *     
+         */
+        public void setShow(Integer value) {
+            this.show = value;
         }
 
         /**
