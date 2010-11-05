@@ -33,11 +33,16 @@ public class LoginDialog extends BasicDialog {
 	private JButton loginButton;
 	private JButton cancelButton;
 	
+	public static enum LoginResult
+	{
+		LOGIN_SUCCESSFUL, LOGIN_UNSUCCESSFUL, CANCEL_PRESSED, UNKNOWN 
+	};
+	
 	public static int LOGIN_SUCCESSFUL = 1;
 	public static int LOGIN_UNSUCCESSFUL = 2;
 	public static int CANCEL_PRESSED = 0;
 	public static int UNKNOWN = 3;
-	private int result = UNKNOWN;
+	private LoginResult result = LoginResult.UNKNOWN;
 	public boolean finished = false;
 	
 	public LoginDialog() {
@@ -134,12 +139,12 @@ public class LoginDialog extends BasicDialog {
 							WebServiceInstance.getDatabaseConnection().createUserAccount(
 									userDetailsDialog.getFirstName(), userDetailsDialog.getLastName());
 					}
-					setResult(LOGIN_SUCCESSFUL);
+					setResult(LoginResult.LOGIN_SUCCESSFUL);
 					
 				} catch (Exception e) {
 					
 					DatabaseConnection.log.severe( e.getMessage() );
-					setResult(LOGIN_UNSUCCESSFUL);
+					setResult(LoginResult.LOGIN_UNSUCCESSFUL);
 				}
 				
 				LoginDialog.this.finished = true;
@@ -150,7 +155,7 @@ public class LoginDialog extends BasicDialog {
 		
 		this.cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginDialog.this.setResult(CANCEL_PRESSED);
+				LoginDialog.this.setResult(LoginResult.CANCEL_PRESSED);
 				
 				LoginDialog.this.setVisible(false);
 				LoginDialog.this.finished = true;
@@ -159,12 +164,12 @@ public class LoginDialog extends BasicDialog {
 		});
 	}
 	
-	private void setResult(int result) {
+	private void setResult(LoginResult result) {
 		
 		this.result = result;
 	}
 	
-	public int getResult() {
+	public LoginResult getResult() {
 		
 		return this.result;
 	}

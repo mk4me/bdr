@@ -2,6 +2,7 @@ package motion.applet;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,7 +22,9 @@ import javax.swing.table.TableModel;
 import motion.Messages;
 import motion.applet.dialogs.AttributeEditDialog;
 import motion.applet.dialogs.BasketDialog;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.LoginDialog;
+import motion.applet.dialogs.OkCancelDialog;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
 import motion.applet.mouse.TrialMouseAdapter;
@@ -65,14 +68,17 @@ public class MotionApplet extends JApplet {
 	private static AppletToolBar appletToolBar;
 
 	String language = null;
+	private boolean noApplet;
 	
 	public MotionApplet() {
 		this(null);
+		noApplet = false;
 	}
 
 	public MotionApplet(String language) {
 	
 		this.language = language;
+		noApplet  = true;
 	}
 
 	private void initUserInterface() {// Create the horizontal split panels
@@ -349,8 +355,18 @@ public class MotionApplet extends JApplet {
 		while(!loginDialog.finished);
 		
 		// Check if login was successful
-		if (loginDialog.getResult() != LoginDialog.LOGIN_SUCCESSFUL) {	
+		if (loginDialog.getResult() != LoginDialog.LoginResult.LOGIN_SUCCESSFUL) {	
 			System.err.println("Login unsuccesfull!");
+			
+			OkCancelDialog d = new OkCancelDialog("<html>Login filed. Cannot continue!<br>  Login result:" + loginDialog.getResult().toString() + "</html>" );
+			d.setMessage("Login failed!");
+			d.hideCancelButton();
+			d.setVisible(true);
+			while (!d.finished);
+			if (noApplet)
+				System.exit(1);
+			else
+				return;
 		}
 
 		// Create the status bar

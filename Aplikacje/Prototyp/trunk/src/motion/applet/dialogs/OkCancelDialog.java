@@ -123,4 +123,9 @@ public class OkCancelDialog extends BasicDialog {
 		this.validator = formValidator;
 		
 	}
+	
+	public void hideCancelButton()
+	{
+		this.cancelButton.setVisible( false );
+	}
 }
