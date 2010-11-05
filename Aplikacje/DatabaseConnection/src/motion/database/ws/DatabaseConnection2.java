@@ -935,7 +935,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	
 	private void getFile(String remoteFileName, String remoteFilePath, String address,
 			String userName, String password, String destLocalFolder,
-			FileTransferListener transferListener) {
+			FileTransferListener transferListener) throws Exception {
 
 		fileTransferSupport.resetDownloadListeners();
 		fileTransferSupport.registerDownloadListener(transferListener);
@@ -945,6 +945,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		} catch (Exception e) {
 			log.severe( e.getMessage() );
 			e.printStackTrace();
+			throw new Exception( e );
 		}
 		finally{
 			ConnectionTools2.finalizeCall();
