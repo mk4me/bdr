@@ -1561,7 +1561,6 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public void saveAttributeViewConfiguration() throws Exception
 	{
-		/*
 		try {
 			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "saveAttributeViewConfiguration", this );
 		
@@ -1584,6 +1583,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 							attrSetting.setAttributeName( attr.name );
 							attrSetting.setDescribedEntity( kind.getName() );
 							attrSetting.setShow( attr.isVisible );
+							attributeView.getAttributeViewSetting().add(attrSetting);
 						}
 					}
 			
@@ -1596,7 +1596,6 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		finally{
 			ConnectionTools2.finalizeCall();
 		}
-		*/
 	}
 	
 	
