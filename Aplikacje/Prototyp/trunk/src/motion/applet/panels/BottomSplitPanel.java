@@ -18,8 +18,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import motion.Messages;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.trees.CheckBoxNode;
 import motion.applet.trees.ConfigurationTree;
+import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityKind;
 
 public class BottomSplitPanel extends JPanel {
@@ -43,6 +45,13 @@ public class BottomSplitPanel extends JPanel {
 		// Configuration area
 		JPanel configurationPanel = new JPanel();
 		configurationPanel.setLayout(new BoxLayout(configurationPanel, BoxLayout.X_AXIS));
+		
+		try {
+			WebServiceInstance.getDatabaseConnection().readAttributeViewConfiguration();
+		} catch (Exception e) {
+			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
+			exceptionDialog.setVisible(true);
+		}
 		
 		performerTree = createConfigurationTree(EntityKind.performer, configurationPanel);
 		sessionTree = createConfigurationTree(EntityKind.session, configurationPanel);
