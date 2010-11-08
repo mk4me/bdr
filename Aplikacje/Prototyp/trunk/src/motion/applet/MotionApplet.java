@@ -31,6 +31,7 @@ import motion.applet.mouse.TrialMouseAdapter;
 import motion.applet.panels.BasketPanel;
 import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
+import motion.applet.panels.SessionBrowserPanel;
 import motion.applet.panels.StatusBar;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
@@ -54,6 +55,7 @@ public class MotionApplet extends JApplet {
 	private static String TAB_BROWSE = Messages.getString("MotionApplet.Browse"); //$NON-NLS-1$
 	private static String TAB_QUERY = Messages.getString("MotionApplet.Query"); //$NON-NLS-1$
 	private static String TAB_BASKETS = Messages.getString("Baskets"); //$NON-NLS-1$
+	private static final String TAB_SESSION_BROWSER = "Session Browser";
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 
 	public static String LANGUAGE_ENGLISH = "English";
@@ -69,6 +71,7 @@ public class MotionApplet extends JApplet {
 
 	String language = null;
 	private boolean noApplet;
+	private SessionBrowserPanel sessionBrowserPanel;
 	
 	public MotionApplet() {
 		this(null);
@@ -101,11 +104,15 @@ public class MotionApplet extends JApplet {
 		JSplitPane basketSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, basketPanel, basketPanel.tablePane);
 		basketSplitPane.setResizeWeight(0.1);
 		
+		// Session browser panel
+		sessionBrowserPanel = new SessionBrowserPanel(1);
+		
 		// Main tabs
 		mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.addTab(TAB_BROWSE, rightPanel);
 		mainTabs.addTab(TAB_QUERY, leftRightSplitPane);
 		mainTabs.addTab(TAB_BASKETS, basketSplitPane);
+		mainTabs.addTab(TAB_SESSION_BROWSER, sessionBrowserPanel);
 		getContentPane().add(mainTabs, BorderLayout.CENTER);
 		
 		// Create the menu bar

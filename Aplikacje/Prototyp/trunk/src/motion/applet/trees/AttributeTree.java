@@ -235,10 +235,9 @@ public class AttributeTree {
             	String labels[] = { "Name:", "Group:", "Unit:" };
             	String values[] = { "", AttributeTree.this.selectedGroup.name, "" };
             	boolean enabled[] = { true, false, true };
-            	String comboLabels[] = { "Type:", "Subtype:" };
-            	String comboValues[][] = { {"integer", "string", "float", "date"}, 
-            			{"int", "decimal", "nonNegativeInteger", "nonNegativeDecimal", "dateTime", "date", "TIMECODE"} };
-            	boolean comboEnabled[] = {true, true };  
+            	String comboLabels[] = { "Type:" };
+            	String comboValues[][] = { {"int", "decimal", "nonNegativeInteger", "nonNegativeDecimal", "shortString", "longString", "dateTime", "date", "TIMECODE"} };
+            	boolean comboEnabled[] = {true};  
             	                     
             	final TextFieldsPanel panel = new TextFieldsPanel(labels, values, enabled);
             	final ComboBoxesPanel comboPanel = new ComboBoxesPanel(comboLabels, comboValues, comboEnabled);
@@ -279,7 +278,7 @@ public class AttributeTree {
 				
 				if (okCancel.getResult() == okCancel.OK_PRESSED)
 				{
-					EntityAttribute attribute = new EntityAttribute( panel.getValue(0), comboPanel.getValue(1), panel.getValue(2), null, group.name);
+					EntityAttribute attribute = new EntityAttribute( panel.getValue(0), comboPanel.getValue(0), panel.getValue(2), null, group.name);
 					attribute.kind = AttributeTree.this.entityKind;
 					if (enumValuesPanel.isEnum.isSelected())
 					{
