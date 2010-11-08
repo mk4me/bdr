@@ -1556,7 +1556,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 										if (s.getShow()==1)
 											a.isVisible = true;
 										else
-											g.isVisible = false;
+											a.isVisible = false;
 									}
 								}
 							}
