@@ -1533,7 +1533,6 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public void readAttributeViewConfiguration() throws Exception
 	{
-		/*
 		try {
 			IUserPersonalSpaceWS port = ConnectionTools2.getUserPersonalSpaceServicePort( "readAttributeViewConfiguration", this );
 			ListViewConfigurationResult r = port.listViewConfiguration();
@@ -1554,7 +1553,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}	
 		finally{
 			ConnectionTools2.finalizeCall();
-		}*/
+		}
 	}
 
 	
