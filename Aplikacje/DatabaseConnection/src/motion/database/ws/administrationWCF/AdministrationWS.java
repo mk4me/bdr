@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AdministrationWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService", wsdlLocation = "http://v21.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl")
+@WebServiceClient(name = "AdministrationWS", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService", wsdlLocation = "http://dbpawell.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl")
 public class AdministrationWS
     extends Service
 {
@@ -30,9 +30,9 @@ public class AdministrationWS
         try {
             URL baseUrl;
             baseUrl = motion.database.ws.administrationWCF.AdministrationWS.class.getResource(".");
-            url = new URL(baseUrl, "http://v21.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl");
+            url = new URL(baseUrl, "http://dbpawell.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://v21.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://dbpawell.pjwstk.edu.pl/Motion/AdministrationWS.svc?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         ADMINISTRATIONWS_WSDL_LOCATION = url;
