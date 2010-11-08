@@ -1539,11 +1539,29 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		
 			for ( AttributeGroupViewConfiguration v : r.getAttributeGroupViewConfigurationList().getAttributeGroupViewConfiguration() )
 			{
-				
-				for ( AttributeView s : v.getAttributeViewList().getAttributeView())
-				{
-					EntityKind kind = Enum.valueOf( EntityKind.class, v.getDescribedEntity() );
-					kind.getAllAttributeGroups().get( s.getAttributeName() ).isVisible = (s.getShow()==1);
+				EntityKind kind = Enum.valueOf( EntityKind.class, v.getDescribedEntity() );
+				for (EntityAttributeGroup g : kind.getGroupedAttributes()) {
+					if (g.name.equals(v.getAttributeGroupName())) {
+						if (v.getShow() != null) {
+							if (v.getShow()==1)
+								g.isVisible = true;
+							else
+								g.isVisible = false;
+						}
+						for ( AttributeView s : v.getAttributeViewList().getAttributeView())
+						{
+							for (EntityAttribute a : g) {
+								if (a.name.equals(s.getAttributeName())) {
+									if (s.getShow() != null) {
+										if (s.getShow()==1)
+											a.isVisible = true;
+										else
+											g.isVisible = false;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			
