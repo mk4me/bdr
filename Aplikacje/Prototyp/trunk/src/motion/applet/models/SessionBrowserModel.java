@@ -126,11 +126,6 @@ class AttributedVectorView extends NamedVector<NamedVector<?>>
 			
 		this.add( attributeVector );
 	}
-	
-	public String toString()
-	{
-		return entity.toString();
-	}
 }
 
 class EntityFileView extends AttributedVectorView 
@@ -211,14 +206,12 @@ class AttributeView implements ModelElementView
 }
 
 
-class FileView implements ModelElementView
+class FileView extends AttributedVectorView
 {
-	DatabaseFile a;
-	
-	public FileView(DatabaseFile a) {
-		this.a = a;
+	public FileView(DatabaseFile a) throws Exception {
+		super(a);
 	}
-
+/*
 	@Override
 	public Object getChild(int i) {
 		return null;
@@ -233,14 +226,14 @@ class FileView implements ModelElementView
 	public Object getValueAt(int column) {
 		return "";
 	}
-
-	public String toString() {
-		return ((EntityAttribute)a.get( DatabaseFileStaticAttributes.FileName )).value.toString();
-	}
 	
 	@Override
 	public boolean isLeaf() {
 		return true;
+	}
+*/
+	public String toString() {
+		return (((DatabaseFile)entity).getValue( DatabaseFileStaticAttributes.FileName )).toString();
 	}
 }
 
@@ -251,7 +244,7 @@ class PerformerView extends AttributedVectorView
 		super(a);
 	}
 
-/*	@Override
+	@Override
 	public Object getValueAt(int column) {
 		if (column == 1)
 			return ((Performer)entity).getValue( PerformerStaticAttributes.FirstName ).toString();
@@ -260,7 +253,6 @@ class PerformerView extends AttributedVectorView
 		else
 			return "";
 	}
-	*/
 }
 
 
@@ -297,7 +289,6 @@ public class SessionBrowserModel extends AbstractTreeTableModel
     static protected Class[]  cTypes = {TreeTableModel.class, String.class, String.class};
 
     public SessionBrowserModel(Session s) throws Exception { 
-//    	super( s.groups.values().toArray()[1] ); //s.entityKind.name() + " (" + s.getId() +")"); 
     	super( new SessionView(s) );
     }
 

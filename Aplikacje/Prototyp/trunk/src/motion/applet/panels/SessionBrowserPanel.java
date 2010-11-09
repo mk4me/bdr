@@ -37,7 +37,13 @@ public class SessionBrowserPanel extends JPanel {
 			@Override
 			protected Object doInBackground() throws Exception {
 				
-				JTreeTable table = new JTreeTable( new SessionBrowserModel(SessionBrowserPanel.this.s) );
+//				SessionBrowserPanel.this.table.setEnabled(false);
+
+				SessionBrowserPanel.this.removeAll();
+				SessionBrowserPanel.this.validate();
+				SessionBrowserPanel.this.repaint();
+				
+				table = new JTreeTable( new SessionBrowserModel(SessionBrowserPanel.this.s) );
 				table.setAutoResizeMode(JTreeTable.AUTO_RESIZE_ALL_COLUMNS);
 				table.setGridColor(Color.lightGray);
 				table.setIntercellSpacing( new Dimension(4,1) );
@@ -46,14 +52,14 @@ public class SessionBrowserPanel extends JPanel {
 				table.setShowGrid(true);
 				table.setAutoscrolls( true );
 				
-				SessionBrowserPanel.this.removeAll();
 				
 				SessionBrowserPanel.this.setLayout( new BorderLayout() );
 				SessionBrowserPanel.this.add( new JScrollPane(table), BorderLayout.CENTER );
 
+				SessionBrowserPanel.this.validate();
 				SessionBrowserPanel.this.repaint();
 				
-			return null;
+				return null;
 			}
 		};
 		
@@ -61,7 +67,7 @@ public class SessionBrowserPanel extends JPanel {
 	}
 	
 	public void setSession(int sessionId) throws Exception {
-		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session );
+		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( sessionId, EntityKind.session );
 		setSession( s );
 	}
 
