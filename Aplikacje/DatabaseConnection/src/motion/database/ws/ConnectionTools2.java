@@ -326,7 +326,7 @@ public class ConnectionTools2 {
 		Trial trial = new Trial();
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
-		trial.put( TrialStaticAttributes.SessionID, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.SessionID, s.getSessionID() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
 	}
@@ -409,7 +409,7 @@ public class ConnectionTools2 {
 		Trial trial = new Trial();
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
-		trial.put( TrialStaticAttributes.SessionID, s.getTrialDescription() );
+		trial.put( TrialStaticAttributes.SessionID, s.getSessionID() );
 
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
 		return trial;
