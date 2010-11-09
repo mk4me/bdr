@@ -60,11 +60,16 @@
 						<xsd:element name="TrialContentList">
 							<xsd:complexType>
 								<xsd:sequence>
-									<xsd:element name="TrialID" type="xsd:int"/>
-									<xsd:element name="SessionID" type="xsd:int"/>
-									<xsd:element name="TrialDescription" type="xsd:string"/>
-									<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
-									<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="TrialContent">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="TrialID" type="xsd:int"/>
+												<xsd:element name="TrialDescription" type="xsd:string"/>
+												<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+												<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -78,6 +83,8 @@
 					<xsd:sequence>
 						<xsd:element ref="tns:SessionContent" minOccurs="0" maxOccurs="unbounded"/>
 					</xsd:sequence>
+					<xsd:attribute name="currentPage" type="xsd:short" use="optional"/>
+					<xsd:attribute name="pages" type="xsd:short" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="Attributes">
@@ -2202,7 +2209,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
