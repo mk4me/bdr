@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import motion.Messages;
 import motion.applet.panels.EntityAssignmentPanel;
 import motion.applet.panels.PrivilegesPanel;
 import motion.applet.toolbars.AppletToolBar;
@@ -24,12 +25,16 @@ import motion.database.model.SessionStaticAttributes;
 import motion.database.ws.SessionPrivilegesSetter;
 
 public class SessionFormDialog extends FormDialog {
-	public static String TITLE = "New session";
-	private static String TITLE_EDIT = "Edit session";
-	public static String WELCOME_MESSAGE = "Create a new session.";
-	private static String WELCOME_MESSAGE_EDIT = "Edit session attribute values.";
-	private static String MISSING_SESSION_DATE = "Missing or incorrect session date.";
-	private static String CREATING_MESSAGE = "Creating a new session...";
+	public static String TITLE = Messages.getString("SessionFormDialog.Title"); //$NON-NLS-1$
+	private static String TITLE_EDIT = Messages.getString("SessionFormDialog.TitleEdit"); //$NON-NLS-1$
+	public static String WELCOME_MESSAGE = Messages.getString("SessionFormDialg.WelcomeMessage"); //$NON-NLS-1$
+	private static String WELCOME_MESSAGE_EDIT = Messages.getString("SessionFormDialg.WelcomeMessageEdit"); //$NON-NLS-1$
+	private static String MISSING_SESSION_DATE = Messages.getString("SessionFormDialog.MissingSessionDate"); //$NON-NLS-1$
+	private static String CREATING_MESSAGE = Messages.getString("SessionFormDialog.CreatingMessage"); //$NON-NLS-1$
+	
+	private static String PRIVILEGES_TAB = Messages.getString("SessionFormDialog.PrivilegesTab"); //$NON-NLS-1$
+	private static String PERFORMERS_TAB = Messages.getString("SessionFormDialog.PerformersTab"); //$NON-NLS-1$
+	private static String GROUPS_TAB = Messages.getString("SessionFormDialog.GroupsTab"); //$NON-NLS-1$
 	
 	private PrivilegesPanel privilegesPanel;
 	private EntityAssignmentPanel performerAssignmentPanel;
@@ -99,11 +104,11 @@ public class SessionFormDialog extends FormDialog {
 		});
 		
 		privilegesPanel = new PrivilegesPanel(this); 
-		this.getFormTabbedPane().addTab("Privileges", privilegesPanel);
+		this.getFormTabbedPane().addTab(PRIVILEGES_TAB, privilegesPanel);
 		performerAssignmentPanel = new EntityAssignmentPanel(EntityKind.performer);
-		this.getFormTabbedPane().addTab("Performers", performerAssignmentPanel);
+		this.getFormTabbedPane().addTab(PERFORMERS_TAB, performerAssignmentPanel);
 		sessionGroupAssignmentPanel = new EntityAssignmentPanel(EntityKind.sessionGroup);
-		this.getFormTabbedPane().addTab("Groups", sessionGroupAssignmentPanel);
+		this.getFormTabbedPane().addTab(GROUPS_TAB, sessionGroupAssignmentPanel);
 		
 	}
 	

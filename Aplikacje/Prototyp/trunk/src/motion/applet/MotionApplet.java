@@ -2,7 +2,6 @@ package motion.applet;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,7 +21,6 @@ import javax.swing.table.TableModel;
 import motion.Messages;
 import motion.applet.dialogs.AttributeEditDialog;
 import motion.applet.dialogs.BasketDialog;
-import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.OkCancelDialog;
 import motion.applet.mouse.PerformerMouseAdapter;
@@ -352,8 +350,9 @@ public class MotionApplet extends JApplet {
 			Messages.setLanguageEnglish();
 		} else if (language!= null && language.equals(LANGUAGE_POLISH)) {
 			Messages.setLanguagePolish();
-		}else
+		} else
 			Messages.setLanguageEnglish();
+		
 		
 		// Login dialog
 		LoginDialog loginDialog = new LoginDialog();

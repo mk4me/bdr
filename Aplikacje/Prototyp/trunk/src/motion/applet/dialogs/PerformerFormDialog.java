@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
 
+import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
@@ -13,13 +14,13 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 
 public class PerformerFormDialog extends FormDialog {
-	public static String TITLE = "New performer";
-	private static String TITLE_EDIT = "Edit performer";
-	public static String WELCOME_MESSAGE = "Create a new performer.";
-	private static String WELCOME_MESSAGE_EDIT = "Edit performer attribute values.";
-	private static String MISSING_FIRST_NAME = "Please input performer's first name.";
-	private static String MISSING_LAST_NAME = "Please input performer's last name.";
-	private static String CREATING_MESSAGE = "Creating a new performer...";
+	public static String TITLE = Messages.getString("PerformerFormDialog.Title"); //$NON-NLS-1$
+	private static String TITLE_EDIT = Messages.getString("PerformerFormDialog.TitleEdit"); //$NON-NLS-1$
+	public static String WELCOME_MESSAGE = Messages.getString("PerformerFormDialg.WelcomeMessage"); //$NON-NLS-1$
+	private static String WELCOME_MESSAGE_EDIT = Messages.getString("PerformerFormDialg.WelcomeMessageEdit"); //$NON-NLS-1$
+	private static String MISSING_FIRST_NAME = Messages.getString("PerformerFormDialog.MissingFirstName"); //$NON-NLS-1$
+	private static String MISSING_LAST_NAME = Messages.getString("PerformerFormDialog.MissingLastName"); //$NON-NLS-1$
+	private static String CREATING_MESSAGE = Messages.getString("PerformerFormDialog.CreatingMessage"); //$NON-NLS-1$
 	
 	public PerformerFormDialog(String title, String welcomeMessage) {
 		super(title, welcomeMessage);

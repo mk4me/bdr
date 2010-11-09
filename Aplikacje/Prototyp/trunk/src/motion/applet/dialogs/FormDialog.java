@@ -39,10 +39,14 @@ public class FormDialog extends BasicDialog {
 	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	private static String EDIT = Messages.getString("OK"); //$NON-NLS-1$
 	
-	protected static String PRESS_CREATE_MESSAGE = "Press Create to finish.";
-	protected static String UPDATING_MESSAGE = "Updating attributes...";
+	protected static String PRESS_CREATE_MESSAGE = Messages.getString("FormDialog.PressCreateMessage"); //$NON-NLS-1$
+	protected static String UPDATING_MESSAGE = Messages.getString("FormDialog.UpdatingMessage"); //$NON-NLS-1$
 	
-	private static String ATTRIBUTES_TAB_NAME = "Attributes";
+	private static String ATTRIBUTES_TAB_NAME = Messages.getString("FormDialog.AttributesTabName"); //$NON-NLS-1$
+	private static String INCORRECT_NUMBER = Messages.getString("FormDialog.IncorrectNumber"); //$NON-NLS-1$
+	private static String INCORRECT_DATE = Messages.getString("FormDialog.IncorrectDate"); //$NON-NLS-1$
+	private static String SET_BUTTON = Messages.getString("FormDialog.SetButton"); //$NON-NLS-1$
+	private static String CLEAR_BUTTON = Messages.getString("FormDialog.ClearButton"); //$NON-NLS-1$
 	
 	protected JButton createButton;
 	private JButton cancelButton;
@@ -201,7 +205,7 @@ public class FormDialog extends BasicDialog {
 			try {
 				attributeValue = ((FormNumberField) f).getData();
 			} catch (NumberFormatException e) {
-				this.messageLabel.setText("Incorrect number in the field " + f.attribute.name + ".");
+				this.messageLabel.setText(INCORRECT_NUMBER + " " + f.attribute.name + ".");
 				
 				return false;
 			}
@@ -209,11 +213,11 @@ public class FormDialog extends BasicDialog {
 			try {
 				attributeValue = ((FormDateField) f).getData();
 			} catch (ParseException e) {
-				this.messageLabel.setText("Incorrect date in the field " + f.attribute.name + ".");
+				this.messageLabel.setText(INCORRECT_DATE + " " + f.attribute.name + ".");
 				
 				return false;
 			} catch (DatatypeConfigurationException e) {
-				this.messageLabel.setText("Incorrect date in the field " + f.attribute.name + ".");
+				this.messageLabel.setText(INCORRECT_DATE + " " + f.attribute.name + ".");
 				
 				return false;
 			}
@@ -378,7 +382,7 @@ public class FormDialog extends BasicDialog {
 			if (!attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
 				gridBagConstraints.gridx++;
 				
-				clearButton = new JButton("Clear");
+				clearButton = new JButton(CLEAR_BUTTON);
 				formPanel.add(clearButton, gridBagConstraints);
 				clearButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -549,7 +553,7 @@ public class FormDialog extends BasicDialog {
 		}
 		
 		protected void finishField() {
-			setDateTimeButton = new JButton("Set");
+			setDateTimeButton = new JButton(SET_BUTTON);
 			setDateTimeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CalendarWidget calendarWidget = new CalendarWidget();
