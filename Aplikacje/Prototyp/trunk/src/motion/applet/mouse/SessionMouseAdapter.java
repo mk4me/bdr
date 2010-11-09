@@ -25,6 +25,9 @@ public class SessionMouseAdapter extends MouseAdapter {
 	private static String MENU_VIEW_PERFORMERS = "View performers";
 	private static String MENU_VIEW_SESSION_GROUPS = "View groups";
 	private static String MENU_VIEW_FILES = "View files";
+	
+	private static String MENU_VIEW_TREE = "View as tree";
+
 	private static String MENU_UPLOAD = "Upload file";
 	private static String MENU_EDIT = "Edit";
 	
@@ -80,6 +83,23 @@ public class SessionMouseAdapter extends MouseAdapter {
 					viewSessionGroups(recordId);
 				}
 			});
+			popupMenu.add(new JSeparator());
+			JMenuItem viewSessionTreeMenuItem = new JMenuItem(MENU_VIEW_TREE);
+			popupMenu.add(viewSessionTreeMenuItem);
+			
+			viewSessionTreeMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						rightPanel.getApplet().switchToSessionBrowser();
+						rightPanel.getApplet().getSessionBrowserPanel().setSession( recordId );
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+
 			
 			popupMenu.add(new JSeparator());
 			// Upload context menu.

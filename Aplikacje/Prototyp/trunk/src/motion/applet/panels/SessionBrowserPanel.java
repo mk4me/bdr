@@ -8,6 +8,9 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
 import javax.swing.treetable.JTreeTable;
 import javax.swing.treetable.TreeTableModel;
 import javax.swing.treetable.TreeTableModelAdapter;
@@ -20,42 +23,55 @@ import motion.database.model.Session;
 
 public class SessionBrowserPanel extends JPanel {
 
-	int sessionID;
+	JTreeTable table;
+	Session s;
 	
-	public SessionBrowserPanel(int i) {
-		
-		this.sessionID = i;
-		createUserInterface();
+	public SessionBrowserPanel() {
 	}
 
-	public void createUserInterface()
+	public void setSession( Session s ) throws Exception
 	{
-		try {
-			Session s = (Session) DatabaseConnection.getInstanceWCF().getById( sessionID, EntityKind.session );
-			
-			SessionBrowserModel model = new SessionBrowserModel(s);
-			JTreeTable table = new JTreeTable(model);
-			table.setAutoResizeMode(JTreeTable.AUTO_RESIZE_ALL_COLUMNS);
-			table.setGridColor(Color.lightGray);
-			table.setIntercellSpacing( new Dimension(4,1) );
-			//table.setRowMargin(4);
-			table.setRowHeight( 22 );
-			table.setShowGrid(true);
-			
-			this.setLayout( new BorderLayout() );
-			this.add( table, BorderLayout.CENTER );
+		this.s = s;
+		SwingWorker<?, ?> worker = new SwingWorker(){
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			@Override
+			protected Object doInBackground() throws Exception {
+				
+				JTreeTable table = new JTreeTable( new SessionBrowserModel(SessionBrowserPanel.this.s) );
+				table.setAutoResizeMode(JTreeTable.AUTO_RESIZE_ALL_COLUMNS);
+				table.setGridColor(Color.lightGray);
+				table.setIntercellSpacing( new Dimension(4,1) );
+				//table.setRowMargin(4);
+				table.setRowHeight( 22 );
+				table.setShowGrid(true);
+				table.setAutoscrolls( true );
+				
+				SessionBrowserPanel.this.removeAll();
+				
+				SessionBrowserPanel.this.setLayout( new BorderLayout() );
+				SessionBrowserPanel.this.add( new JScrollPane(table), BorderLayout.CENTER );
+
+				SessionBrowserPanel.this.repaint();
+				
+			return null;
+			}
+		};
+		
+		worker.execute();
 	}
+	
+	public void setSession(int sessionId) throws Exception {
+		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session );
+		setSession( s );
+	}
+
 	
 	
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		DatabaseProxy database = DatabaseConnection.getInstanceWCF();
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
@@ -63,7 +79,12 @@ public class SessionBrowserPanel extends JPanel {
 
 		JFrame b = new JFrame();
 		b.setLayout( new BorderLayout() );
-		b.add( new SessionBrowserPanel(2), BorderLayout.CENTER );
+		
+		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session );
+		SessionBrowserPanel p = new SessionBrowserPanel(); 
+		b.add( p, BorderLayout.CENTER );
+		
+		p.setSession( s );
 		
 		b.pack();
 		b.setSize(400, 400);

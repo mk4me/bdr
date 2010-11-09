@@ -82,6 +82,11 @@ public class MotionApplet extends JApplet {
 		noApplet  = true;
 	}
 
+	public SessionBrowserPanel getSessionBrowserPanel()
+	{
+		return sessionBrowserPanel;
+	}
+	
 	private void initUserInterface() {// Create the horizontal split panels
 		// Left panel with tool bars
 		JPanel leftPanel = new JPanel();
@@ -94,7 +99,7 @@ public class MotionApplet extends JApplet {
 		queryResultsPane = new JTabbedPane();
 		
 		// Right panel with a tree
-		rightPanel = new RightSplitPanel();
+		rightPanel = new RightSplitPanel(this);
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
 		
 		// Basket panel
@@ -103,7 +108,7 @@ public class MotionApplet extends JApplet {
 		basketSplitPane.setResizeWeight(0.1);
 		
 		// Session browser panel
-		sessionBrowserPanel = new SessionBrowserPanel(1);
+		sessionBrowserPanel = new SessionBrowserPanel();
 		
 		// Main tabs
 		mainTabs = new JTabbedPane(JTabbedPane.TOP);
@@ -119,6 +124,11 @@ public class MotionApplet extends JApplet {
 		//Create the tool bar
 		appletToolBar = new AppletToolBar(rightPanel);
 		this.getContentPane().add(appletToolBar, BorderLayout.NORTH);
+	}
+	
+	public void switchToSessionBrowser()
+	{
+		mainTabs.setSelectedIndex(3);
 	}
 	
 	private void createMenuBar(final RightSplitPanel rightPanel) {

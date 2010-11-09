@@ -236,7 +236,7 @@ public class AttributeTree {
             	String values[] = { "", AttributeTree.this.selectedGroup.name, "" };
             	boolean enabled[] = { true, false, true };
             	String comboLabels[] = { "Type:" };
-            	String comboValues[][] = { {"int", "decimal", "nonNegativeInteger", "nonNegativeDecimal", "shortString", "longString", "dateTime", "date", "TIMECODE"} };
+            	String comboValues[][] = { {"int", "decimal", "nonNegativeInteger", "nonNegativeDecimal", "shortString", "longString", "dateTime", "date", "TIMECODE", "file"} };
             	boolean comboEnabled[] = {true};  
             	                     
             	final TextFieldsPanel panel = new TextFieldsPanel(labels, values, enabled);

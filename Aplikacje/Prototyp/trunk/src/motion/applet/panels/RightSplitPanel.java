@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.TableModel;
 
+import motion.applet.MotionApplet;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.MeasurementConfigurationFormDialog;
@@ -53,9 +54,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static int TABLE_FILE = 4;
 	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
 	private JTable tables[] = new JTable[TABLE_SIZE];
+	private MotionApplet applet;
 	
-	public RightSplitPanel() {
+	public RightSplitPanel(MotionApplet applet) {
 		super();
+		this.applet = applet;
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
@@ -111,6 +114,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		int row = table.rowAtPoint(point);
 		ListSelectionModel model = table.getSelectionModel();
 		model.setSelectionInterval(row, row);
+	}
+	
+	public MotionApplet getApplet()
+	{
+		return applet;
 	}
 	
 	public int getSelectedRecord( JTable table, MouseEvent e ) {
