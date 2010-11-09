@@ -2,6 +2,22 @@ use Motion;
 go
 
 
+alter procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
+select
+s.Publiczna "@IsPublic",
+s.PublicznaZapis "@IsPublicWritable",
+(select 
+	u.Login "@Login", case us.Zapis when 0 then 'false' else 'true' end "@CanWrite"
+	from Uprawnienia_Sesja us join Uzytkownik u on us.IdUzytkownik = u.IdUzytkownik
+	where us.IdSesja = s.IdSesja
+    for XML PATH('SessionPrivilege'), TYPE )
+ from  user_accessible_sessions_by_login(@user_login) s
+ where s.IdSesja = @sess_id
+  for XML PATH ('SessionPrivilegeList')
+go
+
 update Atrybut set Nazwa='MotionKind', Typ_danych='string', Wyliczeniowy=1, Podtyp_danych='shortString' where Nazwa='MotionKindID';
 go
 insert into Wartosc_wyliczeniowa ( IdAtrybut, Wartosc_wyliczeniowa)

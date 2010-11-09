@@ -1,11 +1,5 @@
 use Motion;
 go
-
--- TODO:
-
--- set_performer_conf_attribute
-
-
 -- non-XML queries
 -- ==================================
 
@@ -30,7 +24,7 @@ go
 
 
 
--- Accessibilty mechanism behavior
+-- Authorization-related behavior
 -- ===============================
 
 create function user_sessions_by_user_id( @user_id int)
@@ -93,6 +87,15 @@ go
 -- Resource attribute and label functions
 -- ======================================
 
+create function motion_kind_name( @mk_id int )
+returns varchar(50)
+as
+begin
+	return ( select top 1 Nazwa from Rodzaj_ruchu where IdRodzaj_ruchu = @mk_id );
+end
+go
+
+
 create function list_performer_attributes ( @perf_id int )
 returns TABLE as
 return 
@@ -100,10 +103,7 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -112,7 +112,6 @@ from Atrybut a
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id and a.Typ_danych <> 'file'
-go
 go
 
 
@@ -149,10 +148,7 @@ union
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -177,10 +173,7 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -267,10 +260,7 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -301,15 +291,19 @@ return
 			'_trial_static' as AttributeGroup,
 			'trial' as Entity
 	from Trial t)
+	union
+	(select 'Duration' as Name,
+			t.Czas_trwania as Value,
+			'integer' as Type,
+			'_trial_static' as AttributeGroup,
+			'trial' as Entity
+	from Trial t)
 	)
 union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -327,10 +321,7 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -380,10 +371,7 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -401,10 +389,7 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -433,10 +418,7 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
+		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -447,40 +429,9 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPomiar = @meas_id  and a.Typ_danych <> 'file'));
 go
 
-create function list_performer_configuration_attributes ( @pc_id int )
-returns TABLE as
-return 
-select 
-	a.Nazwa as Name, 
-	(case a.Typ_danych 
-		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
-		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
-		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup,
-		'performer_conf' as Entity
-from Atrybut a 
-inner join Wartosc_atrybutu_konfiguracji_performera wakp on a.IdAtrybut=wakp.IdAtrybut
-inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wakp.IdKonfiguracja_performera = @pc_id and a.Typ_danych <> 'file'
-go
-
--- TODO: Dodac list_performer_configuration_attributes_uniform
-
 
 -- Resource By-ID retrieval
 -- ========================
-
-create function motion_kind_name( @mk_id int )
-returns varchar(50)
-as
-begin
-	return ( select top 1 Nazwa from Rodzaj_ruchu where IdRodzaj_ruchu = @mk_id );
-end
-go
 
 create procedure get_performer_by_id_xml ( @res_id int )
 as
@@ -494,7 +445,7 @@ as
 			for XML AUTO, ELEMENTS
 go
 
-alter procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
+create procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
@@ -508,6 +459,7 @@ as
 			from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes where IdSesja=@res_id
 			for XML AUTO, ELEMENTS
 go
+
 create procedure get_trial_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -515,6 +467,7 @@ as
 				IdObserwacja as TrialID, 
 				IdSesja as SessionID, 
 				Opis_obserwacji as TrialDescription, 
+				Czas_trwania as Duration,
 				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
@@ -524,7 +477,7 @@ as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdPomiar as MeasurementID,
-				(select * from list_measurement_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Pomiar MeasurementDetailsWithAttributes where IdPomiar=@res_id
 			for XML AUTO, ELEMENTS
 go
@@ -537,21 +490,42 @@ as
 				Nazwa as MeasurementConfName,
 				Rodzaj as MeasurementConfKind,
 				Opis as MeasurementConfDescription,
-				(select * from list_measurement_configuration_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Konfiguracja_pomiarowa MeasurementConfDetailsWithAttributes where IdKonfiguracja_pomiarowa=@res_id
 			for XML AUTO, ELEMENTS
 go
 
-create procedure get_performer_configuration_by_id_xml ( @res_id int )
+create procedure get_session_content_xml ( @user_login as varchar(30), @sess_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-			select 
-				IdKonfiguracja_performera as PerformerConfID,
+			select
 				IdSesja as SessionID,
-				IdPerformer as PerformerID,
-				(select * from list_performer_configuration_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-			from Konfiguracja_performera PerformerConfDetailsWithAttributes where IdKonfiguracja_performera=@res_id
-			for XML AUTO, ELEMENTS
+				IdUzytkownik as UserID,
+				IdLaboratorium as LabID,
+				dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+				Data as SessionDate,
+				Opis_sesji as SessionDescription,
+				(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+				(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes,
+				(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+					(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+					from Plik p where p.IdSesja=SessionContent.IdSesja
+					for XML PATH('FileDetailsWithAttributes')
+				) as FileWithAttributesList,
+				(select 
+					IdObserwacja as TrialID,
+					Opis_obserwacji as TrialDescription,
+					(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes,
+					(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+						(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+						from Plik p 
+						where 
+						p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes')
+					) as FileWithAttributesList
+					from Obserwacja TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML AUTO, ELEMENTS, TYPE 
+				) as TrialContentList
+				from user_accessible_sessions_by_login(@user_login) SessionContent where IdSesja=@sess_id
+				for XML AUTO, ELEMENTS
 go
 
 
@@ -713,7 +687,38 @@ as
       for XML AUTO, ELEMENTS, root ('MeasurementConfSessionWithAttributesList')
 go
 
--- Session's session group listing
+create procedure list_session_contents_xml (@user_login varchar(30), @page_size int, @page_no int)
+as
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+	select
+		-- top @page_size ...
+		IdSesja as SessionID,
+		IdUzytkownik as UserID,
+		IdLaboratorium as LabID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+		Data as SessionDate,
+		Opis_sesji as SessionDescription,
+		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
+		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes,
+		(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	from Plik p where p.IdSesja=SessionDetailsWithAttributes.IdSesja
+	for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList,
+	(select 
+		IdObserwacja as TrialID,
+		Opis_obserwacji as TrialDescription,
+		(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes,
+		(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
+		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+		from Plik p 
+		where 
+		p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList
+	from Obserwacja TrialContent where TrialContent.IdSesja = SessionDetailsWithAttributes.IdSesja FOR XML AUTO, ELEMENTS, TYPE ) as TrialContentList
+	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+      for XML AUTO, ELEMENTS, root ('SessionContentList')
+go
+
+-- Session group listing
 -- ===============================
 create procedure list_session_session_groups_xml (@user_login varchar(30), @sess_id int)
 as
@@ -722,8 +727,16 @@ as
 	where (@sess_id in ( select IdSesja from user_accessible_sessions_by_login(@user_login) ))
 	and SessionGroupDefinition.IdGrupa_sesji in 
 	( select sgs.IdGrupa_sesji from Sesja_grupa_sesji sgs where IdSesja = @sess_id)
-	for XML AUTO, ELEMENTS, root ('SessionGroupDefinitionList')
+	for XML AUTO, ELEMENTS, root ('SessionSessionGroupList')
 go
+
+create procedure list_session_groups_defined
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
+
+go
+
 
 
 -- Trial listing queries
@@ -735,7 +748,8 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select
 	IdObserwacja as TrialID,
 	IdSesja as SessionID,
-	Opis_obserwacji as TrialDescription
+	Opis_obserwacji as TrialDescription,
+	Czas_trwania as Duration
 from Obserwacja TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
@@ -747,6 +761,7 @@ select
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
 	Opis_obserwacji as TrialDescription, 
+	Czas_trwania as Duration,
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
@@ -808,39 +823,6 @@ from Pomiar MeasurementDetailsWithAttributes
 where IdPomiar = @trial_id
     for XML AUTO, ELEMENTS, root ('TrialMeasurementWithAttributesList')
 go
-
-create procedure list_measurement_conf_measurements_attributes_xml(@user_login varchar(30), @mc_id int )
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select 
-	IdPomiar MeasurementID,
-	IdKonfiguracja_pomiarowa MeasurementConfID,
-	IdObserwacja TrialID,
-	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Pomiar MeasurementDetailsWithAttributes
-where MeasurementDetailsWithAttributes.IdKonfiguracja_pomiarowa = @mc_id
-and MeasurementDetailsWithAttributes.IdObserwacja in (select o.IdObserwacja from user_accessible_sessions_by_login(@user_login) s join Obserwacja o on s.IdSesja = s.IdSesja)
-    for XML AUTO, ELEMENTS, root ('MeasurementConfMeasurementWithAttributesList')
-go
-
--- Performer conf listing queries
--- ==============================
-
-
-
-create procedure list_session_performer_configurations_attributes_xml(@user_login varchar(30), @sess_id int)
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select 
-	IdKonfiguracja_performera as PerformerConfID, 
-	IdSesja as SessionID, 
-	IdPerformer as PerformerID, 
-	(select * from list_performer_configuration_attributes ( IdKonfiguracja_performera ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Konfiguracja_performera PerformerConfDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
-    for XML AUTO, ELEMENTS, root ('SessionPerformerConfWithAttributesList')
-go
-
-
 
 -- Measurement result listing queries
 -- ==================================
@@ -949,15 +931,6 @@ as
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
-create procedure list_performer_conf_attr_files_xml(@user_login varchar(30),  @pc_id int)
-as
-	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
-	from Plik p join Wartosc_atrybutu_konfiguracji_performera wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut
-	where wakp.IdKonfiguracja_performera=@pc_id
-	for XML PATH('FileDetails'), root ('FileList')
-go
-
 create procedure list_measurement_attr_files_xml(@user_login varchar(30),  @meas_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -1045,16 +1018,6 @@ as
 	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
-create procedure list_performer_conf_attr_files_attributes_xml(@user_login varchar(30),  @pc_id int)
-as
-	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
-	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
-	from Plik p join Wartosc_atrybutu_konfiguracji_performera wakp on p.IdPlik = wakp.Wartosc_Id join Atrybut a on a.IdAtrybut = wakp.IdAtrybut 
-	where wakp.IdKonfiguracja_performera=@pc_id
-	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
-go
-
 
 -- Metadata queries
 -- ===================
@@ -1070,24 +1033,27 @@ where @entity_kind=ga.Opisywana_encja and ( @att_group = '_ALL' or ga.Nazwa = @a
 for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
 go
 
-create procedure list_attributes_defined_with_enums( @att_group varchar(100), @entity_kind varchar(20) )
+create procedure list_attributes_defined_with_enums( @user_login varchar(30), @att_group varchar(100), @entity_kind varchar(20) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	a.Nazwa as AttributeName, a.Podtyp_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, ga.Nazwa as AttributeGroupName, a.Jednostka as Unit,
-	(select Wartosc_wyliczeniowa as Value from Wartosc_wyliczeniowa ww where ww.IdAtrybut = a.IdAtrybut for XML RAW(''), TYPE, ELEMENTS) "EnumValues"
+	a.Nazwa as AttributeName, a.Podtyp_danych as AttributeType, a.Wyliczeniowy as AttributeEnum, 
+	ga.Nazwa as AttributeGroupName, a.Jednostka as Unit, 
+	(select wa.Wyswietlic from Widocznosc_atrybutu wa where wa.IdUzytkownik = dbo.identify_user(@user_login) and wa.IdAtrybut = a.IdAtrybut) as Show, 
+	(select Wartosc_wyliczeniowa as Value from Wartosc_wyliczeniowa ww where ww.IdAtrybut = a.IdAtrybut for XML RAW(''), TYPE, ELEMENTS) as EnumValues
 from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
 where (@entity_kind=ga.Opisywana_encja or @entity_kind = '_ALL') and ( @att_group = '_ALL' or ga.Nazwa = @att_group )
 for XML RAW ('AttributeDefinition'), ELEMENTS, root ('AttributeDefinitionList')
 go
 
 
-create procedure list_attribute_groups_defined( @entity_kind varchar(20) )
+create procedure list_attribute_groups_defined(@user_login varchar(30), @entity_kind varchar(20) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	Nazwa as AttributeGroupName, Opisywana_encja as DescribedEntity
-from Grupa_atrybutow
+	ga.Nazwa as AttributeGroupName, ga.Opisywana_encja as DescribedEntity,
+	(select wga.Wyswietlic from Widocznosc_grupy_atrybutow wga where wga.IdGrupa_atrybutow = ga.IdGrupa_atrybutow and wga.IdUzytkownik = dbo.identify_user(@user_login) ) as Show
+from Grupa_atrybutow ga 
 where (@entity_kind=Opisywana_encja or @entity_kind = '_ALL_ENTITIES' or @entity_kind = '_ALL')
 for XML RAW ('AttributeGroupDefinition'), ELEMENTS, root ('AttributeGroupDefinitionList')
 go
@@ -1117,41 +1083,6 @@ where a.Nazwa = @att_name and ga.Opisywana_encja = @entity_kind
 for XML PATH(''), root ('EnumValueList')
 go
 
--- Create session operation
--- ========================
-
-/*
-Output parameter "result" meaning:
-0 - session created
-1 - motion kind of this name is not valid
-2 - other error
-
-
-*/
-
-create procedure create_session (	@sess_user varchar(20), @sess_lab int, @mk_name varchar(50), @sess_date DateTime, @sess_desc varchar(100), 
-									@sess_id int OUTPUT, @result int OUTPUT )
-as
-begin
-	declare @mc_id as int;
-
-	set @result = 2;
-	if (select COUNT(*) from Rodzaj_ruchu where Nazwa = @mk_name )!=1
-	begin
-		set @mc_id = 1;
-		return;
-	end;
-	
-	insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
-		values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @mk_name), 
-		@sess_date, @sess_desc ) set @sess_id = SCOPE_IDENTITY() ;
-	set @result = 0;
-
-end;
-go
-
-
-
 -- Attribute setting operations
 -- ============================
 
@@ -1164,7 +1095,6 @@ Output parameter "result" meaning:
 4 - (not assigned)
 5 - value of this attribute for this session exists, whille you called this operation in "no overwrite" mode
 6 - the value provided is not valid for this numeric-type attribute
-7 - wrong identifier for file-typed attribute value
 
 */
 
@@ -1173,24 +1103,10 @@ as
 begin
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int ;
-	declare @value_tuple_found as bit = 0;
-	declare @calculated_id as int;	
-
-
-
-
-	/*
-	Current static non-id attributes:
-		'LabID', 'int', 0, 'ID'
-		'MotionKindID', 'int', 0, 'ID'
-		'SessionDate', 'string', 0, 'dateTime'
-		'SessionDescription', 'string', 0, 'longString'
-
-	*/
+	declare @value_tuple_found as bit = 0;	
 
 	set @result = 6; -- result 3 = type casting error
-
-
+	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'session';
 	if @@rowcount = 0 
@@ -1198,7 +1114,6 @@ begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
 		return;
 	end;
-
 	if not exists ( select * from Sesja where IdSesja = @sess_id )
 		begin
 			set @result = 3;
@@ -1206,34 +1121,6 @@ begin
 		end;
 	else
 		begin
-
-
-			if(@attr_name = 'LabID' or @attr_name = 'MotionKind' or @attr_name = 'SessionDate' or @attr_name = 'SessionDescription' )
-			begin
-				if(@update = 0)
-						begin
-							set @result = 5; -- result 5 = value exists while update has not been allowed
-							return;
-						end;	
-				if(@attr_name = 'LabID')
-					begin
-						update Sesja set IdLaboratorium  = cast ( @attr_value as int ) where IdSesja = @sess_id;
-					end;
-				else if(@attr_name = 'MotionKind')
-					begin
-						select top(1) @calculated_id = IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa=@attr_value ;
-						if (@calculated_id is null) begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
-						update Sesja set IdRodzaj_ruchu  =  @calculated_id where IdSesja = @sess_id;
-					end
-				else if(@attr_name = 'SessionDate')
-					update Sesja set Data  =  cast ( @attr_value as datetime ) where IdSesja = @sess_id;
-				else if(@attr_name = 'SessionDescription')
-					update Sesja set Opis_sesji  = @attr_value where IdSesja = @sess_id;
-				set @result = 0;
-				return;
-			end;
-	
-
 			if exists ( select * from Wartosc_atrybutu_sesji where IdAtrybut = @attr_id and IdSesja = @sess_id ) set @value_tuple_found = 1;
 			if @update = 0 and @value_tuple_found = 1
 				begin
@@ -1265,11 +1152,6 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_sesji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdSesja = @sess_id ;
 					else
@@ -1287,7 +1169,6 @@ begin
 end;
 go
 
-
 create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1295,30 +1176,7 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	/*
-	Current static non-id attributes:
-	'FirstName', 'string', 0, 'shortString'
-	'LastName', 'string', 0, 'shortString'
-
-	*/
-
 	set @result = 6; -- result 3 = type casting error
-
-	if(@attr_name = 'FirstName' or @attr_name = 'LastName')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'FirstName')
-			update Performer set Imie  = @attr_value where IdPerformer = @perf_id;
-		if(@attr_name = 'LastName')
-			update Performer set Nazwisko  = @attr_value where IdPerformer = @perf_id;
-		set @result = 0;
-		return;
-	end;
-
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'performer';
@@ -1365,11 +1223,6 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_performera set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPerformer = @perf_id ;
 					else
@@ -1395,29 +1248,7 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-
-	/*
-	Current static non-id attributes:
-	'TrialDescription', 'string', 0, 'longString'
-
-	*/
-
-	set @result = 6; -- result 6 = type casting error
-
-	if(@attr_name = 'TrialDescription')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'TrialDescription')
-			update Obserwacja set Opis_obserwacji  = @attr_value where IdObserwacja = @trial_id;
-
-		set @result = 0;
-		return;
-	end;
-
+	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'trial';
@@ -1464,11 +1295,6 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_obserwacji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
 					else
@@ -1493,32 +1319,7 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	/*
-	Current static non-id attributes:
-		'FileName', 'string', 0, 'shortString'
-		'FileDescription', 'string', 0, 'longString'
-		'SubdirPath', 'string', 0, 'shortString'
-	*/
-
 	set @result = 6; -- result 3 = type casting error
-
-	if(@attr_name = 'FileName' or @attr_name = 'FileDescription' or @attr_name = 'SubdirPath' )
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'FileName')
-			update Plik set Nazwa_pliku  = @attr_value where IdPlik = @file_id;
-		else if(@attr_name = 'Sciezka')
-			update Plik set Nazwa_pliku  =  @attr_value where IdPlik = @file_id;
-		else if(@attr_name = 'SubdirPath')
-			update Plik set Opis_pliku  = @attr_value where IdPlik = @file_id;
-		set @result = 0;
-		return;
-	end;
-
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'file';
@@ -1574,7 +1375,6 @@ begin
 end;
 go
 
-
 create procedure set_measurement_conf_attribute (@mc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1582,32 +1382,7 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	/*
-	Current static non-id attributes:
-	'MeasurementConfName', 'string', 0, 'shortString'
-	'MeasurementConfKind', 'string', 0, 'shortString'
-	'MeasurementConfDescription', 'string', 0, 'longString'
-
-	*/
-
-	set @result = 6; -- result 6 = type casting error
-
-	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'MeasurementConfName')
-			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfKind')
-			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfDescription')
-			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		set @result = 0;
-		return;
-	end;
+	set @result = 6; -- result 3 = type casting error
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement_conf';
@@ -1654,11 +1429,6 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_konfiguracji_pomiarowej set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdKonfiguracja_pomiarowa = @mc_id ;
 					else
@@ -1674,7 +1444,7 @@ begin
 			set @result = 0;
 		end;
 end;
-go	
+go
 
 create procedure set_measurement_attribute (@meas_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
@@ -1683,31 +1453,8 @@ begin
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
 
-	/*
-	Current static non-id attributes:
+	set @result = 6; -- result 3 = type casting error
 	
-
-	*/
-
-	set @result = 6; -- result 6 = type casting error
-	/*
-	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'MeasurementConfName')
-			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfKind')
-			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfDescription')
-			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		set @result = 0;
-		return;
-	end;
-	*/
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement_conf';
 	if @@rowcount = 0 
@@ -1753,11 +1500,6 @@ begin
 			else if @attr_type = 'file'
 				begin
 					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
 					if ( @value_tuple_found = 1 )
 					update Wartosc_atrybutu_pomiaru set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
 					else
@@ -1769,105 +1511,6 @@ begin
 					update Wartosc_atrybutu_pomiaru set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
 					else
 					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_tekst) values (@attr_id, @meas_id, @attr_value);
-				end;
-			set @result = 0;
-		end;
-end;
-go
-
-create procedure set_performer_conf_attribute (@pc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
-as
-begin
-	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float, @id_value int;
-	declare @value_tuple_found as bit = 0;	
-
-	/*
-	Current static non-id attributes:
-	
-
-	*/
-
-	set @result = 6; -- result 6 = type casting error
-	/*
-	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'MeasurementConfName')
-			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfKind')
-			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfDescription')
-			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		set @result = 0;
-		return;
-	end;
-	*/
-	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'performer_conf';
-	if @@rowcount = 0 
-	begin
-		set @result = 1 -- result 1 = attribute of this name not applicable here
-		return;
-	end;
-	if not exists ( select * from Konfiguracja_performera where IdKonfiguracja_performera = @pc_id )
-		begin
-			set @result = 3;
-			return;
-		end;
-	else
-		begin
-			if exists ( select * from Wartosc_atrybutu_konfiguracji_performera where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ) set @value_tuple_found = 1;
-			if @update = 0 and @value_tuple_found = 1
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;
-			if(@attr_enum = 1) 
-			begin
-				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
-				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
-			end;
-			if @attr_type = 'integer'
-				begin
-					set @integer_value = cast ( @attr_value as numeric(10,2) );
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
-					else
-					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_liczba) values (@attr_id, @pc_id, @integer_value);
-				end;
-			
-			else if @attr_type = 'float'
-				begin
-					set @float_value = cast ( @attr_value as float );
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
-					else
-					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_zmiennoprzecinkowa) values (@attr_id, @pc_id, @float_value);
-				end;
-			else if @attr_type = 'file'
-				begin
-					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
-					else
-					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_Id) values (@attr_id, @pc_id, @id_value);
-				end;
-			else
-				begin
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_konfiguracji_performera set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdKonfiguracja_performera = @pc_id ;
-					else
-					insert into Wartosc_atrybutu_konfiguracji_performera (IdAtrybut, IdKonfiguracja_performera, Wartosc_tekst) values (@attr_id, @pc_id, @attr_value);
 				end;
 			set @result = 0;
 		end;
@@ -1930,17 +1573,7 @@ begin
 			set @result = 1;
 			return;
 		end;
-		delete from wa from Wartosc_atrybutu_konfiguracji_pomiarowej wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_pomiarowa = @res_id and a.Nazwa = @attr_name;
-	end
-	else if (@entity = 'performer_conf')
-	begin
-		if not exists ( select * from Atrybut a join Wartosc_atrybutu_konfiguracji_performera wakp on a.IdAtrybut = wakp.IdAtrybut
-				where a.Nazwa = @attr_name and wakp.IdKonfiguracja_performera = @res_id )
-		begin
-			set @result = 1;
-			return;
-		end;
-		delete from wa from Wartosc_atrybutu_konfiguracji_performera wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_performera= @res_id and a.Nazwa = @attr_name;
+	delete from wa from Wartosc_atrybutu_konfiguracji_pomiarowej wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdKonfiguracja_pomiarowa = @res_id and a.Nazwa = @attr_name;
 	end
 	else if (@entity = 'measurement')
 	begin
@@ -1953,6 +1586,29 @@ begin
 	delete from wa from Wartosc_atrybutu_pomiaru wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdPomiar = @res_id and a.Nazwa = @attr_name;
 	end;
 end
+go
+
+-- Session creation
+-- ----------------
+create procedure create_session (	@sess_user varchar(20), @sess_lab int, @mk_name varchar(50), @sess_date DateTime, @sess_desc varchar(100), 
+									@sess_id int OUTPUT, @result int OUTPUT )
+as
+begin
+	declare @mc_id as int;
+
+	set @result = 2;
+	if (select COUNT(*) from Rodzaj_ruchu where Nazwa = @mk_name )!=1
+	begin
+		set @mc_id = 1;
+		return;
+	end;
+	
+	insert into Sesja ( IdUzytkownik, IdLaboratorium, IdRodzaj_ruchu, Data, Opis_sesji)
+		values ((select top(1) IdUzytkownik from Uzytkownik where Login = @sess_user), @sess_lab, (select top(1) IdRodzaj_ruchu from Rodzaj_ruchu where Nazwa = @mk_name), 
+		@sess_date, @sess_desc ) set @sess_id = SCOPE_IDENTITY() ;
+	set @result = 0;
+
+end;
 go
 
 -- Metadata definition procedures

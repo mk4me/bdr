@@ -188,7 +188,7 @@ go
 
  ALTER TABLE Pomiar
         ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja
+                              REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
 go 
  CREATE INDEX X1Pomiar ON Pomiar
  (
@@ -196,10 +196,6 @@ go
  )
 go
 
- ALTER TABLE Pomiar
-        ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja
-go 
  CREATE INDEX X2Pomiar ON Pomiar
  (
         IdKonfiguracja_pomiarowa
@@ -220,6 +216,7 @@ CREATE TABLE Wynik_pomiaru
 )
 go
 
+/* Do usuniêcia???
 
  ALTER TABLE Wynik_pomiaru
         ADD FOREIGN KEY (IdPomiar)
@@ -241,6 +238,8 @@ go
  )
 go
 
+*/
+
 CREATE TABLE Pomiar_performer
 (
 	IdPomiar int NOT NULL,
@@ -250,7 +249,7 @@ go
 
  ALTER TABLE Pomiar_performer
         ADD FOREIGN KEY (IdPomiar)
-                              REFERENCES Pomiar
+                              REFERENCES Pomiar on delete cascade; -- wymaga dodania!
 go 
  CREATE INDEX X1Pomiar_performer ON Pomiar_performer
  (
@@ -701,7 +700,7 @@ create table Predykat -- czesc funkcjonalnosci UPS
 )
 go
  ALTER TABLE Predykat
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Predykat
@@ -722,7 +721,7 @@ create table Koszyk
 )
 go
  ALTER TABLE Koszyk
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Koszyk
@@ -933,7 +932,7 @@ go
  
  ALTER TABLE Obserwacja
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja
+                              REFERENCES Sesja on delete cascade; -- wymaga dodania!
 go 
  
 
@@ -964,7 +963,7 @@ go
  
  ALTER TABLE Sesja_grupa_sesji
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja
+                              REFERENCES Sesja on delete cascade; -- wymaga dodania!
 go
  
  ALTER TABLE Plik
@@ -984,38 +983,38 @@ go
  
  ALTER TABLE Uprawnienia_grupa_atrybutow
         ADD FOREIGN KEY (IdGrupa_atrybutow)
-                              REFERENCES Grupa_atrybutow
+                              REFERENCES Grupa_atrybutow on delete cascade; -- wymaga dodania!
 go
  
  
  ALTER TABLE Uprawnienia_grupa_atrybutow
         ADD FOREIGN KEY (IdUzytkownik)
-                              REFERENCES Uzytkownik
+                              REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
  
  
  
  ALTER TABLE Uprawnienia_sesja
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja
+                              REFERENCES Sesja on delete cascade; -- wymaga dodania!
 go
  
  
  ALTER TABLE Uprawnienia_sesja
         ADD FOREIGN KEY (IdUzytkownik)
-                              REFERENCES Uzytkownik
+                              REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
  
  
  ALTER TABLE Uzytkownik_uprawnienia
         ADD FOREIGN KEY (IdUprawnienia_ogolne)
-                              REFERENCES Uprawnienia_ogolne
+                              REFERENCES Uprawnienia_ogolne on delete cascade; -- wymaga dodania!
 go
  
  
  ALTER TABLE Uzytkownik_uprawnienia
         ADD FOREIGN KEY (IdUzytkownik)
-                              REFERENCES Uzytkownik
+                              REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
  
  
@@ -1073,71 +1072,71 @@ go
 go
  
  ALTER TABLE Performer_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
 go
  ALTER TABLE Performer_Koszyk
-        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade; -- wymaga dodania!
 go
  ALTER TABLE Sesja_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
 go
  ALTER TABLE Sesja_Koszyk
-        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade; -- wymaga dodania!
 go
  ALTER TABLE Obserwacja_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
 go
  ALTER TABLE Obserwacja_Koszyk
-        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja
+        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Materializacja_Atrybutu_Performera
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPerformer)
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdSesja)
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Obserwacji
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdObserwacja)
 go
 ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja
+        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPlik)
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdPlik) REFERENCES Plik
+        ADD FOREIGN KEY (IdPlik) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Predykat
@@ -1145,24 +1144,24 @@ ALTER TABLE Predykat
 go
 
 ALTER TABLE Wartosc_Atrybutu_performera
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Wartosc_Atrybutu_sesji
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 
 ALTER TABLE Wartosc_Atrybutu_obserwacji
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Wartosc_Atrybutu_konfiguracji_pomiarowej
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Wartosc_Atrybutu_pomiaru
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik
+        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete cascade; -- wymaga dodania!
 go
 
 ALTER TABLE Konfiguracja_performera

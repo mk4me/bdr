@@ -1,6 +1,10 @@
 use Motion;
 go
 
+-- uzupelniono pliki glowne dnia 2010-11-09
+
+-- Session creation
+-- ----------------
 create procedure create_session (	@sess_user varchar(20), @sess_lab int, @mk_name varchar(50), @sess_date DateTime, @sess_desc varchar(100), 
 									@sess_id int OUTPUT, @result int OUTPUT )
 as
@@ -675,7 +679,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,

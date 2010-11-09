@@ -1,0 +1,34 @@
+storedProcedures1
+=================
+* non-XML queries
+* authorization-related behavior
+* resource attribute and label functions
+* resource by-ID retrieval (incl. session content structure)
+* performer listing queries
+* session listing queries (incl. session content structure)
+* session group listing queries
+* trial listing queries
+* measurement conf. listing queries
+* measurement listing queries
+* measurement result listing queries (?)
+* file listing queries
+* file-typed attribute listing queries
+* metadata queries (atts, att grps, att enums, motion kinds, sess grps
+
+* attribute setting 
+	* attribute value removal
+* session creation
+
+storedProcedures2
+=================
+* attribute value retrieval functions 
+(sprawdziæ ich zwi¹zek z materia³em z sp1 oraz sposób traktowania atrybutów plikowych!)
+* generic queries
+
+* other utils
+	* session group validation
+
+* UPS procedures (stored filters, baskets, 
+
+* privilege management (user accounts, session privileges and visibility, )
+* metadata definition (attributes, attr groups, enums)
