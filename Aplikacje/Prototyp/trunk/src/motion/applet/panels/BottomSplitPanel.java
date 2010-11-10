@@ -46,13 +46,13 @@ public class BottomSplitPanel extends JPanel {
 		JPanel configurationPanel = new JPanel();
 		configurationPanel.setLayout(new BoxLayout(configurationPanel, BoxLayout.X_AXIS));
 		
-		try {
+/*		try {
 			WebServiceInstance.getDatabaseConnection().readAttributeViewConfiguration();
 		} catch (Exception e) {
 			ExceptionDialog exceptionDialog = new ExceptionDialog(e);
 			exceptionDialog.setVisible(true);
 		}
-		
+*/		
 		performerTree = createConfigurationTree(EntityKind.performer, configurationPanel);
 		sessionTree = createConfigurationTree(EntityKind.session, configurationPanel);
 		sessionGroupTree = createConfigurationTree(EntityKind.sessionGroup, configurationPanel);

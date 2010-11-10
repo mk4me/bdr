@@ -70,6 +70,7 @@ interface ModelElementView
     public abstract Object getValueAt(int column); 
 }
 
+@SuppressWarnings("serial")
 class NamedVector<T extends ModelElementView> extends Vector implements ModelElementView
 {
 	String name;
@@ -105,11 +106,12 @@ class NamedVector<T extends ModelElementView> extends Vector implements ModelEle
 
 
 
-class AttributedVectorView extends NamedVector<NamedVector<?>> 
+@SuppressWarnings("serial")
+class AttributedVectorView<T extends ModelElementView> extends NamedVector<T> 
 {
 	protected GenericDescription<?> entity;
     
-	private NamedVector<AttributeView> attributeVector = new NamedVector<AttributeView>("<html><b>Attributes</b></html>");
+	private NamedVector<T> attributeVector = new NamedVector<T>("<html><b>Attributes</b></html>");
 	
 	public AttributedVectorView( GenericDescription<?> entity ) throws Exception 
 	{
@@ -128,9 +130,10 @@ class AttributedVectorView extends NamedVector<NamedVector<?>>
 	}
 }
 
-class EntityFileView extends AttributedVectorView 
+@SuppressWarnings("serial")
+class EntityFileView<T extends ModelElementView> extends AttributedVectorView<T> 
 {
-	private NamedVector fileVector = new NamedVector("<html><b>Files</b></html>");
+	private NamedVector<T> fileVector = new NamedVector<T>("<html><b>Files</b></html>");
 	
 	public EntityFileView( GenericDescription<?> session ) throws Exception 
 	{
@@ -145,10 +148,11 @@ class EntityFileView extends AttributedVectorView
 }
 
 
+@SuppressWarnings("serial")
 class SessionView extends EntityFileView 
 {
-	private NamedVector performersVector = new NamedVector("<html><b>Performers</b></html>");
-	private NamedVector trialVector = new NamedVector("<html><b>Trials</b></html>");
+	private NamedVector<PerformerView> performersVector = new NamedVector<PerformerView>("<html><b>Performers</b></html>");
+	private NamedVector<TrialView> trialVector = new NamedVector<TrialView>("<html><b>Trials</b></html>");
 	
 	public SessionView( Session session ) throws Exception 
 	{
