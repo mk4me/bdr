@@ -360,7 +360,9 @@ public class DatabaseConnection2 implements DatabaseProxy {
 				for (AttributeGroupDefinition a : resultg.getAttributeGroupDefinitionList().getAttributeGroupDefinition() )
 				{
 					EntityAttributeGroup group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
-					output.put( group.name, group);
+					if (a.getShow()!=null)
+						group.isVisible = a.getShow()==1;
+				output.put( group.name, group);
 				}
 			
 			ListAttributesDefinedResult result = port.listAttributesDefined( "_ALL", entityKind);
@@ -372,13 +374,15 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					if (group == null)
 					{
 						group = new EntityAttributeGroup( a.getAttributeGroupName(), entityKind );
+						if (a.getShow()!=null)
+							group.isVisible = a.getShow()==1;
 						output.put( a.getAttributeGroupName(), group );
 					}
 					EntityAttribute attr = new EntityAttribute( a.getAttributeName(), group.kind, null, a.getAttributeGroupName(), a.getAttributeType() );
 					attr.unit = a.getUnit();
 					attr.isEnum = a.getAttributeEnum()==1;
-					// TODO: add attribute visibility
-					//attr.isVisible = a.get
+					if (a.getShow() != null)
+						attr.isVisible = a.getShow()==1;
 					if (a.getEnumValues() != null) {
 						attr.enumValues = a.getEnumValues().getValue();
 					}
