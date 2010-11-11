@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.BoxLayout;
 import javax.swing.JApplet;
@@ -23,6 +25,7 @@ import motion.applet.dialogs.AttributeEditDialog;
 import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.OkCancelDialog;
+import motion.applet.dialogs.WizardDialog;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
 import motion.applet.mouse.TrialMouseAdapter;
@@ -31,6 +34,7 @@ import motion.applet.panels.LeftSplitPanel;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.SessionBrowserPanel;
 import motion.applet.panels.StatusBar;
+import motion.applet.panels.WizardPanel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.widgets.TabCloseButtonWidget;
@@ -259,6 +263,22 @@ public class MotionApplet extends JApplet {
 		}
 		administerMenu.add( ega );
 		this.setJMenuBar(appletMenuBar);
+		
+		// Wizard
+		JMenuItem wizardItem = new JMenuItem("Test wizard");
+		newMenu.add(wizardItem);
+		wizardItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WizardDialog wizardDialog = new WizardDialog("Wizard",
+						new ArrayList<WizardPanel>(Arrays.asList(
+								new WizardPanel("Test wizard step.", true, false, false, true)
+								
+								)
+						)
+				);
+				wizardDialog.setVisible(true);
+			}
+		});
 	}
 	
 	private void createLeftSplitPanel(JPanel leftPanel, EntityKind entityKind) {

@@ -19,7 +19,6 @@ import javax.swing.SwingWorker;
 
 import motion.Messages;
 import motion.applet.MotionApplet;
-import motion.applet.MotionAppletFrame;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DbElementsList;
 import motion.database.model.UserBasket;
