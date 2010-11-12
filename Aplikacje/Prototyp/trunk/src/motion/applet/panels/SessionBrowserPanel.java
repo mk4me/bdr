@@ -24,12 +24,13 @@ import motion.database.model.Session;
 public class SessionBrowserPanel extends JPanel {
 
 	JTreeTable table;
-	Session s;
+	Session[] s;
 	
 	public SessionBrowserPanel() {
 	}
 
-	public void setSession( Session s ) throws Exception
+
+	public void setSession( Session[] s ) throws Exception
 	{
 		this.s = s;
 		SwingWorker<?, ?> worker = new SwingWorker(){
@@ -43,12 +44,12 @@ public class SessionBrowserPanel extends JPanel {
 				SessionBrowserPanel.this.validate();
 				SessionBrowserPanel.this.repaint();
 				
-				table = new JTreeTable( new SessionBrowserModel(SessionBrowserPanel.this.s) );
+				table = new JTreeTable( new SessionBrowserModel(SessionBrowserPanel.this.s ) );
 				table.setAutoResizeMode(JTreeTable.AUTO_RESIZE_ALL_COLUMNS);
 				table.setGridColor(Color.lightGray);
 				table.setIntercellSpacing( new Dimension(4,1) );
 				//table.setRowMargin(4);
-				table.setRowHeight( 22 );
+				table.setRowHeight( 19 );
 				table.setShowGrid(true);
 				table.setAutoscrolls( true );
 				
@@ -66,9 +67,11 @@ public class SessionBrowserPanel extends JPanel {
 		worker.execute();
 	}
 	
-	public void setSession(int sessionId) throws Exception {
-		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( sessionId, EntityKind.session );
-		setSession( s );
+	public void setSession(int[] recordIds) throws Exception {
+		Session [] session = new Session[recordIds.length];
+		for (int i=0; i<recordIds.length; i++)
+			session[i] = (Session) DatabaseConnection.getInstance().getById( recordIds[i], EntityKind.session);
+		setSession(session);
 	}
 
 	
@@ -86,7 +89,7 @@ public class SessionBrowserPanel extends JPanel {
 		JFrame b = new JFrame();
 		b.setLayout( new BorderLayout() );
 		
-		Session s = (Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session );
+		Session[] s = {(Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session )};
 		SessionBrowserPanel p = new SessionBrowserPanel(); 
 		b.add( p, BorderLayout.CENTER );
 		

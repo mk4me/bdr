@@ -457,6 +457,7 @@ public class AttributeTree {
 				JLabel label = new JLabel(message[i]);
 				comboBoxField[i] = new JComboBox( value[i] ); 
 				comboBoxField[i].setEnabled( enabled[i] );
+				comboBoxField[i].setMaximumRowCount(10);
 				gridBagConstraints.gridx = 0;
 				gridBagConstraints.gridy = i;
 				this.add( label, gridBagConstraints );

@@ -171,6 +171,15 @@ class SessionView extends EntityFileView
 	}
 }
 
+class SessionSetView extends NamedVector<SessionView>
+{
+	public SessionSetView(Session[] sessions) throws Exception {
+		super( "Sessions:" );
+		for (Session i:sessions)
+			this.add( new SessionView( i ));
+	}
+}
+
 class AttributeView implements ModelElementView
 {
 	EntityAttribute a;
@@ -296,6 +305,9 @@ public class SessionBrowserModel extends AbstractTreeTableModel
     	super( new SessionView(s) );
     }
 
+    public SessionBrowserModel(Session[] s) throws Exception { 
+    	super( new SessionSetView(s) );
+    }
     //
     // The TreeModel interface
     //

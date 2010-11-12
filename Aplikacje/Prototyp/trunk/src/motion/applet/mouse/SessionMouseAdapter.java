@@ -16,6 +16,7 @@ import motion.applet.MotionApplet;
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DatabaseConnection;
 import motion.database.model.EntityKind;
 import motion.database.model.Session;
 
@@ -39,7 +40,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 		this.rightPanel = rightPanel;
 	}
 	
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(final MouseEvent e) {
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 			JPopupMenu popupMenu = new JPopupMenu();
@@ -89,10 +90,11 @@ public class SessionMouseAdapter extends MouseAdapter {
 			
 			viewSessionTreeMenuItem.addActionListener(new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent ae) {
 					try {
+						final int[] recordIds = rightPanel.getSelectedRecords((JTable) e.getSource(), e);
 						rightPanel.getApplet().switchToSessionBrowser();
-						rightPanel.getApplet().getSessionBrowserPanel().setSession( recordId );
+						rightPanel.getApplet().getSessionBrowserPanel().setSession( recordIds );
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
