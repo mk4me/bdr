@@ -556,6 +556,33 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 	
 ////////////////////////////////////////////////////////////////////////////
+// Performer Configuration 
+
+	//@Override
+/*	public  String getPerformerPerformerConfiguration(int performerID) throws Exception
+	{
+		try{	
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionLabel", this );
+		
+			return port.listssionLabel( performerID );
+		}
+		catch(IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage e)
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+*/
+	
+
+	
+	
+	
+////////////////////////////////////////////////////////////////////////////
 //	Session
 	
 
@@ -914,26 +941,27 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public  String downloadFile(int fileID, String destLocalFolder, FileTransferListener transferListener, boolean recreateFolder) throws Exception
 	{
-			IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "downloadFile", this );
+		fileTransferCancelled = false;
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "downloadFile", this );
 	
-			FileData file = port.retrieveFile(fileID);
-			
-			File remoteFile = new File ( file.getFileLocation() );
+		FileData file = port.retrieveFile(fileID);
+		
+		File remoteFile = new File ( file.getFileLocation() );
 
-			if (recreateFolder)
-			{
-				destLocalFolder += "/"+ file.getSubdirPath();
-				File localDest = new File(destLocalFolder);
-				localDest.mkdirs();
-			}
-			getFile( remoteFile.getName(), remoteFile.getParent(), 
-					this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
-					destLocalFolder, transferListener );
+		if (recreateFolder)
+		{
+			destLocalFolder += "/"+ file.getSubdirPath();
+			File localDest = new File(destLocalFolder);
+			localDest.mkdirs();
+		}
+		getFile( remoteFile.getName(), remoteFile.getParent(), 
+				this.ftpsCredentials.address, this.ftpsCredentials.userName, this.ftpsCredentials.password,
+				destLocalFolder, transferListener );
 
-			port.downloadComplete(fileID, file.getFileLocation());
-			
-			ConnectionTools2.finalizeCall();
-			return destLocalFolder + remoteFile.getName();
+		port.downloadComplete(fileID, file.getFileLocation());
+		
+		ConnectionTools2.finalizeCall();
+		return destLocalFolder + remoteFile.getName();
 	}
 
 	
@@ -997,7 +1025,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public void uploadFile(int resourceId, EntityKind kind, String description, String localFilePath, FileTransferListener listener) throws Exception
 	{
-
+		fileTransferCancelled = false;
 		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadFile", this );
 
 		String destRemoteFolder = getUniqueFolderName();
@@ -1015,6 +1043,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public void uploadDirectory(int resourceId, EntityKind kind, String description, String filesPath, FileTransferListener listener) throws Exception
 	{
+		fileTransferCancelled = false;
 		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadDirectory", this );
 
 		String destRemoteFolder = getUniqueFolderName();
@@ -1037,8 +1066,9 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	@Override
 	public void uploadFilesDirectories(int resourceId, EntityKind kind, String description, File[] filesPath, FileTransferListener listener) throws Exception
 	{
-		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadDirectory", this );
-
+		fileTransferCancelled = false;
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadFilesDirectories", this );
+		
 
 		for (File path : filesPath)
 		{
