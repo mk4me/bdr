@@ -11,6 +11,8 @@ public class WizardPanel extends JPanel {	// change to abstract class
 	public boolean enableNext;
 	public boolean enableFinish;
 	
+	public String cardName;
+	
 	public WizardPanel(String stepMessage,
 			boolean enableCancel, boolean enableBack, boolean enableNext, boolean enableFinish) {
 		super();

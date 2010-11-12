@@ -271,7 +271,8 @@ public class MotionApplet extends JApplet {
 			public void actionPerformed(ActionEvent arg0) {
 				WizardDialog wizardDialog = new WizardDialog("Wizard",
 						new ArrayList<WizardPanel>(Arrays.asList(
-								new WizardPanel("Test wizard step.", true, false, false, true)
+								new WizardPanel("Test wizard step 1.", true, false, true, true),
+								new WizardPanel("Test wizard step 2.", true, true, false, true)
 								
 								)
 						)
@@ -372,7 +373,7 @@ public class MotionApplet extends JApplet {
 	
 	@Override
 	public void init () {
-		
+		this.setSize(MotionApplet.APPLET_WIDTH, MotionApplet.APPLET_HEIGHT);
 		if (language == null)
 			language = this.getParameter("language");
 
