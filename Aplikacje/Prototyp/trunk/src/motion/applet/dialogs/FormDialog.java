@@ -197,6 +197,16 @@ public class FormDialog extends BasicDialog {
 	
 	protected boolean setAttributeValue(FormField f) {
 		Object attributeValue = null;
+		
+		// Non static attributes are optional
+		if (!f.attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
+			if (f.isDataEmpty() == true) {
+				f.attribute.value = null;
+				
+				return true;
+			}
+		}
+		
 		if (f instanceof FormTextField) {
 			attributeValue = ((FormTextField) f).getData();
 		} else if (f instanceof FormTextAreaField) {
@@ -255,6 +265,11 @@ public class FormDialog extends BasicDialog {
 						f.attribute,
 						true);
 				
+			} else {
+				if (recordId > -1) {
+					// FIXME: clear only those attributes which exist
+					//WebServiceInstance.getDatabaseConnection().clearEntityAttribute(recordId, f.attribute);
+				}
 			}
 		}
 	}
@@ -418,6 +433,16 @@ public class FormDialog extends BasicDialog {
 		public void setData(Object value) {
 			text.setText(value.toString());
 		}
+		
+		public boolean isDataEmpty() {
+			if (text.getText().equals("")) {
+				
+				return true;
+			} else {
+				
+				return false;
+			}
+		}
 	}
 	
 	private class FormTextField extends FormField {
@@ -444,6 +469,16 @@ public class FormDialog extends BasicDialog {
 		public String getData() {
 			
 			return textArea.getText();
+		}
+		
+		public boolean isDataEmpty() {
+			if (textArea.getText().equals("")) {
+				
+				return true;
+			} else {
+				
+				return false;
+			}
 		}
 		
 		protected void prepareField() {
@@ -599,6 +634,11 @@ public class FormDialog extends BasicDialog {
 			//}
 		}
 		
+		public boolean isDataEmpty() {
+			
+			return false;
+		}
+		
 		protected void prepareField() {
 			addLabel();
 		}
@@ -628,5 +668,7 @@ public class FormDialog extends BasicDialog {
 				}
 			}
 		}
+		
+		
 	}
 }
