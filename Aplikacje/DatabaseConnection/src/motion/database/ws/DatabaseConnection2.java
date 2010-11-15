@@ -27,6 +27,7 @@ import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
+import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
@@ -48,6 +49,7 @@ import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.GenericUniformAttributesQueryResult;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage;
@@ -62,6 +64,7 @@ import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListSessionTrial
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListTrialMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerSessionWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
@@ -558,15 +561,21 @@ public class DatabaseConnection2 implements DatabaseProxy {
 ////////////////////////////////////////////////////////////////////////////
 // Performer Configuration 
 
-	//@Override
-/*	public  String getPerformerPerformerConfiguration(int performerID) throws Exception
+	@Override
+	public  DbElementsList<PerformerConfiguration> getSessionPerformerConfiguration(int sessionID) throws Exception
 	{
 		try{	
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionLabel", this );
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionPerformerConfiguration", this );
 		
-			return port.listssionLabel( performerID );
+			DbElementsList<PerformerConfiguration> list = new DbElementsList<PerformerConfiguration>();
+
+			for (PerformerConfDetailsWithAttributes c : port.listSessionPerformerConfsWithAttributesXML(sessionID).getSessionPerformerConfWithAttributesList().getPerformerConfDetailsWithAttributes() )
+				list.add( ConnectionTools2.transformPerformerConfigurationDetails( c ) );
+			
+			return list;
+			
 		}
-		catch(IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage e)
+		catch(IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage e)
 		{
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
@@ -576,7 +585,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-*/
+
 	
 
 	

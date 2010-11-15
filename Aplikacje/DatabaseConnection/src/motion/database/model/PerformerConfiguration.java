@@ -5,13 +5,13 @@ package motion.database.model;
 public class PerformerConfiguration extends GenericDescription<PerformerConfigurationStaticAttributes>{
 
 	public PerformerConfiguration() {
-		super(PerformerConfigurationStaticAttributes.PerformerID.name(), EntityKind.performer);
+		super(PerformerConfigurationStaticAttributes.PerformerConfigurationID.name(), EntityKind.performer_conf);
 	}
 	
 	public String toString() {
 		
-		return super.get(PerformerConfigurationStaticAttributes.FirstName.toString()).value.toString() + " " +
-			super.get(PerformerConfigurationStaticAttributes.LastName.toString()).value.toString();
+		return super.getValue(PerformerConfigurationStaticAttributes.PerformerConfigurationID).toString() + " Session:" +
+			super.getValue(PerformerConfigurationStaticAttributes.SessionID).toString() + " Performer:" + 
+			super.getValue(PerformerConfigurationStaticAttributes.PerformerID).toString();
 	}
-	
 }

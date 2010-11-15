@@ -18,6 +18,8 @@ import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementConfigurationStaticAttributes;
 import motion.database.model.MeasurementStaticAttributes;
 import motion.database.model.Performer;
+import motion.database.model.PerformerConfiguration;
+import motion.database.model.PerformerConfigurationStaticAttributes;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
@@ -43,12 +45,14 @@ import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.FileList.FileDetails;
 import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse.ListSessionPerformerConfsWithAttributesXMLResult;
 import motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.fileStoremanServiceWCF.FileStoremanWS;
@@ -439,6 +443,34 @@ public class ConnectionTools2 {
 		return m;
 	}
 
+	public static DbElementsList<PerformerConfiguration> transformPerformerConfigurationDetails(
+			ListSessionPerformerConfsWithAttributesXMLResult input) {
+		
+		DbElementsList<PerformerConfiguration> list = new DbElementsList<PerformerConfiguration>();
+		for (PerformerConfDetailsWithAttributes c : input.getSessionPerformerConfWithAttributesList().getPerformerConfDetailsWithAttributes() )
+		{
+			PerformerConfiguration conf = new PerformerConfiguration();
+			conf.put( PerformerConfigurationStaticAttributes.PerformerConfigurationID, c.getPerformerConfID() );
+			conf.put( PerformerConfigurationStaticAttributes.PerformerID, c.getPerformerID() );
+			conf.put( PerformerConfigurationStaticAttributes.SessionID, c.getSessionID() );
+			ConnectionTools2.transformGenericAttributes( c.getAttributes(), conf );
+		}
+		return list;
+	}
+
+	public static PerformerConfiguration transformPerformerConfigurationDetails(
+			PerformerConfDetailsWithAttributes c) {
+		
+			PerformerConfiguration conf = new PerformerConfiguration();
+			conf.put( PerformerConfigurationStaticAttributes.PerformerConfigurationID, c.getPerformerConfID() );
+			conf.put( PerformerConfigurationStaticAttributes.PerformerID, c.getPerformerID() );
+			conf.put( PerformerConfigurationStaticAttributes.SessionID, c.getSessionID() );
+			ConnectionTools2.transformGenericAttributes( c.getAttributes(), conf );
+
+			return conf;
+	}
+
+	
 	public static Exception transformWSFaultMessage( Exception e )
 	{
 		String s = e.getLocalizedMessage();
@@ -469,5 +501,4 @@ public class ConnectionTools2 {
 		DatabaseConnection.log.log( Level.SEVERE, s, e );
 		return new Exception( s, e ); 
 	}
-
 }

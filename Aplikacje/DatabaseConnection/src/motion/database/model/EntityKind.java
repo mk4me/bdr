@@ -14,14 +14,17 @@ import motion.database.ws.ConnectionTools2;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse.GetPerformerConfigurationByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetSessionByIdXMLResponse.GetSessionByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetTrialByIdXMLResponse.GetTrialByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
@@ -302,6 +305,55 @@ public enum EntityKind {
 		}
 	}, 
 	
+	performer_conf(PerformerConfigurationStaticAttributes.class) {
+
+/*		@Override
+		public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
+			port.storeMeasurementConfFile(resourceId, destRemoteFolder, description, filename);
+		}
+	
+		@Override
+		public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
+			port.storeMeasurementConfFiles(resourceId, destRemoteFolder, description);
+		}
+
+		@Override
+		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+		{
+			return super.listFilesMethod(port, resourceID);
+		}
+*/
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setPerformerConfAttribute(ID, a.name, a.value.toString(), update);
+		}
+		
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new PerformerConfiguration();
+		}
+
+		@Override
+		public PerformerConfiguration getByID(IBasicQueriesWS port, int id) throws Exception {
+			try{
+				GetPerformerConfigurationByIdXMLResult result = port.getPerformerConfigurationByIdXML(id);
+				PerformerConfDetailsWithAttributes s = result.getPerformerConfDetailsWithAttributes();
+		
+				return ConnectionTools2.transformPerformerConfigurationDetails(s);
+			}
+			catch(IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage e)
+			{
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}
+			finally
+			{
+				ConnectionTools2.finalizeCall();
+			}
+		}
+	}, 
 	
 	file(DatabaseFileStaticAttributes.class)
 	{

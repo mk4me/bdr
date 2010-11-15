@@ -18,6 +18,7 @@ import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
+import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.model.Trial;
@@ -228,6 +229,9 @@ public interface DatabaseProxy {
 	void saveAttributeViewConfiguration() throws Exception;
 
 	void readAttributeViewConfiguration() throws Exception;
+
+	DbElementsList<PerformerConfiguration> getSessionPerformerConfiguration(
+			int sessionID) throws Exception;
 
 
 }
