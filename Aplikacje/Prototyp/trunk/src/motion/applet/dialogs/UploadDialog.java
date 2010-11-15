@@ -201,7 +201,15 @@ public class UploadDialog extends BasicDialog {
 		this.browseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d session file", "c3d")); //$NON-NLS-1$ //$NON-NLS-2$
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".zip", "zip"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".asf", "asf"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".amc", "amc"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".c3d", "c3d"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(".avi", "avi"));
+				fileChooser.setFileFilter(new FileNameExtensionFilter(
+						".avi .c3d .amc .asf .zip",
+						"avi", "c3d", "amc", "asf", "zip"
+						));
 				fileChooser.setMultiSelectionEnabled(true);
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fileChooser.showOpenDialog(UploadDialog.this);
