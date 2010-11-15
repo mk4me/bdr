@@ -305,56 +305,6 @@ public enum EntityKind {
 		}
 	}, 
 	
-	performer_conf(PerformerConfigurationStaticAttributes.class) {
-
-/*		@Override
-		public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
-			port.storeMeasurementConfFile(resourceId, destRemoteFolder, description, filename);
-		}
-	
-		@Override
-		public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
-			port.storeMeasurementConfFiles(resourceId, destRemoteFolder, description);
-		}
-
-		@Override
-		public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
-		{
-			return super.listFilesMethod(port, resourceID);
-		}
-*/
-		@Override
-		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
-				EntityAttribute a, boolean update) throws Exception {
-			port.setPerformerConfAttribute(ID, a.name, a.value.toString(), update);
-		}
-		
-		@Override
-		public GenericDescription<?> newEntity()
-		{
-			return new PerformerConfiguration();
-		}
-
-		@Override
-		public PerformerConfiguration getByID(IBasicQueriesWS port, int id) throws Exception {
-			try{
-				GetPerformerConfigurationByIdXMLResult result = port.getPerformerConfigurationByIdXML(id);
-				PerformerConfDetailsWithAttributes s = result.getPerformerConfDetailsWithAttributes();
-		
-				return ConnectionTools2.transformPerformerConfigurationDetails(s);
-			}
-			catch(IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage e)
-			{
-				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
-				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
-			}
-			finally
-			{
-				ConnectionTools2.finalizeCall();
-			}
-		}
-	}, 
-	
 	file(DatabaseFileStaticAttributes.class)
 	{
 		@Override
@@ -427,6 +377,57 @@ public enum EntityKind {
 			}
 			return genericAttributeGroups;	
 		}
+	},
+	
+	performer_conf(PerformerConfigurationStaticAttributes.class) 
+	{
+
+		/*		@Override
+				public void storeFile(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description, String filename) throws Exception{
+					port.storeMeasurementConfFile(resourceId, destRemoteFolder, description, filename);
+				}
+			
+				@Override
+				public void storeFiles(IFileStoremanWS port, int resourceId, String destRemoteFolder, String description) throws Exception{
+					port.storeMeasurementConfFiles(resourceId, destRemoteFolder, description);
+				}
+
+				@Override
+				public DbElementsList<DatabaseFile> listFiles(IBasicQueriesWS port, int resourceID) throws Exception
+				{
+					return super.listFilesMethod(port, resourceID);
+				}
+		*/
+		@Override
+		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
+				EntityAttribute a, boolean update) throws Exception {
+			port.setPerformerConfAttribute(ID, a.name, a.value.toString(), update);
+		}
+		
+		@Override
+		public GenericDescription<?> newEntity()
+		{
+			return new PerformerConfiguration();
+		}
+
+		@Override
+		public PerformerConfiguration getByID(IBasicQueriesWS port, int id) throws Exception {
+			try{
+				GetPerformerConfigurationByIdXMLResult result = port.getPerformerConfigurationByIdXML(id);
+				PerformerConfDetailsWithAttributes s = result.getPerformerConfDetailsWithAttributes();
+		
+				return ConnectionTools2.transformPerformerConfigurationDetails(s);
+			}
+			catch(IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage e)
+			{
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}
+			finally
+			{
+				ConnectionTools2.finalizeCall();
+			}
+		}
 	};
 	
 	
@@ -435,7 +436,11 @@ public enum EntityKind {
 	protected Class<?> staticAttributesNames;
 	public static String STATIC_ATTRIBUTE_GROUP = "_static";
 
-	protected static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), Messages.getString("EntityKind.9"), Messages.getString("EntityKind.10")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-10$
+	protected static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), 
+		Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), 
+		Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), 
+		Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), 
+		Messages.getString("EntityKind.9"), Messages.getString("EntityKind.10"), Messages.getString("EntityKind.11")}; 
 
 	protected ArrayList<EntityAttribute> genericAttributes;
 	protected ArrayList<EntityAttribute> staticAttributes;
