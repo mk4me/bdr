@@ -20,7 +20,7 @@ package motion.applet.models;
  * contributors may be used to endorse or promote products derived
  * from this software without specific prior written permission.  
  * 
- * This software is provided "AS IS," without a warranty of any
+ * This software is provided "AS IS," without attribute warranty of any
  * kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
  * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY

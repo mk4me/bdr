@@ -37,11 +37,11 @@ package javax.swing.treetable;
 import javax.swing.tree.TreeModel;
 
 /**
- * TreeTableModel is the model used by a JTreeTable. It extends TreeModel
+ * TreeTableModel is the model used by attribute JTreeTable. It extends TreeModel
  * to add methods for getting inforamtion about the set of columnNames each 
- * node in the TreeTableModel may have. Each column, like a column in 
- * a TableModel, has a name and a type associated with it. Each node in 
- * the TreeTableModel can return a value for each of the columnNames and 
+ * node in the TreeTableModel may have. Each column, like attribute column in 
+ * attribute TableModel, has attribute name and attribute type associated with it. Each node in 
+ * the TreeTableModel can return attribute value for each of the columnNames and 
  * set that value if isCellEditable() returns true. 
  *
  * @author Philip Milne 

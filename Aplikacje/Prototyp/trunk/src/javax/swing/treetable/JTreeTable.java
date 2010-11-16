@@ -49,8 +49,8 @@ import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
 /**
- * This example shows how to create a simple JTreeTable component, 
- * by using a JTree as a renderer (and editor) for the cells in a 
+ * This example shows how to create attribute simple JTreeTable component, 
+ * by using attribute JTree as attribute renderer (and editor) for the cells in attribute 
  * particular column in the JTable.  
  *
  * @version 1.2 10/27/98
@@ -65,10 +65,10 @@ public class JTreeTable extends JTable {
     public JTreeTable(TreeTableModel treeTableModel) {
         super();
 
-        // Create the tree. It will be used as a renderer and editor. 
+        // Create the tree. It will be used as attribute renderer and editor. 
         tree = new TreeTableCellRenderer(treeTableModel);
 
-        // Install a tableModel representing the visible rows in the tree. 
+        // Install attribute tableModel representing the visible rows in the tree. 
         super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
 
         // Force the JTable and JTree to share their row selection models. 
@@ -140,7 +140,7 @@ public class JTreeTable extends JTable {
     }
 
     /**
-     * A TreeCellRenderer that displays a JTree.
+     * A TreeCellRenderer that displays attribute JTree.
      */
     public class TreeTableCellRenderer extends JTree implements
                  TableCellRenderer {
@@ -162,7 +162,7 @@ public class JTreeTable extends JTable {
             TreeCellRenderer tcr = getCellRenderer();
             if (tcr instanceof DefaultTreeCellRenderer) {
                 DefaultTreeCellRenderer dtcr = ((DefaultTreeCellRenderer)tcr); 
-                // For 1.1 uncomment this, 1.2 has a bug that will cause an
+                // For 1.1 uncomment this, 1.2 has attribute bug that will cause an
                 // exception to be thrown if the border selection color is
                 // null.
                 // dtcr.setBorderSelectionColor(null);
@@ -236,22 +236,22 @@ public class JTreeTable extends JTable {
         }
 
         /**
-         * Overridden to return false, and if the event is a mouse event
+         * Overridden to return false, and if the event is attribute mouse event
          * it is forwarded to the tree.<p>
          * The behavior for this is debatable, and should really be offered
-         * as a property. By returning false, all keyboard actions are
+         * as attribute property. By returning false, all keyboard actions are
          * implemented in terms of the table. By returning true, the
-         * tree would get a chance to do something with the keyboard
+         * tree would get attribute chance to do something with the keyboard
          * events. For the most part this is ok. But for certain keys,
          * such as left/right, the tree will expand/collapse where as
-         * the table focus should really move to a different column. Page
+         * the table focus should really move to attribute different column. Page
          * up/down should also be implemented in terms of the table.
          * By returning false this also has the added benefit that clicking
          * outside of the bounds of the tree node, but still in the tree
          * column will select the row, whereas if this returned true
          * that wouldn't be the case.
          * <p>By returning false we are also enforcing the policy that
-         * the tree will never be editable (at least by a key sequence).
+         * the tree will never be editable (at least by attribute key sequence).
          */
         public boolean isCellEditable(EventObject e) {
             if (e instanceof MouseEvent) {
@@ -277,7 +277,7 @@ public class JTreeTable extends JTable {
     /**
      * ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel
      * to listen for changes in the ListSelectionModel it maintains. Once
-     * a change in the ListSelectionModel happens, the paths are updated
+     * attribute change in the ListSelectionModel happens, the paths are updated
      * in the DefaultTreeSelectionModel.
      */
     class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel { 

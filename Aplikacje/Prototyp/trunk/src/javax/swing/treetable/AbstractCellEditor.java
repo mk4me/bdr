@@ -63,7 +63,7 @@ public class AbstractCellEditor implements CellEditor {
      * @see EventListenerList
      */
     protected void fireEditingStopped() {
-        // Guaranteed to return a non-null array
+        // Guaranteed to return attribute non-null array
         Object[] listeners = listenerList.getListenerList();
         // Process the listeners last to first, notifying
         // those that are interested in this event
@@ -80,7 +80,7 @@ public class AbstractCellEditor implements CellEditor {
      * @see EventListenerList
      */
     protected void fireEditingCanceled() {
-        // Guaranteed to return a non-null array
+        // Guaranteed to return attribute non-null array
         Object[] listeners = listenerList.getListenerList();
         // Process the listeners last to first, notifying
         // those that are interested in this event

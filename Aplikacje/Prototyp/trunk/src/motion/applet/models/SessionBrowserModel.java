@@ -1,4 +1,5 @@
 package motion.applet.models;
+
 /*
  * %W% %E%
  *
@@ -20,7 +21,7 @@ package motion.applet.models;
  * contributors may be used to endorse or promote products derived
  * from this software without specific prior written permission.  
  * 
- * This software is provided "AS IS," without a warranty of any
+ * This software is provided "AS IS," without attribute warranty of any
  * kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
  * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
@@ -59,330 +60,296 @@ import motion.database.model.Session;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
 
-interface ModelElementView
-{
-	public abstract int getChildCount();
-	
-    public abstract Object getChild(int i);
-    
-    public abstract boolean isLeaf();
-    
-    public abstract Object getValueAt(int column); 
-}
+public class SessionBrowserModel extends AbstractTreeTableModel implements
+		TreeTableModel {
 
-@SuppressWarnings("serial")
-class NamedVector<T extends ModelElementView> extends Vector implements ModelElementView
-{
-	String name;
-	
-	public NamedVector(String name) {
-		this.name = name;
-	}
-	
-	public String toString() {
-		return name;
+	interface ModelElementView {
+		public abstract int getChildCount();
+
+		public abstract Object getChild(int i);
+
+		public abstract boolean isLeaf();
+
+		public abstract Object getValueAt(int column);
 	}
 
-	@Override
-	public Object getChild(int i) {
-		return this.elementAt(i);
+	@SuppressWarnings("serial")
+	static class NamedVector<T extends ModelElementView> extends Vector implements
+			ModelElementView {
+		String name;
+
+		public NamedVector(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+
+		@Override
+		public Object getChild(int i) {
+			return this.elementAt(i);
+		}
+
+		@Override
+		public int getChildCount() {
+			return this.size();
+		}
+
+		@Override
+		public Object getValueAt(int column) {
+			return "";
+		}
+
+		@Override
+		public boolean isLeaf() {
+			return false;
+		}
 	}
 
-	@Override
-	public int getChildCount() {
-		return this.size();
-	}
-
-	@Override
-	public Object getValueAt(int column) {
-		return "";
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return false;
-	}
-}
-
-
-
-@SuppressWarnings("serial")
-class AttributedVectorView<T extends ModelElementView> extends NamedVector<T> 
-{
-	protected GenericDescription<?> entity;
-    
-	private NamedVector<T> attributeVector = new NamedVector<T>("<html><b>Attributes</b></html>");
-	
-	public AttributedVectorView( GenericDescription<?> entity ) throws Exception 
-	{
-		super( entity.entityKind.getGUIName() + " (" + entity.getId() + ")");
-		this.entity = entity;
+	@SuppressWarnings("serial")
+	public static 	class AttributedVectorView<T extends ModelElementView> extends NamedVector<T> {
 		
-		//create attributes View
-		for (EntityAttributeGroup g : entity.groups.values())
-			if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP))
-				for (EntityAttribute a : g)
-					attributeVector.add( new AttributeView(a) );
+		public GenericDescription<?> entity;
+
+		private NamedVector<T> attributeVector = new NamedVector<T>(
+				"<html><b>Attributes</b></html>");
+
+		public AttributedVectorView(GenericDescription<?> entity)
+				throws Exception {
+			super(entity.entityKind.getGUIName() + " (" + entity.getId() + ")");
+			this.entity = entity;
+
+			// create attributes View
+			for (EntityAttributeGroup g : entity.groups.values())
+				if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP))
+					for (EntityAttribute a : g)
+						attributeVector.add(new AttributeView(a));
+				else
+					attributeVector.add(new AttributeGroupView(g));
+
+			this.add(attributeVector);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	static class EntityFileView<T extends ModelElementView> extends
+			AttributedVectorView<T> {
+		
+		private NamedVector<T> fileVector = new NamedVector<T>(
+				"<html><b>Files</b></html>");
+
+		public EntityFileView(GenericDescription<?> session) throws Exception {
+			super(session);
+
+			// create files view
+			for (DatabaseFile f : DatabaseConnection.getInstance().listFiles(
+					session.getId(), session.entityKind))
+				fileVector.add(new SessionBrowserModel.FileView(f));
+
+			this.add(fileVector);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	static class SessionView extends EntityFileView {
+		
+		private NamedVector<PerformerView> performersVector = new NamedVector<PerformerView>(
+				"<html><b>Performers</b></html>");
+		private NamedVector<TrialView> trialVector = new NamedVector<TrialView>(
+				"<html><b>Trials</b></html>");
+
+		public SessionView(Session session) throws Exception {
+			super(session);
+
+			// create performers view
+			for (Performer p : DatabaseConnection.getInstance()
+					.listSessionPerformersWithAttributes(session.getId()))
+				performersVector.add(new PerformerView(p));
+
+			// create trials view
+			for (Trial t : DatabaseConnection.getInstance()
+					.listSessionTrialsWithAttributes(session.getId()))
+				trialVector.add(new TrialView(t));
+
+			this.add(performersVector);
+			this.add(trialVector);
+		}
+	}
+
+	static class SessionSetView extends NamedVector<SessionView> {
+		public SessionSetView(Session[] sessions) throws Exception {
+			super("Sessions:");
+			for (Session i : sessions)
+				this.add(new SessionView(i));
+		}
+	}
+
+	public static class AttributeView implements ModelElementView {
+		
+		public EntityAttribute attribute;
+
+		public AttributeView(EntityAttribute a) {
+			this.attribute = a;
+		}
+
+		@Override
+		public Object getChild(int i) {
+			return null;
+		}
+
+		@Override
+		public int getChildCount() {
+			return 0;
+		}
+
+		@Override
+		public Object getValueAt(int column) {
+			if (attribute.value!= null && column == 1)
+				return attribute.value.toString();
+			else if (column == 2)
+				return attribute.type;
 			else
-				attributeVector.add( new AttributeGroupView (g) );
-			
-		this.add( attributeVector );
-	}
-}
+				return "";
+		}
 
-@SuppressWarnings("serial")
-class EntityFileView<T extends ModelElementView> extends AttributedVectorView<T> 
-{
-	private NamedVector<T> fileVector = new NamedVector<T>("<html><b>Files</b></html>");
-	
-	public EntityFileView( GenericDescription<?> session ) throws Exception 
-	{
-		super( session );
-	
-		//create files view
-		for (DatabaseFile f : DatabaseConnection.getInstance().listFiles(session.getId(), session.entityKind ) )
-			fileVector.add( new FileView(f) );
-	
-		this.add( fileVector );
-	}
-}
+		public String toString() {
+			return attribute.name;
+		}
 
-
-@SuppressWarnings("serial")
-class SessionView extends EntityFileView 
-{
-	private NamedVector<PerformerView> performersVector = new NamedVector<PerformerView>("<html><b>Performers</b></html>");
-	private NamedVector<TrialView> trialVector = new NamedVector<TrialView>("<html><b>Trials</b></html>");
-	
-	public SessionView( Session session ) throws Exception 
-	{
-		super( session );
-	
-		//create performers view
-		for (Performer p : DatabaseConnection.getInstance().listSessionPerformersWithAttributes(session.getId()))
-			performersVector.add( new PerformerView(p) );
-
-		//create trials view
-		for (Trial t : DatabaseConnection.getInstance().listSessionTrialsWithAttributes( session.getId() ))
-			trialVector.add( new TrialView(t) );
-			
-		this.add( performersVector );
-		this.add( trialVector );
-	}
-}
-
-class SessionSetView extends NamedVector<SessionView>
-{
-	public SessionSetView(Session[] sessions) throws Exception {
-		super( "Sessions:" );
-		for (Session i:sessions)
-			this.add( new SessionView( i ));
-	}
-}
-
-class AttributeView implements ModelElementView
-{
-	EntityAttribute a;
-	
-	public AttributeView(EntityAttribute a) {
-		this.a = a;
+		@Override
+		public boolean isLeaf() {
+			return true;
+		}
 	}
 
-	@Override
-	public Object getChild(int i) {
-		return null;
+	public static class FileView extends AttributedVectorView {
+		public FileView(DatabaseFile a) throws Exception {
+			super(a);
+		}
+
+		public String toString() {
+			return (((DatabaseFile) entity)
+					.getValue(DatabaseFileStaticAttributes.FileName))
+					.toString();
+		}
 	}
 
-	@Override
-	public int getChildCount() {
-		return 0;
+	static class PerformerView extends AttributedVectorView {
+		public PerformerView(Performer a) throws Exception {
+			super(a);
+		}
+
+		@Override
+		public Object getValueAt(int column) {
+			if (column == 1)
+				return ((Performer) entity).getValue(
+						PerformerStaticAttributes.FirstName).toString();
+			else if (column == 2)
+				return ((Performer) entity).getValue(
+						PerformerStaticAttributes.LastName).toString();
+			else
+				return "";
+		}
 	}
 
-	@Override
-	public Object getValueAt(int column) {
-		if (column == 1)
-			return a.value.toString();
-		else if (column == 2)
-			return a.type;
-		else
-			return "";
+	static class TrialView extends EntityFileView {
+		public TrialView(Trial a) throws Exception {
+			super(a);
+		}
 	}
 
-	public String toString() {
-		return a.name;
-	}
-	
-	@Override
-	public boolean isLeaf() {
-		return true;
-	}
-}
+	static class AttributeGroupView extends NamedVector<AttributeView> {
+		private EntityAttributeGroup g;
 
+		public AttributeGroupView(EntityAttributeGroup g) {
+			super(g.name);
+			this.g = g;
 
-class FileView extends AttributedVectorView
-{
-	public FileView(DatabaseFile a) throws Exception {
-		super(a);
-	}
-/*
-	@Override
-	public Object getChild(int i) {
-		return null;
+			for (EntityAttribute a : g)
+				add(new AttributeView(a));
+		}
 	}
 
-	@Override
-	public int getChildCount() {
-		return 0;
-	}
+	// Names of the columnNames.
+	static protected String[] cNames = { "Name", "Value", "Type" };
 
-	@Override
-	public Object getValueAt(int column) {
-		return "";
-	}
-	
-	@Override
-	public boolean isLeaf() {
-		return true;
-	}
-*/
-	public String toString() {
-		return (((DatabaseFile)entity).getValue( DatabaseFileStaticAttributes.FileName )).toString();
-	}
-}
+	// Types of the columnNames.
+	static protected Class[] cTypes = { TreeTableModel.class, String.class,
+			String.class };
 
-
-class PerformerView extends AttributedVectorView
-{
-	public PerformerView(Performer a) throws Exception {
-		super(a);
-	}
-
-	@Override
-	public Object getValueAt(int column) {
-		if (column == 1)
-			return ((Performer)entity).getValue( PerformerStaticAttributes.FirstName ).toString();
-		else if (column == 2)
-			return ((Performer)entity).getValue( PerformerStaticAttributes.LastName ).toString();
-		else
-			return "";
-	}
-}
-
-
-class TrialView extends EntityFileView
-{
-	public TrialView(Trial a) throws Exception {
-		super(a);
-	}
-}
-
-
-class AttributeGroupView extends NamedVector<AttributeView>
-{
-	private EntityAttributeGroup g;
-
-	public AttributeGroupView(EntityAttributeGroup g) {
-		super(g.name);
-		this.g = g;
-
-		for (EntityAttribute a : g)
-			add( new AttributeView(a));
-	}
-}
-
-
-
-public class SessionBrowserModel extends AbstractTreeTableModel 
-                             implements TreeTableModel {
-
-    // Names of the columnNames.
-    static protected String[]  cNames = {"Name", "Value", "Type"};
-
-    // Types of the columnNames.
-    static protected Class[]  cTypes = {TreeTableModel.class, String.class, String.class};
-
-    public SessionBrowserModel(Session s) throws Exception { 
+	public SessionBrowserModel(Session s) throws Exception { 
     	super( new SessionView(s) );
     }
 
-    public SessionBrowserModel(Session[] s) throws Exception { 
-    	super( new SessionSetView(s) );
-    }
-    //
-    // The TreeModel interface
-    //
+	public SessionBrowserModel(Session[] s) throws Exception {
+		super(new SessionSetView(s));
+	}
 
-    public int getChildCount(Object node) { 
-    	return ((ModelElementView)node).getChildCount();
-    }
+	//
+	// The TreeModel interface
+	//
 
-    public Object getChild(Object node, int i) { 
-    	return ((ModelElementView)node).getChild(i);
-    }    	
+	public int getChildCount(Object node) {
+		return ((ModelElementView) node).getChildCount();
+	}
 
-    // The superclass's implementation would work, but this is more efficient. 
-    public boolean isLeaf(Object node) 
-    { 
-    	return ((ModelElementView)node).isLeaf();
-    }
+	public Object getChild(Object node, int i) {
+		return ((ModelElementView) node).getChild(i);
+	}
 
-    //
-    //  The TreeTableNode interface. 
-    //
+	// The superclass's implementation would work, but this is more efficient.
+	public boolean isLeaf(Object node) {
+		return ((ModelElementView) node).isLeaf();
+	}
 
-    public int getColumnCount() {
-	return cNames.length;
-    }
+	//
+	// The TreeTableNode interface.
+	//
 
-    public String getColumnName(int column) {
-	return cNames[column];
-    }
+	public int getColumnCount() {
+		return cNames.length;
+	}
 
-    public Class getColumnClass(int column) {
-	return cTypes[column];
-    }
- 
-    public Object getValueAt(Object node, int column) 
-    {
-    	return ((ModelElementView)node).getValueAt(column);
-    }
+	public String getColumnName(int column) {
+		return cNames[column];
+	}
 
-    public boolean isCellEditable(Object node, int column)
-    {
-    	if (column == 0)
-    		return true;
-    	else
-    		return false;
-    }
+	public Class getColumnClass(int column) {
+		return cTypes[column];
+	}
 
-    /**
-     * Sets the value for node <code>node</code>, 
-     * at column number <code>column</code>.
-     */
-    public void setValueAt(Object aValue, Object node, int column)
-    {
-    }
+	public Object getValueAt(Object node, int column) {
+		return ((ModelElementView) node).getValueAt(column);
+	}
 
-    
+	public boolean isCellEditable(Object node, int column) {
+		if (column == 0)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Sets the value for node <code>node</code>, at column number
+	 * <code>column</code>.
+	 */
+	public void setValueAt(Object aValue, Object node, int column) {
+	}
+
 	@Override
 	public void addTreeModelListener(TreeModelListener l) {
-		// TODO Auto-generated method stub
-		
+		super.addTreeModelListener(l);
 	}
 
 	@Override
 	public void removeTreeModelListener(TreeModelListener l) {
-		// TODO Auto-generated method stub
-		
+		super.removeTreeModelListener(l);
 	}
 
 	@Override
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
-
-
-
-

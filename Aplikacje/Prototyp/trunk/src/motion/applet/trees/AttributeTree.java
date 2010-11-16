@@ -76,8 +76,8 @@ public class AttributeTree {
 		
 		for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) {
 			if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
-/*				for (EntityAttribute a : g) {
-					root.add(new ConfigTreeNode( a.name, false, a ));
+/*				for (EntityAttribute attribute : g) {
+					root.add(new ConfigTreeNode( attribute.name, false, attribute ));
 				}
 */			} else {
 				DefaultMutableTreeNode groupNode = new ConfigTreeNode( g.name, true, g );

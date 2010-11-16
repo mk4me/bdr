@@ -102,7 +102,7 @@ public class MotionApplet extends JApplet {
 		// Query results
 		queryResultsPane = new JTabbedPane();
 		
-		// Right panel with a tree
+		// Right panel with attribute tree
 		rightPanel = new RightSplitPanel(this);
 		JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, queryResultsPane );
 		

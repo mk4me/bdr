@@ -23,7 +23,7 @@ import motion.database.model.SessionStaticAttributes;
 
 public class SessionAssignmentDialog extends BasicDialog {
 	private static String TITLE = "Assign session";
-	private static String WELCOME_MESSAGE = "Assign selected performers to a session.";
+	private static String WELCOME_MESSAGE = "Assign selected performers to attribute session.";
 	private static String ASSIGNING_MESSAGE = "Assigning to session...";
 	
 	private static String ASSIGN = "Assign";

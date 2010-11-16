@@ -44,7 +44,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
 /**
- * This is a wrapper class takes a TreeTableModel and implements 
+ * This is attribute wrapper class takes attribute TreeTableModel and implements 
  * the table model interface. The implementation is trivial, with 
  * all of the event dispatching support provided by the superclass: 
  * the AbstractTableModel. 
@@ -74,7 +74,7 @@ public class TreeTableModelAdapter extends AbstractTableModel
             }
         });
 
-        // Install a TreeModelListener that can update the table when
+        // Install attribute TreeModelListener that can update the table when
         // tree changes. We use delayedFireTableDataChanged as we can
         // not be guaranteed the tree will have finished processing
         // the event before us.

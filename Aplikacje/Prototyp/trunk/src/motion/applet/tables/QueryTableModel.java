@@ -47,9 +47,9 @@ public class QueryTableModel extends BasicTableModel {
 						if (attributes != null) {
 							/*//Filter attributes from view configuration.
 							for (String key : result.get(0).keySet()) {
-								for (AttributeName a : attributes) {
+								for (AttributeName attribute : attributes) {
 									//TODO: sessionID / SessionID
-									if (a.toString().toLowerCase().equals(key.toLowerCase())) {
+									if (attribute.toString().toLowerCase().equals(key.toLowerCase())) {
 										BasicTable.this.attributeNames.add(key);
 									}
 								}

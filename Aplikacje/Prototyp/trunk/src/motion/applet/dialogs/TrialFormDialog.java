@@ -15,10 +15,10 @@ import motion.database.model.TrialStaticAttributes;
 public class TrialFormDialog extends FormDialog {
 	public static String TITLE = "New trial";
 	private static String TITLE_EDIT = "Edit trial";
-	public static String WELCOME_MESSAGE = "Create a new trial.";
+	public static String WELCOME_MESSAGE = "Create attribute new trial.";
 	private static String WELCOME_MESSAGE_EDIT = "Edit trial attribute values.";
 	private static String MISSING_TRIAL_DESCRIPTION = "Missing trial description.";
-	private static String CREATING_MESSAGE = "Creating a new trial...";
+	private static String CREATING_MESSAGE = "Creating attribute new trial...";
 	
 	private int sessionId;
 	

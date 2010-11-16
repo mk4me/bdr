@@ -166,8 +166,8 @@ public class FormDialog extends BasicDialog {
 		
 		for (EntityAttribute a : attributes) {
 			if (a.getEnumValues() != null) {
-				//if (a.getType().equals(EntityAttribute.TYPE_INT)) {
-					//FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]), true);
+				//if (attribute.getType().equals(EntityAttribute.TYPE_INT)) {
+					//FormListField field = new FormListField(attribute, gridBagConstraints, formPanel, attribute.getEnumValues().toArray(new String[0]), true);
 					//formFields.add(field);
 				//} else {
 					FormListField field = new FormListField(a, gridBagConstraints, formPanel, a.getEnumValues().toArray(new String[0]));//, false);

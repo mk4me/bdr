@@ -15,12 +15,12 @@ import motion.database.model.MeasurementConfigurationStaticAttributes;
 public class MeasurementConfigurationFormDialog extends FormDialog {
 	public static String TITLE = "New measurement configuration";
 	private static String TITLE_EDIT = "Edit measurement configuration";
-	public static String WELCOME_MESSAGE = "Create a new measurement configuration.";
+	public static String WELCOME_MESSAGE = "Create attribute new measurement configuration.";
 	private static String WELCOME_MESSAGE_EDIT = "Edit measurement configuration attribute values.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_NAME = "Missing measurement configuration name.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_KIND = "Missing measurement configuration kind.";
 	private static String MISSING_MEASUREMENT_CONFIGURATION_DESCRIPTION = "Missing measurement configuration description.";
-	private static String CREATING_MESSAGE = "Creating a new measurement configuration...";
+	private static String CREATING_MESSAGE = "Creating attribute new measurement configuration...";
 	
 	public MeasurementConfigurationFormDialog(String title, String welcomeMessage) {
 		super(title, welcomeMessage);
