@@ -1023,7 +1023,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		if (attribute.kind == null)
 			throw new Exception("Attribute without entity kind defined: " + attribute);
 
-		IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "uploadAttributeFile", this );
+		IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "setFileTypedAttribute", this );
 
 		port.setFileTypedAttributeValue(resourceId, attribute.kind.name(), attribute.name, fileID, update);
 		
@@ -1739,6 +1739,11 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		try {
 			IAdministrationWS port = ConnectionTools2.getAdministrationServicePort( "defineAttribute", this );
 			port.defineAttribute(a.name, a.groupName, a.kind.name(), a.isEnum, pluginDescriptor, a.type, a.unit);
+			if (a.isEnum)
+			{
+				for (String enumValue : a.enumValues)
+					port.addAttributeEnumValue(a.name, a.groupName, a.kind.name(), enumValue, false);
+			}
 
 		} catch (IAdministrationWSDefineAttributeAdministrationOperationExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

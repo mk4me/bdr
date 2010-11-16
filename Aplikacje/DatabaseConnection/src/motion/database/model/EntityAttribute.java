@@ -6,20 +6,7 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 public class EntityAttribute {
-/*
-	public static final String INTEGER_TYPE_SHORT = "int";
-	public static final String INTEGER_TYPE = "integer";
-	public static final String STRING_TYPE = "string";
-	public static final String FLOAT_TYPE = "float";
-	public static final String DATE_TYPE = "DATE";	// Server uses 'string' for dates.
-	public static final String UNKNOWN_TYPE = "Unknown";
-	
-	public static final String SUBTYPE_SHORT_STRING = "shortString";
-	public static final String SUBTYPE_LONG_STRING = "longString";
-	public static final String SUBTYPE_DATE = "date";
-	public static final String SUBTYPE_DATE_TIME = "dateTime";
-	*/
-	
+
 	public static final String TYPE_INT = "int";
 	public static final String TYPE_DECIMAL = "decimal";
 	public static final String TYPE_NON_NEGATIVE_INTEGER = "nonNegativeInteger";
@@ -31,6 +18,7 @@ public class EntityAttribute {
 	public static final String TYPE_DATE_TIME = "dateTime";
 	public static final String TYPE_TIME_CODE = "TIMECODE";
 	public static final String TYPE_UNKNOWN = "unknown";
+	public static final String TYPE_FILE = "file";
 	
 	public static final String DB_TYPE_INTEGER = "integer";
 	public static final String DB_TYPE_FLOAT = "float";
@@ -42,7 +30,6 @@ public class EntityAttribute {
 	public Object value;
 	public String name;
 	public String unit;
-	//public String subtype;
 	public List<String> enumValues;
 	public EntityKind kind;
 	public boolean isEnum;
@@ -144,12 +131,17 @@ public class EntityAttribute {
 			return String.class;
 		} else if (type.equals(TYPE_DATE) || type.equals(TYPE_DATE_TIME) || type.equals(TYPE_TIME_CODE)) {
 			return GregorianCalendar.class;
-		} else { // Unknown type.
-			return Object.class;
+		} else if (type.equals(TYPE_FILE)) {
+			return Integer.class;
+		}
+		else
+		{ // Unknown type.
+			return String.class;
 		}
 	}
 	
 	public void setValueFromString(Object newValue) {
+		
 		Class<?> attributeClass = getAttributeClass();
 		
 		if (attributeClass == String.class) {
@@ -191,7 +183,6 @@ public class EntityAttribute {
 		}
 	}
 
-	//FIXME: subtype/type, is this needed?
 	public static String getTypeName(Object arg) {
 		if (arg instanceof String) {
 			return DB_TYPE_STRING;//STRING_TYPE;
