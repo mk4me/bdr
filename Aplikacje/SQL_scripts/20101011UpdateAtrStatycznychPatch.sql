@@ -505,9 +505,7 @@ begin
 			update Plik set Opis_pliku  = @attr_value where IdPlik = @file_id;
 		set @result = 0;
 		return;
-	end;
-
-	
+	end;	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'file';
 	if @@rowcount = 0 

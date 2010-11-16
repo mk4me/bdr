@@ -14,6 +14,7 @@ as
 go
 */
 
+-- latest revision: 2010-01-02
 create procedure list_performer_sessions @perf_id int
 as
 	select s.IdSesja as SessionID, s.IdUzytkownik as UserID, s.IdLaboratorium as LabID, 
@@ -27,6 +28,7 @@ go
 -- Authorization-related behavior
 -- ===============================
 
+-- last rev: 2010-07-10
 create function user_sessions_by_user_id( @user_id int)
 returns table
 as
@@ -34,6 +36,7 @@ return
 select * from Sesja where IdUzytkownik = @user_id
 go
 
+-- last rev: 2010-07-10
 create function user_sessions_by_login( @user_login varchar(30) )
 returns table
 as
@@ -41,6 +44,7 @@ return
 select s.* from Uzytkownik u inner join Sesja s on u.IdUzytkownik = s.IdUzytkownik where u.Login = @user_login 
 go
 
+-- last rev: 2010-07-10
 create function identify_user( @user_login varchar(30) )
 returns int
 as
@@ -49,6 +53,7 @@ return ( select top 1 IdUzytkownik from Uzytkownik where Login = @user_login );
 end
 go
 
+-- last rev: 2010-07-10
 create function is_superuser( @user_id int )
 returns bit
 as
@@ -57,6 +62,7 @@ return ( select count(*) from Uzytkownik where IdUzytkownik = @user_id and Login
 end
 go
 
+-- last rev: 2010-07-10
 create function is_login_superuser ( @user_login varchar(30) )
 returns bit
 begin
@@ -64,6 +70,7 @@ begin
 end
 go
 
+-- last rev: 2010-07-10
 create function user_accessible_sessions( @user_id int )
 returns table
 as
@@ -75,6 +82,7 @@ union
 (select s.* from Sesja s join Uprawnienia_sesja us on s.IdSesja = us.IdSesja where us.IdUzytkownik = @user_id)
 go
 
+-- last rev: 2010-07-10
 create function user_accessible_sessions_by_login( @user_login varchar(30) )
 returns table
 as
@@ -87,6 +95,7 @@ go
 -- Resource attribute and label functions
 -- ======================================
 
+-- last rev: 2010-10-20
 create function motion_kind_name( @mk_id int )
 returns varchar(50)
 as
@@ -95,7 +104,7 @@ begin
 end
 go
 
-
+-- last rev: 2010-10-18
 create function list_performer_attributes ( @perf_id int )
 returns TABLE as
 return 
@@ -103,7 +112,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -114,7 +126,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id and a.Typ_danych <> 'file'
 go
 
-
+-- last rev: 2010-10-18
 create function list_performer_attributes_uniform ( @perf_id int )
 returns TABLE as
 return 
@@ -148,7 +160,10 @@ union
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -159,13 +174,15 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id  and a.Typ_danych <> 'file'));
 go
 
+-- last rev: 20100706
 create function session_label( @user_login varchar(30), @sess_id int )
 returns TABLE as
 return
-select l.Nazwa+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
-from user_accessible_sessions_by_login(@user_login) s inner join Laboratorium l on s.IdLaboratorium = l.IdLaboratorium where s.IdSesja = @sess_id
+select p.Nazwisko+','+p.Imie+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
+from user_accessible_sessions_by_login(@user_login) s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
 go	
 
+-- last rev: 20101018
 create function list_session_attributes ( @sess_id int )
 returns TABLE as
 return 
@@ -173,7 +190,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( was.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( was.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -184,7 +204,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id and a.Typ_danych <> 'file'
 go
 
-
+-- last rev: 20101020
 create function list_session_attributes_uniform ( @sess_id int )
 returns TABLE as
 return 
@@ -253,6 +273,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id and a.Typ_danych <> 'file' ));
 go
 
+-- last rev: 20101018
 create function list_trial_attributes ( @trial_id int )
 returns TABLE as
 return 
@@ -260,7 +281,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -271,6 +295,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wao.IdObserwacja = @trial_id and a.Typ_danych <> 'file'
 go
 
+-- last rev: 20101018
 create function list_trial_attributes_uniform ( @trial_id int )
 returns TABLE as
 return 
@@ -291,19 +316,15 @@ return
 			'_trial_static' as AttributeGroup,
 			'trial' as Entity
 	from Trial t)
-	union
-	(select 'Duration' as Name,
-			t.Czas_trwania as Value,
-			'integer' as Type,
-			'_trial_static' as AttributeGroup,
-			'trial' as Entity
-	from Trial t)
 	)
 union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wao.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wao.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -314,6 +335,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wao.IdObserwacja = @trial_id and a.Typ_danych <> 'file'));
 go
 
+-- last rev: 20101018
 create function list_measurement_configuration_attributes ( @mc_id int )
 returns TABLE as
 return 
@@ -321,7 +343,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -332,6 +357,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Typ_danych <> 'file'
 go
 
+-- last rev: 20101018
 create function list_measurement_configuration_attributes_uniform ( @mc_id int )
 returns TABLE as
 return 
@@ -371,7 +397,10 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wakp.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -382,6 +411,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Typ_danych <> 'file' ));
 go
 
+-- last rev: 20101018
 create function list_measurement_attributes ( @meas_id int )
 returns TABLE as
 return 
@@ -389,7 +419,10 @@ select
 	a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -400,6 +433,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPomiar = @meas_id and a.Typ_danych <> 'file'
 go
 
+-- last rev: 20101018
 create function list_measurement_attributes_uniform ( @meas_id int )
 returns TABLE as
 return 
@@ -418,7 +452,10 @@ union
 (	select a.Nazwa as Name, 
 	(case a.Typ_danych 
 		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then cast ( wap.Wartosc_liczba as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -433,6 +470,7 @@ go
 -- Resource By-ID retrieval
 -- ========================
 
+-- last rev: 20100102
 create procedure get_performer_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -445,6 +483,7 @@ as
 			for XML AUTO, ELEMENTS
 go
 
+-- last rev: 20101020
 create procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -460,28 +499,31 @@ as
 			for XML AUTO, ELEMENTS
 go
 
-create procedure get_trial_by_id_xml ( @res_id int )
+-- last rev: 20101011
+create procedure get_trial_by_id_xml ( @res_id int )  -- !!! Suspended from production update
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdObserwacja as TrialID, 
 				IdSesja as SessionID, 
 				Opis_obserwacji as TrialDescription, 
-				Czas_trwania as Duration,
 				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
 			for XML AUTO, ELEMENTS
 go
+
+-- last rev: 20101013
 create procedure get_measurement_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdPomiar as MeasurementID,
-				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+				(select * from list_measurement_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Pomiar MeasurementDetailsWithAttributes where IdPomiar=@res_id
 			for XML AUTO, ELEMENTS
 go
 
+-- last rev: 20101013
 create procedure get_measurement_configuration_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -490,11 +532,25 @@ as
 				Nazwa as MeasurementConfName,
 				Rodzaj as MeasurementConfKind,
 				Opis as MeasurementConfDescription,
-				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+				(select * from list_measurement_configuration_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Konfiguracja_pomiarowa MeasurementConfDetailsWithAttributes where IdKonfiguracja_pomiarowa=@res_id
 			for XML AUTO, ELEMENTS
 go
 
+-- last rev: 20101013
+create procedure get_performer_configuration_by_id_xml ( @res_id int )
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select 
+				IdKonfiguracja_performera as PerformerConfID,
+				IdSesja as SessionID,
+				IdPerformer as PerformerID,
+				(select * from list_performer_configuration_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+			from Konfiguracja_performera PerformerConfDetailsWithAttributes where IdKonfiguracja_performera=@res_id
+			for XML AUTO, ELEMENTS
+go
+
+-- last rev: 20101109
 create procedure get_session_content_xml ( @user_login as varchar(30), @sess_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -532,7 +588,7 @@ go
 -- Performer listing queries
 -- =========================
 
-
+-- last rev: 20100102
 create procedure list_performers_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -541,6 +597,7 @@ select IdPerformer as PerformerID, Imie as FirstName, Nazwisko as LastName
     for XML AUTO, root ('PerformerList')
 go
 
+-- last rev: 20100102
 create procedure list_performers_attributes_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -553,6 +610,7 @@ select
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
 
+-- last rev: 20100102
 create procedure list_session_performers_attributes_xml (@user_login varchar(30), @sess_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -567,7 +625,7 @@ select
     for XML AUTO, ELEMENTS, root ('SessionPerformerWithAttributesList')
 go
 
-
+-- last rev: 20100102
 create procedure list_lab_performers_attributes_xml (@lab_id int)  -- Mozna pytac o przypisania na poziomie sesji
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -583,6 +641,7 @@ select
     for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
 go
 
+-- last rev: 20100102
 create procedure list_measurement_performers_attributes_xml (@meas_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -601,6 +660,7 @@ go
 -- Session listing queries
 -- =======================
 
+-- last rev: 20101020
 create procedure list_performer_sessions_xml (@user_login varchar(30), @perf_id int) -- mozna uproscic do wykorzystujacej PerformerConfiguration
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -614,6 +674,7 @@ as
       for XML AUTO, root ('PerformerSessionList')
 go
 
+-- last rev: 20101020
 create procedure list_performer_sessions_attributes_xml (@user_login varchar(30), @perf_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -633,7 +694,7 @@ as
       for XML AUTO, ELEMENTS, root ('PerformerSessionWithAttributesList')
 go
 
-
+-- last rev: 20101020
 create procedure list_lab_sessions_attributes_xml (@user_login varchar(30), @lab_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -650,6 +711,7 @@ as
       for XML AUTO, ELEMENTS, root ('LabSessionWithAttributesList')
 go
 
+-- last rev: 20101020
 create procedure list_group_sessions_attributes_xml (@user_login varchar(30), @group_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -667,6 +729,7 @@ as
       for XML AUTO, ELEMENTS, root ('GroupSessionWithAttributesList')
 go
 
+-- last rev: 20101020
 create procedure list_measurement_conf_sessions_attributes_xml (@user_login varchar(30), @mc_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -687,6 +750,7 @@ as
       for XML AUTO, ELEMENTS, root ('MeasurementConfSessionWithAttributesList')
 go
 
+-- last rev: 20101109
 create procedure list_session_contents_xml (@user_login varchar(30), @page_size int, @page_no int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -702,7 +766,7 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes,
 		(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
-	from Plik p where p.IdSesja=SessionDetailsWithAttributes.IdSesja
+	from Plik p where p.IdSesja=SessionContent.IdSesja
 	for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList,
 	(select 
 		IdObserwacja as TrialID,
@@ -713,13 +777,15 @@ as
 		from Plik p 
 		where 
 		p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList
-	from Obserwacja TrialContent where TrialContent.IdSesja = SessionDetailsWithAttributes.IdSesja FOR XML AUTO, ELEMENTS, TYPE ) as TrialContentList
-	from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
+	from Obserwacja TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML AUTO, ELEMENTS, TYPE ) as TrialContentList
+	from user_accessible_sessions_by_login(@user_login) SessionContent
       for XML AUTO, ELEMENTS, root ('SessionContentList')
 go
 
 -- Session group listing
 -- ===============================
+
+-- last rev: 20100102
 create procedure list_session_session_groups_xml (@user_login varchar(30), @sess_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -730,11 +796,12 @@ as
 	for XML AUTO, ELEMENTS, root ('SessionSessionGroupList')
 go
 
+-- last rev: 20100710
 create procedure list_session_groups_defined
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select IdGrupa_sesji as SessionGroupID, Nazwa as SessionGroupName from Grupa_sesji
-
+for XML RAW ('SessionGroupDefinition'), ELEMENTS, root ('SessionGroupDefinitionList')
 go
 
 
@@ -742,26 +809,26 @@ go
 -- Trial listing queries
 -- =====================
 
-create procedure list_session_trials_xml(@user_login varchar(30),  @sess_id int )
+-- last rev: 20101011
+create procedure list_session_trials_xml(@user_login varchar(30),  @sess_id int )  -- !!! Suspended from production update
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdObserwacja as TrialID,
 	IdSesja as SessionID,
-	Opis_obserwacji as TrialDescription,
-	Czas_trwania as Duration
+	Opis_obserwacji as TrialDescription
 from Obserwacja TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
 
-create procedure list_session_trials_attributes_xml(@user_login varchar(30),   @sess_id int)
+-- last rev: 20101011
+create procedure list_session_trials_attributes_xml(@user_login varchar(30),   @sess_id int)  -- !!! Suspended from production update
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select 
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
 	Opis_obserwacji as TrialDescription, 
-	Czas_trwania as Duration,
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
@@ -770,6 +837,7 @@ go
 -- Measurement configuration listing queries
 -- =========================================
 
+-- last rev: 20100102
 create procedure list_measurement_configurations_xml(@user_login varchar(30) ) -- UNUSED?
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -782,6 +850,7 @@ from Konfiguracja_pomiarowa MeasurementConfDetails
       for XML AUTO, root ('MeasurementConfList')
 go
 
+-- last rev: 20100102
 create procedure list_measurement_configurations_attributes_xml(@user_login varchar(30) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -799,6 +868,7 @@ go
 -- Measurement listing queries
 -- ===========================
 
+-- last rev: 20100102
 create procedure list_trial_measurements_xml(@user_login varchar(30), @trial_id int ) -- UNUSED CURRENTLY
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -811,6 +881,7 @@ where IdObserwacja = @trial_id
       for XML AUTO, root ('TrialMeasurementList')
 go
 
+-- last rev: 20100102
 create procedure list_trial_measurements_attributes_xml(@user_login varchar(30), @trial_id int )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -827,6 +898,7 @@ go
 -- Measurement result listing queries
 -- ==================================
 
+-- last rev: 20100102
 create procedure list_measurement_results_attributes_xml(@user_login varchar(30), @meas_id int )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')

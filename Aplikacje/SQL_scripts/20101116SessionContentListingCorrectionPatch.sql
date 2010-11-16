@@ -2,7 +2,7 @@ use Motion;
 go
 
 
-create procedure get_session_content_xml ( @user_login as varchar(30), @sess_id int )
+alter procedure get_session_content_xml ( @user_login as varchar(30), @sess_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
@@ -17,7 +17,7 @@ as
 				(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 					(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 					from Plik p where p.IdSesja=SessionContent.IdSesja
-					for XML PATH('FileDetailsWithAttributes')
+					for XML PATH('FileDetailsWithAttributes'), TYPE
 				) as FileWithAttributesList,
 				(select 
 					IdObserwacja as TrialID,
@@ -27,7 +27,7 @@ as
 						(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 						from Plik p 
 						where 
-						p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes')
+						p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes'), TYPE
 					) as FileWithAttributesList
 					from Obserwacja TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML AUTO, ELEMENTS, TYPE 
 				) as TrialContentList
@@ -36,7 +36,7 @@ as
 go
 
 
-create procedure list_session_contents_xml (@user_login varchar(30), @page_size int, @page_no int)
+alter procedure list_session_contents_xml (@user_login varchar(30), @page_size int, @page_no int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select
@@ -52,7 +52,7 @@ as
 		(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 	from Plik p where p.IdSesja=SessionContent.IdSesja
-	for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList,
+	for XML PATH('FileDetailsWithAttributes'), TYPE) as FileWithAttributesList,
 	(select 
 		IdObserwacja as TrialID,
 		Opis_obserwacji as TrialDescription,
@@ -61,7 +61,7 @@ as
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 		from Plik p 
 		where 
-		p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes')) as FileWithAttributesList
+		p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes'), TYPE) as FileWithAttributesList
 	from Obserwacja TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML AUTO, ELEMENTS, TYPE ) as TrialContentList
 	from user_accessible_sessions_by_login(@user_login) SessionContent
       for XML AUTO, ELEMENTS, root ('SessionContentList')

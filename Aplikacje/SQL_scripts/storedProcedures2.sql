@@ -650,16 +650,6 @@ end
 go
 
 
--- Utility procedures 
-
-create procedure validate_session_group_id( @group_id int )
-as
- select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
-go
-
-
-
-
 -- UPS Procedures
 
 create procedure update_stored_filters(@user_login as varchar(30), @filter as PredicateUdt readonly)
@@ -903,7 +893,7 @@ as
 		IdSesja as SessionID,
 		IdUzytkownik as UserID,
 		IdLaboratorium as LabID,
-		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKindID,
+		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
@@ -1132,3 +1122,13 @@ begin
 	
 end
 go
+
+
+-- Utility procedures 
+
+create procedure validate_session_group_id( @group_id int )
+as
+ select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
+go
+
+
