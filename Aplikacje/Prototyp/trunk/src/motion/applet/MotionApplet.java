@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -50,6 +51,7 @@ public class MotionApplet extends JApplet {
 	private static String MENU_ALL_PERFORMERS = Messages.getString("MotionApplet.MenuAllPerformers"); //$NON-NLS-1$
 	private static String MENU_ALL_SESSIONS = Messages.getString("MotionApplet.MenuAllSessions"); //$NON-NLS-1$
 	private static String MENU_ALL_SESSION_GROUPS = "All session groups";
+	private static String MENU_VIEW_CONFIGURATION = "View configuration";
 	private static String MENU_REFRESH = Messages.getString("MotionApplet.MenuRefresh"); //$NON-NLS-1$
 	private static String MENU_NEW = Messages.getString("MotionApplet.MenuNew"); //$NON-NLS-1$
 	private static String MENU_BASKET = Messages.getString("Basket"); //$NON-NLS-1$
@@ -199,6 +201,14 @@ public class MotionApplet extends JApplet {
 		viewAllSessionGroupsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rightPanel.showTable(EntityKind.sessionGroup);
+			}
+		});
+		
+		JRadioButtonMenuItem viewConfigurationItem = new JRadioButtonMenuItem(MENU_VIEW_CONFIGURATION, false);
+		viewMenu.add(viewConfigurationItem);
+		viewConfigurationItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rightPanel.toggleViewConfiguration();
 			}
 		});
 		

@@ -55,6 +55,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	private MotionApplet applet;
+	private JSplitPane splitPane;
+	private int dividerSize;
 	
 	public RightSplitPanel(MotionApplet applet) {
 		super();
@@ -89,8 +91,12 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		this.setLayout(new BorderLayout());
 		
 		bottomPanel = new BottomSplitPanel();
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, bottomPanel);
+		bottomPanel.setVisible(false);
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabbedPane, bottomPanel);
 		splitPane.setResizeWeight(0.8);
+		dividerSize = splitPane.getDividerSize();
+		splitPane.setDividerSize(0);
+		splitPane.setOneTouchExpandable(true);
 		this.add(splitPane, BorderLayout.CENTER);
 		
 		bottomPanel.addApplyButtonListener(this);
@@ -383,5 +389,16 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	public JTabbedPane getTabbedPane() {
 		
 		return this.tabbedPane;
+	}
+	
+	public void toggleViewConfiguration() {
+		boolean isVisible = !bottomPanel.isVisible();
+		bottomPanel.setVisible(isVisible);
+		splitPane.resetToPreferredSizes();
+		if (isVisible) {
+			splitPane.setDividerSize(dividerSize);
+		} else {
+			splitPane.setDividerSize(0);
+		}
 	}
 }
