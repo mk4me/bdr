@@ -176,7 +176,7 @@ public class EntityAttribute {
 			this.value = 0;
 		} else if (attributeClass == Float.class) {
 			this.value = 0;
-		} else if (attributeClass == XMLGregorianCalendar.class || getAttributeClass() == GregorianCalendar.class) {
+		} else if (attributeClass == XMLGregorianCalendar.class || attributeClass == GregorianCalendar.class) {
 			this.value = GregorianCalendar.getInstance();
 		} else {
 			throw new RuntimeException("TODO: Unknown value type." + this.value.getClass());
@@ -185,15 +185,15 @@ public class EntityAttribute {
 
 	public static String getTypeName(Object arg) {
 		if (arg instanceof String) {
-			return DB_TYPE_STRING;//STRING_TYPE;
+			return DB_TYPE_STRING;
 		} else if (arg instanceof Integer) {
-			return DB_TYPE_INTEGER;//INTEGER_TYPE;
-		} else if ( arg instanceof Float || arg instanceof Double) {
-			return DB_TYPE_FLOAT;//FLOAT_TYPE;
-		} else if ( arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar) {
-			return DB_TYPE_DATE;//DATE_TYPE;
-		} else if ( arg instanceof Boolean) {
-			return DB_TYPE_INTEGER;//DATE_TYPE;
+			return DB_TYPE_INTEGER;
+		} else if (arg instanceof Float || arg instanceof Double) {
+			return DB_TYPE_FLOAT;
+		} else if (arg instanceof XMLGregorianCalendar || arg instanceof GregorianCalendar) {
+			return DB_TYPE_DATE;
+		} else if (arg instanceof Boolean) {
+			return DB_TYPE_INTEGER;
 		}	
 		else {
 			throw new RuntimeException("TODO: Unknown value type: " + arg);
