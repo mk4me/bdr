@@ -267,8 +267,12 @@ public class FormDialog extends BasicDialog {
 				
 			} else {
 				if (recordId > -1) {
-					// FIXME: clear only those attributes which exist
-					//WebServiceInstance.getDatabaseConnection().clearEntityAttribute(recordId, f.attribute);
+					if (!f.attribute.groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
+						// Clear only those attributes which exist, extra flag in FormField if attribute was not empty before editing.
+						if (f.hasValue == true) {
+							WebServiceInstance.getDatabaseConnection().clearEntityAttribute(recordId, f.attribute);
+						}
+					}
 				}
 			}
 		}
@@ -293,6 +297,7 @@ public class FormDialog extends BasicDialog {
 			EntityAttribute attribute = record.get(f.attribute.name);
 			if (attribute != null) {
 				f.setData(attribute.value);
+				f.hasValue = true;
 			} else {
 				f.setData("");
 			}
@@ -359,6 +364,7 @@ public class FormDialog extends BasicDialog {
 		protected GridBagConstraints gridBagConstraints;
 		protected JPanel formPanel;
 		public EntityAttribute attribute;
+		public boolean hasValue = false;
 		
 		public FormField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 			this.attribute = attribute;
