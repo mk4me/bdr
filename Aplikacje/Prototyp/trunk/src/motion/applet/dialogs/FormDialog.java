@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -556,7 +557,8 @@ public class FormDialog extends BasicDialog {
 			} else {
 				this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			}
-			setCurrentDate();
+			// Do not put initial current date in the field.
+			// setCurrentDate();
 			finishField();
 		}
 		
@@ -587,13 +589,16 @@ public class FormDialog extends BasicDialog {
 		protected void prepareField() {
 			addLabel();
 			text = new JTextField(20);
-			label.setLabelFor(text);
+			label.setLabelFor(text);;
 			formPanel.add(text, gridBagConstraints);
 			
 			gridBagConstraints.gridx++;
 		}
 		
 		protected void finishField() {
+			String dateFormatString = ((SimpleDateFormat) dateFormat).toPattern();
+			label.setText("<html>" + label.getText() + "<br/>" + "(" + dateFormatString + ")" + "</html>");
+			text.setToolTipText(dateFormatString);
 			setDateTimeButton = new JButton(SET_BUTTON);
 			setDateTimeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -674,7 +679,5 @@ public class FormDialog extends BasicDialog {
 				}
 			}
 		}
-		
-		
 	}
 }
