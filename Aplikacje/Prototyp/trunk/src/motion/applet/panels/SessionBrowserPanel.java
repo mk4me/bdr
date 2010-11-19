@@ -91,6 +91,9 @@ public class SessionBrowserPanel extends JPanel {
 					public void mouseClicked(final MouseEvent e) {
 						if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 							DefaultListSelectionModel selectionModel = (DefaultListSelectionModel) table.getSelectionModel();
+
+							JPopupMenu popupMenu = new JPopupMenu();
+
 							if (table.getSelectedRows().length == 2)
 							{
 								Object o1 = table.getTree().getPathForRow( table.getSelectedRows()[0] ).getLastPathComponent();
@@ -116,35 +119,68 @@ public class SessionBrowserPanel extends JPanel {
 								{
 									if (attribute.type.equals(EntityAttribute.TYPE_FILE))
 									{
-										JPopupMenu popupMenu = new JPopupMenu();
+										JMenuItem assignFileMenuItem = new JMenuItem("Assign file to attribute");
+										popupMenu.add(assignFileMenuItem);
 										
-										JMenuItem createTrialMenuItem = new JMenuItem("Assign file to attribute");
-										popupMenu.add(createTrialMenuItem);
-										
-										createTrialMenuItem.addActionListener(new ActionListener() {
+										assignFileMenuItem.addActionListener(new ActionListener() {
 											@Override
 											public void actionPerformed(ActionEvent e) {
 												System.out.println("Assigning file to attribute now!");
 												try {
-													System.out.println(SessionBrowserPanel.this.entity.getId() + " " + SessionBrowserPanel.this.attribute + " " + SessionBrowserPanel.this.file.getId() );
+													boolean isUpdate = ( getInteger(attribute.value) != 0);
 													DatabaseConnection.getInstance().setFileTypedAttribute(
 															SessionBrowserPanel.this.entity.getId(), 
 															SessionBrowserPanel.this.attribute, 
-															SessionBrowserPanel.this.file.getId(), true);
+															SessionBrowserPanel.this.file.getId(), isUpdate);
 												} catch (Exception e1) {
-													// TODO Auto-generated catch block
 													e1.printStackTrace();
+													DatabaseConnection.log.severe( e1.getMessage() );
 												}
 											}
 										});
 										
-										popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
+										
 									}
 								}
 							}
+							else if (table.getSelectedRows().length == 1)
+							{
+								Object o1 = table.getTree().getPathForRow( table.getSelectedRows()[0] ).getLastPathComponent();
+								if (o1 instanceof SessionBrowserModel.AttributeView)
+								{
+									SessionBrowserPanel.this.attribute = (EntityAttribute) ((SessionBrowserModel.AttributeView)o1).attribute;
+									if (getInteger(attribute.value) > 0)
+									{
+										JMenuItem removeFileAssignmentMenuItem = new JMenuItem("Remove file assignment"); 
+										popupMenu.add(removeFileAssignmentMenuItem);
+											removeFileAssignmentMenuItem.addActionListener( new ActionListener() {
+											@Override
+											public void actionPerformed(ActionEvent e) {
+												try {
+													DatabaseConnection.getInstance().clearEntityAttribute( SessionBrowserPanel.this.entity.getId(), attribute);
+												} catch (Exception e1) {
+													e1.printStackTrace();
+													DatabaseConnection.log.severe( e1.getMessage() );
+												}
+											}
+										});
+									}
+								}
+							}
+
+							popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 						}
 					}
 
+					private int getInteger(Object value) {
+						if (value instanceof Integer)
+							return (Integer)value;
+						else if (value instanceof String)
+							return Integer.parseInt( (String) value );
+						else
+							return 0;
+					}
+					
 					private GenericDescription<?> findParentEntity(
 							TreePath path) {
 
