@@ -49,9 +49,9 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private static int TABLE_SIZE = 6;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
-	private static int TABLE_SESSION_GROUP = 2;
-	private static int TABLE_TRIAL = 3;
-	private static int TABLE_FILE = 4;
+	private static int TABLE_TRIAL = 2;
+	private static int TABLE_FILE = 3;
+	private static int TABLE_SESSION_GROUP = 4;
 	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	private MotionApplet applet;
@@ -72,10 +72,6 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_SESSION] = new JTable();
 		tabbedPane.addTab(EntityKind.session.getGUIName(), new JScrollPane(tables[TABLE_SESSION]));
 		
-		tabNameHash.put(EntityKind.sessionGroup, TABLE_SESSION_GROUP);
-		tables[TABLE_SESSION_GROUP] = new JTable();
-		tabbedPane.addTab(EntityKind.sessionGroup.getGUIName(), new JScrollPane(tables[TABLE_SESSION_GROUP]));
-		
 		tabNameHash.put(EntityKind.trial, TABLE_TRIAL);
 		tables[TABLE_TRIAL] = new JTable();
 		tabbedPane.addTab(EntityKind.trial.getGUIName(), new JScrollPane(tables[TABLE_TRIAL]));
@@ -83,6 +79,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabNameHash.put(EntityKind.file, TABLE_FILE);
 		tables[TABLE_FILE] = new JTable();
 		tabbedPane.addTab(EntityKind.file.getGUIName(), new JScrollPane(tables[TABLE_FILE]));
+		
+		tabNameHash.put(EntityKind.sessionGroup, TABLE_SESSION_GROUP);
+		tables[TABLE_SESSION_GROUP] = new JTable();
+		tabbedPane.addTab(EntityKind.sessionGroup.getGUIName(), new JScrollPane(tables[TABLE_SESSION_GROUP]));
 		
 		tabNameHash.put(EntityKind.measurement_conf, TABLE_MEASUREMENT_CONFIGURATION);
 		tables[TABLE_MEASUREMENT_CONFIGURATION] = new JTable();
