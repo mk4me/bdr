@@ -586,6 +586,16 @@ public class FormDialog extends BasicDialog {
 			return data;
 		}
 		
+		private Date getDate() {
+			try {
+				
+				return dateFormat.parse(text.getText());
+			} catch (ParseException e) {
+				
+				return null;
+			}
+		}
+		
 		protected void prepareField() {
 			addLabel();
 			text = new JTextField(20);
@@ -603,10 +613,14 @@ public class FormDialog extends BasicDialog {
 			setDateTimeButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CalendarWidget calendarWidget = new CalendarWidget();
+					Date date = getDate();
+					if (date != null) {
+						calendarWidget.setDate(date);
+					}
 					calendarWidget.setVisible(true);
 					if (calendarWidget.getDate() != null) {
-						String date = dateFormat.format(calendarWidget.getDate()).toString();
-						text.setText(date);
+						String dateString = dateFormat.format(calendarWidget.getDate()).toString();
+						text.setText(dateString);
 					}
 				}
 			});
