@@ -104,7 +104,6 @@ public class AttributeEditDialog extends BasicDialog {
 	
 	protected void finishUserInterface() {
 		this.setSize(400, 450);
-		this.setLocation(200, 200);
 		this.tree = new AttributeTree(entityKind);
 
 		// Labels

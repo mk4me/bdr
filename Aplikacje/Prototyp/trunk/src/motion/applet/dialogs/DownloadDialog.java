@@ -90,7 +90,6 @@ public class DownloadDialog extends BasicDialog {
 		this.totalProgressBar.setMaximum( recordId.length-1 );
 		
 		this.setSize(300, 200);
-		this.setLocation(200, 200);
 		
 		this.pathLabel.setText( PATH_LABEL + path);
 	}

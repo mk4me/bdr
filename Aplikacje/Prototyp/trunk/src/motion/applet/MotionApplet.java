@@ -2,6 +2,7 @@ package motion.applet;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -77,17 +78,19 @@ public class MotionApplet extends JApplet {
 	private boolean noApplet;
 	private SessionBrowserPanel sessionBrowserPanel;
 	
+	public static Container contentPane;
+	
 	public MotionApplet() {
 		this(null);
 		noApplet = false;
 	}
-
-	public MotionApplet(String language) {
 	
+	public MotionApplet(String language) {
 		this.language = language;
 		noApplet  = true;
+		contentPane = this.getContentPane();
 	}
-
+	
 	public SessionBrowserPanel getSessionBrowserPanel()
 	{
 		return sessionBrowserPanel;

@@ -80,7 +80,6 @@ public class SessionAssignmentDialog extends BasicDialog {
 	@Override
 	protected void finishUserInterface() {
 		this.setSize(400, 200);
-		this.setLocation(200, 200);
 		
 		assignButton.setEnabled(false);
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {

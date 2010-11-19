@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import motion.applet.MotionApplet;
+
 import org.freixas.jcalendar.DateEvent;
 import org.freixas.jcalendar.DateListener;
 import org.freixas.jcalendar.JCalendar;
@@ -23,7 +25,7 @@ public class CalendarWidget extends JDialog {
 	public CalendarWidget() {
 		super((JFrame) null, "Calendar", true);
 		this.setSize(350, 350);
-		this.setLocation(200, 200);
+		this.setLocationRelativeTo(MotionApplet.contentPane);
 		
 		formPanel = new JPanel();
 		formPanel.setLayout(new BorderLayout());

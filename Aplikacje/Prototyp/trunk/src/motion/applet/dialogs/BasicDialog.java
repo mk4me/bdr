@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import motion.applet.MotionApplet;
+
 public abstract class BasicDialog extends JDialog {
 	protected JLabel messageLabel;
 	private JPanel buttonPanel = new JPanel();
@@ -23,7 +25,8 @@ public abstract class BasicDialog extends JDialog {
 	public BasicDialog(String title, String message) {
 		super((JFrame) null, title, true);
 		this.setSize(400, 400);
-		this.setLocation(200, 200);
+		//this.setLocation(200, 200);
+		this.setLocationRelativeTo(MotionApplet.contentPane);
 		this.createMessageArea(message);
 		this.constructUserInterface();
 		this.createButtonArea();

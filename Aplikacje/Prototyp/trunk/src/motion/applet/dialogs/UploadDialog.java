@@ -148,7 +148,6 @@ public class UploadDialog extends BasicDialog {
 	
 	protected void finishUserInterface() {
 		this.setSize(480, 210);
-		this.setLocation(200, 200);
 		
 		this.idLabel.setText(this.entityKind.getGUIName() + Messages.COLON);
 		
