@@ -649,7 +649,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	{
 		try {
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listLabSessionsWithAttributes", this );
-
+			
 			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
 			DbElementsList<Session> output = new DbElementsList<Session>();
 			if (result != null && result.getLabSessionWithAttributesList() != null )
@@ -669,6 +669,32 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 	}
 
+
+	//@Override
+/*	public  DbElementsList<Session> getSessionContent(int sessionID) throws Exception
+	{
+		try {
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listLabSessionsWithAttributes", this );
+			
+			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
+			DbElementsList<Session> output = new DbElementsList<Session>();
+			if (result != null && result.getLabSessionWithAttributesList() != null )
+				for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
+					output.add( ConnectionTools2.transformSessionDetails(s) );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+*/
 	
 ////////////////////////////////////////////////////////////////////////////
 //	Session Groups

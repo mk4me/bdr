@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -22,6 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionContent" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="currentPage" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="pages" type="{http://www.w3.org/2001/XMLSchema}short" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,6 +41,10 @@ public class SessionContentList {
 
     @XmlElement(name = "SessionContent")
     protected List<SessionContent> sessionContent;
+    @XmlAttribute
+    protected Short currentPage;
+    @XmlAttribute
+    protected Short pages;
 
     /**
      * Gets the value of the sessionContent property.
@@ -66,6 +73,54 @@ public class SessionContentList {
             sessionContent = new ArrayList<SessionContent>();
         }
         return this.sessionContent;
+    }
+
+    /**
+     * Gets the value of the currentPage property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Short }
+     *     
+     */
+    public Short getCurrentPage() {
+        return currentPage;
+    }
+
+    /**
+     * Sets the value of the currentPage property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Short }
+     *     
+     */
+    public void setCurrentPage(Short value) {
+        this.currentPage = value;
+    }
+
+    /**
+     * Gets the value of the pages property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Short }
+     *     
+     */
+    public Short getPages() {
+        return pages;
+    }
+
+    /**
+     * Sets the value of the pages property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Short }
+     *     
+     */
+    public void setPages(Short value) {
+        this.pages = value;
     }
 
 }
