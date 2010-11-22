@@ -6,13 +6,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 
 import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
@@ -110,6 +111,27 @@ public class LoginDialog extends BasicDialog {
 		domainText.setText("dbpawell");
 		//domainText.setText("pjwstk");
 		
+		// Add select all text listeners.
+		loginText.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				loginText.selectAll();
+			}
+		});
+		
+		passwordText.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				passwordText.selectAll();
+			}
+		});
+		
+		domainText.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				domainText.selectAll();
+			}
+		});
 	}
 	
 	protected void finishUserInterface() {
