@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 public class EntityAttribute {
-
+	public static final String TYPE_ID = "ID";
 	public static final String TYPE_INT = "int";
 	public static final String TYPE_DECIMAL = "decimal";
 	public static final String TYPE_NON_NEGATIVE_INTEGER = "nonNegativeInteger";
@@ -106,7 +106,7 @@ public class EntityAttribute {
 	
 	// Used by applet for filters.
 	public String[] getOperators() {
-		if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER) ||
+		if (type.equals(TYPE_ID) || type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER) ||
 				type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) ||
 				type.equals(TYPE_FLOAT)) {
 			return Predicate.integerOperators;
@@ -123,7 +123,7 @@ public class EntityAttribute {
 	public Class<?> getAttributeClass() {
 		if (type == null) {
 			return Object.class;
-		} else if (type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER)) {
+		} else if (type.equals(TYPE_ID) ||type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER)) {
 			return Integer.class;
 		} else if (type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) || type.equals(TYPE_FLOAT)) {
 			return Float.class;
