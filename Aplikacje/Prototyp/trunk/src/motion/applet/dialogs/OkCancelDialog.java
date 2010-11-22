@@ -2,22 +2,14 @@ package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 
 import motion.Messages;
-import motion.applet.webservice.client.WebServiceInstance;
-import motion.database.DatabaseConnection;
 
 public class OkCancelDialog extends BasicDialog {
 	
@@ -51,7 +43,6 @@ public class OkCancelDialog extends BasicDialog {
 		container.add( new JPanel(), BorderLayout.SOUTH );
 		
 		this.add( container );
-		this.setLocationByPlatform( true );
 		this.pack();
 	}
 	
