@@ -165,6 +165,7 @@ public class AttributeEditDialog extends BasicDialog {
 								DatabaseConnection.getInstanceWCF().defineAttribute(g, "");
 
 							AttributeEditDialog.this.entityKind.rescanGenericAttributeGroups();
+							AttributeEditDialog.this.entityKind.rescanGenericAttributes();
 							MotionApplet.refreshTables();
 						
 						} catch (Exception e1) {
