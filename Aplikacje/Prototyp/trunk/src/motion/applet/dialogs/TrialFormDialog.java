@@ -43,7 +43,6 @@ public class TrialFormDialog extends FormDialog {
 								int trialID = WebServiceInstance.getDatabaseConnection().createTrial(
 										TrialFormDialog.this.sessionId,
 										TrialFormDialog.this.getTrialDescription()
-//										TrialFormDialog.this.getDuration()
 										);
 								setDefinedAttributes(trialID);
 							} catch (Exception e1) {
@@ -84,23 +83,15 @@ public class TrialFormDialog extends FormDialog {
 		return (String) getAttributeValue(EntityKind.trial, TrialStaticAttributes.TrialDescription.toString());
 	}
 	
-/*	private int getDuration() {
-		int duration = -1;
-		Object value = getAttributeValue(EntityKind.trial, TrialStaticAttributes.Duration.toString());
-		if (value != null) {
-			duration = (Integer) value;
-		}
-		
-		return duration;
-	}
-	*/
 	protected boolean validateResult() {
+		// Allow empty string static attributes.
+		/*
 		if (getTrialDescription().equals("")) {
 			this.messageLabel.setText(MISSING_TRIAL_DESCRIPTION);
 			
 			return false;
 		} 
-		
+		*/
 		this.messageLabel.setText(PRESS_CREATE_MESSAGE);
 		
 		return super.validateResult();
