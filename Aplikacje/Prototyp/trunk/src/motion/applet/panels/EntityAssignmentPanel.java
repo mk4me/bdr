@@ -28,4 +28,8 @@ public class EntityAssignmentPanel extends JPanel {
 	public void setSelectedRecords(int[] recordIds) {
 		((BasicTableModel) entityTable.getModel()).setCheckedRecords(recordIds);
 	}
+	
+	public void refreshTable() {
+		((AttributeTableModel) entityTable.getModel()).refresh();
+	}
 }

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.SwingWorker;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -41,6 +42,9 @@ public class SessionFormDialog extends FormDialog {
 	private EntityAssignmentPanel sessionGroupAssignmentPanel;
 	
 	private ArrayList<String> motionKinds;
+	
+	private static String NEW_PERFORMER = "New performer";
+	private JButton newPerformerButton;
 	
 	public SessionFormDialog(String title, String welcomeMessage) {
 		super(title, welcomeMessage, true);
@@ -103,6 +107,22 @@ public class SessionFormDialog extends FormDialog {
 			}
 		});
 		
+		newPerformerButton = new JButton(NEW_PERFORMER);
+		this.addToButtonPanel(newPerformerButton);
+		newPerformerButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PerformerFormDialog performerFormDialog = new PerformerFormDialog(PerformerFormDialog.TITLE, PerformerFormDialog.WELCOME_MESSAGE);
+				performerFormDialog.setVisible(true);
+				if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
+						performerFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
+					int i = getFormTabbedPane().indexOfComponent(performerAssignmentPanel);
+					getFormTabbedPane().setSelectedIndex(i);
+					performerAssignmentPanel.refreshTable();
+				}
+			}
+		});
+		
 		privilegesPanel = new PrivilegesPanel(this); 
 		this.getFormTabbedPane().addTab(PRIVILEGES_TAB, privilegesPanel);
 		performerAssignmentPanel = new EntityAssignmentPanel(EntityKind.performer);
@@ -117,8 +137,6 @@ public class SessionFormDialog extends FormDialog {
 		fillFormFields(session);
 		fillSessionPerformers(session);
 		privilegesPanel.fillPrivilegesListPanel(session.getId());
-
-		
 		fillSessionGroups(session);
 	}
 	
