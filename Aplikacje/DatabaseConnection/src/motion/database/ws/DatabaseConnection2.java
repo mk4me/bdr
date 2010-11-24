@@ -50,6 +50,7 @@ import motion.database.ws.basicQueriesServiceWCF.GenericUniformAttributesQueryRe
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGenericQueryUniformXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionLabelQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributeGroupsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDefinedQueryExceptionFaultFaultMessage;
@@ -74,6 +75,7 @@ import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.AttributeDefinitionList.AttributeDefinition;
 import motion.database.ws.basicQueriesServiceWCF.AttributeGroupDefinitionList.AttributeGroupDefinition;
 import motion.database.ws.basicQueriesServiceWCF.GenericQueryUniformXMLResponse.GenericQueryUniformXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.GetSessionContentResponse.GetSessionContentResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributeGroupsDefinedResponse.ListAttributeGroupsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListAttributesDefinedResponse.ListAttributesDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnumValuesResult;
@@ -562,7 +564,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 // Performer Configuration 
 
 	@Override
-	public  DbElementsList<PerformerConfiguration> getSessionPerformerConfiguration(int sessionID) throws Exception
+	public  DbElementsList<PerformerConfiguration> listSessionPerformerConfigurations(int sessionID) throws Exception
 	{
 		try{	
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionPerformerConfiguration", this );
@@ -671,20 +673,19 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 
 	//@Override
-/*	public  DbElementsList<Session> getSessionContent(int sessionID) throws Exception
+	public  Session getSessionContent(int sessionID) throws Exception
 	{
 		try {
-			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listLabSessionsWithAttributes", this );
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "getSessionContent", this );
+			Session output = null;
 			
-			ListLabSessionsWithAttributesXMLResult result = port.listLabSessionsWithAttributesXML(labID);
-			DbElementsList<Session> output = new DbElementsList<Session>();
-			if (result != null && result.getLabSessionWithAttributesList() != null )
-				for ( motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes s : result.getLabSessionWithAttributesList().getSessionDetailsWithAttributes() )
-					output.add( ConnectionTools2.transformSessionDetails(s) );
+			GetSessionContentResult result = port.getSessionContent(sessionID);
+			if (result != null && result.getSessionContent()!=null )
+				output = ConnectionTools2.transformSessionContent( result.getSessionContent() );
 			
 			return output;
 		} 
-		catch (IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		catch (IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage e) 
 		{
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
@@ -694,7 +695,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-*/
+
 	
 ////////////////////////////////////////////////////////////////////////////
 //	Session Groups

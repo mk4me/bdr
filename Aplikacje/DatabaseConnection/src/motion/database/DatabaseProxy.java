@@ -230,7 +230,7 @@ public interface DatabaseProxy {
 
 	void readAttributeViewConfiguration() throws Exception;
 
-	DbElementsList<PerformerConfiguration> getSessionPerformerConfiguration(
+	DbElementsList<PerformerConfiguration> listSessionPerformerConfigurations(
 			int sessionID) throws Exception;
 
 

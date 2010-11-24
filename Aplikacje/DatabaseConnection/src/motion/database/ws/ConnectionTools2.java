@@ -47,12 +47,14 @@ import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttri
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.SessionContent;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.FileList.FileDetails;
 import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse.ListSessionPerformerConfsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.SessionContent.TrialContentList.TrialContent;
 import motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.fileStoremanServiceWCF.FileStoremanWS;
@@ -320,7 +322,29 @@ public class ConnectionTools2 {
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), session );
 		return session;
 	}
-	
+
+	public static Session transformSessionContent(SessionContent s) {
+		if(s==null)
+			return null;
+		
+		Session session = new Session();
+		session.put( SessionStaticAttributes.LabID, s.getLabID() );
+		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
+		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
+		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
+		session.put( SessionStaticAttributes.UserID, s.getUserID() );
+		session.put( SessionStaticAttributes.SessionLabel, s.getSessionLabel() );
+		
+		ConnectionTools2.transformGenericAttributes( s.getAttributes(), session );
+
+		session.trials = new DbElementsList<Trial>();
+//		for ( TrialContent trial : s.getTrialContentList().getTrialContent() )
+//			trial.
+		
+		return session;
+	}
+
 
 	public static Trial transformTrialDetails(
 			motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes s) {
