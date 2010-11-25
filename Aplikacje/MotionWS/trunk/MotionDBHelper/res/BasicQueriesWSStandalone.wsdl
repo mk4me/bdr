@@ -48,24 +48,15 @@
 			<xsd:element name="SessionContent">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="SessionID" type="xsd:int"/>
-						<xsd:element name="UserID" type="xsd:int"/>
-						<xsd:element name="LabID" type="xsd:int"/>
-						<xsd:element name="MotionKind" type="xsd:string"/>
-						<xsd:element name="SessionDate" type="xsd:dateTime"/>
-						<xsd:element name="SessionDescription" type="xsd:string"/>
-						<xsd:element name="SessionLabel" type="xsd:string"/>
-						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+						<xsd:element ref="tns:SessionDetailsWithAttributes"/>
 						<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
 						<xsd:element name="TrialContentList">
 							<xsd:complexType>
 								<xsd:sequence>
-									<xsd:element name="TrialContent">
+									<xsd:element name="TrialContent" minOccurs="0" maxOccurs="unbounded">
 										<xsd:complexType>
 											<xsd:sequence>
-												<xsd:element name="TrialID" type="xsd:int"/>
-												<xsd:element name="TrialDescription" type="xsd:string"/>
-												<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+												<xsd:element ref="tns:TrialDetailsWithAttributes"/>
 												<xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
 											</xsd:sequence>
 										</xsd:complexType>
@@ -74,8 +65,6 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<!--  <xsd:attribute name="P" use="required" type="xsd:int" />
-      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="SessionContentList">
@@ -85,6 +74,20 @@
 					</xsd:sequence>
 					<xsd:attribute name="currentPage" type="xsd:short" use="optional"/>
 					<xsd:attribute name="pages" type="xsd:short" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FileSetValidationResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SessionContent"/>
+						<xsd:element name="ErrorList">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Error" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="Attributes">
@@ -537,6 +540,36 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:SessionContent"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ValidateSessionFileSet">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="fileNames" type="tns:ArrayOfFileNameEntry"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ArrayOfFileNameEntry">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="FileNameEntry" type="tns:FileNameEntry"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FileNameEntry">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Name" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ValidateSessionFileSetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ValidateSessionFileSetResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:FileSetValidationResult"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -1284,6 +1317,15 @@
 	<wsdl:message name="IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_InputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateSessionFileSet"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateSessionFileSetResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GenericQueryXML"/>
 	</wsdl:message>
@@ -1598,6 +1640,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentResponse" message="tns:IBasicQueriesWS_GetSessionContent_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ValidateSessionFileSet">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet" message="tns:IBasicQueriesWS_ValidateSessionFileSet_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetResponse" message="tns:IBasicQueriesWS_ValidateSessionFileSet_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1812,6 +1859,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="GetSessionContent">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContent" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ValidateSessionFileSet">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -2209,7 +2268,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

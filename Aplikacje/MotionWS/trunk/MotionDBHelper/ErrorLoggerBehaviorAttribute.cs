@@ -38,7 +38,7 @@ namespace MotionDBWebServices
  
 		public void ProvideFault(Exception error, MessageVersion version, ref Message fault)
 		{
-			fault = null; //Suppress any faults in contract
+            if (!(error is FaultException)) fault = null; //Suppress any faults in contract
 		}
  
 		public bool HandleError(Exception error)

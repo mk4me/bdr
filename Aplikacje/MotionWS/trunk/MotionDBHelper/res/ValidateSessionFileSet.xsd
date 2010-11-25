@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="SessionDetailsWithAttributes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="SessionContentElement.xsd" />
+  <xsd:element name="FileSetValidationResult">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SessionContent" />
+        <xsd:element name="ErrorList" >
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Error" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

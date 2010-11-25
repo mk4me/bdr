@@ -1,28 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <xsd:include schemaLocation="AttributesElement.xsd" />
+  <xsd:include schemaLocation="SessionDetailsWithAttributesElement.xsd" />
+  <xsd:include schemaLocation="TrialDetailsWithAttributesElement.xsd" />
   <xsd:include schemaLocation="FileWithAttributesListElement.xsd" />
   <xsd:element name="SessionContent">
     <xsd:complexType>
             <xsd:sequence>
-              <xsd:element name="SessionID" type="xsd:int" />
-              <xsd:element name="UserID" type="xsd:int" />
-              <xsd:element name="LabID" type="xsd:int" />
-              <xsd:element name="MotionKind" type="xsd:string" />
-              <xsd:element name="SessionDate" type="xsd:dateTime" />
-              <xsd:element name="SessionDescription" type="xsd:string" />
-              <xsd:element name="SessionLabel" type="xsd:string" />
-              <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+              <xsd:element ref="SessionDetailsWithAttributes" />
               <xsd:element ref ="FileWithAttributesList" minOccurs="0" maxOccurs="1" />
               <xsd:element name="TrialContentList">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="TrialContent">
+                    <xsd:element name="TrialContent" minOccurs="0" maxOccurs="unbounded">
                       <xsd:complexType>
                         <xsd:sequence>
-                          <xsd:element name="TrialID" type="xsd:int" />
-                          <xsd:element name="TrialDescription" type="xsd:string" />
-                          <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+                          <xsd:element ref="TrialDetailsWithAttributes" />
                           <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" />
                         </xsd:sequence>
                       </xsd:complexType>
@@ -31,8 +23,6 @@
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
-    <!--  <xsd:attribute name="P" use="required" type="xsd:int" />
-      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>

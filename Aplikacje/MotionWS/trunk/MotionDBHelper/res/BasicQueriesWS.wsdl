@@ -14,6 +14,7 @@
 			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xsd:include schemaLocation="ListSessionContents.xsd"/>
 			<xsd:include schemaLocation="GetSessionContent.xsd"/>
+			<xsd:include schemaLocation="ValidateSessionFileSet.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -140,6 +141,36 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:SessionContent"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ValidateSessionFileSet">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="fileNames" type="tns:ArrayOfFileNameEntry"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ArrayOfFileNameEntry">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="FileNameEntry" type="tns:FileNameEntry"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FileNameEntry">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Name" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ValidateSessionFileSetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ValidateSessionFileSetResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:FileSetValidationResult"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -806,6 +837,7 @@
 			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xsd:include schemaLocation="ListSessionContents.xsd"/>
 			<xsd:include schemaLocation="GetSessionContent.xsd"/>
+			<xsd:include schemaLocation="ValidateSessionFileSet.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -921,6 +953,15 @@
 		<wsdl:part name="parameters" element="tns:GetSessionContentResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_InputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateSessionFileSet"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ValidateSessionFileSetResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
@@ -1237,6 +1278,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentResponse" message="tns:IBasicQueriesWS_GetSessionContent_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContentQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetSessionContent_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ValidateSessionFileSet">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet" message="tns:IBasicQueriesWS_ValidateSessionFileSet_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetResponse" message="tns:IBasicQueriesWS_ValidateSessionFileSet_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1451,6 +1497,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="GetSessionContent">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetSessionContent" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ValidateSessionFileSet">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -1848,7 +1906,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

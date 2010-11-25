@@ -772,7 +772,7 @@
 	</wsdl:binding>
 	<wsdl:service name="UserPersonalSpace">
 		<wsdl:port name="BasicHttpBinding_IUserPersonalSpaceWS" binding="tns:BasicHttpBinding_IUserPersonalSpaceWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/UserPersonalSpaceWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/UserPersonalSpaceWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

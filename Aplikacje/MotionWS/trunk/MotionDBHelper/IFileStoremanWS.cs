@@ -43,5 +43,9 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
         FileData RetrieveFile(int fileID);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        int CreateSessionFromFiles(string path);
     }
 }

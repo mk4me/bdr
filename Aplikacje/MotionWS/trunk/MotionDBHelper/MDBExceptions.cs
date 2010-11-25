@@ -30,6 +30,7 @@ namespace MotionDBWebServices
             _details = det;
         }
     }
+
     [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")]
     public class UpdateException
     {
@@ -134,7 +135,7 @@ namespace MotionDBWebServices
         }
     }
 
-
+    
         [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")]
     public class AdministrationOperationException
     {

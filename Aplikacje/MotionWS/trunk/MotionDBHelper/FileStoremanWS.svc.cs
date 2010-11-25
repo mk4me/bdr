@@ -16,7 +16,7 @@ namespace MotionDBWebServices
     public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
 
-        int maxFileSize = 10000000;
+        int maxFileSize = 40000000;
         byte[] fileData = null;
 
         SqlDataReader fileReader = null;
@@ -718,7 +718,92 @@ namespace MotionDBWebServices
             return fData;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        public int CreateSessionFromFiles(string path)
+        {
+            /*
+            string dirLocation = baseLocalFilePath;
 
+            int dirLocLength;
+            string subdirPath = "";
+            string fileName = "";
+
+
+            if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
+            if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
+            dirLocation = baseLocalFilePath + path;
+            dirLocLength = dirLocation.Length + 1; // plus additional "/" character
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
+                OpenConnection();
+                cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
+                                        values (@sess_id, @file_desc, @file_data, @file_name, @file_path)";
+                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
+                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
+                // can be used for recoring of several files
+                cmd.Parameters["@sess_id"].Value = sessionID;
+
+                FileInfo[] sFiles = di.GetFiles("*.*", SearchOption.AllDirectories);
+                foreach (FileInfo fi in sFiles)
+                {
+
+                    if ((fi.FullName.Length - dirLocLength - fi.Name.Length) > 100)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("File subdirectory path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file path", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+                    }
+                }
+                foreach (FileInfo fi in sFiles)
+                {
+
+                    if ((fi.Name.Length) > 100)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("File name too long", "File name: " + fi.Name + " exceeds the maximum length of 100 characters");
+                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file name", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+                    }
+                }
+                foreach (FileInfo fi in sFiles)
+                {
+                    fileName = fi.Name;
+                    subdirPath = fi.FullName.Substring(dirLocLength);
+                    subdirPath = subdirPath.Substring(0, subdirPath.Length - fileName.Length - 1);
+                    subdirPath = subdirPath.Replace("\\", "/");
+                    if ((fi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) continue;
+                    FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
+                    BinaryReader br = new BinaryReader(fs);
+                    fileData = br.ReadBytes(maxFileSize);
+                    if (description.Equals("")) description = "sample description";
+                    cmd.Parameters["@file_desc"].Value = description;
+                    cmd.Parameters["@file_data"].Value = fileData;
+                    cmd.Parameters["@file_name"].Value = fileName;
+                    cmd.Parameters["@file_path"].Value = subdirPath;
+                    cmd.ExecuteNonQuery();
+                    br.Close();
+                    fs.Close();
+                    File.Delete(fi.FullName);
+                }
+
+
+                Directory.Delete(di.FullName, true);
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+
+
+            }
+            finally
+            {
+                CloseConnection();
+            } */
+            return 0;
+        }
 
     }
 

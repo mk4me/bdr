@@ -301,34 +301,62 @@ namespace MotionDBWebServices
         public int AssignPerformerToSession(int sessionID, int performerID)
         {
             int newPerfConfId = 0;
+            int res = 0;
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
             try
             {
 
                 OpenConnection();
-                cmd.CommandText = @"insert into Konfiguracja_performera ( IdSesja, IdPerformer)
-                                            values (@sess_id, @perf_id )
-                                    set @perf_conf_id = SCOPE_IDENTITY()";
+                cmd.CommandText = "assign_performer_to_session";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters.Add("@perf_id", SqlDbType.Int);
                 SqlParameter pcIdParameter =
                     new SqlParameter("@perf_conf_id", SqlDbType.Int);
                 pcIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(pcIdParameter);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+                cmd.Parameters["@user_login"].Value = userName;
                 cmd.Parameters["@sess_id"].Value = sessionID;
                 cmd.Parameters["@perf_id"].Value = performerID;
-                cmd.Prepare();
                 cmd.ExecuteNonQuery();
-                newPerfConfId = (int) pcIdParameter.Value;
+                res = (int)resultCodeParameter.Value;
+                if(res == 0) newPerfConfId = (int) pcIdParameter.Value;
             }
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("AssignPerformerToSession")));
+                throw new FaultException<UpdateException>(exc, "UpdateException");
             }
             finally
             {
                 CloseConnection();
             }
+            if (res == 1)
+            {
+                UpdateException exc = new UpdateException("privilege", "Session not available");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 2)
+            {
+                UpdateException exc = new UpdateException("parameter", "Performer not found");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+
+            if (res == 9)
+            {
+                UpdateException exc = new UpdateException("authorization", "Unknown user");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            } 
             return newPerfConfId;
         }
 
@@ -964,6 +992,7 @@ namespace MotionDBWebServices
                         paramName = "@pc_id";
                         break;
                 }
+                OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = operationName;
                 cmd.Parameters.Add(paramName, SqlDbType.Int);

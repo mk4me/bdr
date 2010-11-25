@@ -12,6 +12,7 @@ using System.Security.Permissions;
 namespace MotionDBWebServices
 {
     [ServiceBehavior (Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")]
+    [ErrorLoggerBehaviorAttribute]
  //   [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)] 
     public class BasicQueriesWS : DatabaseAccessService, IBasicQueriesWS
     {
@@ -20,6 +21,7 @@ namespace MotionDBWebServices
         public XmlElement GenericQueryXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
+
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
@@ -169,7 +171,9 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                // report exception
+                QueryException exc = new QueryException("database", "Database-side failure");
+                throw new FaultException<QueryException>(exc, "Query invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetPerformerByIdXML")));
+
             }
             CloseConnection();
             if (notFound)
@@ -461,7 +465,7 @@ namespace MotionDBWebServices
         public XmlElement ListPerformersXML()  // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
-
+            xd.AppendChild(xd.CreateElement("PerformerList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             try
             {
                 OpenConnection();
@@ -472,14 +476,19 @@ namespace MotionDBWebServices
                 {
                     xd.Load(dr);
                 }
-                if (xd.DocumentElement == null)
+                    if (xd.DocumentElement == null)
                 {
                     xd.AppendChild(xd.CreateElement("PerformerList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
                 }
-
+/*                else
+                {
+                    XmlAttribute nsAttr = xd.CreateAttribute("xmlns");
+                    nsAttr.InnerText = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService";
+                    xd.DocumentElement.Attributes.Append(nsAttr);
+                } */
                 dr.Close();
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
                 // report exception
             }
@@ -1741,7 +1750,7 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListEnumValues(string attributeName, string entityKind)
         {
             XmlDocument xd = new XmlDocument();
@@ -1778,8 +1787,38 @@ namespace MotionDBWebServices
             }
             return xd.DocumentElement;
         }
+
+        // Wizard-used validation operation
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        public XmlElement ValidateSessionFileSet(FileNameEntryCollection fileNames)
+        {
+            XmlDocument xd = new XmlDocument();
+ 
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "validate_file_list_xml";
+                SqlParameter fileListPar = cmd.Parameters.Add("@file_list", SqlDbType.Structured);
+                fileListPar.Direction = ParameterDirection.Input;
+                fileListPar.Value = fileNames; 
+                XmlReader dr = cmd.ExecuteXmlReader();
+
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                QueryException exc = new QueryException("DB-side", "Stored procedure execution error");
+                throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("ValidateSessionFileSet")));
+            }
+            CloseConnection();
+
+            return xd.DocumentElement;
+        }
     }
-
-
-
 }

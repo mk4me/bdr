@@ -165,6 +165,10 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement GetSessionContent(int sessionID);
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ValidateSessionFileSet(FileNameEntryCollection fileNames);
+
 
     }
 
