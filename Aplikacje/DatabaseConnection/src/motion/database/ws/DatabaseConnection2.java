@@ -42,9 +42,11 @@ import motion.database.ws.administrationWCF.IAdministrationWSRemoveAttributeGrou
 import motion.database.ws.authorizationWCF.IAuthorizationWS;
 import motion.database.ws.authorizationWCF.IAuthorizationWSAlterSessionVisibilityAuthorizationExceptionFaultFaultMessage;
 import motion.database.ws.authorizationWCF.IAuthorizationWSCheckUserAccountAuthorizationExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.ArrayOfFileNameEntry;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfFilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.ArrayOfString;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
+import motion.database.ws.basicQueriesServiceWCF.FileNameEntry;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.basicQueriesServiceWCF.GenericUniformAttributesQueryResult;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
@@ -92,6 +94,7 @@ import motion.database.ws.basicQueriesServiceWCF.ListSessionSessionGroupsRespons
 import motion.database.ws.basicQueriesServiceWCF.ListSessionTrialsWithAttributesXMLResponse.ListSessionTrialsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListTrialMeasurementsWithAttributesXMLResponse.ListTrialMeasurementsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.MotionKindDefinitionList.MotionKindDefinition;
+import motion.database.ws.basicQueriesServiceWCF.ValidateSessionFileSetResponse.ValidateSessionFileSetResult;
 import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage;
@@ -891,6 +894,41 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		catch (Exception e) 
 		{
 			throw ConnectionTools2.transformWSFaultMessage(e); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+	
+////////////////////////////////////////////////////////////////////////////
+//	Wizard (validation) 
+
+	
+	@Override
+	public  Session validateSessionFileSet(String[] paths) throws Exception
+	{
+		try {
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "validateSessionFileSet", this );
+			Session output = null;
+			
+			ArrayOfFileNameEntry input = new ArrayOfFileNameEntry();
+			for (String file : paths){
+				FileNameEntry fne = new FileNameEntry();
+				fne.setName( file );
+				input.getFileNameEntry().add( fne );
+			}
+			ValidateSessionFileSetResult result = port.validateSessionFileSet( input );
+			if (result != null && result.getFileSetValidationResult().getSessionContent()!=null )
+				output = ConnectionTools2.transformSessionContent( result.getFileSetValidationResult().getSessionContent() );
+			
+			return output;
+		} 
+		catch (IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 		}
 		finally
 		{

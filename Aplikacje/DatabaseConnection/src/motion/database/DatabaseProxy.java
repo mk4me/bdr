@@ -235,5 +235,7 @@ public interface DatabaseProxy {
 
 	Session getSessionContent(int sessionID) throws Exception;
 
+	Session validateSessionFileSet(String[] paths) throws Exception;
+
 
 }

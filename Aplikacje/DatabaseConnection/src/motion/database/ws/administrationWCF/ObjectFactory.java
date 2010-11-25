@@ -61,38 +61,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineAttriubeGroup }
-     * 
-     */
-    public DefineAttriubeGroup createDefineAttriubeGroup() {
-        return new DefineAttriubeGroup();
-    }
-
-    /**
-     * Create an instance of {@link AddAttributeEnumValueResponse }
-     * 
-     */
-    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
-        return new AddAttributeEnumValueResponse();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeGroup }
-     * 
-     */
-    public RemoveAttributeGroup createRemoveAttributeGroup() {
-        return new RemoveAttributeGroup();
-    }
-
-    /**
-     * Create an instance of {@link AdministrationOperationException }
-     * 
-     */
-    public AdministrationOperationException createAdministrationOperationException() {
-        return new AdministrationOperationException();
-    }
-
-    /**
      * Create an instance of {@link DownloadAreaCleanupResponse }
      * 
      */
@@ -101,11 +69,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttribute }
+     * Create an instance of {@link AddAttributeEnumValue }
      * 
      */
-    public RemoveAttribute createRemoveAttribute() {
-        return new RemoveAttribute();
+    public AddAttributeEnumValue createAddAttributeEnumValue() {
+        return new AddAttributeEnumValue();
+    }
+
+    /**
+     * Create an instance of {@link DownloadAreaCleanup }
+     * 
+     */
+    public DownloadAreaCleanup createDownloadAreaCleanup() {
+        return new DownloadAreaCleanup();
     }
 
     /**
@@ -125,19 +101,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttributeGroupResponse }
+     * Create an instance of {@link DefineAttriubeGroup }
      * 
      */
-    public RemoveAttributeGroupResponse createRemoveAttributeGroupResponse() {
-        return new RemoveAttributeGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link DownloadAreaCleanup }
-     * 
-     */
-    public DownloadAreaCleanup createDownloadAreaCleanup() {
-        return new DownloadAreaCleanup();
+    public DefineAttriubeGroup createDefineAttriubeGroup() {
+        return new DefineAttriubeGroup();
     }
 
     /**
@@ -149,19 +117,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddAttributeEnumValue }
-     * 
-     */
-    public AddAttributeEnumValue createAddAttributeEnumValue() {
-        return new AddAttributeEnumValue();
-    }
-
-    /**
      * Create an instance of {@link DefineAttribute }
      * 
      */
     public DefineAttribute createDefineAttribute() {
         return new DefineAttribute();
+    }
+
+    /**
+     * Create an instance of {@link AddAttributeEnumValueResponse }
+     * 
+     */
+    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
+        return new AddAttributeEnumValueResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttribute }
+     * 
+     */
+    public RemoveAttribute createRemoveAttribute() {
+        return new RemoveAttribute();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeGroupResponse }
+     * 
+     */
+    public RemoveAttributeGroupResponse createRemoveAttributeGroupResponse() {
+        return new RemoveAttributeGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeGroup }
+     * 
+     */
+    public RemoveAttributeGroup createRemoveAttributeGroup() {
+        return new RemoveAttributeGroup();
+    }
+
+    /**
+     * Create an instance of {@link AdministrationOperationException }
+     * 
+     */
+    public AdministrationOperationException createAdministrationOperationException() {
+        return new AdministrationOperationException();
     }
 
     /**

@@ -110,6 +110,23 @@ public interface IBasicQueriesWS {
 
     /**
      * 
+     * @param fileNames
+     * @return
+     *     returns motion.database.ws.basicQueriesServiceWCF.ValidateSessionFileSetResponse.ValidateSessionFileSetResult
+     * @throws IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ValidateSessionFileSet", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet")
+    @WebResult(name = "ValidateSessionFileSetResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+    @RequestWrapper(localName = "ValidateSessionFileSet", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ValidateSessionFileSet")
+    @ResponseWrapper(localName = "ValidateSessionFileSetResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ValidateSessionFileSetResponse")
+    public motion.database.ws.basicQueriesServiceWCF.ValidateSessionFileSetResponse.ValidateSessionFileSetResult validateSessionFileSet(
+        @WebParam(name = "fileNames", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        ArrayOfFileNameEntry fileNames)
+        throws IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param entitiesToInclude
      * @param filter
      * @return

@@ -195,4 +195,21 @@ public interface IFileStoremanWS {
         throws IFileStoremanWSRetrieveFileFileAccessServiceExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param path
+     * @return
+     *     returns int
+     * @throws IFileStoremanWSCreateSessionFromFilesFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "CreateSessionFromFiles", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/CreateSessionFromFiles")
+    @WebResult(name = "CreateSessionFromFilesResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "CreateSessionFromFiles", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.CreateSessionFromFiles")
+    @ResponseWrapper(localName = "CreateSessionFromFilesResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.CreateSessionFromFilesResponse")
+    public int createSessionFromFiles(
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path)
+        throws IFileStoremanWSCreateSessionFromFilesFileAccessServiceExceptionFaultFaultMessage
+    ;
+
 }
