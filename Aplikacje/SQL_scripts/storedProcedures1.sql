@@ -95,17 +95,17 @@ go
 -- Resource attribute and label functions
 -- ======================================
 
--- last rev: 2010-10-20
-create function motion_kind_name( @mk_id int )
-returns varchar(50)
-as
-begin
-	return ( select top 1 Nazwa from Rodzaj_ruchu where IdRodzaj_ruchu = @mk_id );
-end
-go
+-- last rev: 20101116 ++
+create function session_label( @user_login varchar(30), @sess_id int )
+returns TABLE as
+return
+select l.Nazwa+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
+from user_accessible_sessions_by_login(@user_login) s inner join Laboratorium l on s.IdLaboratorium = l.IdLaboratorium where s.IdSesja = @sess_id
+go	
 
--- last rev: 2010-10-18
-create function list_performer_attributes ( @perf_id int )
+
+-- last rev: 2010-11-16
+alter function list_performer_attributes ( @perf_id int )
 returns TABLE as
 return 
 select 
@@ -116,6 +116,7 @@ select
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -123,11 +124,11 @@ select
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPerformer = @perf_id and a.Typ_danych <> 'file'
+where wap.IdPerformer = @perf_id 
 go
 
--- last rev: 2010-10-18
-create function list_performer_attributes_uniform ( @perf_id int )
+-- last rev: 2010-11-16
+alter function list_performer_attributes_uniform ( @perf_id int )
 returns TABLE as
 return 
 (
@@ -164,6 +165,7 @@ union
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 	a.Typ_danych as Type,
 	ga.Nazwa as AttributeGroup,
@@ -171,19 +173,11 @@ union
 from Atrybut a 
 inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPerformer = @perf_id  and a.Typ_danych <> 'file'));
+where wap.IdPerformer = @perf_id  ));
 go
 
--- last rev: 20100706
-create function session_label( @user_login varchar(30), @sess_id int )
-returns TABLE as
-return
-select p.Nazwisko+','+p.Imie+':'+CONVERT(CHAR(10),s.Data,126) as SessionLabel
-from user_accessible_sessions_by_login(@user_login) s inner join Performer p on s.IdPerformer = p.IdPerformer where s.IdSesja = @sess_id
-go	
-
--- last rev: 20101018
-create function list_session_attributes ( @sess_id int )
+-- last rev: 20101116
+alter function list_session_attributes ( @sess_id int )
 returns TABLE as
 return 
 select 
@@ -194,6 +188,7 @@ select
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (was.Wartosc_Id  as SQL_VARIANT)
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -201,11 +196,11 @@ select
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where was.IdSesja = @sess_id and a.Typ_danych <> 'file'
+where was.IdSesja = @sess_id
 go
 
--- last rev: 20101020
-create function list_session_attributes_uniform ( @sess_id int )
+-- last rev: 20101116
+alter function list_session_attributes_uniform ( @sess_id int )
 returns TABLE as
 return 
 (
@@ -263,6 +258,7 @@ union
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( was.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( was.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (was.Wartosc_Id  as SQL_VARIANT)
 		else cast ( was.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -270,11 +266,11 @@ union
 from Atrybut a 
 inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where was.IdSesja = @sess_id and a.Typ_danych <> 'file' ));
+where was.IdSesja = @sess_id ));
 go
 
--- last rev: 20101018
-create function list_trial_attributes ( @trial_id int )
+-- last rev: 20101116
+alter function list_trial_attributes ( @trial_id int )
 returns TABLE as
 return 
 select 
@@ -285,6 +281,7 @@ select
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wao.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -292,11 +289,11 @@ select
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wao.IdObserwacja = @trial_id and a.Typ_danych <> 'file'
+where wao.IdObserwacja = @trial_id 
 go
 
--- last rev: 20101018
-create function list_trial_attributes_uniform ( @trial_id int )
+-- last rev: 20101116
+alter function list_trial_attributes_uniform ( @trial_id int )
 returns TABLE as
 return 
 (
@@ -325,6 +322,7 @@ union
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wao.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wao.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wao.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wao.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -332,11 +330,11 @@ union
 from Atrybut a 
 inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wao.IdObserwacja = @trial_id and a.Typ_danych <> 'file'));
+where wao.IdObserwacja = @trial_id ));
 go
 
--- last rev: 20101018
-create function list_measurement_configuration_attributes ( @mc_id int )
+-- last rev: 20101116
+alter function list_measurement_configuration_attributes ( @mc_id int )
 returns TABLE as
 return 
 select 
@@ -347,6 +345,7 @@ select
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wakp.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -354,11 +353,11 @@ select
 from Atrybut a 
 inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Typ_danych <> 'file'
+where wakp.IdKonfiguracja_pomiarowa = @mc_id 
 go
 
--- last rev: 20101018
-create function list_measurement_configuration_attributes_uniform ( @mc_id int )
+-- last rev: 20101116
+alter function list_measurement_configuration_attributes_uniform ( @mc_id int )
 returns TABLE as
 return 
 (
@@ -401,6 +400,7 @@ union
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wakp.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -408,11 +408,11 @@ union
 from Atrybut a 
 inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Typ_danych <> 'file' ));
+where wakp.IdKonfiguracja_pomiarowa = @mc_id ));
 go
 
--- last rev: 20101018
-create function list_measurement_attributes ( @meas_id int )
+-- last rev: 20101116
+alter function list_measurement_attributes ( @meas_id int )
 returns TABLE as
 return 
 select 
@@ -423,6 +423,7 @@ select
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -430,11 +431,11 @@ select
 from Atrybut a 
 inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPomiar = @meas_id and a.Typ_danych <> 'file'
+where wap.IdPomiar = @meas_id
 go
 
--- last rev: 20101018
-create function list_measurement_attributes_uniform ( @meas_id int )
+-- last rev: 20101116
+alter function list_measurement_attributes_uniform ( @meas_id int )
 returns TABLE as
 return 
 (
@@ -456,6 +457,7 @@ union
 			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
 			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
 		)
+		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
 		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
 		a.Typ_danych as Type,
 		ga.Nazwa as AttributeGroup,
@@ -463,8 +465,10 @@ union
 from Atrybut a 
 inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPomiar = @meas_id  and a.Typ_danych <> 'file'));
+where wap.IdPomiar = @meas_id ));
 go
+
+
 
 
 -- Resource By-ID retrieval
@@ -550,7 +554,7 @@ as
 			for XML AUTO, ELEMENTS
 go
 
--- last rev: 20101109
+-- last rev: 20101109 ++
 create procedure get_session_content_xml ( @user_login as varchar(30), @sess_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
