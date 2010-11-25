@@ -62,14 +62,13 @@ public class WizardDialog extends BasicDialog {
 	
 	@Override
 	protected void finishUserInterface() {
-		this.setSize(450, 350);
+		this.setSize(520, 350);
 		
 		int i = 0;
 		for (WizardPanel w : wizardPanels) {
 			w.cardName = String.valueOf(i);
 			formPanel.add(w, w.cardName);
 			i++;
-			System.out.println(w.cardName);
 		}
 		
 		if (wizardPanels.isEmpty() == false) {
@@ -89,8 +88,15 @@ public class WizardDialog extends BasicDialog {
 		this.nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentStep+1 < wizardPanels.size()) {
-					currentStep++;
-					switchWizardPanel(wizardPanels.get(currentStep));
+					if (wizardPanels.get(currentStep).nextPressed() == true) {
+						currentStep++;
+						switchWizardPanel(wizardPanels.get(currentStep));
+					} else {
+						String errorMessage = wizardPanels.get(currentStep).getErrorMessage();
+						if (!errorMessage.equals("")) {
+							messageLabel.setText(errorMessage);
+						}
+					}
 				}
 			}
 		});
@@ -98,6 +104,7 @@ public class WizardDialog extends BasicDialog {
 		this.backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentStep-1 >= 0) {
+					wizardPanels.get(currentStep).backPressed();
 					currentStep--;
 					switchWizardPanel(wizardPanels.get(currentStep));
 				}
@@ -108,7 +115,7 @@ public class WizardDialog extends BasicDialog {
 	private void switchWizardPanel(WizardPanel wizardPanel) {
 		this.messageLabel.setText(wizardPanel.getStepMessage());
 		cardLayout.show(formPanel, wizardPanel.cardName);
-		this.add(wizardPanel, BorderLayout.CENTER);
+		//this.add(wizardPanel, BorderLayout.CENTER);
 		
 		cancelButton.setEnabled(wizardPanel.enableCancel);
 		backButton.setEnabled(wizardPanel.enableBack);

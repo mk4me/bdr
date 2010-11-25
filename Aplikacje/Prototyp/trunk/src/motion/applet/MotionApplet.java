@@ -37,6 +37,7 @@ import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.SessionBrowserPanel;
 import motion.applet.panels.StatusBar;
 import motion.applet.panels.WizardPanel;
+import motion.applet.panels.WizardSessionDirectoryPanel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.widgets.TabCloseButtonWidget;
@@ -278,14 +279,14 @@ public class MotionApplet extends JApplet {
 		this.setJMenuBar(appletMenuBar);
 		
 		// Wizard
-		JMenuItem wizardItem = new JMenuItem("Test wizard");
+		JMenuItem wizardItem = new JMenuItem("Session wizard");
 		newMenu.add(wizardItem);
 		wizardItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WizardDialog wizardDialog = new WizardDialog("Wizard",
+				WizardDialog wizardDialog = new WizardDialog("Session wizard",
 						new ArrayList<WizardPanel>(Arrays.asList(
-								new WizardPanel("Test wizard step 1.", true, false, true, true),
-								new WizardPanel("Test wizard step 2.", true, true, false, true)
+								new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
+								new WizardPanel("Test wizard step 2.", true, false, false, true)
 								
 								)
 						)
