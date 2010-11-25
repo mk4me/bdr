@@ -27,7 +27,7 @@ public class SessionMouseAdapter extends MouseAdapter {
 	private static String MENU_VIEW_SESSION_GROUPS = "View groups";
 	private static String MENU_VIEW_FILES = "View files";
 	
-	private static String MENU_VIEW_TREE = "View as tree";
+	private static String MENU_VIEW_TREE = "View content as tree";
 
 	private static String MENU_UPLOAD = "Upload file";
 	private static String MENU_EDIT = "Edit";

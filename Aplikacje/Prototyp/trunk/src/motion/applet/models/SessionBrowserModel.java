@@ -47,7 +47,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.treetable.AbstractTreeTableModel;
 import javax.swing.treetable.TreeTableModel;
 
-import motion.database.DatabaseConnection;
+import motion.database.DbElementsList;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
@@ -58,7 +58,6 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
 import motion.database.model.Trial;
-import motion.database.model.TrialStaticAttributes;
 
 public class SessionBrowserModel extends AbstractTreeTableModel implements
 		TreeTableModel {
@@ -71,10 +70,12 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 		public abstract boolean isLeaf();
 
 		public abstract Object getValueAt(int column);
+		
+		public abstract String getName(); 
 	}
 
 	@SuppressWarnings("serial")
-	static class NamedVector<T extends ModelElementView> extends Vector implements
+	static class NamedVector<T extends ModelElementView> extends Vector<T> implements
 			ModelElementView {
 		String name;
 
@@ -105,14 +106,28 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 		public boolean isLeaf() {
 			return false;
 		}
+		
+		@Override
+		public String getName()
+		{
+			return name;
+		}
+		
+		public T findByName(String name)
+		{
+			for (T v : this)
+				if (v.getName().equals(name))
+					return v;
+			return null;
+		}
 	}
 
 	@SuppressWarnings("serial")
-	public static 	class AttributedVectorView<T extends ModelElementView> extends NamedVector<T> {
+	public static class AttributedVectorView<T extends ModelElementView> extends NamedVector<ModelElementView> {
 		
 		public GenericDescription<?> entity;
 
-		private NamedVector<T> attributeVector = new NamedVector<T>(
+		private NamedVector<ModelElementView> attributeVector = new NamedVector<ModelElementView>(
 				"<html><b>Attributes</b></html>");
 
 		public AttributedVectorView(GenericDescription<?> entity)
@@ -122,30 +137,63 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 
 			// create attributes View
 			for (EntityAttributeGroup g : entity.groups.values())
+			{
 				if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP))
+				{
 					for (EntityAttribute a : g)
 						attributeVector.add(new AttributeView(a));
+				}
 				else
 					attributeVector.add(new AttributeGroupView(g));
+			}
 
+			// create empty file attributes and their groups if necessary
+			addEmptyFileAttributes(entity.entityKind);
+			
 			this.add(attributeVector);
+		}
+
+		private void addEmptyFileAttributes(EntityKind entityKind) throws Exception 
+		{
+			for (EntityAttributeGroup g : entityKind.getGroupedAttributeCopies()) 
+			{
+				if (!g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) 
+				{
+					AttributeGroupView groupView = (AttributeGroupView) attributeVector.findByName(g.name);
+					if (groupView == null) 
+					{
+						groupView = new AttributeGroupView(g);
+						attributeVector.add(groupView);
+					}
+					for (EntityAttribute a : g) 
+					{
+						AttributeView attributeView = groupView.findByName(a.name);
+						if (a.type.equals( EntityAttribute.TYPE_FILE )
+								&& attributeView == null) {
+							//a.emptyValue();
+							attributeView = new AttributeView(a); 
+							groupView.add(attributeView);
+						}
+					}
+				}
+			}
 		}
 	}
 
 	@SuppressWarnings("serial")
 	static class EntityFileView<T extends ModelElementView> extends
-			AttributedVectorView<T> {
+			AttributedVectorView<ModelElementView> {
 		
-		private NamedVector<T> fileVector = new NamedVector<T>(
+		private NamedVector<ModelElementView> fileVector = new NamedVector<ModelElementView>(
 				"<html><b>Files</b></html>");
 
-		public EntityFileView(GenericDescription<?> session) throws Exception {
+		public EntityFileView(GenericDescription<?> session, DbElementsList<DatabaseFile> files) throws Exception {
 			super(session);
 
 			// create files view
-			for (DatabaseFile f : DatabaseConnection.getInstance().listFiles(
-					session.getId(), session.entityKind))
-				fileVector.add(new SessionBrowserModel.FileView(f));
+			if (files!= null)
+				for (DatabaseFile f : files)
+					fileVector.add(new SessionBrowserModel.FileView(f));
 
 			this.add(fileVector);
 		}
@@ -160,19 +208,19 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 				"<html><b>Trials</b></html>");
 
 		public SessionView(Session session) throws Exception {
-			super(session);
+			super(session, session.files);
 
 			// create performers view
-			for (Performer p : DatabaseConnection.getInstance()
-					.listSessionPerformersWithAttributes(session.getId()))
-				performersVector.add(new PerformerView(p));
-
+//			for (Performer p : DatabaseConnection.getInstance()
+//					.listSessionPerformersWithAttributes(session.getId()))
+//				performersVector.add(new PerformerView(p));
+			
 			// create trials view
-			for (Trial t : DatabaseConnection.getInstance()
-					.listSessionTrialsWithAttributes(session.getId()))
-				trialVector.add(new TrialView(t));
+			if (session.trials != null)
+				for (Trial t : session.trials)
+					trialVector.add(new TrialView(t));
 
-			this.add(performersVector);
+			//this.add(performersVector);
 			this.add(trialVector);
 		}
 	}
@@ -221,6 +269,11 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 		public boolean isLeaf() {
 			return true;
 		}
+
+		@Override
+		public String getName() {
+			return attribute.name;
+		}
 	}
 
 	public static class FileView extends AttributedVectorView {
@@ -255,7 +308,7 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 
 	static class TrialView extends EntityFileView {
 		public TrialView(Trial a) throws Exception {
-			super(a);
+			super(a, a.files);
 		}
 	}
 

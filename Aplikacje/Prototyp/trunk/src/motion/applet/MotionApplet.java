@@ -60,7 +60,7 @@ public class MotionApplet extends JApplet {
 	private static String TAB_BROWSE = Messages.getString("MotionApplet.Browse"); //$NON-NLS-1$
 	private static String TAB_QUERY = Messages.getString("MotionApplet.Query"); //$NON-NLS-1$
 	private static String TAB_BASKETS = Messages.getString("Baskets"); //$NON-NLS-1$
-	private static final String TAB_SESSION_BROWSER = "Session Browser";
+	private static final String TAB_SESSION_BROWSER = "Session Content Browser";
 	private static String MESSAGE_PLEASE_WAIT = Messages.getString("MotionApplet.PleaseWait"); //$NON-NLS-1$
 
 	public static String LANGUAGE_ENGLISH = "English";

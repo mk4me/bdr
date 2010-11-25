@@ -132,6 +132,9 @@ public class SessionBrowserPanel extends JPanel {
 															SessionBrowserPanel.this.entity.getId(), 
 															SessionBrowserPanel.this.attribute, 
 															SessionBrowserPanel.this.file.getId(), isUpdate);
+													attribute.value = file.getId();
+													table.invalidate();
+													table.repaint();
 												} catch (Exception e1) {
 													e1.printStackTrace();
 													DatabaseConnection.log.severe( e1.getMessage() );
@@ -158,6 +161,9 @@ public class SessionBrowserPanel extends JPanel {
 											public void actionPerformed(ActionEvent e) {
 												try {
 													DatabaseConnection.getInstance().clearEntityAttribute( SessionBrowserPanel.this.entity.getId(), attribute);
+													attribute.value = null;
+													table.invalidate();
+													table.repaint();
 												} catch (Exception e1) {
 													e1.printStackTrace();
 													DatabaseConnection.log.severe( e1.getMessage() );
@@ -201,17 +207,7 @@ public class SessionBrowserPanel extends JPanel {
 	public void setSession(int[] recordIds) throws Exception {
 		Session [] session = new Session[recordIds.length];
 		for (int i=0; i<recordIds.length; i++)
-		{
-			session[i] = (Session) DatabaseConnection.getInstance().getById( recordIds[i], EntityKind.session);
-			for (EntityAttribute generic: EntityKind.session.getGenericAttributes())
-			{
-				if ( session[i].get( generic.name ) == null ) //&& generic.type == EntityAttribute.TYPE_FILE)
-				{	
-					generic.emptyValue();
-					session[i].put( generic.name, generic );
-				}
-			}
-		}
+			session[i] = (Session) DatabaseConnection.getInstance().getSessionContent( recordIds[i] );
 		setSession(session);
 	}
 
