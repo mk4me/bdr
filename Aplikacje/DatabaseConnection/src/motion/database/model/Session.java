@@ -10,9 +10,8 @@ public class Session extends GenericDescription<SessionStaticAttributes>{
 	 * Session child elements  
 	 */
 	
-	public DbElementsList<Trial> 					trials;
-	DbElementsList<Performer> 				performers;
-	DbElementsList<DatabaseFile>			files;	
+	public DbElementsList<Trial> 			trials;
+	public DbElementsList<DatabaseFile>			files;	
 	
 	public Session() {
 		super(SessionStaticAttributes.SessionID.name(), EntityKind.session);

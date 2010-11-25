@@ -233,5 +233,7 @@ public interface DatabaseProxy {
 	DbElementsList<PerformerConfiguration> listSessionPerformerConfigurations(
 			int sessionID) throws Exception;
 
+	Session getSessionContent(int sessionID) throws Exception;
+
 
 }

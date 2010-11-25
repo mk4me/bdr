@@ -42,6 +42,7 @@ import motion.database.ws.authorizationWCF.SessionPrivilegeList.SessionPrivilege
 import motion.database.ws.authorizationWCF.UserList.UserDetails;
 import motion.database.ws.basicQueriesServiceWCF.Attributes;
 import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
+import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
@@ -270,11 +271,13 @@ public class ConnectionTools2 {
 		return null;
 	}
 	
-	public static DbElementsList<DatabaseFile> transformListOfFiles(Object result) {
+	public static DbElementsList<DatabaseFile> transformListOfFiles(FileWithAttributesList r) {
 
+		if (r==null)
+			return null;
 		DbElementsList<DatabaseFile> list = new DbElementsList<DatabaseFile>();
-		ListFilesWithAttributesXMLResult r = (ListFilesWithAttributesXMLResult) result;
-		for (FileDetailsWithAttributes d: r.getFileWithAttributesList().getFileDetailsWithAttributes() )
+		//ListFilesWithAttributesXMLResult r = (ListFilesWithAttributesXMLResult) result;
+		for (FileDetailsWithAttributes d: r.getFileDetailsWithAttributes() )
 		{
 			DatabaseFile df = new DatabaseFile();
 			df.put( DatabaseFileStaticAttributes.FileID, d.getFileID() );
@@ -323,24 +326,22 @@ public class ConnectionTools2 {
 		return session;
 	}
 
-	public static Session transformSessionContent(SessionContent s) {
+	public static Session transformSessionContent(SessionContent s) 
+	{
 		if(s==null)
 			return null;
 		
-		Session session = new Session();
-		session.put( SessionStaticAttributes.LabID, s.getLabID() );
-		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
-		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
-		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
-		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
-		session.put( SessionStaticAttributes.UserID, s.getUserID() );
-		session.put( SessionStaticAttributes.SessionLabel, s.getSessionLabel() );
-		
-		ConnectionTools2.transformGenericAttributes( s.getAttributes(), session );
-
+		Session session = transformSessionDetails(s.getSessionDetailsWithAttributes());
 		session.trials = new DbElementsList<Trial>();
-//		for ( TrialContent trial : s.getTrialContentList().getTrialContent() )
-//			trial.
+		if (s.getTrialContentList() != null)
+			for (TrialContent tc : s.getTrialContentList().getTrialContent())
+			{
+				Trial t = ConnectionTools2.transformTrialDetails( tc.getTrialDetailsWithAttributes() );
+				t.files = new DbElementsList<DatabaseFile>();
+				t.files = ConnectionTools2.transformListOfFiles( tc.getFileWithAttributesList() );
+				session.trials.add( t );
+			}
+		session.files = ConnectionTools2.transformListOfFiles( s.getFileWithAttributesList() );
 		
 		return session;
 	}

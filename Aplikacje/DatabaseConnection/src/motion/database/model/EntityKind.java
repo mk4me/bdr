@@ -674,7 +674,7 @@ public enum EntityKind {
 	private  DbElementsList<DatabaseFile> listFilesMethod(IBasicQueriesWS port, int resourceID) throws Exception
 	{
 		ListFilesWithAttributesXMLResult result = port.listFilesWithAttributesXML(resourceID, this.name());
-		return ConnectionTools2.transformListOfFiles(result);
+		return ConnectionTools2.transformListOfFiles(result.getFileWithAttributesList());
 	}
 
 }

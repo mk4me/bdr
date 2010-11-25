@@ -672,7 +672,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 
-	//@Override
+	@Override
 	public  Session getSessionContent(int sessionID) throws Exception
 	{
 		try {
