@@ -73,6 +73,8 @@ public class SessionFormDialog extends FormDialog {
 								int sessionID = WebServiceInstance.getDatabaseConnection().createSession(
 										selectedSessionGroups,
 										SessionFormDialog.this.getSessionDescription(),
+										"TODO:SessionName",
+										"TODO:Tags",
 										AppletToolBar.getLabId(),
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());

@@ -42,6 +42,7 @@ public class TrialFormDialog extends FormDialog {
 							try {
 								int trialID = WebServiceInstance.getDatabaseConnection().createTrial(
 										TrialFormDialog.this.sessionId,
+										"TODO: trial name",
 										TrialFormDialog.this.getTrialDescription()
 										);
 								setDefinedAttributes(trialID);
