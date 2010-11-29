@@ -160,7 +160,8 @@ public class FormDialog extends BasicDialog {
 	}
 	
 	protected void addFormFields(EntityAttributeGroup attributes, String groupName) {
-		if (!groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP)) {
+		if (!groupName.equals(EntityKind.STATIC_ATTRIBUTE_GROUP) &&
+				!attributes.isEmpty()) {
 			addFormTextLabel(groupName + ":");
 		}
 		

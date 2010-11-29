@@ -73,8 +73,8 @@ public class SessionFormDialog extends FormDialog {
 								int sessionID = WebServiceInstance.getDatabaseConnection().createSession(
 										selectedSessionGroups,
 										SessionFormDialog.this.getSessionDescription(),
-										"TODO:SessionName",
-										"TODO:Tags",
+										SessionFormDialog.this.getSessionName(),
+										SessionFormDialog.this.getSessionTags(),
 										AppletToolBar.getLabId(),
 										SessionFormDialog.this.getSessionDate(),
 										SessionFormDialog.this.getMotionKind());
@@ -292,6 +292,16 @@ public class SessionFormDialog extends FormDialog {
 		} else {
 			return "";
 		}
+	}
+	
+	private String getSessionName() {
+		
+		return (String) getAttributeValue(EntityKind.session, SessionStaticAttributes.SessionName.toString());
+	}
+	
+	private String getSessionTags() {
+		
+		return (String) getAttributeValue(EntityKind.session, SessionStaticAttributes.Tags.toString());
 	}
 	
 	protected boolean validateResult() {

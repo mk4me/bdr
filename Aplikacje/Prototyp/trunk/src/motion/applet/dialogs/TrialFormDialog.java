@@ -42,7 +42,7 @@ public class TrialFormDialog extends FormDialog {
 							try {
 								int trialID = WebServiceInstance.getDatabaseConnection().createTrial(
 										TrialFormDialog.this.sessionId,
-										"TODO: trial name",
+										TrialFormDialog.this.getTrialName(),
 										TrialFormDialog.this.getTrialDescription()
 										);
 								setDefinedAttributes(trialID);
@@ -82,6 +82,11 @@ public class TrialFormDialog extends FormDialog {
 	private String getTrialDescription() {
 		
 		return (String) getAttributeValue(EntityKind.trial, TrialStaticAttributes.TrialDescription.toString());
+	}
+	
+	private String getTrialName() {
+		
+		return (String) getAttributeValue(EntityKind.trial, TrialStaticAttributes.TrialName.toString());
 	}
 	
 	protected boolean validateResult() {
