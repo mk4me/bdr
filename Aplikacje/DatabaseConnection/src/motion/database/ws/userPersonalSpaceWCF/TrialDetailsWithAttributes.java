@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "trialID",
     "sessionID",
+    "trialName",
     "trialDescription",
     "attributes"
 })
@@ -44,6 +46,8 @@ public class TrialDetailsWithAttributes {
     protected int trialID;
     @XmlElement(name = "SessionID")
     protected int sessionID;
+    @XmlElement(name = "TrialName", required = true)
+    protected String trialName;
     @XmlElement(name = "TrialDescription", required = true)
     protected String trialDescription;
     @XmlElement(name = "Attributes")
@@ -79,6 +83,30 @@ public class TrialDetailsWithAttributes {
      */
     public void setSessionID(int value) {
         this.sessionID = value;
+    }
+
+    /**
+     * Gets the value of the trialName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTrialName() {
+        return trialName;
+    }
+
+    /**
+     * Sets the value of the trialName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTrialName(String value) {
+        this.trialName = value;
     }
 
     /**

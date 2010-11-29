@@ -1232,7 +1232,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public int createSession(int [] sessionGroupID, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
+	public int createSession(int [] sessionGroupID, String sessionName, String sessionTags, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception
 	{
 		try {
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createSession", this );
@@ -1241,7 +1241,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			for (int s: sessionGroupID)
 				sessionGroupIDs.getInt().add(s);
 				
-			return port.createSession(labID, motionKindName, sessionDate, sessionDescription, sessionGroupIDs);
+			return port.createSession(labID, motionKindName, sessionDate, sessionName, sessionTags, sessionDescription, sessionGroupIDs);
 		} 
 		catch ( IBasicUpdatesWSCreateSessionUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
@@ -1254,12 +1254,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public int createTrial(int sessionID, String trialDescription ) throws Exception
+	public int createTrial(int sessionID, String trialName, String trialDescription ) throws Exception
 	{
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createTrial", this );
 			
-			return port.createTrial(sessionID, trialDescription);
+			return port.createTrial(sessionID, trialName, trialDescription);
 		} 
 		catch ( IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );

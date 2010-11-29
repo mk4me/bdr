@@ -43,7 +43,9 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
+     * @param tags
      * @param sessionDate
+     * @param sessionName
      * @param motionKindName
      * @param labID
      * @param sessionGroupIDs
@@ -63,6 +65,10 @@ public interface IBasicUpdatesWS {
         String motionKindName,
         @WebParam(name = "sessionDate", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         XMLGregorianCalendar sessionDate,
+        @WebParam(name = "sessionName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String sessionName,
+        @WebParam(name = "tags", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String tags,
         @WebParam(name = "sessionDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String sessionDescription,
         @WebParam(name = "sessionGroupIDs", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
@@ -97,6 +103,7 @@ public interface IBasicUpdatesWS {
      * 
      * @param trialDescription
      * @param sessionID
+     * @param trialName
      * @return
      *     returns int
      * @throws IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage
@@ -108,6 +115,8 @@ public interface IBasicUpdatesWS {
     public int createTrial(
         @WebParam(name = "sessionID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         int sessionID,
+        @WebParam(name = "trialName", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        String trialName,
         @WebParam(name = "trialDescription", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
         String trialDescription)
         throws IBasicUpdatesWSCreateTrialUpdateExceptionFaultFaultMessage

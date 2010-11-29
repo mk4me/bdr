@@ -23,6 +23,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="labID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="motionKindName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="sessionName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tags" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sessionGroupIDs" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService}ArrayOfInt" minOccurs="0"/>
  *       &lt;/sequence>
@@ -38,6 +40,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "labID",
     "motionKindName",
     "sessionDate",
+    "sessionName",
+    "tags",
     "sessionDescription",
     "sessionGroupIDs"
 })
@@ -49,6 +53,8 @@ public class CreateSession {
     @XmlElement(required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar sessionDate;
+    protected String sessionName;
+    protected String tags;
     protected String sessionDescription;
     protected ArrayOfInt sessionGroupIDs;
 
@@ -114,6 +120,54 @@ public class CreateSession {
      */
     public void setSessionDate(XMLGregorianCalendar value) {
         this.sessionDate = value;
+    }
+
+    /**
+     * Gets the value of the sessionName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSessionName() {
+        return sessionName;
+    }
+
+    /**
+     * Sets the value of the sessionName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSessionName(String value) {
+        this.sessionName = value;
+    }
+
+    /**
+     * Gets the value of the tags property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets the value of the tags property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTags(String value) {
+        this.tags = value;
     }
 
     /**

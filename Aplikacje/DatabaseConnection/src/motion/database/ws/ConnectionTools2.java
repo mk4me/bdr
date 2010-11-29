@@ -317,6 +317,8 @@ public class ConnectionTools2 {
 		session.put( SessionStaticAttributes.LabID, s.getLabID() );
 		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.SessionName, s.getSessionName() );
+		session.put( SessionStaticAttributes.SessionTags, s.getTags() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
 		session.put( SessionStaticAttributes.UserID, s.getUserID() );
@@ -354,6 +356,7 @@ public class ConnectionTools2 {
 
 		Trial trial = new Trial();
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.TrialName, s.getTrialName() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
 		trial.put( TrialStaticAttributes.SessionID, s.getSessionID() );
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), trial );
@@ -424,6 +427,8 @@ public class ConnectionTools2 {
 		session.put( SessionStaticAttributes.LabID, s.getLabID() );
 		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
+		session.put( SessionStaticAttributes.SessionName, s.getSessionName() );
+		session.put( SessionStaticAttributes.SessionTags, s.getTags() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
 		session.put( SessionStaticAttributes.UserID, s.getUserID() );
@@ -437,6 +442,7 @@ public class ConnectionTools2 {
 
 		Trial trial = new Trial();
 		trial.put( TrialStaticAttributes.TrialID, s.getTrialID() );
+		trial.put( TrialStaticAttributes.TrialName, s.getTrialName() );
 		trial.put( TrialStaticAttributes.TrialDescription, s.getTrialDescription() );
 		trial.put( TrialStaticAttributes.SessionID, s.getSessionID() );
 

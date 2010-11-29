@@ -32,6 +32,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                 &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
+ *                 &lt;attribute name="SessionName" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="Tags" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
@@ -100,6 +102,8 @@ public class PerformerSessionList {
      *       &lt;attribute name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
+     *       &lt;attribute name="SessionName" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="Tags" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="SessionLabel" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
@@ -124,6 +128,10 @@ public class PerformerSessionList {
         @XmlAttribute(name = "SessionDate")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar sessionDate;
+        @XmlAttribute(name = "SessionName")
+        protected String sessionName;
+        @XmlAttribute(name = "Tags")
+        protected String tags;
         @XmlAttribute(name = "SessionDescription")
         protected String sessionDescription;
         @XmlAttribute(name = "SessionLabel")
@@ -247,6 +255,54 @@ public class PerformerSessionList {
          */
         public void setSessionDate(XMLGregorianCalendar value) {
             this.sessionDate = value;
+        }
+
+        /**
+         * Gets the value of the sessionName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getSessionName() {
+            return sessionName;
+        }
+
+        /**
+         * Sets the value of the sessionName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setSessionName(String value) {
+            this.sessionName = value;
+        }
+
+        /**
+         * Gets the value of the tags property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getTags() {
+            return tags;
+        }
+
+        /**
+         * Sets the value of the tags property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setTags(String value) {
+            this.tags = value;
         }
 
         /**

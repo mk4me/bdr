@@ -35,8 +35,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                   &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *                   &lt;element name="SessionName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *                   &lt;element name="Tags" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+ *                   &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -114,8 +117,11 @@ public class GenericQueryResult {
      *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MotionKind" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="SessionDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+     *         &lt;element name="SessionName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+     *         &lt;element name="Tags" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="SessionDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
+     *         &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -140,8 +146,11 @@ public class GenericQueryResult {
         "labID",
         "motionKind",
         "sessionDate",
+        "sessionName",
+        "tags",
         "sessionDescription",
         "trialID",
+        "trialName",
         "trialDescription",
         "measurementID",
         "measurementConfID",
@@ -168,10 +177,16 @@ public class GenericQueryResult {
         @XmlElement(name = "SessionDate")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar sessionDate;
+        @XmlElement(name = "SessionName")
+        protected String sessionName;
+        @XmlElement(name = "Tags")
+        protected String tags;
         @XmlElement(name = "SessionDescription")
         protected String sessionDescription;
         @XmlElement(name = "TrialID")
         protected Integer trialID;
+        @XmlElement(name = "TrialName")
+        protected String trialName;
         @XmlElement(name = "TrialDescription")
         protected String trialDescription;
         @XmlElement(name = "MeasurementID")
@@ -378,6 +393,54 @@ public class GenericQueryResult {
         }
 
         /**
+         * Gets the value of the sessionName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getSessionName() {
+            return sessionName;
+        }
+
+        /**
+         * Sets the value of the sessionName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setSessionName(String value) {
+            this.sessionName = value;
+        }
+
+        /**
+         * Gets the value of the tags property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getTags() {
+            return tags;
+        }
+
+        /**
+         * Sets the value of the tags property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setTags(String value) {
+            this.tags = value;
+        }
+
+        /**
          * Gets the value of the sessionDescription property.
          * 
          * @return
@@ -423,6 +486,30 @@ public class GenericQueryResult {
          */
         public void setTrialID(Integer value) {
             this.trialID = value;
+        }
+
+        /**
+         * Gets the value of the trialName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getTrialName() {
+            return trialName;
+        }
+
+        /**
+         * Sets the value of the trialName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setTrialName(String value) {
+            this.trialName = value;
         }
 
         /**

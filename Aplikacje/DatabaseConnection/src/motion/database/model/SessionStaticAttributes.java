@@ -9,6 +9,8 @@ public enum SessionStaticAttributes{
     LabID,
     MotionKind,
     SessionDate,
+    SessionName,
+    SessionTags,
     SessionLabel,
     SessionDescription;
 }

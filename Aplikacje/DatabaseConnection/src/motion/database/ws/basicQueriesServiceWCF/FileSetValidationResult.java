@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionContent"/>
- *         &lt;element name="ErrorList">
+ *         &lt;element name="ErrorList" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -50,7 +50,7 @@ public class FileSetValidationResult {
 
     @XmlElement(name = "SessionContent", required = true)
     protected SessionContent sessionContent;
-    @XmlElement(name = "ErrorList", required = true)
+    @XmlElement(name = "ErrorList")
     protected FileSetValidationResult.ErrorList errorList;
 
     /**

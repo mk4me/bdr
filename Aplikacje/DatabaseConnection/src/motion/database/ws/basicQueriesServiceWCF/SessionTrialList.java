@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
  *                 &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *                 &lt;attribute name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -91,6 +92,7 @@ public class SessionTrialList {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" />
      *       &lt;attribute name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" />
+     *       &lt;attribute name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -107,6 +109,8 @@ public class SessionTrialList {
         protected Integer trialID;
         @XmlAttribute(name = "SessionID")
         protected Integer sessionID;
+        @XmlAttribute(name = "TrialName")
+        protected String trialName;
         @XmlAttribute(name = "TrialDescription")
         protected String trialDescription;
 
@@ -156,6 +160,30 @@ public class SessionTrialList {
          */
         public void setSessionID(Integer value) {
             this.sessionID = value;
+        }
+
+        /**
+         * Gets the value of the trialName property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getTrialName() {
+            return trialName;
+        }
+
+        /**
+         * Sets the value of the trialName property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setTrialName(String value) {
+            this.trialName = value;
         }
 
         /**
