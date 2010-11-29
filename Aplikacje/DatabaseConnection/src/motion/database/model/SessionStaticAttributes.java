@@ -10,7 +10,7 @@ public enum SessionStaticAttributes{
     MotionKind,
     SessionDate,
     SessionName,
-    SessionTags,
+    Tags,
     SessionLabel,
     SessionDescription;
 }

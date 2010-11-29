@@ -318,7 +318,7 @@ public class ConnectionTools2 {
 		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
 		session.put( SessionStaticAttributes.SessionName, s.getSessionName() );
-		session.put( SessionStaticAttributes.SessionTags, s.getTags() );
+		session.put( SessionStaticAttributes.Tags, s.getTags() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
 		session.put( SessionStaticAttributes.UserID, s.getUserID() );
@@ -428,7 +428,7 @@ public class ConnectionTools2 {
 		session.put( SessionStaticAttributes.MotionKind, s.getMotionKind() );
 		session.put( SessionStaticAttributes.SessionDate, s.getSessionDate() );
 		session.put( SessionStaticAttributes.SessionName, s.getSessionName() );
-		session.put( SessionStaticAttributes.SessionTags, s.getTags() );
+		session.put( SessionStaticAttributes.Tags, s.getTags() );
 		session.put( SessionStaticAttributes.SessionDescription, s.getSessionDescription() );
 		session.put( SessionStaticAttributes.SessionID, s.getSessionID() );
 		session.put( SessionStaticAttributes.UserID, s.getUserID() );
