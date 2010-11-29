@@ -15,18 +15,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 	}
 	
 	@Override
-	protected void createWizardContents() {
-		//GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		//gridBagConstraints.anchor = GridBagConstraints.EAST;
-		//gridBagConstraints.ipadx = 10;
-		//gridBagConstraints.insets = new Insets(1, 1, 1, 1);
-		//gridBagConstraints.gridx = 0;
-		//gridBagConstraints.gridy = 0;
-		//System.out.println("OK");
-		//directoryText = new JTextField(20);
-		//this.add(directoryText, gridBagConstraints);
-		
-		this.setLayout(new BorderLayout());
+	protected void createWizardContents() {this.setLayout(new BorderLayout());
 		fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

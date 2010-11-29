@@ -98,7 +98,7 @@ public class BasicTableModel extends AbstractTableModel {
 	public void setCheckedRecords(int[] recordIds) {
 		if (this.contents.isEmpty() == false) {
 			int j = 0;
-			for (int id : recordIds) {
+			for (int id : this.recordIds) {
 				for (int i = 0; i < recordIds.length; i++) {
 					if (recordIds[i] == id) {
 						contents.get(j).set(CHECKBOX_COLUMN, Boolean.TRUE);

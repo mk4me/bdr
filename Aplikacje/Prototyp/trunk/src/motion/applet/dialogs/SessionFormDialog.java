@@ -183,6 +183,7 @@ public class SessionFormDialog extends FormDialog {
 					int i = 0;
 					for (Performer p : performers) {
 						recordIds[i] = p.getId();
+						i++;
 					}
 					performerAssignmentPanel.setSelectedRecords(recordIds);
 				} catch (Exception e1) {
