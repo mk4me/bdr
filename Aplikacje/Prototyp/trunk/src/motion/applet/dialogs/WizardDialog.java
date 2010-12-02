@@ -87,11 +87,14 @@ public class WizardDialog extends BasicDialog {
 		this.nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentStep+1 < wizardPanels.size()) {
-					if (wizardPanels.get(currentStep).nextPressed() == true) {
+					WizardPanel currentWizardPanel = wizardPanels.get(currentStep);
+					if (currentWizardPanel.nextPressed() == true) {
 						currentStep++;
-						switchWizardPanel(wizardPanels.get(currentStep));
+						WizardPanel nextWizardPanel = wizardPanels.get(currentStep);
+						nextWizardPanel.afterNextPressed(currentWizardPanel);
+						switchWizardPanel(nextWizardPanel);
 					} else {
-						String errorMessage = wizardPanels.get(currentStep).getErrorMessage();
+						String errorMessage = currentWizardPanel.getErrorMessage();
 						if (!errorMessage.equals("")) {
 							messageLabel.setText(errorMessage);
 						}

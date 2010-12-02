@@ -37,6 +37,7 @@ import motion.applet.panels.RightSplitPanel;
 import motion.applet.panels.SessionBrowserPanel;
 import motion.applet.panels.StatusBar;
 import motion.applet.panels.WizardPanel;
+import motion.applet.panels.WizardSessionBrowserPanel;
 import motion.applet.panels.WizardSessionDirectoryPanel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
@@ -286,7 +287,7 @@ public class MotionApplet extends JApplet {
 				WizardDialog wizardDialog = new WizardDialog("Session wizard",
 						new ArrayList<WizardPanel>(Arrays.asList(
 								new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
-								new WizardPanel("Test wizard step 2.", true, false, false, true)
+								new WizardSessionBrowserPanel("Session validation.", true, false, false, true)
 								
 								)
 						)

@@ -59,4 +59,8 @@ public class WizardPanel extends JPanel {	//FIXME: change to abstract class
 	public void cancelPressed() {
 		
 	}
+	
+	public void afterNextPressed(WizardPanel previousWizardPanel) {
+		
+	}
 }
