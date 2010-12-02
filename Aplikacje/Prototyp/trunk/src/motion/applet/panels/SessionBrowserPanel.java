@@ -223,14 +223,19 @@ public class SessionBrowserPanel extends JPanel {
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
 		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 
+		showFrame( (Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session ) );
+
+	}
+
+
+	static void showFrame(Session session) throws Exception {
 		JFrame b = new JFrame();
 		b.setLayout( new BorderLayout() );
 		
-		Session[] s = {(Session) DatabaseConnection.getInstanceWCF().getById( 1, EntityKind.session )};
 		SessionBrowserPanel p = new SessionBrowserPanel(); 
 		b.add( p, BorderLayout.CENTER );
 		
-		p.setSession( s );
+		p.setSession( new Session[]{session} );
 		
 		b.pack();
 		b.setSize(400, 400);
@@ -240,6 +245,7 @@ public class SessionBrowserPanel extends JPanel {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);		
 			}
-		});	}
+		});	
+	}
 
 }

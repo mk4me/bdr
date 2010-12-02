@@ -138,13 +138,16 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 			// create attributes View
 			for (EntityAttributeGroup g : entity.groups.values())
 			{
-				if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP))
+				if (g.name != null)
 				{
-					for (EntityAttribute a : g)
-						attributeVector.add(new AttributeView(a));
+					if (g.name.equals(EntityKind.STATIC_ATTRIBUTE_GROUP))
+					{
+						for (EntityAttribute a : g)
+							attributeVector.add(new AttributeView(a));
+					}
+					else
+						attributeVector.add(new AttributeGroupView(g));
 				}
-				else
-					attributeVector.add(new AttributeGroupView(g));
 			}
 
 			// create empty file attributes and their groups if necessary

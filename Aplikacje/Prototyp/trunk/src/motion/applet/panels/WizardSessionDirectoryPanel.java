@@ -41,6 +41,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 					try {
 						session = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.list());
 						System.out.println(session.toStringAllAttributes());
+
 					} catch (Exception e1) {
 						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 						exceptionDialog.setVisible(true);
