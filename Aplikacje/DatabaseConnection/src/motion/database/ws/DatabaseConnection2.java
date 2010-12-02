@@ -65,6 +65,7 @@ import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListPerformersWi
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListSessionGroupsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListSessionTrialsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListTrialMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
@@ -925,7 +926,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			
 			return output;
 		} 
-		catch (IBasicQueriesWSGetSessionContentQueryExceptionFaultFaultMessage e) 
+		catch (IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage e) 
 		{
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
