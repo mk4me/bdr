@@ -937,7 +937,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 				}
 			}
 			
-			uploadSessionFileSet(paths, null);
+			//uploadSessionFileSet(paths, null);
 			
 			return new SessionValidationInfo( output, errors );
 		} 
