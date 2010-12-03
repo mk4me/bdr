@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
@@ -910,7 +911,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public  SessionValidationInfo validateSessionFileSet(String[] paths) throws Exception
+	public  SessionValidationInfo validateSessionFileSet(File [] paths) throws Exception
 	{
 		try {
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "validateSessionFileSet", this );
@@ -918,9 +919,9 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			LinkedList<String> errors = null; 
 			
 			ArrayOfFileNameEntry input = new ArrayOfFileNameEntry();
-			for (String file : paths){
+			for (File file : paths){
 				FileNameEntry fne = new FileNameEntry();
-				fne.setName( file );
+				fne.setName( file.getName() );
 				input.getFileNameEntry().add( fne );
 			}
 			ValidateSessionFileSetResult result = port.validateSessionFileSet( input );
@@ -930,8 +931,14 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			{
 				errors = new LinkedList<String>();
 				for (String error : result.getFileSetValidationResult().getErrorList().getError() )
+				{
+					DatabaseConnection.log.info( "Session file set validation error: " + error  );
 					errors.add( error );
+				}
 			}
+			
+			uploadSessionFileSet(paths, null);
+			
 			return new SessionValidationInfo( output, errors );
 		} 
 		catch (IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage e) 
@@ -944,6 +951,43 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
+
+	
+	@Override
+	public  void uploadSessionFileSet(File[] paths, FileTransferListener listener) throws Exception
+	{
+		try {
+			IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadSessionFileSet", this );
+			
+			String destRemoteFolder = getUniqueFolderName();
+			createRemoteFolder( destRemoteFolder, "" );
+			for (File path : paths)
+			{
+				if ( path.isDirectory() )
+				{
+					int filesNo = path.list().length;
+					createRemoteFolder( path.getName(), destRemoteFolder );
+					FTPs.sendFolder( path.getAbsolutePath(), destRemoteFolder+path.getName(), 
+							new BatchTransferProgressObserver(listener, filesNo), 
+							ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+				}
+				else
+					putFileIntoExistingFolder(path.getAbsolutePath(), destRemoteFolder, listener);			
+			
+				port.createSessionFromFiles( destRemoteFolder );
+			}
+		} 
+		catch (Exception e) 
+		{
+			log.log( Level.SEVERE, e.getMessage(), e );
+			throw e; 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
 	
 	
 	/*==========================================================================
@@ -1080,6 +1124,23 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		
 		try {
 			createRemoteFolder( destRemoteFolder, "" );
+			fileTransferSupport.putFile(localFilePath, destRemoteFolder, ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
+		} catch (Exception e) {
+			log.severe( e.getMessage() );
+			e.printStackTrace();
+		} finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+	protected void putFileIntoExistingFolder(String localFilePath, String destRemoteFolder, FileTransferListener listener) throws FileTransferException
+	{
+		fileTransferSupport.resetUploadListeners();
+		if (listener != null)
+			fileTransferSupport.registerUploadListener(listener);
+		
+		try {
 			fileTransferSupport.putFile(localFilePath, destRemoteFolder, ftpsCredentials.address, ftpsCredentials.userName, ftpsCredentials.password);
 		} catch (Exception e) {
 			log.severe( e.getMessage() );

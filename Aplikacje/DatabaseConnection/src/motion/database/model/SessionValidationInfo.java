@@ -12,5 +12,4 @@ public class SessionValidationInfo {
 		this.session = session;
 		this.errors = errors;
 	}
-	
 }

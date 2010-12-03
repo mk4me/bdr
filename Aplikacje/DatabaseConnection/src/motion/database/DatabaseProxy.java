@@ -234,7 +234,10 @@ public interface DatabaseProxy {
 
 	Session getSessionContent(int sessionID) throws Exception;
 
-	SessionValidationInfo validateSessionFileSet(String[] paths) throws Exception;
+	SessionValidationInfo validateSessionFileSet(File[] paths) throws Exception;
+
+	void uploadSessionFileSet(File[] paths, FileTransferListener listener)
+			throws Exception;
 
 
 }
