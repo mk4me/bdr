@@ -39,7 +39,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 				//@Override
 				//protected Void doInBackground() throws InterruptedException {
 					try {
-						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.list());
+						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.listFiles());
 						if (sessionValidationInfo.session != null) {
 							session = sessionValidationInfo.session;
 							System.out.println(session.toStringAllAttributes());
