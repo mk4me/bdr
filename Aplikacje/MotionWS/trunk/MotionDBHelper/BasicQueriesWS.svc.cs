@@ -1800,7 +1800,7 @@ namespace MotionDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "validate_file_list_xml";
-                SqlParameter fileListPar = cmd.Parameters.Add("@file_list", SqlDbType.Structured);
+                SqlParameter fileListPar = cmd.Parameters.Add("@files", SqlDbType.Structured);
                 fileListPar.Direction = ParameterDirection.Input;
                 fileListPar.Value = fileNames; 
                 XmlReader dr = cmd.ExecuteXmlReader();
@@ -1813,7 +1813,7 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                QueryException exc = new QueryException("DB-side", "Stored procedure execution error");
+                QueryException exc = new QueryException("DB-side", "Stored procedure execution error: "+ex.Message);
                 throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("ValidateSessionFileSet")));
             }
             CloseConnection();

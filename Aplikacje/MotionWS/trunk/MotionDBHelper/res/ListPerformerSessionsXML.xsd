@@ -10,6 +10,8 @@
                 <xsd:attribute name="LabID" type="xsd:int" />
                 <xsd:attribute name="MotionKind" type="xsd:string" />
                 <xsd:attribute name="SessionDate" type="xsd:dateTime" />
+                <xsd:attribute name="SessionName" type="xsd:string" />
+                <xsd:attribute name="Tags" type="xsd:string" />
                 <xsd:attribute name="SessionDescription" type="xsd:string" />
                 <xsd:attribute name="SessionLabel" type="xsd:string" use="optional" />
               </xsd:complexType>

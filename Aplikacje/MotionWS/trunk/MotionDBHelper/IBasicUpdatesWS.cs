@@ -17,7 +17,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs);
+        int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
@@ -25,7 +25,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        int CreateTrial(int sessionID, string trialDescription);
+        int CreateTrial(int sessionID, string trialName, string trialDescription);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]

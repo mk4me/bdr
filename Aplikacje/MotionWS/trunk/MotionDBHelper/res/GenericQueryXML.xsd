@@ -15,8 +15,11 @@
             <xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MotionKind" type="xsd:string" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="SessionDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="SessionName" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="Tags" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
+            <xsd:element name="TrialName" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"  />

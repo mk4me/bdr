@@ -12,13 +12,12 @@ namespace MotionDBWebServices
         protected SqlConnection conn = null;
         protected SqlCommand cmd = null;
         protected const bool debug = false;
-        protected string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
+        protected string baseLocalFilePath = @"C:\FTPShare\"; // !!! change to F: in production!
 
         protected void OpenConnection()
         {
             // server = DBPAWELL albo DB-BDR
-            // UWAGA! To samo trzeba zmieniac (development / produkcja) w permissions w .svc.cs
-            // oraz w recznie generowanych wsdl-ach
+            // zmieniać w recznie generowanych wsdl-ach
             conn = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             conn.Open();
             cmd = conn.CreateCommand();

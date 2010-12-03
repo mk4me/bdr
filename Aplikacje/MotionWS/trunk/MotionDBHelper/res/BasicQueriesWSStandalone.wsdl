@@ -80,7 +80,7 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element ref="tns:SessionContent"/>
-						<xsd:element name="ErrorList">
+						<xsd:element name="ErrorList" minOccurs="0">
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element name="Error" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -131,8 +131,11 @@
 									<xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MotionKind" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="SessionDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="SessionName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="Tags" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+									<xsd:element name="TrialName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
@@ -170,6 +173,8 @@
 						<xsd:element name="LabID" type="xsd:int"/>
 						<xsd:element name="MotionKind" type="xsd:string"/>
 						<xsd:element name="SessionDate" type="xsd:dateTime"/>
+						<xsd:element name="SessionName" type="xsd:string"/>
+						<xsd:element name="Tags" type="xsd:string"/>
 						<xsd:element name="SessionDescription" type="xsd:string"/>
 						<xsd:element name="SessionLabel" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
@@ -183,6 +188,7 @@
 					<xsd:sequence>
 						<xsd:element name="TrialID" type="xsd:int"/>
 						<xsd:element name="SessionID" type="xsd:int"/>
+						<xsd:element name="TrialName" type="xsd:string"/>
 						<xsd:element name="TrialDescription" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 						<!-- <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" /> -->
@@ -273,6 +279,8 @@
 								<xsd:attribute name="LabID" type="xsd:int"/>
 								<xsd:attribute name="MotionKind" type="xsd:string"/>
 								<xsd:attribute name="SessionDate" type="xsd:dateTime"/>
+								<xsd:attribute name="SessionName" type="xsd:string"/>
+								<xsd:attribute name="Tags" type="xsd:string"/>
 								<xsd:attribute name="SessionDescription" type="xsd:string"/>
 								<xsd:attribute name="SessionLabel" type="xsd:string" use="optional"/>
 							</xsd:complexType>
@@ -326,6 +334,7 @@
 							<xsd:complexType>
 								<xsd:attribute name="TrialID" type="xsd:int"/>
 								<xsd:attribute name="SessionID" type="xsd:int"/>
+								<xsd:attribute name="TrialName" type="xsd:string"/>
 								<xsd:attribute name="TrialDescription" type="xsd:string"/>
 							</xsd:complexType>
 						</xsd:element>

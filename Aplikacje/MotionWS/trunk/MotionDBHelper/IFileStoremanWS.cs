@@ -47,5 +47,10 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
         int CreateSessionFromFiles(string path);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        void ReplaceFile(int fileID, string path, string filename);
+
     }
 }

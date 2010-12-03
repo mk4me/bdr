@@ -207,6 +207,59 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        public void ReplaceFile(int fileID, string path, string filename)
+        {
+  
+            string dirLocation = baseLocalFilePath + path;
+            string fileLocation = dirLocation + @"\" + filename;
+
+            if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+
+            }
+
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(dirLocation);
+                OpenConnection();
+                cmd.CommandText = @"update Plik 
+                                        set Plik = @file_data, Nazwa_pliku = @file_name
+                                        where IdPlik = @file_id";                                 
+                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                FileStream fs = new FileStream(fileLocation, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                fileData = br.ReadBytes(maxFileSize);
+                cmd.Parameters["@file_data"].Value = fileData;
+                cmd.Parameters["@file_name"].Value = filename;
+                cmd.Parameters["@file_id"].Value = fileID;
+                cmd.ExecuteNonQuery();
+                br.Close();
+                fs.Close();
+                File.Delete(fileLocation);
+                Directory.Delete(di.FullName);
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("database", "Database operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed at the DBMS side", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+            catch (SystemException ex1)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("system", "File access failure: "+ex1.Message);
+                throw new FaultException<FileAccessServiceException>(exc, "File access failure", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void StoreMeasurementConfFiles(int mcID, string path, string description)
         {
@@ -721,88 +774,142 @@ namespace MotionDBWebServices
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreateSessionFromFiles(string path)
         {
-            /*
+
+            // int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            int result = 0;
+            int sessionId = 0;
+
+            string fileName;
+            string fullPath;
+            string entity;
+            int resId;
+
             string dirLocation = baseLocalFilePath;
-
-            int dirLocLength;
-            string subdirPath = "";
-            string fileName = "";
-
 
             if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
             if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
-            dirLocation = baseLocalFilePath + path;
-            dirLocLength = dirLocation.Length + 1; // plus additional "/" character
+            dirLocation = dirLocation + path + "\\";
+
+            SqlConnection connF;
+            SqlCommand cmdF;
+
+            FileNameEntryCollection fileNames = new FileNameEntryCollection();
+            // Wczytanie nazw plikow ze wskazanego katalogu. Utworzenie sesji i triali wedlug nazw tych plikow. Poprzedzone walidacja.
+            connF = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             try
             {
+                connF.Open();
+                
+                 
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
+                foreach (FileInfo fi in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+                {
+                    FileNameEntry fne = new FileNameEntry();
+                    fne.Name = fi.Name;
+                    fileNames.Add(fne);
+                }
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdSesja, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
-                                        values (@sess_id, @file_desc, @file_data, @file_name, @file_path)";
-                cmd.Parameters.Add("@sess_id", SqlDbType.Int);
-                cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
-                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 100);
-                // can be used for recoring of several files
-                cmd.Parameters["@sess_id"].Value = sessionID;
+                cmd = conn.CreateCommand();
+                cmd.CommandText = "create_session_from_file_list";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@files", SqlDbType.Structured);
+                SqlParameter resultParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
 
-                FileInfo[] sFiles = di.GetFiles("*.*", SearchOption.AllDirectories);
-                foreach (FileInfo fi in sFiles)
+                cmd.Parameters["@user_login"].Value = userName;
+                cmd.Parameters["@files"].Value = fileNames;
+                SqlDataReader sdr = cmd.ExecuteReader();
+                
+                if (resultParameter.Value != null)
                 {
-
-                    if ((fi.FullName.Length - dirLocLength - fi.Name.Length) > 100)
+                    result = (int)resultParameter.Value;
+                    if (result != 0)
                     {
-                        FileAccessServiceException exc = new FileAccessServiceException("File subdirectory path too long", "Relative file path: " + fi.FullName.Substring(dirLocLength) + " exceeds the maximum length of 100 characters");
-                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file path", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
+                        FileAccessServiceException exc = new FileAccessServiceException("validation", "File set validation error");
+                        throw new FaultException<FileAccessServiceException>(exc, "Files validation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSessionFromFiles")));
                     }
                 }
-                foreach (FileInfo fi in sFiles)
-                {
+                cmdF = connF.CreateCommand();
+                
+                cmdF.CommandText = @"insert into Plik ( IdSesja, IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
+                                        values (@sess_id, @trial_id, @file_desc, @file_data, @file_name)";
+                cmdF.CommandType = CommandType.Text;
+                cmdF.Parameters.Add("@sess_id", SqlDbType.Int);
+                cmdF.Parameters.Add("@trial_id", SqlDbType.Int);
+                cmdF.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
+                cmdF.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmdF.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
 
-                    if ((fi.Name.Length) > 100)
-                    {
-                        FileAccessServiceException exc = new FileAccessServiceException("File name too long", "File name: " + fi.Name + " exceeds the maximum length of 100 characters");
-                        throw new FaultException<FileAccessServiceException>(exc, "Invalid file name", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
-                    }
-                }
-                foreach (FileInfo fi in sFiles)
+                cmdF.Parameters["@file_desc"].Value = "";
+
+                FileStream fs;
+                BinaryReader br;
+
+                while (sdr.Read())
                 {
-                    fileName = fi.Name;
-                    subdirPath = fi.FullName.Substring(dirLocLength);
-                    subdirPath = subdirPath.Substring(0, subdirPath.Length - fileName.Length - 1);
-                    subdirPath = subdirPath.Replace("\\", "/");
-                    if ((fi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) continue;
-                    FileStream fs = new FileStream(fi.FullName, FileMode.Open, FileAccess.Read);
-                    BinaryReader br = new BinaryReader(fs);
+                    fileName = sdr[0].ToString();
+                    resId = int.Parse(sdr[1].ToString());
+                    entity = sdr[2].ToString();
+
+                    if (entity.Equals("session"))
+                    {
+                        sessionId = resId;
+                        cmdF.Parameters["@sess_id"].Value = sessionId;
+                        cmdF.Parameters["@trial_id"].Value = DBNull.Value;
+                    }
+                    else
+                    {
+                        cmdF.Parameters["@sess_id"].Value = DBNull.Value;
+                        cmdF.Parameters["@trial_id"].Value = resId;
+                    }
+                    
+                    fullPath = dirLocation + fileName;
+
+                    fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                    br = new BinaryReader(fs);
                     fileData = br.ReadBytes(maxFileSize);
-                    if (description.Equals("")) description = "sample description";
-                    cmd.Parameters["@file_desc"].Value = description;
-                    cmd.Parameters["@file_data"].Value = fileData;
-                    cmd.Parameters["@file_name"].Value = fileName;
-                    cmd.Parameters["@file_path"].Value = subdirPath;
-                    cmd.ExecuteNonQuery();
+
+                    cmdF.Parameters["@file_data"].Value = fileData;
+                    cmdF.Parameters["@file_name"].Value = fileName;
+                    cmdF.ExecuteNonQuery();
                     br.Close();
                     fs.Close();
-                    File.Delete(fi.FullName);
-                }
-
+                    /* File.Delete(fullPath); */
+                  
+                } 
 
                 Directory.Delete(di.FullName, true);
 
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated");
-                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
-
+                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated: "+ex.Message);
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSessionFromFiles")));
+            }
+            catch (Exception ex1)
+            {
+                if (ex1 is FaultException) throw ex1;
+                else
+                {
+                    FileAccessServiceException exc = new FileAccessServiceException("other", "Other exception: "+ex1.Message + ex1.StackTrace);
+                    throw new FaultException<FileAccessServiceException>(exc, "Other exception", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSessionFromFiles")));
+                }
 
             }
+
             finally
             {
+                connF.Close();
                 CloseConnection();
-            } */
-            return 0;
+            }             
+            return sessionId; 
         }
 
     }

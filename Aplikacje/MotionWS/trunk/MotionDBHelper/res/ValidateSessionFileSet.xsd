@@ -5,7 +5,7 @@
     <xsd:complexType>
       <xsd:sequence>
         <xsd:element ref="SessionContent" />
-        <xsd:element name="ErrorList" >
+        <xsd:element name="ErrorList" minOccurs="0" >
           <xsd:complexType>
             <xsd:sequence>
               <xsd:element name="Error" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />

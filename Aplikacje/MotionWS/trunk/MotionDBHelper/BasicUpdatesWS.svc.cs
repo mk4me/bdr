@@ -56,7 +56,7 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionDescription, int[] sessionGroupIDs)
+        public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
             int result = 0;
@@ -97,6 +97,8 @@ namespace MotionDBWebServices
                 cmd.Parameters.Add("@sess_lab", SqlDbType.Int);
                 cmd.Parameters.Add("@mk_name", SqlDbType.VarChar, 50);
                 cmd.Parameters.Add("@sess_date", SqlDbType.DateTime);
+                cmd.Parameters.Add("@sess_name", SqlDbType.VarChar, 20);
+                cmd.Parameters.Add("@sess_tags", SqlDbType.VarChar, 100);
                 cmd.Parameters.Add("@sess_desc", SqlDbType.VarChar, 100);
 
                 SqlParameter sessionIdParameter =
@@ -112,6 +114,8 @@ namespace MotionDBWebServices
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@mk_name"].Value = motionKindName;
                 cmd.Parameters["@sess_date"].Value = sessionDate;
+                cmd.Parameters["@sess_name"].Value = sessionName;
+                cmd.Parameters["@sess_tags"].Value = tags;
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
@@ -147,16 +151,17 @@ namespace MotionDBWebServices
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateTrial(int sessionID, string trialDescription)
+        public int CreateTrial(int sessionID, string trialName, string trialDescription)
         {
             int newTrialId = 0;
             try
             {
                 OpenConnection();
-                cmd.CommandText = @"insert into Obserwacja ( IdSesja, Opis_obserwacji)
-                                    values (@trial_session, @trial_desc )
+                cmd.CommandText = @"insert into Obserwacja ( IdSesja, Opis_obserwacji, Nazwa)
+                                    values (@trial_session, @trial_desc, @trial_name )
                                             set @trial_id = SCOPE_IDENTITY()";
                 cmd.Parameters.Add("@trial_session", SqlDbType.Int);
+                cmd.Parameters.Add("@trial_name", SqlDbType.VarChar, 20);
                 cmd.Parameters.Add("@trial_desc", SqlDbType.VarChar, 100);
 
                 SqlParameter trialIdParameter =
@@ -164,6 +169,7 @@ namespace MotionDBWebServices
                 trialIdParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(trialIdParameter);
                 cmd.Parameters["@trial_session"].Value = sessionID;
+                cmd.Parameters["@trial_name"].Value = trialName;
                 cmd.Parameters["@trial_desc"].Value = trialDescription;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
