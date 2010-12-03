@@ -21,6 +21,7 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
+import motion.database.model.SessionValidationInfo;
 import motion.database.model.Trial;
 import motion.database.model.User;
 import motion.database.model.UserBasket;
@@ -233,7 +234,7 @@ public interface DatabaseProxy {
 
 	Session getSessionContent(int sessionID) throws Exception;
 
-	Session validateSessionFileSet(String[] paths) throws Exception;
+	SessionValidationInfo validateSessionFileSet(String[] paths) throws Exception;
 
 
 }

@@ -5,6 +5,7 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
+import motion.database.model.SessionValidationInfo;
 import motion.database.model.Trial;
 import motion.database.model.User;
 import motion.database.model.UserBasket;
@@ -908,11 +910,12 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public  Session validateSessionFileSet(String[] paths) throws Exception
+	public  SessionValidationInfo validateSessionFileSet(String[] paths) throws Exception
 	{
 		try {
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "validateSessionFileSet", this );
 			Session output = null;
+			LinkedList<String> errors = null; 
 			
 			ArrayOfFileNameEntry input = new ArrayOfFileNameEntry();
 			for (String file : paths){
@@ -923,8 +926,13 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ValidateSessionFileSetResult result = port.validateSessionFileSet( input );
 			if (result != null && result.getFileSetValidationResult().getSessionContent()!=null )
 				output = ConnectionTools2.transformSessionContent( result.getFileSetValidationResult().getSessionContent() );
-			
-			return output;
+			if (result != null && result.getFileSetValidationResult().getErrorList()!=null )
+			{
+				errors = new LinkedList<String>();
+				for (String error : result.getFileSetValidationResult().getErrorList().getError() )
+					errors.add( error );
+			}
+			return new SessionValidationInfo( output, errors );
 		} 
 		catch (IBasicQueriesWSValidateSessionFileSetQueryExceptionFaultFaultMessage e) 
 		{
