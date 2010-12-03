@@ -4,11 +4,11 @@ import java.awt.BorderLayout;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Session;
+import motion.database.model.SessionValidationInfo;
 
 public class WizardSessionDirectoryPanel extends WizardPanel {
 	private JFileChooser fileChooser;
@@ -39,9 +39,15 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 				//@Override
 				//protected Void doInBackground() throws InterruptedException {
 					try {
-						session = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.list());
-						System.out.println(session.toStringAllAttributes());
-
+						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.list());
+						if (sessionValidationInfo.session != null) {
+							session = sessionValidationInfo.session;
+							System.out.println(session.toStringAllAttributes());
+							
+							return true;
+						} else if (sessionValidationInfo.errors != null) {
+							errorMessage = sessionValidationInfo.errors.toString();
+						}
 					} catch (Exception e1) {
 						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 						exceptionDialog.setVisible(true);
@@ -56,7 +62,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 			//};
 			//worker.execute();
 			
-			return true;
+			return false;
 		} else {
 			errorMessage = "No directory selected";
 			
