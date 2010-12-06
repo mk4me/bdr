@@ -287,7 +287,7 @@ public class MotionApplet extends JApplet {
 				WizardDialog wizardDialog = new WizardDialog("Session wizard",
 						new ArrayList<WizardPanel>(Arrays.asList(
 								new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
-								new WizardSessionBrowserPanel("Session validation.", true, false, false, true)
+								new WizardSessionBrowserPanel("Session validation.", true, true, false, true)
 								
 								)
 						)
