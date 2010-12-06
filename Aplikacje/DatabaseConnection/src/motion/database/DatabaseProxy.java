@@ -239,5 +239,8 @@ public interface DatabaseProxy {
 	void uploadSessionFileSet(File[] paths, FileTransferListener listener)
 			throws Exception;
 
+	void replaceFile(int resourceId, String localFilePath,
+			FileTransferListener listener) throws Exception;
+
 
 }

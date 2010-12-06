@@ -1175,7 +1175,6 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		String destRemoteFolder = getUniqueFolderName();
 		createRemoteFolder( destRemoteFolder, "" );
 		putFile(localFilePath, destRemoteFolder, listener);			
-		    
 		if (!fileTransferCancelled)
 				kind.storeFile( port, resourceId, destRemoteFolder, description, new File(localFilePath).getName() );
 		
@@ -1236,7 +1235,21 @@ public class DatabaseConnection2 implements DatabaseProxy {
 		}
 		ConnectionTools2.finalizeCall();
 	}
-	
+
+	@Override
+	public void replaceFile(int resourceId, String localFilePath, FileTransferListener listener) throws Exception
+	{
+		fileTransferCancelled = false;
+		IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "replaceFile", this );
+
+		String destRemoteFolder = getUniqueFolderName();
+		putFile(localFilePath, destRemoteFolder, listener);			
+		if (!fileTransferCancelled)
+				port.replaceFile( resourceId, destRemoteFolder, new File(localFilePath).getName() );
+		
+		ConnectionTools2.finalizeCall();
+	}
+
 
 	/*==========================================================================
 	 * 	BasicUpdateServiceWCF
