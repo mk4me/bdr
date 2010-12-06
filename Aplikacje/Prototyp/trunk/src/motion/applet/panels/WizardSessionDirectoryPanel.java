@@ -40,13 +40,13 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 				//protected Void doInBackground() throws InterruptedException {
 					try {
 						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.listFiles());
-						if (sessionValidationInfo.session != null) {
+						if (sessionValidationInfo.errors != null) {
+								errorMessage = sessionValidationInfo.errors.toString();
+						} else if (sessionValidationInfo.session != null) {
 							session = sessionValidationInfo.session;
 							System.out.println(session.toStringAllAttributes());
 							
 							return true;
-						} else if (sessionValidationInfo.errors != null) {
-							errorMessage = sessionValidationInfo.errors.toString();
 						}
 					} catch (Exception e1) {
 						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
