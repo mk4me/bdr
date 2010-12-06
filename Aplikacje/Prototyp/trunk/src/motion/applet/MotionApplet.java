@@ -28,6 +28,7 @@ import motion.applet.dialogs.BasketDialog;
 import motion.applet.dialogs.LoginDialog;
 import motion.applet.dialogs.OkCancelDialog;
 import motion.applet.dialogs.WizardDialog;
+import motion.applet.dialogs.WizardSessionDialog;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
 import motion.applet.mouse.TrialMouseAdapter;
@@ -284,15 +285,15 @@ public class MotionApplet extends JApplet {
 		newMenu.add(wizardItem);
 		wizardItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WizardDialog wizardDialog = new WizardDialog("Session wizard",
+				WizardSessionDialog wizardSessionDialog = new WizardSessionDialog("Session wizard",
 						new ArrayList<WizardPanel>(Arrays.asList(
 								new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
-								new WizardSessionBrowserPanel("Session validation.", true, true, false, true)
+								new WizardSessionBrowserPanel("Press finish to upload session.", true, true, false, true)
 								
 								)
 						)
 				);
-				wizardDialog.setVisible(true);
+				wizardSessionDialog.setVisible(true);
 			}
 		});
 	}

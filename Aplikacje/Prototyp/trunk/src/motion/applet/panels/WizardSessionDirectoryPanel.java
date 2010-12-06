@@ -13,6 +13,7 @@ import motion.database.model.SessionValidationInfo;
 public class WizardSessionDirectoryPanel extends WizardPanel {
 	private JFileChooser fileChooser;
 	private Session session;
+	private File[] files;
 	
 	public WizardSessionDirectoryPanel(String stepMessage,
 			boolean enableCancel, boolean enableBack, boolean enableNext, boolean enableFinish) {
@@ -33,13 +34,14 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 	@Override
 	public boolean nextPressed() {
 		final File file = fileChooser.getSelectedFile();
+		files = file.listFiles();
 		if (file != null) {
 			System.out.println(file);
 			//SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				//@Override
 				//protected Void doInBackground() throws InterruptedException {
 					try {
-						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(file.listFiles());
+						SessionValidationInfo sessionValidationInfo = WebServiceInstance.getDatabaseConnection().validateSessionFileSet(files);
 						if (sessionValidationInfo.errors != null) {
 								errorMessage = sessionValidationInfo.errors.toString();
 						} else if (sessionValidationInfo.session != null) {
@@ -73,5 +75,10 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 	public Session getSession() {
 		
 		return session;
+	}
+	
+	public File[] getFiles() {
+		
+		return files;
 	}
 }

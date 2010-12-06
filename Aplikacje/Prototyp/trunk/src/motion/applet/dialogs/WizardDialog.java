@@ -18,13 +18,13 @@ public class WizardDialog extends BasicDialog {
 	private static String FINISH = "Finish";
 	private static String CANCEL = Messages.getString("Cancel"); //$NON-NLS-1$
 	
-	private JButton backButton;
-	private JButton nextButton;
-	private JButton finishButton;
-	private JButton cancelButton;
+	protected JButton backButton;
+	protected JButton nextButton;
+	protected JButton finishButton;
+	protected JButton cancelButton;
 	
-	private  ArrayList<WizardPanel> wizardPanels;
-	private int currentStep = 0;
+	protected  ArrayList<WizardPanel> wizardPanels;
+	protected int currentStep = 0;
 	
 	private CardLayout cardLayout;
 	private JPanel formPanel;
