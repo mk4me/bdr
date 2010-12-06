@@ -11,12 +11,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.DownloadDialog;
+import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.panels.RightSplitPanel;
+import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.DatabaseFile;
+import motion.database.model.EntityKind;
+import motion.database.model.Session;
 
 public class FileMouseAdapter extends MouseAdapter {
 	private static String MENU_DOWNLOAD = "Download selected";
+	private static String MENU_EDIT = "Edit";
 	private File file;	// Save last directory for downloaded files.
 	
 	private RightSplitPanel rightPanel;
@@ -52,6 +59,19 @@ public class FileMouseAdapter extends MouseAdapter {
 					}
 				}
 			});
+			
+			JMenuItem editMenuItem = new JMenuItem(MENU_EDIT);
+			popupMenu.addSeparator();
+			popupMenu.add(editMenuItem);
+			
+			editMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					edit(recordIds[0]);
+				}
+			});
+			
+			
 			/*
 			JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_INVERT_SELECTION);
 			popupMenu.add(batchDownloadMenuItem);
@@ -67,4 +87,27 @@ public class FileMouseAdapter extends MouseAdapter {
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		}
 	}
+	
+	private void edit(final int recordId) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					DatabaseFile file = (DatabaseFile) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.file);
+					rightPanel.showFileDialog(file);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+			}
+		};
+		worker.execute();
+	}
+
 }

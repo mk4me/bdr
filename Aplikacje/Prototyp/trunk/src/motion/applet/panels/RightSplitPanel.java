@@ -20,6 +20,7 @@ import javax.swing.table.TableModel;
 
 import motion.applet.MotionApplet;
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.dialogs.FileFormDialog;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.MeasurementConfigurationFormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
@@ -35,6 +36,7 @@ import motion.applet.tables.AttributeTableModel;
 import motion.applet.tables.BasicTableModel;
 import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.DatabaseFile;
 import motion.database.model.EntityKind;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.Performer;
@@ -327,7 +329,25 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			RightSplitPanel.this.refreshSessionTable();
 		}
 	}
-	
+
+	public void showFileDialog(DatabaseFile file) {
+		FileFormDialog fileFormDialog;
+		if (file == null) {
+			// this should never happen since we cannot create a file in this way. 
+			return;
+		} else {
+			fileFormDialog = new FileFormDialog(file);
+		}
+		fileFormDialog.pack();	// TODO: is this needed?
+		fileFormDialog.setVisible(true);
+		if (fileFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			showTable(EntityKind.file);	// Show newly created sessions by viewing all sessions.
+		} else if (fileFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_FILE);
+			RightSplitPanel.this.refreshFileTable();
+		}
+	}
+
 	public void showTrialDialog(int recordId, Trial trial) {
 		TrialFormDialog trialFormDialog;
 		if (trial == null) {
