@@ -35,6 +35,7 @@ public class SessionFileSetCreator {
 	}
 	
 	private static void createTrialFiles(String string, int trialNo) throws IOException {
+		createFile( string+"-trial" + trialNo + ".c3d", "Hello c3d Kitty!");
 		for( int i=1; i<=4; i++)
 			createFile( string+"-trial" + trialNo + ".cam" + i + ".avi", "Hello trial Kitty!" );
 	}

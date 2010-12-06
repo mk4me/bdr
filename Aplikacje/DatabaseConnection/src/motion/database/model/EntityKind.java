@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -11,7 +12,9 @@ import motion.Messages;
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
 import motion.database.ws.ConnectionTools2;
+import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetFileDataByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage;
@@ -22,6 +25,8 @@ import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttribu
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
+import motion.database.ws.basicQueriesServiceWCF.GetFileDataByIdXMLResponse.GetFileDataByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse.GetPerformerConfigurationByIdXMLResult;
@@ -318,6 +323,25 @@ public enum EntityKind {
 		{
 			return new DatabaseFile();
 		}
+
+		@Override
+		public DatabaseFile getByID(IBasicQueriesWS port, int id) throws Exception {
+			try{
+				GetFileDataByIdXMLResult result = port.getFileDataByIdXML(id);
+				motion.database.ws.basicQueriesServiceWCF.FileDetailsWithAttributes s = result.getFileDetailsWithAttributes();
+				
+				return ConnectionTools2.transformFileDetails(s);
+			}
+			catch(IBasicQueriesWSGetFileDataByIdXMLQueryExceptionFaultFaultMessage e)
+			{
+				DatabaseConnection.log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+				throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+			}
+			finally
+			{
+				ConnectionTools2.finalizeCall();
+			}
+		}
 	},
 
 	user(UserStaticAttributes.class)
@@ -449,7 +473,7 @@ public enum EntityKind {
 	//////////////////////////////////////////////////////////////////////////
 
 	static public EnumSet<EntityKind> kindsWithGenericAttributes = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement_conf, EntityKind.file );
-	static public EnumSet<EntityKind> kindsWithGetByID = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement );
+	static public EnumSet<EntityKind> kindsWithGetByID = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement, EntityKind.file );
 	static public EnumSet<EntityKind> kindsBasketStorable = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial );
 
 	

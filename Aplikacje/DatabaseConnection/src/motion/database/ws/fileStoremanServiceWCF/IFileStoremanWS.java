@@ -212,4 +212,24 @@ public interface IFileStoremanWS {
         throws IFileStoremanWSCreateSessionFromFilesFileAccessServiceExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param fileID
+     * @param path
+     * @param filename
+     * @throws IFileStoremanWSReplaceFileFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "ReplaceFile", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/ReplaceFile")
+    @RequestWrapper(localName = "ReplaceFile", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.ReplaceFile")
+    @ResponseWrapper(localName = "ReplaceFileResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.ReplaceFileResponse")
+    public void replaceFile(
+        @WebParam(name = "fileID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        int fileID,
+        @WebParam(name = "path", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String path,
+        @WebParam(name = "filename", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+        String filename)
+        throws IFileStoremanWSReplaceFileFileAccessServiceExceptionFaultFaultMessage
+    ;
+
 }

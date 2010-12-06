@@ -501,6 +501,18 @@ public class ConnectionTools2 {
 			return conf;
 	}
 
+	public static DatabaseFile transformFileDetails(
+			motion.database.ws.basicQueriesServiceWCF.FileDetailsWithAttributes s) {
+
+		DatabaseFile file = new DatabaseFile();
+		file.put( DatabaseFileStaticAttributes.FileID, s.getFileID() );
+		file.put( DatabaseFileStaticAttributes.FileName, s.getFileName() );
+		file.put( DatabaseFileStaticAttributes.FileDescription, s.getFileDescription() );
+		file.put( DatabaseFileStaticAttributes.SubdirPath, s.getSubdirPath() );
+
+		return file;
+	}
+
 	
 	public static Exception transformWSFaultMessage( Exception e )
 	{
@@ -532,4 +544,5 @@ public class ConnectionTools2 {
 		DatabaseConnection.log.log( Level.SEVERE, s, e );
 		return new Exception( s, e ); 
 	}
+
 }

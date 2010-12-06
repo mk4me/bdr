@@ -69,14 +69,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetMeasurementAttributeResponse }
-     * 
-     */
-    public SetMeasurementAttributeResponse createSetMeasurementAttributeResponse() {
-        return new SetMeasurementAttributeResponse();
-    }
-
-    /**
      * Create an instance of {@link SetPerformerConfAttribute }
      * 
      */
@@ -125,19 +117,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetMeasurementConfAttributeResponse }
-     * 
-     */
-    public SetMeasurementConfAttributeResponse createSetMeasurementConfAttributeResponse() {
-        return new SetMeasurementConfAttributeResponse();
-    }
-
-    /**
      * Create an instance of {@link SetSessionAttribute }
      * 
      */
     public SetSessionAttribute createSetSessionAttribute() {
         return new SetSessionAttribute();
+    }
+
+    /**
+     * Create an instance of {@link SetMeasurementAttributeResponse }
+     * 
+     */
+    public SetMeasurementAttributeResponse createSetMeasurementAttributeResponse() {
+        return new SetMeasurementAttributeResponse();
     }
 
     /**
@@ -165,27 +157,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SetPerformerAttributeResponse }
-     * 
-     */
-    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
-        return new SetPerformerAttributeResponse();
-    }
-
-    /**
      * Create an instance of {@link CreateTrialResponse }
      * 
      */
     public CreateTrialResponse createCreateTrialResponse() {
         return new CreateTrialResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateMeasurementConfiguration }
-     * 
-     */
-    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
-        return new CreateMeasurementConfiguration();
     }
 
     /**
@@ -221,6 +197,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetMeasurementConfAttributeResponse }
+     * 
+     */
+    public SetMeasurementConfAttributeResponse createSetMeasurementConfAttributeResponse() {
+        return new SetMeasurementConfAttributeResponse();
+    }
+
+    /**
      * Create an instance of {@link AssignPerformerToSessionResponse }
      * 
      */
@@ -234,6 +218,14 @@ public class ObjectFactory {
      */
     public SetMeasurementAttribute createSetMeasurementAttribute() {
         return new SetMeasurementAttribute();
+    }
+
+    /**
+     * Create an instance of {@link CreateMeasurementConfiguration }
+     * 
+     */
+    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
+        return new CreateMeasurementConfiguration();
     }
 
     /**
@@ -274,14 +266,6 @@ public class ObjectFactory {
      */
     public SetPerformerAttribute createSetPerformerAttribute() {
         return new SetPerformerAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetSessionAttributeResponse }
-     * 
-     */
-    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
-        return new SetSessionAttributeResponse();
     }
 
     /**
@@ -333,6 +317,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetPerformerAttributeResponse }
+     * 
+     */
+    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
+        return new SetPerformerAttributeResponse();
+    }
+
+    /**
      * Create an instance of {@link CreateSessionResponse }
      * 
      */
@@ -354,6 +346,14 @@ public class ObjectFactory {
      */
     public SetFileAttributeResponse createSetFileAttributeResponse() {
         return new SetFileAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttributeResponse }
+     * 
+     */
+    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
+        return new SetSessionAttributeResponse();
     }
 
     /**

@@ -142,4 +142,24 @@ public interface IAuthorizationWS {
         throws IAuthorizationWSListSessionPrivilegesAuthorizationExceptionFaultFaultMessage
     ;
 
+    /**
+     * 
+     * @param resourceID
+     * @param entity
+     * @return
+     *     returns boolean
+     * @throws IAuthorizationWSIfCanUpdateAuthorizationExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "IfCanUpdate", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdate")
+    @WebResult(name = "IfCanUpdateResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+    @RequestWrapper(localName = "IfCanUpdate", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.IfCanUpdate")
+    @ResponseWrapper(localName = "IfCanUpdateResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService", className = "motion.database.ws.authorizationWCF.IfCanUpdateResponse")
+    public boolean ifCanUpdate(
+        @WebParam(name = "resourceID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        int resourceID,
+        @WebParam(name = "entity", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")
+        String entity)
+        throws IAuthorizationWSIfCanUpdateAuthorizationExceptionFaultFaultMessage
+    ;
+
 }
