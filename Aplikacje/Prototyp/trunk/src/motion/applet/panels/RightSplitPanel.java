@@ -258,7 +258,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void refreshFileTable() {
+	public void refreshFileTable() {
 		TableModel tableModel = tables[TABLE_FILE].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();

@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,13 +16,16 @@ import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.DatabaseConnection;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityKind;
 import motion.database.model.Session;
 
 public class FileMouseAdapter extends MouseAdapter {
+	private static String MENU_UPLOAD = "Upload new file";
 	private static String MENU_DOWNLOAD = "Download selected";
 	private static String MENU_EDIT = "Edit";
 	private File file;	// Save last directory for downloaded files.
@@ -70,7 +74,17 @@ public class FileMouseAdapter extends MouseAdapter {
 					edit(recordIds[0]);
 				}
 			});
+
+			JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
+			popupMenu.add(uploadMenuItem);
 			
+			uploadMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					upload(recordIds[0]);
+				}
+			});
+
 			
 			/*
 			JMenuItem batchDownloadMenuItem = new JMenuItem(MENU_INVERT_SELECTION);
@@ -95,6 +109,36 @@ public class FileMouseAdapter extends MouseAdapter {
 				try {
 					DatabaseFile file = (DatabaseFile) WebServiceInstance.getDatabaseConnection().getById(recordId, EntityKind.file);
 					rightPanel.showFileDialog(file);
+				} catch (Exception e1) {
+					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+					exceptionDialog.setVisible(true);
+				}
+				
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+			}
+		};
+		worker.execute();
+	}
+
+	private void upload(final int recordId) {
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() throws InterruptedException {
+				try {
+					JFileChooser fileChooser = UploadDialog.createFileChooser();
+					fileChooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
+					fileChooser.setMultiSelectionEnabled( false );
+					int result = fileChooser.showOpenDialog( null );
+					if ( result == JFileChooser.APPROVE_OPTION) {
+					
+						File file = fileChooser.getSelectedFile();
+						DatabaseConnection.getInstance().replaceFile(recordId, file.getAbsolutePath(), null );
+						rightPanel.refreshFileTable();
+					}
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
