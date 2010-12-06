@@ -37,7 +37,7 @@ public class WizardSessionDialog extends WizardDialog {
 				progressBar.setVisible(true);
 				finishButton.setEnabled(false);
 				backButton.setEnabled(false);
-				
+				messageLabel.setText("Uploading session...");
 				wizardPanels.get(currentStep).finishPressed();
 			}
 		});

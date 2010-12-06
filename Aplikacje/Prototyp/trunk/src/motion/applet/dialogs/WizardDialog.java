@@ -2,6 +2,7 @@ package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class WizardDialog extends BasicDialog {
 	@Override
 	protected void finishUserInterface() {
 		this.setSize(520, 350);
+		this.setMinimumSize(new Dimension(520, 350));
 		
 		int i = 0;
 		for (WizardPanel w : wizardPanels) {

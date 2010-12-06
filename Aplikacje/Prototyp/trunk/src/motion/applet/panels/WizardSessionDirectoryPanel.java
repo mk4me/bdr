@@ -34,8 +34,8 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 	@Override
 	public boolean nextPressed() {
 		final File file = fileChooser.getSelectedFile();
-		files = file.listFiles();
 		if (file != null) {
+			files = file.listFiles();
 			System.out.println(file);
 			//SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				//@Override
