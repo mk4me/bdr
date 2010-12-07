@@ -1,14 +1,20 @@
 package motion.applet.mouse;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -131,6 +137,7 @@ public class FileMouseAdapter extends MouseAdapter {
 					JFileChooser fileChooser = UploadDialog.createFileChooser();
 					fileChooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
 					fileChooser.setMultiSelectionEnabled( false );
+
 					int result = fileChooser.showOpenDialog( rightPanel );
 					if ( result == JFileChooser.APPROVE_OPTION) {
 						File file = fileChooser.getSelectedFile();

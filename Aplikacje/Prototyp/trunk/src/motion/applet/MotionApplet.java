@@ -191,6 +191,7 @@ public class MotionApplet extends JApplet {
 		viewAllPerformersItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rightPanel.showTable(EntityKind.performer);
+				setBrowsePanelVisible();
 			}
 		});
 		
@@ -199,6 +200,7 @@ public class MotionApplet extends JApplet {
 		viewAllSessionsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rightPanel.showTable(EntityKind.session);
+				setBrowsePanelVisible();
 			}
 		});
 		
@@ -207,6 +209,7 @@ public class MotionApplet extends JApplet {
 		viewAllSessionGroupsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rightPanel.showTable(EntityKind.sessionGroup);
+				setBrowsePanelVisible();
 			}
 		});
 		
