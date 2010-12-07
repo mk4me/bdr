@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -16,13 +15,13 @@ import javax.swing.SwingWorker;
 
 import motion.applet.dialogs.DownloadDialog;
 import motion.applet.dialogs.ExceptionDialog;
+import motion.applet.dialogs.ProgressBarDialog;
 import motion.applet.dialogs.UploadDialog;
 import motion.applet.panels.RightSplitPanel;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.DatabaseConnection;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityKind;
-import motion.database.model.Session;
 
 public class FileMouseAdapter extends MouseAdapter {
 	private static String MENU_UPLOAD = "Upload new file";
@@ -132,11 +131,29 @@ public class FileMouseAdapter extends MouseAdapter {
 					JFileChooser fileChooser = UploadDialog.createFileChooser();
 					fileChooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
 					fileChooser.setMultiSelectionEnabled( false );
-					int result = fileChooser.showOpenDialog( null );
+					int result = fileChooser.showOpenDialog( rightPanel );
 					if ( result == JFileChooser.APPROVE_OPTION) {
-					
 						File file = fileChooser.getSelectedFile();
-						DatabaseConnection.getInstance().replaceFile(recordId, file.getAbsolutePath(), null );
+						final ProgressBarDialog progressBarDialog = new ProgressBarDialog("Upload progress", "Replacing file with: " + file.getName());
+						SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+							@Override
+							protected Void doInBackground() throws InterruptedException {
+								progressBarDialog.setVisible(true);
+								
+								return null;
+							}
+							
+							@Override
+							protected void done() {
+							}
+						};
+						worker.execute();
+						
+						DatabaseConnection.getInstance().replaceFile(recordId, file.getAbsolutePath(), progressBarDialog.uploadTransferListener );
+						
+						progressBarDialog.setVisible(false);
+						progressBarDialog.dispose();
+						
 						rightPanel.refreshFileTable();
 					}
 				} catch (Exception e1) {
