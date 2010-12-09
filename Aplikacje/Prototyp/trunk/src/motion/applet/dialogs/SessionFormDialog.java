@@ -85,10 +85,7 @@ public class SessionFormDialog extends FormDialog {
 								setPrivileges(sessionID);
 								
 								//performers
-								int[] selectedPerformers = performerAssignmentPanel.getSelectedRecords();
-								for (int i = 0; i < selectedPerformers.length; i++) {
-									WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionID, selectedPerformers[i]);
-								}
+								setPerformers(sessionID);
 								
 							} catch (Exception e1) {
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
@@ -148,29 +145,39 @@ public class SessionFormDialog extends FormDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (SessionFormDialog.this.validateResult() == true) {
-					setPrivileges(recordId);
+					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						@Override
+						protected Void doInBackground() throws InterruptedException {
+								try {
+									//privileges
+									setPrivileges(recordId);
+									
+									//performers
+									setPerformers(recordId);
+								} catch (Exception e1) {
+									ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+									exceptionDialog.setVisible(true);
+								}
+								return null;
+						}
+					};
+					worker.execute();
 				}
 			}
 		});
 	}
 	
-	private void setPrivileges(final int sessionId) {
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws InterruptedException {
-					//privileges
-					try {
-						SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionId, privilegesPanel.getResult());
-						sessionPrivileges.setUserPrivileges( privilegesPanel.getPrivileges() );
-						sessionPrivileges.performDatabaseUpdate();
-					} catch (Exception e1) {
-						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-						exceptionDialog.setVisible(true);
-					}
-					return null;
-			}
-		};
-		worker.execute();
+	private void setPrivileges(final int sessionId) throws Exception {
+		SessionPrivilegesSetter sessionPrivileges = new SessionPrivilegesSetter(sessionId, privilegesPanel.getResult());
+		sessionPrivileges.setUserPrivileges(privilegesPanel.getPrivileges());
+		sessionPrivileges.performDatabaseUpdate();
+	}
+	
+	private void setPerformers(final int sessionId) throws Exception {
+		int[] selectedPerformers = performerAssignmentPanel.getSelectedRecords();
+		for (int i = 0; i < selectedPerformers.length; i++) {
+			WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionId, selectedPerformers[i]);
+		}
 	}
 	
 	private void fillSessionPerformers(final Session session) {
@@ -196,7 +203,7 @@ public class SessionFormDialog extends FormDialog {
 			
 			@Override
 			protected void done() {
-				performerAssignmentPanel.doLayout();
+				performerAssignmentPanel.invalidate();
 			}
 		};
 		worker.execute();
