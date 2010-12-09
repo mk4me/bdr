@@ -236,7 +236,6 @@ public class SessionFormDialog extends FormDialog {
 		};
 		worker.execute();
 	}
-
 	
 	private boolean setMotionKinds(EntityAttributeGroup group) {
 		for (EntityAttribute a : group) {

@@ -51,8 +51,9 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 							return true;
 						}
 					} catch (Exception e1) {
-						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
-						exceptionDialog.setVisible(true);
+						//ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						//exceptionDialog.setVisible(true);
+						errorMessage = "Incorrect directory contents.";
 					}
 					
 					//return null;
