@@ -1,6 +1,7 @@
 use Motion;
 go
 
+-- last rev. 2010-11-20
 create function user_updateable_sessions( @user_id int )
 returns table
 as
@@ -18,6 +19,7 @@ go
 	9 - user login not recognized
 */
 
+-- last rev. 2010-11-20
 create procedure assign_performer_to_session (@user_login varchar(30), @sess_id int, @perf_id int, @perf_conf_id int OUTPUT, @result int OUTPUT )
 as
 begin

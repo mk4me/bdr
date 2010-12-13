@@ -1,5 +1,6 @@
 use Motion;
 
+-- last rev. 2010-01-02
 create type PredicateUdt as table
 (
 	PredicateID int,
@@ -15,6 +16,7 @@ create type PredicateUdt as table
 )
 go
 
+-- last rev. 2010-01-02
 create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -31,6 +33,7 @@ inner join Wartosc_atrybutu_performera wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPerformer = @perf_id and a.Nazwa = @attributeName
 go
 
+-- last rev. 2010-01-02
 create function sess_attr_value(@sess_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -47,6 +50,7 @@ inner join Wartosc_atrybutu_sesji was on a.IdAtrybut=was.IdAtrybut
 where was.IdSesja = @sess_id and a.Nazwa = @attributeName
 go
 
+-- last rev. 2010-01-02
 create function trial_attr_value(@trial_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -63,6 +67,7 @@ inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
 where wao.IdObserwacja = @trial_id and a.Nazwa = @attributeName
 go
 
+-- last rev. 2010-01-02
 create function measurement_conf_attr_value(@mc_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -79,6 +84,7 @@ inner join Wartosc_atrybutu_konfiguracji_pomiarowej wakp on a.IdAtrybut=wakp.IdA
 where wakp.IdKonfiguracja_pomiarowa = @mc_id and a.Nazwa = @attributeName
 go
 
+-- last rev. 2010-01-02
 create function measurement_attr_value(@meas_id int, @attributeName as varchar(100))
 returns table
 as return
@@ -95,6 +101,7 @@ inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
 where wap.IdPomiar = @meas_id and a.Nazwa = @attributeName
 go
 
+-- last rev. 2010-11-27
 create procedure evaluate_generic_query(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @meas as bit, @mc as bit, @pc as bit, @sg as bit)
 as
 begin
@@ -152,7 +159,7 @@ begin
 	if(@sg = 1) and (@perf=1 or @sess=1 or @trial=1 or @mc=1 or @meas=1) set @selectClause = @selectClause + ', ';
 	if(@perf = 1) set @selectClause = @selectClause + 'p.IdPerformer as PerformerID, p.Imie as FirstName,	p.Nazwisko as LastName ';
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +', ';
-	if(@sess = 1) set @selectClause = @selectClause + 's.IdSesja as SessionID, s.IdLaboratorium as LabID, dbo.motion_kind_name(s.IdRodzaj_ruchu) as MotionKind,	s.Data as SessionDate,	s.Opis_sesji as SessionDescription ';
+	if(@sess = 1) set @selectClause = @selectClause + 's.IdSesja as SessionID, s.IdLaboratorium as LabID, dbo.motion_kind_name(s.IdRodzaj_ruchu) as MotionKind,	s.Data as SessionDate,	s.Nazwa as SessionName, s.Tagi as Tags, s.Opis_sesji as SessionDescription ';
 	if(@sess = 1 and (@trial=1 or @mc=1 or @meas=1)) set @selectClause = @selectClause +', ';
 	if(@trial = 1) set @selectClause = @selectClause +'t.IdObserwacja as TrialID, t.Opis_obserwacji as TrialDescription ';
 	if(@trial = 1 and (@mc=1 or @meas=1)) set @selectClause = @selectClause + ', ';
@@ -283,13 +290,15 @@ begin
 					when 'UserID' then 's.IdUzytkownik'
 					when 'LabID' then 's.IdLaboratorium'
 					when 'MotionKind' then 'dbo.motion_kind_name(s.IdRodzaj_ruchu)'
-					when 'PerformerID' then 's.IdPerformer'
 					when 'SessionDate' then 's.Data'
+					when 'SessionName' then 's.Nazwa'
+					when 'Tags' then 's.Tagi'
 					when 'SessionDescription' then 's.Opis_sesji'
 					else '(select top 1 * from sess_attr_value(s.IdSesja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'trial' then (
 				case @currentFeatureName
 					when 'TrialID' then	't.IdObserwacja'
+					when 'TrialName' then 't.Nazwa'
 					when 'TrialDescription' then 't.Opis_obserwacji'
 					else '(select top 1 * from trial_attr_value(t.IdObserwacja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement' then (
@@ -375,6 +384,7 @@ begin
 end
 go
 
+-- last rev. 2010-11-27
 create procedure evaluate_generic_query_uniform(@user_login as varchar(30), @filter as PredicateUdt readonly, @perf as bit, @sess as bit, @trial as bit, @mc as bit, @meas as bit, @pc as bit, @sg as bit)
 as
 begin
@@ -557,13 +567,15 @@ begin
 					when 'UserID' then 's.IdUzytkownik'
 					when 'LabID' then 's.IdLaboratorium'
 					when 'MotionKind' then 'dbo.motion_kind_name(s.IdRodzaj_ruchu)'
-					when 'PerformerID' then 's.IdPerformer'
 					when 'SessionDate' then 's.Data'
+					when 'SessionName' then 's.Nazwa'
+					when 'Tags' then 's.Tagi'
 					when 'SessionDescription' then 's.Opis_sesji'
 					else '(select top 1 * from sess_attr_value(s.IdSesja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'trial' then (
 				case @currentFeatureName
 					when 'TrialID' then	't.IdObserwacja'
+					when 'TrialName' then 't.Nazwa'
 					when 'TrialDescription' then 't.Opis_obserwacji'
 					else '(select top 1 * from trial_attr_value(t.IdObserwacja, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement' then (
@@ -649,9 +661,8 @@ begin
 end
 go
 
-
 -- UPS Procedures
-
+-- last rev. 2010-10-25
 create procedure update_stored_filters(@user_login as varchar(30), @filter as PredicateUdt readonly)
 as
 begin
@@ -697,6 +708,7 @@ begin
 end
 go
 
+-- last rev. 2010-07-20
 create procedure list_user_filters_xml ( @user_login as varchar(30) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
@@ -716,6 +728,7 @@ select
     for XML PATH('Filter'), root ('FilterList')
 go
 
+-- last rev. 2010-07-20
 create procedure create_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
 as
 begin
@@ -740,6 +753,7 @@ begin
 end
 go
 
+-- last rev. 2010-12-13
 create procedure remove_basket ( @user_login as varchar(30), @basket_name as varchar(30), @result int OUTPUT)
 as
 begin
@@ -763,11 +777,12 @@ begin
 	delete from Performer_Koszyk where IdKoszyk = @basket_id;
 	delete from Sesja_Koszyk where IdKoszyk = @basket_id;
 	delete from Obserwacja_Koszyk where IdKoszyk = @basket_id;
-	delete from Segment_Koszyk where IdKoszyk = @basket_id;
 	delete from Koszyk where Nazwa = @basket_name and IdUzytkownik = @user_id;
 	set @result = 0;
 end
 go
+
+-- last rev. 2010-12-13
 /* Error codes:
 	1 - login not found
 	2 - basket does not exist
@@ -819,11 +834,6 @@ begin
 			if not exists ( select * from Obserwacja_Koszyk where IdObserwacja = @res_id and IdKoszyk = @basket_id )
 			insert into Obserwacja_Koszyk ( IdKoszyk, IdObserwacja ) values ( @basket_id, @res_id );
 		end;
-	else if @entity = 'segment'
-		begin
-			if not exists ( select * from Segment_Koszyk where IdSegment = @res_id and IdKoszyk = @basket_id )
-			insert into Segment_Koszyk ( IdKoszyk, IdSegment ) values ( @basket_id, @res_id );
-		end;
 	else
 		begin
 			set @result = 7;
@@ -832,6 +842,8 @@ begin
 	set @result = 0;
 end
 go
+
+-- last rev. 2010-12-13
 /* Error codes:
 	1 - login not found
 	2 - basket does not exist
@@ -862,8 +874,6 @@ begin
 		delete from Sesja_Koszyk where IdKoszyk = @basket_id and IdSesja = @res_id;
 	else if @entity = 'trial'
 		delete from Obserwacja_Koszyk where IdKoszyk = @basket_id and IdObserwacja = @res_id;
-	else if @entity = 'segment'
-		delete from Segment_Koszyk where IdKoszyk = @basket_id and IdSegment = @res_id;
 	else
 		begin
 			set @result = 7;
@@ -873,6 +883,7 @@ begin
 end
 go
 
+-- last rev. 2010-07-20
 create procedure list_basket_performers_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
@@ -886,6 +897,7 @@ select
     for XML AUTO, ELEMENTS, root ('BasketPerformerWithAttributesList')
 go
 
+-- last rev. 2010-11-27
 create procedure list_basket_sessions_attributes_xml (@user_login varchar(30), @basket_name varchar(30))
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
@@ -895,6 +907,8 @@ as
 		IdLaboratorium as LabID,
 		dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
 		Data as SessionDate,
+		Nazwa as SessionName,
+		Tagi as Tags,
 		Opis_sesji as SessionDescription,
 		(select * from session_label(@user_login, IdSesja)) as SessionLabel,
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
@@ -903,12 +917,14 @@ as
       for XML AUTO, ELEMENTS, root ('BasketSessionWithAttributesList')
 go
 
+-- last rev. 2010-11-27
 create procedure list_basket_trials_attributes_xml(@user_login varchar(30), @basket_name varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
 select 
 	IdObserwacja as TrialID, 
 	IdSesja as SessionID, 
+	Nazwa as TrialName,
 	Opis_obserwacji as TrialDescription, 
 	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) 
@@ -917,7 +933,7 @@ from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja f
     for XML AUTO, ELEMENTS, root ('BasketTrialWithAttributesList')
 go
 
-
+-- last rev. 2010-07-20
 create procedure list_user_baskets( @user_login varchar(30) )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
@@ -929,7 +945,7 @@ for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
 go
 
 -- PRIVILEGE AND USER MANAGEMENT
-
+-- last rev. 2010-07-17
 create procedure list_users_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
@@ -938,6 +954,7 @@ select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
     for XML PATH('UserDetails'), root ('UserList')
 go
 
+-- last rev. 2010-10-28
 create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
@@ -954,16 +971,19 @@ s.PublicznaZapis "@IsPublicWritable",
   for XML PATH ('SessionPrivilegeList')
 go
 
+-- last rev. 2010-07-10
 create procedure check_user_account( @user_login varchar(30), @result int OUTPUT )
 as
  set @result = ((select count(*) from Uzytkownik where Login = @user_login))
 go
 
+-- last rev. 2010-07-10
 create procedure create_user_account (@user_login varchar(30), @user_first_name varchar(30), @user_last_name varchar(50))
 as
 insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
 go
 
+-- last rev. 2010-07-10
 create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
 as
 begin
@@ -985,6 +1005,7 @@ begin
 end
 go
 
+-- last rev. 2010-07-10
 create procedure unset_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int)
 as
 begin
@@ -995,6 +1016,7 @@ begin
 end
 go
 
+-- last rev. 2010-07-10
 create procedure alter_session_visibility (@granting_user_login varchar(30), @sess_id int, @public bit, @writeable bit)
 as
 begin
@@ -1007,7 +1029,7 @@ go
 
 
 -- Metadata definition procedures
-
+-- last rev. 2010-10-19
 create procedure define_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
 as
 begin
@@ -1026,7 +1048,7 @@ begin
 end;
 go
 
--- remove attribute group ( name, entity )
+-- last rev. 2010-10-19
 create procedure remove_attribute_group (@group_name varchar(100), @entity varchar(20), @result int OUTPUT )
 as
 begin
@@ -1040,6 +1062,7 @@ begin
 end;
 go
 
+-- last rev. 2010-11-03
 /* define attribute ( group, entity, name, type, subtype, units )
 	0 - success
 	1 - attribute already exists
@@ -1081,7 +1104,7 @@ begin
 end
 go
 
--- remove attribute ( group, entity, name )
+-- last rev. 2010-10-19
 create procedure remove_attribute (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @result int OUTPUT  )
 as
 begin
@@ -1102,6 +1125,9 @@ end
 go
 
 -- Define enum values
+-- -------------------
+
+-- last rev. 2010-10-19
 create procedure add_attribute_enum_value (@attr_name varchar(100), @group_name varchar(100), @entity varchar(20), @value varchar(100), @replace_all bit, @result int OUTPUT  )
 as
 begin
@@ -1125,10 +1151,240 @@ go
 
 
 -- Utility procedures 
+-- ------------------
 
+-- last rev. 2010-07-10
 create procedure validate_session_group_id( @group_id int )
 as
  select count(*) from Grupa_sesji where IdGrupa_sesji = @group_id;
 go
 
+-- Wizard procedures
+-- -----------------
+
+-- last rev. 2010-12-07
+create procedure validate_file_list_xml (  @files as FileNameListUdt readonly )
+as
+	declare @errorList table(err varchar(200) );
+	declare @sessionName varchar(30);
+	set @sessionName = 'Not determined';
+	declare @trialNames table(tname varchar(30));
+	
+
+	-- Czy lista nie jest pusta?
+	if ( (select COUNT(*) from @files where CHARINDEX ('-T', Name ) > 0) = 0 )
+		insert @errorList values ( 'No files provided at all or files with trial -T** naming convention not found');
+	else
+	begin
+	  -- Ustalam nazwe sesji
+	  select top 1 @sessionName = SUBSTRING (Name, 1, CHARINDEX ('-T', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
+	  -- Czy nie ma plikow o niezgodnych nazwach?
+	  if exists( select * from @files where CHARINDEX (@sessionName , Name)=0 )
+			insert @errorList select (Name+' name does not start with '+@sessionName) from @files where CHARINDEX (@sessionName , Name)=0 
+	  if exists( select * from Sesja where Nazwa = @sessionName )
+			insert into @errorList values ('Session with name '+@sessionName+' already exists in the database!');
+	  -- Kompletuje liste triali
+	  insert @trialNames  select distinct SUBSTRING (Name, 1, CHARINDEX ('.', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
+	  if exists( select * from @trialNames tn where 
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
+		or
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+		)
+		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having 4 .avi files AND 1 .c3d file') 
+		from @trialNames tn where 
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
+		or
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)	
+
+	end;
+	
+/*
+	-- czy dla kazdego trial-a sa po 4 pliki .avi
+	-- czy dla kazdego trial-a jest 1 plik .c3d
+	-- czy kazdy z pozostalych plikow jest plikiem nazwa-sesji.zip
+	-- czy nie ma juz sesji o zadanej nazwie
+	*/
+	-- insert into @errorList values ('VALIDATOR NOT YET IMPLEMENTED' from @trialNames));
+	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+		select
+			(select
+					0 "SessionDetailsWithAttributes/SessionID",
+					@sessionName "SessionDetailsWithAttributes/SessionName",
+					0 "SessionDetailsWithAttributes/UserID",
+					0 "SessionDetailsWithAttributes/LabID",
+					'' "SessionDetailsWithAttributes/MotionKind",
+					'2000-01-01 00:00:00.000' "SessionDetailsWithAttributes/SessionDate",
+					'' "SessionDetailsWithAttributes/SessionDescription",
+					'' "SessionDetailsWithAttributes/SessionLabel",
+					(	
+						select	
+							a.Nazwa "Name", 
+							'' "Value",
+							a.Typ_danych "Type",
+							ga.Nazwa "AttributeGroup",
+							'session' "Entity"
+						from Atrybut a 
+							inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+						where ga.Opisywana_encja = 'session' and ga.Nazwa <> '_static'				
+						FOR XML PATH('Attribute'), TYPE 
+					) "SessionDetailsWithAttributes/Attributes",
+					(	
+						select 
+							0 "@FileID", 
+							p.Name "@FileName", 
+							'...' "@FileDescription", 
+							'' "@SubdirPath",
+							(
+								select
+									a.Nazwa "Name", 
+									'' "Value",
+									a.Typ_danych "Type",
+									ga.Nazwa "AttributeGroup",
+									'file' "Entity"
+								from Atrybut a 
+									inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+								where ga.Opisywana_encja = 'file' and ga.Nazwa <> '_static'
+								FOR XML PATH('Attribute'), TYPE 
+							) "Attributes"
+							from @files p where CHARINDEX ('-T', Name ) = 0
+							for XML PATH('FileDetailsWithAttributes'), TYPE
+					) "FileWithAttributesList",
+					( 
+						select 
+							0 "TrialDetailsWithAttributes/TrialID",
+							tname "TrialDetailsWithAttributes/TrialName",
+							'...' "TrialDetailsWithAttributes/TrialDescription",
+							(
+									select
+											a.Nazwa "Name", 
+											'' "Value",
+											a.Typ_danych "Type",
+											ga.Nazwa "AttributeGroup",
+											'file' "Entity"
+										from Atrybut a 
+											inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+										where ga.Opisywana_encja = 'trial' and ga.Nazwa <> '_static'
+										FOR XML PATH('Attribute'), TYPE 
+							) "TrialDetailsWithAttributes/Attributes",
+							(	
+								select 
+									0 "@FileID", 
+									p.Name "@FileName", 
+									'' "@FileDescription", 
+									'' "@SubdirPath",
+									(
+										select
+											a.Nazwa "Name", 
+											'' "Value",
+											a.Typ_danych "Type",
+											ga.Nazwa "AttributeGroup",
+											'file' "Entity"
+										from Atrybut a 
+											inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+										where ga.Opisywana_encja = 'file' and ga.Nazwa <> '_static'
+										FOR XML PATH('Attribute'), TYPE 
+									) "Attributes"
+						from @files p where CHARINDEX (tname, Name ) > 0 
+						for XML PATH('FileDetailsWithAttributes'), TYPE
+					) as FileWithAttributesList
+				from @trialNames tc FOR XML PATH('TrialContent'), ELEMENTS, TYPE 
+				) "TrialContentList"
+				for XML Path('SessionContent'), TYPE, ELEMENTS),
+				(select err as Error from @errorList ErrorList FOR XML AUTO, TYPE, ELEMENTS ) 
+				for XML PATH('FileSetValidationResult'), ELEMENTS
+				
+go
+
+
+-- last rev. 2010-11-27
+create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
+as
+	set @result = 0;
+	declare @fileStoreList table(fname varchar(100), resid int, entity varchar(20) );
+	declare @sessionName varchar(30);
+	declare @sessionDate DateTime;
+	declare @trialNames table(tname varchar(30));
+	declare @trialName varchar(30);
+	
+	declare @sessionId int;
+	declare @trialId int;
+	declare @labId int;
+	declare @res int;
+	
+	declare @trialsToCreate int;
+	set @sessionId = 0;
+
+	 select top(1) @labId=IdLaboratorium from Laboratorium;
+	
+
+	-- Czy lista nie jest pusta?
+	if ( (select COUNT(*) from @files where CHARINDEX ('-T', Name ) > 0) = 0 )
+		begin
+			set @result = 1;
+			return;
+		end;
+
+	  -- Ustalam nazwe sesji
+	  select top 1 @sessionName = SUBSTRING (Name, 1, CHARINDEX ('-T', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
+	  if( ISDATE ( SUBSTRING(@sessionName,1,10))<>1)
+		begin
+			set @result = 1;
+			return;
+		end;
+	  set @sessionDate = CAST ( SUBSTRING(@sessionName,1,10) as DateTime);
+	  -- Czy nie ma plikow o niezgodnych nazwach?
+	  if exists( select * from @files where CHARINDEX (@sessionName , Name)=0 )
+		begin
+			set @result = 1;
+			return;
+		end;
+	  if exists( select * from Sesja where Nazwa = @sessionName )
+		begin
+			set @result = 1;
+			return;
+		end;
+	  -- Kompletuje liste triali
+	  insert @trialNames  select distinct SUBSTRING (Name, 1, CHARINDEX ('.', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
+	  if exists( select * from @trialNames tn where 
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
+		or
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+		)
+		begin
+			set @result = 1;
+			return;
+		end;
+	
+
+	
+	exec create_session  @user_login, 1, 'walk', @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
+	
+	if (@result<>0) 
+		begin
+			set @result = 1;
+			return;
+		end;
+	-- po przetestowaniu zamien wykomentowania gora-dol
+	-- set @sessionId = 1;
+									
+	insert @fileStoreList ( fname, entity, resid ) select Name, 'session', @sessionId from @files f where ( CHARINDEX ('-T', f.Name)=0 );
+	
+	select @trialsToCreate = COUNT(*) from @trialNames;
+	
+	while @trialsToCreate > 0
+		begin
+			select top(1) @trialName = tn.tname from @trialNames tn where not exists ( select * from @fileStoreList fsl where ( CHARINDEX(tn.tname,fsl.fname)>0  ));
+
+			
+			insert into Obserwacja ( IdSesja, Opis_obserwacji, Nazwa) values (@sessionId, '', @trialName ) set @trialId = SCOPE_IDENTITY();
+			-- po przetestowaniu zamien wykomentowania gora-dol
+			-- set @trialId = @trialsToCreate;
+            insert @fileStoreList ( fname, entity, resid ) select Name, 'trial', @trialId from @files f where ( CHARINDEX (@trialName, f.Name)>0 );
+			set @trialsToCreate = @trialsToCreate-1;						
+		end;
+
+	select * from @fileStoreList;
+
+				
+go
 
