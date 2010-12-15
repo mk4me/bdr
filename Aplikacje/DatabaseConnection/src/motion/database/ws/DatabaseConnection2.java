@@ -974,8 +974,8 @@ public class DatabaseConnection2 implements DatabaseProxy {
 				else
 					putFileIntoExistingFolder(path.getAbsolutePath(), destRemoteFolder, listener);			
 			
-				port.createSessionFromFiles( destRemoteFolder );
 			}
+			port.createSessionFromFiles( destRemoteFolder );
 		} 
 		catch (Exception e) 
 		{
