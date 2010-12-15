@@ -62,6 +62,7 @@ import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListAttributesDe
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListEnumValuesQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListLabSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
+import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListMotionKindsDefinedQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListPerformerSessionsWithAttributesXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSListPerformersWithAttributesXMLQueryExceptionFaultFaultMessage;
@@ -88,6 +89,7 @@ import motion.database.ws.basicQueriesServiceWCF.ListEnumValuesResponse.ListEnum
 import motion.database.ws.basicQueriesServiceWCF.ListGroupSessionsWithAttributesXMLResponse.ListGroupSessionsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabPerformersWithAttributesXMLResponse.ListLabPerformersWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListLabSessionsWithAttributesXMLResponse.ListLabSessionsWithAttributesXMLResult;
+import motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse.ListMeasurementConfMeasurementsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfigurationsWithAttributesXMLResponse.ListMeasurementConfigurationsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListMotionKindsDefinedResponse.ListMotionKindsDefinedResult;
 import motion.database.ws.basicQueriesServiceWCF.ListPerformerSessionsWithAttributesXMLResponse.ListPerformerSessionsWithAttributesXMLResult;
@@ -845,7 +847,33 @@ public class DatabaseConnection2 implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-	
+
+	@Override
+	public  DbElementsList<Measurement> listMeasurementConfMeasurementsWithAttributes(int measurementConfID) throws Exception
+	{
+		try{
+			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listMeasurementConfMeasurementsWithAttributes", this );
+		
+			ListMeasurementConfMeasurementsWithAttributesXMLResult result = port.listMeasurementConfMeasurementsWithAttributesXML(measurementConfID);
+			DbElementsList<Measurement> output = new DbElementsList<Measurement>();
+			
+			for ( MeasurementDetailsWithAttributes s : result.getMeasurementConfMeasurementWithAttributesList().getMeasurementDetailsWithAttributes() )
+				output.add( ConnectionTools2.transformMeasurementDetails(s) );
+				
+			ConnectionTools2.finalizeCall();
+			return output;
+		} 
+		catch (IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage e) 
+		{
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}
+		finally
+		{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
 
 ////////////////////////////////////////////////////////////////////////////
 //	MesurementsConfiguration

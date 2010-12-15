@@ -242,5 +242,8 @@ public interface DatabaseProxy {
 	void replaceFile(int resourceId, String localFilePath,
 			FileTransferListener listener) throws Exception;
 
+	DbElementsList<Measurement> listMeasurementConfMeasurementsWithAttributes(
+			int measurementConfID) throws Exception;
+
 
 }
