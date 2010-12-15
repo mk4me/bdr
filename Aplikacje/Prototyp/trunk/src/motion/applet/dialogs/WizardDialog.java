@@ -67,6 +67,7 @@ public class WizardDialog extends BasicDialog {
 		
 		int i = 0;
 		for (WizardPanel w : wizardPanels) {
+			w.setWizardDialog(this);
 			w.cardName = String.valueOf(i);
 			formPanel.add(w, w.cardName);
 			i++;

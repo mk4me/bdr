@@ -62,6 +62,8 @@ public class WizardSessionBrowserPanel extends WizardPanel {
 			
 			@Override
 			protected void done() {
+				wizardDialog.setVisible(false);
+				wizardDialog.dispose();
 			}
 		};
 		worker.execute();

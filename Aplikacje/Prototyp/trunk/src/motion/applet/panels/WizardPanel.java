@@ -4,7 +4,10 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+import motion.applet.dialogs.WizardDialog;
+
 public class WizardPanel extends JPanel {	//FIXME: change to abstract class
+	protected WizardDialog wizardDialog;
 	private String stepMessage;
 	protected String errorMessage;
 	public boolean enableCancel;
@@ -27,6 +30,10 @@ public class WizardPanel extends JPanel {	//FIXME: change to abstract class
 		this.setLayout(new GridBagLayout());
 		
 		this.createWizardContents();
+	}
+	
+	public void setWizardDialog(WizardDialog wizardDialog) {
+		this.wizardDialog = wizardDialog;
 	}
 	
 	protected void createWizardContents() {	//FIXME: change to abstract
