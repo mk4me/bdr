@@ -20,7 +20,7 @@ import motion.database.model.EntityKind;
 import motion.database.model.Trial;
 
 public class TrialMouseAdapter extends MouseAdapter {
-	private static String MENU_VIEW_MEASUREMENT_CONFIGURATIONS = "View measurement configurations";
+	private static String MENU_VIEW_MEASUREMENT = "View measurements";
 	private static String MENU_VIEW_FILES = "View files";
 	private static String MENU_UPLOAD = "Upload file";
 	private static String MENU_EDIT = "Edit";
@@ -38,14 +38,14 @@ public class TrialMouseAdapter extends MouseAdapter {
 		if (SwingUtilities.isRightMouseButton(e)) {
 			JPopupMenu popupMenu = new JPopupMenu();
 			
-			// View Trial measurement configurations context menu
-			JMenuItem viewMeasurementConfigurationsMenuItem = new JMenuItem(MENU_VIEW_MEASUREMENT_CONFIGURATIONS);
-			popupMenu.add(viewMeasurementConfigurationsMenuItem);
+			// View Trial measurement context menu
+			JMenuItem viewMeasurementsMenuItem = new JMenuItem(MENU_VIEW_MEASUREMENT);
+			popupMenu.add(viewMeasurementsMenuItem);
 			
-			viewMeasurementConfigurationsMenuItem.addActionListener(new ActionListener() {
+			viewMeasurementsMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					viewMeasurementConfigurations(recordId);
+					viewMeasurements(recordId);
 				}
 			});
 			
@@ -87,7 +87,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 			
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
-			viewMeasurementConfigurations(recordId);
+			viewMeasurements(recordId);
 		}
 	}
 	
@@ -96,8 +96,8 @@ public class TrialMouseAdapter extends MouseAdapter {
 		MotionApplet.setBrowsePanelVisible();
 	}
 	
-	private void viewMeasurementConfigurations(int recordId) {
-		rightPanel.showTable(EntityKind.measurement_conf, recordId);
+	private void viewMeasurements(int recordId) {
+		rightPanel.showTable(EntityKind.measurement, recordId);
 		MotionApplet.setBrowsePanelVisible();
 	}
 	

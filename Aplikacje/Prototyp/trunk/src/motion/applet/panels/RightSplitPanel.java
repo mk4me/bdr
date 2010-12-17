@@ -48,13 +48,15 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private BottomSplitPanel bottomPanel;
 	private Hashtable<EntityKind, Integer> tabNameHash = new Hashtable<EntityKind, Integer>();
 	
-	private static int TABLE_SIZE = 6;
+	private static int TABLE_SIZE = 7;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
 	private static int TABLE_TRIAL = 2;
-	private static int TABLE_FILE = 3;
-	private static int TABLE_SESSION_GROUP = 4;
-	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
+	private static int TABLE_MEASUREMENT = 3;
+	private static int TABLE_FILE = 4;
+	private static int TABLE_SESSION_GROUP = 5;
+	private static int TABLE_MEASUREMENT_CONFIGURATION = 6;
+	
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	private MotionApplet applet;
 	private JSplitPane splitPane;
@@ -78,6 +80,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_TRIAL] = new JTable();
 		tabbedPane.addTab(EntityKind.trial.getGUIName(), new JScrollPane(tables[TABLE_TRIAL]));
 		
+		tabNameHash.put(EntityKind.measurement, TABLE_MEASUREMENT);
+		tables[TABLE_MEASUREMENT] = new JTable();
+		tabbedPane.addTab(EntityKind.measurement.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT]));
+		
 		tabNameHash.put(EntityKind.file, TABLE_FILE);
 		tables[TABLE_FILE] = new JTable();
 		tabbedPane.addTab(EntityKind.file.getGUIName(), new JScrollPane(tables[TABLE_FILE]));
@@ -89,6 +95,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabNameHash.put(EntityKind.measurement_conf, TABLE_MEASUREMENT_CONFIGURATION);
 		tables[TABLE_MEASUREMENT_CONFIGURATION] = new JTable();
 		tabbedPane.addTab(EntityKind.measurement_conf.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT_CONFIGURATION]));
+		
 		
 		this.setLayout(new BorderLayout());
 		
@@ -265,8 +272,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	private void refreshMeasurementFileTable() {
-		TableModel tableModel = tables[TABLE_MEASUREMENT_CONFIGURATION].getModel();
+	public void refreshMeasurementTable() {
+		TableModel tableModel = tables[TABLE_MEASUREMENT].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
@@ -280,7 +287,8 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		refreshSessionGroupTable();
 		refreshTrialTable();
 		refreshFileTable();
-		refreshMeasurementFileTable();
+		refreshMeasurementConfigurationTable();
+		refreshMeasurementTable();
 		tabbedPane.setSelectedIndex(i);
 	}
 	
