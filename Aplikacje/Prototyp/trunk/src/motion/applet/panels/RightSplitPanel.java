@@ -404,7 +404,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	}
 	
 	public void showSessionWizard() {
-		WizardSessionDialog wizardSessionDialog = new WizardSessionDialog("Session wizard",
+		final WizardSessionDialog wizardSessionDialog = new WizardSessionDialog("Session wizard",
 				new ArrayList<WizardPanel>(Arrays.asList(
 						new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
 						new WizardSessionBrowserPanel("Press finish to upload session.", true, true, false, true)
@@ -416,6 +416,25 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		if (wizardSessionDialog.getResult() == WizardDialog.FINISH_PRESSED) {
 			showTable(EntityKind.session);
 			MotionApplet.setBrowsePanelVisible();
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws InterruptedException {
+					try {
+						Session session = (Session) WebServiceInstance.getDatabaseConnection().getById(wizardSessionDialog.sessionId, EntityKind.session);
+						showSessionDialog(session);
+					} catch (Exception e1) {
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						exceptionDialog.setVisible(true);
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void done() {
+				}
+			};
+			worker.execute();
 		}
 	}
 	

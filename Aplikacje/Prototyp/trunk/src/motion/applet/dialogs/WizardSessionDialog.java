@@ -12,6 +12,7 @@ import motion.applet.panels.WizardPanel;
 public class WizardSessionDialog extends WizardDialog {
 	public static JProgressBar progressBar;
 	private File[] files;
+	public int sessionId = -1;
 	
 	public WizardSessionDialog(String title, ArrayList<WizardPanel> wizardPanels) {
 		super(title, wizardPanels);

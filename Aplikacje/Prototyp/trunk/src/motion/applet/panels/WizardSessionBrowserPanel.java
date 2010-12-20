@@ -50,8 +50,7 @@ public class WizardSessionBrowserPanel extends WizardPanel {
 			@Override
 			protected Void doInBackground() throws InterruptedException {
 				try {
-					WebServiceInstance.getDatabaseConnection().uploadSessionFileSet(files, new UploadTransferListener());
-					
+					((WizardSessionDialog) wizardDialog).sessionId = WebServiceInstance.getDatabaseConnection().uploadSessionFileSet(files, new UploadTransferListener());
 				} catch (Exception e1) {
 					ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 					exceptionDialog.setVisible(true);
