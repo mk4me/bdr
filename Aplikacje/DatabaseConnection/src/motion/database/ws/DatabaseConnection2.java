@@ -982,7 +982,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public  void uploadSessionFileSet(File[] paths, FileTransferListener listener) throws Exception
+	public int uploadSessionFileSet(File[] paths, FileTransferListener listener) throws Exception
 	{
 		try {
 			IFileStoremanWS port = ConnectionTools2.getFileStoremanServicePort( "uploadSessionFileSet", this );
@@ -1003,7 +1003,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 					putFileIntoExistingFolder(path.getAbsolutePath(), destRemoteFolder, listener);			
 			
 			}
-			port.createSessionFromFiles( destRemoteFolder );
+			return port.createSessionFromFiles( destRemoteFolder );
 		} 
 		catch (Exception e) 
 		{

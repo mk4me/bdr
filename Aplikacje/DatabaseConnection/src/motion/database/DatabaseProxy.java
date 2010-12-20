@@ -236,7 +236,7 @@ public interface DatabaseProxy {
 
 	SessionValidationInfo validateSessionFileSet(File[] paths) throws Exception;
 
-	void uploadSessionFileSet(File[] paths, FileTransferListener listener)
+	int uploadSessionFileSet(File[] paths, FileTransferListener listener)
 			throws Exception;
 
 	void replaceFile(int resourceId, String localFilePath,
