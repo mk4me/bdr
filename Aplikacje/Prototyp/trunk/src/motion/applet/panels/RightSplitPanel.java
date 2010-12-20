@@ -123,9 +123,9 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		
 		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
-		//showTable(EntityKind.session);
 		showTable(EntityKind.sessionGroup);
 		showTable(EntityKind.performer);	// Performers not grouped by labs.
+		showTable(EntityKind.session);
 	}
 	
 	private void createSelectionAtMouse( JTable table, MouseEvent e ) {
