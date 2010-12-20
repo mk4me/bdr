@@ -569,7 +569,7 @@ public interface IBasicQueriesWS {
 
     /**
      * 
-     * @param trialID
+     * @param measurementConfID
      * @return
      *     returns motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse.ListMeasurementConfMeasurementsWithAttributesXMLResult
      * @throws IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage
@@ -579,8 +579,8 @@ public interface IBasicQueriesWS {
     @RequestWrapper(localName = "ListMeasurementConfMeasurementsWithAttributesXML", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXML")
     @ResponseWrapper(localName = "ListMeasurementConfMeasurementsWithAttributesXMLResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", className = "motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse")
     public motion.database.ws.basicQueriesServiceWCF.ListMeasurementConfMeasurementsWithAttributesXMLResponse.ListMeasurementConfMeasurementsWithAttributesXMLResult listMeasurementConfMeasurementsWithAttributesXML(
-        @WebParam(name = "trialID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
-        int trialID)
+        @WebParam(name = "measurementConfID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")
+        int measurementConfID)
         throws IBasicQueriesWSListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFaultFaultMessage
     ;
 

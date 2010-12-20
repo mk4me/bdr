@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}SessionDetailsWithAttributes"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}FileWithAttributesList" minOccurs="0"/>
- *         &lt;element name="TrialContentList">
+ *         &lt;element name="TrialContentList" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -65,7 +65,7 @@ public class SessionContent {
     protected SessionDetailsWithAttributes sessionDetailsWithAttributes;
     @XmlElement(name = "FileWithAttributesList")
     protected FileWithAttributesList fileWithAttributesList;
-    @XmlElement(name = "TrialContentList", required = true)
+    @XmlElement(name = "TrialContentList")
     protected SessionContent.TrialContentList trialContentList;
 
     /**

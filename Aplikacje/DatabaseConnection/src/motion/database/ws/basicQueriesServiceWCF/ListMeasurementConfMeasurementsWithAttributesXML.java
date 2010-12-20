@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="trialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="measurementConfID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,27 +28,27 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "trialID"
+    "measurementConfID"
 })
 @XmlRootElement(name = "ListMeasurementConfMeasurementsWithAttributesXML")
 public class ListMeasurementConfMeasurementsWithAttributesXML {
 
-    protected int trialID;
+    protected int measurementConfID;
 
     /**
-     * Gets the value of the trialID property.
+     * Gets the value of the measurementConfID property.
      * 
      */
-    public int getTrialID() {
-        return trialID;
+    public int getMeasurementConfID() {
+        return measurementConfID;
     }
 
     /**
-     * Sets the value of the trialID property.
+     * Sets the value of the measurementConfID property.
      * 
      */
-    public void setTrialID(int value) {
-        this.trialID = value;
+    public void setMeasurementConfID(int value) {
+        this.measurementConfID = value;
     }
 
 }

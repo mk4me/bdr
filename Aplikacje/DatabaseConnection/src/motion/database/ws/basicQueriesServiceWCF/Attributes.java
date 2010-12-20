@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="Value" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                 &lt;attribute name="Entity">
  *                   &lt;simpleType>
  *                     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -104,7 +104,7 @@ public class Attributes {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="Name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="Value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="Value" type="{http://www.w3.org/2001/XMLSchema}string" />
      *       &lt;attribute name="Entity">
      *         &lt;simpleType>
      *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -133,7 +133,7 @@ public class Attributes {
 
         @XmlAttribute(name = "Name", required = true)
         protected String name;
-        @XmlAttribute(name = "Value", required = true)
+        @XmlAttribute(name = "Value")
         protected String value;
         @XmlAttribute(name = "Entity")
         protected String entity;
