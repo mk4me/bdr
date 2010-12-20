@@ -30,6 +30,10 @@ public class WizardDialog extends BasicDialog {
 	private CardLayout cardLayout;
 	private JPanel formPanel;
 	
+	public static int CANCEL_PRESSED = 0;
+	public static int FINISH_PRESSED = 1;
+	private int result = CANCEL_PRESSED;
+	
 	public WizardDialog(String title, ArrayList<WizardPanel> wizardPanels) {
 		super(title, "");
 		this.wizardPanels = wizardPanels;
@@ -126,5 +130,16 @@ public class WizardDialog extends BasicDialog {
 		backButton.setEnabled(wizardPanel.enableBack);
 		nextButton.setEnabled(wizardPanel.enableNext);
 		finishButton.setEnabled(wizardPanel.enableFinish);
+	}
+	
+	// Button press result.
+	protected void setResult(int result) {
+		
+		this.result = result;
+	}
+	
+	public int getResult() {
+		
+		return this.result;
 	}
 }

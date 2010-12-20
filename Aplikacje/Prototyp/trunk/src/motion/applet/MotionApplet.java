@@ -288,15 +288,7 @@ public class MotionApplet extends JApplet {
 		newMenu.add(wizardItem);
 		wizardItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WizardSessionDialog wizardSessionDialog = new WizardSessionDialog("Session wizard",
-						new ArrayList<WizardPanel>(Arrays.asList(
-								new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
-								new WizardSessionBrowserPanel("Press finish to upload session.", true, true, false, true)
-								
-								)
-						)
-				);
-				wizardSessionDialog.setVisible(true);
+				rightPanel.showSessionWizard();
 			}
 		});
 	}

@@ -36,7 +36,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 		final File file = fileChooser.getSelectedFile();
 		if (file != null) {
 			files = file.listFiles();
-			System.out.println(file);
+			//System.out.println(file);
 			//SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				//@Override
 				//protected Void doInBackground() throws InterruptedException {
@@ -46,7 +46,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 								errorMessage = sessionValidationInfo.errors.toString();
 						} else if (sessionValidationInfo.session != null) {
 							session = sessionValidationInfo.session;
-							System.out.println(session.toStringAllAttributes());
+							//System.out.println(session.toStringAllAttributes());
 							
 							return true;
 						}

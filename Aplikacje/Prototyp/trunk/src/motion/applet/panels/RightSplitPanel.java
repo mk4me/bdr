@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import javax.swing.JButton;
@@ -27,6 +29,8 @@ import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
 import motion.applet.dialogs.UploadDialog;
+import motion.applet.dialogs.WizardDialog;
+import motion.applet.dialogs.WizardSessionDialog;
 import motion.applet.mouse.FileMouseAdapter;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionGroupMouseAdapter;
@@ -317,7 +321,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		if (performerFormDialog.getResult() == FormDialog.CREATE_PRESSED ||
 				performerFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_PERFORMER);
-			RightSplitPanel.this.refreshPerformerTable();
+			refreshPerformerTable();
 		}
 	}
 	
@@ -334,7 +338,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			showTable(EntityKind.session);	// Show newly created sessions by viewing all sessions.
 		} else if (sessionFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_SESSION);
-			RightSplitPanel.this.refreshSessionTable();
+			refreshSessionTable();
 		}
 	}
 
@@ -352,7 +356,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			showTable(EntityKind.file);	// Show newly created sessions by viewing all sessions.
 		} else if (fileFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_FILE);
-			RightSplitPanel.this.refreshFileTable();
+			refreshFileTable();
 		}
 	}
 
@@ -368,7 +372,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			showTable(EntityKind.trial, recordId);	// Show newly created trial for the session.
 		} else if (trialFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_TRIAL);
-			RightSplitPanel.this.refreshTrialTable();
+			refreshTrialTable();
 		}
 	}
 	
@@ -383,20 +387,36 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		if (measurementConfigurationDialog.getResult() == FormDialog.CREATE_PRESSED ||
 				measurementConfigurationDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT_CONFIGURATION);
-			RightSplitPanel.this.refreshMeasurementConfigurationTable();
+			refreshMeasurementConfigurationTable();
 		}
 	}
 	
 	public void showUploadDialog(EntityKind entityKind, int recordId) {
 		UploadDialog uploadDialog = new UploadDialog(entityKind, recordId);
 		uploadDialog.setVisible(true);
-		RightSplitPanel.this.refreshFileTable();
+		refreshFileTable();
 	}
 	
 	public void showUploadDialog(EntityKind entityKind) {
 		UploadDialog uploadDialog = new UploadDialog(entityKind);
 		uploadDialog.setVisible(true);
-		RightSplitPanel.this.refreshFileTable();
+		refreshFileTable();
+	}
+	
+	public void showSessionWizard() {
+		WizardSessionDialog wizardSessionDialog = new WizardSessionDialog("Session wizard",
+				new ArrayList<WizardPanel>(Arrays.asList(
+						new WizardSessionDirectoryPanel("Choose session directory to upload.", true, false, true, false),
+						new WizardSessionBrowserPanel("Press finish to upload session.", true, true, false, true)
+						
+						)
+				)
+		);
+		wizardSessionDialog.setVisible(true);
+		if (wizardSessionDialog.getResult() == WizardDialog.FINISH_PRESSED) {
+			showTable(EntityKind.session);
+			MotionApplet.setBrowsePanelVisible();
+		}
 	}
 	
 	private void clearSessionTable() {
