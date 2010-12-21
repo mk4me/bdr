@@ -1296,7 +1296,7 @@ as
 go
 
 
--- last rev. 2010-11-27
+-- last rev. 2010-12-21
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1358,7 +1358,7 @@ as
 
 	
 	exec create_session  @user_login, 1, 'walk', @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
-	
+	update Sesja set Publiczna = 1 where IdSesja = @sessionId;
 	if (@result<>0) 
 		begin
 			set @result = 1;
