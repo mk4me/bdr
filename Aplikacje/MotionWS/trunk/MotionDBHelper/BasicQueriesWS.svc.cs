@@ -460,6 +460,42 @@ namespace MotionDBWebServices
         }
 
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public XmlElement GetFileDataByIdXML(int id)
+        {
+            XmlDocument xd = new XmlDocument();
+            bool notFound = false;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_file_data_by_id_xml";
+                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                resId.Direction = ParameterDirection.Input;
+                resId.Value = id;
+                XmlReader dr = cmd.ExecuteXmlReader();
+
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                else notFound = true;
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            CloseConnection();
+            if (notFound)
+            {
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any file");
+                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetFileDataByIdXML")));
+            }
+            return xd.DocumentElement;
+        }
+
         // PERFORMER QUERIES
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListPerformersXML()  // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!

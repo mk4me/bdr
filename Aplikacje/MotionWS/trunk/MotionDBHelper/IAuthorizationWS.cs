@@ -40,5 +40,9 @@ namespace MotionDBWebServices
         [FaultContract(typeof(AuthorizationException))]
         XmlElement ListSessionPrivileges(int sessionID);
 
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        bool IfCanUpdate(int resourceID, string entity);
+
     }
 }

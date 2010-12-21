@@ -268,6 +268,45 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public bool IfCanUpdate(int resourceID, string entity)
+        {
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            int result = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "if_can_update";
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@res_id", SqlDbType.Int);
+                cmd.Parameters.Add("@entity", SqlDbType.VarChar, 20);
+                SqlParameter resultParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
+
+                cmd.Parameters["@user_login"].Value = userName;
+                cmd.Parameters["@res_id"].Value = resourceID;
+                cmd.Parameters["@entity"].Value = entity;
+
+                cmd.ExecuteNonQuery();
+                result = (int)resultParameter.Value;
+            }
+            catch (SqlException ex)
+            {
+                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("IfCanUpdate")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return result == 1;
+        }
+
     }
 }
 

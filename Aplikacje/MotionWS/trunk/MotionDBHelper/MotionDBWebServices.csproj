@@ -159,6 +159,8 @@
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\FileDetailsWithAttributesElement.xsd" />
+    <None Include="res\GetFileDataByIdXML.xsd" />
     <None Include="res\GetSessionContent.xsd" />
     <None Include="res\ListSessionContents.xsd" />
     <None Include="res\ListViewConfiguration.xsd" />

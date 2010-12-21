@@ -135,6 +135,21 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="IfCanUpdate">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="resourceID" type="xsd:int"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entity" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IfCanUpdateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="IfCanUpdateResult" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
@@ -241,6 +256,15 @@
 	<wsdl:message name="IAuthorizationWS_ListSessionPrivileges_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_IfCanUpdate_InputMessage">
+		<wsdl:part name="parameters" element="tns:IfCanUpdate"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_IfCanUpdate_OutputMessage">
+		<wsdl:part name="parameters" element="tns:IfCanUpdateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_IfCanUpdate_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
 	<wsdl:portType name="IAuthorizationWS">
 		<wsdl:operation name="CheckUserAccount">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccount" message="tns:IAuthorizationWS_CheckUserAccount_InputMessage"/>
@@ -276,6 +300,11 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivileges" message="tns:IAuthorizationWS_ListSessionPrivileges_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivilegesResponse" message="tns:IAuthorizationWS_ListSessionPrivileges_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListSessionPrivilegesAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListSessionPrivileges_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="IfCanUpdate">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdate" message="tns:IAuthorizationWS_IfCanUpdate_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdateResponse" message="tns:IAuthorizationWS_IfCanUpdate_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdateAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_IfCanUpdate_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicHttpBinding_IAuthorizationWS" type="tns:IAuthorizationWS">
@@ -365,10 +394,22 @@
 				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
+		<wsdl:operation name="IfCanUpdate">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdate" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="AuthorizationWS">
 		<wsdl:port name="BasicHttpBinding_IAuthorizationWS" binding="tns:BasicHttpBinding_IAuthorizationWS">
-			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/AuthorizationWS.svc"/>
+			<soap:address location="http://v21.pjwstk.edu.pl/Motion/AuthorizationWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
