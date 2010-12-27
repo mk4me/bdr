@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService}Attributes" minOccurs="0"/>
@@ -45,7 +45,7 @@ public class TrialDetailsWithAttributes {
     @XmlElement(name = "TrialID")
     protected int trialID;
     @XmlElement(name = "SessionID")
-    protected int sessionID;
+    protected Integer sessionID;
     @XmlElement(name = "TrialName", required = true)
     protected String trialName;
     @XmlElement(name = "TrialDescription", required = true)
@@ -72,16 +72,24 @@ public class TrialDetailsWithAttributes {
     /**
      * Gets the value of the sessionID property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getSessionID() {
+    public Integer getSessionID() {
         return sessionID;
     }
 
     /**
      * Sets the value of the sessionID property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setSessionID(int value) {
+    public void setSessionID(Integer value) {
         this.sessionID = value;
     }
 
