@@ -53,7 +53,7 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 					} catch (Exception e1) {
 						//ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 						//exceptionDialog.setVisible(true);
-						errorMessage = "Incorrect directory contents.";
+						errorMessage = "Unable to validate session.";
 					}
 					
 					//return null;
