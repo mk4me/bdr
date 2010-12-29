@@ -2,10 +2,10 @@ package motion.applet.panels;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.JFileChooser;
 
-import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.Session;
 import motion.database.model.SessionValidationInfo;
@@ -36,6 +36,25 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 		final File file = fileChooser.getSelectedFile();
 		if (file != null) {
 			files = file.listFiles();
+			int k = 0;
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					files[i] = null;
+				} else {
+					String fileString = files[i].toString();
+					int j = fileString.lastIndexOf(".");
+					String extension = fileString.substring(j+1, fileString.length());
+					if (!extension.equals("zip") && !extension.equals("c3d") &&
+							!extension.equals("avi") && !extension.equals("asf") && !extension.equals("amc")) {
+						files[i] = null;
+					} else {
+						k++;
+					}
+				}
+			}
+			
+			files = Arrays.copyOf(files, k);
+			
 			//System.out.println(file);
 			//SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				//@Override
