@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -31,6 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "measurementID",
+    "measurementConfID",
+    "trialID",
     "attributes"
 })
 @XmlRootElement(name = "MeasurementDetailsWithAttributes")
@@ -38,6 +42,10 @@ public class MeasurementDetailsWithAttributes {
 
     @XmlElement(name = "MeasurementID")
     protected int measurementID;
+    @XmlElement(name = "MeasurementConfID")
+    protected int measurementConfID;
+    @XmlElement(name = "TrialID")
+    protected int trialID;
     @XmlElement(name = "Attributes")
     protected Attributes attributes;
 
@@ -55,6 +63,38 @@ public class MeasurementDetailsWithAttributes {
      */
     public void setMeasurementID(int value) {
         this.measurementID = value;
+    }
+
+    /**
+     * Gets the value of the measurementConfID property.
+     * 
+     */
+    public int getMeasurementConfID() {
+        return measurementConfID;
+    }
+
+    /**
+     * Sets the value of the measurementConfID property.
+     * 
+     */
+    public void setMeasurementConfID(int value) {
+        this.measurementConfID = value;
+    }
+
+    /**
+     * Gets the value of the trialID property.
+     * 
+     */
+    public int getTrialID() {
+        return trialID;
+    }
+
+    /**
+     * Sets the value of the trialID property.
+     * 
+     */
+    public void setTrialID(int value) {
+        this.trialID = value;
     }
 
     /**

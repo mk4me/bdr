@@ -459,7 +459,10 @@ public class ConnectionTools2 {
 	public static Measurement transformMeasurementDetails(
 			MeasurementDetailsWithAttributes s) {
 		Measurement m = new Measurement();
+		m.put( MeasurementStaticAttributes.TrialID, s.getTrialID() );
 		m.put( MeasurementStaticAttributes.MeasurementID, s.getMeasurementID() );
+		m.put( MeasurementStaticAttributes.MeasurementConfID, s.getMeasurementConfID() );
+		
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), m );
 		return m;
 	}

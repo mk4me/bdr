@@ -61,11 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadAreaCleanupResponse }
+     * Create an instance of {@link AddAttributeEnumValue }
      * 
      */
-    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
-        return new DownloadAreaCleanupResponse();
+    public AddAttributeEnumValue createAddAttributeEnumValue() {
+        return new AddAttributeEnumValue();
     }
 
     /**
@@ -77,51 +77,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttributeGroup }
+     * Create an instance of {@link RemoveAttribute }
      * 
      */
-    public RemoveAttributeGroup createRemoveAttributeGroup() {
-        return new RemoveAttributeGroup();
-    }
-
-    /**
-     * Create an instance of {@link AddAttributeEnumValue }
-     * 
-     */
-    public AddAttributeEnumValue createAddAttributeEnumValue() {
-        return new AddAttributeEnumValue();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttributeResponse }
-     * 
-     */
-    public DefineAttributeResponse createDefineAttributeResponse() {
-        return new DefineAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link AddAttributeEnumValueResponse }
-     * 
-     */
-    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
-        return new AddAttributeEnumValueResponse();
-    }
-
-    /**
-     * Create an instance of {@link DefineAttribute }
-     * 
-     */
-    public DefineAttribute createDefineAttribute() {
-        return new DefineAttribute();
-    }
-
-    /**
-     * Create an instance of {@link RemoveAttributeResponse }
-     * 
-     */
-    public RemoveAttributeResponse createRemoveAttributeResponse() {
-        return new RemoveAttributeResponse();
+    public RemoveAttribute createRemoveAttribute() {
+        return new RemoveAttribute();
     }
 
     /**
@@ -133,6 +93,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DownloadAreaCleanupResponse }
+     * 
+     */
+    public DownloadAreaCleanupResponse createDownloadAreaCleanupResponse() {
+        return new DownloadAreaCleanupResponse();
+    }
+
+    /**
      * Create an instance of {@link RemoveAttributeGroupResponse }
      * 
      */
@@ -141,11 +109,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DefineAttriubeGroupResponse }
+     * Create an instance of {@link AddAttributeEnumValueResponse }
      * 
      */
-    public DefineAttriubeGroupResponse createDefineAttriubeGroupResponse() {
-        return new DefineAttriubeGroupResponse();
+    public AddAttributeEnumValueResponse createAddAttributeEnumValueResponse() {
+        return new AddAttributeEnumValueResponse();
     }
 
     /**
@@ -157,11 +125,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RemoveAttribute }
+     * Create an instance of {@link DefineAttribute }
      * 
      */
-    public RemoveAttribute createRemoveAttribute() {
-        return new RemoveAttribute();
+    public DefineAttribute createDefineAttribute() {
+        return new DefineAttribute();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeGroup }
+     * 
+     */
+    public RemoveAttributeGroup createRemoveAttributeGroup() {
+        return new RemoveAttributeGroup();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttriubeGroupResponse }
+     * 
+     */
+    public DefineAttriubeGroupResponse createDefineAttriubeGroupResponse() {
+        return new DefineAttriubeGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveAttributeResponse }
+     * 
+     */
+    public RemoveAttributeResponse createRemoveAttributeResponse() {
+        return new RemoveAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link DefineAttributeResponse }
+     * 
+     */
+    public DefineAttributeResponse createDefineAttributeResponse() {
+        return new DefineAttributeResponse();
     }
 
     /**

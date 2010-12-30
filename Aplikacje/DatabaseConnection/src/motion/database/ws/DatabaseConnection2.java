@@ -886,7 +886,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 
 	
 	@Override
-	public  DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes(int trialID) throws Exception
+	public  DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes() throws Exception
 	{
 		try{
 			IBasicQueriesWS port = ConnectionTools2.getBasicQueriesPort( "listMeasurementConfigurationsWithAttributes", this );

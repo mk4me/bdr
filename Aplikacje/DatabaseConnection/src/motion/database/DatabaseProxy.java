@@ -182,8 +182,7 @@ public interface DatabaseProxy {
 
 	public HashMap<String, EntityAttributeGroup> listGrouppedAttributesDefined(EntityKind kind) throws Exception;
 
-	DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes(
-			int trialID) throws Exception;
+	DbElementsList<MeasurementConfiguration> listMeasurementConfigurationsWithAttributes() throws Exception;
 
 	void uploadFile(int resourceId, EntityKind kind, String description,
 			String localFilePath, FileTransferListener listener)
