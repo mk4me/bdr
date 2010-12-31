@@ -32,7 +32,7 @@ import motion.applet.dialogs.UploadDialog;
 import motion.applet.dialogs.WizardDialog;
 import motion.applet.dialogs.WizardSessionDialog;
 import motion.applet.mouse.FileMouseAdapter;
-import motion.applet.mouse.MeasurementMouseAdapter;
+import motion.applet.mouse.MeasurementConfigurationMouseAdapter;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionGroupMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
@@ -118,9 +118,10 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_PERFORMER].addMouseListener(new PerformerMouseAdapter(this)); 
 		tables[TABLE_SESSION].addMouseListener(new SessionMouseAdapter(this));
 		tables[TABLE_TRIAL].addMouseListener(new TrialMouseAdapter(this));
-		tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
+		//tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
 		tables[TABLE_FILE].addMouseListener(new FileMouseAdapter(this));
 		tables[TABLE_SESSION_GROUP].addMouseListener(new SessionGroupMouseAdapter(this));
+		tables[TABLE_MEASUREMENT_CONFIGURATION].addMouseListener(new MeasurementConfigurationMouseAdapter(this));
 		
 		//tables[3].setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 		//FIXME: double refresh
