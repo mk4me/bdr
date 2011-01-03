@@ -48,7 +48,7 @@ public class MeasurementConfigurationMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewMeasurements(int recordId) {
-		rightPanel.showTable(EntityKind.measurement, recordId);
+		rightPanel.showTable(EntityKind.measurement, recordId, EntityKind.measurement_conf);
 		MotionApplet.setBrowsePanelVisible();
 	}
 }

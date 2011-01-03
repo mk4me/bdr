@@ -97,7 +97,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 	}
 	
 	private void viewMeasurements(int recordId) {
-		rightPanel.showTable(EntityKind.measurement, recordId);
+		rightPanel.showTable(EntityKind.measurement, recordId, EntityKind.trial);
 		MotionApplet.setBrowsePanelVisible();
 	}
 	
