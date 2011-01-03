@@ -61,75 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AlterSessionVisibility }
+     * Create an instance of {@link ListUsers }
      * 
      */
-    public AlterSessionVisibility createAlterSessionVisibility() {
-        return new AlterSessionVisibility();
-    }
-
-    /**
-     * Create an instance of {@link ListSessionPrivileges }
-     * 
-     */
-    public ListSessionPrivileges createListSessionPrivileges() {
-        return new ListSessionPrivileges();
-    }
-
-    /**
-     * Create an instance of {@link AlterSessionVisibilityResponse }
-     * 
-     */
-    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
-        return new AlterSessionVisibilityResponse();
-    }
-
-    /**
-     * Create an instance of {@link SessionPrivilegeList.SessionPrivilege }
-     * 
-     */
-    public SessionPrivilegeList.SessionPrivilege createSessionPrivilegeListSessionPrivilege() {
-        return new SessionPrivilegeList.SessionPrivilege();
-    }
-
-    /**
-     * Create an instance of {@link AuthorizationException }
-     * 
-     */
-    public AuthorizationException createAuthorizationException() {
-        return new AuthorizationException();
-    }
-
-    /**
-     * Create an instance of {@link ListUsersResponse.ListUsersResult }
-     * 
-     */
-    public ListUsersResponse.ListUsersResult createListUsersResponseListUsersResult() {
-        return new ListUsersResponse.ListUsersResult();
-    }
-
-    /**
-     * Create an instance of {@link ListUsersResponse }
-     * 
-     */
-    public ListUsersResponse createListUsersResponse() {
-        return new ListUsersResponse();
-    }
-
-    /**
-     * Create an instance of {@link CheckUserAccount }
-     * 
-     */
-    public CheckUserAccount createCheckUserAccount() {
-        return new CheckUserAccount();
-    }
-
-    /**
-     * Create an instance of {@link RemoveSessionPrivilegesResponse }
-     * 
-     */
-    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
-        return new RemoveSessionPrivilegesResponse();
+    public ListUsers createListUsers() {
+        return new ListUsers();
     }
 
     /**
@@ -141,11 +77,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IfCanUpdate }
+     * Create an instance of {@link CheckUserAccountResponse }
      * 
      */
-    public IfCanUpdate createIfCanUpdate() {
-        return new IfCanUpdate();
+    public CheckUserAccountResponse createCheckUserAccountResponse() {
+        return new CheckUserAccountResponse();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibilityResponse }
+     * 
+     */
+    public AlterSessionVisibilityResponse createAlterSessionVisibilityResponse() {
+        return new AlterSessionVisibilityResponse();
     }
 
     /**
@@ -157,35 +101,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CheckUserAccountResponse }
+     * Create an instance of {@link CheckUserAccount }
      * 
      */
-    public CheckUserAccountResponse createCheckUserAccountResponse() {
-        return new CheckUserAccountResponse();
+    public CheckUserAccount createCheckUserAccount() {
+        return new CheckUserAccount();
     }
 
     /**
-     * Create an instance of {@link RemoveSessionPrivileges }
+     * Create an instance of {@link ListUsersResponse }
      * 
      */
-    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
-        return new RemoveSessionPrivileges();
+    public ListUsersResponse createListUsersResponse() {
+        return new ListUsersResponse();
     }
 
     /**
-     * Create an instance of {@link UserList }
+     * Create an instance of {@link ListSessionPrivileges }
      * 
      */
-    public UserList createUserList() {
-        return new UserList();
+    public ListSessionPrivileges createListSessionPrivileges() {
+        return new ListSessionPrivileges();
     }
 
     /**
-     * Create an instance of {@link ListSessionPrivilegesResponse.ListSessionPrivilegesResult }
+     * Create an instance of {@link IfCanUpdate }
      * 
      */
-    public ListSessionPrivilegesResponse.ListSessionPrivilegesResult createListSessionPrivilegesResponseListSessionPrivilegesResult() {
-        return new ListSessionPrivilegesResponse.ListSessionPrivilegesResult();
+    public IfCanUpdate createIfCanUpdate() {
+        return new IfCanUpdate();
     }
 
     /**
@@ -197,27 +141,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SessionPrivilegeList }
+     * Create an instance of {@link UserList }
      * 
      */
-    public SessionPrivilegeList createSessionPrivilegeList() {
-        return new SessionPrivilegeList();
-    }
-
-    /**
-     * Create an instance of {@link IfCanUpdateResponse }
-     * 
-     */
-    public IfCanUpdateResponse createIfCanUpdateResponse() {
-        return new IfCanUpdateResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateUserAccountResponse }
-     * 
-     */
-    public CreateUserAccountResponse createCreateUserAccountResponse() {
-        return new CreateUserAccountResponse();
+    public UserList createUserList() {
+        return new UserList();
     }
 
     /**
@@ -229,11 +157,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListUsers }
+     * Create an instance of {@link AuthorizationException }
      * 
      */
-    public ListUsers createListUsers() {
-        return new ListUsers();
+    public AuthorizationException createAuthorizationException() {
+        return new AuthorizationException();
+    }
+
+    /**
+     * Create an instance of {@link ListSessionPrivilegesResponse.ListSessionPrivilegesResult }
+     * 
+     */
+    public ListSessionPrivilegesResponse.ListSessionPrivilegesResult createListSessionPrivilegesResponseListSessionPrivilegesResult() {
+        return new ListSessionPrivilegesResponse.ListSessionPrivilegesResult();
     }
 
     /**
@@ -242,6 +178,70 @@ public class ObjectFactory {
      */
     public UserList.UserDetails createUserListUserDetails() {
         return new UserList.UserDetails();
+    }
+
+    /**
+     * Create an instance of {@link SessionPrivilegeList.SessionPrivilege }
+     * 
+     */
+    public SessionPrivilegeList.SessionPrivilege createSessionPrivilegeListSessionPrivilege() {
+        return new SessionPrivilegeList.SessionPrivilege();
+    }
+
+    /**
+     * Create an instance of {@link AlterSessionVisibility }
+     * 
+     */
+    public AlterSessionVisibility createAlterSessionVisibility() {
+        return new AlterSessionVisibility();
+    }
+
+    /**
+     * Create an instance of {@link RemoveSessionPrivilegesResponse }
+     * 
+     */
+    public RemoveSessionPrivilegesResponse createRemoveSessionPrivilegesResponse() {
+        return new RemoveSessionPrivilegesResponse();
+    }
+
+    /**
+     * Create an instance of {@link IfCanUpdateResponse }
+     * 
+     */
+    public IfCanUpdateResponse createIfCanUpdateResponse() {
+        return new IfCanUpdateResponse();
+    }
+
+    /**
+     * Create an instance of {@link RemoveSessionPrivileges }
+     * 
+     */
+    public RemoveSessionPrivileges createRemoveSessionPrivileges() {
+        return new RemoveSessionPrivileges();
+    }
+
+    /**
+     * Create an instance of {@link ListUsersResponse.ListUsersResult }
+     * 
+     */
+    public ListUsersResponse.ListUsersResult createListUsersResponseListUsersResult() {
+        return new ListUsersResponse.ListUsersResult();
+    }
+
+    /**
+     * Create an instance of {@link SessionPrivilegeList }
+     * 
+     */
+    public SessionPrivilegeList createSessionPrivilegeList() {
+        return new SessionPrivilegeList();
+    }
+
+    /**
+     * Create an instance of {@link CreateUserAccountResponse }
+     * 
+     */
+    public CreateUserAccountResponse createCreateUserAccountResponse() {
+        return new CreateUserAccountResponse();
     }
 
     /**
