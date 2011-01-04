@@ -25,6 +25,7 @@ import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FileFormDialog;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.MeasurementConfigurationFormDialog;
+import motion.applet.dialogs.MeasurementFormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
@@ -33,6 +34,7 @@ import motion.applet.dialogs.WizardDialog;
 import motion.applet.dialogs.WizardSessionDialog;
 import motion.applet.mouse.FileMouseAdapter;
 import motion.applet.mouse.MeasurementConfigurationMouseAdapter;
+import motion.applet.mouse.MeasurementMouseAdapter;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionGroupMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
@@ -43,6 +45,7 @@ import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityKind;
+import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.Performer;
 import motion.database.model.Session;
@@ -118,7 +121,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_PERFORMER].addMouseListener(new PerformerMouseAdapter(this)); 
 		tables[TABLE_SESSION].addMouseListener(new SessionMouseAdapter(this));
 		tables[TABLE_TRIAL].addMouseListener(new TrialMouseAdapter(this));
-		//tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
+		tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
 		tables[TABLE_FILE].addMouseListener(new FileMouseAdapter(this));
 		tables[TABLE_SESSION_GROUP].addMouseListener(new SessionGroupMouseAdapter(this));
 		tables[TABLE_MEASUREMENT_CONFIGURATION].addMouseListener(new MeasurementConfigurationMouseAdapter(this));
@@ -390,6 +393,22 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 				measurementConfigurationDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT_CONFIGURATION);
 			refreshMeasurementConfigurationTable();
+		}
+	}
+	
+	public void showMeasurementDialog(int recordId, Measurement measurement) {
+		MeasurementFormDialog measurementFormDialog;
+		if (measurement == null) {
+			measurementFormDialog = new MeasurementFormDialog(MeasurementFormDialog.TITLE, MeasurementFormDialog.WELCOME_MESSAGE, recordId);
+		} else {
+			measurementFormDialog = new MeasurementFormDialog(recordId, measurement);
+		}
+		measurementFormDialog.setVisible(true);
+		if (measurementFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
+			showTable(EntityKind.measurement, recordId);	// Show newly created measurement for the trial.
+		} else if (measurementFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
+			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT);
+			refreshMeasurementTable();
 		}
 	}
 	

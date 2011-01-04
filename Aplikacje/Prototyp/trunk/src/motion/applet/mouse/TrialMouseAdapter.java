@@ -20,6 +20,7 @@ import motion.database.model.EntityKind;
 import motion.database.model.Trial;
 
 public class TrialMouseAdapter extends MouseAdapter {
+	private static String MENU_CREATE_MEASUREMENT = "Create new measurement";
 	private static String MENU_VIEW_MEASUREMENT = "View measurements";
 	private static String MENU_VIEW_FILES = "View files";
 	private static String MENU_UPLOAD = "Upload file";
@@ -37,6 +38,16 @@ public class TrialMouseAdapter extends MouseAdapter {
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {
 			JPopupMenu popupMenu = new JPopupMenu();
+			
+			JMenuItem createMeasurementMenuItem = new JMenuItem(MENU_CREATE_MEASUREMENT);
+			popupMenu.add(createMeasurementMenuItem);
+			
+			createMeasurementMenuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rightPanel.showMeasurementDialog(recordId, null);
+				}
+			});
 			
 			// View Trial measurement context menu
 			JMenuItem viewMeasurementsMenuItem = new JMenuItem(MENU_VIEW_MEASUREMENT);
