@@ -405,7 +405,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		}
 		measurementFormDialog.setVisible(true);
 		if (measurementFormDialog.getResult() == FormDialog.CREATE_PRESSED) {
-			showTable(EntityKind.measurement, recordId);	// Show newly created measurement for the trial.
+			showTable(EntityKind.measurement, recordId, EntityKind.trial);	// Show newly created measurement for the trial.
 		} else if (measurementFormDialog.getResult() == FormDialog.EDIT_PRESSED) {
 			tabbedPane.setSelectedIndex(TABLE_MEASUREMENT);
 			refreshMeasurementTable();

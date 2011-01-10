@@ -1,6 +1,7 @@
 package motion.applet.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,6 +34,7 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
+import motion.database.model.MeasurementStaticAttributes;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
@@ -192,6 +194,9 @@ public class FormDialog extends BasicDialog {
 			} else if (a.getType().equals(EntityAttribute.TYPE_DATE_TIME)) {
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
 				formFields.add(field);
+			} else if (a.getType().equals(EntityAttribute.TYPE_ID)) {
+				FormListField field = new FormListField(a, gridBagConstraints, formPanel);
+				formFields.add(field);
 			}
 		}
 	}
@@ -233,7 +238,7 @@ public class FormDialog extends BasicDialog {
 				return false;
 			}
 		} else if (f instanceof FormListField) {
-			attributeValue = ((FormListField) f).getData().toString();
+			attributeValue = ((FormListField) f).getData();
 		}
 		
 		if (attributeValue != null) {
@@ -283,7 +288,6 @@ public class FormDialog extends BasicDialog {
 		for (FormField f : formFields) {
 			if (f.attribute.name.equals(attribute)) {
 				setAttributeValue(f);
-				
 				return f.attribute.value;
 			}
 		}
@@ -639,7 +643,7 @@ public class FormDialog extends BasicDialog {
 	
 	private class FormListField extends FormField {
 		private JComboBox comboBox;
-		private String[] list;
+		private Object[] list;
 		//private boolean dataAsIndex = false;
 		
 		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {//, boolean dataAsIndex) {
@@ -649,10 +653,44 @@ public class FormDialog extends BasicDialog {
 			finishField();
 		}
 		
-		public String getData() {
+		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+			super(attribute, gridBagConstraints, formPanel);
+			this.list = new Object[0];
+			finishField();
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws InterruptedException {
+					try {
+						getComboBoxContents();
+					} catch (Exception e1) {
+						ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
+						exceptionDialog.setVisible(true);
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void done() {
+					for (int i = 0; i < list.length; i++) {
+						comboBox.addItem(list[i]);
+					}
+				}
+			};
+			worker.execute();
+			
+		}
+		
+		private void getComboBoxContents() throws Exception {
+			if (attribute.name.trim().equals(MeasurementStaticAttributes.MeasurementConfID.toString())) {	//FIXME: Remove space character after MeasurementConfID in attribute name
+				list = WebServiceInstance.getDatabaseConnection().listMeasurementConfigurationsWithAttributes().toArray(new Object[0]);
+			}
+		}
+		
+		public Object getData() {
 			//if (dataAsIndex == false) {
 				
-				return comboBox.getSelectedItem().toString();
+				return comboBox.getSelectedItem();
 			//} else {
 				
 				//return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
@@ -670,6 +708,8 @@ public class FormDialog extends BasicDialog {
 		
 		protected void finishField() {
 			comboBox = new JComboBox(list);
+			comboBox.setSize(new Dimension(200, comboBox.getPreferredSize().height));
+			comboBox.setPreferredSize(new Dimension(200, comboBox.getPreferredSize().height));
 			label.setLabelFor(comboBox);
 			formPanel.add(comboBox, gridBagConstraints);
 			

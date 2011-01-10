@@ -10,6 +10,7 @@ import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.Measurement;
+import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementStaticAttributes;
 
 public class MeasurementFormDialog extends FormDialog {
@@ -71,14 +72,15 @@ public class MeasurementFormDialog extends FormDialog {
 	
 	private ArrayList<String> getDeselectedAttributes() {
 		ArrayList<String> attributes = new ArrayList<String>();
-		attributes.add(MeasurementStaticAttributes.MeasurementID.toString());	// FIXME: is this needed?
+		attributes.add(MeasurementStaticAttributes.MeasurementID.toString());
+		attributes.add(MeasurementStaticAttributes.TrialID.toString());
 		
 		return attributes;
 	}
 	
 	private int getMeasurementConfigurationId() {
 		
-		return (Integer) getAttributeValue(EntityKind.measurement, MeasurementStaticAttributes.MeasurementConfID.toString());
+		return ((MeasurementConfiguration) getAttributeValue(EntityKind.measurement, MeasurementStaticAttributes.MeasurementConfID.toString()+ " ")).getId();	//FIXME: Remove space character after MeasurementConfID in attribute name
 	}
 	
 	protected boolean validateResult() {
