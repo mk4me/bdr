@@ -21,6 +21,7 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
+import motion.database.model.SessionPrivileges;
 import motion.database.model.SessionValidationInfo;
 import motion.database.model.Trial;
 import motion.database.model.User;
@@ -29,19 +30,72 @@ import motion.database.model.UserPrivileges;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate;
 
+/**
+ * This interface represents a Facade between clients and a motion server. 
+ * Different implementations may deliver different communication paths as well as 
+ * protocols and transmission interfaces. Intention of this interface is to hide all 
+ * these details from clients.
+ * 
+ * The only limitation a client has got here is authentication procedure. Due to current 
+ * server implementation a client must login to a Web Services server and to a FTPS server.
+ * In case of future changes the two methods: setWSCredentials and setFTPSCredentials should 
+ * be exchanged with a more generic design pattern with an authenticator object used.     
+ *
+ * The Facade interface is responsible for
+ * <ul>
+ * <li> executing operations on the server side (and receiving results) </li>
+ * <li> uploading files </li>
+ * <li> downloading files </li>
+ * </ul>
+ * In case of the remote operations execution all parameters and returned values are transformed
+ * from connection and server specific structures to native facade objects. This feature realizes
+ * total separation of the client and server and lets the clients to see data in pure object 
+ * oriented model. For example facade defines its own representation for Performer, Session, Trial, 
+ * etc. 
+ * 
+ * Files uploading and downloading may be additionally supported by observers in order to inform 
+ * a user about progress. 
+ * 
+ * Currently the facade defines operations for the following services on the server side:
+ *  <ul>
+ *   	<li> Administration </li>
+ *   	<li> Authorization </li>
+ *  	<li> Basic queries</li>
+ *      <li> Basic updates </li>
+ *  	<li> File upload/download </li>
+ *      <li> User personal space </li>
+ *  </ul>
+ *
+ */
 public interface DatabaseProxy {
 
+	/**
+	 * This method sets user authentication data when logging into Web Services server. 
+	 * 
+	 * @param userName
+	 * @param password
+	 * @param domainName
+	 */
 	public abstract void setWSCredentials(String userName, String password,
 			String domainName);
 
+	/**
+	 * This method sets user authentication data when logging into FTPS server.
+	 * 
+	 * @param address
+	 * @param userName
+	 * @param password
+	 */
 	public abstract void setFTPSCredentials(String address, String userName,
 			String password);
 
+	/**
+	 * This method should return an information about the server connection.
+	 * 
+	 * @return String describing the connection (user name and server used).
+	 */
 	public abstract String getConnectionInfo();
 	
-	
-	//public abstract boolean testConnection() throws Exception;
-
 	public void removeBasket(String basketName) throws Exception;
 
 	public void createBasket(String basketName) throws Exception;

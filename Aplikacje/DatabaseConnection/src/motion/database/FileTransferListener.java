@@ -3,22 +3,23 @@ package motion.database;
 public interface FileTransferListener {
 
 		/**
-		 * Ta metoda bêdzie wo³ana co X bajtów transferu. Przy downloadzie.
-		 * Aktualnie X wynosi 4096
+		 * This method will be called every X bytes of transfer during download. 
+		 * Initially X is set to 4096
 		 */
 		public void transferStep();
 		
 		/**
-		 * Ta metoda bêdzie wo³ana co getDesiredStepPercent()
+		 * This method will be called every getDesiredStepPercent()
 		 * 
-		 * @param percent aktualny stan uploadu w procentach
+		 * @param percent actual upload state in percents 
 		 */
 		public void transferStepPercent(int percent);
 		
 		/**
-		 * Ta metoda ustala co ile procent postêpu ma byæ wo³ana metoda transferStepPercent.
 		 * 
-		 * @return wartoœæ w procentach (np 5)
+		 * This method sets every how many percents of progress the method transferStepPercent must be called. 
+		 * 
+		 * @return a value in percents (for ex. 5)
 		 */
 		public int getDesiredStepPercent();
 }

@@ -5,9 +5,9 @@
 		Motion WSDL importer for all services.
 	</description>
 
-	<property name="wsimport_path" value="/usr/lib/jvm/java-6-sun-1.6.0.20/bin/" />
+	<property name="wsimport_path" value="/usr/lib/jvm/java-6-sun/bin/" />
 	<property name="server_address" value="http://dbpawell.pjwstk.edu.pl" />
-	<property name="server_address_b" value="http://83.230.112.43" />
+	<property name="server_address_b" value="http://v21.pjwstk.edu.pl" />
 	<property name="server_address_c" value="http://db-bdr.pjwstk.edu.pl" />
 
 	<macrodef name="run-wsimport">

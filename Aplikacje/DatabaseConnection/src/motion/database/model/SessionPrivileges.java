@@ -1,6 +1,6 @@
-package motion.database;
+package motion.database.model;
 
-import motion.database.model.UserPrivileges;
+import motion.database.DbElementsList;
 
 public class SessionPrivileges extends DbElementsList<UserPrivileges>
 {

@@ -61,6 +61,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CreateSessionResponse }
+     * 
+     */
+    public CreateSessionResponse createCreateSessionResponse() {
+        return new CreateSessionResponse();
+    }
+
+    /**
      * Create an instance of {@link SetTrialAttributeResponse }
      * 
      */
@@ -69,35 +77,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AddPerformerToMeasurement }
+     * Create an instance of {@link SetMeasurementAttribute }
      * 
      */
-    public AddPerformerToMeasurement createAddPerformerToMeasurement() {
-        return new AddPerformerToMeasurement();
+    public SetMeasurementAttribute createSetMeasurementAttribute() {
+        return new SetMeasurementAttribute();
     }
 
     /**
-     * Create an instance of {@link ClearAttributeValueResponse }
+     * Create an instance of {@link SetFileAttribute }
      * 
      */
-    public ClearAttributeValueResponse createClearAttributeValueResponse() {
-        return new ClearAttributeValueResponse();
+    public SetFileAttribute createSetFileAttribute() {
+        return new SetFileAttribute();
     }
 
     /**
-     * Create an instance of {@link SetFileAttributeResponse }
+     * Create an instance of {@link PerformerData }
      * 
      */
-    public SetFileAttributeResponse createSetFileAttributeResponse() {
-        return new SetFileAttributeResponse();
+    public PerformerData createPerformerData() {
+        return new PerformerData();
     }
 
     /**
-     * Create an instance of {@link CreateMeasurementConfigurationResponse }
+     * Create an instance of {@link AssignPerformerToSessionResponse }
      * 
      */
-    public CreateMeasurementConfigurationResponse createCreateMeasurementConfigurationResponse() {
-        return new CreateMeasurementConfigurationResponse();
+    public AssignPerformerToSessionResponse createAssignPerformerToSessionResponse() {
+        return new AssignPerformerToSessionResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetTrialAttribute }
+     * 
+     */
+    public SetTrialAttribute createSetTrialAttribute() {
+        return new SetTrialAttribute();
+    }
+
+    /**
+     * Create an instance of {@link UpdateException }
+     * 
+     */
+    public UpdateException createUpdateException() {
+        return new UpdateException();
     }
 
     /**
@@ -117,227 +141,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ClearAttributeValue }
-     * 
-     */
-    public ClearAttributeValue createClearAttributeValue() {
-        return new ClearAttributeValue();
-    }
-
-    /**
-     * Create an instance of {@link AssignPerformerToSession }
-     * 
-     */
-    public AssignPerformerToSession createAssignPerformerToSession() {
-        return new AssignPerformerToSession();
-    }
-
-    /**
-     * Create an instance of {@link SetFileTypedAttributeValue }
-     * 
-     */
-    public SetFileTypedAttributeValue createSetFileTypedAttributeValue() {
-        return new SetFileTypedAttributeValue();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerAttribute }
-     * 
-     */
-    public SetPerformerAttribute createSetPerformerAttribute() {
-        return new SetPerformerAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerConfAttributeResponse }
-     * 
-     */
-    public SetPerformerConfAttributeResponse createSetPerformerConfAttributeResponse() {
-        return new SetPerformerConfAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateSessionResponse }
-     * 
-     */
-    public CreateSessionResponse createCreateSessionResponse() {
-        return new CreateSessionResponse();
-    }
-
-    /**
-     * Create an instance of {@link AssignSessionToGroup }
-     * 
-     */
-    public AssignSessionToGroup createAssignSessionToGroup() {
-        return new AssignSessionToGroup();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerConfAttribute }
-     * 
-     */
-    public SetPerformerConfAttribute createSetPerformerConfAttribute() {
-        return new SetPerformerConfAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetFileAttribute }
-     * 
-     */
-    public SetFileAttribute createSetFileAttribute() {
-        return new SetFileAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetTrialAttribute }
-     * 
-     */
-    public SetTrialAttribute createSetTrialAttribute() {
-        return new SetTrialAttribute();
-    }
-
-    /**
-     * Create an instance of {@link SetMeasurementAttribute }
-     * 
-     */
-    public SetMeasurementAttribute createSetMeasurementAttribute() {
-        return new SetMeasurementAttribute();
-    }
-
-    /**
-     * Create an instance of {@link CreatePerformer }
-     * 
-     */
-    public CreatePerformer createCreatePerformer() {
-        return new CreatePerformer();
-    }
-
-    /**
-     * Create an instance of {@link CreateMeasurement }
-     * 
-     */
-    public CreateMeasurement createCreateMeasurement() {
-        return new CreateMeasurement();
-    }
-
-    /**
-     * Create an instance of {@link SetSessionAttributeResponse }
-     * 
-     */
-    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
-        return new SetSessionAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link AssignPerformerToSessionResponse }
-     * 
-     */
-    public AssignPerformerToSessionResponse createAssignPerformerToSessionResponse() {
-        return new AssignPerformerToSessionResponse();
-    }
-
-    /**
-     * Create an instance of {@link SetPerformerAttributeResponse }
-     * 
-     */
-    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
-        return new SetPerformerAttributeResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateMeasurementResponse }
-     * 
-     */
-    public CreateMeasurementResponse createCreateMeasurementResponse() {
-        return new CreateMeasurementResponse();
-    }
-
-    /**
-     * Create an instance of {@link AssignSessionToGroupResponse }
-     * 
-     */
-    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
-        return new AssignSessionToGroupResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateSession }
-     * 
-     */
-    public CreateSession createCreateSession() {
-        return new CreateSession();
-    }
-
-    /**
-     * Create an instance of {@link PerformerData }
-     * 
-     */
-    public PerformerData createPerformerData() {
-        return new PerformerData();
-    }
-
-    /**
-     * Create an instance of {@link CreateTrialResponse }
-     * 
-     */
-    public CreateTrialResponse createCreateTrialResponse() {
-        return new CreateTrialResponse();
-    }
-
-    /**
-     * Create an instance of {@link UpdateException }
-     * 
-     */
-    public UpdateException createUpdateException() {
-        return new UpdateException();
-    }
-
-    /**
-     * Create an instance of {@link SetMeasurementAttributeResponse }
-     * 
-     */
-    public SetMeasurementAttributeResponse createSetMeasurementAttributeResponse() {
-        return new SetMeasurementAttributeResponse();
-    }
-
-    /**
      * Create an instance of {@link AddPerformerToMeasurementResponse }
      * 
      */
     public AddPerformerToMeasurementResponse createAddPerformerToMeasurementResponse() {
         return new AddPerformerToMeasurementResponse();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfInt }
-     * 
-     */
-    public ArrayOfInt createArrayOfInt() {
-        return new ArrayOfInt();
-    }
-
-    /**
-     * Create an instance of {@link SetSessionAttribute }
-     * 
-     */
-    public SetSessionAttribute createSetSessionAttribute() {
-        return new SetSessionAttribute();
-    }
-
-    /**
-     * Create an instance of {@link CreateMeasurementConfiguration }
-     * 
-     */
-    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
-        return new CreateMeasurementConfiguration();
-    }
-
-    /**
-     * Create an instance of {@link CreateTrial }
-     * 
-     */
-    public CreateTrial createCreateTrial() {
-        return new CreateTrial();
     }
 
     /**
@@ -349,11 +157,203 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SetPerformerConfAttributeResponse }
+     * 
+     */
+    public SetPerformerConfAttributeResponse createSetPerformerConfAttributeResponse() {
+        return new SetPerformerConfAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link AssignPerformerToSession }
+     * 
+     */
+    public AssignPerformerToSession createAssignPerformerToSession() {
+        return new AssignPerformerToSession();
+    }
+
+    /**
+     * Create an instance of {@link CreateSession }
+     * 
+     */
+    public CreateSession createCreateSession() {
+        return new CreateSession();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValue }
+     * 
+     */
+    public ClearAttributeValue createClearAttributeValue() {
+        return new ClearAttributeValue();
+    }
+
+    /**
+     * Create an instance of {@link SetFileAttributeResponse }
+     * 
+     */
+    public SetFileAttributeResponse createSetFileAttributeResponse() {
+        return new SetFileAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetPerformerConfAttribute }
+     * 
+     */
+    public SetPerformerConfAttribute createSetPerformerConfAttribute() {
+        return new SetPerformerConfAttribute();
+    }
+
+    /**
+     * Create an instance of {@link SetFileTypedAttributeValue }
+     * 
+     */
+    public SetFileTypedAttributeValue createSetFileTypedAttributeValue() {
+        return new SetFileTypedAttributeValue();
+    }
+
+    /**
+     * Create an instance of {@link CreateMeasurementConfiguration }
+     * 
+     */
+    public CreateMeasurementConfiguration createCreateMeasurementConfiguration() {
+        return new CreateMeasurementConfiguration();
+    }
+
+    /**
+     * Create an instance of {@link AssignSessionToGroup }
+     * 
+     */
+    public AssignSessionToGroup createAssignSessionToGroup() {
+        return new AssignSessionToGroup();
+    }
+
+    /**
+     * Create an instance of {@link CreateMeasurement }
+     * 
+     */
+    public CreateMeasurement createCreateMeasurement() {
+        return new CreateMeasurement();
+    }
+
+    /**
+     * Create an instance of {@link AddPerformerToMeasurement }
+     * 
+     */
+    public AddPerformerToMeasurement createAddPerformerToMeasurement() {
+        return new AddPerformerToMeasurement();
+    }
+
+    /**
+     * Create an instance of {@link SetPerformerAttributeResponse }
+     * 
+     */
+    public SetPerformerAttributeResponse createSetPerformerAttributeResponse() {
+        return new SetPerformerAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetMeasurementAttributeResponse }
+     * 
+     */
+    public SetMeasurementAttributeResponse createSetMeasurementAttributeResponse() {
+        return new SetMeasurementAttributeResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateTrialResponse }
+     * 
+     */
+    public CreateTrialResponse createCreateTrialResponse() {
+        return new CreateTrialResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateTrial }
+     * 
+     */
+    public CreateTrial createCreateTrial() {
+        return new CreateTrial();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttribute }
+     * 
+     */
+    public SetSessionAttribute createSetSessionAttribute() {
+        return new SetSessionAttribute();
+    }
+
+    /**
+     * Create an instance of {@link CreateMeasurementConfigurationResponse }
+     * 
+     */
+    public CreateMeasurementConfigurationResponse createCreateMeasurementConfigurationResponse() {
+        return new CreateMeasurementConfigurationResponse();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfInt }
+     * 
+     */
+    public ArrayOfInt createArrayOfInt() {
+        return new ArrayOfInt();
+    }
+
+    /**
+     * Create an instance of {@link CreatePerformer }
+     * 
+     */
+    public CreatePerformer createCreatePerformer() {
+        return new CreatePerformer();
+    }
+
+    /**
+     * Create an instance of {@link AssignSessionToGroupResponse }
+     * 
+     */
+    public AssignSessionToGroupResponse createAssignSessionToGroupResponse() {
+        return new AssignSessionToGroupResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetSessionAttributeResponse }
+     * 
+     */
+    public SetSessionAttributeResponse createSetSessionAttributeResponse() {
+        return new SetSessionAttributeResponse();
+    }
+
+    /**
      * Create an instance of {@link SetMeasurementConfAttribute }
      * 
      */
     public SetMeasurementConfAttribute createSetMeasurementConfAttribute() {
         return new SetMeasurementConfAttribute();
+    }
+
+    /**
+     * Create an instance of {@link ClearAttributeValueResponse }
+     * 
+     */
+    public ClearAttributeValueResponse createClearAttributeValueResponse() {
+        return new ClearAttributeValueResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateMeasurementResponse }
+     * 
+     */
+    public CreateMeasurementResponse createCreateMeasurementResponse() {
+        return new CreateMeasurementResponse();
+    }
+
+    /**
+     * Create an instance of {@link SetPerformerAttribute }
+     * 
+     */
+    public SetPerformerAttribute createSetPerformerAttribute() {
+        return new SetPerformerAttribute();
     }
 
     /**

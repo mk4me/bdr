@@ -1,0 +1,31 @@
+<html>
+<body>
+This package contains data model classes. They reflect data structures on the server side.
+
+Objects which are instances of these classes are not synchronized automatically with the server
+as it is often done in other solutions. They are mostly return by facade query operations and are 
+designed to be consumed on the client side. In several cases they are used as facade operations 
+parameters.
+
+There are three types of classes:
+<ol>
+<li>Real entity classes - reflecting database tables. These are: <b>Performer, Session, Trial,
+Measurement, MeasurementConfiguration, PerformerConfiguration</b>. 
+The base class for all of them is <b>GenericDescription</b>. Also each of them is supported by 
+<b>*StaticAttributes</b> class which contains an enumeration of static attributes for the given entity.
+The *StaticAttributes classes are used for type checking purposes on the client side and are mostly 
+supporting programmers.  
+</li>
+<li>Virtual entity classes - not reflecting any particular database table but containing data 
+in such a way that they seem to be stored on the database side. They are also subclasses of 
+<b>GenericDescription</b> and are paired with <b>*StaticAttributes</b> information. In this way objects of these 
+classes may be used in exactly the same way as the real entity classes. This kind of uniform
+model and transparent integration simplifies the client code and make it more generic.
+These classes are: <b>DatabaseFile, GenericResult, SessionGroup, User, UserBasket, UserPrivileges</b></li>
+<li>Supporting classes - tools used to organize data on the client side. These classes are:
+<b>EntityAttribute, EntityAttributeGroup, Filter, GenericName, MotionKind, Predicate, PredicateComposition, 
+Privileges, SessionValidationInfo, SessionPrivileges, SimplePredicate.</b> Please, read detailed description for
+them in order to get information on their purposes.</li>
+</ol>   
+</body>
+</html>

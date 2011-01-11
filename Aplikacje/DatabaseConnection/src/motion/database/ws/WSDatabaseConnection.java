@@ -17,7 +17,6 @@ import motion.database.DatabaseConnection;
 import motion.database.DatabaseProxy;
 import motion.database.DbElementsList;
 import motion.database.FileTransferListener;
-import motion.database.SessionPrivileges;
 import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityAttribute;
@@ -32,6 +31,7 @@ import motion.database.model.Performer;
 import motion.database.model.PerformerConfiguration;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
+import motion.database.model.SessionPrivileges;
 import motion.database.model.SessionValidationInfo;
 import motion.database.model.Trial;
 import motion.database.model.User;
@@ -139,7 +139,7 @@ import com.zehon.exception.FileTransferException;
 import com.zehon.ftps.FTPs;
 
 
-public class DatabaseConnection2 implements DatabaseProxy {
+public class WSDatabaseConnection implements DatabaseProxy {
 
 	public static class Credentials {
 		public String userName;
@@ -226,7 +226,7 @@ public class DatabaseConnection2 implements DatabaseProxy {
 	}
 
 	
-	public DatabaseConnection2(Logger log)
+	public WSDatabaseConnection(Logger log)
 	{
 		this.log = log;
 		this.state = ConnectionState.UNINITIALIZED;

@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.XMLFormatter;
 
-import motion.database.ws.DatabaseConnection2;
+import motion.database.ws.WSDatabaseConnection;
 
 
 public class DatabaseConnection {
@@ -99,7 +99,7 @@ public class DatabaseConnection {
 	public static DatabaseProxy getInstanceWCF()
 	{
 		if (instance==null)
-			instance = new DatabaseConnection2(log);
+			instance = new WSDatabaseConnection(log);
 		return instance;
 	}
 	

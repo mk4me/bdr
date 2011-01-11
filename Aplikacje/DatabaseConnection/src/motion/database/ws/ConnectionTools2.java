@@ -6,7 +6,6 @@ import java.util.logging.Level;
 
 import motion.database.DatabaseConnection;
 import motion.database.DbElementsList;
-import motion.database.SessionPrivileges;
 import motion.database.TextMessageListener;
 import motion.database.model.DatabaseFile;
 import motion.database.model.DatabaseFileStaticAttributes;
@@ -22,6 +21,7 @@ import motion.database.model.PerformerConfiguration;
 import motion.database.model.PerformerConfigurationStaticAttributes;
 import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
+import motion.database.model.SessionPrivileges;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
@@ -31,7 +31,7 @@ import motion.database.model.UserBasketStaticAttributes;
 import motion.database.model.UserPrivileges;
 import motion.database.model.UserPrivilegesStaticAttributes;
 import motion.database.model.UserStaticAttributes;
-import motion.database.ws.DatabaseConnection2.ConnectionState;
+import motion.database.ws.WSDatabaseConnection.ConnectionState;
 import motion.database.ws.administrationWCF.AdministrationWS;
 import motion.database.ws.administrationWCF.IAdministrationWS;
 import motion.database.ws.authorizationWCF.AuthorizationWS;
@@ -107,14 +107,14 @@ public class ConnectionTools2 {
 			textMessageListener.setMessage(message);
 	}
 	
-	public static IBasicQueriesWS getBasicQueriesPort( String callerName, DatabaseConnection2 db ) throws Exception
+	public static IBasicQueriesWS getBasicQueriesPort( String callerName, WSDatabaseConnection db ) throws Exception
 	{
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		
@@ -126,14 +126,14 @@ public class ConnectionTools2 {
 		return port;
 	}
 
-	public static IFileStoremanWS getFileStoremanServicePort( String callerName, DatabaseConnection2 db ) throws Exception
+	public static IFileStoremanWS getFileStoremanServicePort( String callerName, WSDatabaseConnection db ) throws Exception
 	{
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		
@@ -146,14 +146,14 @@ public class ConnectionTools2 {
 	}
 
 
-	public static IBasicUpdatesWS getBasicUpdateServicePort(String callerName, DatabaseConnection2 db) throws Exception 
+	public static IBasicUpdatesWS getBasicUpdateServicePort(String callerName, WSDatabaseConnection db) throws Exception 
 	{
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		
@@ -165,14 +165,14 @@ public class ConnectionTools2 {
 		return port;
 	}
 
-	public static IAuthorizationWS getAuthorizationServicePort( String callerName, DatabaseConnection2 db ) throws Exception
+	public static IAuthorizationWS getAuthorizationServicePort( String callerName, WSDatabaseConnection db ) throws Exception
 	{
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		
@@ -185,14 +185,14 @@ public class ConnectionTools2 {
 	}
 
 	public static IAdministrationWS getAdministrationServicePort(String callerName,
-			DatabaseConnection2 db) throws Exception {
+			WSDatabaseConnection db) throws Exception {
 
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		
@@ -205,14 +205,14 @@ public class ConnectionTools2 {
 	}
 	
 	
-	public static IUserPersonalSpaceWS getUserPersonalSpaceServicePort( String callerName, DatabaseConnection2 db ) throws Exception
+	public static IUserPersonalSpaceWS getUserPersonalSpaceServicePort( String callerName, WSDatabaseConnection db ) throws Exception
 	{
 		if (db.state != ConnectionState.INITIALIZED)
 		{
 			db.log.severe("Trying to use WS without initialization! Called:" + callerName);
 			throw new Exception("Not Initialized. Cannot do: " + callerName );
 		}
-		db.log.entering( "DatabaseConnection2", callerName );
+		db.log.entering( "WSDatabaseConnection", callerName );
 		if (textMessageListener!=null)
 			textMessageListener.setMessage("Performing: " + callerName);
 		

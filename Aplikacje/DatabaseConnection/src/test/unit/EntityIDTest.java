@@ -22,7 +22,7 @@ import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.Session;
 import motion.database.model.SessionGroup;
 import motion.database.ws.ConnectionTools2;
-import motion.database.ws.DatabaseConnection2;
+import motion.database.ws.WSDatabaseConnection;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class EntityIDTest {
 	}
 	
 	
-	private DatabaseConnection2 database;
+	private WSDatabaseConnection database;
 	private Logger log; 
 	
 	
@@ -56,7 +56,7 @@ public class EntityIDTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		database = (DatabaseConnection2) DatabaseConnection.getInstanceWCF();
+		database = (WSDatabaseConnection) DatabaseConnection.getInstanceWCF();
 //		database.setWSCredentials("applet", "motion#motion2X", "pjwstk");
 //		database.setWSCredentials("bzdura", "bzdura", "pjwstk");
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
