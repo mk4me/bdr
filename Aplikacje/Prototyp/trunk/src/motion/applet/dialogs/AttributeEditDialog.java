@@ -49,7 +49,7 @@ import motion.database.model.Session;
 import motion.database.model.SessionStaticAttributes;
 import motion.database.model.Trial;
 import motion.database.model.TrialStaticAttributes;
-import motion.database.ws.DatabaseConnection2;
+import motion.database.ws.WSDatabaseConnection;
 
 public class AttributeEditDialog extends BasicDialog {
 
@@ -203,7 +203,7 @@ public class AttributeEditDialog extends BasicDialog {
 
 	public static void main(String [] args)
 	{
-		DatabaseConnection2 database = (DatabaseConnection2) DatabaseConnection.getInstanceWCF();
+		WSDatabaseConnection database = (WSDatabaseConnection) DatabaseConnection.getInstanceWCF();
 		database.setWSCredentials("applet_user", "aplet4Motion", "dbpawell");
 		database.setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 

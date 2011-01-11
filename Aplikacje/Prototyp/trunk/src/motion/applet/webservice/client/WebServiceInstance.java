@@ -8,8 +8,6 @@ public class WebServiceInstance {
 	
 	private WebServiceInstance() {
 		databaseConnection = DatabaseConnection.getInstanceWCF();
-//		databaseConnection.setWSCredentials("applet", "motion#motion2X", "pjwstk");
-//		databaseConnection.setFTPSCredentials("db-bdr.pjwstk.edu.pl", "testUser", "testUser");
 	}
 	
 	public static DatabaseProxy getDatabaseConnection() {
