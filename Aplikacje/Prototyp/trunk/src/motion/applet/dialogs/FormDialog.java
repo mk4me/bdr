@@ -644,12 +644,10 @@ public class FormDialog extends BasicDialog {
 	private class FormListField extends FormField {
 		private JComboBox comboBox;
 		private Object[] list;
-		//private boolean dataAsIndex = false;
 		
-		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {//, boolean dataAsIndex) {
+		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {
 			super(attribute, gridBagConstraints, formPanel);
 			this.list = list;
-			//this.dataAsIndex = dataAsIndex;
 			finishField();
 		}
 		
@@ -682,19 +680,14 @@ public class FormDialog extends BasicDialog {
 		}
 		
 		private void getComboBoxContents() throws Exception {
-			if (attribute.name.trim().equals(MeasurementStaticAttributes.MeasurementConfID.toString())) {	//FIXME: Remove space character after MeasurementConfID in attribute name
+			if (attribute.name.equals(MeasurementStaticAttributes.MeasurementConfID.toString())) {
 				list = WebServiceInstance.getDatabaseConnection().listMeasurementConfigurationsWithAttributes().toArray(new Object[0]);
 			}
 		}
 		
 		public Object getData() {
-			//if (dataAsIndex == false) {
-				
-				return comboBox.getSelectedItem();
-			//} else {
-				
-				//return "" + (comboBox.getSelectedIndex()+1);	// Database values start with 1.
-			//}
+			
+			return comboBox.getSelectedItem();
 		}
 		
 		public boolean isDataEmpty() {

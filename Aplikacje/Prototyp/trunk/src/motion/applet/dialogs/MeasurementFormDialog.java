@@ -80,7 +80,7 @@ public class MeasurementFormDialog extends FormDialog {
 	
 	private int getMeasurementConfigurationId() {
 		
-		return ((MeasurementConfiguration) getAttributeValue(EntityKind.measurement, MeasurementStaticAttributes.MeasurementConfID.toString()+ " ")).getId();	//FIXME: Remove space character after MeasurementConfID in attribute name
+		return ((MeasurementConfiguration) getAttributeValue(EntityKind.measurement, MeasurementStaticAttributes.MeasurementConfID.toString())).getId();
 	}
 	
 	protected boolean validateResult() {
