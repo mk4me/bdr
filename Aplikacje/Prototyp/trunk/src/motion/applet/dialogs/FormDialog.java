@@ -34,6 +34,7 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
+import motion.database.model.Measurement;
 import motion.database.model.MeasurementStaticAttributes;
 
 public class FormDialog extends BasicDialog {
@@ -644,6 +645,7 @@ public class FormDialog extends BasicDialog {
 	private class FormListField extends FormField {
 		private JComboBox comboBox;
 		private Object[] list;
+		private int id = -1;
 		
 		public FormListField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel, String[] list) {
 			super(attribute, gridBagConstraints, formPanel);
@@ -672,6 +674,9 @@ public class FormDialog extends BasicDialog {
 				protected void done() {
 					for (int i = 0; i < list.length; i++) {
 						comboBox.addItem(list[i]);
+						if (((GenericDescription<?>) list[i]).getId() == id) {
+							comboBox.setSelectedIndex(i);
+						}
 					}
 				}
 			};
@@ -715,7 +720,9 @@ public class FormDialog extends BasicDialog {
 		public void setData(Object value) {
 			try {
 				int i = Integer.parseInt(value.toString());
-				if (i > 0 && i <= comboBox.getItemCount()) {
+				if ((attribute.name.equals(MeasurementStaticAttributes.MeasurementConfID.toString()))) {
+					id = i;
+				} else if (i > 0 && i <= comboBox.getItemCount()) {
 					comboBox.setSelectedIndex(i-1);
 				}
 			} catch (NumberFormatException e) {
