@@ -66,6 +66,21 @@ import motion.database.ws.userPersonalSpaceWCF.UserPersonalSpace;
 import motion.database.ws.userPersonalSpaceWCF.Attributes.Attribute;
 import motion.database.ws.userPersonalSpaceWCF.BasketDefinitionList.BasketDefinition;
 
+
+/**
+ * This class is a tool for converting data coming from the server into a form acceptable
+ * by the client. 
+ * transform*(...) methods take a list of entity properties returned from WS and puts them
+ * into GenericDescription according to the list of static and generic attributes.
+ * After this process attributes in entities derived from GenericDescription are indistinguishable.
+ * They all look the same regardless to being static or generic. 
+ * 
+ * Another task of this class is to prepare WS specific connection. 
+ * 
+ * 
+ * @author kk
+ *
+ */
 public class ConnectionTools2 {
 
 	private static TextMessageListener textMessageListener;

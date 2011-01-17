@@ -5,6 +5,14 @@ import java.util.List;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+/**
+ * This class describes a single attribute in an entity. It may represent just an
+ * attribute or an attribute together with its value.
+ * 
+ * 
+ * @author kk
+ *
+ */
 public class EntityAttribute {
 	public static final String TYPE_ID = "ID";
 	public static final String TYPE_INT = "int";
@@ -25,16 +33,52 @@ public class EntityAttribute {
 	public static final String DB_TYPE_STRING = "string";
 	public static final String DB_TYPE_DATE = "DATE";
 			
+	/**
+	 * Attribute type
+	 */
 	public String type;
-	public String groupName;
-	public Object value;
-	public String name;
-	public String unit;
-	public List<String> enumValues;
-	public EntityKind kind;
-	public boolean isEnum;
 	
+	/** 
+	 * Attribute group name. It must be unique within an entity kind.
+	 */
+	public String groupName;
+	/**
+	 * Attribute value. May be null if this attribute was not returned as certain
+	 * entity attribute value. In most cases methods from EntityKind enumeration like
+	 * getAllAttributes() return this field null as in such cases it is not connected
+	 * to any particular entity but to an EntityKind as a whole. 
+	 */
+	public Object value;
+	/**
+	 * Attribute name. Must be unique within a group of attributes.
+	 */
+	public String name;
+	/**
+	 * Attribute value unit. This information is stored in database to inform
+	 * users about measures used in certain cases.
+	 */
+	public String unit;
+	/**
+	 * If an attribute is an enumeration then this field contains all enumeration values
+	 * as strings.
+	 */
+	public List<String> enumValues;
+	/**
+	 * This field keeps information on kind of entity this attribute is stored in.
+	 */
+	public EntityKind kind;
+	/**
+	 * This field informs if the attribute is an enumeration.
+	 */
+	public boolean isEnum;
+	/**
+	 * This field is true if the actual (the one who logged in) user set this attribute
+	 * to be visible in browser tables. Visibility may be changed for different attributes 
+	 * and users. Each user may select to observ only the set of attributes he or she is 
+	 * interested in. 
+	 */
 	public boolean isVisible;
+	
 	
 	public EntityAttribute(String attribute, String type, String unit, List<String> enumValues, String groupName) 
 	{

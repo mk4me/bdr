@@ -43,6 +43,58 @@ import motion.database.ws.userPersonalSpaceWCF.ListBasketPerformersWithAttribute
 import motion.database.ws.userPersonalSpaceWCF.ListBasketSessionsWithAttributesXMLResponse.ListBasketSessionsWithAttributesXMLResult;
 import motion.database.ws.userPersonalSpaceWCF.ListBasketTrialsWithAttributesXMLResponse.ListBasketTrialsWithAttributesXMLResult;
 
+/**
+ * This enumeration contains all the kinds of Entities which are used throughout the client together with
+ * their generic behavior. As it was explained in package description there are two types of Entities: 
+ * real entities and virtual entities. The behavior varies on this distinction. 
+ * 
+ * There are following generic operations which can be done on entities:
+ * 
+ *  <ul>
+ *      <li>setEntityAttribute</li>
+ *      <li>getByID</li>
+ *      <li>listBasketEntitiesWithAttributes</li>
+ *      <li>newEntity</li>
+ *      <li>storeFile</li>
+ *      <li>storeFiles</li>
+ *      <li>storeAttributeFile</li>
+ *      <li>listFiles</li>
+ *  </ul>
+ *  All of the above methods work on certain entity instance (as it is stored on a server) and need
+ *  certain entity ID and WS port reference. 
+
+ * There is also a number of methods dedicated for operations on entity attributes. Each 
+ * entity kind may define different set of static and generic attributes. For example one 
+ * may call EntityKind.session.getGenericAttributes() in order to get a list of currently defined 
+ * generic attributes for Session entity. This list is cached on client side at the 
+ * beginning of client application execution but may be refreshed by calling appropriate 
+ * refresh* method. 
+ * 
+ * Since in many places a client may need to update attribute list it may ask for
+ * copies of the attributes by calling get*Copies().
+ * 
+ * These are the methods working on attributes:
+ * <ul>
+ * <li>getAllAttributeCopies()</li>
+ * <li>getAllAttributeGroups()</li>
+ * <li>getEntityAttributeCopy(String)</li>
+ * <li>getGenericAttributeCopies()</li>
+ * <li>getGenericAttributes()</li>
+ * <li>getGroupedAttributeCopies()</li>
+ * <li>getGroupedAttributes()</li>
+ * <li>getDeselectedAttributeGroupCopies(ArrayList<String>)</li>
+ * <li>getSelectedAttributeCopies(ArrayList<String>)</li>
+ * <li>getStaticAttributeCopies()</li>
+ * <li>getStaticAttributes()</li>
+ * </ul>
+ * 
+ * According to the Motion Server Architecture Design generic attributes may be grouped. 
+ * Each group has to have a unique name for given entity kind. Static attributes are contained in a group
+ * named "_static". 
+ * 
+ * @author kk
+ *
+ */
 public enum EntityKind {
 
 	performer(PerformerStaticAttributes.class) {
