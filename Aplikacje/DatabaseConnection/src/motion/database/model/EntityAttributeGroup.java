@@ -2,6 +2,12 @@ package motion.database.model;
 
 import java.util.Vector;
 
+/**
+ * This class models group of attributes as they exist on the server. 
+ * A group may be defined for one entity kind. 
+ * A group may have also GUI visibility set for users (in the same way as generic attributes).
+ * 
+ */
 @SuppressWarnings("serial")
 public class EntityAttributeGroup extends Vector<EntityAttribute>{
 
@@ -31,6 +37,13 @@ public class EntityAttributeGroup extends Vector<EntityAttribute>{
 		return name;
 	}
 	
+	/**
+	 * This methods has linear complexity since group in an extension of a normal vector. In case of insufficient 
+	 * performance implementation of attribute group should be changed to use a hash table. 
+	 * 
+	 * @param name of an attribute to search for
+	 * @return attribute found or null
+	 */
 	public EntityAttribute findAttributeByName(String name)
 	{
 		for (EntityAttribute a : this)

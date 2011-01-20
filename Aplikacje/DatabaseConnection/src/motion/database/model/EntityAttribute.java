@@ -109,11 +109,21 @@ public class EntityAttribute {
 		this( name, EntityKind.valueOf( kind ), null, null, null );
 	}
 
+	/**
+	 * Standard toString method returns only name of this attribute. Do not modify this behavior since many
+	 * tables and other GUI components depend on it.
+	 * 
+	 */
 	public String toString()
 	{
 		return name;
 	}
 
+	/**
+	 * This method creates a string containing all content of this attribute.
+	 * 
+	 * @return
+	 */
 	public String toStringAllContent()
 	{
 		StringBuffer result = new StringBuffer();
@@ -123,6 +133,11 @@ public class EntityAttribute {
 		return result.toString();
 	}
 
+	/**
+	 * This method returs a string with enumeration information. All the possible enum values will be separated by commas.
+	 * 
+	 * @return
+	 */
 	private String getEnumInfo() {
 		StringBuffer result = new StringBuffer("enum[ ");
 		for(String v:enumValues)
@@ -133,22 +148,38 @@ public class EntityAttribute {
 	}
 
 
+	/**
+	 * Type getter.
+	 * 
+	 * @return
+	 */
 	public String getType() {
 		
 		return type;
 	}
 	
+	/**
+	 * Unit getter.
+	 * @return
+	 */
 	public String getUnit() {
 		
 		return unit;
 	}
 	
+	/**
+	 * Enum values getter.
+	 * 
+	 * @return
+	 */
 	public List<String> getEnumValues() {
 		
 		return enumValues;
 	}
 	
-	// Used by applet for filters.
+	/**
+	 * This method is used to get available operators for this attribute (upon its type). 
+	 */  
 	public String[] getOperators() {
 		if (type.equals(TYPE_ID) || type.equals(TYPE_INT) || type.equals(TYPE_NON_NEGATIVE_INTEGER) ||
 				type.equals(TYPE_DECIMAL) || type.equals(TYPE_NON_NEGATIVE_DECIMAL) ||
@@ -163,7 +194,11 @@ public class EntityAttribute {
 		}
 	}
 	
-	// Used by applet for table cell format.
+	/**
+	 * This method is used to get Java-capable type information for an attribute. 
+	 * 
+	 * @return Java Class describing the type.
+	 */
 	public Class<?> getAttributeClass() {
 		if (type == null) {
 			return Object.class;
@@ -184,6 +219,11 @@ public class EntityAttribute {
 		}
 	}
 	
+	/**
+	 * This method sets the attribute value parsing a string. It is done according to the attribute type.
+	 * 
+	 * @param newValue as String
+	 */
 	public void setValueFromString(Object newValue) {
 		
 		Class<?> attributeClass = getAttributeClass();
@@ -211,6 +251,10 @@ public class EntityAttribute {
 		}
 	}
 
+	/** 
+	 * This method empties the value of this attribute. Appropriate 'zero' value is
+	 * set according to attribute type. 
+	 */
 	public void emptyValue() {
 		Class<?> attributeClass = getAttributeClass();
 		
@@ -227,6 +271,12 @@ public class EntityAttribute {
 		}
 	}
 
+	/**
+	 * Returns name of type for given call parameter according to types defined for generic attributes.
+	 * 
+	 * @param arg
+	 * @return
+	 */
 	public static String getTypeName(Object arg) {
 		if (arg instanceof String) {
 			return DB_TYPE_STRING;
