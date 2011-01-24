@@ -3,14 +3,18 @@ package motion.applet.dialogs;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
 import motion.applet.webservice.client.WebServiceInstance;
+import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementConfigurationStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
 
 public class MeasurementConfigurationFormDialog extends FormDialog {
 	public static String TITLE = "New measurement configuration";
@@ -22,10 +26,16 @@ public class MeasurementConfigurationFormDialog extends FormDialog {
 	private static String MISSING_MEASUREMENT_CONFIGURATION_DESCRIPTION = "Missing measurement configuration description.";
 	private static String CREATING_MESSAGE = "Creating attribute new measurement configuration...";
 	
+	private List<String> measurementConfigurationKinds;
+	
 	public MeasurementConfigurationFormDialog(String title, String welcomeMessage) {
 		super(title, welcomeMessage);
 		
+		boolean measurementConfigurationKindsSet = false;
 		for (EntityAttributeGroup g : EntityKind.measurement_conf.getDeselectedAttributeGroupCopies(getDeselectedAttributes())) {
+			if (measurementConfigurationKindsSet == false) {
+				measurementConfigurationKindsSet = setMeasurementConfigurationKinds(g);
+			}
 			addFormFields(g, g.name);
 		}
 		
@@ -69,6 +79,34 @@ public class MeasurementConfigurationFormDialog extends FormDialog {
 		fillFormFields(measurementConfiguration);
 	}
 	
+	private boolean setMeasurementConfigurationKinds(EntityAttributeGroup group) {
+		for (EntityAttribute a : group) {
+			if (a.name.equals(MeasurementConfigurationStaticAttributes.MeasurementConfKind.toString())) {
+				a.enumValues = getMeasurementConfigurationKinds();
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private List<String> getMeasurementConfigurationKinds() {
+		if (measurementConfigurationKinds != null) {
+			
+			return measurementConfigurationKinds;
+		} else {
+			try {
+				measurementConfigurationKinds = new ArrayList<String>();
+				measurementConfigurationKinds = Arrays.asList(WebServiceInstance.getDatabaseConnection().listMeasurementConfKinds());
+			} catch (Exception e) {
+				
+			}
+			
+			return measurementConfigurationKinds;
+		}
+	}
+	
 	private ArrayList<String> getDeselectedAttributes() {
 		ArrayList<String> attributes = new ArrayList<String>();
 		attributes.add(MeasurementConfigurationStaticAttributes.MeasurementConfID.toString());
@@ -82,8 +120,12 @@ public class MeasurementConfigurationFormDialog extends FormDialog {
 	}
 	
 	private String getMeasurementConfigurationKind() {
-		
-		return (String) getAttributeValue(EntityKind.measurement_conf, MeasurementConfigurationStaticAttributes.MeasurementConfKind.toString());
+		Object value = getAttributeValue(EntityKind.measurement_conf, MeasurementConfigurationStaticAttributes.MeasurementConfKind.toString());
+		if (value != null) {
+			return value.toString();
+		} else {
+			return "";
+		}
 	}
 	
 	private String getMeasurementConfigurationDescription() {
