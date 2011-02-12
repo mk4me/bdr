@@ -46,6 +46,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
+        string GetShallowCopy();
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
         int CreateSessionFromFiles(string path);
 
         [OperationContract]

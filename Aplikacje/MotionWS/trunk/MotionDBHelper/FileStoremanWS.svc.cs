@@ -7,6 +7,7 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Xml;
 using System.Security.Permissions;
 
 namespace MotionDBWebServices
@@ -654,6 +655,16 @@ namespace MotionDBWebServices
 
             string fileLocation = "NOT_FOUND";
             path = path.Substring(0, path.LastIndexOf('/'));
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+            if ((fileID == 0) && path.Contains("dump"))
+            {
+                if (Directory.Exists(baseLocalFilePath + userName + @"\dump"))
+                    Directory.Delete(baseLocalFilePath + userName + @"\dump", true);
+                return;
+            }
+
             try
             {
                 OpenConnection();
@@ -688,6 +699,7 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
         }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public FileData RetrieveFile(int fileID)
         {
@@ -769,6 +781,63 @@ namespace MotionDBWebServices
             fData.FileLocation = relativePath+"/"+fileName;
             fData.SubdirPath = filePath;
             return fData;
+        }
+      
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public string GetShallowCopy()
+        {
+            string filePath = "";
+            string fileName = "shallowCopy.xml";
+            string fileLocation = "";
+
+
+            XmlDocument xd = new XmlDocument();
+            XmlElement xe = xd.CreateElement("ShallowCopy", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            filePath = userName+"/dump";
+
+            if (!Directory.Exists(baseLocalFilePath + filePath))
+                Directory.CreateDirectory(baseLocalFilePath + filePath);
+
+            fileLocation = filePath + "/" + fileName;
+            try
+                {
+                    OpenConnection();
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "get_shallow_copy";
+                    SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                    usernamePar.Direction = ParameterDirection.Input;
+                    usernamePar.Value = userName;
+                    XmlReader dr = cmd.ExecuteXmlReader();
+                    if (dr.Read())
+                    {
+                        xd.Load(dr);
+                    }
+                    dr.Close();
+ 
+                    while (xd.DocumentElement.HasChildNodes)
+                    {
+                        xe.AppendChild(xd.DocumentElement.ChildNodes[0]);
+                    }
+                    xd.RemoveChild(xd.DocumentElement);
+                    xd.AppendChild(xe);
+                    xd.Save(baseLocalFilePath + fileLocation);
+                    
+                }
+                catch (SqlException ex)
+                {
+                    FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                    throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetShallowCopy")));
+                }
+                finally
+                {
+                    CloseConnection();
+                }
+
+            return fileLocation;
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]

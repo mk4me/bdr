@@ -3,7 +3,7 @@
 	<wsp:Policy wsu:Id="BasicHttpBinding_IBasicQueriesWS_policy">
 		<wsp:ExactlyOne>
 			<wsp:All>
-				<http:NtlmAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http"/>
+				<http:NegotiateAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http"/>
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
@@ -1954,7 +1954,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

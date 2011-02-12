@@ -5,6 +5,8 @@
       <xsd:complexType>
         <xsd:sequence>
           <xsd:element name="MeasurementID" type="xsd:int" />
+          <xsd:element name="MeasurementConfID" type="xsd:int" />
+          <xsd:element name="TrialID" type="xsd:int" />
           <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
       </xsd:complexType>
