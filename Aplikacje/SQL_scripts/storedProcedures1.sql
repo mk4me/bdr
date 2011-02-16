@@ -551,12 +551,14 @@ as
 			for XML AUTO, ELEMENTS
 go
 
--- last rev: 20101013
+-- last rev: 20110112
 create procedure get_measurement_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
 				IdPomiar as MeasurementID,
+				IdKonfiguracja_pomiarowa as MeasurementConfID,
+				IdObserwacja as TrialID,
 				(select * from list_measurement_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 			from Pomiar MeasurementDetailsWithAttributes where IdPomiar=@res_id
 			for XML AUTO, ELEMENTS
@@ -955,7 +957,7 @@ where IdObserwacja = @trial_id
       for XML AUTO, root ('TrialMeasurementList')
 go
 
--- last rev: 20100102
+-- last rev: 20101220
 create procedure list_trial_measurements_attributes_xml(@user_login varchar(30), @trial_id int )
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -965,7 +967,7 @@ select
 	IdObserwacja TrialID,
 	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Pomiar MeasurementDetailsWithAttributes
-where IdPomiar = @trial_id
+where IdObserwacja = @trial_id
     for XML AUTO, ELEMENTS, root ('TrialMeasurementWithAttributesList')
 go
 
@@ -1716,7 +1718,7 @@ begin
 end;
 go
 
--- last rev: 2010-12-08
+-- last rev: 2010-12-29
 create procedure set_file_attribute (@file_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1742,9 +1744,9 @@ begin
 				end;	
 		if(@attr_name = 'FileName')
 			update Plik set Nazwa_pliku  = @attr_value where IdPlik = @file_id;
-		else if(@attr_name = 'Sciezka')
-			update Plik set Sciezka  =  @attr_value where IdPlik = @file_id;
 		else if(@attr_name = 'SubdirPath')
+			update Plik set Sciezka  =  @attr_value where IdPlik = @file_id;
+		else if(@attr_name = 'FileDescription')
 			update Plik set Opis_pliku  = @attr_value where IdPlik = @file_id;
 		set @result = 0;
 		return;
@@ -1803,7 +1805,7 @@ begin
 end;
 go
 
--- last rev: 2010-10-18
+-- last rev: 2011-01-25
 create procedure set_measurement_conf_attribute (@mc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1831,9 +1833,9 @@ begin
 		if(@attr_name = 'MeasurementConfName')
 			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
 		if(@attr_name = 'MeasurementConfKind')
-			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfDescription')
 			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
+		if(@attr_name = 'MeasurementConfDescription')
+			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
 		set @result = 0;
 		return;
 	end;
@@ -1905,7 +1907,7 @@ begin
 end;
 go	
 
--- last rev: 2010-10-18
+-- last rev: 2011-01-18
 create procedure set_measurement_attribute (@meas_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1919,27 +1921,33 @@ begin
 
 	*/
 
-	set @result = 6; -- result 6 = type casting error
-	/*
-	if(@attr_name = 'MeasurementConfName' or @attr_name = 'MeasurementConfKind' or @attr_name = 'MeasurementConfDescription')
+	set @result = 6; -- result 6 = type casting erroron
+
+	if(@attr_name = 'MeasurementConfId') 
 	begin
 		if(@update = 0)
 				begin
 					set @result = 5; -- result 5 = value exists while update has not been allowed
 					return;
 				end;	
-		if(@attr_name = 'MeasurementConfName')
-			update Konfiguracja_pomiarowa set Nazwa  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfKind')
-			update Konfiguracja_pomiarowa set Opis  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		if(@attr_name = 'MeasurementConfDescription')
-			update Konfiguracja_pomiarowa set Rodzaj  = @attr_value where IdKonfiguracja_pomiarowa = @mc_id;
-		set @result = 0;
-		return;
+		if(@attr_name = 'MeasurementConfId')
+			begin
+				set @integer_value = cast ( @attr_value as numeric(10,2) );
+				if(exists(select * from Konfiguracja_pomiarowa where IdKonfiguracja_pomiarowa = @integer_value))
+					begin
+						update Pomiar set IdKonfiguracja_pomiarowa  = @integer_value where IdPomiar = @meas_id;	
+						set @result = 0;
+					end;
+				else
+					begin
+						set @result = 7; -- result 7 = illegal ID value
+					end;
+				return;
+			end;
 	end;
-	*/
+
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement_conf';
+		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement';
 	if @@rowcount = 0 
 	begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
@@ -2004,7 +2012,6 @@ begin
 		end;
 end;
 go
-
 
 
 
