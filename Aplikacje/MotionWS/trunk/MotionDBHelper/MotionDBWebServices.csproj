@@ -169,6 +169,7 @@
     <None Include="res\ListMeasurementConfSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
     <None Include="res\ListSessionPerformerConfsWithAttributesXML.xsd" />
+    <None Include="res\Metadata.xsd" />
     <None Include="res\PerformerConfDetailsWithAttributesElement.xsd" />
     <None Include="res\GetPerformerConfigurationByIdXML.xsd" />
     <None Include="res\ListSessionPerformersWithAttributesXML.xsd" />
@@ -196,6 +197,7 @@
     <None Include="res\SessionContentElement.xsd" />
     <None Include="res\SessionDetailsWithAttributesElement.xsd" />
     <None Include="res\SessionGroupDefinitionElement.xsd" />
+    <None Include="res\ShallowCopy.xsd" />
     <None Include="res\UserPersonalSpaceWSStandalone.wsdl" />
     <None Include="res\UserPersonalSpaceWS.wsdl" />
     <None Include="res\ListBasketSegmentsWithAttributesXML.xsd" />

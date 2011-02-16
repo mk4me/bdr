@@ -50,6 +50,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
+        string GetMetadata();
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
         int CreateSessionFromFiles(string path);
 
         [OperationContract]

@@ -114,7 +114,7 @@
 	</wsdl:binding>
 	<wsdl:service name="SampleOpsWS">
 		<wsdl:port name="BasicHttpBinding_ISampleOpsWS" binding="tns:BasicHttpBinding_ISampleOpsWS">
-			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/SampleOpsWS.svc"/>
+			<soap:address location="http://v21.pjwstk.edu.pl/Motion/SampleOpsWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
