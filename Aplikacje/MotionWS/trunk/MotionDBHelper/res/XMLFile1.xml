@@ -1,0 +1,1516 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test>
+  <xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"
+              xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="AttributeGroupDefinitionList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="AttributeGroupDefinition" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="AttributeGroupName" type="xsd:string"/>
+                <xsd:element name="DescribedEntity" type="xsd:string"/>
+                <xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionGroupDefinition">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="SessionGroupID" type="xsd:int"/>
+          <xsd:element name="SessionGroupName" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionGroupDefinitionList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MotionKindDefinitionList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="MotionKindID" type="xsd:int"/>
+                <xsd:element name="MotionKindName" type="xsd:string"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="EnumValueList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="EnumValue" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionContent">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionDetailsWithAttributes"/>
+          <xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="TrialContentList" minOccurs="0" maxOccurs="1">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="TrialContent" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element ref="tns:TrialDetailsWithAttributes"/>
+                      <xsd:element ref="tns:FileWithAttributesList" minOccurs="0" maxOccurs="1"/>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionContentList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionContent" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="currentPage" type="xsd:short" use="optional"/>
+        <xsd:attribute name="pages" type="xsd:short" use="optional"/>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="FileSetValidationResult">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionContent"/>
+          <xsd:element name="ErrorList" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Error" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Attributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:attribute name="Name" type="xsd:string" use="required"/>
+              <xsd:attribute name="Value" type="xsd:string" use="optional"/>
+              <xsd:attribute name="Entity" use="optional">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="performer"/>
+                    <xsd:enumeration value="session"/>
+                    <xsd:enumeration value="trial"/>
+                    <xsd:enumeration value="performer_conf"/>
+                    <xsd:enumeration value="measurement_conf"/>
+                    <xsd:enumeration value="measurement"/>
+                    <xsd:enumeration value="file"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:attribute>
+              <xsd:attribute name="AttributeGroup" type="xsd:string" use="required"/>
+              <xsd:attribute name="Type" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GenericQueryResult">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="GenericResultRow" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="PerformerID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="FirstName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="LastName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="UserID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="MotionKind" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="SessionDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="SessionName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="Tags" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="SessionDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="TrialName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="MeasurementConfName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="MeasurementConfDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GenericUniformAttributesQueryResult">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="PerformerID" type="xsd:int"/>
+          <xsd:element name="FirstName" type="xsd:string"/>
+          <xsd:element name="LastName" type="xsd:string"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="SessionID" type="xsd:int"/>
+          <xsd:element name="UserID" type="xsd:int"/>
+          <xsd:element name="LabID" type="xsd:int"/>
+          <xsd:element name="MotionKind" type="xsd:string"/>
+          <xsd:element name="SessionDate" type="xsd:dateTime"/>
+          <xsd:element name="SessionName" type="xsd:string"/>
+          <xsd:element name="Tags" type="xsd:string"/>
+          <xsd:element name="SessionDescription" type="xsd:string"/>
+          <xsd:element name="SessionLabel" type="xsd:string"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="TrialDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="TrialID" type="xsd:int"/>
+          <xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="TrialName" type="xsd:string"/>
+          <xsd:element name="TrialDescription" type="xsd:string"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+          <!-- <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" /> -->
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="MeasurementID" type="xsd:int"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementConfDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="MeasurementConfID" type="xsd:int"/>
+          <xsd:element name="MeasurementConfName" type="xsd:string"/>
+          <xsd:element name="MeasurementConfKind" type="xsd:string"/>
+          <xsd:element name="MeasurementConfDescription" type="xsd:string"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerConfDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="PerformerConfID" type="xsd:int"/>
+          <xsd:element name="SessionID" type="xsd:int"/>
+          <xsd:element name="PerformerID" type="xsd:int"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="FileDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="FileID" type="xsd:int"/>
+          <xsd:element name="FileName" type="xsd:string"/>
+          <xsd:element name="FileDescription" type="xsd:string"/>
+          <xsd:element name="SubdirPath" type="xsd:string"/>
+          <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:attribute name="PerformerID" type="xsd:int"/>
+              <xsd:attribute name="FirstName" type="xsd:string"/>
+              <xsd:attribute name="LastName" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionPerformerWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="LabPerformerWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementPerformerWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerSessionList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="SessionDetails" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:attribute name="SessionID" type="xsd:int"/>
+              <xsd:attribute name="UserID" type="xsd:int"/>
+              <xsd:attribute name="LabID" type="xsd:int"/>
+              <xsd:attribute name="MotionKind" type="xsd:string"/>
+              <xsd:attribute name="SessionDate" type="xsd:dateTime"/>
+              <xsd:attribute name="SessionName" type="xsd:string"/>
+              <xsd:attribute name="Tags" type="xsd:string"/>
+              <xsd:attribute name="SessionDescription" type="xsd:string"/>
+              <xsd:attribute name="SessionLabel" type="xsd:string" use="optional"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GroupSessionWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PerformerSessionWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="LabSessionWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementConfSessionWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionSessionGroupList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionTrialList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="TrialDetails" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:attribute name="TrialID" type="xsd:int"/>
+              <xsd:attribute name="SessionID" type="xsd:int"/>
+              <xsd:attribute name="TrialName" type="xsd:string"/>
+              <xsd:attribute name="TrialDescription" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionTrialWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SessionPerformerConfWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:PerformerConfDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="TrialMeasurementWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:MeasurementDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementConfMeasurementWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:MeasurementDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="MeasurementConfWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element ref="tns:MeasurementConfDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="FileList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="FileDetails" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:attribute name="FileID" type="xsd:int"/>
+              <xsd:attribute name="FileName" type="xsd:string"/>
+              <xsd:attribute name="FileDescription" type="xsd:string"/>
+              <xsd:attribute name="SubdirPath" type="xsd:string" use="optional"/>
+              <xsd:attribute name="AttributeName" type="xsd:string" use="optional"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="FileWithAttributesList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="FileID" type="xsd:int"/>
+              <xsd:attribute name="FileName" type="xsd:string"/>
+              <xsd:attribute name="FileDescription" type="xsd:string"/>
+              <xsd:attribute name="SubdirPath" type="xsd:string" use="optional"/>
+              <xsd:attribute name="AttributeName" type="xsd:string" use="optional"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="AttributeDefinitionList">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="AttributeName" type="xsd:string"/>
+                <xsd:element name="AttributeType" type="xsd:string"/>
+                <xsd:element name="AttributeEnum" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="AttributeGroupName" type="xsd:string"/>
+                <xsd:element name="Unit" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="EnumValues" minOccurs="0" maxOccurs="1">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="Value" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListAttributeGroupsDefined">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListAttributeGroupsDefinedResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:AttributeGroupDefinitionList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="QueryException">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+        <xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
+    <xsd:element name="ListSessionGroupsDefined">
+      <xsd:complexType/>
+    </xsd:element>
+    <xsd:element name="ListSessionGroupsDefinedResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionGroupDefinitionList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMotionKindsDefined">
+      <xsd:complexType/>
+    </xsd:element>
+    <xsd:element name="ListMotionKindsDefinedResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MotionKindDefinitionList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListEnumValues">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListEnumValuesResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:EnumValueList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionContents">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="pageSize" type="xsd:int"/>
+          <xsd:element minOccurs="1" maxOccurs="1" name="pageNo" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionContentsResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionContentsResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionContentList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionContent">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionContentResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetSessionContentResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionContent"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ValidateSessionFileSet">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="fileNames" type="tns:ArrayOfFileNameEntry"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="ArrayOfFileNameEntry">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="FileNameEntry" type="tns:FileNameEntry"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="FileNameEntry">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="1" name="Name" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="ValidateSessionFileSetResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ValidateSessionFileSetResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileSetValidationResult"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GenericQueryXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="ArrayOfFilterPredicate">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="FilterPredicate" type="tns:FilterPredicate"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="FilterPredicate">
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="PredicateID" type="xsd:int"/>
+        <xsd:element minOccurs="1" maxOccurs="1" name="ParentPredicate" type="xsd:int"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="ContextEntity" type="xsd:string"/>
+        <xsd:element minOccurs="1" maxOccurs="1" name="PreviousPredicate" type="xsd:int"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="NextOperator" type="xsd:string"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="FeatureName" type="xsd:string"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="Operator" type="xsd:string"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="Value" type="xsd:string"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="AggregateFunction" type="xsd:string"/>
+        <xsd:element minOccurs="0" maxOccurs="1" name="AggregateEntity" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ArrayOfString">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="GenericQueryXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GenericQueryXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:GenericQueryResult"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GenericQueryUniformXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GenericQueryUniformXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GenericQueryUniformXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:GenericUniformAttributesQueryResult"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetPerformerByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetPerformerByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetPerformerByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetSessionByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionLabel">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetSessionLabelResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetSessionLabelResult" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetTrialByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetTrialByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetTrialByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:TrialDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetMeasurementByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetMeasurementByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetMeasurementByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetMeasurementConfigurationByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetMeasurementConfigurationByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetMeasurementConfigurationByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementConfDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetPerformerConfigurationByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetPerformerConfigurationByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetPerformerConfigurationByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerConfDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetFileDataByIdXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="GetFileDataByIdXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="GetFileDataByIdXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileDetailsWithAttributes"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformersXML">
+      <xsd:complexType/>
+    </xsd:element>
+    <xsd:element name="ListPerformersXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListPerformersXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformersWithAttributesXML">
+      <xsd:complexType/>
+    </xsd:element>
+    <xsd:element name="ListPerformersWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListPerformersWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionPerformersWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionPerformersWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionPerformersWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionPerformerWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListLabPerformersWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="labID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListLabPerformersWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListLabPerformersWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:LabPerformerWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementPerformersWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="measurementID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementPerformersWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementPerformersWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementPerformerWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformerSessionsXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="performerID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformerSessionsXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerSessionList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListGroupSessionsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionGroupID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListGroupSessionsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListGroupSessionsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:GroupSessionWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformerSessionsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="performerID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListPerformerSessionsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:PerformerSessionWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListLabSessionsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="labID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListLabSessionsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListLabSessionsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:LabSessionWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfSessionsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="measurementConfID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfSessionsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementConfSessionsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementConfSessionWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionSessionGroups">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionSessionGroupsResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionSessionGroupsResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionSessionGroupList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionTrialsXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionTrialsXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionTrialsXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionTrialList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionTrialsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionTrialsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionTrialsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionTrialWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionPerformerConfsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="sessionID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListSessionPerformerConfsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListSessionPerformerConfsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:SessionPerformerConfWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListTrialMeasurementsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="trialID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListTrialMeasurementsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListTrialMeasurementsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:TrialMeasurementWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfMeasurementsWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="measurementConfID" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfMeasurementsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementConfMeasurementsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementConfMeasurementWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfigurationsWithAttributesXML">
+      <xsd:complexType/>
+    </xsd:element>
+    <xsd:element name="ListMeasurementConfigurationsWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementConfigurationsWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:MeasurementConfWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFilesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="subjectType" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFilesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListFilesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFilesWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="subjectType" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFilesWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListFilesWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFileAttributeDataXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="subjectType" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFileAttributeDataXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListFileAttributeDataXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFileAttributeDataWithAttributesXML">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="1" maxOccurs="1" name="subjectID" type="xsd:int"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="subjectEntity" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListFileAttributeDataWithAttributesXMLResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListFileAttributeDataWithAttributesXMLResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:FileWithAttributesList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListAttributesDefined">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="attributeGroupName" type="xsd:string"/>
+          <xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="ListAttributesDefinedResponse">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="1" name="ListAttributesDefinedResult">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element ref="tns:AttributeDefinitionList"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <SessionContentList xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+    <SessionContent>
+      <SessionDetailsWithAttributes>
+        <SessionID>12</SessionID>
+        <UserID>7</UserID>
+        <LabID>1</LabID>
+        <MotionKind>walk</MotionKind>
+        <SessionDate>2010-10-03T01:01:01</SessionDate>
+        <SessionName>S01</SessionName>
+        <Tags></Tags>
+        <SessionDescription></SessionDescription>
+        <SessionLabel>PJWSTK:S01</SessionLabel>
+      </SessionDetailsWithAttributes>
+      <FileWithAttributesList>
+        <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="63" FileName="2010-10-03-P02-S01.zip" FileDescription="konfiguracja aktora" />
+      </FileWithAttributesList>
+      <TrialContentList xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>11</TrialID>
+            <TrialName />
+            <TrialDescription>bez EMG</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T01" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="58" FileName="2010-10-03-P02-S01-T01.53875336.avi" FileDescription="bez emg" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="59" FileName="2010-10-03-P02-S01-T01.56339527.avi" FileDescription="bez emg" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="60" FileName="2010-10-03-P02-S01-T01.59461898.avi" FileDescription="bez emg" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="61" FileName="2010-10-03-P02-S01-T01.60981847.avi" FileDescription="bez emg" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="62" FileName="2010-10-03-P02-S01-T01.c3d" FileDescription="bez emg" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="64" FileName="2010-10-03-P02-S01-T01.zip" FileDescription="konfiguracja triala" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>12</TrialID>
+            <TrialName />
+            <TrialDescription>bez EMG</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T02" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="65" FileName="2010-10-03-P02-S01-T02.53875336.avi" FileDescription="bez EMG" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="66" FileName="2010-10-03-P02-S01-T02.56339527.avi" FileDescription="bez EMG" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="67" FileName="2010-10-03-P02-S01-T02.59461898.avi" FileDescription="bez EMG" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="68" FileName="2010-10-03-P02-S01-T02.60981847.avi" FileDescription="bez EMG" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="69" FileName="2010-10-03-P02-S01-T02.c3d" FileDescription="bez EMG" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="70" FileName="2010-10-03-P02-S01-T02.zip" FileDescription="konfiguracja triala" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>13</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T03" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="71" FileName="2010-10-03-P02-S01-T03.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="72" FileName="2010-10-03-P02-S01-T03.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="73" FileName="2010-10-03-P02-S01-T03.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="74" FileName="2010-10-03-P02-S01-T03.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="75" FileName="2010-10-03-P02-S01-T03.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="76" FileName="2010-10-03-P02-S01-T03.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>14</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T04" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="77" FileName="2010-10-03-P02-S01-T04.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="78" FileName="2010-10-03-P02-S01-T04.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="79" FileName="2010-10-03-P02-S01-T04.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="80" FileName="2010-10-03-P02-S01-T04.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="81" FileName="2010-10-03-P02-S01-T04.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="82" FileName="2010-10-03-P02-S01-T04.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>15</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T05" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="83" FileName="2010-10-03-P02-S01-T05.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="84" FileName="2010-10-03-P02-S01-T05.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="85" FileName="2010-10-03-P02-S01-T05.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="86" FileName="2010-10-03-P02-S01-T05.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="87" FileName="2010-10-03-P02-S01-T05.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="88" FileName="2010-10-03-P02-S01-T05.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>16</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T06" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="89" FileName="2010-10-03-P02-S01-T06.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="90" FileName="2010-10-03-P02-S01-T06.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="91" FileName="2010-10-03-P02-S01-T06.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="92" FileName="2010-10-03-P02-S01-T06.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="93" FileName="2010-10-03-P02-S01-T06.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="94" FileName="2010-10-03-P02-S01-T06.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>17</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T07" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="95" FileName="2010-10-03-P02-S01-T07.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="96" FileName="2010-10-03-P02-S01-T07.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="97" FileName="2010-10-03-P02-S01-T07.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="98" FileName="2010-10-03-P02-S01-T07.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="99" FileName="2010-10-03-P02-S01-T07.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="100" FileName="2010-10-03-P02-S01-T07.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>18</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S01-T08" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="101" FileName="2010-10-03-P02-S01-T08.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="102" FileName="2010-10-03-P02-S01-T08.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="103" FileName="2010-10-03-P02-S01-T08.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="104" FileName="2010-10-03-P02-S01-T08.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="105" FileName="2010-10-03-P02-S01-T08.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="106" FileName="2010-10-03-P02-S01-T08.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+      </TrialContentList>
+    </SessionContent>
+    <SessionContent>
+      <SessionDetailsWithAttributes>
+        <SessionID>13</SessionID>
+        <UserID>7</UserID>
+        <LabID>1</LabID>
+        <MotionKind>walk</MotionKind>
+        <SessionDate>2010-10-03T01:01:01</SessionDate>
+        <SessionName>S02</SessionName>
+        <Tags></Tags>
+        <SessionDescription></SessionDescription>
+        <SessionLabel>PJWSTK:S02</SessionLabel>
+      </SessionDetailsWithAttributes>
+      <FileWithAttributesList>
+        <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="107" FileName="2010-10-03-P02-S02.zip" FileDescription="-" />
+      </FileWithAttributesList>
+      <TrialContentList xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>19</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S02-T01" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="108" FileName="2010-10-03-P02-S02-T01.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="109" FileName="2010-10-03-P02-S02-T01.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="110" FileName="2010-10-03-P02-S02-T01.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="111" FileName="2010-10-03-P02-S02-T01.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="112" FileName="2010-10-03-P02-S02-T01.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="113" FileName="2010-10-03-P02-S02-T01.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>20</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S02-T02" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="114" FileName="2010-10-03-P02-S02-T02.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="115" FileName="2010-10-03-P02-S02-T02.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="116" FileName="2010-10-03-P02-S02-T02.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="117" FileName="2010-10-03-P02-S02-T02.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="118" FileName="2010-10-03-P02-S02-T02.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="119" FileName="2010-10-03-P02-S02-T02.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+        <TrialContent>
+          <TrialDetailsWithAttributes>
+            <TrialID>21</TrialID>
+            <TrialName />
+            <TrialDescription>0</TrialDescription>
+            <Attributes>
+              <Attribute xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" Name="TrialName" Value="2010-10-03-P02-S02-T03" Type="string" AttributeGroup="_static" Entity="trial" />
+            </Attributes>
+          </TrialDetailsWithAttributes>
+          <FileWithAttributesList>
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="120" FileName="2010-10-03-P02-S02-T03.53875336.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="121" FileName="2010-10-03-P02-S02-T03.56339527.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="122" FileName="2010-10-03-P02-S02-T03.59461898.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="123" FileName="2010-10-03-P02-S02-T03.60981847.avi" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="124" FileName="2010-10-03-P02-S02-T03.c3d" FileDescription="-" />
+            <FileDetailsWithAttributes xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" FileID="125" FileName="2010-10-03-P02-S02-T03.zip" FileDescription="-" />
+          </FileWithAttributesList>
+        </TrialContent>
+      </TrialContentList>
+    </SessionContent>
+    <SessionContent>
+      <SessionDetailsWithAttributes>
+        <SessionID>14</SessionID>
+        <UserID>7</UserID>
+        <LabID>1</LabID>
+        <MotionKind>walk</MotionKind>
+        <SessionDate>2010-10-03T01:01:01</SessionDate>
+        <SessionName>S03</SessionName>
+        <Tags></Tags>
+        <SessionDescription></SessionDescription>
+        <SessionLabel>PJWSTK:S03</SessionLabel>
+      </SessionDetailsWithAttributes>
+    </SessionContent>
+  </SessionContentList>
+</test>

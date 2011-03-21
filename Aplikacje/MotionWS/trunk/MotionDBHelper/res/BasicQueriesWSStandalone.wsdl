@@ -436,7 +436,6 @@
 								<xsd:attribute name="FileName" type="xsd:string"/>
 								<xsd:attribute name="FileDescription" type="xsd:string"/>
 								<xsd:attribute name="SubdirPath" type="xsd:string" use="optional"/>
-								<xsd:attribute name="AttributeName" type="xsd:string" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -2336,7 +2335,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

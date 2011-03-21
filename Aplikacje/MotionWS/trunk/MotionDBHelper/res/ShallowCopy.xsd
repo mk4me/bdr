@@ -13,6 +13,24 @@
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
+
+  <xsd:element name="Files">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="File" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="FileID" type="xsd:int" />
+            <xsd:attribute name="FileName" type="xsd:string" />
+            <xsd:attribute name="FileDescription" type="xsd:string" />
+            <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
   
   <xsd:element name="ShallowCopy">
     <xsd:complexType>
@@ -24,6 +42,7 @@
                 <xsd:complexType>
                   <xsd:sequence>
                     <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="Files" minOccurs="0" maxOccurs="1" />
                   </xsd:sequence>
                   <xsd:attribute name="SessionID" type="xsd:int" />
                   <xsd:attribute name="UserID"  type="xsd:int" />
@@ -57,6 +76,7 @@
                 <xsd:complexType>
                   <xsd:sequence>
                     <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="Files" minOccurs="0" maxOccurs="1" />
                   </xsd:sequence>
                   <xsd:attribute name="TrialID" type="xsd:int" />
                   <xsd:attribute name="SessionID" type="xsd:int" />

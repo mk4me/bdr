@@ -144,6 +144,7 @@
     <Content Include="res\PreciseXSDWeaver.xslt" />
     <Content Include="res\PreciseXSDWeaverWCF.xslt" />
     <Content Include="res\StandaloneWSDLCompositor.xslt" />
+    <Content Include="res\XMLFile1.xml" />
     <Content Include="SampleOpsWS.svc" />
     <Content Include="UserPersonalSpaceWS.svc" />
     <Content Include="Web.config" />
