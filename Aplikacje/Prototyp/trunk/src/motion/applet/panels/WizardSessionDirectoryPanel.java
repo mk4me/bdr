@@ -2,7 +2,7 @@ package motion.applet.panels;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
@@ -36,24 +36,20 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 		final File file = fileChooser.getSelectedFile();
 		if (file != null) {
 			files = file.listFiles();
-			int k = 0;
+			ArrayList<File> filesList = new ArrayList<File>();
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					files[i] = null;
-				} else {
+				if (!files[i].isDirectory()) {
 					String fileString = files[i].toString();
 					int j = fileString.lastIndexOf(".");
 					String extension = fileString.substring(j+1, fileString.length());
-					if (!extension.equals("zip") && !extension.equals("c3d") &&
-							!extension.equals("avi") && !extension.equals("asf") && !extension.equals("amc")) {
-						files[i] = null;
-					} else {
-						k++;
+					if (extension.equals("zip") || extension.equals("c3d") ||
+							extension.equals("avi") || extension.equals("asf") || extension.equals("amc")) {
+						filesList.add(files[i]);
 					}
 				}
 			}
 			
-			files = Arrays.copyOf(files, k);
+			files = filesList.toArray(new File[0]);
 			
 			//System.out.println(file);
 			//SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
