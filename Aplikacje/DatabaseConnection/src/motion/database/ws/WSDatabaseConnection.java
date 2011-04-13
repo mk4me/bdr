@@ -948,9 +948,11 @@ public class WSDatabaseConnection implements DatabaseProxy {
 			
 			ArrayOfFileNameEntry input = new ArrayOfFileNameEntry();
 			for (File file : paths){
-				FileNameEntry fne = new FileNameEntry();
-				fne.setName( file.getName() );
-				input.getFileNameEntry().add( fne );
+				if (file != null) {
+					FileNameEntry fne = new FileNameEntry();
+					fne.setName( file.getName() );
+					input.getFileNameEntry().add( fne );
+				}
 			}
 			ValidateSessionFileSetResult result = port.validateSessionFileSet( input );
 			if (result != null && result.getFileSetValidationResult().getSessionContent()!=null )
