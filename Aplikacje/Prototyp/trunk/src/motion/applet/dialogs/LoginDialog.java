@@ -147,7 +147,7 @@ public class LoginDialog extends BasicDialog {
 				
 				LoginDialog.this.loginButton.setEnabled(false);
 				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
-				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpwell.pjwstk.edu.pl", "testUser", "testUser");
+				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 
 				// Check user credentials
 				try {
