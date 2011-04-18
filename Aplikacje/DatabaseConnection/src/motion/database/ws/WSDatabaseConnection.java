@@ -105,6 +105,7 @@ import motion.database.ws.basicUpdatesServiceWCF.ArrayOfInt;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWS;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage;
+import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSAssignSessionToGroupUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateMeasurementConfigurationUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreateMeasurementUpdateExceptionFaultFaultMessage;
 import motion.database.ws.basicUpdatesServiceWCF.IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage;
@@ -1317,6 +1318,24 @@ public class WSDatabaseConnection implements DatabaseProxy {
 			return port.assignPerformerToSession(sessionID, performerID);
 		} 
 		catch ( IBasicUpdatesWSAssignPerformerToSessionUpdateExceptionFaultFaultMessage e) {
+			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
+			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
+		}	
+		finally{
+			ConnectionTools2.finalizeCall();
+		}
+	}
+
+	
+	@Override
+	public boolean assignSessionToGroup(int sessionID, int groupID) throws Exception
+	{
+		try{
+			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "assignSessionToGroup", this );
+
+			return port.assignSessionToGroup(sessionID, groupID);
+		} 
+		catch ( IBasicUpdatesWSAssignSessionToGroupUpdateExceptionFaultFaultMessage e) {
 			log.log( Level.SEVERE, e.getFaultInfo().getDetails().getValue(), e );
 			throw new Exception( e.getFaultInfo().getDetails().getValue(), e ); 
 		}	

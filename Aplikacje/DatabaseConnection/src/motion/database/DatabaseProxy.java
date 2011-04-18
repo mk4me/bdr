@@ -298,5 +298,7 @@ public interface DatabaseProxy {
 	DbElementsList<Measurement> listMeasurementConfMeasurementsWithAttributes(
 			int measurementConfID) throws Exception;
 
+	boolean assignSessionToGroup(int sessionID, int groupID) throws Exception;
+
 
 }
