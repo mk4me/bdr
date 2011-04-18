@@ -30,7 +30,7 @@ public class WizardSessionBrowserPanel extends WizardPanel {
 	public void afterNextPressed(WizardPanel wizardPanel) {
 		if (wizardPanel instanceof WizardSessionDirectoryPanel) {
 			Session session = ((WizardSessionDirectoryPanel) wizardPanel).getSession();
-			files = ((WizardSessionDirectoryPanel) wizardPanel).getFiles();
+			files = ((WizardSessionDirectoryPanel) wizardPanel).getValidatedFiles();
 			
 			try {
 				sessionBrowserPanel = new SessionBrowserPanel();
