@@ -154,6 +154,10 @@ public class SessionFormDialog extends FormDialog {
 									
 									//performers
 									setPerformers(recordId);
+									
+									//session groups
+									setSessionGroups(recordId);
+									
 								} catch (Exception e1) {
 									ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 									exceptionDialog.setVisible(true);
@@ -177,6 +181,13 @@ public class SessionFormDialog extends FormDialog {
 		int[] selectedPerformers = performerAssignmentPanel.getSelectedRecords();
 		for (int i = 0; i < selectedPerformers.length; i++) {
 			WebServiceInstance.getDatabaseConnection().assignPerformerToSession(sessionId, selectedPerformers[i]);
+		}
+	}
+	
+	private void setSessionGroups(final int sessionId) throws Exception {
+		int[] selectedSessionGroups = sessionGroupAssignmentPanel.getSelectedRecords();
+		for (int i = 0; i < selectedSessionGroups.length; i++) {
+			WebServiceInstance.getDatabaseConnection().assignSessionToGroup(sessionId, selectedSessionGroups[i]);
 		}
 	}
 	
