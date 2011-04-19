@@ -30,12 +30,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import motion.Messages;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.applet.widgets.CalendarWidget;
+import motion.applet.widgets.TagWidget;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.Measurement;
 import motion.database.model.MeasurementStaticAttributes;
+import motion.database.model.SessionStaticAttributes;
 
 public class FormDialog extends BasicDialog {
 	private static String CREATE = Messages.getString("Create"); //$NON-NLS-1$
@@ -50,6 +51,7 @@ public class FormDialog extends BasicDialog {
 	private static String INCORRECT_DATE = Messages.getString("FormDialog.IncorrectDate"); //$NON-NLS-1$
 	private static String SET_BUTTON = Messages.getString("FormDialog.SetButton"); //$NON-NLS-1$
 	private static String CLEAR_BUTTON = Messages.getString("FormDialog.ClearButton"); //$NON-NLS-1$
+	private static String EDIT_BUTTON = Messages.getString("Edit"); //$NON-NLS-1$
 	
 	protected JButton createButton;
 	private JButton cancelButton;
@@ -184,8 +186,13 @@ public class FormDialog extends BasicDialog {
 				FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel, true);
 				formFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.TYPE_SHORT_STRING)) {
-				FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
-				formFields.add(field);
+				if (a.name.equals(SessionStaticAttributes.Tags.toString())) {
+					FormTagField field = new FormTagField(a, gridBagConstraints, formPanel);
+					formFields.add(field);
+				} else {
+					FormTextField field = new FormTextField(a, gridBagConstraints, formPanel);
+					formFields.add(field);
+				}
 			} else if (a.getType().equals(EntityAttribute.TYPE_LONG_STRING)) {
 				FormTextAreaField field = new FormTextAreaField(a, gridBagConstraints, formPanel);
 				formFields.add(field);
@@ -240,6 +247,8 @@ public class FormDialog extends BasicDialog {
 			}
 		} else if (f instanceof FormListField) {
 			attributeValue = ((FormListField) f).getData();
+		} else if (f instanceof FormTagField) {
+			attributeValue = ((FormTagField) f).getData();
 		}
 		
 		if (attributeValue != null) {
@@ -461,7 +470,6 @@ public class FormDialog extends BasicDialog {
 		
 		public FormTextField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 			super(attribute, gridBagConstraints, formPanel);
-			
 		}
 		
 		public String getData() {
@@ -732,6 +740,59 @@ public class FormDialog extends BasicDialog {
 					}
 				}
 			}
+		}
+	}
+	
+	private class FormTagField extends FormField {
+		private JButton editButton;
+		
+		public FormTagField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
+			super(attribute, gridBagConstraints, formPanel);
+			
+			finishField();
+		}
+		
+		public String getData() {
+			
+			return text.getText();
+		}
+		
+		protected void prepareField() {
+			addLabel();
+			text = new JTextField(20);
+			label.setLabelFor(text);;
+			formPanel.add(text, gridBagConstraints);
+			
+			gridBagConstraints.gridx++;
+		}
+		
+		protected void finishField() {
+			editButton = new JButton(EDIT_BUTTON);
+			editButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					TagWidget tagWidget = new TagWidget();
+					tagWidget.setVisible(true);
+					
+					/*
+					CalendarWidget calendarWidget = new CalendarWidget();
+					Date date = getDate();
+					if (date != null) {
+						calendarWidget.setDate(date);
+					}
+					calendarWidget.setVisible(true);
+					if (calendarWidget.getDate() != null) {
+						String dateString = dateFormat.format(calendarWidget.getDate()).toString();
+						text.setText(dateString);
+					}
+					*/
+				}
+			});
+			formPanel.add(editButton, gridBagConstraints);
+			
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy++;
+			
+			gridBagConstraints.anchor = GridBagConstraints.ABOVE_BASELINE_TRAILING;
 		}
 	}
 }
