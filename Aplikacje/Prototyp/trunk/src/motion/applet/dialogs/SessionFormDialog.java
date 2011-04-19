@@ -230,6 +230,7 @@ public class SessionFormDialog extends FormDialog {
 					int i = 0;
 					for (SessionGroup s : sessionGroups) {
 						recordIds[i] = s.getId();
+						i++;
 					}
 					sessionGroupAssignmentPanel.setSelectedRecords(recordIds);
 				} catch (Exception e1) {
