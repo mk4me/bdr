@@ -1954,7 +1954,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

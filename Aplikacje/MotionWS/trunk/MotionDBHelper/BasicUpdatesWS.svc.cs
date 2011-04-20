@@ -280,7 +280,7 @@ namespace MotionDBWebServices
 
                 OpenConnection();
                 cmd.CommandText = @"insert into Sesja_grupa_sesji ( IdSesja, IdGrupa_sesji)
-                                            values (@sess_id, @sess_group_id )";
+                                            select @sess_id, @sess_group_id except select IdSesja, IdGrupa_sesji from Sesja_grupa_sesji";
                 cmd.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmd.Parameters.Add("@sess_group_id", SqlDbType.Int);
                 cmd.Parameters["@sess_id"].Value = sessionID;

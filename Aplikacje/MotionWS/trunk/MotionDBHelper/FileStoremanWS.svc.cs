@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -922,6 +923,7 @@ namespace MotionDBWebServices
             string fullPath;
             string entity;
             int resId;
+            int asfFileId = 0;
 
             string dirLocation = baseLocalFilePath;
 
@@ -932,20 +934,29 @@ namespace MotionDBWebServices
             SqlConnection connF;
             SqlCommand cmdF;
 
+            SqlConnection connA;
+            SqlCommand cmdA;
+
             FileNameEntryCollection fileNames = new FileNameEntryCollection();
             // Wczytanie nazw plikow ze wskazanego katalogu. Utworzenie sesji i triali wedlug nazw tych plikow. Poprzedzone walidacja.
             connF = new SqlConnection(@"server = .; integrated security = true; database = Motion");
+            connA = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             try
             {
                 connF.Open();
+                connA.Open();
                 
                  
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
-                foreach (FileInfo fi in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+                foreach (FileInfo fi in di.GetFiles("????-??-??-P??-S??*.???", SearchOption.TopDirectoryOnly) )
                 {
-                    FileNameEntry fne = new FileNameEntry();
-                    fne.Name = fi.Name;
-                    fileNames.Add(fne);
+
+                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-P\d{2}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip))"))
+                    {
+                        FileNameEntry fne = new FileNameEntry();
+                        fne.Name = fi.Name;
+                        fileNames.Add(fne);
+                    }
                 }
                 OpenConnection();
                 cmd = conn.CreateCommand();
@@ -972,9 +983,11 @@ namespace MotionDBWebServices
                     }
                 }
                 cmdF = connF.CreateCommand();
-                
+                cmdA = connA.CreateCommand();
+
                 cmdF.CommandText = @"insert into Plik ( IdSesja, IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
-                                        values (@sess_id, @trial_id, @file_desc, @file_data, @file_name)";
+                                        values (@sess_id, @trial_id, @file_desc, @file_data, @file_name)
+                                        set @file_id = SCOPE_IDENTITY()";
                 cmdF.CommandType = CommandType.Text;
                 cmdF.Parameters.Add("@sess_id", SqlDbType.Int);
                 cmdF.Parameters.Add("@trial_id", SqlDbType.Int);
@@ -983,6 +996,24 @@ namespace MotionDBWebServices
                 cmdF.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
 
                 cmdF.Parameters["@file_desc"].Value = "";
+                SqlParameter fileIdParameter =
+                    new SqlParameter("@file_id", SqlDbType.Int);
+                fileIdParameter.Direction = ParameterDirection.Output;
+                cmdF.Parameters.Add(fileIdParameter);
+
+
+                cmdA.CommandText = "set_trial_attribute";
+                cmdA.CommandType = CommandType.StoredProcedure;
+                cmdA.Parameters.Add("@trial_id", SqlDbType.Int);
+                cmdA.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
+                cmdA.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
+                cmdA.Parameters.Add("@update", SqlDbType.Bit);
+                SqlParameter resultCodeParameter = new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmdA.Parameters.Add(resultCodeParameter);
+
+                cmdA.Parameters["@attr_name"].Value = "SkeletonFile";
+                cmdA.Parameters["@update"].Value = 1;
 
                 FileStream fs;
                 BinaryReader br;
@@ -1003,6 +1034,12 @@ namespace MotionDBWebServices
                     {
                         cmdF.Parameters["@sess_id"].Value = DBNull.Value;
                         cmdF.Parameters["@trial_id"].Value = resId;
+                        if (fileName.EndsWith(".amc"))
+                        {
+                            cmdA.Parameters["@trial_id"].Value = resId;
+                            cmdA.Parameters["@attr_value"].Value = asfFileId;
+                            cmdA.ExecuteNonQuery();
+                        }
                     }
                     
                     fullPath = dirLocation + fileName;
@@ -1014,10 +1051,11 @@ namespace MotionDBWebServices
                     cmdF.Parameters["@file_data"].Value = fileData;
                     cmdF.Parameters["@file_name"].Value = fileName;
                     cmdF.ExecuteNonQuery();
+                    if (fileName.EndsWith(".asf")) asfFileId = (int)fileIdParameter.Value;
+
                     br.Close();
                     fs.Close();
                     /* File.Delete(fullPath); */
-                  
                 } 
 
                 Directory.Delete(di.FullName, true);
@@ -1041,6 +1079,7 @@ namespace MotionDBWebServices
 
             finally
             {
+                connA.Close();
                 connF.Close();
                 CloseConnection();
             }             

@@ -1829,7 +1829,8 @@ namespace MotionDBWebServices
         public XmlElement ValidateSessionFileSet(FileNameEntryCollection fileNames)
         {
             XmlDocument xd = new XmlDocument();
- 
+            int _before = 0;
+            int _after = 0;
 
             try
             {
@@ -1838,7 +1839,14 @@ namespace MotionDBWebServices
                 cmd.CommandText = "validate_file_list_xml";
                 SqlParameter fileListPar = cmd.Parameters.Add("@files", SqlDbType.Structured);
                 fileListPar.Direction = ParameterDirection.Input;
-                fileListPar.Value = fileNames; 
+
+                // filter-out ignored files
+
+                _before = fileNames.Count;
+                fileNames.RemoveAll(IgnoredFiles);
+                _after = fileNames.Count;
+
+                fileListPar.Value = fileNames;
                 XmlReader dr = cmd.ExecuteXmlReader();
 
                 if (dr.Read())
@@ -1849,12 +1857,25 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                QueryException exc = new QueryException("DB-side", "Stored procedure execution error: "+ex.Message);
+                QueryException exc = new QueryException("DB-side", "Stored procedure execution error: " + ex.Message);
                 throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("ValidateSessionFileSet")));
             }
-            CloseConnection();
+            catch (Exception ex1)
+            {
+                QueryException exc = new QueryException("parameter", "Parameter processing error: " + ex1.Message+" "+ex1.Source);
+                throw new FaultException<QueryException>(exc, "Parameter error", FaultCode.CreateReceiverFaultCode(new FaultCode("ValidateSessionFileSet")));
+            }
 
+            CloseConnection();            
             return xd.DocumentElement;
         }
+        private static bool IgnoredFiles(FileNameEntry fne)
+        {
+            string s = fne.Name;
+            // return false;
+            return !(System.Text.RegularExpressions.Regex.IsMatch(s, @"(\d{4}-\d{2}-\d{2}-P\d{2}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip))"));
+
+        }
+
     }
 }
