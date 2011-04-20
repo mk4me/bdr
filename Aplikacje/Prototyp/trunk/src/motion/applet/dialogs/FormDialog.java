@@ -767,24 +767,16 @@ public class FormDialog extends BasicDialog {
 		}
 		
 		protected void finishField() {
+			String tagFormat = "tag1(option), tag2(option),...";
+			label.setText("<html>" + label.getText() + "<br/>" + "(" + "tag(option)" + ")" + "</html>");
+			text.setToolTipText("tag1(option), tag2(option),...");
 			editButton = new JButton(EDIT_BUTTON);
 			editButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					TagWidget tagWidget = new TagWidget();
 					tagWidget.setVisible(true);
 					
-					/*
-					CalendarWidget calendarWidget = new CalendarWidget();
-					Date date = getDate();
-					if (date != null) {
-						calendarWidget.setDate(date);
-					}
-					calendarWidget.setVisible(true);
-					if (calendarWidget.getDate() != null) {
-						String dateString = dateFormat.format(calendarWidget.getDate()).toString();
-						text.setText(dateString);
-					}
-					*/
+					text.setText(tagWidget.getTags());
 				}
 			});
 			formPanel.add(editButton, gridBagConstraints);
