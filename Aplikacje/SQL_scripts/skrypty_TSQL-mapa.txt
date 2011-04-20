@@ -32,3 +32,5 @@ storedProcedures2
 
 * privilege management (user accounts, session privileges and visibility, )
 * metadata definition (attributes, attr groups, enums)
+
+* shallow copy retrieval
