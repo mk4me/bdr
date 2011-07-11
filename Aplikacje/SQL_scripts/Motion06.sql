@@ -1,4 +1,111 @@
--- TODO: zbudowac dla Sesji tryger on delete kasujacy pliki obserwacji
+-- TODO: zbudowac dla Sesji tryger on delete kasujacy pliki proby
+-- TO DO: Zrobiæ trigger do usuwania pliku przy wykonywaniu stosownej ClearAttributeValue.
+
+use Motion_Med;
+go 
+ CREATE TABLE Pacjent (
+        IdPacjent           int IDENTITY,
+        Imie                varchar(30) NOT NULL,
+        Nazwisko            varchar(50) NOT NULL,
+        Plec				char NOT NULL,
+        Data_urodzenia		date NOT NULL,
+        Zdjecie				varbinary(max) filestream,
+        rowguid				uniqueidentifier rowguidcol not null unique
+)
+go
+ ALTER TABLE Pacjent
+        ADD PRIMARY KEY (IdPacjent)
+go
+
+CREATE TABLE Uzytkownik (
+        IdUzytkownik         int IDENTITY,
+        Login                varchar(30) NOT NULL UNIQUE,
+        Imie                 varchar(30) NOT NULL,
+        Nazwisko             varchar(50) NOT NULL
+ )
+go
+ 
+ 
+ALTER TABLE Uzytkownik
+        ADD PRIMARY KEY (IdUzytkownik)
+go
+
+
+create table Badanie (
+	IdBadanie	int IDENTITY,
+	Data	date NOT NULL,
+	Opis varchar(255),
+	Notatki	varchar(255),
+	IdSesja int,
+	IdTyp_badania int
+)
+go
+
+alter table Badanie
+	add primary key (IdBadanie)
+go
+
+CREATE INDEX X1Badanie ON Badanie
+ (
+        IdSesja
+ )
+go
+
+create table Schorzenie (
+	IdSchorzenie	int IDENTITY,
+	Nazwa	varchar(60)
+)
+go
+
+alter table Schorzenie
+	add primary key (IdSchorzenie)
+go
+
+create table Badanie_schorzenie (
+	IdBadanie	int not null,
+	IdSchorzenie	int not null,
+	Komentarz varchar(255)
+)
+go
+
+alter table Badanie_schorzenie
+	add primary key (IdBadanie, IdSchorzenie)
+go
+
+alter table Badanie_schorzenie
+	add foreign key (IdBadanie) references Badanie on delete cascade;
+go
+
+alter table Badanie_schorzenie
+	add foreign key (IdSchorzenie) references Schorzenie on delete cascade;
+go
+
+create index X1Badanie_schorzenie on Badanie_schorzenie (
+	IdBadanie
+)
+go
+
+create index X2Badanie_schorzenie on Badanie_schorzenie (
+	IdSchorzenie
+)
+go
+
+create table Typ_badania (
+	IdTyp_badania int IDENTITY,
+	Nazwa varchar (50)
+)
+go
+
+alter table Typ_badania
+	add primary key (IdTyp_badania)
+go
+
+alter table Badanie
+	add foreign key (IdTyp_badania) references Typ_badania on delete cascade;
+go
+
+
+
 use Motion;
 go 
  CREATE TABLE Atrybut (
@@ -32,7 +139,7 @@ go
  )
 go
  
- 
+
  ALTER TABLE Grupa_atrybutow
         ADD PRIMARY KEY (IdGrupa_atrybutow)
 go
@@ -61,33 +168,29 @@ go
         ADD PRIMARY KEY (IdLaboratorium)
 go
   
- CREATE TABLE Obserwacja (
-        IdObserwacja         int IDENTITY,
+ CREATE TABLE Proba (
+        IdProba         int IDENTITY,
         IdSesja              int NOT NULL,
-        Opis_obserwacji      varchar(100) NOT NULL
+        Nazwa			varchar(30),
+        Opis_proby      varchar(100) NOT NULL
  )
 go
  
- CREATE INDEX X1Obserwacja ON Obserwacja
+ CREATE INDEX X1Proba ON Proba
  (
         IdSesja
  )
 go
  
- 
- ALTER TABLE Obserwacja
-        ADD PRIMARY KEY (IdObserwacja)
+ ALTER TABLE Proba
+        ADD PRIMARY KEY (IdProba)
 go
- 
   
  CREATE TABLE Performer (
-        IdPerformer          int IDENTITY,
-        Imie                 varchar(30) NULL,
-        Nazwisko             varchar(50) NOT NULL
+        IdPerformer          int
  )
 go
- 
- 
+  
  ALTER TABLE Performer
         ADD PRIMARY KEY (IdPerformer)
 go
@@ -122,11 +225,11 @@ go
         IdPlik              int IDENTITY,
 		IdKonfiguracja_pomiarowa int NULL,
         IdSesja              int NULL,
-        IdObserwacja         int NULL,
+        IdProba         int NULL,
         Opis_pliku          varchar(100) NOT NULL,
         Plik                varbinary(max) filestream not null,
 		rowguid				uniqueidentifier rowguidcol not null unique,
-		Nazwa_pliku         varchar(255) null,
+		Nazwa_pliku         varchar(255) null,	-- zmiana na 100 (20100726) ???
 		Sciezka				varchar(100) null
  )
 go
@@ -134,7 +237,7 @@ go
 
  CREATE INDEX X1Plik ON Plik
  (
-        IdObserwacja
+        IdProba
  )
 go
  
@@ -168,106 +271,42 @@ ALTER TABLE Konfiguracja_pomiarowa
 go
 
 
- CREATE INDEX X1Konfiguracja_pomiarowa ON Konfiguracja_pomiarowa
+CREATE INDEX X1Konfiguracja_pomiarowa ON Konfiguracja_pomiarowa
  (
         Nazwa
  )
 go
 
 
-CREATE TABLE Pomiar
+CREATE TABLE Sesja_Konfiguracja_pomiarowa
 (
-	IdPomiar int IDENTITY,
-	IdObserwacja int NOT NULL,
+	IdSesja int NOT NULL,
 	IdKonfiguracja_pomiarowa int NOT NULL
 )
 go
 
-ALTER TABLE Pomiar
-        ADD PRIMARY KEY (IdPomiar)
-go
 
- ALTER TABLE Pomiar
-        ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
-go 
- CREATE INDEX X1Pomiar ON Pomiar
+CREATE INDEX X1Sesja_Konfiguracja_pomiarowa ON Sesja_Konfiguracja_pomiarowa
  (
-        IdObserwacja
+        IdSesja
  )
 go
 
- CREATE INDEX X2Pomiar ON Pomiar
+CREATE INDEX X2Sesja_Konfiguracja_pomiarowa ON Sesja_Konfiguracja_pomiarowa
  (
         IdKonfiguracja_pomiarowa
  )
 go
 
- ALTER TABLE Pomiar
-        ADD FOREIGN KEY (IdKonfiguracja_pomiarowa)
-                              REFERENCES Konfiguracja_pomiarowa
-go 
 
-
-CREATE TABLE Wynik_pomiaru
-(
-	IdPomiar int NOT NULL,
-	IdPlik int NOT NULL,
-	IdPlikPodglad int NULL
-)
+ ALTER TABLE Sesja_Konfiguracja_pomiarowa
+        ADD PRIMARY KEY (IdKonfiguracja_pomiarowa, IdSesja)
 go
 
-/* Do usuniêcia???
 
- ALTER TABLE Wynik_pomiaru
-        ADD FOREIGN KEY (IdPomiar)
-                              REFERENCES Pomiar
-go 
- CREATE INDEX X1Wynik_pomiaru ON Wynik_pomiaru
- (
-        IdPomiar
- )
-go
 
- ALTER TABLE Wynik_pomiaru
-        ADD FOREIGN KEY (IdPlik)
-                              REFERENCES Plik
-go 
- CREATE INDEX X2Wynik_pomiaru ON Wynik_pomiaru
- (
-        IdPlik
- )
-go
 
-*/
 
-CREATE TABLE Pomiar_performer
-(
-	IdPomiar int NOT NULL,
-	IdPerformer int NOT NULL
-)
-go
-
- ALTER TABLE Pomiar_performer
-        ADD FOREIGN KEY (IdPomiar)
-                              REFERENCES Pomiar on delete cascade; -- wymaga dodania!
-go 
- CREATE INDEX X1Pomiar_performer ON Pomiar_performer
- (
-        IdPomiar
- )
-go
-
- ALTER TABLE Pomiar_performer
-        ADD FOREIGN KEY (IdPerformer)
-                              REFERENCES Performer
-go 
- CREATE INDEX X2Pomiar_performer ON Pomiar_performer
- (
-        IdPerformer
- )
-go 
- 
  
  
  CREATE TABLE Rodzaj_ruchu (
@@ -285,10 +324,12 @@ go
  
  CREATE TABLE Sesja (
         IdSesja              int IDENTITY,
+        Nazwa				varchar(20) NULL,
+        Tagi				varchar(100) NULL,
         IdUzytkownik         int NOT NULL,
         IdLaboratorium       int NOT NULL,
         IdRodzaj_ruchu       int NULL,
-        Data                 datetime NOT NULL,
+        Data                 date NOT NULL,	-- zmienione z datetime w wersji 6 schematu
         Opis_sesji           varchar(100) NULL,
         Publiczna			bit not null default 0,
         PublicznaZapis		 bit not null default 0
@@ -309,52 +350,39 @@ go
  )
 go
  
- CREATE INDEX X3Sesja ON Sesja
+CREATE INDEX X3Sesja ON Sesja
  (
         IdUzytkownik
  )
 go
  
  
- ALTER TABLE Sesja
+ALTER TABLE Sesja
         ADD PRIMARY KEY (IdSesja)
 go
  
  
- CREATE TABLE Sesja_grupa_sesji (
+CREATE TABLE Sesja_grupa_sesji (
         IdSesja              int NOT NULL,
         IdGrupa_sesji        int NOT NULL
  )
 go
  
- CREATE INDEX X1Sesja_grupa_sesji ON Sesja_grupa_sesji
+CREATE INDEX X1Sesja_grupa_sesji ON Sesja_grupa_sesji
  (
         IdSesja
  )
 go
  
- CREATE INDEX X2Sesja_grupa_sesji ON Sesja_grupa_sesji
+CREATE INDEX X2Sesja_grupa_sesji ON Sesja_grupa_sesji
  (
         IdGrupa_sesji
  )
 go
  
  
- ALTER TABLE Sesja_grupa_sesji
+ALTER TABLE Sesja_grupa_sesji
         ADD PRIMARY KEY (IdSesja, IdGrupa_sesji)
-go
- 
-  CREATE TABLE Uzytkownik (
-        IdUzytkownik         int IDENTITY,
-        Login                varchar(30) NOT NULL UNIQUE,
-        Imie                 varchar(30) NOT NULL,
-        Nazwisko             varchar(50) NOT NULL
- )
-go
- 
- 
- ALTER TABLE Uzytkownik
-        ADD PRIMARY KEY (IdUzytkownik)
 go
  
  
@@ -445,8 +473,8 @@ go
 go
  
  
- CREATE TABLE Wartosc_atrybutu_obserwacji (
-        IdObserwacja         int NOT NULL,
+ CREATE TABLE Wartosc_atrybutu_proby (
+        IdProba         int NOT NULL,
         IdAtrybut            int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
         Wartosc_liczba       numeric(10,2) NULL,
@@ -455,28 +483,28 @@ go
  )
 go
  
- CREATE INDEX X1Wartosc_atrybutu_obserwacji ON Wartosc_atrybutu_obserwacji
+ CREATE INDEX X1Wartosc_atrybutu_proby ON Wartosc_atrybutu_proby
  (
-        IdObserwacja
+        IdProba
  )
 go
  
- CREATE INDEX X2Wartosc_atrybutu_obserwacji ON Wartosc_atrybutu_obserwacji
+ CREATE INDEX X2Wartosc_atrybutu_proby ON Wartosc_atrybutu_proby
  (
         IdAtrybut
  )
 go
 
- CREATE INDEX X3Wartosc_atrybutu_obserwacji ON Wartosc_atrybutu_obserwacji
+ CREATE INDEX X3Wartosc_atrybutu_proby ON Wartosc_atrybutu_proby
  (
         Wartosc_Id
  )
 go
  
- ALTER TABLE Wartosc_atrybutu_obserwacji
-        ADD PRIMARY KEY (IdObserwacja, IdAtrybut)
+ ALTER TABLE Wartosc_atrybutu_proby
+        ADD PRIMARY KEY (IdProba, IdAtrybut)
 go
- 
+
  
  CREATE TABLE Wartosc_atrybutu_performera (
         IdAtrybut            int NOT NULL,
@@ -571,7 +599,7 @@ go
 go
  
  
-  CREATE TABLE Wartosc_atrybutu_konfiguracji_pomiarowej (
+CREATE TABLE Wartosc_atrybutu_konfiguracji_pomiarowej (
         IdKonfiguracja_pomiarowa         int NOT NULL,
         IdAtrybut            int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
@@ -604,7 +632,7 @@ go
 go
  
  
-  ALTER TABLE Wartosc_atrybutu_konfiguracji_pomiarowej
+ALTER TABLE Wartosc_atrybutu_konfiguracji_pomiarowej
         ADD FOREIGN KEY (IdAtrybut)
                               REFERENCES Atrybut on delete cascade;
 go
@@ -615,50 +643,7 @@ go
                               REFERENCES Konfiguracja_pomiarowa on delete cascade;
 go
  
-  CREATE TABLE Wartosc_atrybutu_pomiaru (
-        IdPomiar         int NOT NULL,
-        IdAtrybut            int NOT NULL,
-        Wartosc_tekst        varchar(100) NULL,
-        Wartosc_liczba       numeric(10,2) NULL,
-        Wartosc_zmiennoprzecinkowa float NULL,
-        Wartosc_Id int NULL
- )
-go
- 
- CREATE INDEX X1Wartosc_atrybutu_pomiaru ON Wartosc_atrybutu_pomiaru
- (
-        IdPomiar
- )
-go
- 
- CREATE INDEX X2Wartosc_atrybutu_pomiaru ON Wartosc_atrybutu_pomiaru
- (
-        IdAtrybut
- )
-go
 
- CREATE INDEX X3Wartosc_atrybutu_pomiaru ON Wartosc_atrybutu_pomiaru
- (
-        Wartosc_Id
- )
-go  
- 
- ALTER TABLE Wartosc_atrybutu_pomiaru
-        ADD PRIMARY KEY (IdPomiar, IdAtrybut)
-go
- 
- 
-  ALTER TABLE Wartosc_atrybutu_pomiaru
-        ADD FOREIGN KEY (IdAtrybut)
-                              REFERENCES Atrybut on delete cascade;
-go
- 
- 
- ALTER TABLE Wartosc_atrybutu_pomiaru
-        ADD FOREIGN KEY (IdPomiar)
-                              REFERENCES Pomiar on delete cascade;
-go
- 
  
  CREATE TABLE Wartosc_wyliczeniowa (
         IdWartosc_wyliczeniowa int IDENTITY,
@@ -700,8 +685,9 @@ create table Predykat -- czesc funkcjonalnosci UPS
 	IdUzytkownik int not null
 )
 go
- ALTER TABLE Predykat
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+
+ALTER TABLE Predykat
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; 
 go
 
 ALTER TABLE Predykat
@@ -722,7 +708,7 @@ create table Koszyk
 )
 go
  ALTER TABLE Koszyk
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; 
 go
 
 ALTER TABLE Koszyk
@@ -779,26 +765,26 @@ ALTER TABLE Sesja_Koszyk
         ADD PRIMARY KEY (IdKoszyk, IdSesja)
 go
 
-create table Obserwacja_Koszyk (
-        IdObserwacja	int NOT NULL,
+create table Proba_Koszyk (
+        IdProba	int NOT NULL,
         IdKoszyk	int NOT NULL
  )
 go
  
- CREATE INDEX X1Obserwacja_Koszyk ON Obserwacja_Koszyk
+ CREATE INDEX X1Proba_Koszyk ON Proba_Koszyk
  (
         IdKoszyk
  )
 go
  
- CREATE INDEX X2Obserwacja_Koszyk ON Obserwacja_Koszyk
+ CREATE INDEX X2Proba_Koszyk ON Proba_Koszyk
  (
-        IdObserwacja
+        IdProba
  )
 go
  
-ALTER TABLE Obserwacja_Koszyk
-        ADD PRIMARY KEY (IdKoszyk, IdObserwacja)
+ALTER TABLE Proba_Koszyk
+        ADD PRIMARY KEY (IdKoszyk, IdProba)
 go
 
 
@@ -850,8 +836,8 @@ go
         IdUzytkownik
  )
 go
-create table Materializacja_Atrybutu_Obserwacji (
-        IdObserwacja         int NOT NULL,
+create table Materializacja_Atrybutu_Proby (
+        IdProba         int NOT NULL,
         IdAtrybut            int NOT NULL,
         IdUzytkownik		int NOT NULL,
         Wartosc_tekst        varchar(100) NULL,
@@ -859,17 +845,17 @@ create table Materializacja_Atrybutu_Obserwacji (
         Wartosc_zmiennoprzecinkowa float NULL
  )
 go
- CREATE INDEX X1Materializacja_Atrybutu_Obserwacji ON Materializacja_Atrybutu_Obserwacji
+ CREATE INDEX X1Materializacja_Atrybutu_Proby ON Materializacja_Atrybutu_Proby
  (
-        IdObserwacja
+        IdProba
  )
 go
- CREATE INDEX X2Materializacja_Atrybutu_Obserwacji ON Materializacja_Atrybutu_Obserwacji
+ CREATE INDEX X2Materializacja_Atrybutu_Proby ON Materializacja_Atrybutu_Proby
  (
         IdAtrybut
  )
 go
- CREATE INDEX X3Materializacja_Atrybutu_Obserwacji ON Materializacja_Atrybutu_Obserwacji
+ CREATE INDEX X3Materializacja_Atrybutu_Proby ON Materializacja_Atrybutu_Proby
  (
         IdUzytkownik
  )
@@ -931,9 +917,9 @@ go
                               REFERENCES Grupa_atrybutow on delete cascade;
 go
  
- ALTER TABLE Obserwacja
+ ALTER TABLE Proba
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja on delete cascade; -- wymaga dodania!
+                              REFERENCES Sesja on delete cascade;
 go 
  
 
@@ -964,7 +950,7 @@ go
  
  ALTER TABLE Sesja_grupa_sesji
         ADD FOREIGN KEY (IdSesja)
-                              REFERENCES Sesja on delete cascade; -- wymaga dodania!
+                              REFERENCES Sesja on delete cascade;
 go
  
  ALTER TABLE Plik
@@ -972,10 +958,10 @@ go
                               REFERENCES Konfiguracja_pomiarowa on delete cascade;
 go
 
--- Usunieto on cascade delete, by uniknac multiple paths
+-- Usunieto on delete cascade, by uniknac multiple paths
  ALTER TABLE Plik
-        ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja on delete no action;
+        ADD FOREIGN KEY (IdProba)
+                              REFERENCES Proba on delete no action;
 go
 
  ALTER TABLE Plik
@@ -1020,15 +1006,15 @@ ALTER TABLE Uzytkownik_uprawnienia
 go
  
 
-ALTER TABLE Wartosc_atrybutu_obserwacji
+ALTER TABLE Wartosc_atrybutu_proby
         ADD FOREIGN KEY (IdAtrybut)
                               REFERENCES Atrybut on delete cascade;
 go
  
  
- ALTER TABLE Wartosc_atrybutu_obserwacji
-        ADD FOREIGN KEY (IdObserwacja)
-                              REFERENCES Obserwacja on delete cascade;
+ ALTER TABLE Wartosc_atrybutu_proby
+        ADD FOREIGN KEY (IdProba)
+                              REFERENCES Proba on delete cascade;
 go
  
  
@@ -1074,71 +1060,71 @@ go
 go
 
  ALTER TABLE Performer_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade;
 go
  ALTER TABLE Performer_Koszyk
-        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade;
 go
  ALTER TABLE Sesja_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade;
 go
  ALTER TABLE Sesja_Koszyk
-        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade;
 go
- ALTER TABLE Obserwacja_Koszyk
-        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade; -- wymaga dodania!
+ ALTER TABLE Proba_Koszyk
+        ADD FOREIGN KEY (IdKoszyk) REFERENCES Koszyk on delete cascade;
 go
- ALTER TABLE Obserwacja_Koszyk
-        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
+ ALTER TABLE Proba_Koszyk
+        ADD FOREIGN KEY (IdProba) REFERENCES Proba on delete cascade;
 go
 -- zalezonosci cascade delete dla materializacji - pominiete na diagramie
 ALTER TABLE Materializacja_Atrybutu_Performera
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPerformer)
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Performera
-        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdPerformer) REFERENCES Performer on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdSesja)
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Sesji
-        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade;
 go
-ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdObserwacja)
+ALTER TABLE Materializacja_Atrybutu_Proby
+        ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdProba)
 go
-ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+ALTER TABLE Materializacja_Atrybutu_Proby
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade;
 go
-ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
+ALTER TABLE Materializacja_Atrybutu_Proby
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade;
 go
-ALTER TABLE Materializacja_Atrybutu_Obserwacji
-        ADD FOREIGN KEY (IdObserwacja) REFERENCES Obserwacja on delete cascade; -- wymaga dodania!
+ALTER TABLE Materializacja_Atrybutu_Proby
+        ADD FOREIGN KEY (IdProba) REFERENCES Proba on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
         ADD PRIMARY KEY (IdUzytkownik, IdAtrybut, IdPlik)
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdUzytkownik) REFERENCES Uzytkownik on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdAtrybut) REFERENCES Atrybut on delete cascade;
 go
 ALTER TABLE Materializacja_Atrybutu_Pliku
-        ADD FOREIGN KEY (IdPlik) REFERENCES Plik on delete cascade; -- wymaga dodania!
+        ADD FOREIGN KEY (IdPlik) REFERENCES Plik on delete cascade;
 go
 -- /zalezonosci cascade delete dla materializacji - pominiete na diagramie
 ALTER TABLE Predykat
@@ -1155,7 +1141,7 @@ ALTER TABLE Wartosc_Atrybutu_sesji
 go
 
 
-ALTER TABLE Wartosc_Atrybutu_obserwacji
+ALTER TABLE Wartosc_Atrybutu_proby
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete no action;
 go
 
@@ -1163,9 +1149,6 @@ ALTER TABLE Wartosc_Atrybutu_konfiguracji_pomiarowej
         ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete no action;
 go
 
-ALTER TABLE Wartosc_Atrybutu_pomiaru
-        ADD FOREIGN KEY (Wartosc_Id) REFERENCES Plik on delete no action;
-go
 -- /Usunieto kaskade, aby uniknac wielu sciezek propagacji usuwania
 
 
@@ -1177,7 +1160,6 @@ ALTER TABLE Konfiguracja_performera
         ADD FOREIGN KEY (IdSesja) REFERENCES Sesja on delete cascade;
 go
 
------------ NEW
 
   CREATE TABLE Wartosc_atrybutu_konfiguracji_performera (
         IdKonfiguracja_performera         int NOT NULL,
@@ -1297,7 +1279,15 @@ ALTER TABLE Widocznosc_grupy_atrybutow
                               REFERENCES Uzytkownik on delete cascade;
 go
 
+ALTER TABLE Sesja_Konfiguracja_pomiarowa
+        ADD FOREIGN KEY (IdSesja)
+                              REFERENCES Sesja on delete cascade;
+go 
 
+ALTER TABLE Sesja_Konfiguracja_pomiarowa
+        ADD FOREIGN KEY (IdKonfiguracja_pomiarowa)
+                              REFERENCES Konfiguracja_pomiarowa on delete cascade;
+go 
 
 /*
 SELECT OBJECT_NAME(id) AS TableName, OBJECT_NAME(constid) AS ConstraintName
@@ -1323,4 +1313,3 @@ ADD CONSTRAINT U_UzytkownikLogin UNIQUE (Login)
 go
 */
 
--- TO DO: Zrobiæ trigger do usuwania pliku przy wykonywaniu stosownej ClearAttributeValue.

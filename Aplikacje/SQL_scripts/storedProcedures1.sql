@@ -9,7 +9,7 @@ create procedure list_performer_sessions @perf_id int
 as
 	select distinct s.IdSesja as SessionID, s.IdUzytkownik as UserID, s.IdLaboratorium as LabID, 
       s.IdRodzaj_ruchu as MotionKindID, s.Data as SessionDate, s.Opis_sesji as SessionDescription  
-      from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja join Sesja s on o.IdSesja = s.IdSesja 
+      from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Proba o on p.IdProba = o.IdProba join Sesja s on o.IdSesja = s.IdSesja 
       where pp.IdPerformer=@perf_id
 go
 */
@@ -139,7 +139,7 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wap.IdPerformer = @perf_id 
 go
 
--- last rev: 2010-11-16
+-- last rev: 2011-07-10
 alter function list_performer_attributes_uniform ( @perf_id int )
 returns TABLE as
 return 
@@ -150,20 +150,6 @@ return
 	(select 'FirstName' as Name,
 			p.Imie as Value,
 			'string' as Type,
-			'_performer_static' as AttributeGroup,
-			'performer' as Entity
-	from Perf p)
-	union
-	(select 'LastName' as Name,
-			p.Nazwisko as Value,
-			'string' as Type,
-			'_performer_static' as AttributeGroup,
-			'performer' as Entity
-	from Perf p)
-	union
-	(select 'PerformerID' as Name,
-			p.IdPerformer as Value,
-			'integer' as Type,
 			'_performer_static' as AttributeGroup,
 			'performer' as Entity
 	from Perf p)
@@ -313,9 +299,9 @@ select
 		ga.Nazwa as AttributeGroup,
 		'trial' as Entity
 from Atrybut a 
-inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
+inner join Wartosc_atrybutu_proby wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wao.IdObserwacja = @trial_id 
+where wao.IdProba = @trial_id 
 go
 
 -- last rev: 2010-11-27
@@ -324,10 +310,10 @@ returns TABLE as
 return 
 (
  with Trial as
-( select * from Obserwacja where IdObserwacja=@trial_id )
+( select * from Proba where IdProba=@trial_id )
 	(
 	(select 'TrialID' as Name,
-			t.IdObserwacja as Value,
+			t.IdProba as Value,
 			'integer' as Type,
 			'_static' as AttributeGroup,
 			'trial' as Entity
@@ -341,7 +327,7 @@ return
 	from Trial t)
 	union
 	(select 'TrialDescription' as Name,
-			t.Opis_obserwacji as Value,
+			t.Opis_proby as Value,
 			'string' as Type,
 			'_static' as AttributeGroup,
 			'trial' as Entity
@@ -361,9 +347,9 @@ union
 		ga.Nazwa as AttributeGroup,
 		'trial' as Entity
 from Atrybut a 
-inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
+inner join Wartosc_atrybutu_proby wao on a.IdAtrybut=wao.IdAtrybut
 inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wao.IdObserwacja = @trial_id ));
+where wao.IdProba = @trial_id ));
 go
 
 -- last rev: 2010-11-16
@@ -444,82 +430,27 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where wakp.IdKonfiguracja_pomiarowa = @mc_id ));
 go
 
--- last rev: 2010-11-16
-alter function list_measurement_attributes ( @meas_id int )
-returns TABLE as
-return 
-select 
-	a.Nazwa as Name, 
-	(case a.Typ_danych 
-		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
-		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
-		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
-		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup,
-		'measurement' as Entity
-from Atrybut a 
-inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
-inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPomiar = @meas_id
-go
-
--- last rev: 2010-11-27
-alter function list_measurement_attributes_uniform ( @meas_id int )
-returns TABLE as
-return 
-(
- with Measurement as
-( select * from Pomiar where IdPomiar=@meas_id )
-	(
-	(select 'MeasurementID' as Name,
-			t.IdPomiar as Value,
-			'integer' as Type,
-			'_static' as AttributeGroup,
-			'measurement' as Entity
-	from Measurement t)
-	)
-union
-(	select a.Nazwa as Name, 
-	(case a.Typ_danych 
-		when 'string' then cast ( wap.Wartosc_tekst as SQL_VARIANT )
-		when 'integer' then (
-			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wap.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
-			else cast (cast ( wap.Wartosc_liczba as int ) as SQL_VARIANT) end
-		)
-		when 'file' then cast (wap.Wartosc_Id  as SQL_VARIANT)
-		else cast ( wap.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
-		a.Typ_danych as Type,
-		ga.Nazwa as AttributeGroup,
-		'measurement' as Entity
-from Atrybut a 
-inner join Wartosc_atrybutu_pomiaru wap on a.IdAtrybut=wap.IdAtrybut
-inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
-where wap.IdPomiar = @meas_id ));
-go
 
 
 
 -- Resource By-ID retrieval
 -- ========================
 
--- last rev: 20100102
+-- last rev: 2011-07-10
+-- deprecated
 create procedure get_performer_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
 				IdPerformer as PerformerID,
-				Imie as FirstName,
-				Nazwisko as LastName,
+				'anonymous' as FirstName,
+				'anonymous' as LastName,
 				(select * from list_performer_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE) as Attributes
 			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
 			for XML AUTO, ELEMENTS
 go
 
--- last rev: 20101127
+-- last rev: 2010-11-27
 create procedure get_session_by_id_xml ( @user_login as varchar(30), @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
@@ -542,27 +473,15 @@ create procedure get_trial_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select 
-				IdObserwacja as TrialID, 
+				IdProba as TrialID, 
 				IdSesja as SessionID,
 				Nazwa as TrialName,
-				Opis_obserwacji as TrialDescription, 
+				Opis_proby as TrialDescription, 
 				(select * from list_trial_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-			from Obserwacja TrialDetailsWithAttributes where IdObserwacja=@res_id
+			from Proba TrialDetailsWithAttributes where IdProba=@res_id
 			for XML AUTO, ELEMENTS
 go
 
--- last rev: 20110112
-create procedure get_measurement_by_id_xml ( @res_id int )
-as
-			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-			select 
-				IdPomiar as MeasurementID,
-				IdKonfiguracja_pomiarowa as MeasurementConfID,
-				IdObserwacja as TrialID,
-				(select * from list_measurement_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-			from Pomiar MeasurementDetailsWithAttributes where IdPomiar=@res_id
-			for XML AUTO, ELEMENTS
-go
 
 -- last rev: 20101013
 create procedure get_measurement_configuration_by_id_xml ( @res_id int )
@@ -628,17 +547,17 @@ as
 				) as FileWithAttributesList,
 				( 
 				   select 
-					IdObserwacja "TrialDetailsWithAttributes/TrialID",
+					IdProba "TrialDetailsWithAttributes/TrialID",
 					Nazwa "TrialDetailsWithAttributes/TrialName",
-					Opis_obserwacji "TrialDetailsWithAttributes/TrialDescription",
-					(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) "TrialDetailsWithAttributes/Attributes",
+					Opis_proby "TrialDetailsWithAttributes/TrialDescription",
+					(select * from list_trial_attributes ( IdProba ) Attribute FOR XML AUTO, TYPE ) "TrialDetailsWithAttributes/Attributes",
 					(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 						(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 						from Plik p 
 						where 
-						p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes'), TYPE
+						p.IdProba=TrialContent.IdProba for XML PATH('FileDetailsWithAttributes'), TYPE
 					) as FileWithAttributesList
-				from Obserwacja TrialContent where TrialContent.IdSesja = sc.IdSesja FOR XML PATH('TrialContent'), ELEMENTS, TYPE 
+				from Proba TrialContent where TrialContent.IdSesja = sc.IdSesja FOR XML PATH('TrialContent'), ELEMENTS, TYPE 
 				) as TrialContentList
 				from user_accessible_sessions_by_login(@user_login) sc where sc.IdSesja=@sess_id
 				for XML Path('SessionContent'), ELEMENTS
@@ -648,36 +567,36 @@ go
 -- Performer listing queries
 -- =========================
 
--- last rev: 20100102
+-- last rev: 2011-07-10
 create procedure list_performers_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select IdPerformer as PerformerID, Imie as FirstName, Nazwisko as LastName
+select IdPerformer as PerformerID, 'anonymous' as FirstName, 'anonymous' as LastName
 	from Performer PerformerDetails
     for XML AUTO, root ('PerformerList')
 go
 
--- last rev: 20100102
+-- last rev: 2011-07-10
 create procedure list_performers_attributes_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
+	'anonymous' as FirstName,
+	'anonymous' as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Performer PerformerDetailsWithAttributes
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')
 go
 
--- last rev: 20100102
+-- last rev: 2011-07-10
 create procedure list_session_performers_attributes_xml (@user_login varchar(30), @sess_id int)
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
+	'anonymous' as FirstName,
+	'anonymous' as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Performer PerformerDetailsWithAttributes
 	where exists ( select * from user_accessible_sessions_by_login (@user_login) where IdSesja = @sess_id) 
@@ -685,37 +604,21 @@ select
     for XML AUTO, ELEMENTS, root ('SessionPerformerWithAttributesList')
 go
 
--- last rev: 20100102
+-- last rev: 2011-07-10
 create procedure list_lab_performers_attributes_xml (@lab_id int)  -- Mozna pytac o przypisania na poziomie sesji
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
+	'anonymous' as FirstName,
+	'anonymous' as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Performer PerformerDetailsWithAttributes
 	where exists(
-	select * from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Obserwacja o on p.IdObserwacja = o.IdObserwacja join Sesja s  on o.IdSesja = s.IdSesja 
+	select * from Pomiar_performer pp join Pomiar p on pp.IdPomiar = p.IdPomiar join Proba o on p.IdProba = o.IdProba join Sesja s  on o.IdSesja = s.IdSesja 
 	where s.IdLaboratorium = @lab_id and pp.IdPerformer = PerformerDetailsWithAttributes.IdPerformer)
     for XML AUTO, ELEMENTS, root ('LabPerformerWithAttributesList')
 go
-
--- last rev: 20100102
-create procedure list_measurement_performers_attributes_xml (@meas_id int)
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select
-	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
-	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-	from Performer PerformerDetailsWithAttributes
-	where exists(
-	select * from Pomiar_performer pp where pp.IdPomiar = @meas_id and PerformerDetailsWithAttributes.IdPerformer = pp.IdPerformer)
-    for XML AUTO, ELEMENTS, root ('MeasurementPerformerWithAttributesList')
-go
-
 
 
 
@@ -815,7 +718,7 @@ as
 		(select * from list_session_attributes ( IdSesja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 		from user_accessible_sessions_by_login(@user_login) SessionDetailsWithAttributes
 		where exists (
-			select * from Pomiar p join Obserwacja o on p.IdObserwacja = o.IdObserwacja 
+			select * from Pomiar p join Proba o on p.IdProba = o.IdProba 
 			where p.IdKonfiguracja_pomiarowa = @mc_id and o.IdSesja = SessionDetailsWithAttributes.IdSesja
 		)
       for XML AUTO, ELEMENTS, root ('MeasurementConfSessionWithAttributesList')
@@ -842,16 +745,16 @@ as
 	from Plik p where p.IdSesja=SessionContent.IdSesja
 	for XML PATH('FileDetailsWithAttributes'), TYPE) as FileWithAttributesList,
 	(select 
-		IdObserwacja "TrialDetailsWithAttributes/TrialID",
+		IdProba "TrialDetailsWithAttributes/TrialID",
 		Nazwa "TrialDetailsWithAttributes/TrialName",
-		Opis_obserwacji "TrialDetailsWithAttributes/TrialDescription",
-		(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) "TrialDetailsWithAttributes/Attributes",
+		Opis_proby "TrialDetailsWithAttributes/TrialDescription",
+		(select * from list_trial_attributes ( IdProba ) Attribute FOR XML AUTO, TYPE ) "TrialDetailsWithAttributes/Attributes",
 		(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
 		from Plik p 
 		where 
-		p.IdObserwacja=TrialContent.IdObserwacja for XML PATH('FileDetailsWithAttributes'), TYPE) as FileWithAttributesList
-	from Obserwacja TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML PATH('TrialContent'), ELEMENTS, TYPE, ROOT('TrialContentList') ) 
+		p.IdProba=TrialContent.IdProba for XML PATH('FileDetailsWithAttributes'), TYPE) as FileWithAttributesList
+	from Proba TrialContent where TrialContent.IdSesja = SessionContent.IdSesja FOR XML PATH('TrialContent'), ELEMENTS, TYPE, ROOT('TrialContentList') ) 
 	from user_accessible_sessions_by_login(@user_login) SessionContent
       for XML PATH ('SessionContent'), ELEMENTS, ROOT('SessionContentList')
 go
@@ -888,11 +791,11 @@ create procedure list_session_trials_xml(@user_login varchar(30),  @sess_id int 
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	IdObserwacja as TrialID,
+	IdProba as TrialID,
 	IdSesja as SessionID,
 	Nazwa as TrialName,
-	Opis_obserwacji as TrialDescription
-from Obserwacja TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
+	Opis_proby as TrialDescription
+from Proba TrialDetails where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
       for XML AUTO, root ('SessionTrialList')
 go
 
@@ -901,12 +804,12 @@ create procedure list_session_trials_attributes_xml(@user_login varchar(30),   @
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select 
-	IdObserwacja as TrialID, 
+	IdProba as TrialID, 
 	IdSesja as SessionID, 
 	Nazwa as TrialName,
-	Opis_obserwacji as TrialDescription, 
-	(select * from list_trial_attributes ( IdObserwacja ) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Obserwacja TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
+	Opis_proby as TrialDescription, 
+	(select * from list_trial_attributes ( IdProba ) Attribute FOR XML AUTO, TYPE ) as Attributes 
+from Proba TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdSesja=@sess_id
     for XML AUTO, ELEMENTS, root ('SessionTrialWithAttributesList')
 go
 
@@ -951,9 +854,9 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select
 	IdPomiar MeasurementID,
 	IdKonfiguracja_pomiarowa MeasurementConfID,
-	IdObserwacja TrialID
+	IdProba TrialID
 from Pomiar MeasurementDetails
-where IdObserwacja = @trial_id
+where IdProba = @trial_id
       for XML AUTO, root ('TrialMeasurementList')
 go
 
@@ -964,31 +867,12 @@ with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueri
 select 
 	IdPomiar MeasurementID,
 	IdKonfiguracja_pomiarowa MeasurementConfID,
-	IdObserwacja TrialID,
+	IdProba TrialID,
 	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Pomiar MeasurementDetailsWithAttributes
-where IdObserwacja = @trial_id
+where IdProba = @trial_id
     for XML AUTO, ELEMENTS, root ('TrialMeasurementWithAttributesList')
 go
-
--- Measurement result listing queries
--- ==================================
-
--- last rev: 2010-01-02
-create procedure list_measurement_results_attributes_xml(@user_login varchar(30), @meas_id int )
-as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select 
-	IdPomiar MeasurementID,
-	IdKonfiguracja_pomiarowa MeasurementConfID,
-	IdObserwacja TrialID,
-	(select * from list_measurement_attributes(IdPomiar) Attribute FOR XML AUTO, TYPE ) as Attributes 
-from Pomiar MeasurementDetailsWithAttributes
-where IdPomiar = @meas_id
-    for XML AUTO, ELEMENTS, root ('MeasureResultWithAttributesList')
-go
-
-
 
 
 -- File queries
@@ -1039,7 +923,7 @@ create procedure list_trial_files_xml(@user_login varchar(30), @trial_id int)
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select IdPlik as FileID, Nazwa_pliku as FileName, Opis_pliku as FileDescription, Sciezka as SubdirPath from Plik FileDetails where 
-	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdObserwacja=@trial_id
+	((select top 1 IdSesja from Proba where IdProba = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdProba=@trial_id
 	for XML AUTO, root ('FileList')
 go
 
@@ -1066,10 +950,10 @@ create procedure list_trial_attr_files_xml(@user_login varchar(30), @trial_id in
 as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName"
-	from Plik p join Wartosc_atrybutu_obserwacji wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
+	from Plik p join Wartosc_atrybutu_proby wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
 	where 
-	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
-	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdObserwacja=@trial_id
+	((select top 1 IdSesja from Proba where IdProba = @trial_id) 
+	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdProba=@trial_id
 	for XML PATH('FileDetails'), root ('FileList')
 go
 
@@ -1156,7 +1040,7 @@ as
 		Opis_pliku as FileDescription,
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Plik FileDetailsWithAttributes
-		where ((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdObserwacja=@trial_id
+		where ((select top 1 IdSesja from Proba where IdProba = @trial_id) in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and IdProba=@trial_id
 	for XML AUTO, root ('FileWithAttributesList')
 go
 
@@ -1166,10 +1050,10 @@ as
 	with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", a.Nazwa "@AttributeName",
 	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
-	from Plik p join Wartosc_atrybutu_obserwacji wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
+	from Plik p join Wartosc_atrybutu_proby wao on p.IdPlik = wao.Wartosc_Id join Atrybut a on a.IdAtrybut = wao.IdAtrybut 
 	where 
-	((select top 1 IdSesja from Obserwacja where IdObserwacja = @trial_id) 
-	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdObserwacja=@trial_id
+	((select top 1 IdSesja from Proba where IdProba = @trial_id) 
+	in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) and wao.IdProba=@trial_id
 	for XML PATH('FileDetailsWithAttributes'), root ('FileWithAttributesList')
 go
 
@@ -1416,7 +1300,7 @@ begin
 end;
 go
 
--- last rev: 2010-10-18
+-- last rev: 2011-07-10
 create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
@@ -1426,28 +1310,11 @@ begin
 
 	/*
 	Current static non-id attributes:
-	'FirstName', 'string', 0, 'shortString'
-	'LastName', 'string', 0, 'shortString'
+
 
 	*/
 
 	set @result = 6; -- result 3 = type casting error
-
-	if(@attr_name = 'FirstName' or @attr_name = 'LastName')
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'FirstName')
-			update Performer set Imie  = @attr_value where IdPerformer = @perf_id;
-		if(@attr_name = 'LastName')
-			update Performer set Nazwisko  = @attr_value where IdPerformer = @perf_id;
-		set @result = 0;
-		return;
-	end;
-
 	
 	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
 		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja = 'performer';
@@ -1642,9 +1509,9 @@ begin
 					return;
 				end;	
 		if(@attr_name = 'TrialDescription')
-			update Obserwacja set Opis_obserwacji  = @attr_value where IdObserwacja = @trial_id;
+			update Proba set Opis_proby  = @attr_value where IdProba = @trial_id;
 		else if(@attr_name = 'TrialName')
-					update Obserwacja set Nazwa  =  @attr_value where IdSesja = @trial_id;
+					update Proba set Nazwa  =  @attr_value where IdSesja = @trial_id;
 
 		set @result = 0;
 		return;
@@ -1658,14 +1525,14 @@ begin
 		set @result = 1 -- result 1 = attribute of this name not applicable here
 		return;
 	end;
-	if not exists ( select * from Obserwacja where IdObserwacja = @trial_id )
+	if not exists ( select * from Proba where IdProba = @trial_id )
 		begin
 			set @result = 3;
 			return;
 		end;
 	else
 		begin
-			if exists ( select * from Wartosc_atrybutu_obserwacji where IdAtrybut = @attr_id and IdObserwacja = @trial_id ) set @value_tuple_found = 1;
+			if exists ( select * from Wartosc_atrybutu_proby where IdAtrybut = @attr_id and IdProba = @trial_id ) set @value_tuple_found = 1;
 			if @update = 0 and @value_tuple_found = 1
 				begin
 					set @result = 5; -- result 5 = value exists while update has not been allowed
@@ -1680,18 +1547,18 @@ begin
 				begin
 					set @integer_value = cast ( @attr_value as numeric(10,2) );
 					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_obserwacji set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					update Wartosc_atrybutu_proby set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdProba = @trial_id ;
 					else
-					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_liczba) values (@attr_id, @trial_id, @integer_value);
+					insert into Wartosc_atrybutu_proby (IdAtrybut, IdProba, Wartosc_liczba) values (@attr_id, @trial_id, @integer_value);
 				end;
 			
 			else if @attr_type = 'float'
 				begin
 					set @float_value = cast ( @attr_value as float );
 					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_obserwacji set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					update Wartosc_atrybutu_proby set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdProba = @trial_id ;
 					else
-					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_zmiennoprzecinkowa) values (@attr_id, @trial_id, @float_value);
+					insert into Wartosc_atrybutu_proby (IdAtrybut, IdProba, Wartosc_zmiennoprzecinkowa) values (@attr_id, @trial_id, @float_value);
 				end;
 			else if @attr_type = 'file'
 				begin
@@ -1702,16 +1569,16 @@ begin
 						return;
 					end;
 					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_obserwacji set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					update Wartosc_atrybutu_proby set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdProba = @trial_id ;
 					else
-					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_Id) values (@attr_id, @trial_id, @id_value);
+					insert into Wartosc_atrybutu_proby (IdAtrybut, IdProba, Wartosc_Id) values (@attr_id, @trial_id, @id_value);
 				end;
 			else
 				begin
 					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_obserwacji set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdObserwacja = @trial_id ;
+					update Wartosc_atrybutu_proby set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdProba = @trial_id ;
 					else
-					insert into Wartosc_atrybutu_obserwacji (IdAtrybut, IdObserwacja, Wartosc_tekst) values (@attr_id, @trial_id, @attr_value);
+					insert into Wartosc_atrybutu_proby (IdAtrybut, IdProba, Wartosc_tekst) values (@attr_id, @trial_id, @attr_value);
 				end;
 			set @result = 0;
 		end;
@@ -1907,113 +1774,6 @@ begin
 end;
 go	
 
--- last rev: 2011-01-18
-create procedure set_measurement_attribute (@meas_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
-as
-begin
-	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
-	declare @integer_value numeric(10,2), @float_value float, @id_value int;
-	declare @value_tuple_found as bit = 0;	
-
-	/*
-	Current static non-id attributes:
-	
-
-	*/
-
-	set @result = 6; -- result 6 = type casting erroron
-
-	if(@attr_name = 'MeasurementConfId') 
-	begin
-		if(@update = 0)
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;	
-		if(@attr_name = 'MeasurementConfId')
-			begin
-				set @integer_value = cast ( @attr_value as numeric(10,2) );
-				if(exists(select * from Konfiguracja_pomiarowa where IdKonfiguracja_pomiarowa = @integer_value))
-					begin
-						update Pomiar set IdKonfiguracja_pomiarowa  = @integer_value where IdPomiar = @meas_id;	
-						set @result = 0;
-					end;
-				else
-					begin
-						set @result = 7; -- result 7 = illegal ID value
-					end;
-				return;
-			end;
-	end;
-
-	select top(1) @attr_id = IdAtrybut, @attr_type = Typ_danych, @attr_enum = Wyliczeniowy 
-		from Atrybut a join Grupa_atrybutow ga on a.IdGrupa_atrybutow=ga.IdGrupa_atrybutow where a.Nazwa = @attr_name and ga.Opisywana_encja =  'measurement';
-	if @@rowcount = 0 
-	begin
-		set @result = 1 -- result 1 = attribute of this name not applicable here
-		return;
-	end;
-	if not exists ( select * from Pomiar where IdPomiar = @meas_id )
-		begin
-			set @result = 3;
-			return;
-		end;
-	else
-		begin
-			if exists ( select * from Wartosc_atrybutu_pomiaru where IdAtrybut = @attr_id and IdPomiar = @meas_id ) set @value_tuple_found = 1;
-			if @update = 0 and @value_tuple_found = 1
-				begin
-					set @result = 5; -- result 5 = value exists while update has not been allowed
-					return;
-				end;
-			if(@attr_enum = 1) 
-			begin
-				select top(1) Wartosc_wyliczeniowa from Wartosc_wyliczeniowa where Wartosc_wyliczeniowa=@attr_value ;
-				if @@rowcount = 0 begin set @result = 2; return; end; -- result 2 = illegal enum attribute value
-			end;
-			if @attr_type = 'integer'
-				begin
-					set @integer_value = cast ( @attr_value as numeric(10,2) );
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_pomiaru set Wartosc_liczba  = @integer_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
-					else
-					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_liczba) values (@attr_id, @meas_id, @integer_value);
-				end;
-			
-			else if @attr_type = 'float'
-				begin
-					set @float_value = cast ( @attr_value as float );
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_pomiaru set Wartosc_zmiennoprzecinkowa  = @float_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
-					else
-					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_zmiennoprzecinkowa) values (@attr_id, @meas_id, @float_value);
-				end;
-			else if @attr_type = 'file'
-				begin
-					set @id_value = cast ( @attr_value as int );
-					if ( not exists ( select IdPlik from Plik where IdPlik = @id_value) )
-					begin
-						set @result = 7;
-						return;
-					end;
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_pomiaru set Wartosc_Id  = @id_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
-					else
-					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_Id) values (@attr_id, @meas_id, @id_value);
-				end;
-			else
-				begin
-					if ( @value_tuple_found = 1 )
-					update Wartosc_atrybutu_pomiaru set Wartosc_tekst  = @attr_value where IdAtrybut = @attr_id and IdPomiar = @meas_id ;
-					else
-					insert into Wartosc_atrybutu_pomiaru (IdAtrybut, IdPomiar, Wartosc_tekst) values (@attr_id, @meas_id, @attr_value);
-				end;
-			set @result = 0;
-		end;
-end;
-go
-
-
 
 -- Attribute value removal
 -- last rev: 2010-10-18
@@ -2043,13 +1803,13 @@ begin
 	end
 	else if (@entity = 'trial')
 	begin
-		if not exists ( select * from Atrybut a join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut = wao.IdAtrybut
-				where a.Nazwa = @attr_name and wao.IdObserwacja = @res_id )
+		if not exists ( select * from Atrybut a join Wartosc_atrybutu_proby wao on a.IdAtrybut = wao.IdAtrybut
+				where a.Nazwa = @attr_name and wao.IdProba = @res_id )
 		begin
 			set @result = 1;
 			return;
 		end;
-	delete from wa from Wartosc_atrybutu_obserwacji wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdObserwacja = @res_id and a.Nazwa = @attr_name;
+	delete from wa from Wartosc_atrybutu_proby wa join Atrybut a on wa.IdAtrybut = a.IdAtrybut where wa.IdProba = @res_id and a.Nazwa = @attr_name;
 	end
 	else if (@entity = 'file')
 	begin

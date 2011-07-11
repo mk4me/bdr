@@ -1,4 +1,6 @@
+ -- zdezaktualizowane
  use Motion;
+ 
  
  ALTER TABLE Plik ADD IdPerformer int NULL;
  go
