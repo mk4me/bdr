@@ -25,7 +25,7 @@ begin
 
 end;
 go
-
+-- created: 2010-10-20
 create function motion_kind_name( @mk_id int )
 returns varchar(50)
 as

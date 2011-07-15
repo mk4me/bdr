@@ -16,6 +16,14 @@ create type PredicateUdt as table
 )
 go
 
+-- created: 2010-11-25
+create type FileNameListUdt as table
+(
+	Name varchar(255)
+)
+go
+
+
 -- last rev. 2010-01-02
 create function perf_attr_value(@perf_id int, @attributeName as varchar(100))
 returns table
@@ -63,7 +71,7 @@ select
 		)
 		else cast ( cast ( wao.Wartosc_zmiennoprzecinkowa as float) as varchar(100) ) end  ) as Value
 from Atrybut a 
-inner join Wartosc_atrybutu_obserwacji wao on a.IdAtrybut=wao.IdAtrybut
+inner join Wartosc_atrybutu_proby wao on a.IdAtrybut=wao.IdAtrybut
 where wao.IdProba = @trial_id and a.Nazwa = @attributeName
 go
 
@@ -144,7 +152,7 @@ begin
 	if(@perf = 1 and (@sess=1 or @trial=1 or @mc=1)) set @selectClause = @selectClause +', ';
 	if(@sess = 1) set @selectClause = @selectClause + 's.IdSesja as SessionID, s.IdLaboratorium as LabID, dbo.motion_kind_name(s.IdRodzaj_ruchu) as MotionKind,	s.Data as SessionDate,	s.Nazwa as SessionName, s.Tagi as Tags, s.Opis_sesji as SessionDescription ';
 	if(@sess = 1 and (@trial=1 or @mc=1)) set @selectClause = @selectClause +', ';
-	if(@trial = 1) set @selectClause = @selectClause +'t.IdProba as TrialID, t.Opis_obserwacji as TrialDescription ';
+	if(@trial = 1) set @selectClause = @selectClause +'t.IdProba as TrialID, t.Opis_proby as TrialDescription ';
 	if(@trial = 1 and @mc=1) set @selectClause = @selectClause + ', ';
 	if(@mc = 1) set @selectClause = @selectClause + 'c.IdKonfiguracja_pomiarowa as MeasurementConfID,	c.Nazwa as MeasureConfName, c.Opis as MeasureConfDescription ';
 	
@@ -188,12 +196,6 @@ begin
 		end;
 	
 	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Proba as t ';
-
-	if( @trial = 0 and (@meas = 1 or (@perf = 1 and @mc =1))) 
-		begin
-		 set @fromClause = @fromClause + 'Pomiar as m ';
-		 set @meas = 1;
-		end;
 
 	if (@sess = 1 and @mc = 1)
 		begin
@@ -266,7 +268,7 @@ begin
 				case @currentFeatureName
 					when 'TrialID' then	't.IdProba'
 					when 'TrialName' then 't.Nazwa'
-					when 'TrialDescription' then 't.Opis_obserwacji'
+					when 'TrialDescription' then 't.Opis_proby'
 					else '(select top 1 * from trial_attr_value(t.IdProba, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement_conf' then (
 				case @currentFeatureName
@@ -446,22 +448,14 @@ begin
 	if( @sess = 0 and @trial = 1) set @fromClause = @fromClause + 'Proba as t ';
 
 
-	if (@meas = 1)
+
+	if( @perf=1)  
 		begin
-		if(  @mc=1)  
-			set @fromClause = @fromClause + 'join Konfiguracja_pomiarowa as mc on p.IdKonfiguracja_pomiarowa = c.IdKonfiguracja_pomiarowa ';
-		if( @perf=1)
-			set @fromClause = @fromClause + 'join Pomiar_performer as pp on pp.IdPomiar = pp.IdPomiar join Performer as p on p.IdPerformer = pp.IdPerformer ';	
-		end	
-	else
-		begin	
-			if( @perf=1)  
-				begin
-					if(@pc = 0) set @fromClause = @fromClause + 'Performer as p ';	
-					else set @fromClause = @fromClause + 'join Performer p on pc.IdPerformer = p.IdPerformer ';
-				end
-			if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
-		end;
+			if(@pc = 0) set @fromClause = @fromClause + 'Performer as p ';	
+			else set @fromClause = @fromClause + 'join Performer p on pc.IdPerformer = p.IdPerformer ';
+		end
+	if( @mc=1)  set @fromClause = @fromClause + 'Konfiguracja_pomiarowa as mc ';	
+
 
 	if (@sess = 1 and @mc = 1)
 		begin
@@ -533,7 +527,7 @@ begin
 				case @currentFeatureName
 					when 'TrialID' then	't.IdProba'
 					when 'TrialName' then 't.Nazwa'
-					when 'TrialDescription' then 't.Opis_obserwacji'
+					when 'TrialDescription' then 't.Opis_proby'
 					else '(select top 1 * from trial_attr_value(t.IdProba, '+quotename(@currentFeatureName,'''')+'))' end				)
 			when 'measurement_conf' then (
 				case @currentFeatureName
@@ -842,8 +836,6 @@ as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService')
 select
 	IdPerformer as PerformerID,
-	Imie as FirstName,
-	Nazwisko as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Performer PerformerDetailsWithAttributes
 	where IdPerformer in (select IdPerformer from Performer_Koszyk pk join Koszyk k on pk.IdKoszyk = k.IdKoszyk where k.Nazwa = @basket_name and k.IdUzytkownik = dbo.identify_user(@user_login) )
@@ -878,7 +870,7 @@ select
 	IdProba as TrialID, 
 	IdSesja as SessionID, 
 	Nazwa as TrialName,
-	Opis_obserwacji as TrialDescription, 
+	Opis_proby as TrialDescription, 
 	(select * from list_trial_attributes ( IdProba ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 from Proba TrialDetailsWithAttributes where (IdSesja in (select s.IdSesja from user_accessible_sessions_by_login(@user_login) s)) 
 	and IdProba in 
@@ -1249,7 +1241,7 @@ as
 go
 
 
--- last rev. 2011-03-26
+-- last rev. 2011-07-13
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1284,7 +1276,7 @@ as
 			set @result = 1;
 			return;
 		end;
-	  set @sessionDate = CAST ( SUBSTRING(@sessionName,1,10) as DateTime);
+	  set @sessionDate = CAST ( SUBSTRING(@sessionName,1,10) as Date);
 	  -- Czy nie ma plikow o niezgodnych nazwach?
 	  if exists( select * from @files where CHARINDEX (@sessionName , Name)=0 )
 		begin
@@ -1329,7 +1321,7 @@ as
 			select top(1) @trialName = tn.tname from @trialNames tn where not exists ( select * from @fileStoreList fsl where ( CHARINDEX(tn.tname,fsl.fname)>0  ));
 
 			
-			insert into Proba ( IdSesja, Opis_obserwacji, Nazwa) values (@sessionId, '', @trialName ) set @trialId = SCOPE_IDENTITY();
+			insert into Proba ( IdSesja, Opis_proby, Nazwa) values (@sessionId, '', @trialName ) set @trialId = SCOPE_IDENTITY();
 			-- po przetestowaniu zamien wykomentowania gora-dol
 			-- set @trialId = @trialsToCreate;
             insert @fileStoreList ( fname, entity, resid ) select Name, 'trial', @trialId from @files f where ( CHARINDEX (@trialName, f.Name)>0 );
@@ -1379,7 +1371,7 @@ select
 	IdProba as TrialID,
 	IdSesja as SessionID,
 	Nazwa as TrialName,
-	Opis_obserwacji as TrialDescription,
+	Opis_proby as TrialDescription,
 	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
 	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
 		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes

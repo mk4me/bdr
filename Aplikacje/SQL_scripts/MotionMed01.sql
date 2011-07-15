@@ -4,7 +4,7 @@
 use Motion_Med;
 go 
  CREATE TABLE Pacjent (
-        IdPacjent           int IDENTITY,
+        IdPacjent           int IDENTITY, -- zmienic!!!
         Imie                varchar(30) NOT NULL,
         Nazwisko            varchar(50) NOT NULL,
         Plec				char NOT NULL,
@@ -33,7 +33,7 @@ go
 
 create table Badanie (
 	IdBadanie	int IDENTITY,
-	Data	date NOT NULL,
+	Data	date NOT NULL, -- datetime ???
 	Opis varchar(255),
 	Notatki	varchar(255),
 	IdSesja int,
@@ -61,7 +61,7 @@ alter table Schorzenie
 	add primary key (IdSchorzenie)
 go
 
-create table Badanie_schorzenie (
+create table Badanie_schorzenie ( -- przeniesc do pacjenta?
 	IdBadanie	int not null,
 	IdSchorzenie	int not null,
 	Komentarz varchar(255)

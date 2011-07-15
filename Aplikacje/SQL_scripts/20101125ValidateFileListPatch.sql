@@ -1401,7 +1401,7 @@ delete from Sesja where IdSesja > 74
 
 
 drop type FileNameListUdt
-
+-- created: 2010-11-25
 create type FileNameListUdt as table
 (
 	Name varchar(255)

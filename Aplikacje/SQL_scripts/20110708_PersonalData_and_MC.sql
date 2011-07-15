@@ -44,9 +44,12 @@ go
 
 -- usuniecie: set_measurement_attribute
 
+-- usuniecie: measurement_attr_value
+
+-- Anonimizacja: procedury w storedProcedures2.sql
+
 -- usuniecie: 
-
-
+-- usuniecie: -- usuniecie: -- usuniecie: -- usuniecie: 
 
 
 
