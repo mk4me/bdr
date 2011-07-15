@@ -15,6 +15,7 @@ namespace MotionDBWebServices
 {
     // NOTE: If you change the class name "FileStoremanWS" here, you must also update the reference to "FileStoremanWS" in Web.config.
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
+    [ErrorLoggerBehaviorAttribute]
     public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
 
@@ -166,7 +167,7 @@ namespace MotionDBWebServices
             {
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
+                cmd.CommandText = @"insert into Plik ( IdProba, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@trial_id, @file_desc, @file_data, @file_name)
                                         set @file_id = SCOPE_IDENTITY()";
                 cmd.Parameters.Add("@trial_id", SqlDbType.Int);
@@ -452,7 +453,7 @@ namespace MotionDBWebServices
             {
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
                 OpenConnection();
-                cmd.CommandText = @"insert into Plik ( IdObserwacja, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
+                cmd.CommandText = @"insert into Plik ( IdProba, Opis_pliku, Plik, Nazwa_pliku, Sciezka)
                                         values (@trial_id, @file_desc, @file_data, @file_name, @file_path)";
                 cmd.Parameters.Add("@trial_id", SqlDbType.Int);
                 cmd.Parameters.Add("@file_desc", SqlDbType.VarChar, 100);
@@ -943,22 +944,23 @@ namespace MotionDBWebServices
             connA = new SqlConnection(@"server = .; integrated security = true; database = Motion");
             try
             {
+                OpenConnection();
                 connF.Open();
                 connA.Open();
                 
                  
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
-                foreach (FileInfo fi in di.GetFiles("????-??-??-P??-S??*.???", SearchOption.TopDirectoryOnly) )
+                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.???", SearchOption.TopDirectoryOnly) )
                 {
 
-                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-P\d{2}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip))"))
+                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-B\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
                     {
                         FileNameEntry fne = new FileNameEntry();
                         fne.Name = fi.Name;
                         fileNames.Add(fne);
                     }
                 }
-                OpenConnection();
+
                 cmd = conn.CreateCommand();
                 cmd.CommandText = "create_session_from_file_list";
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -985,7 +987,7 @@ namespace MotionDBWebServices
                 cmdF = connF.CreateCommand();
                 cmdA = connA.CreateCommand();
 
-                cmdF.CommandText = @"insert into Plik ( IdSesja, IdObserwacja, Opis_pliku, Plik, Nazwa_pliku)
+                cmdF.CommandText = @"insert into Plik ( IdSesja, IdProba, Opis_pliku, Plik, Nazwa_pliku)
                                         values (@sess_id, @trial_id, @file_desc, @file_data, @file_name)
                                         set @file_id = SCOPE_IDENTITY()";
                 cmdF.CommandType = CommandType.Text;

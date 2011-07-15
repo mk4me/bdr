@@ -113,7 +113,7 @@ namespace MotionDBWebServices
                 cmd.Parameters["@sess_user"].Value = userName;
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@mk_name"].Value = motionKindName;
-                cmd.Parameters["@sess_date"].Value = sessionDate;
+                cmd.Parameters["@sess_date"].Value = sessionDate.Date;
                 cmd.Parameters["@sess_name"].Value = sessionName;
                 cmd.Parameters["@sess_tags"].Value = tags;
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
@@ -366,41 +366,7 @@ namespace MotionDBWebServices
             return newPerfConfId;
         }
 
-        
-        // Performer to measurement assignment operations
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public bool AddPerformerToMeasurement(int performerID, int measurementID)
-        {
-
-            bool result = false;
-            try
-            {
-
-                OpenConnection();
-                cmd.CommandText = @"insert into Pomiar_performer ( IdPomiar, IdPerformer)
-                                            values (@meas_id, @perf_id )";
-                cmd.Parameters.Add("@meas_id", SqlDbType.Int);
-                cmd.Parameters.Add("@perf_id", SqlDbType.Int);
-                cmd.Parameters["@meas_id"].Value = measurementID;
-                cmd.Parameters["@perf_id"].Value = performerID;
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-
-            }
-            catch (SqlException ex)
-            {
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("AddPerformerToMeasurement")));
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            result = true;
-            return result;
-        }
-
+       
 
         // Attribute update operations
 

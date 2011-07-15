@@ -9,57 +9,6 @@
 	</wsp:Policy>
 	<wsdl:types>
 		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
-			<xsd:element name="AttributeGroupDefinitionList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="AttributeGroupDefinition" minOccurs="0" maxOccurs="unbounded">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element name="AttributeGroupName" type="xsd:string"/>
-									<xsd:element name="DescribedEntity" type="xsd:string"/>
-									<xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="SessionGroupDefinition">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="SessionGroupID" type="xsd:int"/>
-						<xsd:element name="SessionGroupName" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="SessionGroupDefinitionList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element ref="tns:SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="MotionKindDefinitionList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element name="MotionKindID" type="xsd:int"/>
-									<xsd:element name="MotionKindName" type="xsd:string"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="EnumValueList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="EnumValue" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
 			<xsd:element name="SessionContent">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -139,8 +88,6 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element name="PerformerID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-									<xsd:element name="FirstName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-									<xsd:element name="LastName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="UserID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
@@ -152,7 +99,6 @@
 									<xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-									<xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfName" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 									<xsd:element name="MeasurementConfDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/>
@@ -174,8 +120,6 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="PerformerID" type="xsd:int"/>
-						<xsd:element name="FirstName" type="xsd:string"/>
-						<xsd:element name="LastName" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -207,16 +151,6 @@
 						<xsd:element name="TrialDescription" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 						<!-- <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" /> -->
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="MeasurementDetailsWithAttributes">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="MeasurementID" type="xsd:int"/>
-						<xsd:element name="MeasurementConfID" type="xsd:int"/>
-						<xsd:element name="TrialID" type="xsd:int"/>
-						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -258,8 +192,6 @@
 						<xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="PerformerID" type="xsd:int"/>
-								<xsd:attribute name="FirstName" type="xsd:string"/>
-								<xsd:attribute name="LastName" type="xsd:string"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -282,14 +214,6 @@
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="LabPerformerWithAttributesList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-        </xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="MeasurementPerformerWithAttributesList">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
@@ -348,6 +272,14 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="SessionGroupDefinition">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionGroupID" type="xsd:int"/>
+						<xsd:element name="SessionGroupName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="SessionSessionGroupList">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -382,22 +314,6 @@
 					<xsd:sequence>
 						<xsd:element ref="tns:PerformerConfDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
         </xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="TrialMeasurementWithAttributesList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element ref="tns:MeasurementDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-            </xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="MeasurementConfMeasurementWithAttributesList">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element ref="tns:MeasurementDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
-            </xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -466,83 +382,46 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListAttributeGroupsDefined">
+			<xsd:element name="AttributeGroupDefinitionList">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListAttributeGroupsDefinedResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
+						<xsd:element name="AttributeGroupDefinition" minOccurs="0" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:sequence>
-									<xsd:element ref="tns:AttributeGroupDefinitionList"/>
+									<xsd:element name="AttributeGroupName" type="xsd:string"/>
+									<xsd:element name="DescribedEntity" type="xsd:string"/>
+									<xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:complexType name="QueryException">
-				<xsd:sequence>
-					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
-					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
-			<xsd:element name="ListSessionGroupsDefined">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListSessionGroupsDefinedResponse">
+			<xsd:element name="SessionGroupDefinitionList">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+						<xsd:element ref="tns:SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MotionKindDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="MotionKindDefinition" minOccurs="0" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:sequence>
-									<xsd:element ref="tns:SessionGroupDefinitionList"/>
+									<xsd:element name="MotionKindID" type="xsd:int"/>
+									<xsd:element name="MotionKindName" type="xsd:string"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListMotionKindsDefined">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListMotionKindsDefinedResponse">
+			<xsd:element name="EnumValueList">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:MotionKindDefinitionList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListEnumValues">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
-						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListEnumValuesResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:EnumValueList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
+						<xsd:element name="EnumValue" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -567,6 +446,13 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:complexType name="QueryException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
 			<xsd:element name="GetSessionContent">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -757,26 +643,6 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="GetMeasurementByIdXML">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:int"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="GetMeasurementByIdXMLResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="GetMeasurementByIdXMLResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:MeasurementDetailsWithAttributes"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
 			<xsd:element name="GetMeasurementConfigurationByIdXML">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -903,26 +769,6 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:LabPerformerWithAttributesList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListMeasurementPerformersWithAttributesXML">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="measurementID" type="xsd:int"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListMeasurementPerformersWithAttributesXMLResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementPerformersWithAttributesXMLResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:MeasurementPerformerWithAttributesList"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -1109,46 +955,6 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListTrialMeasurementsWithAttributesXML">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="trialID" type="xsd:int"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListTrialMeasurementsWithAttributesXMLResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListTrialMeasurementsWithAttributesXMLResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:TrialMeasurementWithAttributesList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListMeasurementConfMeasurementsWithAttributesXML">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="measurementConfID" type="xsd:int"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListMeasurementConfMeasurementsWithAttributesXMLResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListMeasurementConfMeasurementsWithAttributesXMLResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:MeasurementConfMeasurementWithAttributesList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
 			<xsd:element name="ListMeasurementConfigurationsWithAttributesXML">
 				<xsd:complexType/>
 			</xsd:element>
@@ -1270,6 +1076,79 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="ListAttributeGroupsDefined">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListAttributeGroupsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:AttributeGroupDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListSessionGroupsDefined">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListSessionGroupsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionGroupDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListMotionKindsDefined">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListMotionKindsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:MotionKindDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListEnumValues">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListEnumValuesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:EnumValueList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
@@ -1313,42 +1192,6 @@
 			<xs:attribute name="Ref" type="xs:IDREF"/>
 		</xs:schema>
 	</wsdl:types>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListEnumValues"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListEnumValuesResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListSessionContents_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListSessionContents"/>
 	</wsdl:message>
@@ -1430,15 +1273,6 @@
 	<wsdl:message name="IBasicQueriesWS_GetTrialByIdXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_GetMeasurementByIdXML_InputMessage">
-		<wsdl:part name="parameters" element="tns:GetMeasurementByIdXML"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_GetMeasurementByIdXML_OutputMessage">
-		<wsdl:part name="parameters" element="tns:GetMeasurementByIdXMLResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_GetMeasurementByIdXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GetMeasurementConfigurationByIdXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GetMeasurementConfigurationByIdXML"/>
 	</wsdl:message>
@@ -1500,15 +1334,6 @@
 		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListLabPerformersWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementPerformersWithAttributesXML"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementPerformersWithAttributesXMLResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListPerformerSessionsXML_InputMessage">
@@ -1592,24 +1417,6 @@
 	<wsdl:message name="IBasicQueriesWS_ListSessionPerformerConfsWithAttributesXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListTrialMeasurementsWithAttributesXML"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListTrialMeasurementsWithAttributesXMLResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementConfMeasurementsWithAttributesXML"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListMeasurementConfMeasurementsWithAttributesXMLResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListMeasurementConfigurationsWithAttributesXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListMeasurementConfigurationsWithAttributesXML"/>
 	</wsdl:message>
@@ -1664,27 +1471,43 @@
 	<wsdl:message name="IBasicQueriesWS_ListAttributesDefined_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValues"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValuesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:portType name="IBasicQueriesWS">
-		<wsdl:operation name="ListAttributeGroupsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListSessionGroupsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListMotionKindsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" message="tns:IBasicQueriesWS_ListMotionKindsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedResponse" message="tns:IBasicQueriesWS_ListMotionKindsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListEnumValues">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" message="tns:IBasicQueriesWS_ListEnumValues_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
 		<wsdl:operation name="ListSessionContents">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" message="tns:IBasicQueriesWS_ListSessionContents_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContentsResponse" message="tns:IBasicQueriesWS_ListSessionContents_OutputMessage"/>
@@ -1730,11 +1553,6 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetTrialByIdXMLResponse" message="tns:IBasicQueriesWS_GetTrialByIdXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetTrialByIdXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetTrialByIdXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
-		<wsdl:operation name="GetMeasurementByIdXML">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementByIdXML" message="tns:IBasicQueriesWS_GetMeasurementByIdXML_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementByIdXMLResponse" message="tns:IBasicQueriesWS_GetMeasurementByIdXML_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementByIdXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetMeasurementByIdXML_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
 		<wsdl:operation name="GetMeasurementConfigurationByIdXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementConfigurationByIdXML" message="tns:IBasicQueriesWS_GetMeasurementConfigurationByIdXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementConfigurationByIdXMLResponse" message="tns:IBasicQueriesWS_GetMeasurementConfigurationByIdXML_OutputMessage"/>
@@ -1769,11 +1587,6 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXML" message="tns:IBasicQueriesWS_ListLabPerformersWithAttributesXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListLabPerformersWithAttributesXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListLabPerformersWithAttributesXML_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementPerformersWithAttributesXML">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementPerformersWithAttributesXML" message="tns:IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementPerformersWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementPerformersWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMeasurementPerformersWithAttributesXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="ListPerformerSessionsXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListPerformerSessionsXML" message="tns:IBasicQueriesWS_ListPerformerSessionsXML_InputMessage"/>
@@ -1820,16 +1633,6 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformerConfsWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListSessionPerformerConfsWithAttributesXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionPerformerConfsWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionPerformerConfsWithAttributesXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
-		<wsdl:operation name="ListTrialMeasurementsWithAttributesXML">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListTrialMeasurementsWithAttributesXML" message="tns:IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListTrialMeasurementsWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListTrialMeasurementsWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListTrialMeasurementsWithAttributesXML_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementConfMeasurementsWithAttributesXML">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfMeasurementsWithAttributesXML" message="tns:IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfMeasurementsWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfMeasurementsWithAttributesXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMeasurementConfMeasurementsWithAttributesXML_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
 		<wsdl:operation name="ListMeasurementConfigurationsWithAttributesXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfigurationsWithAttributesXML" message="tns:IBasicQueriesWS_ListMeasurementConfigurationsWithAttributesXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfigurationsWithAttributesXMLResponse" message="tns:IBasicQueriesWS_ListMeasurementConfigurationsWithAttributesXML_OutputMessage"/>
@@ -1860,58 +1663,30 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributesDefinedResponse" message="tns:IBasicQueriesWS_ListAttributesDefined_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributesDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributesDefined_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" message="tns:IBasicQueriesWS_ListMotionKindsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedResponse" message="tns:IBasicQueriesWS_ListMotionKindsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" message="tns:IBasicQueriesWS_ListEnumValues_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicHttpBinding_IBasicQueriesWS" type="tns:IBasicQueriesWS">
 		<wsp:PolicyReference URI="#BasicHttpBinding_IBasicQueriesWS_policy"/>
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
-		<wsdl:operation name="ListAttributeGroupsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListSessionGroupsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListMotionKindsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListEnumValues">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
 		<wsdl:operation name="ListSessionContents">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" style="document"/>
 			<wsdl:input>
@@ -2020,18 +1795,6 @@
 				<soap:fault name="QueryExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
-		<wsdl:operation name="GetMeasurementByIdXML">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementByIdXML" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
 		<wsdl:operation name="GetMeasurementConfigurationByIdXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMeasurementConfigurationByIdXML" style="document"/>
 			<wsdl:input>
@@ -2106,18 +1869,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListLabPerformersWithAttributesXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListLabPerformersWithAttributesXML" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementPerformersWithAttributesXML">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementPerformersWithAttributesXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -2236,30 +1987,6 @@
 				<soap:fault name="QueryExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
-		<wsdl:operation name="ListTrialMeasurementsWithAttributesXML">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListTrialMeasurementsWithAttributesXML" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListMeasurementConfMeasurementsWithAttributesXML">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfMeasurementsWithAttributesXML" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
 		<wsdl:operation name="ListMeasurementConfigurationsWithAttributesXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMeasurementConfigurationsWithAttributesXML" style="document"/>
 			<wsdl:input>
@@ -2332,10 +2059,58 @@
 				<soap:fault name="QueryExceptionFault" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

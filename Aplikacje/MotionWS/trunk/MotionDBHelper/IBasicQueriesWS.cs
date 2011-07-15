@@ -38,10 +38,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
-        XmlElement GetMeasurementByIdXML(int id);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
         XmlElement GetMeasurementConfigurationByIdXML(int id);
 
         [OperationContract]
@@ -67,10 +63,6 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListLabPerformersWithAttributesXML(int labID);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListMeasurementPerformersWithAttributesXML(int measurementID);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]
@@ -107,14 +99,6 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(QueryException))]
         XmlElement ListSessionPerformerConfsWithAttributesXML(int sessionID);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListTrialMeasurementsWithAttributesXML(int trialID);
-
-        [OperationContract]
-        [FaultContract(typeof(QueryException))]
-        XmlElement ListMeasurementConfMeasurementsWithAttributesXML(int measurementConfID);
 
         [OperationContract]
         [FaultContract(typeof(QueryException))]

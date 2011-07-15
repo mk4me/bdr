@@ -41,10 +41,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        bool AddPerformerToMeasurement(int performerID, int measurementID);
-
-        [OperationContract]
-        [FaultContract(typeof(UpdateException))]
         void SetPerformerAttribute(int performerID, string attributeName, string attributeValue, bool update);
 
         [OperationContract]

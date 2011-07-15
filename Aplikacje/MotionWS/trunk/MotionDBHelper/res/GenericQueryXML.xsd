@@ -8,8 +8,6 @@
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="PerformerID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="FirstName" type="xsd:string" minOccurs="0" maxOccurs="1" />
-            <xsd:element name="LastName" type="xsd:string"  minOccurs="0" maxOccurs="1"/>
             <xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="UserID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="LabID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
@@ -21,7 +19,6 @@
             <xsd:element name="TrialID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="TrialName" type="xsd:string" minOccurs="0" maxOccurs="1" />
             <xsd:element name="TrialDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />
-            <xsd:element name="MeasurementID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfID" type="xsd:int" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfName" type="xsd:string" minOccurs="0" maxOccurs="1"  />
             <xsd:element name="MeasurementConfDescription" type="xsd:string" minOccurs="0" maxOccurs="1"  />

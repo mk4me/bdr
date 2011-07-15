@@ -6,8 +6,6 @@
             <xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:attribute name="PerformerID" type="xsd:int" />
-                <xsd:attribute name="FirstName" type="xsd:string" />
-                <xsd:attribute name="LastName" type="xsd:string" />
               </xsd:complexType>
             </xsd:element>
           </xsd:sequence>

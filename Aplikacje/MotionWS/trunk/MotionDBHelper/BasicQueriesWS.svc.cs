@@ -44,9 +44,7 @@ namespace MotionDBWebServices
                 SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
                 showTrialfPar.Direction = ParameterDirection.Input;
                 showTrialfPar.Value = entitiesToInclude.Contains("trial") ? 1 : 0;
-                SqlParameter showMeasPar = cmd.Parameters.Add("@meas", SqlDbType.Bit);
-                showMeasPar.Direction = ParameterDirection.Input;
-                showMeasPar.Value = entitiesToInclude.Contains("measurement") ? 1 : 0;
+
                 SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
                 showMCPar.Direction = ParameterDirection.Input;
                 showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
@@ -108,9 +106,6 @@ namespace MotionDBWebServices
                 SqlParameter showTrialfPar = cmd.Parameters.Add("@trial", SqlDbType.Bit);
                 showTrialfPar.Direction = ParameterDirection.Input;
                 showTrialfPar.Value = entitiesToInclude.Contains("trial") ? 1 : 0;
-                SqlParameter showMeasPar = cmd.Parameters.Add("@meas", SqlDbType.Bit);
-                showMeasPar.Direction = ParameterDirection.Input;
-                showMeasPar.Value = entitiesToInclude.Contains("measurement") ? 1 : 0;
                 SqlParameter showMCPar = cmd.Parameters.Add("@mc", SqlDbType.Bit);
                 showMCPar.Direction = ParameterDirection.Input;
                 showMCPar.Value = entitiesToInclude.Contains("measurement_conf") ? 1 : 0;
@@ -304,7 +299,7 @@ namespace MotionDBWebServices
             if (notFound)
             {
                 QueryException exc = new QueryException(id.ToString(), "The id provided does not match any measurement");
-                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMeasurementByIdXML")));
+                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionContent")));
             }
             return xd.DocumentElement;
         }
@@ -345,44 +340,6 @@ namespace MotionDBWebServices
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetTrialByIdXML")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-            return xd.DocumentElement;
-        }
-
-
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement GetMeasurementByIdXML(int id) 
-        {
-            XmlDocument xd = new XmlDocument();
-            bool notFound = false;
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "get_measurement_by_id_xml";
-                SqlParameter resId = cmd.Parameters.Add("@res_id", SqlDbType.Int);
-                resId.Direction = ParameterDirection.Input;
-                resId.Value = id;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                //if (dr.) notFound = true;
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                else notFound = true;
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            CloseConnection();
-            if (notFound)
-            {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any measurement");
-                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMeasurementByIdXML")));
-            }
             return xd.DocumentElement;
         }
 
@@ -607,10 +564,15 @@ namespace MotionDBWebServices
 
             return xd.DocumentElement;
         }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListLabPerformersWithAttributesXML(int labID) // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+
 
             try
             {
@@ -618,6 +580,7 @@ namespace MotionDBWebServices
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "list_lab_performers_attributes_xml";
                 SqlParameter labId = cmd.Parameters.Add("@lab_id", SqlDbType.Int);
+                SqlParameter userLogin = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 labId.Direction = ParameterDirection.Input;
                 labId.Value = labID;
                 XmlReader dr = cmd.ExecuteXmlReader();
@@ -1090,90 +1053,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
         
-        // MEASUREMENT LISTING QUERY
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListTrialMeasurementsWithAttributesXML(int trialID)
-        {
-            XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
-            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_trial_measurements_attributes_xml";
-                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                usernamePar.Direction = ParameterDirection.Input;
-                usernamePar.Value = userName;
-                SqlParameter resfId = cmd.Parameters.Add("@trial_id", SqlDbType.Int);
-                resfId.Direction = ParameterDirection.Input;
-                resfId.Value = trialID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("TrialMeasurementWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-                }
-                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return xd.DocumentElement;
-        }
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public XmlElement ListMeasurementConfMeasurementsWithAttributesXML(int measurementConfID)
-        {
-            XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
-            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_measurement_conf_measurements_attributes_xml";
-                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                usernamePar.Direction = ParameterDirection.Input;
-                usernamePar.Value = userName;
-                SqlParameter resfId = cmd.Parameters.Add("@mc_id", SqlDbType.Int);
-                resfId.Direction = ParameterDirection.Input;
-                resfId.Value = measurementConfID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("MeasurementConfMeasurementWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-                }
-                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService");
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return xd.DocumentElement;
-        }
-        // MEASUREMENT CONFIGURATION LISTING QUERY
+         // MEASUREMENT CONFIGURATION LISTING QUERY
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListMeasurementConfigurationsWithAttributesXML() // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {

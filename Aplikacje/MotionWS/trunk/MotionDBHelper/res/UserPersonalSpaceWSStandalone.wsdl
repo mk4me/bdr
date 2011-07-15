@@ -75,8 +75,6 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="PerformerID" type="xsd:int"/>
-						<xsd:element name="FirstName" type="xsd:string"/>
-						<xsd:element name="LastName" type="xsd:string"/>
 						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -774,7 +772,7 @@
 	</wsdl:binding>
 	<wsdl:service name="UserPersonalSpace">
 		<wsdl:port name="BasicHttpBinding_IUserPersonalSpaceWS" binding="tns:BasicHttpBinding_IUserPersonalSpaceWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/UserPersonalSpaceWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/UserPersonalSpaceWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

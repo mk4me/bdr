@@ -15,8 +15,6 @@
 						<xsd:element name="PerformerDetails" minOccurs="0" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="PerformerID" type="xsd:int"/>
-								<xsd:attribute name="FirstName" type="xsd:string"/>
-								<xsd:attribute name="LastName" type="xsd:string"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -124,7 +122,7 @@
 	</wsdl:binding>
 	<wsdl:service name="SampleOpsWS">
 		<wsdl:port name="BasicHttpBinding_ISampleOpsWS" binding="tns:BasicHttpBinding_ISampleOpsWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/SampleOpsWS.svc"/>
+			<soap:address location="http://dbpawell.pjwstk.edu.pl/Motion/SampleOpsWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

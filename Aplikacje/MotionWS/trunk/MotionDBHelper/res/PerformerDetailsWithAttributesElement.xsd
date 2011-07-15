@@ -5,8 +5,6 @@
           <xsd:complexType>
             <xsd:sequence>
               <xsd:element name="PerformerID" type="xsd:int" />
-              <xsd:element name="FirstName" type="xsd:string" />
-              <xsd:element name="LastName" type="xsd:string" />
               <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
             </xsd:sequence>
           </xsd:complexType>

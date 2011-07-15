@@ -165,7 +165,6 @@
     <None Include="res\GetSessionContent.xsd" />
     <None Include="res\ListSessionContents.xsd" />
     <None Include="res\ListViewConfiguration.xsd" />
-    <None Include="res\ListMeasurementConfMeasurementsWithAttributesXML.xsd" />
     <None Include="res\GetMeasurementConfigurationByIdXML.xsd" />
     <None Include="res\ListMeasurementConfSessionsWithAttributesXML.xsd" />
     <None Include="res\ListSessionGroupsDefined.xsd" />
@@ -183,8 +182,6 @@
     <None Include="res\ListLabPerformersWithAttributesXML.xsd" />
     <None Include="res\ListMeasurementConfigurationsWithAttributesXML.xsd" />
     <None Include="res\ListGroupSessionsWithAttributesXML.xsd" />
-    <None Include="res\ListMeasurementPerformersWithAttributesXML.xsd" />
-    <None Include="res\ListMeasurementResultFilesWithAttributesXML.xsd" />
     <None Include="res\ListSessionSessionGroups.xsd" />
     <None Include="res\ListSessionTrialsWithAttributesXML.xsd" />
     <None Include="res\ListTrialMeasurementsWithAttributesXML.xsd" />
@@ -201,7 +198,6 @@
     <None Include="res\ShallowCopy.xsd" />
     <None Include="res\UserPersonalSpaceWSStandalone.wsdl" />
     <None Include="res\UserPersonalSpaceWS.wsdl" />
-    <None Include="res\ListBasketSegmentsWithAttributesXML.xsd" />
     <None Include="res\ListBasketSessionsWithAttributesXML.xsd" />
     <None Include="res\ListBasketPerformersWithAttributesXML.xsd" />
     <None Include="res\GenericQueryUniformXML.xsd" />
