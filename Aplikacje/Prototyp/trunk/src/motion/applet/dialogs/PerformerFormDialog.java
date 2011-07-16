@@ -39,9 +39,7 @@ public class PerformerFormDialog extends FormDialog {
 							PerformerFormDialog.this.messageLabel.setText(CREATING_MESSAGE);
 							PerformerFormDialog.this.createButton.setEnabled(false);
 							try {
-								int performerID = WebServiceInstance.getDatabaseConnection().createPerformer(
-										getFirstName(),
-										getLastName());
+								int performerID = WebServiceInstance.getDatabaseConnection().createPerformer();
 								
 								setDefinedAttributes(performerID);
 							} catch (Exception e1) {
@@ -75,7 +73,7 @@ public class PerformerFormDialog extends FormDialog {
 		
 		return attributes;
 	}
-	
+	/*
 	private String getFirstName() {
 		
 		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.FirstName.toString());
@@ -85,8 +83,8 @@ public class PerformerFormDialog extends FormDialog {
 		
 		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.LastName.toString());
 	}
-	
-	protected boolean validateResult() {
+	*/
+	protected boolean validateResult() {/*
 		if (getFirstName().equals("")) {
 			this.messageLabel.setText(MISSING_FIRST_NAME);
 			
@@ -96,7 +94,7 @@ public class PerformerFormDialog extends FormDialog {
 			
 			return false;
 		}
-		
+		*/
 		return super.validateResult();
 	}
 }

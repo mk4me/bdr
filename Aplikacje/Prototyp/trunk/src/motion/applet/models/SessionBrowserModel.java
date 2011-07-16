@@ -298,13 +298,14 @@ public class SessionBrowserModel extends AbstractTreeTableModel implements
 
 		@Override
 		public Object getValueAt(int column) {
+			/*
 			if (column == 1)
 				return ((Performer) entity).getValue(
 						PerformerStaticAttributes.FirstName).toString();
 			else if (column == 2)
 				return ((Performer) entity).getValue(
 						PerformerStaticAttributes.LastName).toString();
-			else
+			else*/
 				return "";
 		}
 	}
