@@ -10,8 +10,7 @@ public class Performer extends GenericDescription<PerformerStaticAttributes>{
 	
 	public String toString() {
 		
-		return super.get(PerformerStaticAttributes.FirstName.toString()).value.toString() + " " +
-			super.get(PerformerStaticAttributes.LastName.toString()).value.toString();
+		return "Performer ID: " + super.getId();
 	}
 	
 }

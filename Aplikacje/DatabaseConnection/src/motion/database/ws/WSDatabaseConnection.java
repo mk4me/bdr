@@ -1289,14 +1289,12 @@ public class WSDatabaseConnection implements DatabaseProxy {
 	 */	
 	
 	@Override
-	public int createPerformer(String name, String surname) throws Exception
+	public int createPerformer() throws Exception
 	{
 		try{
 			IBasicUpdatesWS port = ConnectionTools2.getBasicUpdateServicePort( "createPerformer", this );
 
 			PerformerData performerData = new PerformerData();
-			performerData.setName( name );
-			performerData.setSurname( surname );
 	
 			return port.createPerformer(performerData);
 		} 

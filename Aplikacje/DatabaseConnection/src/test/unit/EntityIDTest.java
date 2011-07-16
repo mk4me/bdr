@@ -77,8 +77,6 @@ public class EntityIDTest {
 
 		Performer p = new Performer();
 		
-		p.put( PerformerStaticAttributes.FirstName, "Janek" );
-		p.put( PerformerStaticAttributes.LastName, "Kowalski" );
 		
 		p = (Performer)kind.getByID(port, id);
 		
