@@ -91,7 +91,10 @@ public class AttributeTableModel extends BasicTableModel {
 						} else {
 							records = WebServiceInstance.getDatabaseConnection().listSessionGroupsDefined();
 						}
-					} else if (entityKind.equals(EntityKind.measurement)) {
+					}
+					// 16.07.2011
+					/*
+					else if (entityKind.equals(EntityKind.measurement)) {
 						if (recordId > -1 && fromEntityKind != null) {
 							if (fromEntityKind.equals(EntityKind.trial)) {
 								records = WebServiceInstance.getDatabaseConnection().listTrialMeasurementsWithAttributes(recordId);
@@ -100,7 +103,7 @@ public class AttributeTableModel extends BasicTableModel {
 							}
 						}
 					}
-					
+					*/
 					for (GenericDescription<?> r : records) {
 						ArrayList<Object> cellList = new ArrayList<Object>();
 						cellList.add(new Boolean(false));	// checkboxes initially unchecked
