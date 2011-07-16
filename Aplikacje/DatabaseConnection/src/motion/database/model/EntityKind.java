@@ -529,7 +529,7 @@ public enum EntityKind {
 	public static String STATIC_ATTRIBUTE_GROUP = "_static";
 
 	protected static String[] guiNames={Messages.getString("EntityKind.0"), Messages.getString("EntityKind.1"), 
-		Messages.getString("EntityKind.2"), Messages.getString("EntityKind.3"), 
+		Messages.getString("EntityKind.2"),/* Messages.getString("EntityKind.3"),*/ 
 		Messages.getString("EntityKind.4"), Messages.getString("EntityKind.5"), Messages.getString("EntityKind.6"), 
 		Messages.getString("EntityKind.7"), Messages.getString("EntityKind.8"), 
 		Messages.getString("EntityKind.9"), Messages.getString("EntityKind.10"), Messages.getString("EntityKind.11")}; 
