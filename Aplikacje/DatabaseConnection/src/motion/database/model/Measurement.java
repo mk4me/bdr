@@ -1,4 +1,4 @@
-package motion.database.model;
+/*package motion.database.model;
 
 
 @SuppressWarnings("serial")
@@ -12,4 +12,4 @@ public class Measurement extends GenericDescription<MeasurementStaticAttributes>
 		
 		return "Measurement " + super.get(MeasurementStaticAttributes.MeasurementID.toString()).value.toString();
 	}
-}
+}*/

@@ -294,14 +294,14 @@ public enum EntityKind {
 			return new Trial();
 		}
 	}, 
-	
+	/*
 	measurement(MeasurementStaticAttributes.class) {
 		@Override
 		public void setEntityAttribute(IBasicUpdatesWS port, int ID,
 				EntityAttribute a, boolean update) throws Exception {
 			port.setMeasurementAttribute(ID, a.name, a.value.toString(), update);
 		}
-		/*	// 16.07.2011
+		*//*	// 16.07.2011
 		@Override
 		public Measurement getByID(IBasicQueriesWS port, int id) throws Exception {
 			try{
@@ -320,14 +320,14 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
-		*/
+		*//*
 		@Override
 		public GenericDescription<?> newEntity()
 		{
 			return new Measurement();
 		}
 	}, 
-	
+	*/
 	measurement_conf(MeasurementConfigurationStaticAttributes.class) {
 
 		@Override
@@ -541,7 +541,7 @@ public enum EntityKind {
 	//////////////////////////////////////////////////////////////////////////
 
 	static public EnumSet<EntityKind> kindsWithGenericAttributes = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement_conf, EntityKind.file );
-	static public EnumSet<EntityKind> kindsWithGetByID = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, EntityKind.measurement, EntityKind.file );
+	static public EnumSet<EntityKind> kindsWithGetByID = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial, /*EntityKind.measurement, */EntityKind.file );
 	static public EnumSet<EntityKind> kindsBasketStorable = EnumSet.of( EntityKind.performer, EntityKind.session, EntityKind.trial );
 
 	

@@ -1,7 +1,6 @@
 package motion.database.ws;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.logging.Level;
 
 import motion.database.DatabaseConnection;
@@ -12,10 +11,8 @@ import motion.database.model.DatabaseFileStaticAttributes;
 import motion.database.model.EntityAttribute;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MeasurementConfigurationStaticAttributes;
-import motion.database.model.MeasurementStaticAttributes;
 import motion.database.model.Performer;
 import motion.database.model.PerformerConfiguration;
 import motion.database.model.PerformerConfigurationStaticAttributes;
@@ -45,15 +42,11 @@ import motion.database.ws.basicQueriesServiceWCF.BasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
-import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionContent;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
-import motion.database.ws.basicQueriesServiceWCF.FileList.FileDetails;
 import motion.database.ws.basicQueriesServiceWCF.FileWithAttributesList.FileDetailsWithAttributes;
-import motion.database.ws.basicQueriesServiceWCF.ListFileAttributeDataXMLResponse.ListFileAttributeDataXMLResult;
-import motion.database.ws.basicQueriesServiceWCF.ListFilesWithAttributesXMLResponse.ListFilesWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.ListSessionPerformerConfsWithAttributesXMLResponse.ListSessionPerformerConfsWithAttributesXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.SessionContent.TrialContentList.TrialContent;
 import motion.database.ws.basicUpdatesServiceWCF.BasicUpdatesWS;
@@ -470,7 +463,7 @@ public class ConnectionTools2 {
 		basket.put( UserBasketStaticAttributes.basketName, s.getBasketName() );
 		return basket;
 	}
-
+/*
 	public static Measurement transformMeasurementDetails(
 			MeasurementDetailsWithAttributes s) {
 		Measurement m = new Measurement();
@@ -481,7 +474,7 @@ public class ConnectionTools2 {
 		ConnectionTools2.transformGenericAttributes( s.getAttributes(), m );
 		return m;
 	}
-
+*/
 	public static MeasurementConfiguration transformMeasurementConfigurationDetails(
 			MeasurementConfDetailsWithAttributes s) {
 		MeasurementConfiguration m = new MeasurementConfiguration();

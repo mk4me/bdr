@@ -13,8 +13,6 @@ import motion.database.model.EntityAttribute;
 import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
-import motion.database.model.GenericResult;
-import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.MotionKind;
 import motion.database.model.Performer;
@@ -26,7 +24,6 @@ import motion.database.model.SessionValidationInfo;
 import motion.database.model.Trial;
 import motion.database.model.User;
 import motion.database.model.UserBasket;
-import motion.database.model.UserPrivileges;
 import motion.database.ws.basicQueriesServiceWCF.FilterPredicate;
 import motion.database.ws.userPersonalSpaceWCF.ArrayOfFilterPredicate;
 
