@@ -1,4 +1,4 @@
-package motion.applet.dialogs;
+/*package motion.applet.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,3 +95,4 @@ public class MeasurementFormDialog extends FormDialog {
 		return super.validateResult();
 	}
 }
+*/
