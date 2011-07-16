@@ -25,7 +25,6 @@ import motion.applet.dialogs.ExceptionDialog;
 import motion.applet.dialogs.FileFormDialog;
 import motion.applet.dialogs.FormDialog;
 import motion.applet.dialogs.MeasurementConfigurationFormDialog;
-import motion.applet.dialogs.MeasurementFormDialog;
 import motion.applet.dialogs.PerformerFormDialog;
 import motion.applet.dialogs.SessionFormDialog;
 import motion.applet.dialogs.TrialFormDialog;
@@ -34,7 +33,6 @@ import motion.applet.dialogs.WizardDialog;
 import motion.applet.dialogs.WizardSessionDialog;
 import motion.applet.mouse.FileMouseAdapter;
 import motion.applet.mouse.MeasurementConfigurationMouseAdapter;
-import motion.applet.mouse.MeasurementMouseAdapter;
 import motion.applet.mouse.PerformerMouseAdapter;
 import motion.applet.mouse.SessionGroupMouseAdapter;
 import motion.applet.mouse.SessionMouseAdapter;
@@ -45,7 +43,6 @@ import motion.applet.toolbars.AppletToolBar;
 import motion.applet.webservice.client.WebServiceInstance;
 import motion.database.model.DatabaseFile;
 import motion.database.model.EntityKind;
-import motion.database.model.Measurement;
 import motion.database.model.MeasurementConfiguration;
 import motion.database.model.Performer;
 import motion.database.model.Session;
@@ -87,11 +84,11 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tabNameHash.put(EntityKind.trial, TABLE_TRIAL);
 		tables[TABLE_TRIAL] = new JTable();
 		tabbedPane.addTab(EntityKind.trial.getGUIName(), new JScrollPane(tables[TABLE_TRIAL]));
-		
+		/*
 		tabNameHash.put(EntityKind.measurement, TABLE_MEASUREMENT);
 		tables[TABLE_MEASUREMENT] = new JTable();
 		tabbedPane.addTab(EntityKind.measurement.getGUIName(), new JScrollPane(tables[TABLE_MEASUREMENT]));
-		
+		*/
 		tabNameHash.put(EntityKind.file, TABLE_FILE);
 		tables[TABLE_FILE] = new JTable();
 		tabbedPane.addTab(EntityKind.file.getGUIName(), new JScrollPane(tables[TABLE_FILE]));
@@ -121,7 +118,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		tables[TABLE_PERFORMER].addMouseListener(new PerformerMouseAdapter(this)); 
 		tables[TABLE_SESSION].addMouseListener(new SessionMouseAdapter(this));
 		tables[TABLE_TRIAL].addMouseListener(new TrialMouseAdapter(this));
-		tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
+		//tables[TABLE_MEASUREMENT].addMouseListener(new MeasurementMouseAdapter(this));
 		tables[TABLE_FILE].addMouseListener(new FileMouseAdapter(this));
 		tables[TABLE_SESSION_GROUP].addMouseListener(new SessionGroupMouseAdapter(this));
 		tables[TABLE_MEASUREMENT_CONFIGURATION].addMouseListener(new MeasurementConfigurationMouseAdapter(this));
@@ -280,14 +277,14 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			((AttributeTableModel) tableModel).refresh();
 		}
 	}
-	
+	/*
 	public void refreshMeasurementTable() {
 		TableModel tableModel = tables[TABLE_MEASUREMENT].getModel();
 		if (tableModel instanceof AttributeTableModel) {
 			((AttributeTableModel) tableModel).refresh();
 		}
 	}
-	
+	*/
 	//FIXME: Change to column hiding
 	public void refreshAllTables() {
 		int i = tabbedPane.getSelectedIndex();
@@ -297,7 +294,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 		refreshTrialTable();
 		refreshFileTable();
 		refreshMeasurementConfigurationTable();
-		refreshMeasurementTable();
+		//refreshMeasurementTable();
 		tabbedPane.setSelectedIndex(i);
 	}
 	
@@ -395,7 +392,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			refreshMeasurementConfigurationTable();
 		}
 	}
-	
+	/*
 	public void showMeasurementDialog(int recordId, Measurement measurement) {
 		MeasurementFormDialog measurementFormDialog;
 		if (measurement == null) {
@@ -411,7 +408,7 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 			refreshMeasurementTable();
 		}
 	}
-	
+	*/
 	public void showUploadDialog(EntityKind entityKind, int recordId) {
 		UploadDialog uploadDialog = new UploadDialog(entityKind, recordId);
 		uploadDialog.setVisible(true);

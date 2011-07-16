@@ -38,7 +38,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {
 			JPopupMenu popupMenu = new JPopupMenu();
-			
+			/*
 			JMenuItem createMeasurementMenuItem = new JMenuItem(MENU_CREATE_MEASUREMENT);
 			popupMenu.add(createMeasurementMenuItem);
 			
@@ -60,7 +60,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 				}
 			});
 			
-			popupMenu.add(new JSeparator());
+			popupMenu.add(new JSeparator());*/
 			// Upload context menu.
 			JMenuItem uploadMenuItem = new JMenuItem(MENU_UPLOAD);
 			popupMenu.add(uploadMenuItem);
@@ -98,7 +98,7 @@ public class TrialMouseAdapter extends MouseAdapter {
 			
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
-			viewMeasurements(recordId);
+			//viewMeasurements(recordId);
 		}
 	}
 	
@@ -106,12 +106,12 @@ public class TrialMouseAdapter extends MouseAdapter {
 		rightPanel.showTable(EntityKind.file, recordId, entityKind);
 		MotionApplet.setBrowsePanelVisible();
 	}
-	
+	/*
 	private void viewMeasurements(int recordId) {
 		rightPanel.showTable(EntityKind.measurement, recordId, EntityKind.trial);
 		MotionApplet.setBrowsePanelVisible();
 	}
-	
+	*/
 	private void edit(final int recordId) {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override

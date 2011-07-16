@@ -33,7 +33,7 @@ public class BottomSplitPanel extends JPanel {
 	private static ConfigurationTree trialTree;
 	private static ConfigurationTree fileTree;
 	private static ConfigurationTree measurementConfigurationTree;
-	private static ConfigurationTree measurementTree;
+	//private static ConfigurationTree measurementTree;
 	private JButton applySelectionButton;
 	
 	public BottomSplitPanel() {
@@ -60,7 +60,7 @@ public class BottomSplitPanel extends JPanel {
 		trialTree = createConfigurationTree(EntityKind.trial, configurationPanel);
 		fileTree = createConfigurationTree(EntityKind.file, configurationPanel);
 		measurementConfigurationTree = createConfigurationTree(EntityKind.measurement_conf, configurationPanel);
-		measurementTree = createConfigurationTree(EntityKind.measurement, configurationPanel);
+		//measurementTree = createConfigurationTree(EntityKind.measurement, configurationPanel);
 		
 		this.add(configurationPanel, BorderLayout.CENTER);
 		
@@ -97,7 +97,7 @@ public class BottomSplitPanel extends JPanel {
 		trialTree.getTreeContents();
 		fileTree.getTreeContents();
 		measurementConfigurationTree.getTreeContents();
-		measurementTree.getTreeContents();
+		//measurementTree.getTreeContents();
 	}
 	
 	private static void getCheckedItems(DefaultMutableTreeNode node, ArrayList<String> checkedItems) {
@@ -165,7 +165,7 @@ public class BottomSplitPanel extends JPanel {
 		
 		return checkedItems;
 	}
-	
+	/*
 	public static ArrayList<String> getCheckedMeasurementAttributes() {
 		ArrayList<String> checkedItems = new ArrayList<String>();
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) measurementTree.tree.getModel().getRoot();
@@ -173,7 +173,7 @@ public class BottomSplitPanel extends JPanel {
 		
 		return checkedItems;
 	}
-	
+	*/
 	public static ArrayList<String> getCheckedAttributes(EntityKind entityKind) {
 		if (entityKind.equals(EntityKind.performer)) {
 			return getCheckedPerformerAttributes();
@@ -187,9 +187,9 @@ public class BottomSplitPanel extends JPanel {
 			return getCheckedFileAttributes();
 		} else if (entityKind.equals(EntityKind.measurement_conf)) {
 			return getCheckedMeasurementConfigurationAttributes();
-		} else if (entityKind.equals(EntityKind.measurement)) {
+		}/* else if (entityKind.equals(EntityKind.measurement)) {
 			return getCheckedMeasurementAttributes();
-		}
+		}*/
 		
 		return null;
 	}
@@ -207,9 +207,9 @@ public class BottomSplitPanel extends JPanel {
 			return getCheckedFileAttributes().contains(attribute);
 		} else if (entityKind.equals(EntityKind.measurement_conf)) {
 			return getCheckedMeasurementConfigurationAttributes().contains(attribute);
-		} else if (entityKind.equals(EntityKind.measurement)) {
+		}/* else if (entityKind.equals(EntityKind.measurement)) {
 			return getCheckedMeasurementAttributes().contains(attribute);
-		}
+		}*/
 		
 		return false;
 	}

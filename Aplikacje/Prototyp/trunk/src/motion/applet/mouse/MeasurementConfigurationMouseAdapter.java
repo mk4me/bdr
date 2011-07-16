@@ -34,7 +34,7 @@ public class MeasurementConfigurationMouseAdapter extends MouseAdapter {
 		final int recordId = rightPanel.getSelectedRecord((JTable) e.getSource(), e);
 		if (SwingUtilities.isRightMouseButton(e)) {	// Right click.
 			JPopupMenu popupMenu = new JPopupMenu();
-			
+			/*
 			// View Sessions context menu
 			JMenuItem viewMeasurementsMenuItem = new JMenuItem(MENU_VIEW_MEASUREMENTS);
 			popupMenu.add(viewMeasurementsMenuItem);
@@ -45,7 +45,7 @@ public class MeasurementConfigurationMouseAdapter extends MouseAdapter {
 					viewMeasurements(recordId);
 				}
 			});
-			
+			*/
 			// Edit
 			JMenuItem editMenuItem = new JMenuItem(MENU_EDIT);
 			popupMenu.add(editMenuItem);
@@ -59,15 +59,15 @@ public class MeasurementConfigurationMouseAdapter extends MouseAdapter {
 			
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
-			viewMeasurements(recordId);
+			//viewMeasurements(recordId);
 		}
 	}
-	
+	/*
 	private void viewMeasurements(int recordId) {
 		rightPanel.showTable(EntityKind.measurement, recordId, EntityKind.measurement_conf);
 		MotionApplet.setBrowsePanelVisible();
 	}
-	
+	*/
 	private void edit(final int recordId) {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override

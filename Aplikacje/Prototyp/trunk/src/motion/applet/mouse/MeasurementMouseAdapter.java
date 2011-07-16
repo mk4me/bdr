@@ -1,4 +1,4 @@
-package motion.applet.mouse;
+/*package motion.applet.mouse;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,7 +36,7 @@ public class MeasurementMouseAdapter extends MouseAdapter {
 			JPopupMenu popupMenu = new JPopupMenu();
 			
 			// No operation to view MeasurementConfigurations from Measurement
-			/*
+			*//*
 			// View Measurement Configurations context menu
 			JMenuItem viewMeasurementConfigurationsMenuItem = new JMenuItem(MENU_VIEW_MEASUREMENT_CONFIGURATIONS);
 			popupMenu.add(viewMeasurementConfigurationsMenuItem);
@@ -49,7 +49,7 @@ public class MeasurementMouseAdapter extends MouseAdapter {
 			});
 			
 			popupMenu.add(new JSeparator());
-			*/
+			*//*
 			// Edit
 			JMenuItem editMenuItem = new JMenuItem(MENU_EDIT);
 			popupMenu.add(editMenuItem);
@@ -94,3 +94,4 @@ public class MeasurementMouseAdapter extends MouseAdapter {
 		worker.execute();
 	}
 }
+*/
