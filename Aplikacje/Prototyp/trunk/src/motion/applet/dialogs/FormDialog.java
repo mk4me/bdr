@@ -749,7 +749,7 @@ public class FormDialog extends BasicDialog {
 		public FormTagField(EntityAttribute attribute, GridBagConstraints gridBagConstraints, JPanel formPanel) {
 			super(attribute, gridBagConstraints, formPanel);
 			
-			finishField();
+			//finishField();
 		}
 		
 		public String getData() {
