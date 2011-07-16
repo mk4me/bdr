@@ -19,8 +19,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element ref="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService}Attributes" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -33,8 +31,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "performerID",
-    "firstName",
-    "lastName",
     "attributes"
 })
 @XmlRootElement(name = "PerformerDetailsWithAttributes")
@@ -42,10 +38,6 @@ public class PerformerDetailsWithAttributes {
 
     @XmlElement(name = "PerformerID")
     protected int performerID;
-    @XmlElement(name = "FirstName", required = true)
-    protected String firstName;
-    @XmlElement(name = "LastName", required = true)
-    protected String lastName;
     @XmlElement(name = "Attributes")
     protected Attributes attributes;
 
@@ -63,54 +55,6 @@ public class PerformerDetailsWithAttributes {
      */
     public void setPerformerID(int value) {
         this.performerID = value;
-    }
-
-    /**
-     * Gets the value of the firstName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * Sets the value of the firstName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setFirstName(String value) {
-        this.firstName = value;
-    }
-
-    /**
-     * Gets the value of the lastName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Sets the value of the lastName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLastName(String value) {
-        this.lastName = value;
     }
 
     /**

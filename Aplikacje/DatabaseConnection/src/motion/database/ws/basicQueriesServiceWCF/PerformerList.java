@@ -26,8 +26,6 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
- *                 &lt;attribute name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
@@ -90,8 +88,6 @@ public class PerformerList {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;attribute name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" />
-     *       &lt;attribute name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -105,10 +101,6 @@ public class PerformerList {
 
         @XmlAttribute(name = "PerformerID")
         protected Integer performerID;
-        @XmlAttribute(name = "FirstName")
-        protected String firstName;
-        @XmlAttribute(name = "LastName")
-        protected String lastName;
 
         /**
          * Gets the value of the performerID property.
@@ -132,54 +124,6 @@ public class PerformerList {
          */
         public void setPerformerID(Integer value) {
             this.performerID = value;
-        }
-
-        /**
-         * Gets the value of the firstName property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getFirstName() {
-            return firstName;
-        }
-
-        /**
-         * Sets the value of the firstName property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setFirstName(String value) {
-            this.firstName = value;
-        }
-
-        /**
-         * Gets the value of the lastName property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLastName() {
-            return lastName;
-        }
-
-        /**
-         * Sets the value of the lastName property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLastName(String value) {
-            this.lastName = value;
         }
 
     }

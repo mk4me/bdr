@@ -822,7 +822,7 @@ public class WSDatabaseConnection implements DatabaseProxy {
 	
 ////////////////////////////////////////////////////////////////////////////
 //	Measurements
-
+	/* // 16.07.2011
 	@Override
 	public  DbElementsList<Measurement> listTrialMeasurementsWithAttributes(int trialID) throws Exception
 	{
@@ -848,7 +848,8 @@ public class WSDatabaseConnection implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-
+	*/
+	/* // 16.07.2011
 	@Override
 	public  DbElementsList<Measurement> listMeasurementConfMeasurementsWithAttributes(int measurementConfID) throws Exception
 	{
@@ -874,7 +875,7 @@ public class WSDatabaseConnection implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-
+	*/
 
 ////////////////////////////////////////////////////////////////////////////
 //	MesurementsConfiguration
@@ -1344,7 +1345,7 @@ public class WSDatabaseConnection implements DatabaseProxy {
 		}
 	}
 
-
+	/* // 16.07.2011
 	@Override
 	public boolean addPerformerToMeasurement(int performerID, int measurementID) throws Exception
 	{
@@ -1361,7 +1362,7 @@ public class WSDatabaseConnection implements DatabaseProxy {
 			ConnectionTools2.finalizeCall();
 		}
 	}
-
+	*/
 	
 	@Override
 	public int createSession(int [] sessionGroupID, String sessionName, String sessionTags, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception

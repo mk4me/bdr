@@ -197,6 +197,34 @@ public interface IFileStoremanWS {
 
     /**
      * 
+     * @return
+     *     returns java.lang.String
+     * @throws IFileStoremanWSGetShallowCopyFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "GetShallowCopy", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/GetShallowCopy")
+    @WebResult(name = "GetShallowCopyResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "GetShallowCopy", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.GetShallowCopy")
+    @ResponseWrapper(localName = "GetShallowCopyResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.GetShallowCopyResponse")
+    public String getShallowCopy()
+        throws IFileStoremanWSGetShallowCopyFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
+     * @return
+     *     returns java.lang.String
+     * @throws IFileStoremanWSGetMetadataFileAccessServiceExceptionFaultFaultMessage
+     */
+    @WebMethod(operationName = "GetMetadata", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService/IFileStoremanWS/GetMetadata")
+    @WebResult(name = "GetMetadataResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")
+    @RequestWrapper(localName = "GetMetadata", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.GetMetadata")
+    @ResponseWrapper(localName = "GetMetadataResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", className = "motion.database.ws.fileStoremanServiceWCF.GetMetadataResponse")
+    public String getMetadata()
+        throws IFileStoremanWSGetMetadataFileAccessServiceExceptionFaultFaultMessage
+    ;
+
+    /**
+     * 
      * @param path
      * @return
      *     returns int

@@ -184,26 +184,6 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
-     * @param measurementID
-     * @param performerID
-     * @return
-     *     returns boolean
-     * @throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
-     */
-    @WebMethod(operationName = "AddPerformerToMeasurement", action = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService/IBasicUpdatesWS/AddPerformerToMeasurement")
-    @WebResult(name = "AddPerformerToMeasurementResult", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-    @RequestWrapper(localName = "AddPerformerToMeasurement", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AddPerformerToMeasurement")
-    @ResponseWrapper(localName = "AddPerformerToMeasurementResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.AddPerformerToMeasurementResponse")
-    public boolean addPerformerToMeasurement(
-        @WebParam(name = "performerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int performerID,
-        @WebParam(name = "measurementID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        int measurementID)
-        throws IBasicUpdatesWSAddPerformerToMeasurementUpdateExceptionFaultFaultMessage
-    ;
-
-    /**
-     * 
      * @param update
      * @param attributeName
      * @param attributeValue

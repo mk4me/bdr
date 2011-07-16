@@ -223,9 +223,10 @@ public interface DatabaseProxy {
 	public void setSessionPrivileges(int sessionID, boolean readPrivilege, boolean writePrivilege) throws Exception;
 
 	public DbElementsList<UserBasket>  listUserBaskets() throws Exception;
-
+	// 16.07.2011
+	/*
 	public  DbElementsList<Measurement> listTrialMeasurementsWithAttributes(int trialID) throws Exception;
-
+	*/
 	public int createMeasurement(int trialID, int measurementConfigurationID ) throws Exception;
 	
 	public int createMeasurementConfiguration(String name, String kind, String description ) throws Exception;
@@ -267,9 +268,10 @@ public interface DatabaseProxy {
 	DbElementsList<Performer> listSessionPerformersWithAttributes(int sessionID) throws Exception;
 
 	int assignPerformerToSession(int sessionID, int performerID) throws Exception;
-
+	// 16.07.2011
+	/*
 	boolean addPerformerToMeasurement(int performerID, int measurementID) throws Exception;
-
+	*/
 	void uploadFilesDirectories(int resourceId, EntityKind kind,
 			String description, File[] files,
 			FileTransferListener listener) throws Exception;
@@ -294,10 +296,11 @@ public interface DatabaseProxy {
 
 	void replaceFile(int resourceId, String localFilePath,
 			FileTransferListener listener) throws Exception;
-
+	// 16.07.2011
+	/*
 	DbElementsList<Measurement> listMeasurementConfMeasurementsWithAttributes(
 			int measurementConfID) throws Exception;
-
+	*/
 	boolean assignSessionToGroup(int sessionID, int groupID) throws Exception;
 
 

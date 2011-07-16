@@ -13,20 +13,17 @@ import motion.database.DbElementsList;
 import motion.database.ws.ConnectionTools2;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWS;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetFileDataByIdXMLQueryExceptionFaultFaultMessage;
-import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetMeasurementConfigurationByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetPerformerConfigurationByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetSessionByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.IBasicQueriesWSGetTrialByIdXMLQueryExceptionFaultFaultMessage;
 import motion.database.ws.basicQueriesServiceWCF.MeasurementConfDetailsWithAttributes;
-import motion.database.ws.basicQueriesServiceWCF.MeasurementDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerConfDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.PerformerDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.SessionDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.TrialDetailsWithAttributes;
 import motion.database.ws.basicQueriesServiceWCF.GetFileDataByIdXMLResponse.GetFileDataByIdXMLResult;
-import motion.database.ws.basicQueriesServiceWCF.GetMeasurementByIdXMLResponse.GetMeasurementByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetMeasurementConfigurationByIdXMLResponse.GetMeasurementConfigurationByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerByIdXMLResponse.GetPerformerByIdXMLResult;
 import motion.database.ws.basicQueriesServiceWCF.GetPerformerConfigurationByIdXMLResponse.GetPerformerConfigurationByIdXMLResult;
@@ -304,7 +301,7 @@ public enum EntityKind {
 				EntityAttribute a, boolean update) throws Exception {
 			port.setMeasurementAttribute(ID, a.name, a.value.toString(), update);
 		}
-		
+		/*	// 16.07.2011
 		@Override
 		public Measurement getByID(IBasicQueriesWS port, int id) throws Exception {
 			try{
@@ -323,7 +320,7 @@ public enum EntityKind {
 				ConnectionTools2.finalizeCall();
 			}
 		}
-
+		*/
 		@Override
 		public GenericDescription<?> newEntity()
 		{

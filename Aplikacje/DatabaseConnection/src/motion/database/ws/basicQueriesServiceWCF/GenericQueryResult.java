@@ -28,8 +28,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *                   &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                   &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -41,7 +39,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *                   &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *                   &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *                   &lt;element name="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -110,8 +107,6 @@ public class GenericQueryResult {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
-     *         &lt;element name="FirstName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="LastName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="SessionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="UserID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="LabID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -123,7 +118,6 @@ public class GenericQueryResult {
      *         &lt;element name="TrialID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="TrialName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="TrialDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *         &lt;element name="MeasurementID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementConfID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
      *         &lt;element name="MeasurementConfName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="MeasurementConfDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -139,8 +133,6 @@ public class GenericQueryResult {
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "performerID",
-        "firstName",
-        "lastName",
         "sessionID",
         "userID",
         "labID",
@@ -152,7 +144,6 @@ public class GenericQueryResult {
         "trialID",
         "trialName",
         "trialDescription",
-        "measurementID",
         "measurementConfID",
         "measurementConfName",
         "measurementConfDescription",
@@ -162,10 +153,6 @@ public class GenericQueryResult {
 
         @XmlElement(name = "PerformerID")
         protected Integer performerID;
-        @XmlElement(name = "FirstName")
-        protected String firstName;
-        @XmlElement(name = "LastName")
-        protected String lastName;
         @XmlElement(name = "SessionID")
         protected Integer sessionID;
         @XmlElement(name = "UserID")
@@ -189,8 +176,6 @@ public class GenericQueryResult {
         protected String trialName;
         @XmlElement(name = "TrialDescription")
         protected String trialDescription;
-        @XmlElement(name = "MeasurementID")
-        protected Integer measurementID;
         @XmlElement(name = "MeasurementConfID")
         protected Integer measurementConfID;
         @XmlElement(name = "MeasurementConfName")
@@ -222,54 +207,6 @@ public class GenericQueryResult {
          */
         public void setPerformerID(Integer value) {
             this.performerID = value;
-        }
-
-        /**
-         * Gets the value of the firstName property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getFirstName() {
-            return firstName;
-        }
-
-        /**
-         * Sets the value of the firstName property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setFirstName(String value) {
-            this.firstName = value;
-        }
-
-        /**
-         * Gets the value of the lastName property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getLastName() {
-            return lastName;
-        }
-
-        /**
-         * Sets the value of the lastName property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setLastName(String value) {
-            this.lastName = value;
         }
 
         /**
@@ -534,30 +471,6 @@ public class GenericQueryResult {
          */
         public void setTrialDescription(String value) {
             this.trialDescription = value;
-        }
-
-        /**
-         * Gets the value of the measurementID property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link Integer }
-         *     
-         */
-        public Integer getMeasurementID() {
-            return measurementID;
-        }
-
-        /**
-         * Sets the value of the measurementID property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link Integer }
-         *     
-         */
-        public void setMeasurementID(Integer value) {
-            this.measurementID = value;
         }
 
         /**

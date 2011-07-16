@@ -253,8 +253,8 @@ public class ConnectionTools2 {
 		
 		Performer performer = new Performer();
 		performer.put( PerformerStaticAttributes.PerformerID, s.getPerformerID() );
-		performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );
-		performer.put( PerformerStaticAttributes.LastName, s.getLastName() );
+		//performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );	// 16.07.2011
+		//performer.put( PerformerStaticAttributes.LastName, s.getLastName() );	// 16.07.2011
 		transformGenericAttributes( s.getAttributes(), performer );
 		return performer;
 	}
@@ -413,8 +413,8 @@ public class ConnectionTools2 {
 			
 			Performer performer = new Performer();
 			performer.put( PerformerStaticAttributes.PerformerID, s.getPerformerID() );
-			performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );
-			performer.put( PerformerStaticAttributes.LastName, s.getLastName() );
+			//performer.put( PerformerStaticAttributes.FirstName, s.getFirstName() );	// 16.07.2011
+			//performer.put( PerformerStaticAttributes.LastName, s.getLastName() );	// 16.07.2011
 			transformGenericAttributes( s.getAttributes(), performer );
 
 			return performer;
