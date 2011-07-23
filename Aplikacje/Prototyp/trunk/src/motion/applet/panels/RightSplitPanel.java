@@ -53,14 +53,14 @@ public class RightSplitPanel extends JPanel implements ActionListener {
 	private BottomSplitPanel bottomPanel;
 	private Hashtable<EntityKind, Integer> tabNameHash = new Hashtable<EntityKind, Integer>();
 	
-	private static int TABLE_SIZE = 7;
+	private static int TABLE_SIZE = 6;
 	private static int TABLE_PERFORMER = 0;
 	private static int TABLE_SESSION = 1;
 	private static int TABLE_TRIAL = 2;
-	private static int TABLE_MEASUREMENT = 3;
-	private static int TABLE_FILE = 4;
-	private static int TABLE_SESSION_GROUP = 5;
-	private static int TABLE_MEASUREMENT_CONFIGURATION = 6;
+	//private static int TABLE_MEASUREMENT = 3;
+	private static int TABLE_FILE = 3;
+	private static int TABLE_SESSION_GROUP = 4;
+	private static int TABLE_MEASUREMENT_CONFIGURATION = 5;
 	
 	private JTable tables[] = new JTable[TABLE_SIZE];
 	private MotionApplet applet;
