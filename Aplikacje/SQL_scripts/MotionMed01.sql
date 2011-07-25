@@ -61,31 +61,31 @@ alter table Schorzenie
 	add primary key (IdSchorzenie)
 go
 
-create table Badanie_schorzenie ( -- przeniesc do pacjenta?
-	IdBadanie	int not null,
+create table Pacjent_schorzenie ( -- przeniesc do pacjenta?
+	IdPacjent	int not null,
 	IdSchorzenie	int not null,
 	Komentarz varchar(255)
 )
 go
 
-alter table Badanie_schorzenie
-	add primary key (IdBadanie, IdSchorzenie)
+alter table Pacjent_schorzenie
+	add primary key (IdPacjent, IdSchorzenie)
 go
 
-alter table Badanie_schorzenie
-	add foreign key (IdBadanie) references Badanie on delete cascade;
+alter table Pacjent_schorzenie
+	add foreign key (IdPacjent) references Badanie on delete cascade;
 go
 
-alter table Badanie_schorzenie
+alter table Pacjent_schorzenie
 	add foreign key (IdSchorzenie) references Schorzenie on delete cascade;
 go
 
-create index X1Badanie_schorzenie on Badanie_schorzenie (
+create index X1Pacjent_schorzenie on Badanie_schorzenie (
 	IdBadanie
 )
 go
 
-create index X2Badanie_schorzenie on Badanie_schorzenie (
+create index X2Pacjent_schorzenie on Badanie_schorzenie (
 	IdSchorzenie
 )
 go
