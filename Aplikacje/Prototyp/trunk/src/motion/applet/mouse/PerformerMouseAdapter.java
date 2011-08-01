@@ -96,7 +96,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 //					viewFiles(recordId, EntityKind.performer);
 //				}
 //			});
-			
+			/*
 			popupMenu.add(new JSeparator());
 			
 			// Edit
@@ -109,7 +109,7 @@ public class PerformerMouseAdapter extends MouseAdapter {
 					edit(recordId);
 				}
 			});
-
+			*/
 			popupMenu.show((JTable) e.getSource(), e.getPoint().x, e.getPoint().y);
 		} else if (e.getClickCount() == 2) {	// Double click.
 			viewSessions(recordId);
