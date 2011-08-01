@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="performerData" type="{http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService}PerformerData"/>
+ *         &lt;element name="PerformerID" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,28 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "performerData"
+    "performerID"
 })
 @XmlRootElement(name = "CreatePerformer")
 public class CreatePerformer {
 
-    @XmlElement(required = true)
-    protected PerformerData performerData;
+    @XmlElement(name = "PerformerID")
+    protected int performerID;
 
     /**
-     * Gets the value of the performerData property.
+     * Gets the value of the performerID property.
      * 
-     * @return
-     *     possible object is
-     *     {@link PerformerData }
-     *     
      */
-    public PerformerData getPerformerData() {
-        return performerData;
+    public int getPerformerID() {
+        return performerID;
     }
 
     /**
-     * Sets the value of the performerData property.
+     * Sets the value of the performerID property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link PerformerData }
-     *     
      */
-    public void setPerformerData(PerformerData value) {
-        this.performerData = value;
+    public void setPerformerID(int value) {
+        this.performerID = value;
     }
 
 }

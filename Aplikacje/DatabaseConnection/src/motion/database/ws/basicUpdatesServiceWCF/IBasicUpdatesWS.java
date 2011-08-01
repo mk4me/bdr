@@ -26,7 +26,7 @@ public interface IBasicUpdatesWS {
 
     /**
      * 
-     * @param performerData
+     * @param performerID
      * @return
      *     returns int
      * @throws IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage
@@ -36,8 +36,8 @@ public interface IBasicUpdatesWS {
     @RequestWrapper(localName = "CreatePerformer", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreatePerformer")
     @ResponseWrapper(localName = "CreatePerformerResponse", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService", className = "motion.database.ws.basicUpdatesServiceWCF.CreatePerformerResponse")
     public int createPerformer(
-        @WebParam(name = "performerData", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
-        PerformerData performerData)
+        @WebParam(name = "PerformerID", targetNamespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")
+        int performerID)
         throws IBasicUpdatesWSCreatePerformerUpdateExceptionFaultFaultMessage
     ;
 

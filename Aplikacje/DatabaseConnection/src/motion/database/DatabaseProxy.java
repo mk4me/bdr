@@ -152,7 +152,7 @@ public interface DatabaseProxy {
 	public abstract DbElementsList<Trial> listSessionTrialsWithAttributes(
 			int sessionID) throws Exception;
 
-	public abstract int createPerformer()
+	public abstract int createPerformer(int performerID)
 			throws Exception;
 
 	public abstract int createSession(int [] sessionGroupID, String sessionName, String sessionTags, String sessionDescription, int labID, XMLGregorianCalendar sessionDate, String motionKindName ) throws Exception;
