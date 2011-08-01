@@ -21,6 +21,8 @@ public class PerformerFormDialog extends FormDialog {
 	private static String MISSING_FIRST_NAME = Messages.getString("PerformerFormDialog.MissingFirstName"); //$NON-NLS-1$
 	private static String MISSING_LAST_NAME = Messages.getString("PerformerFormDialog.MissingLastName"); //$NON-NLS-1$
 	private static String CREATING_MESSAGE = Messages.getString("PerformerFormDialog.CreatingMessage"); //$NON-NLS-1$
+	private static String MISSING_PERFORMER_ID = Messages.getString("PerformerFormDialog.MissingPerformerId"); //$NON-NLS-1$
+	private static String ID_EXISTS = Messages.getString("PerformerFormDialog.IdExists"); //$NON-NLS-1$
 	
 	public PerformerFormDialog(String title, String welcomeMessage) {
 		super(title, welcomeMessage);
@@ -34,17 +36,26 @@ public class PerformerFormDialog extends FormDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (PerformerFormDialog.this.validateResult() == true) {
 					SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+						private boolean created = false;
+						
 						@Override
 						protected Void doInBackground() throws InterruptedException {
 							PerformerFormDialog.this.messageLabel.setText(CREATING_MESSAGE);
 							PerformerFormDialog.this.createButton.setEnabled(false);
+							
 							try {
-								int performerID = WebServiceInstance.getDatabaseConnection().createPerformer();
+								int performerID = WebServiceInstance.getDatabaseConnection().createPerformer(
+										PerformerFormDialog.this.getPerformerId());
 								
 								setDefinedAttributes(performerID);
+								created = true;
 							} catch (Exception e1) {
+								PerformerFormDialog.this.messageLabel.setText(ID_EXISTS);
+								PerformerFormDialog.this.createButton.setEnabled(true);
+								/*
 								ExceptionDialog exceptionDialog = new ExceptionDialog(e1);
 								exceptionDialog.setVisible(true);
+								*/
 							}
 							
 							return null;
@@ -52,8 +63,10 @@ public class PerformerFormDialog extends FormDialog {
 						
 						@Override
 						protected void done() {
-							PerformerFormDialog.this.setVisible(false);
-							PerformerFormDialog.this.dispose();
+							if (created == true) {
+								PerformerFormDialog.this.setVisible(false);
+								PerformerFormDialog.this.dispose();
+							}
 						}
 					};
 					worker.execute();
@@ -69,7 +82,7 @@ public class PerformerFormDialog extends FormDialog {
 	
 	private ArrayList<String> getDeselectedAttributes() {
 		ArrayList<String> attributes = new ArrayList<String>();
-		attributes.add(PerformerStaticAttributes.PerformerID.toString());
+		//attributes.add(PerformerStaticAttributes.PerformerID.toString());
 		
 		return attributes;
 	}
@@ -84,6 +97,11 @@ public class PerformerFormDialog extends FormDialog {
 		return (String) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.LastName.toString());
 	}
 	*/
+	private Integer getPerformerId() {
+		
+		return (Integer) getAttributeValue(EntityKind.performer, PerformerStaticAttributes.PerformerID.toString());
+	}
+	
 	protected boolean validateResult() {/*
 		if (getFirstName().equals("")) {
 			this.messageLabel.setText(MISSING_FIRST_NAME);
@@ -95,6 +113,16 @@ public class PerformerFormDialog extends FormDialog {
 			return false;
 		}
 		*/
+		if (getPerformerId() == null) {
+			this.messageLabel.setText(MISSING_PERFORMER_ID);
+			
+			return false;
+		} else if (getPerformerId() < 1) {
+			this.messageLabel.setText(MISSING_PERFORMER_ID);
+				
+			return false;
+		}
+		
 		return super.validateResult();
 	}
 }

@@ -36,6 +36,7 @@ import motion.database.model.EntityAttributeGroup;
 import motion.database.model.EntityKind;
 import motion.database.model.GenericDescription;
 import motion.database.model.MeasurementStaticAttributes;
+import motion.database.model.PerformerStaticAttributes;
 import motion.database.model.SessionStaticAttributes;
 
 public class FormDialog extends BasicDialog {
@@ -203,8 +204,13 @@ public class FormDialog extends BasicDialog {
 				FormDateField field = new FormDateField(a, gridBagConstraints, formPanel, true);
 				formFields.add(field);
 			} else if (a.getType().equals(EntityAttribute.TYPE_ID)) {
-				FormListField field = new FormListField(a, gridBagConstraints, formPanel);
-				formFields.add(field);
+				if (a.name.equals(PerformerStaticAttributes.PerformerID.toString())) {
+					FormNumberField field = new FormNumberField(a, gridBagConstraints, formPanel, true);
+					formFields.add(field);
+				} else {
+					FormListField field = new FormListField(a, gridBagConstraints, formPanel);
+					formFields.add(field);
+				}
 			}
 		}
 	}
@@ -253,6 +259,8 @@ public class FormDialog extends BasicDialog {
 		
 		if (attributeValue != null) {
 			f.attribute.setValueFromString(attributeValue);
+		} else {
+			f.attribute.value = null;
 		}
 		
 		return true;
@@ -297,8 +305,11 @@ public class FormDialog extends BasicDialog {
 	protected Object getAttributeValue(EntityKind entityKind, String attribute) {
 		for (FormField f : formFields) {
 			if (f.attribute.name.equals(attribute)) {
-				setAttributeValue(f);
-				return f.attribute.value;
+				if (setAttributeValue(f) == true) {
+					return f.attribute.value;
+				} else {
+					return null;
+				}
 			}
 		}
 		
