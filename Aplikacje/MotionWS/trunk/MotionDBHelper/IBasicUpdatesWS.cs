@@ -13,7 +13,7 @@ namespace MotionDBWebServices
     {
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
-        int CreatePerformer(PerformerData performerData);
+        int CreatePerformer(int PerformerID);
 
         [OperationContract]
         [FaultContract(typeof(UpdateException))]

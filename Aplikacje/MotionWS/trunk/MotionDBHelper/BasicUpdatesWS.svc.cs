@@ -17,41 +17,40 @@ namespace MotionDBWebServices
     {
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreatePerformer(PerformerData performerData)
+        public int CreatePerformer(int PerformerID)
         {
-            int newPerformerId = 0;
-
             try
             {
 
                 OpenConnection();
-                cmd.CommandText = @"insert into Performer ( Imie, Nazwisko)
-                                            values (@perf_name, @perf_surname)
-                                            set @perf_id = SCOPE_IDENTITY()";
-                cmd.Parameters.Add("@perf_name", SqlDbType.VarChar, 30);
-                cmd.Parameters.Add("@perf_surname", SqlDbType.VarChar, 50);
-                SqlParameter performerIdParameter =
-                    new SqlParameter("@perf_id", SqlDbType.Int);
-                performerIdParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(performerIdParameter);
-                cmd.Parameters["@perf_name"].Value = performerData.Name;
-                cmd.Parameters["@perf_surname"].Value = performerData.Surname;
+                cmd.CommandText = @"insert into Performer ( IdPerformer)
+                                            values (@perf_id)";
+                cmd.Parameters.Add("@perf_id", SqlDbType.Int);
+                cmd.Parameters["@perf_id"].Value = PerformerID;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
-                newPerformerId = (int)performerIdParameter.Value;
 
 
             }
             catch (SqlException ex)
             {
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreatePerformer")));
+                if (ex.ErrorCode == -2146232060)
+                {
+                    UpdateException exc = new UpdateException("Parameter", "Identifier value already exists");
+                    throw new FaultException<UpdateException>(exc, "The PerformerID = "+PerformerID+" already exists", FaultCode.CreateReceiverFaultCode(new FaultCode("CreatePerformer")));
+
+                }
+                else
+                {
+                    UpdateException exc = new UpdateException("DB-Side", "DB-Side failure");
+                    throw new FaultException<UpdateException>(exc, "DB-Side failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreatePerformer")));
+                }
             }
             finally
             {
                 CloseConnection();
             }
-            return newPerformerId;
+            return PerformerID;
 
         }
 
