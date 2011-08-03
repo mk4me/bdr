@@ -49,7 +49,8 @@ public class WizardSessionDirectoryPanel extends WizardPanel {
 					int j = fileString.lastIndexOf(".");
 					String extension = fileString.substring(j+1, fileString.length());
 					if (extension.equals("zip") || extension.equals("c3d") ||
-							extension.equals("avi") || extension.equals("asf") || extension.equals("amc")) {
+							extension.equals("avi") || extension.equals("asf") || extension.equals("amc")
+							|| extension.equals("vsk") || extension.equals("mp")) {
 						filesList.add(files[i]);
 					}
 				}
