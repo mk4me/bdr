@@ -28,6 +28,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _FileAccessServiceExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "IssueKind");
+    private final static QName _FileAccessServiceExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "Details");
     private final static QName _AnyURI_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "anyURI");
     private final static QName _Char_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "char");
     private final static QName _UnsignedByte_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedByte");
@@ -50,150 +52,12 @@ public class ObjectFactory {
     private final static QName _String_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "string");
     private final static QName _UnsignedLong_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "unsignedLong");
     private final static QName _Boolean_QNAME = new QName("http://schemas.microsoft.com/2003/10/Serialization/", "boolean");
-    private final static QName _FileAccessServiceExceptionIssueKind_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "IssueKind");
-    private final static QName _FileAccessServiceExceptionDetails_QNAME = new QName("http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", "Details");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: motion.database.ws.fileStoremanServiceWCF
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFilesResponse }
-     * 
-     */
-    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
-        return new StoreTrialFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFilesResponse }
-     * 
-     */
-    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
-        return new StoreSessionFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link DownloadComplete }
-     * 
-     */
-    public DownloadComplete createDownloadComplete() {
-        return new DownloadComplete();
-    }
-
-    /**
-     * Create an instance of {@link ReplaceFile }
-     * 
-     */
-    public ReplaceFile createReplaceFile() {
-        return new ReplaceFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFile }
-     * 
-     */
-    public StoreSessionFile createStoreSessionFile() {
-        return new StoreSessionFile();
-    }
-
-    /**
-     * Create an instance of {@link StoreMeasurementConfFiles }
-     * 
-     */
-    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
-        return new StoreMeasurementConfFiles();
-    }
-
-    /**
-     * Create an instance of {@link StoreTrialFile }
-     * 
-     */
-    public StoreTrialFile createStoreTrialFile() {
-        return new StoreTrialFile();
-    }
-
-    /**
-     * Create an instance of {@link GetMetadata }
-     * 
-     */
-    public GetMetadata createGetMetadata() {
-        return new GetMetadata();
-    }
-
-    /**
-     * Create an instance of {@link FileData }
-     * 
-     */
-    public FileData createFileData() {
-        return new FileData();
-    }
-
-    /**
-     * Create an instance of {@link StoreMeasurementConfFilesResponse }
-     * 
-     */
-    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
-        return new StoreMeasurementConfFilesResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFileResponse }
-     * 
-     */
-    public StoreSessionFileResponse createStoreSessionFileResponse() {
-        return new StoreSessionFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link StoreSessionFiles }
-     * 
-     */
-    public StoreSessionFiles createStoreSessionFiles() {
-        return new StoreSessionFiles();
-    }
-
-    /**
-     * Create an instance of {@link ReplaceFileResponse }
-     * 
-     */
-    public ReplaceFileResponse createReplaceFileResponse() {
-        return new ReplaceFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFileResponse }
-     * 
-     */
-    public RetrieveFileResponse createRetrieveFileResponse() {
-        return new RetrieveFileResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateSessionFromFiles }
-     * 
-     */
-    public CreateSessionFromFiles createCreateSessionFromFiles() {
-        return new CreateSessionFromFiles();
-    }
-
-    /**
-     * Create an instance of {@link GetShallowCopyResponse }
-     * 
-     */
-    public GetShallowCopyResponse createGetShallowCopyResponse() {
-        return new GetShallowCopyResponse();
-    }
-
-    /**
-     * Create an instance of {@link RetrieveFile }
-     * 
-     */
-    public RetrieveFile createRetrieveFile() {
-        return new RetrieveFile();
     }
 
     /**
@@ -213,11 +77,75 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link RetrieveFile }
+     * 
+     */
+    public RetrieveFile createRetrieveFile() {
+        return new RetrieveFile();
+    }
+
+    /**
+     * Create an instance of {@link GetMetadata }
+     * 
+     */
+    public GetMetadata createGetMetadata() {
+        return new GetMetadata();
+    }
+
+    /**
+     * Create an instance of {@link DownloadComplete }
+     * 
+     */
+    public DownloadComplete createDownloadComplete() {
+        return new DownloadComplete();
+    }
+
+    /**
+     * Create an instance of {@link StoreMeasurementConfFilesResponse }
+     * 
+     */
+    public StoreMeasurementConfFilesResponse createStoreMeasurementConfFilesResponse() {
+        return new StoreMeasurementConfFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFileResponse }
+     * 
+     */
+    public StoreSessionFileResponse createStoreSessionFileResponse() {
+        return new StoreSessionFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFilesResponse }
+     * 
+     */
+    public StoreSessionFilesResponse createStoreSessionFilesResponse() {
+        return new StoreSessionFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReplaceFile }
+     * 
+     */
+    public ReplaceFile createReplaceFile() {
+        return new ReplaceFile();
+    }
+
+    /**
      * Create an instance of {@link GetMetadataResponse }
      * 
      */
     public GetMetadataResponse createGetMetadataResponse() {
         return new GetMetadataResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetShallowCopyResponse }
+     * 
+     */
+    public GetShallowCopyResponse createGetShallowCopyResponse() {
+        return new GetShallowCopyResponse();
     }
 
     /**
@@ -237,11 +165,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateSessionFromFilesResponse }
+     * Create an instance of {@link StoreTrialFileResponse }
      * 
      */
-    public CreateSessionFromFilesResponse createCreateSessionFromFilesResponse() {
-        return new CreateSessionFromFilesResponse();
+    public StoreTrialFileResponse createStoreTrialFileResponse() {
+        return new StoreTrialFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFilesResponse }
+     * 
+     */
+    public StoreTrialFilesResponse createStoreTrialFilesResponse() {
+        return new StoreTrialFilesResponse();
     }
 
     /**
@@ -253,11 +189,75 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link StoreTrialFileResponse }
+     * Create an instance of {@link ReplaceFileResponse }
      * 
      */
-    public StoreTrialFileResponse createStoreTrialFileResponse() {
-        return new StoreTrialFileResponse();
+    public ReplaceFileResponse createReplaceFileResponse() {
+        return new ReplaceFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFile }
+     * 
+     */
+    public StoreSessionFile createStoreSessionFile() {
+        return new StoreSessionFile();
+    }
+
+    /**
+     * Create an instance of {@link CreateSessionFromFiles }
+     * 
+     */
+    public CreateSessionFromFiles createCreateSessionFromFiles() {
+        return new CreateSessionFromFiles();
+    }
+
+    /**
+     * Create an instance of {@link CreateSessionFromFilesResponse }
+     * 
+     */
+    public CreateSessionFromFilesResponse createCreateSessionFromFilesResponse() {
+        return new CreateSessionFromFilesResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreMeasurementConfFiles }
+     * 
+     */
+    public StoreMeasurementConfFiles createStoreMeasurementConfFiles() {
+        return new StoreMeasurementConfFiles();
+    }
+
+    /**
+     * Create an instance of {@link RetrieveFileResponse }
+     * 
+     */
+    public RetrieveFileResponse createRetrieveFileResponse() {
+        return new RetrieveFileResponse();
+    }
+
+    /**
+     * Create an instance of {@link StoreTrialFile }
+     * 
+     */
+    public StoreTrialFile createStoreTrialFile() {
+        return new StoreTrialFile();
+    }
+
+    /**
+     * Create an instance of {@link FileData }
+     * 
+     */
+    public FileData createFileData() {
+        return new FileData();
+    }
+
+    /**
+     * Create an instance of {@link StoreSessionFiles }
+     * 
+     */
+    public StoreSessionFiles createStoreSessionFiles() {
+        return new StoreSessionFiles();
     }
 
     /**
@@ -266,6 +266,24 @@ public class ObjectFactory {
      */
     public StoreMeasurementConfFile createStoreMeasurementConfFile() {
         return new StoreMeasurementConfFile();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "IssueKind", scope = FileAccessServiceException.class)
+    public JAXBElement<String> createFileAccessServiceExceptionIssueKind(String value) {
+        return new JAXBElement<String>(_FileAccessServiceExceptionIssueKind_QNAME, String.class, FileAccessServiceException.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "Details", scope = FileAccessServiceException.class)
+    public JAXBElement<String> createFileAccessServiceExceptionDetails(String value) {
+        return new JAXBElement<String>(_FileAccessServiceExceptionDetails_QNAME, String.class, FileAccessServiceException.class, value);
     }
 
     /**
@@ -464,24 +482,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.microsoft.com/2003/10/Serialization/", name = "boolean")
     public JAXBElement<Boolean> createBoolean(Boolean value) {
         return new JAXBElement<Boolean>(_Boolean_QNAME, Boolean.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "IssueKind", scope = FileAccessServiceException.class)
-    public JAXBElement<String> createFileAccessServiceExceptionIssueKind(String value) {
-        return new JAXBElement<String>(_FileAccessServiceExceptionIssueKind_QNAME, String.class, FileAccessServiceException.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService", name = "Details", scope = FileAccessServiceException.class)
-    public JAXBElement<String> createFileAccessServiceExceptionDetails(String value) {
-        return new JAXBElement<String>(_FileAccessServiceExceptionDetails_QNAME, String.class, FileAccessServiceException.class, value);
     }
 
 }
