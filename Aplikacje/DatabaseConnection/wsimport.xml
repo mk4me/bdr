@@ -6,8 +6,9 @@
 	</description>
 
 	<property name="wsimport_path" value="C:/Program Files (x86)/Java/jdk1.6.0_20/bin/" />
-	<property name="server_address_a" value="http://dbpawell.pjwstk.edu.pl" />
-	<property name="server_address" value="http://v21.pjwstk.edu.pl" />
+	<!-- <property name="wsimport_path" value="/usr/lib/jvm/java-6-sun/bin" /> -->
+	<property name="server_address" value="http://dbpawell.pjwstk.edu.pl" />
+	<property name="server_address_b" value="http://v21.pjwstk.edu.pl" />
 	<property name="server_address_c" value="http://db-bdr.pjwstk.edu.pl" />
 
 	<macrodef name="run-wsimport">
