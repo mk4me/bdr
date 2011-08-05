@@ -1,7 +1,7 @@
 <? header ("Content-Type: application/x-java-jnlp-file"); ?>
 <jnlp
   spec="1.0+"
-  codebase="http://dbpawell.pjwstk.edu.pl/Motion-Client"
+  codebase="http://v21.pjwstk.edu.pl/Motion-Client"
   href="MotionClientApplication_pl.jnlp">
   <information>
     <title>Motion Web Client</title>

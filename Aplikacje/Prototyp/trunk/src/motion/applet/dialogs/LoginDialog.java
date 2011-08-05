@@ -108,10 +108,10 @@ public class LoginDialog extends BasicDialog {
 		this.addToButtonPanel(cancelButton);
 		
 		// Initial text
-		loginText.setText( "" );
-		passwordText.setText( "" );
-		//domainText.setText("dbpawell");
-		domainText.setText("pjwstk");
+		loginText.setText( "applet_user" );
+		passwordText.setText( "aplet4Motion" );
+		domainText.setText("dbpawell");
+		// domainText.setText("pjwstk");
 		
 		// Add select all text listeners.
 		loginText.addFocusListener(new FocusAdapter() {
@@ -147,7 +147,7 @@ public class LoginDialog extends BasicDialog {
 				
 				LoginDialog.this.loginButton.setEnabled(false);
 				WebServiceInstance.getDatabaseConnection().setWSCredentials( loginText.getText().trim(), passwordText.getText(), domainText.getText());
-				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("v21.pjwstk.edu.pl", "testUser", "testUser");
+				WebServiceInstance.getDatabaseConnection().setFTPSCredentials("dbpawell.pjwstk.edu.pl", "testUser", "testUser");
 
 				// Check user credentials
 				try {
