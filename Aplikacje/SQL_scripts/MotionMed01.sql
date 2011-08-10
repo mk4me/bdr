@@ -4,13 +4,13 @@
 use Motion_Med;
 go 
  CREATE TABLE Pacjent (
-        IdPacjent           int IDENTITY, -- zmienic!!!
+        IdPacjent           int not null,
         Imie                varchar(30) NOT NULL,
         Nazwisko            varchar(50) NOT NULL,
         Plec				char NOT NULL,
         Data_urodzenia		date NOT NULL,
         Zdjecie				varbinary(max) filestream,
-        rowguid				uniqueidentifier rowguidcol not null unique
+        rowguid				uniqueidentifier rowguidcol  not null unique default NEWSEQUENTIALID()
 )
 go
  ALTER TABLE Pacjent
@@ -33,6 +33,7 @@ go
 
 create table Badanie (
 	IdBadanie	int IDENTITY,
+	IdPacjent int NOT NULL,
 	Data	date NOT NULL, -- datetime ???
 	Opis varchar(255),
 	Notatki	varchar(255),
@@ -40,6 +41,25 @@ create table Badanie (
 	IdTyp_badania int
 )
 go
+
+create table Zdjecie_udostepnione (
+        IdPacjent int NOT NULL,
+        Data_udostepnienia datetime NOT NULL,
+        Lokalizacja varchar(80) NOT NULL
+ )
+go
+
+CREATE INDEX X1Zdjecie_udostepnione ON Zdjecie_udostepnione
+ (
+         IdPacjent
+ )
+go
+ 
+ ALTER TABLE Zdjecie_udostepnione
+        ADD FOREIGN KEY (IdPacjent)
+			REFERENCES Pacjent
+go
+
 
 alter table Badanie
 	add primary key (IdBadanie)
@@ -51,6 +71,13 @@ CREATE INDEX X1Badanie ON Badanie
  )
 go
 
+CREATE INDEX X2Badanie ON Badanie
+ (
+        IdPacjent
+ )
+go
+
+
 create table Schorzenie (
 	IdSchorzenie	int IDENTITY,
 	Nazwa	varchar(60)
@@ -61,7 +88,7 @@ alter table Schorzenie
 	add primary key (IdSchorzenie)
 go
 
-create table Pacjent_schorzenie ( -- przeniesc do pacjenta?
+create table Pacjent_schorzenie (
 	IdPacjent	int not null,
 	IdSchorzenie	int not null,
 	Komentarz varchar(255)
@@ -73,19 +100,19 @@ alter table Pacjent_schorzenie
 go
 
 alter table Pacjent_schorzenie
-	add foreign key (IdPacjent) references Badanie on delete cascade;
+	add foreign key (IdPacjent) references Pacjent on delete cascade;
 go
 
 alter table Pacjent_schorzenie
 	add foreign key (IdSchorzenie) references Schorzenie on delete cascade;
 go
 
-create index X1Pacjent_schorzenie on Badanie_schorzenie (
-	IdBadanie
+create index X1Pacjent_schorzenie on Pacjent_schorzenie (
+	IdPacjent
 )
 go
 
-create index X2Pacjent_schorzenie on Badanie_schorzenie (
+create index X2Pacjent_schorzenie on Pacjent_schorzenie (
 	IdSchorzenie
 )
 go
@@ -101,8 +128,11 @@ alter table Typ_badania
 go
 
 alter table Badanie
-	add foreign key (IdTyp_badania) references Typ_badania on delete cascade;
+	add foreign key (IdTyp_badania) references Typ_badania;
 go
 
+alter table Badanie
+	add foreign key (IdPacjent) references Pacjent;
+go
 
 

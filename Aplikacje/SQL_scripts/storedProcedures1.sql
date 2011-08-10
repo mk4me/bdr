@@ -272,6 +272,30 @@ inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
 where was.IdSesja = @sess_id ));
 go
 
+-- last rev. 2010-10-18
+create function list_performer_configuration_attributes ( @pc_id int )
+returns TABLE as
+return 
+select 
+	a.Nazwa as Name, 
+	(case a.Typ_danych 
+		when 'string' then cast ( wakp.Wartosc_tekst as SQL_VARIANT )
+		when 'integer' then (
+			case a.Podtyp_danych when 'nonNegativeDecimal'	then cast (cast ( wakp.Wartosc_liczba as numeric(10,2) ) as SQL_VARIANT)
+			else cast (cast ( wakp.Wartosc_liczba as int ) as SQL_VARIANT) end
+		)
+		else cast ( wakp.Wartosc_zmiennoprzecinkowa as SQL_VARIANT) end ) as Value,
+		a.Typ_danych as Type,
+		ga.Nazwa as AttributeGroup,
+		'performer_conf' as Entity
+from Atrybut a 
+inner join Wartosc_atrybutu_konfiguracji_performera wakp on a.IdAtrybut=wakp.IdAtrybut
+inner join Grupa_atrybutow ga on ga.IdGrupa_atrybutow=a.IdGrupa_atrybutow
+where wakp.IdKonfiguracja_performera = @pc_id and a.Typ_danych <> 'file'
+go
+
+
+
 -- last rev: 20101116
 create function list_trial_attributes ( @trial_id int )
 returns TABLE as
@@ -427,15 +451,13 @@ go
 -- Resource By-ID retrieval
 -- ========================
 
--- last rev: 2011-07-10
+-- last rev: 2011-08-05
 -- deprecated
 create procedure get_performer_by_id_xml ( @res_id int )
 as
 			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 			select
 				IdPerformer as PerformerID,
-				'anonymous' as FirstName,
-				'anonymous' as LastName,
 				(select * from list_performer_attributes ( @res_id ) Attribute FOR XML AUTO, TYPE) as Attributes
 			from Performer PerformerDetailsWithAttributes where IdPerformer = @res_id
 			for XML AUTO, ELEMENTS
@@ -558,23 +580,21 @@ go
 -- Performer listing queries
 -- =========================
 
--- last rev: 2011-07-10
+-- last rev: 2011-08-05
 create procedure list_performers_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
-select IdPerformer as PerformerID, 'anonymous' as FirstName, 'anonymous' as LastName
+select IdPerformer as PerformerID
 	from Performer PerformerDetails
     for XML AUTO, root ('PerformerList')
 go
 
--- last rev: 2011-07-10
+-- last rev: 2011-08-05
 create procedure list_performers_attributes_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
 	IdPerformer as PerformerID,
-	'anonymous' as FirstName,
-	'anonymous' as LastName,
 	(select * from list_performer_attributes ( IdPerformer ) Attribute FOR XML AUTO, TYPE ) as Attributes 
 	from Performer PerformerDetailsWithAttributes
     for XML AUTO, ELEMENTS, root ('PerformerWithAttributesList')

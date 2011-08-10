@@ -1241,7 +1241,7 @@ as
 go
 
 
--- last rev. 2011-07-13
+-- last rev. 2011-08-05
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1255,6 +1255,8 @@ as
 	declare @trialId int;
 	declare @labId int;
 	declare @res int;
+	
+	declare @perf_id int;
 	
 	declare @trialsToCreate int;
 	set @sessionId = 0;
@@ -1277,6 +1279,10 @@ as
 			return;
 		end;
 	  set @sessionDate = CAST ( SUBSTRING(@sessionName,1,10) as Date);
+	  
+	  -- Okreslam numer performera
+	  set @perf_id = CAST ( SUBSTRING(@sessionName,13,4) as int );
+	  
 	  -- Czy nie ma plikow o niezgodnych nazwach?
 	  if exists( select * from @files where CHARINDEX (@sessionName , Name)=0 )
 		begin
@@ -1300,7 +1306,10 @@ as
 			return;
 		end;
 	
-
+		if not exists ( select * from Performer where IdPerformer = @perf_id )
+		begin
+			insert into Performer ( IdPerformer ) values ( @perf_id );
+		end;
 	
 	exec create_session  @user_login, 1, 'walk', @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
 	
@@ -1309,6 +1318,8 @@ as
 			set @result = 1;
 			return;
 		end;
+		
+	insert into Konfiguracja_performera ( IdPerformer, IdSesja ) values (@perf_id, @sessionId );
 	-- po przetestowaniu zamien wykomentowania gora-dol
 	-- set @sessionId = 1;
 									
@@ -1338,8 +1349,7 @@ go
 -- last rev. 2011-07-11
 create procedure get_shallow_copy @user_login varchar(30)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB'),
-
+with
 UAS as (select * from dbo.user_accessible_sessions_by_login (@user_login) Session ),
 UAGA as (select * from Sesja_grupa_sesji GroupAssignment where exists(select * from UAS where UAS.IdSesja = GroupAssignment.IdSesja)),
 UAT as (select * from Proba Trial where exists (select * from UAS where UAS.IdSesja = Trial.IdSesja)),
@@ -1398,7 +1408,7 @@ go
 -- last rev. 2011-02-11
 create procedure get_metadata @user_login varchar(30)
 as
-with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB'),
+with
 SG as (select * from Grupa_sesji SessionGroup ),
 MK as (select * from Rodzaj_ruchu MotionKind),
 LB as (select * from Laboratorium Lab),
