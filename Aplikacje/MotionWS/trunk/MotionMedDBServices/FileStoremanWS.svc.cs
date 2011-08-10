@@ -14,9 +14,9 @@ using System.Security.Permissions;
 namespace MotionMedDBWebServices
 {
     // NOTE: If you change the class name "FileStoremanWS" here, you must also update the reference to "FileStoremanWS" in Web.config.
-    [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
+    [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/FileStoremanService")]
     [ErrorLoggerBehaviorAttribute]
-    [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
+
     public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
     {
 
@@ -162,10 +162,9 @@ namespace MotionMedDBWebServices
             string filePath = "";
             string fileName = "patientList.xml";
             string fileLocation = "";
-            XmlDeclaration xmldecl;
 
             XmlDocument xd = new XmlDocument();
-            XmlElement xe = xd.CreateElement("ShallowCopy", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+            XmlDocument xd1 = new XmlDocument();
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
@@ -188,14 +187,9 @@ namespace MotionMedDBWebServices
                 }
                 dr.Close();
 
-                while (xd.DocumentElement.HasChildNodes)
-                {
-                    xe.AppendChild(xd.DocumentElement.ChildNodes[0]);
-                }
-                xd.RemoveChild(xd.DocumentElement);
-                xd.AppendChild(xe);
-                xmldecl = xd.CreateXmlDeclaration("1.0", null, null);
-                xd.InsertBefore(xmldecl, xd.DocumentElement);
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
+                xd1.LoadXml(xd.OuterXml);
+
                 xd.Save(baseLocalFilePath + fileLocation);
 
             }
@@ -216,13 +210,14 @@ namespace MotionMedDBWebServices
         public string GetMetadata()
         {
             string filePath = "";
-            string fileName = "metadata.xml";
+            string fileName = "medMetadata.xml";
             string fileLocation = "";
-            XmlDeclaration xmldecl;
+
 
 
             XmlDocument xd = new XmlDocument();
-            XmlElement xe = xd.CreateElement("Metadata", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+            XmlDocument xd1 = new XmlDocument(); // --
+            // XmlElement xe = xd.CreateElement("Metadata", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
@@ -238,16 +233,13 @@ namespace MotionMedDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "get_med_metadata";
-                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                usernamePar.Direction = ParameterDirection.Input;
-                usernamePar.Value = userName;
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {
                     xd.Load(dr);
                 }
                 dr.Close();
-
+                /*
                 while (xd.DocumentElement.HasChildNodes)
                 {
                     xe.AppendChild(xd.DocumentElement.ChildNodes[0]);
@@ -257,14 +249,16 @@ namespace MotionMedDBWebServices
 
                 xmldecl = xd.CreateXmlDeclaration("1.0", null, null);
                 xd.InsertBefore(xmldecl, xd.DocumentElement);
+                */
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
+                xd1.LoadXml(xd.OuterXml);
 
-
-                xd.Save(baseLocalFilePath + fileLocation);
+                xd1.Save(baseLocalFilePath + fileLocation);
 
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                FileAccessServiceException exc = new FileAccessServiceException("DB-side", "Shallow copy dump failed");
                 throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMetadata")));
             }
             finally
