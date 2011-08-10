@@ -791,10 +791,10 @@ namespace MotionDBWebServices
             string filePath = "";
             string fileName = "shallowCopy.xml";
             string fileLocation = "";
-            XmlDeclaration xmldecl;
+
 
             XmlDocument xd = new XmlDocument();
-            XmlElement xe = xd.CreateElement("ShallowCopy", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+            XmlDocument xd1 = new XmlDocument();
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
@@ -819,15 +819,10 @@ namespace MotionDBWebServices
                         xd.Load(dr);
                     }
                     dr.Close();
- 
-                    while (xd.DocumentElement.HasChildNodes)
-                    {
-                        xe.AppendChild(xd.DocumentElement.ChildNodes[0]);
-                    }
-                    xd.RemoveChild(xd.DocumentElement);
-                    xd.AppendChild(xe);
-                    xmldecl = xd.CreateXmlDeclaration("1.0", null, null);
-                    xd.InsertBefore(xmldecl, xd.DocumentElement);
+
+                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+                    xd1.LoadXml(xd.OuterXml);
+
                     xd.Save(baseLocalFilePath + fileLocation);
                     
                 }
@@ -850,11 +845,10 @@ namespace MotionDBWebServices
             string filePath = "";
             string fileName = "metadata.xml";
             string fileLocation = "";
-            XmlDeclaration xmldecl;
 
 
             XmlDocument xd = new XmlDocument();
-            XmlElement xe = xd.CreateElement("Metadata", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+            XmlDocument xd1 = new XmlDocument();
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
@@ -880,16 +874,8 @@ namespace MotionDBWebServices
                 }
                 dr.Close();
 
-                while (xd.DocumentElement.HasChildNodes)
-                {
-                    xe.AppendChild(xd.DocumentElement.ChildNodes[0]);
-                }
-                xd.RemoveChild(xd.DocumentElement);
-                xd.AppendChild(xe);
-
-                xmldecl = xd.CreateXmlDeclaration("1.0", null, null);
-                xd.InsertBefore(xmldecl, xd.DocumentElement);
-
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+                xd1.LoadXml(xd.OuterXml);
 
                 xd.Save(baseLocalFilePath + fileLocation);
 
@@ -950,7 +936,7 @@ namespace MotionDBWebServices
                 
                  
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
-                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.???", SearchOption.TopDirectoryOnly) )
+                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.??*", SearchOption.TopDirectoryOnly) )
                 {
 
                     if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-B\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
