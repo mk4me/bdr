@@ -1115,6 +1115,15 @@ Output parameter "result" meaning:
 create procedure set_session_attribute (@sess_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+		7 = file-valued attribute: invalid file ID
+	*/
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int ;
 	declare @value_tuple_found as bit = 0;
@@ -1241,6 +1250,14 @@ go
 create procedure set_performer_attribute (@perf_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+		7 = file-valued attribute: invalid file ID
+	*/
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
@@ -1324,6 +1341,15 @@ go
 create procedure set_performer_conf_attribute (@pc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+		7 = file-valued attribute: invalid file ID
+	*/
+
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
@@ -1425,6 +1451,15 @@ go
 create procedure set_trial_attribute (@trial_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+		7 = file-valued attribute: invalid file ID
+	*/
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
@@ -1526,6 +1561,13 @@ go
 create procedure set_file_attribute (@file_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+	*/
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	
@@ -1613,6 +1655,14 @@ go
 create procedure set_measurement_conf_attribute (@mc_id int, @attr_name varchar(100), @attr_value varchar(100), @update bit, @result int OUTPUT )
 as
 begin
+
+	/* Error codes:
+		1 = attribute of this name not applicable here
+		3 = attribute owning instance not found
+		5 = value exists while update has not been allowed
+		6 = value type casting error
+		7 = file-valued attribute: invalid file ID
+	*/
 	declare @attr_id as int, @attr_type as varchar(100), @attr_enum as bit;
 	declare @integer_value numeric(10,2), @float_value float, @id_value int;
 	declare @value_tuple_found as bit = 0;	

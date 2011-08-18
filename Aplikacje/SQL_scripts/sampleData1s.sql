@@ -244,7 +244,7 @@ go
 insert into Laboratorium (Nazwa) values ('PJWSTK')
 go
 
-
+select * from Konfiguracja_performera
 
 -- zakresy ruchowe (run, jump, hop, sit, trot, dance, ...) -> IdRodzajRuchu
 
@@ -262,6 +262,94 @@ insert into Rodzaj_ruchu ( Nazwa ) values ('trot')
 go
 insert into Rodzaj_ruchu ( Nazwa ) values ('dance')
 go
+
+-- select * from Grupa_atrybutow
+
+-- delete from Grupa_atrybutow where Nazwa != '_static' and Opisywana_encja = 'performer_conf'
+
+insert into Grupa_atrybutow ( Nazwa, Opisywana_encja ) values ('Anthropometric', 'performer_conf');
+go
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'BodyMass', 'integer', 0, 'nonNegativeDecimal', 'kg') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'Height', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'InterAsisDistance', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftLegLength', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightLegLenght', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftKneeWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightKneeWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftAnkleWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightAnkleWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftCircuitThigh', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightCircuitThight', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftCircuitShank', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightCircuitShank', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftShoulderOffset', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightShoulderOffset', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftElbowWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightElbowWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftWristWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightWristWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftWristThickness', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightWristThickness', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftHandWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightHandWidth', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'LeftHandThickness', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+insert into Atrybut ( IdGrupa_atrybutow, Nazwa, Typ_danych, Wyliczeniowy, Podtyp_danych, Jednostka)
+values ( (select IdGrupa_atrybutow from Grupa_atrybutow where Nazwa = 'Anthropometric' and Opisywana_encja='performer_conf'), 'RightHandThickness', 'integer', 0, 'nonNegativeInteger', 'mm') 
+
+
+select Nazwa from Sesja
+
+select IdPerformer from Performer
+
 
 -- PONIZSZE: TYLKO NA SERWER TESTOWY! --
 
