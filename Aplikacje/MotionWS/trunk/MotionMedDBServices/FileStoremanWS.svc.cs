@@ -162,12 +162,19 @@ namespace MotionMedDBWebServices
             string filePath = "";
             string fileName = "patientList.xml";
             string fileLocation = "";
+            Random r = new Random();
+            StringBuilder b = new StringBuilder();
+            char ch;
 
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
-
+            string subdirName = "/dump";
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            for(int i=0; i<20; i++) b.Append( Convert.ToChar( Convert.ToInt32 ( Math.Floor(26 * r.NextDouble()+65))));
+
+            subdirName ="/"+b.ToString() +subdirName;
 
             filePath = userName + "/dump";
 
