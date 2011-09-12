@@ -34,7 +34,7 @@ go
 create table Badanie (
 	IdBadanie	int IDENTITY,
 	IdPacjent int NOT NULL,
-	Data	date NOT NULL, -- datetime ???
+	Data	datetime NOT NULL,
 	Opis varchar(255),
 	Notatki	varchar(255),
 	IdSesja int,
