@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Xml;
 using System.Security.Permissions;
+using MotionDBCommons;
 
 namespace MotionDBWebServices
 {

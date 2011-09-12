@@ -72,7 +72,6 @@
   <ItemGroup>
     <Compile Include="AdministrationWS.svc.cs">
       <DependentUpon>AdministrationWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="AttributeViewSetting.cs">
       <SubType>Code</SubType>
@@ -82,28 +81,21 @@
     </Compile>
     <Compile Include="AuthorizationWS.svc.cs">
       <DependentUpon>AuthorizationWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="BasicQueriesWS.svc.cs">
       <DependentUpon>BasicQueriesWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="BasicUpdatesWS.svc.cs">
       <DependentUpon>BasicUpdatesWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="AttributeGroupViewSetting.cs" />
     <Compile Include="AttributeGroupViewSettingCollection.cs" />
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
-    <Compile Include="DatabaseAccessService.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="FileNameEntry.cs" />
     <Compile Include="FileNameEntryCollection.cs" />
     <Compile Include="FileStoremanWS.svc.cs">
       <DependentUpon>FileStoremanWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="FilterPredicate.cs" />
     <Compile Include="FilterPredicateCollection.cs" />
@@ -126,13 +118,14 @@
     </Compile>
     <Compile Include="UserPersonalSpaceWS.svc.cs">
       <DependentUpon>UserPersonalSpaceWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AdministrationWS.svc" />
     <Content Include="AuthorizationWS.svc" />
     <Content Include="BasicUpdatesWS.svc" />
+    <Content Include="bin\MotionDBCommons.dll" />
+    <Content Include="bin\MotionDBCommons.pdb" />
     <Content Include="bin\MotionDBWebService.dll" />
     <Content Include="bin\MotionDBWebService.pdb" />
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.dll" />
@@ -225,6 +218,12 @@
     <None Include="res\UserPersonalSpaceWSStandaloneImport.wsdl" />
     <None Include="res\ValidateSessionFileSet.xsd" />
     <None Include="res\_PerformQuery.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MotionDBCommons\MotionDBCommons.csproj">
+      <Project>{73DCDC9E-D462-4CAD-A43C-291E31843959}</Project>
+      <Name>MotionDBCommons</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
