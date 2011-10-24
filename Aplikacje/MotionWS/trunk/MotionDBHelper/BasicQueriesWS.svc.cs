@@ -1750,6 +1750,83 @@ namespace MotionDBWebServices
             CloseConnection();            
             return xd.DocumentElement;
         }
+
+        // Querying for the last update - needed for the shallow copy retrieval
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public DateTime GetDBTimestamp()
+        {
+            DateTime stamp = DateTime.Now;
+            SqlDataReader dr;
+             try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "time_stamp";
+                dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    stamp = DateTime.Parse(dr[0].ToString());
+                }
+                dr.Close();
+
+            }
+             catch (SqlException ex)
+             {
+                 QueryException exc = new QueryException("DB-side", "Stored procedure execution error: " + ex.Message);
+                 throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GetDBTimestamp")));
+             }
+             catch (Exception ex1)
+             {
+                 QueryException exc = new QueryException("unknown", "Other error: " + ex1.Message + " " + ex1.Source);
+                 throw new FaultException<QueryException>(exc, "Other error", FaultCode.CreateReceiverFaultCode(new FaultCode("GetDBTimestamp")));
+             }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return stamp;
+        }
+
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        public DateTime GetMetadataTimestamp()
+        {
+            DateTime stamp = DateTime.Now;
+            SqlDataReader dr;
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "metadata_time_stamp";
+                dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    stamp = DateTime.Parse(dr[0].ToString());
+                }
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                QueryException exc = new QueryException("DB-side", "Stored procedure execution error: " + ex.Message);
+                throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMetadataTimestamp")));
+            }
+            catch (Exception ex1)
+            {
+                QueryException exc = new QueryException("unknown", "Other error: " + ex1.Message + " " + ex1.Source);
+                throw new FaultException<QueryException>(exc, "Other error", FaultCode.CreateReceiverFaultCode(new FaultCode("GetMetadataTimestamp")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return stamp;
+        }
+
+
         private static bool IgnoredFiles(FileNameEntry fne)
         {
             string s = fne.Name;

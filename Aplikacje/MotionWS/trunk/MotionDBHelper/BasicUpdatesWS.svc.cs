@@ -230,44 +230,6 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public int CreateMeasurement(int trialID, int mcID)
-        {
-            int newMeasurementId = 0;
-            try
-            {
-                OpenConnection();
-                cmd.CommandText = @"insert into Pomiar ( IdObserwacja, IdKonfiguracja_pomiarowa)
-                                    values (@meas_trial, @meas_conf )
-                                            set @meas_id = SCOPE_IDENTITY()";
-                cmd.Parameters.Add("@meas_trial", SqlDbType.Int);
-                cmd.Parameters.Add("@meas_conf", SqlDbType.Int);
-
-                SqlParameter measurementIdParameter =
-                    new SqlParameter("@meas_id", SqlDbType.Int);
-                measurementIdParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(measurementIdParameter);
-                cmd.Parameters["@meas_trial"].Value = trialID;
-                cmd.Parameters["@meas_conf"].Value = mcID;
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
-                newMeasurementId = (int)measurementIdParameter.Value;
-            }
-            catch (SqlException ex)
-            {
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateMeasurement")));
-
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return newMeasurementId;
-
-        }
-
         // Group Assignment operations
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
@@ -597,76 +559,6 @@ namespace MotionDBWebServices
                     default:
                         exc = new UpdateException("Unknown error", "unknown error occured");
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetTrialAttribute")));
-
-                }
-            }
-
-        }
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
-        public void SetMeasurementAttribute(int measurementID, string attributeName, string attributeValue, bool update)
-        {
-            int resultCode = 0;
-
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "set_measurement_attribute";
-                cmd.Parameters.Add("@meas_id", SqlDbType.Int);
-                cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@attr_value", SqlDbType.VarChar, 100);
-                cmd.Parameters.Add("@update", SqlDbType.Bit);
-                SqlParameter resultCodeParameter =
-                    new SqlParameter("@result", SqlDbType.Int);
-                resultCodeParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(resultCodeParameter);
-
-                cmd.Parameters["@meas_id"].Value = measurementID;
-                cmd.Parameters["@attr_name"].Value = attributeName;
-                cmd.Parameters["@attr_value"].Value = attributeValue;
-                cmd.Parameters["@update"].Value = update ? 1 : 0;
-
-                cmd.ExecuteNonQuery();
-                resultCode = (int)resultCodeParameter.Value;
-
-            }
-            catch (SqlException ex)
-            {
-                // log the exception
-                UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetMeasurementAttribute")));
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            if (resultCode != 0)
-            {
-                UpdateException exc;
-                string resName = "measurement";
-
-                switch (resultCode)
-                {
-                    case 1:
-                        exc = new UpdateException("Invalid attribute", "Attribute of name " + attributeName + " is not applicable to " + resName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 2:
-                        exc = new UpdateException("Invalid enum value", "the value " + attributeValue + " is not valid for the enum-type attribute " + attributeName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 3:
-                        exc = new UpdateException("Invalid resource ID", "the " + resName + " of ID " + measurementID + "not found");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 5:
-                        exc = new UpdateException("Value already exists", "value of attribute " + attributeName + " for this " + resName + " already exists, while you called this operation in no overwrite mode");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-                    case 6:
-                        exc = new UpdateException("Invalid numeric value", "the value " + attributeValue + " provided is not valid for this numeric-type attribute " + attributeName);
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
-
-                    default:
-                        exc = new UpdateException("Unknown error", "unknown error occured");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
 
                 }
             }

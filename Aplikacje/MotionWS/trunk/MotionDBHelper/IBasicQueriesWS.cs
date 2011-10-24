@@ -157,6 +157,13 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement ValidateSessionFileSet(FileNameEntryCollection fileNames);
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        DateTime GetDBTimestamp();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        DateTime GetMetadataTimestamp();
 
     }
 

@@ -503,6 +503,26 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="GetDBTimestamp">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="GetDBTimestampResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="GetDBTimestampResult" type="xsd:dateTime"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetMetadataTimestamp">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="GetMetadataTimestampResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="GetMetadataTimestampResult" type="xsd:dateTime"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="GenericQueryXML">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -1219,6 +1239,24 @@
 	<wsdl:message name="IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetDBTimestamp_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDBTimestamp"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetDBTimestamp_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetDBTimestampResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetDBTimestamp_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetMetadataTimestamp_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetMetadataTimestamp"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetMetadataTimestamp_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetMetadataTimestampResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetMetadataTimestamp_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GenericQueryXML"/>
 	</wsdl:message>
@@ -1523,6 +1561,16 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetResponse" message="tns:IBasicQueriesWS_ValidateSessionFileSet_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSetQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ValidateSessionFileSet_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="GetDBTimestamp">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetDBTimestamp" message="tns:IBasicQueriesWS_GetDBTimestamp_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetDBTimestampResponse" message="tns:IBasicQueriesWS_GetDBTimestamp_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetDBTimestampQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetDBTimestamp_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetMetadataTimestamp">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestamp" message="tns:IBasicQueriesWS_GetMetadataTimestamp_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestampResponse" message="tns:IBasicQueriesWS_GetMetadataTimestamp_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestampQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetMetadataTimestamp_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1713,6 +1761,30 @@
 		</wsdl:operation>
 		<wsdl:operation name="ValidateSessionFileSet">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ValidateSessionFileSet" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetDBTimestamp">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetDBTimestamp" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetMetadataTimestamp">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestamp" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

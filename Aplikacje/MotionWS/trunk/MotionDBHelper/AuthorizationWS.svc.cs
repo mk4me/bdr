@@ -52,9 +52,9 @@ namespace MotionDBWebServices
             }
             return result == 1;
         }
+        // SPrawdzić !!!!
 
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void CreateUserAccount(string firstName, string lastName)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
