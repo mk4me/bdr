@@ -1107,7 +1107,7 @@ go
 -- Wizard procedures
 -- -----------------
 
--- last rev. 2010-12-07
+-- last rev. 2011-10-06
 create procedure validate_file_list_xml (  @files as FileNameListUdt readonly )
 as
 	declare @errorList table(err varchar(200) );
@@ -1130,16 +1130,20 @@ as
 			insert into @errorList values ('Session with name '+@sessionName+' already exists in the database!');
 	  -- Kompletuje liste triali
 	  insert @trialNames  select distinct SUBSTRING (Name, 1, CHARINDEX ('.', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
-	  if exists( select * from @trialNames tn where 
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
-		or
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+	  -- jesli jakakolwiek proba posiada pliki .avi - wymagamy po 4 takowe dla kazdej z nich
+	  if exists(select * from @files where CHARINDEX ('.avi', Name ) > 0)
+	   and exists( select * from @trialNames tn where 
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)>4
 		)
-		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having 4 .avi files AND 1 .c3d file') 
+		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having at most 4 .avi files') 
 		from @trialNames tn where 
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
-		or
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)	
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4
+
+      if exists( select * from @trialNames tn where 
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having 1 .c3d file') 
+		from @trialNames tn where 
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1	
 
 	end;
 	
@@ -1241,7 +1245,7 @@ as
 go
 
 
--- last rev. 2011-08-05
+-- last rev. 2011-10-06
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1296,10 +1300,18 @@ as
 		end;
 	  -- Kompletuje liste triali
 	  insert @trialNames  select distinct SUBSTRING (Name, 1, CHARINDEX ('.', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
-	  if exists( select * from @trialNames tn where 
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4)
+	  if exists(select * from @files where CHARINDEX ('.avi', Name ) > 0) and exists( select * from @trialNames tn where 
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)>4)
 		or
 		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+		)
+		begin
+			set @result = 1;
+			return;
+		end;
+
+	  if exists( select * from @trialNames tn where 
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1		
 		)
 		begin
 			set @result = 1;
@@ -1345,8 +1357,8 @@ go
 
 -- Shallow copy retrieval
 -- ==========================
-
--- last rev. 2011-07-11
+-- TODO: konfiguracje pomiarowe / ew. - grupy atrybutow
+-- last rev. 2011-10-24
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1366,8 +1378,8 @@ select
 	Tagi as Tags,
 	Opis_sesji as SessionDescription,
 	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
-	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
-	(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attrs
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
 	from Plik p where p.IdSesja=Session.IdSesja
 	for XML PATH('File'), TYPE) as Files
 	from UAS Session for XML AUTO, TYPE
@@ -1383,8 +1395,8 @@ select
 	Nazwa as TrialName,
 	Opis_proby as TrialDescription,
 	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
-	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath",
-		(select * from list_file_attributes ( IdPlik ) Attribute FOR XML AUTO, TYPE ) as Attributes
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
 		from Plik p 
 		where 
 		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as Files
@@ -1404,6 +1416,68 @@ select
  ) PerformerConfs
  for XML RAW ('ShallowCopy'), TYPE;
 go
+
+
+-- last rev. 2011-10-24
+create procedure get_shallow_copy_increment @user_login varchar(30), @since datetime
+as
+with
+UAS as (select * from dbo.user_accessible_sessions_by_login (@user_login) Session ),
+UAGA as (select * from Sesja_grupa_sesji GroupAssignment where exists(select * from UAS where UAS.IdSesja = GroupAssignment.IdSesja)),
+UAT as (select * from Proba Trial where exists (select * from UAS where UAS.IdSesja = Trial.IdSesja)),
+UAP as (select * from Performer Performer where exists (select * from Konfiguracja_performera KP where exists (select * from UAS where UAS.IdSesja = KP.IdSesja) )),
+UAPC as (select * from Konfiguracja_performera PerformerConf where exists(select * from UAS where UAS.IdSesja = PerformerConf.IdSesja))
+select
+(select 
+	IdSesja as SessionID,
+	IdUzytkownik as UserID,
+	IdLaboratorium as LabID,
+	dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+	Data as SessionDate,
+	Nazwa as SessionName,
+	Tagi as Tags,
+	Opis_sesji as SessionDescription,
+	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+	from Plik p where p.IdSesja=Session.IdSesja and  Ostatnia_zmiana > @since
+	for XML PATH('File'), TYPE) as Files
+	from UAS Session where Ostatnia_zmiana > @since for XML AUTO, TYPE
+ ) Sessions,
+ (select 
+	IdSesja as SessionID,
+	IdGrupa_sesji as SessionGroupID 
+	from UAGA GroupAssignment for XML AUTO, TYPE
+ ) GroupAssignments,
+ (select 
+	IdProba as TrialID,
+	IdSesja as SessionID,
+	Nazwa as TrialName,
+	Opis_proby as TrialDescription,
+	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+		from Plik p 
+		where  Ostatnia_zmiana > @since and
+		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as Files
+	from UAT Trial where Ostatnia_zmiana > @since FOR XML AUTO, TYPE 
+ ) Trials,
+ (select 
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_attributes ( IdPerformer ) A FOR XML AUTO, TYPE ) Attrs
+	from UAP Performer where Ostatnia_zmiana > @since FOR XML AUTO, TYPE 
+ ) Performers,
+ (select 
+	IdKonfiguracja_performera as PerformerConfID,
+	IdSesja as SessionID,
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
+	from UAPC Performer  where Ostatnia_zmiana > @since FOR XML AUTO, TYPE 
+ ) PerformerConfs
+ for XML RAW ('ShallowCopy'), TYPE;
+go
+
+
 
 -- last rev. 2011-02-11
 create procedure get_metadata @user_login varchar(30)
@@ -1551,3 +1625,203 @@ begin
 	exec set_performer_conf_attribute @pc_id, 'RightHandThickness', @RightHandThickness, 0, @result OUTPUT;
 	if( @result <> 0 ) return;
 end;
+
+-- Timestamp procedures and triggers
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_konfiguracji_performera_Update on Wartosc_atrybutu_konfiguracji_performera
+for update, insert
+as
+begin
+	update Konfiguracja_performera
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Konfiguracja_performera kp on i.IdKonfiguracja_performera = kp.IdKonfiguracja_performera
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_sesji_Update on Wartosc_atrybutu_sesji
+for update, insert
+as
+begin
+	update Sesja
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Sesja s on i.IdSesja = s.IdSesja
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_konfiguracji_pomiarowej_Update on Wartosc_atrybutu_konfiguracji_pomiarowej
+for update, insert
+as
+begin
+	update Konfiguracja_pomiarowa
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Konfiguracja_pomiarowa kp on i.IdKonfiguracja_pomiarowa = kp.IdKonfiguracja_pomiarowa
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_performera_Update on Wartosc_atrybutu_performera
+for update, insert
+as
+begin
+	update Performer
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Performer p on i.IdPerformer = p.IdPerformer
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_pliku_Update on Wartosc_atrybutu_pliku
+for update, insert
+as
+begin
+	update Plik
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Plik p on i.IdPlik = p.IdPlik
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Wartosc_atrybutu_proby_Update on Wartosc_atrybutu_proby
+for update, insert
+as
+begin
+	update Proba
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Proba p on i.IdProba = p.IdProba
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Sesja_Update on Sesja
+for update, insert
+as
+begin
+	update Sesja
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Sesja s on i.IdSesja = s.IdSesja
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Konfiguracja_pomiarowa_Update on Konfiguracja_pomiarowa
+for update, insert
+as
+begin
+	update Konfiguracja_pomiarowa
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Konfiguracja_pomiarowa kp on i.IdKonfiguracja_pomiarowa = kp.IdKonfiguracja_pomiarowa
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Plik_Update on Plik
+for update, insert
+as
+begin
+	update Plik
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Plik p on i.IdPlik = p.IdPlik
+	if( COLUMNS_UPDATED() = 0x20)
+	update Plik
+	set Zmieniony = getdate()
+	from inserted i join Plik p on i.IdPlik = p.IdPlik;
+
+end
+go
+
+-- last rev. 2011-10-17
+create trigger tr_Proba_Update on Proba
+for update, insert
+as
+begin
+	update Proba
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Proba p on i.IdProba = p.IdProba
+end
+go
+
+-- last rev. 2011-10-17
+create procedure time_stamp
+as
+(
+select max(ts) as time_stamp from
+	(
+	select max(Ostatnia_zmiana) as ts from Konfiguracja_performera 
+	union
+	select max(Ostatnia_zmiana) as ts from Konfiguracja_pomiarowa 
+	union
+	select max(Ostatnia_zmiana) as ts from Performer
+	union 
+	select max(Ostatnia_zmiana) as ts from Plik 
+	union
+	select max(Ostatnia_zmiana) as ts from Proba 
+	union
+	select max(Ostatnia_zmiana) as ts from Sesja
+	union
+	select max(Zmieniony) as ts from Plik
+	) as q1
+)
+
+-- last rev. 2011-10-24
+create trigger tr_Grupa_sesji_Update on Grupa_sesji
+for update, insert
+as
+begin
+	update Grupa_sesji
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Grupa_sesji gs on i.IdGrupa_sesji = gs.IdGrupa_sesji
+end
+go
+
+-- last rev. 2011-10-24
+create trigger tr_Rodzaj_ruchu_Update on Rodzaj_ruchu
+for update, insert
+as
+begin
+	update Rodzaj_ruchu
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Rodzaj_ruchu rr on i.IdRodzaj_ruchu = rr.IdRodzaj_ruchu
+end
+go
+
+-- last rev. 2011-10-24
+create trigger tr_Laboratorium_Update on Laboratorium
+for update, insert
+as
+begin
+	update Laboratorium
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Laboratorium l on i.IdLaboratorium = l.IdLaboratorium
+end
+go
+
+-- last rev. 2011-10-24
+create trigger tr_Grupa_atrybutow_Update on Grupa_atrybutow
+for update, insert
+as
+begin
+	update Grupa_atrybutow
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Grupa_atrybutow ga on i.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+end
+go
+
+-- last rev. 2011-10-24
+create procedure metadata_time_stamp
+as
+(
+select max(ts) as time_stamp from
+	(
+	select max(Ostatnia_zmiana) as ts from Grupa_atrybutow 
+	union
+	select max(Ostatnia_zmiana) as ts from Laboratorium 
+	union
+	select max(Ostatnia_zmiana) as ts from Rodzaj_ruchu
+	union 
+	select max(Ostatnia_zmiana) as ts from Grupa_sesji 
+	) as q1
+)
+go

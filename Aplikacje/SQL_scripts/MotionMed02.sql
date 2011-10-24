@@ -18,10 +18,11 @@ go
 go
 
 CREATE TABLE Uzytkownik (
-        IdUzytkownik         int IDENTITY,
-        Login                varchar(30) NOT NULL UNIQUE,
-        Imie                 varchar(30) NOT NULL,
-        Nazwisko             varchar(50) NOT NULL
+        IdUzytkownik        int IDENTITY,
+        Login               varchar(30) NOT NULL UNIQUE,
+        Imie                varchar(30) NOT NULL,
+        Nazwisko            varchar(50) NOT NULL,
+        LoginBDR			varchar(30)
  )
 go
  
@@ -38,7 +39,7 @@ create table Badanie (
 	Opis varchar(255),
 	Notatki	varchar(255),
 	IdSesja int,
-	IdTyp_badania int -- !!!!!!!!!!!!!!!!!!!! zamienic na idGrupa_badan
+	IdGrupa_badan int
 )
 go
 
@@ -78,58 +79,60 @@ CREATE INDEX X2Badanie ON Badanie
 go
 
 
-create table Schorzenie (	-- zmienic na Jednostka_chorobowa ???
-	IdSchorzenie	int IDENTITY,
+create table Jednostka_chorobowa (
+	IdJednostka_chorobowa	int IDENTITY,
 	Nazwa	varchar(60)
 )
 go
 
-alter table Schorzenie
-	add primary key (IdSchorzenie)
+alter table Jednostka_chorobowa
+	add primary key (IdJednostka_chorobowa)
 go
 
-create table Pacjent_schorzenie (
+create table Pacjent_Jednostka_chorobowa (
 	IdPacjent	int not null,
-	IdSchorzenie	int not null,
-	Komentarz varchar(255) -- !!!! Data diagnozy
+	IdJednostka_chorobowa	int not null,
+	Komentarz varchar(255),
+	Data_diagnozy date,
+	Glowna bit
 )
 go
 
-alter table Pacjent_schorzenie
-	add primary key (IdPacjent, IdSchorzenie)
+alter table Pacjent_Jednostka_chorobowa
+	add primary key (IdPacjent, IdJednostka_chorobowa)
 go
 
-alter table Pacjent_schorzenie
+alter table Pacjent_Jednostka_chorobowa
 	add foreign key (IdPacjent) references Pacjent on delete cascade;
 go
 
-alter table Pacjent_schorzenie
-	add foreign key (IdSchorzenie) references Schorzenie on delete cascade;
+alter table Pacjent_Jednostka_chorobowa
+	add foreign key (IdJednostka_chorobowa) references Jednostka_chorobowa on delete cascade;
 go
 
-create index X1Pacjent_schorzenie on Pacjent_schorzenie (
+create index X1Pacjent_Jednostka_chorobowa on Pacjent_Jednostka_chorobowa (
 	IdPacjent
 )
 go
 
-create index X2Pacjent_schorzenie on Pacjent_schorzenie (
-	IdSchorzenie
+create index X2Pacjent_Jednostka_chorobowa on Pacjent_Jednostka_chorobowa (
+	IdJednostka_chorobowa
 )
 go
 
-create table Typ_badania (
-	IdTyp_badania int IDENTITY,
+create table Grupa_badan (
+	IdGrupa_badan int IDENTITY,
 	Nazwa varchar (50)
 )
-go -- !!! Grupa_badan
+go
 
-alter table Typ_badania
-	add primary key (IdTyp_badania)
-go -- !!! Grupa_badan
+alter table Grupa_badan
+	add primary key (IdGrupa_badan)
+go
 
 alter table Badanie
-	add foreign key (IdTyp_badania) references Typ_badania;
-go -- !!! Grupa_badan
+	add foreign key (IdGrupa_badan) references Grupa_badan;
+go
 
 alter table Badanie
 	add foreign key (IdPacjent) references Pacjent;

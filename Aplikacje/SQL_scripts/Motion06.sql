@@ -31,7 +31,8 @@ go
  CREATE TABLE Grupa_atrybutow (
         IdGrupa_atrybutow    int IDENTITY,
         Nazwa                varchar(100) NOT NULL,
-        Opisywana_encja		varchar(20) NOT NULL
+        Opisywana_encja		varchar(20) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
@@ -43,7 +44,8 @@ go
  
  CREATE TABLE Grupa_sesji (
         IdGrupa_sesji        int IDENTITY,
-        Nazwa                varchar(100) NOT NULL
+        Nazwa                varchar(100) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
@@ -55,7 +57,8 @@ go
  
  CREATE TABLE Laboratorium (
         IdLaboratorium       int IDENTITY,
-        Nazwa                varchar(100) NOT NULL
+        Nazwa                varchar(100) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
@@ -68,7 +71,8 @@ go
         IdProba         int IDENTITY,
         IdSesja              int NOT NULL,
         Nazwa			varchar(30),
-        Opis_proby      varchar(100) NOT NULL
+        Opis_proby      varchar(100) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
@@ -83,7 +87,8 @@ go
 go
   
  CREATE TABLE Performer (
-        IdPerformer      int not null
+        IdPerformer      int not null,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
   
@@ -94,7 +99,8 @@ go
  CREATE TABLE Konfiguracja_performera (
         IdKonfiguracja_performera	int IDENTITY,
         IdSesja                int NOT NULL,
-        IdPerformer            int NOT NULL
+        IdPerformer            int NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
 
@@ -126,7 +132,9 @@ go
         Plik                varbinary(max) filestream not null,
 		rowguid				uniqueidentifier rowguidcol not null unique default NEWSEQUENTIALID(),
 		Nazwa_pliku         varchar(255) null,	-- zmiana na 100 (20100726) ???
-		Sciezka				varchar(100) null
+		Sciezka				varchar(100) null,
+		Ostatnia_zmiana datetime default getdate() not null,
+		Zmieniony datetime
  )
 go
 
@@ -158,7 +166,8 @@ CREATE TABLE Konfiguracja_pomiarowa
 	IdKonfiguracja_pomiarowa int IDENTITY,
 	Nazwa varchar(50) UNIQUE NOT NULL,
 	Opis varchar(255) NULL,
-	Rodzaj varchar(50) NOT NULL
+	Rodzaj varchar(50) NOT NULL,
+	Ostatnia_zmiana datetime default getdate() not null
 )
 go
 
@@ -207,7 +216,8 @@ go
  
  CREATE TABLE Rodzaj_ruchu (
         IdRodzaj_ruchu       int IDENTITY,
-        Nazwa                varchar(50) NOT NULL
+        Nazwa                varchar(50) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
@@ -228,7 +238,8 @@ go
         Data                 date NOT NULL,	-- zmienione z datetime w wersji 6 schematu
         Opis_sesji           varchar(100) NULL,
         Publiczna			bit not null default 0,
-        PublicznaZapis		 bit not null default 0
+        PublicznaZapis		 bit not null default 0,
+        Ostatnia_zmiana datetime default getdate() not null
  )
 go
  
