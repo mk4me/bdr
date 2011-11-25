@@ -1479,7 +1479,7 @@ go
 
 
 
--- last rev. 2011-02-11
+-- last rev. 2011-11-03
 create procedure get_metadata @user_login varchar(30)
 as
 with
@@ -1494,6 +1494,7 @@ select
 	from SG SessionGroup for XML AUTO, TYPE
  ) SessionGroups,
  (select 
+	IdRodzaj_ruchu as MotionKindID,
 	Nazwa as MotionKindName
 	from MK MotionKind for XML AUTO, TYPE
  ) MotionKinds,

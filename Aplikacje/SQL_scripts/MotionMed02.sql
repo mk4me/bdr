@@ -10,7 +10,9 @@ go
         Plec				char NOT NULL,
         Data_urodzenia		date NOT NULL,
         Zdjecie				varbinary(max) filestream,
-        rowguid				uniqueidentifier rowguidcol  not null unique default NEWSEQUENTIALID()
+        rowguid				uniqueidentifier rowguidcol  not null unique default NEWSEQUENTIALID(),
+        Uwagi				varchar(255),
+        IdPerformer			int
 )
 go
  ALTER TABLE Pacjent

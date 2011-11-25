@@ -1,24 +1,8 @@
 use Motion_Med;
 go
 
--- Shallow copy retrieval
--- ==========================
 
--- last rev. 2011-10-24
-
---MedicalData (
---  Patient ( ...
---    Disorder (... )*
---    Examination (... )*
---  )*
---)
-
---insert into Badanie ( IdGrupa_badan, IdPacjent, Data, Opis, Notatki, IdSesja ) values ( 1, 1, '2011-11-11 12:12:12:000', 'Desc', 'Notes', null )
---insert into Badanie ( IdGrupa_badan, IdPacjent, Data, Opis, Notatki, IdSesja ) values ( 1, 2, '2011-11-11 12:12:12:000', 'Desc', 'Notes', 1 )
---insert into Badanie ( IdGrupa_badan, IdPacjent, Data, Opis, Notatki, IdSesja ) values ( 1, 2, '2011-11-12 12:12:12:000', 'Desc', 'Notes', 2 )
-
--- last mod. 2011-11-25
-create procedure m_get_patient_list
+alter procedure m_get_patient_list
 as
 with
 P as (select * from Pacjent Patient ),
@@ -67,5 +51,7 @@ from DO DisorderOccurence for XML AUTO, TYPE) DisorderOccurences,
 for XML RAW('Dictionaries') , TYPE)
 for XML RAW ('MedicalRecords'), TYPE
 go
+
+
 
 
