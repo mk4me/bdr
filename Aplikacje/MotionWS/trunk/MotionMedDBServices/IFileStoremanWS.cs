@@ -13,7 +13,7 @@ namespace MotionMedDBWebServices
     {
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        void DownloadComplete(int photoID, string path);
+        void DownloadComplete(int resourceID, string resourceType, string path);
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]

@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\MotionDBCommons.dll" />
+    <Content Include="bin\MotionDBCommons.pdb" />
     <Content Include="bin\MotionMedDBServices.dll" />
     <Content Include="bin\MotionMedDBServices.pdb" />
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.dll" />
@@ -72,15 +74,20 @@
     <Compile Include="FileData.cs" />
     <Compile Include="FileStoremanWS.svc.cs">
       <DependentUpon>FileStoremanWS.svc</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="IFileStoremanWS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="res\MedMDBExceptions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\MedicalRecords.xsd" />
     <None Include="res\MedMetadata.xsd" />
-    <None Include="res\PatientList.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MotionDBCommons\MotionDBCommons.csproj">
+      <Project>{73DCDC9E-D462-4CAD-A43C-291E31843959}</Project>
+      <Name>MotionDBCommons</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

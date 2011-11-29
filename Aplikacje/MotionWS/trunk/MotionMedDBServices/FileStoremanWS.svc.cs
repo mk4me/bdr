@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Xml;
 using System.Security.Permissions;
+using MotionDBCommons;
 
 namespace MotionMedDBWebServices
 {
@@ -17,16 +18,36 @@ namespace MotionMedDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/FileStoremanService")]
     [ErrorLoggerBehaviorAttribute]
 
-    public class FileStoremanWS : DatabaseAccessService, IFileStoremanWS
+    public class FileStoremanWS : MotionDBCommons.DatabaseAccessService, IFileStoremanWS
     {
 
         int maxFileSize = 40000000;
         byte[] fileData = null;
 
+
+        static string localReadDirSuffix = "MED/";
+        static string localReadDir = baseLocalFilePath + localReadDirSuffix;
+        static string localWriteDirSuffix = localReadDirSuffix + "w/";
+        static string localWriteDir = localReadDir + localWriteDirSuffix;
+
         SqlDataReader fileReader = null;
 
+
+        protected string GetConnectionString()
+        {
+            return @"server = .; integrated security = true; database = Motion_Med";
+        }
+
+
+        protected void OpenConnection()
+        {
+            conn = new SqlConnection(@"server = .; integrated security = true; database = Motion_Med");
+            conn.Open();
+            cmd = conn.CreateCommand();
+        }
+
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
-        public void DownloadComplete(int photoID, string path)
+        public void DownloadComplete(int resourceID, string resourceType, string path)
         {
 
             string fileLocation = "NOT_FOUND";
@@ -34,10 +55,12 @@ namespace MotionMedDBWebServices
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
-            if ((photoID == 0) && path.Contains("dump"))
+
+
+            if ((resourceID == 0) && path.Contains(userName)) // Tymczasowe; zastapic docelowym sposobem rejestrowania w Zasob udostepniony
             {
-                if (Directory.Exists(baseLocalFilePath + userName + @"\dump"))
-                    Directory.Delete(baseLocalFilePath + userName + @"\dump", true);
+                if (Directory.Exists(baseLocalFilePath + path))
+                    Directory.Delete(baseLocalFilePath + path, true);
                 return;
             }
 
@@ -46,7 +69,7 @@ namespace MotionMedDBWebServices
                 OpenConnection();
                 cmd.CommandText = @"select Lokalizacja from Zdjecie_udostepnione where IdPacjent = @file_id and Lokalizacja = @file_path";
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
-                cmd.Parameters["@file_id"].Value = photoID;
+                cmd.Parameters["@file_id"].Value = resourceID;
                 cmd.Parameters.Add("@file_path", SqlDbType.VarChar, 80);
                 cmd.Parameters["@file_path"].Value = path;
 
@@ -114,16 +137,16 @@ namespace MotionMedDBWebServices
                     throw new FaultException<FileAccessServiceException>(exc, "Cannot retrieve this file", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
                 }
 
-                if (!Directory.Exists(baseLocalFilePath + relativePath))
-                    Directory.CreateDirectory(baseLocalFilePath + relativePath);
+                if (!Directory.Exists(localReadDir + relativePath))
+                    Directory.CreateDirectory(localReadDir + relativePath);
 
                 fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
                 fileName = fileName.Substring(fileName.LastIndexOf('/') + 1);
 
-                FileStream fs = File.Create(baseLocalFilePath + relativePath + @"\" + fileName);
+                FileStream fs = File.Create(localReadDir + relativePath + @"\" + fileName);
                 BinaryWriter sw = new BinaryWriter(fs);
                 sw.Write(fileData);
-                fileLocation = baseLocalFilePath + relativePath + @"\" + fileName;
+                fileLocation = relativePath + @"\" + fileName;
                 fileReader.Close();
                 cmd.Parameters.Clear();
                 cmd.CommandText = @"insert into Zdjecie_udostepnione ( IdPacjent, Data_udostepnienia, Lokalizacja )
@@ -131,9 +154,8 @@ namespace MotionMedDBWebServices
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
                 cmd.Parameters.Add("@relative_path", SqlDbType.VarChar, 80);
 
-                // can be used for recoring of several files
                 cmd.Parameters["@file_id"].Value = photoID;
-                cmd.Parameters["@relative_path"].Value = relativePath;
+                cmd.Parameters["@relative_path"].Value = localReadDirSuffix + relativePath;
                 cmd.ExecuteNonQuery();
                 sw.Close();
                 fs.Close();
@@ -151,7 +173,7 @@ namespace MotionMedDBWebServices
             {
                 CloseConnection();
             }
-            fData.FileLocation = relativePath + "/" + fileName;
+            fData.FileLocation = localReadDirSuffix + relativePath + "/" + fileName;
             fData.SubdirPath = filePath;
             return fData;
         }
@@ -160,7 +182,7 @@ namespace MotionMedDBWebServices
         public string GetShallowCopy()
         {
             string filePath = "";
-            string fileName = "patientList.xml";
+            string fileName = "medicalRecords.xml";
             string fileLocation = "";
             Random r = new Random();
             StringBuilder b = new StringBuilder();
@@ -174,12 +196,12 @@ namespace MotionMedDBWebServices
 
             for(int i=0; i<20; i++) b.Append( Convert.ToChar( Convert.ToInt32 ( Math.Floor(26 * r.NextDouble()+65))));
 
-            subdirName ="/"+b.ToString() +subdirName;
+            subdirName ="/"+b.ToString();
 
-            filePath = userName + "/dump";
+            filePath = userName + subdirName;
 
-            if (!Directory.Exists(baseLocalFilePath + filePath))
-                Directory.CreateDirectory(baseLocalFilePath + filePath);
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
 
             fileLocation = filePath + "/" + fileName;
             try
@@ -197,12 +219,12 @@ namespace MotionMedDBWebServices
                 xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
                 xd1.LoadXml(xd.OuterXml);
 
-                xd.Save(baseLocalFilePath + fileLocation);
+                xd.Save(localReadDir + fileLocation);
 
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed: "+ex.Message);
                 throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetShallowCopy")));
             }
             finally
@@ -210,7 +232,7 @@ namespace MotionMedDBWebServices
                 CloseConnection();
             }
 
-            return fileLocation;
+            return localReadDirSuffix + fileLocation;
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
@@ -229,10 +251,10 @@ namespace MotionMedDBWebServices
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
-            filePath = userName + "/dump";
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
 
-            if (!Directory.Exists(baseLocalFilePath + filePath))
-                Directory.CreateDirectory(baseLocalFilePath + filePath);
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
 
             fileLocation = filePath + "/" + fileName;
             try
@@ -260,7 +282,7 @@ namespace MotionMedDBWebServices
                 xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
                 xd1.LoadXml(xd.OuterXml);
 
-                xd1.Save(baseLocalFilePath + fileLocation);
+                xd1.Save(localReadDir + fileLocation);
 
             }
             catch (SqlException ex)
@@ -273,7 +295,7 @@ namespace MotionMedDBWebServices
                 CloseConnection();
             }
 
-            return fileLocation;
+            return localReadDirSuffix + fileLocation;
         }
 
 

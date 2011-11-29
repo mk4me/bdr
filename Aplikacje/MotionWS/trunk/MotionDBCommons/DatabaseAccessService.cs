@@ -12,13 +12,15 @@ namespace MotionDBCommons
         protected SqlConnection conn = null;
         protected SqlCommand cmd = null;
         protected const bool debug = false;
-        protected string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
+        protected static string baseLocalFilePath = @"C:\FTPShare\"; // !!! change to F: in production!
+        protected string GetConnectionString()
+        {
+            return @"server = .; integrated security = true; database = Motion";
+        }
 
         protected void OpenConnection()
         {
-            // server = DBPAWELL albo DB-BDR
-            // zmieniać w recznie generowanych wsdl-ach
-            conn = new SqlConnection(@"server = .; integrated security = true; database = Motion");
+            conn = new SqlConnection(GetConnectionString());
             conn.Open();
             cmd = conn.CreateCommand();
         }
