@@ -4,6 +4,25 @@
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<http:NegotiateAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http"/>
+				<sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false"/>
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256/>
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict/>
+							</wsp:Policy>
+						</sp:Layout>
+					</wsp:Policy>
+				</sp:TransportBinding>
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
@@ -2182,7 +2201,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BasicQueriesWS">
 		<wsdl:port name="BasicHttpBinding_IBasicQueriesWS" binding="tns:BasicHttpBinding_IBasicQueriesWS">
-			<soap:address location="http://v21.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
+			<soap:address location="https://dbpawell.pjwstk.edu.pl/Motion/BasicQueriesWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

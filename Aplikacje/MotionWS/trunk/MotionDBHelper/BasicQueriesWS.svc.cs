@@ -1790,7 +1790,7 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers" )]
         public DateTime GetMetadataTimestamp()
         {
             DateTime stamp = DateTime.Now;

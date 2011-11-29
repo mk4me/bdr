@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="AttributeGroupViewSetting.cs" />
     <Compile Include="AttributeGroupViewSettingCollection.cs" />
+    <Compile Include="CustomAuthValidator.cs" />
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="FileNameEntry.cs" />

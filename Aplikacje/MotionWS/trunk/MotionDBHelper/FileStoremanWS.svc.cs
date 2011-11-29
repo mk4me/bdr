@@ -12,6 +12,8 @@ using System.Xml;
 using System.Security.Permissions;
 using MotionDBCommons;
 
+
+
 namespace MotionDBWebServices
 {
     // NOTE: If you change the class name "FileStoremanWS" here, you must also update the reference to "FileStoremanWS" in Web.config.
@@ -23,7 +25,14 @@ namespace MotionDBWebServices
         int maxFileSize = 40000000;
         byte[] fileData = null;
 
+        static string localReadDirSuffix = "BDR/";
+        static string localReadDir =  baseLocalFilePath+localReadDirSuffix;
+        static string localWriteDirSuffix = localReadDirSuffix+"w/";
+        static string localWriteDir = localReadDir+localWriteDirSuffix;
+
         SqlDataReader fileReader = null;
+
+        // !! TODO - docelowo zmienic na bazujace implicite na sciezce localWriteDir - ale po aktualizacji klienta BDR dopiero
 
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public int StoreMeasurementConfFile(int mcID, string path, string description, string filename)
@@ -33,6 +42,14 @@ namespace MotionDBWebServices
 
 
             int newFileId = 0;
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreMeasurementConfFile")));
+
+            }
+            */
 
             if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
             {
@@ -94,11 +111,18 @@ namespace MotionDBWebServices
 
 
             int newFileId = 0;
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFile")));
 
+            }
+            */
             if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
             {
                 FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
-                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StorePerformerFile")));
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFile")));
 
             }
 
@@ -156,7 +180,14 @@ namespace MotionDBWebServices
 
 
             int newFileId = 0;
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFile")));
 
+            }
+            */
             if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
             {
                 FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
@@ -217,7 +248,14 @@ namespace MotionDBWebServices
   
             string dirLocation = baseLocalFilePath + path;
             string fileLocation = dirLocation + @"\" + filename;
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
 
+            }
+            */
             if (filename.Normalize().Contains('\\') || filename.Normalize().Contains('/'))
             {
                 FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + filename + "'. Must be a simple file name.");
@@ -274,6 +312,14 @@ namespace MotionDBWebServices
             string fileName = "";
 
 
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreMeasurementConfFiles")));
+
+            }
+            */
             if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
             if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
             dirLocation = baseLocalFilePath + path;
@@ -360,7 +406,14 @@ namespace MotionDBWebServices
             string subdirPath = "";
             string fileName = "";
 
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreSessionFiles")));
 
+            }
+            */
             if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
             if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
             dirLocation = baseLocalFilePath + path;
@@ -445,6 +498,15 @@ namespace MotionDBWebServices
             string subdirPath = "";
             string fileName = "";
 
+
+            /* To be activated after the BDR client update
+            if (! path.Normalize().Contains(localWriteDir))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file location", "The path is required to lead to the: '" + localWriteDir + "' subdirectory.");
+                throw new FaultException<FileAccessServiceException>(exc, "Wrong file location", FaultCode.CreateReceiverFaultCode(new FaultCode("StoreTrialFiles")));
+
+            }
+            */
             if (path.StartsWith("\\") || path.StartsWith("/")) path = path.Substring(1);
             if (path.EndsWith("\\") || path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
             dirLocation = baseLocalFilePath + path;
@@ -661,16 +723,19 @@ namespace MotionDBWebServices
 
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
-            if ((fileID == 0) && path.Contains("dump"))
+
+            if ((fileID == 0) && path.Contains(userName))
             {
-                if (Directory.Exists(baseLocalFilePath + userName + @"\dump"))
-                    Directory.Delete(baseLocalFilePath + userName + @"\dump", true);
+                if (Directory.Exists( baseLocalFilePath + path ))
+                    Directory.Delete(baseLocalFilePath + path, true);
                 return;
             }
 
             try
             {
                 OpenConnection();
+
+     
                 cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where IdPlik_udostepniony = @file_id and Lokalizacja = @file_path";
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
                 cmd.Parameters["@file_id"].Value = fileID;
@@ -716,7 +781,7 @@ namespace MotionDBWebServices
 
             fileData = null;
             fileName = "";
-            relativePath = DateTime.Now.Ticks.ToString(); 
+            relativePath = localReadDirSuffix+DateTime.Now.Ticks.ToString(); 
             try
             {
                 // TO DO: generowanie losowej nazwy katalogu
@@ -800,12 +865,12 @@ namespace MotionDBWebServices
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
-            filePath = userName+"/dump";
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
 
-            if (!Directory.Exists(baseLocalFilePath + filePath))
-                Directory.CreateDirectory(baseLocalFilePath + filePath);
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
 
-            fileLocation = filePath + "/" + fileName;
+            fileLocation = localReadDirSuffix + filePath + "/" + fileName;
             try
                 {
                     OpenConnection();
@@ -855,12 +920,12 @@ namespace MotionDBWebServices
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
-            filePath = userName + "/dump";
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
 
-            if (!Directory.Exists(baseLocalFilePath + filePath))
-                Directory.CreateDirectory(baseLocalFilePath + filePath);
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
 
-            fileLocation = filePath + "/" + fileName;
+            fileLocation = localReadDirSuffix + filePath + "/" + fileName;
             try
             {
                 OpenConnection();
@@ -913,12 +978,12 @@ namespace MotionDBWebServices
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
-            filePath = userName + "/dump";
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
 
-            if (!Directory.Exists(baseLocalFilePath + filePath))
-                Directory.CreateDirectory(baseLocalFilePath + filePath);
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
 
-            fileLocation = filePath + "/" + fileName;
+            fileLocation = localReadDirSuffix + filePath + "/" + fileName;
             try
             {
                 OpenConnection();

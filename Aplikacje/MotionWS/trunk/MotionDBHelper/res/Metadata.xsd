@@ -21,6 +21,7 @@
             <xsd:sequence>
               <xsd:element name="MotionKind" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
+                  <xsd:attribute name="MotionKindID" type="xsd:int" />
                   <xsd:attribute name="MotionKindName" type="xsd:string" />
                 </xsd:complexType>
               </xsd:element>
