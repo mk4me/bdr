@@ -12,7 +12,7 @@ namespace MotionDBCommons
         protected SqlConnection conn = null;
         protected SqlCommand cmd = null;
         protected const bool debug = false;
-        protected static string baseLocalFilePath = @"C:\FTPShare\"; // !!! change to F: in production!
+        protected static string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
         protected string GetConnectionString()
         {
             return @"server = .; integrated security = true; database = Motion";

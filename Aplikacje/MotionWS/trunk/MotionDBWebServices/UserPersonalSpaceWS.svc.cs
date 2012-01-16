@@ -21,7 +21,7 @@ namespace MotionDBWebServices
 
         public void UpdateStoredFilters(FilterPredicateCollection filter)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -51,7 +51,7 @@ namespace MotionDBWebServices
         public XmlElement ListStoredFilters()
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -90,7 +90,7 @@ namespace MotionDBWebServices
         public XmlElement ListUserBaskets()
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -128,7 +128,7 @@ namespace MotionDBWebServices
 
         public void CreateBasket(string basketName)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int res = 0;
             try
@@ -180,7 +180,7 @@ namespace MotionDBWebServices
 
         public void RemoveBasket(string basketName)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int res = 0;
             try
@@ -233,7 +233,7 @@ namespace MotionDBWebServices
 
         public void AddEntityToBasket(string basketName, int resourceID, string entity)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int res = 0;
             try
@@ -291,7 +291,7 @@ namespace MotionDBWebServices
 
         public void RemoveEntityFromBasket(string basketName, int resourceID, string entity)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int res = 0;
             try
@@ -347,7 +347,7 @@ namespace MotionDBWebServices
         public XmlElement ListBasketPerformersWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -386,7 +386,7 @@ namespace MotionDBWebServices
         public XmlElement ListBasketSessionsWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -426,7 +426,7 @@ namespace MotionDBWebServices
         public XmlElement ListBasketTrialsWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -462,11 +462,11 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }          
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void UpdateViewConfiguration(AttributeGroupViewSettingCollection attrGroupViewSettings, AttributeViewSettingCollection attrViewSettings)
         {
             int result = 0;
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -516,11 +516,11 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public XmlElement ListViewConfiguration()
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {

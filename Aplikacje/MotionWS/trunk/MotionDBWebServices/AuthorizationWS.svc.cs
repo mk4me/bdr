@@ -18,10 +18,10 @@ namespace MotionDBWebServices
     public class AuthorizationWS : DatabaseAccessService, IAuthorizationWS   
     {
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public bool CheckUserAccount()
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int result = 0;
 
@@ -43,8 +43,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
+                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
             }
             finally
             {
@@ -54,10 +54,10 @@ namespace MotionDBWebServices
         }
         // SPrawdzić !!!!
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        // DOUBLE SECURE ME !!!
         public void CreateUserAccount(string firstName, string lastName)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -87,10 +87,10 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -123,10 +123,10 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void RemoveSessionPrivileges(string grantedUserLogin, int sessionID)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -155,10 +155,10 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -187,7 +187,7 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public XmlElement ListUsers()
         {
             XmlDocument xd = new XmlDocument();
@@ -225,11 +225,11 @@ namespace MotionDBWebServices
 
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public XmlElement ListSessionPrivileges(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -269,10 +269,10 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public bool IfCanUpdate(int resourceID, string entity)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int result = 0;
 
@@ -298,8 +298,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("IfCanUpdate")));
+                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("IfCanUpdate")));
             }
             finally
             {

@@ -27,6 +27,7 @@
             <xsd:attribute name="FileDescription" type="xsd:string" />
             <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
             <xsd:attribute name="Changed" type="xsd:dateTime" use="optional" />
+            <xsd:attribute name="Size" type="xsd:nonNegativeInteger" />
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>

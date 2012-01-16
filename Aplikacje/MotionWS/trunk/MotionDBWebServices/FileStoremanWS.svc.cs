@@ -34,7 +34,7 @@ namespace MotionDBWebServices
 
         // !! TODO - docelowo zmienic na bazujace implicite na sciezce localWriteDir - ale po aktualizacji klienta BDR dopiero
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public int StoreMeasurementConfFile(int mcID, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -103,7 +103,7 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -171,7 +171,7 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
 
@@ -242,7 +242,7 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        // DOUBLE SECURE ME !!!
         public void ReplaceFile(int fileID, string path, string filename)
         {
   
@@ -302,7 +302,7 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void StoreMeasurementConfFiles(int mcID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -397,7 +397,7 @@ namespace MotionDBWebServices
             }
             return;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -489,7 +489,7 @@ namespace MotionDBWebServices
             }
             return;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void StoreTrialFiles(int trialId, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -586,7 +586,7 @@ namespace MotionDBWebServices
         }
 
         /*
-                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+                // SECURE ME !!!
                 public int StoreMeasurementResultFile(int measurementID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -651,7 +651,7 @@ namespace MotionDBWebServices
                     return newFileId;
                 }
 
-                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+                // SECURE ME !!!
                 public int StorePreviewFile(int sourceFileID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -721,7 +721,7 @@ namespace MotionDBWebServices
             string fileLocation = "NOT_FOUND";
             path = path.Substring(0, path.LastIndexOf('/'));
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             if ((fileID == 0) && path.Contains(userName))
@@ -768,7 +768,7 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public FileData RetrieveFile(int fileID)
         {
             string relativePath = "";
@@ -851,7 +851,7 @@ namespace MotionDBWebServices
             return fData;
         }
       
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
         public string GetShallowCopy()
         {
             string filePath = "";
@@ -862,7 +862,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -906,7 +906,6 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetShallowCopyIncrement(DateTime since)
         {
             string filePath = "";
@@ -917,7 +916,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -964,7 +963,6 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetMetadata()
         {
             string filePath = "";
@@ -975,7 +973,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -1019,13 +1017,13 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        // DOUBLE SECURE ME !!!
         public int CreateSessionFromFiles(string path)
         {
 
             // int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             int result = 0;

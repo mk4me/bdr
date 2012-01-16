@@ -3,7 +3,6 @@
 	<wsp:Policy wsu:Id="BasicHttpBinding_ISampleOpsWS_policy">
 		<wsp:ExactlyOne>
 			<wsp:All>
-				<http:NegotiateAuthentication xmlns:http="http://schemas.microsoft.com/ws/06/2004/policy/http"/>
 				<sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
 					<wsp:Policy>
 						<sp:TransportToken>
@@ -18,11 +17,27 @@
 						</sp:AlgorithmSuite>
 						<sp:Layout>
 							<wsp:Policy>
-								<sp:Strict/>
+								<sp:Lax/>
 							</wsp:Policy>
 						</sp:Layout>
+						<sp:IncludeTimestamp/>
 					</wsp:Policy>
 				</sp:TransportBinding>
+				<sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+							<wsp:Policy>
+								<sp:WssUsernameToken10/>
+							</wsp:Policy>
+						</sp:UsernameToken>
+					</wsp:Policy>
+				</sp:SignedSupportingTokens>
+				<sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:MustSupportRefKeyIdentifier/>
+						<sp:MustSupportRefIssuerSerial/>
+					</wsp:Policy>
+				</sp:Wss10>
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
@@ -141,7 +156,7 @@
 	</wsdl:binding>
 	<wsdl:service name="SampleOpsWS">
 		<wsdl:port name="BasicHttpBinding_ISampleOpsWS" binding="tns:BasicHttpBinding_ISampleOpsWS">
-			<soap:address location="https://dbpawell.pjwstk.edu.pl/Motion/SampleOpsWS.svc"/>
+			<soap:address location="https://v21.pjwstk.edu.pl/HMDB/SampleOpsWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

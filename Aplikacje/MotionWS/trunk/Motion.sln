@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDBWebServices", "MotionDBWebServices\MotionDBWebServices.csproj", "{073393CD-60FC-4E55-B0B0-9656652F7D79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionMedDBServices", "MotionMedDBServices\MotionMedDBServices.csproj", "{975D3D10-EC5A-4EA7-9909-52ADFFB9ED91}"
