@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SecureSample.Service1" Factory="Thinktecture.ServiceModel.Extensions.Description.FlatWsdlServiceHostFactory"  CodeBehind="Service1.svc.cs" %>
