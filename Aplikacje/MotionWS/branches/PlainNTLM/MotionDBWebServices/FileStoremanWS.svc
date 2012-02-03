@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionDBWebServices.FileStoremanWS" Factory="Thinktecture.ServiceModel.Extensions.Description.FlatWsdlServiceHostFactory" CodeBehind="FileStoremanWS.svc.cs" %>

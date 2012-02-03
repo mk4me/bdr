@@ -1,2 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionDBWebServices.BasicUpdatesWS" Factory="Thinktecture.ServiceModel.Extensions.Description.FlatWsdlServiceHostFactory" CodeBehind="BasicUpdatesWS.svc.cs" %>
-

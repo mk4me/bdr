@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xsd:schema id="MeasurementConfDetailsWithAttributes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-  <xsd:include schemaLocation="MeasurementConfDetailsWithAttributesElement.xsd" /> 
-</xsd:schema>
