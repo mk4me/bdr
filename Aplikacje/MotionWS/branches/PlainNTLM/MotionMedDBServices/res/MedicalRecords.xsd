@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" elementFormDefault="qualified" >
+    <xsd:element name="MedicalRecords">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Patients" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Patient" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:attribute name="PatientID" type="xsd:int" />
+                                    <xsd:attribute name="FirstName" type="xsd:string" />
+                                    <xsd:attribute name="LastName" type="xsd:string" />
+                                    <xsd:attribute name="Gender">
+                                        <xsd:simpleType>
+                                            <xsd:restriction base="xsd:string">
+                                                <xsd:enumeration value="M" />
+                                                <xsd:enumeration value="K" />
+                                            </xsd:restriction>
+                                        </xsd:simpleType>
+                                    </xsd:attribute>
+                                    <xsd:attribute name="BirthDate" type="xsd:date" />
+                                    <xsd:attribute name="BDRPerformerID" type="xsd:int" />
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="DisorderOccurences" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="DisorderOccurence" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:attribute name="PatientID" type="xsd:int" />
+                                    <xsd:attribute name="DisorderID" type="xsd:int" />
+                                    <xsd:attribute name="DiagnosisDate" type="xsd:date" />
+                                    <xsd:attribute name="Comment" type="xsd:string" />
+                                    <xsd:attribute name="Focus">
+                                        <xsd:simpleType>
+                                            <xsd:restriction base="xsd:string">
+                                                <xsd:enumeration value="primary" />
+                                                <xsd:enumeration value="secondary" />
+                                            </xsd:restriction>
+                                        </xsd:simpleType>
+                                    </xsd:attribute>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="Examinations" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Examination" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:attribute name="ExamID" type="xsd:int" />
+                                    <xsd:attribute name="PatientID" type="xsd:int" />
+                                    <xsd:attribute name="ExamDate" type="xsd:dateTime" />
+                                    <xsd:attribute name="Notes" type="xsd:string" />
+                                    <xsd:attribute name="Description" type="xsd:string" />
+                                    <xsd:attribute name="BDRSessionID" type="xsd:int" />
+                                    <xsd:attribute name="ExamTypeID" type="xsd:int" />
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="Dictionaries" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="ExamGroups" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="ExamGroup" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:attribute name="ExamGroupID" type="xsd:int" />
+                                                <xsd:attribute name="ExamGroupName" type="xsd:string" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="Disorders" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Disorder" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:attribute name="DisorderID" type="xsd:int" />
+                                                <xsd:attribute name="DisorderName" type="xsd:string" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

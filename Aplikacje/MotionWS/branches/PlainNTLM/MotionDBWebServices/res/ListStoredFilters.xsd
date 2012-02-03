@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="FilterList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="FilterList" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="FilterPredicate" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="PredicateID" type="xsd:int" />
+              <xsd:element name="ParentPredicate" type="xsd:int" />
+              <xsd:element name="ContextEntity" type="xsd:string" />
+              <xsd:element name="PreviousPredicate" type="xsd:int" />
+              <xsd:element name="NextOperator" type="xsd:string" />
+              <xsd:element name="FeatureName" type="xsd:string" />
+              <xsd:element name="Operator" type="xsd:string" />
+              <xsd:element name="Value" type="xsd:string" />
+              <xsd:element name="AggregateFunction" type="xsd:string" />
+              <xsd:element name="AggregateEntity" type="xsd:string" />
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="UserPersonalSpace" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService">
+	<wsp:Policy wsu:Id="BasicHttpBinding_IUserPersonalSpaceWS_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false"/>
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256/>
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Lax/>
+							</wsp:Policy>
+						</sp:Layout>
+						<sp:IncludeTimestamp/>
+					</wsp:Policy>
+				</sp:TransportBinding>
+				<sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+							<wsp:Policy>
+								<sp:WssUsernameToken10/>
+							</wsp:Policy>
+						</sp:UsernameToken>
+					</wsp:Policy>
+				</sp:SignedSupportingTokens>
+				<sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:MustSupportRefKeyIdentifier/>
+						<sp:MustSupportRefIssuerSerial/>
+					</wsp:Policy>
+				</sp:Wss10>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService">
+			<xsd:element name="FilterList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FilterPredicate" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="PredicateID" type="xsd:int"/>
+									<xsd:element name="ParentPredicate" type="xsd:int"/>
+									<xsd:element name="ContextEntity" type="xsd:string"/>
+									<xsd:element name="PreviousPredicate" type="xsd:int"/>
+									<xsd:element name="NextOperator" type="xsd:string"/>
+									<xsd:element name="FeatureName" type="xsd:string"/>
+									<xsd:element name="Operator" type="xsd:string"/>
+									<xsd:element name="Value" type="xsd:string"/>
+									<xsd:element name="AggregateFunction" type="xsd:string"/>
+									<xsd:element name="AggregateEntity" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BasketDefinitionList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="BasketDefinition" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="BasketName" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Attributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Attribute" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="Name" type="xsd:string" use="required"/>
+								<xsd:attribute name="Value" type="xsd:string" use="optional"/>
+								<xsd:attribute name="Entity" use="optional">
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:string">
+											<xsd:enumeration value="performer"/>
+											<xsd:enumeration value="session"/>
+											<xsd:enumeration value="trial"/>
+											<xsd:enumeration value="performer_conf"/>
+											<xsd:enumeration value="measurement_conf"/>
+											<xsd:enumeration value="measurement"/>
+											<xsd:enumeration value="file"/>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:attribute>
+								<xsd:attribute name="AttributeGroup" type="xsd:string" use="required"/>
+								<xsd:attribute name="Type" type="xsd:string" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PerformerDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="PerformerID" type="xsd:int"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BasketPerformerWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:PerformerDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="SessionDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SessionID" type="xsd:int"/>
+						<xsd:element name="UserID" type="xsd:int"/>
+						<xsd:element name="LabID" type="xsd:int"/>
+						<xsd:element name="MotionKind" type="xsd:string"/>
+						<xsd:element name="SessionDate" type="xsd:dateTime"/>
+						<xsd:element name="SessionName" type="xsd:string"/>
+						<xsd:element name="Tags" type="xsd:string"/>
+						<xsd:element name="SessionDescription" type="xsd:string"/>
+						<xsd:element name="SessionLabel" type="xsd:string"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+					</xsd:sequence>
+					<!--  <xsd:attribute name="P" use="required" type="xsd:int" />
+      <xsd:attribute name="PW" use="required" type="xsd:int" /> -->
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BasketSessionWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:SessionDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FileWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FileDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+								</xsd:sequence>
+								<xsd:attribute name="FileID" type="xsd:int"/>
+								<xsd:attribute name="FileName" type="xsd:string"/>
+								<xsd:attribute name="FileDescription" type="xsd:string"/>
+								<xsd:attribute name="SubdirPath" type="xsd:string" use="optional"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="TrialDetailsWithAttributes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TrialID" type="xsd:int"/>
+						<xsd:element name="SessionID" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+						<xsd:element name="TrialName" type="xsd:string"/>
+						<xsd:element name="TrialDescription" type="xsd:string"/>
+						<xsd:element ref="tns:Attributes" minOccurs="0" maxOccurs="1"/>
+						<!-- <xsd:element ref="FileWithAttributesList" minOccurs="0" maxOccurs="1" /> -->
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BasketTrialWithAttributesList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="tns:TrialDetailsWithAttributes" minOccurs="0" maxOccurs="unbounded">
+            </xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AttributeGroupViewConfigurationList">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="AttributeGroupViewConfiguration" minOccurs="0" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="AttributeViewList">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="AttributeView" maxOccurs="unbounded">
+													<xsd:complexType>
+														<xsd:attribute name="AttributeName" type="xsd:string"/>
+														<xsd:attribute name="Show" type="xsd:int"/>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:attribute name="AttributeGroupName" type="xsd:string"/>
+								<xsd:attribute name="DescribedEntity" type="xsd:string"/>
+								<xsd:attribute name="Show" type="xsd:int"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UpdateStoredFilters">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ArrayOfFilterPredicate">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="FilterPredicate" type="tns:FilterPredicate"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FilterPredicate">
+				<xsd:sequence>
+					<xsd:element minOccurs="1" maxOccurs="1" name="PredicateID" type="xsd:int"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="ParentPredicate" type="xsd:int"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="ContextEntity" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="PreviousPredicate" type="xsd:int"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="NextOperator" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="FeatureName" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Operator" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Value" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="AggregateFunction" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="AggregateEntity" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="UpdateStoredFiltersResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:complexType name="UPSException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="UPSException" nillable="true" type="tns:UPSException"/>
+			<xsd:element name="ListStoredFilters">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListStoredFiltersResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListStoredFiltersResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:FilterList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListUserBaskets">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListUserBasketsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListUserBasketsResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:BasketDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CreateBasket">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CreateBasketResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="RemoveBasket">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RemoveBasketResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="AddEntityToBasket">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="resourceID" type="xsd:int"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entity" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AddEntityToBasketResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="RemoveEntityFromBasket">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="resourceID" type="xsd:int"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entity" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RemoveEntityFromBasketResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListBasketPerformersWithAttributesXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListBasketPerformersWithAttributesXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListBasketPerformersWithAttributesXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:BasketPerformerWithAttributesList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListBasketSessionsWithAttributesXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListBasketSessionsWithAttributesXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListBasketSessionsWithAttributesXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:BasketSessionWithAttributesList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListBasketTrialsWithAttributesXML">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="basketName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListBasketTrialsWithAttributesXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListBasketTrialsWithAttributesXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:BasketTrialWithAttributesList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UpdateViewConfiguration">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="attrGroupViewSettings" type="tns:ArrayOfAttributeGroupViewSetting"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="attrViewSettings" type="tns:ArrayOfAttributeViewSetting"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ArrayOfAttributeGroupViewSetting">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="AttributeGroupViewSetting" type="tns:AttributeGroupViewSetting"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AttributeGroupViewSetting">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="1" name="AttributeGroupName" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="DescribedEntity" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="Show" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ArrayOfAttributeViewSetting">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="AttributeViewSetting" type="tns:AttributeViewSetting"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AttributeViewSetting">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="1" name="AttributeName" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="DescribedEntity" type="xsd:string"/>
+					<xsd:element minOccurs="1" maxOccurs="1" name="Show" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="UpdateViewConfigurationResponse">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListViewConfiguration">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListViewConfigurationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListViewConfigurationResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:AttributeGroupViewConfigurationList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
+			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
+			<xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
+			<xs:element name="boolean" nillable="true" type="xs:boolean"/>
+			<xs:element name="byte" nillable="true" type="xs:byte"/>
+			<xs:element name="dateTime" nillable="true" type="xs:dateTime"/>
+			<xs:element name="decimal" nillable="true" type="xs:decimal"/>
+			<xs:element name="double" nillable="true" type="xs:double"/>
+			<xs:element name="float" nillable="true" type="xs:float"/>
+			<xs:element name="int" nillable="true" type="xs:int"/>
+			<xs:element name="long" nillable="true" type="xs:long"/>
+			<xs:element name="QName" nillable="true" type="xs:QName"/>
+			<xs:element name="short" nillable="true" type="xs:short"/>
+			<xs:element name="string" nillable="true" type="xs:string"/>
+			<xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"/>
+			<xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"/>
+			<xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"/>
+			<xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"/>
+			<xs:element name="char" nillable="true" type="tns:char"/>
+			<xs:simpleType name="char">
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+			<xs:element name="duration" nillable="true" type="tns:duration"/>
+			<xs:simpleType name="duration">
+				<xs:restriction base="xs:duration">
+					<xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"/>
+					<xs:minInclusive value="-P10675199DT2H48M5.4775808S"/>
+					<xs:maxInclusive value="P10675199DT2H48M5.4775807S"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="guid" nillable="true" type="tns:guid"/>
+			<xs:simpleType name="guid">
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:attribute name="FactoryType" type="xs:QName"/>
+			<xs:attribute name="Id" type="xs:ID"/>
+			<xs:attribute name="Ref" type="xs:IDREF"/>
+		</xs:schema>
+		<xsd:schema xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+			<xsd:complexType name="QueryException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateStoredFilters_InputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateStoredFilters"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateStoredFilters_OutputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateStoredFiltersResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateStoredFilters_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListStoredFilters_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListStoredFilters"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListStoredFilters_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListStoredFiltersResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListStoredFilters_QueryExceptionFault_FaultMessage">
+		<wsdl:part xmlns:q1="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q1:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListUserBaskets"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListUserBasketsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListUserBaskets_QueryExceptionFault_FaultMessage">
+		<wsdl:part xmlns:q2="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" name="detail" element="q2:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_CreateBasket_InputMessage">
+		<wsdl:part name="parameters" element="tns:CreateBasket"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_CreateBasket_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CreateBasketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_CreateBasket_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveBasket_InputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveBasket"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveBasket_OutputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveBasketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveBasket_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_AddEntityToBasket_InputMessage">
+		<wsdl:part name="parameters" element="tns:AddEntityToBasket"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_AddEntityToBasket_OutputMessage">
+		<wsdl:part name="parameters" element="tns:AddEntityToBasketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_AddEntityToBasket_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveEntityFromBasket_InputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveEntityFromBasket"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveEntityFromBasket_OutputMessage">
+		<wsdl:part name="parameters" element="tns:RemoveEntityFromBasketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_RemoveEntityFromBasket_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketSessionsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketSessionsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketTrialsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListBasketTrialsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateViewConfiguration_InputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateViewConfiguration"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateViewConfiguration_OutputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateViewConfigurationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_UpdateViewConfiguration_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListViewConfiguration_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListViewConfiguration"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListViewConfiguration_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListViewConfigurationResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IUserPersonalSpaceWS_ListViewConfiguration_UPSExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:UPSException"/>
+	</wsdl:message>
+	<wsdl:portType name="IUserPersonalSpaceWS">
+		<wsdl:operation name="UpdateStoredFilters">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateStoredFilters" message="tns:IUserPersonalSpaceWS_UpdateStoredFilters_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateStoredFiltersResponse" message="tns:IUserPersonalSpaceWS_UpdateStoredFilters_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateStoredFiltersUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_UpdateStoredFilters_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListStoredFilters">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFilters" message="tns:IUserPersonalSpaceWS_ListStoredFilters_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFiltersResponse" message="tns:IUserPersonalSpaceWS_ListStoredFilters_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFiltersQueryExceptionFault" name="QueryExceptionFault" message="tns:IUserPersonalSpaceWS_ListStoredFilters_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListUserBaskets">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBaskets" message="tns:IUserPersonalSpaceWS_ListUserBaskets_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBasketsResponse" message="tns:IUserPersonalSpaceWS_ListUserBaskets_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBasketsQueryExceptionFault" name="QueryExceptionFault" message="tns:IUserPersonalSpaceWS_ListUserBaskets_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="CreateBasket">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/CreateBasket" message="tns:IUserPersonalSpaceWS_CreateBasket_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/CreateBasketResponse" message="tns:IUserPersonalSpaceWS_CreateBasket_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/CreateBasketUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_CreateBasket_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveBasket">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveBasket" message="tns:IUserPersonalSpaceWS_RemoveBasket_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveBasketResponse" message="tns:IUserPersonalSpaceWS_RemoveBasket_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveBasketUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_RemoveBasket_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="AddEntityToBasket">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/AddEntityToBasket" message="tns:IUserPersonalSpaceWS_AddEntityToBasket_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/AddEntityToBasketResponse" message="tns:IUserPersonalSpaceWS_AddEntityToBasket_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/AddEntityToBasketUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_AddEntityToBasket_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveEntityFromBasket">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveEntityFromBasket" message="tns:IUserPersonalSpaceWS_RemoveEntityFromBasket_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveEntityFromBasketResponse" message="tns:IUserPersonalSpaceWS_RemoveEntityFromBasket_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveEntityFromBasketUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_RemoveEntityFromBasket_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketPerformersWithAttributesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketPerformersWithAttributesXML" message="tns:IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketPerformersWithAttributesXMLResponse" message="tns:IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketPerformersWithAttributesXMLUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_ListBasketPerformersWithAttributesXML_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketSessionsWithAttributesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSessionsWithAttributesXML" message="tns:IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSessionsWithAttributesXMLResponse" message="tns:IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSessionsWithAttributesXMLUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_ListBasketSessionsWithAttributesXML_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketTrialsWithAttributesXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketTrialsWithAttributesXML" message="tns:IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketTrialsWithAttributesXMLResponse" message="tns:IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketTrialsWithAttributesXMLUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_ListBasketTrialsWithAttributesXML_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateViewConfiguration">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateViewConfiguration" message="tns:IUserPersonalSpaceWS_UpdateViewConfiguration_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateViewConfigurationResponse" message="tns:IUserPersonalSpaceWS_UpdateViewConfiguration_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateViewConfigurationUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_UpdateViewConfiguration_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListViewConfiguration">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListViewConfiguration" message="tns:IUserPersonalSpaceWS_ListViewConfiguration_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListViewConfigurationResponse" message="tns:IUserPersonalSpaceWS_ListViewConfiguration_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListViewConfigurationUPSExceptionFault" name="UPSExceptionFault" message="tns:IUserPersonalSpaceWS_ListViewConfiguration_UPSExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_IUserPersonalSpaceWS" type="tns:IUserPersonalSpaceWS">
+		<wsp:PolicyReference URI="#BasicHttpBinding_IUserPersonalSpaceWS_policy"/>
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="UpdateStoredFilters">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateStoredFilters" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListStoredFilters">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListStoredFilters" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListUserBaskets">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListUserBaskets" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="CreateBasket">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/CreateBasket" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveBasket">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveBasket" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="AddEntityToBasket">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/AddEntityToBasket" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="RemoveEntityFromBasket">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/RemoveEntityFromBasket" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketSessionsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListBasketTrialsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListBasketTrialsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateViewConfiguration">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/UpdateViewConfiguration" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListViewConfiguration">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService/IUserPersonalSpaceWS/ListViewConfiguration" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="UPSExceptionFault">
+				<soap:fault name="UPSExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="UserPersonalSpace">
+		<wsdl:port name="BasicHttpBinding_IUserPersonalSpaceWS" binding="tns:BasicHttpBinding_IUserPersonalSpaceWS">
+			<soap:address location="https://v21.pjwstk.edu.pl/HMDB/UserPersonalSpaceWS.svc"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
