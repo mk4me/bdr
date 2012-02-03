@@ -580,12 +580,26 @@ go
 
 CREATE TABLE Uzytkownik (
         IdUzytkownik         int IDENTITY,
-        Login                varchar(30) NOT NULL UNIQUE,
+        Login                varchar(50) NOT NULL UNIQUE,
         Imie                 varchar(30) NOT NULL,
-        Nazwisko             varchar(50) NOT NULL
+        Nazwisko             varchar(50) NOT NULL,
+        Haslo				varbinary(100) default 0x00 not null
  )
 go
- 
+
+
+
+CREATE TABLE Grupa_uzytkownikow (
+        IdGrupa_uzytkownikow    int IDENTITY,
+        Nazwa					varchar(100) NOT NULL
+ )
+go
+
+create table Uzytkownik_grupa_uzytkownikow (
+	IdGrupa_uzytkownikow	int not null,
+	IdUzytkownik	int not null
+)
+go
  
 ALTER TABLE Uzytkownik
         ADD PRIMARY KEY (IdUzytkownik)
@@ -1212,6 +1226,70 @@ ALTER TABLE Sesja_Konfiguracja_pomiarowa
         ADD FOREIGN KEY (IdKonfiguracja_pomiarowa)
                               REFERENCES Konfiguracja_pomiarowa on delete cascade;
 go 
+
+-- Autentykacja i autoryzacja - nowe struktury
+
+alter table Grupa_uzytkownikow
+	add primary key (IdGrupa_uzytkownikow)
+go
+
+
+CREATE INDEX X1Uzytkownik_grupa_uzytkownikow ON Uzytkownik_grupa_uzytkownikow
+ (
+        IdUzytkownik
+ )
+go
+
+CREATE INDEX X2Uzytkownik_grupa_uzytkownikow ON Uzytkownik_grupa_uzytkownikow
+ (
+        IdGrupa_uzytkownikow
+ )
+go
+
+
+ALTER TABLE Uzytkownik_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdUzytkownik)
+                              REFERENCES Uzytkownik;
+go
+ 
+ 
+ ALTER TABLE Uzytkownik_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_uzytkownikow)
+                              REFERENCES Grupa_uzytkownikow on delete cascade;
+go
+
+
+create table Grupa_sesji_grupa_uzytkownikow (
+	IdGrupa_uzytkownikow	int not null,
+	IdGrupa_sesji	int not null,
+	Zapis bit default 0 not null,
+	Wlasciciel bit default 0 not null
+)
+go
+
+CREATE INDEX X1Grupa_sesji_grupa_uzytkownikow ON Grupa_sesji_grupa_uzytkownikow
+ (
+        IdGrupa_sesji
+ )
+go
+
+CREATE INDEX X2Grupa_sesji_grupa_uzytkownikow ON Grupa_sesji_grupa_uzytkownikow
+ (
+        IdGrupa_uzytkownikow
+ )
+go
+
+ALTER TABLE Grupa_sesji_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_sesji)
+                              REFERENCES Grupa_sesji;
+go
+ 
+ 
+ ALTER TABLE Grupa_sesji_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_uzytkownikow)
+                              REFERENCES Grupa_uzytkownikow on delete cascade;
+go
+
 
 /*
 SELECT OBJECT_NAME(id) AS TableName, OBJECT_NAME(constid) AS ConstraintName

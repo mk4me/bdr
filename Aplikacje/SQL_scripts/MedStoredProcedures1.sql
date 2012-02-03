@@ -17,6 +17,7 @@ go
 --insert into Badanie ( IdGrupa_badan, IdPacjent, Data, Opis, Notatki, IdSesja ) values ( 1, 2, '2011-11-11 12:12:12:000', 'Desc', 'Notes', 1 )
 --insert into Badanie ( IdGrupa_badan, IdPacjent, Data, Opis, Notatki, IdSesja ) values ( 1, 2, '2011-11-12 12:12:12:000', 'Desc', 'Notes', 2 )
 
+
 -- last mod. 2011-11-25
 create procedure m_get_patient_list
 as
@@ -68,4 +69,45 @@ for XML RAW('Dictionaries') , TYPE)
 for XML RAW ('MedicalRecords'), TYPE
 go
 
+-- Password related
+-- ================
+
+
+-- last mod. 2012-01-14
+create procedure validate_password(@login varchar(30), @pass varchar(25), @res bit OUTPUT)
+as
+begin
+declare @c int = 0;
+select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass);
+if (@c = 1) set @res = 1; else set @res = 0;
+end;
+go
+
+-- last mod. 2012-01-14
+create procedure create_user(@name varchar(30), @surname varchar(50),  @login varchar(50), @bdr_login varchar(50), @pass varchar(25), @res int OUTPUT)
+as
+begin
+if exists(select * from Uzytkownik where Login = @login)
+	begin
+		set @res = 1;
+		return;
+	end;
+insert into Uzytkownik ( Imie, Nazwisko, Login, LoginBDR, Haslo ) values ( @name, @surname, @login, @bdr_login, HashBytes('SHA1',@pass));
+return 0;
+end;
+go
+
+-- last mod. 2012-01-14
+create procedure reset_password(@login varchar(30), @old varchar(25), @new varchar(25), @res int OUTPUT )
+as
+begin
+if not exists(select * from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@old))
+	begin
+		set @res = 1;
+		return;
+	end;
+update Uzytkownik set Haslo = HashBytes('SHA1',@new) where Login = @login and Haslo = HashBytes('SHA1',@old);
+return 0;
+end;
+go
 

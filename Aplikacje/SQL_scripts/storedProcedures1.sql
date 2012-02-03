@@ -60,7 +60,49 @@ begin
 end
 go
 
--- last rev: 2011-10-24
+-- last rev: 2012-01-14
+create function user_group_assigned_session_ids( @user_id int )
+returns table
+as
+return
+select sgs.IdSesja from Uzytkownik_grupa_uzytkownikow ugu
+join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+join Grupa_sesji_grupa_uzytkownikow gsgu on gu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
+join Grupa_sesji gs on gsgu.IdGrupa_sesji = gs.IdGrupa_sesji
+join Sesja_grupa_sesji sgs on gs.IdGrupa_Sesji = sgs.IdGrupa_sesji
+where ugu.IdUzytkownik = @user_id;
+go
+
+-- last rev: 2012-01-14
+create function user_group_writable_session_ids( @user_id int )
+returns table
+as
+return
+select sgs.IdSesja from Uzytkownik_grupa_uzytkownikow ugu
+join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+join Grupa_sesji_grupa_uzytkownikow gsgu on gu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
+join Grupa_sesji gs on gsgu.IdGrupa_sesji = gs.IdGrupa_sesji
+join Sesja_grupa_sesji sgs on gs.IdGrupa_Sesji = sgs.IdGrupa_sesji
+where ugu.IdUzytkownik = @user_id and gsgu.Zapis =1 ;
+go
+
+-- last rev: 2012-01-14
+create function user_group_owned_session_ids( @user_id int )
+returns table
+as
+return
+select sgs.IdSesja from Uzytkownik_grupa_uzytkownikow ugu
+join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+join Grupa_sesji_grupa_uzytkownikow gsgu on gu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
+join Grupa_sesji gs on gsgu.IdGrupa_sesji = gs.IdGrupa_sesji
+join Sesja_grupa_sesji sgs on gs.IdGrupa_Sesji = sgs.IdGrupa_sesji
+where ugu.IdUzytkownik = @user_id and gsgu.Wlasciciel =1 ;
+go
+
+
+
+
+-- last rev: 2012-01-14 ----
 create function user_accessible_sessions( @user_id int )
 returns table
 as
@@ -70,17 +112,12 @@ union
 (select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana from Sesja s where s.IdUzytkownik = @user_id)
 union
 (select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana from Sesja s join Uprawnienia_sesja us on s.IdSesja = us.IdSesja where us.IdUzytkownik = @user_id)
+union
+(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana from Sesja s 
+ where s.IdSesja in ( select * from user_group_assigned_session_ids( @user_id) ) )  
 go
 
--- last rev: 2010-10-24
-create function user_accessible_sessions_by_login( @user_login varchar(30) )
-returns table
-as
-return
-select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana from user_accessible_sessions( dbo.identify_user( @user_login )) s
-go
-
--- last rev. 2010-12-06
+-- last rev. 2011-01-14
 create function user_updateable_sessions( @user_id int )
 returns table
 as
@@ -90,8 +127,30 @@ union
 (select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis  from Sesja s where s.IdUzytkownik = @user_id)
 union
 (select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis  from Sesja s join Uprawnienia_sesja us on s.IdSesja = us.IdSesja where us.IdUzytkownik = @user_id and us.Zapis = 1 )
+union
+(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis from Sesja s 
+ where s.IdSesja in ( select * from user_group_writable_session_ids( @user_id) ) )  
 go
 
+-- last rev. 2011-01-14
+create function user_owned_sessions( @user_id int )
+returns table
+as
+return
+(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis  from Sesja s where dbo.is_superuser(@user_id)=1)
+union
+(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis from Sesja s 
+ where s.IdSesja in ( select * from user_group_owned_session_ids( @user_id) ) )  
+go
+
+
+-- last rev: 2010-10-24
+create function user_accessible_sessions_by_login( @user_login varchar(30) )
+returns table
+as
+return
+select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana from user_accessible_sessions( dbo.identify_user( @user_login )) s
+go
 
 -- Resource attribute and label functions
 -- ======================================

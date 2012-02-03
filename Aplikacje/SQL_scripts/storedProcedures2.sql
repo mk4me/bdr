@@ -899,6 +899,45 @@ select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
     for XML PATH('UserDetails'), root ('UserList')
 go
 
+-- last rev. 2011-12-28
+create procedure validate_password(@login varchar(30), @pass varchar(25), @res bit OUTPUT)
+as
+begin
+declare @c int = 0;
+select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass);
+if (@c = 1) set @res = 1; else set @res = 0;
+end;
+go
+
+-- last rev. 2011-12-28
+create procedure create_user(@name varchar(30), @surname varchar(50),  @login varchar(50), @pass varchar(25), @res int OUTPUT)
+as
+begin
+if exists(select * from Uzytkownik where Login = @login)
+	begin
+		set @res = 1;
+		return;
+	end;
+insert into Uzytkownik ( Imie, Nazwisko, Login, Haslo ) values ( @name, @surname, @login, HashBytes('SHA1',@pass));
+return 0;
+end;
+go
+
+-- last rev. 2011-12-28
+create procedure reset_password(@login varchar(30), @old varchar(25), @new varchar(25), @res int OUTPUT )
+as
+begin
+if not exists(select * from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@old))
+	begin
+		set @res = 1;
+		return;
+	end;
+update Uzytkownik set Haslo = HashBytes('SHA1',@new) where Login = @login and Haslo = HashBytes('SHA1',@old);
+return 0;
+end;
+go
+
+
 -- last rev. 2010-10-28
 create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
 as
@@ -922,11 +961,6 @@ as
  set @result = ((select count(*) from Uzytkownik where Login = @user_login))
 go
 
--- last rev. 2010-07-10
-create procedure create_user_account (@user_login varchar(30), @user_first_name varchar(30), @user_last_name varchar(50))
-as
-insert into Uzytkownik ( Login, Imie, Nazwisko) values (@user_login, @user_first_name, @user_last_name );
-go
 
 -- last rev. 2010-07-10
 create procedure set_session_privileges (@granting_user_login varchar(30), @granted_user_login varchar(30), @sess_id int, @write bit)
@@ -1245,7 +1279,7 @@ as
 go
 
 
--- last rev. 2011-10-06
+-- last rev. 2012-01-14
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1325,7 +1359,7 @@ as
 	
 	exec create_session  @user_login, 1, 'walk', @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
 	
-	if (@result<>0) 
+	if (@res<>0) 
 		begin
 			set @result = 1;
 			return;
@@ -1354,11 +1388,10 @@ as
 	select * from @fileStoreList order by entity;				
 go
 
-
 -- Shallow copy retrieval
 -- ==========================
 -- TODO: konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2011-10-24
+-- last rev. 2011-12-28
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1378,7 +1411,7 @@ select
 	Tagi as Tags,
 	Opis_sesji as SessionDescription,
 	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
-	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed", DATALENGTH(p.Plik) "@Size",
 	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
 	from Plik p where p.IdSesja=Session.IdSesja
 	for XML PATH('File'), TYPE) as Files
@@ -1395,7 +1428,7 @@ select
 	Nazwa as TrialName,
 	Opis_proby as TrialDescription,
 	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
-	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed", DATALENGTH(p.Plik) "@Size",
 		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
 		from Plik p 
 		where 
@@ -1416,7 +1449,6 @@ select
  ) PerformerConfs
  for XML RAW ('ShallowCopy'), TYPE;
 go
-
 
 -- last rev. 2011-10-24
 create procedure get_shallow_copy_increment @user_login varchar(30), @since datetime

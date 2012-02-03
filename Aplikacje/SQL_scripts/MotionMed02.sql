@@ -24,7 +24,8 @@ CREATE TABLE Uzytkownik (
         Login               varchar(30) NOT NULL UNIQUE,
         Imie                varchar(30) NOT NULL,
         Nazwisko            varchar(50) NOT NULL,
-        LoginBDR			varchar(30)
+        LoginBDR			varchar(30),
+        Haslo				varbinary(100) default 0x00 not null
  )
 go
  
@@ -140,4 +141,108 @@ alter table Badanie
 	add foreign key (IdPacjent) references Pacjent;
 go
 
+create table Badanie_kontekst_badania (
+	IdKontekst_badania	int not null,
+	IdBadanie	int not null,
+	Rola	varchar(50)
+)
+go
+
+
+alter table Kontekst_badania
+	add primary key (IdKontekst_badania)
+go
+
+CREATE INDEX X1Badanie_kontekst_badania ON Badanie_kontekst_badania
+ (
+        IdKontekst_badania
+ )
+go
+
+CREATE INDEX X2Badanie_kontekst_badania ON Badanie_kontekst_badania
+ (
+        IdBadanie
+ )
+go
+
+ALTER TABLE Badanie_kontekst_badania
+        ADD FOREIGN KEY (IdKontekst_badania)
+                              REFERENCES Kontekst_badania;
+go
+ 
+ 
+ ALTER TABLE Badanie_kontekst_badania
+        ADD FOREIGN KEY (IdBadanie)
+                              REFERENCES Badanie on delete cascade;
+go
+
+
+CREATE TABLE Grupa_uzytkownikow (
+        IdGrupa_uzytkownikow    int IDENTITY,
+        Nazwa					varchar(100) NOT NULL
+ )
+go
+
+create table Uzytkownik_grupa_uzytkownikow (
+	IdGrupa_uzytkownikow	int not null,
+	IdUzytkownik	int not null
+)
+go
+
+alter table Grupa_uzytkownikow
+	add primary key (IdGrupa_uzytkownikow)
+go
+
+CREATE INDEX X1Uzytkownik_grupa_uzytkownikow ON Uzytkownik_grupa_uzytkownikow
+ (
+        IdUzytkownik
+ )
+go
+
+CREATE INDEX X2Uzytkownik_grupa_uzytkownikow ON Uzytkownik_grupa_uzytkownikow
+ (
+        IdGrupa_uzytkownikow
+ )
+go
+
+ALTER TABLE Uzytkownik_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdUzytkownik)
+                              REFERENCES Uzytkownik;
+go
+ 
+ 
+ ALTER TABLE Uzytkownik_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_uzytkownikow)
+                              REFERENCES Grupa_uzytkownikow on delete cascade;
+go
+
+
+create table Grupa_badan_grupa_uzytkownikow (
+	IdGrupa_uzytkownikow	int not null,
+	IdGrupa_badan	int not null
+)
+go
+
+CREATE INDEX X1Grupa_badan_grupa_uzytkownikow ON Grupa_badan_grupa_uzytkownikow
+ (
+        IdGrupa_badan
+ )
+go
+
+CREATE INDEX X2Grupa_badan_grupa_uzytkownikow ON Grupa_badan_grupa_uzytkownikow
+ (
+        IdGrupa_uzytkownikow
+ )
+go
+
+ALTER TABLE Grupa_badan_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_badan)
+                              REFERENCES Grupa_badan;
+go
+ 
+ 
+ ALTER TABLE Grupa_badan_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_uzytkownikow)
+                              REFERENCES Grupa_uzytkownikow on delete cascade;
+go
 
