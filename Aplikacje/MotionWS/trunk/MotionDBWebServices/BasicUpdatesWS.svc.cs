@@ -60,7 +60,7 @@ namespace MotionDBWebServices
         {
             int newSessionId = 0;
             int result = 0;
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
 
 
             try
@@ -137,7 +137,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
 
             }
             finally
@@ -271,7 +271,7 @@ namespace MotionDBWebServices
             int newPerfConfId = 0;
             int res = 0;
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try

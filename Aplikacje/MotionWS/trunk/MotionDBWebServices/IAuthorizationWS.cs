@@ -18,7 +18,7 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void CreateUserAccount(string firstName, string lastName);
+        string CreateUserAccount(string username, string email);
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]

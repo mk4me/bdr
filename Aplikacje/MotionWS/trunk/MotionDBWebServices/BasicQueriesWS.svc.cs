@@ -24,7 +24,7 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -86,7 +86,7 @@ namespace MotionDBWebServices
         public XmlElement GenericQueryUniformXML(FilterPredicateCollection filter, string[] entitiesToInclude)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -186,7 +186,7 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -227,7 +227,7 @@ namespace MotionDBWebServices
         public string GetSessionLabel(int id)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             bool found = false;
             string res = "";
@@ -263,7 +263,7 @@ namespace MotionDBWebServices
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionLabel")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-            return res; // +"(retrieved by: " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name + ")";
+            return res; // +"(retrieved by: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name + ")";
         }
 
 
@@ -271,7 +271,7 @@ namespace MotionDBWebServices
         public XmlElement GetSessionContent(int id)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             bool notFound = false;
 
@@ -531,7 +531,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionPerformersWithAttributesXML(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -572,7 +572,7 @@ namespace MotionDBWebServices
         public XmlElement ListLabPerformersWithAttributesXML(int labID) // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
 
@@ -652,7 +652,7 @@ namespace MotionDBWebServices
         {
             XmlDocument xd = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -692,7 +692,7 @@ namespace MotionDBWebServices
         public XmlElement ListPerformerSessionsWithAttributesXML(int performerID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -737,7 +737,7 @@ namespace MotionDBWebServices
         public XmlElement ListLabSessionsWithAttributesXML(int labID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name; //ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name; //ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
   
@@ -781,7 +781,7 @@ namespace MotionDBWebServices
         public XmlElement  ListMeasurementConfSessionsWithAttributesXML(int labID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -821,7 +821,7 @@ namespace MotionDBWebServices
         public XmlElement ListGroupSessionsWithAttributesXML(int sessionGroupID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -860,7 +860,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionContents(int pageSize, int pageNo)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -900,7 +900,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionSessionGroups(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -940,7 +940,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionTrialsXML(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -978,7 +978,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionTrialsWithAttributesXML(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -1020,7 +1020,7 @@ namespace MotionDBWebServices
         public XmlElement ListSessionPerformerConfsWithAttributesXML(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -1061,7 +1061,7 @@ namespace MotionDBWebServices
         public XmlElement ListMeasurementConfigurationsWithAttributesXML() // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -1098,7 +1098,7 @@ namespace MotionDBWebServices
         public XmlElement ListFileAttributeDataXML(int subjectID, string subjectEntity)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             string operationName = "";
             string paramName = "";
@@ -1180,7 +1180,7 @@ namespace MotionDBWebServices
         public XmlElement ListFileAttributeDataWithAttributesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             SqlParameter usernamePar;
             string operationName = "";
@@ -1261,7 +1261,7 @@ namespace MotionDBWebServices
         public XmlElement ListFilesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             string operationName = "";
             string paramName = "";
@@ -1330,7 +1330,7 @@ namespace MotionDBWebServices
         public XmlElement ListFilesWithAttributesXML(int subjectID, string subjectType)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             SqlParameter usernamePar;
             string operationName = "";
@@ -1472,7 +1472,7 @@ namespace MotionDBWebServices
         public XmlElement ListAttributesDefined(string attributeGroupName, string entityKind)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -1519,7 +1519,7 @@ namespace MotionDBWebServices
         public XmlElement ListAttributeGroupsDefined(string entityKind)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try

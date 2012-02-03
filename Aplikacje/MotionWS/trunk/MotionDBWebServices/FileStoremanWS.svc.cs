@@ -721,7 +721,7 @@ namespace MotionDBWebServices
             string fileLocation = "NOT_FOUND";
             path = path.Substring(0, path.LastIndexOf('/'));
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             if ((fileID == 0) && path.Contains(userName))
@@ -862,7 +862,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -916,7 +916,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -973,7 +973,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -1023,7 +1023,7 @@ namespace MotionDBWebServices
 
             // int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs
 
-            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             int result = 0;
