@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="AttributeDefinitionList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="AttributeDefinitionList" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="AttributeDefinition" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="AttributeName" type="xsd:string" />
+              <xsd:element name="AttributeType" type="xsd:string" />
+              <xsd:element name="AttributeEnum" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="AttributeGroupName" type="xsd:string" />
+              <xsd:element name="Unit" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="Show" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <xsd:element name="EnumValues" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Value" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

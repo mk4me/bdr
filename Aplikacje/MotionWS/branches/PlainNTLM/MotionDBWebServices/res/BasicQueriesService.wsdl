@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+	<wsdl:types>
+		<s:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+			<s:include schemaLocation="GenericQueryXML.xsd"/>
+			<s:include schemaLocation="GenericQueryUniformXML.xsd"/>
+			<s:include schemaLocation="GetPerformerByIdXML.xsd"/>
+			<s:include schemaLocation="GetSessionByIdXML.xsd"/>
+			<s:include schemaLocation="GetTrialByIdXML.xsd"/>
+			<s:include schemaLocation="GetSegmentByIdXML.xsd"/>
+			<s:include schemaLocation="ListPerformersXML.xsd"/>
+			<s:include schemaLocation="ListPerformersWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListLabPerformersWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListPerformerSessionsXML.xsd"/>
+			<s:include schemaLocation="ListPerformerSessionsWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListLabSessionsWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListSessionTrialsXML.xsd"/>
+			<s:include schemaLocation="ListSessionTrialsWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListTrialSegmentsXML.xsd"/>
+			<s:include schemaLocation="ListTrialSegmentsWithAttributesXML.xsd"/>
+			<s:include schemaLocation="ListFilesXML.xsd"/>
+			<s:include schemaLocation="ListFilesWithAttributesXML.xsd"/>
+			<s:include schemaLocation="_PerformQuery.xsd"/>
+			<s:include schemaLocation="ListAttributesDefined.xsd"/>
+			<s:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
+			<s:include schemaLocation="ListSessionGroupsDefined.xsd"/>
+			<s:include schemaLocation="ListMotionKindsDefined.xsd"/>
+			<s:element name="ListPerformerSessions">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformerSessionsResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsResult" type="tns:ArrayOfPlainSessionDetails"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ArrayOfPlainSessionDetails">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PlainSessionDetails" type="tns:PlainSessionDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PlainSessionDetails">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="SessionID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="LabID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="MotionKindID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="PerformerID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="SessionDate" type="s:dateTime"/>
+					<s:element minOccurs="0" maxOccurs="1" name="SessionDescription" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="ListSessionFiles">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionFilesResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionFilesResult" type="tns:ArrayOfPlainFileDetails"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ArrayOfPlainFileDetails">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="PlainFileDetails" type="tns:PlainFileDetails"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="PlainFileDetails">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="FileID" type="s:int"/>
+					<s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="FileDescription" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="GenericQueryXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+						<s:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:complexType name="ArrayOfFilterPredicate">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="FilterPredicate" type="tns:FilterPredicate"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="FilterPredicate">
+				<s:sequence>
+					<s:element minOccurs="1" maxOccurs="1" name="PredicateID" type="s:int"/>
+					<s:element minOccurs="1" maxOccurs="1" name="ParentPredicate" type="s:int"/>
+					<s:element minOccurs="0" maxOccurs="1" name="ContextEntity" type="s:string"/>
+					<s:element minOccurs="1" maxOccurs="1" name="PreviousPredicate" type="s:int"/>
+					<s:element minOccurs="0" maxOccurs="1" name="NextOperator" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="FeatureName" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="Operator" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="AggregateFunction" type="s:string"/>
+					<s:element minOccurs="0" maxOccurs="1" name="AggregateEntity" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:complexType name="ArrayOfString">
+				<s:sequence>
+					<s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string"/>
+				</s:sequence>
+			</s:complexType>
+			<s:element name="GenericQueryXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GenericQueryXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:GenericQueryResult"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenericQueryUniformXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="filter" type="tns:ArrayOfFilterPredicate"/>
+						<s:element minOccurs="0" maxOccurs="1" name="entitiesToInclude" type="tns:ArrayOfString"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GenericQueryUniformXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GenericQueryUniformXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:GenericUniformAttributesQueryResult"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetPerformerByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetPerformerByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetPerformerByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSessionByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSessionByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetSessionByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetTrialByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetTrialByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetTrialByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:TrialDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSegmentByIdXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="id" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="GetSegmentByIdXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="GetSegmentByIdXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SegmentDetailsWithAttributes"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformersXML">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListPerformersXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformersXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformersWithAttributesXML">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListPerformersWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformersWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabPerformersWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="labID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabPerformersWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListLabPerformersWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:LabPerformerWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformerSessionsXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformerSessionsXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerSessionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformerSessionsWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="performerID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListPerformerSessionsWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListPerformerSessionsWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:PerformerSessionWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabSessionsWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="labID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListLabSessionsWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListLabSessionsWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:LabSessionWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionTrialsXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionTrialsXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionTrialsXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionTrialList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionTrialsWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="sessionID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionTrialsWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionTrialsWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionTrialWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListTrialSegmentsXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="trialID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListTrialSegmentsXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListTrialSegmentsXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:TrailSegmentList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListTrialSegmentsWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="trialID" type="s:int"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListTrialSegmentsWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListTrialSegmentsWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:TrailSegmentWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListFilesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="subjectID" type="s:int"/>
+						<s:element minOccurs="0" maxOccurs="1" name="subjectType" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListFilesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListFilesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:FileList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListFilesWithAttributesXML">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="1" maxOccurs="1" name="subjectID" type="s:int"/>
+						<s:element minOccurs="0" maxOccurs="1" name="subjectType" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListFilesWithAttributesXMLResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListFilesWithAttributesXMLResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:FileWithAttributesList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="_PerformQuery">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="query" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="_PerformQueryResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="_PerformQueryResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:Result"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListAttributesDefined">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="attributeGroupName" type="s:string"/>
+						<s:element minOccurs="0" maxOccurs="1" name="entityKind" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListAttributesDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListAttributesDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:AttributeDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListAttributeGroupsDefined">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="entityKind" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListAttributeGroupsDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:AttributeGroupDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListSessionGroupsDefined">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListSessionGroupsDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:SessionGroupDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element name="ListMotionKindsDefined">
+				<s:complexType/>
+			</s:element>
+			<s:element name="ListMotionKindsDefinedResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
+							<s:complexType mixed="true">
+								<s:sequence>
+									<s:element ref="tns:MotionKindDefinitionList"/>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+		</s:schema>
+	</wsdl:types>
+	<wsdl:message name="ListPerformerSessionsSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessions"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformerSessionsSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessionsResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionFilesSoapIn">
+		<wsdl:part name="parameters" element="tns:ListSessionFiles"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionFilesSoapOut">
+		<wsdl:part name="parameters" element="tns:ListSessionFilesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GenericQueryXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GenericQueryXML"/>
+	</wsdl:message>
+	<wsdl:message name="GenericQueryXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GenericQueryXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GenericQueryUniformXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXML"/>
+	</wsdl:message>
+	<wsdl:message name="GenericQueryUniformXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GenericQueryUniformXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetPerformerByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetPerformerByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetPerformerByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetPerformerByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetSessionByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetSessionByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetSessionByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetSessionByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetTrialByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetTrialByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetTrialByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetTrialByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetSegmentByIdXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:GetSegmentByIdXML"/>
+	</wsdl:message>
+	<wsdl:message name="GetSegmentByIdXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:GetSegmentByIdXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformersXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformersXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformersWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabPerformersWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabPerformersWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListLabPerformersWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformerSessionsXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessionsXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformerSessionsXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessionsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformerSessionsWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessionsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListPerformerSessionsWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListPerformerSessionsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabSessionsWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListLabSessionsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListLabSessionsWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListLabSessionsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionTrialsXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListSessionTrialsXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionTrialsXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListSessionTrialsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionTrialsWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListSessionTrialsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionTrialsWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListSessionTrialsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListTrialSegmentsXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListTrialSegmentsXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListTrialSegmentsXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListTrialSegmentsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListTrialSegmentsWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListTrialSegmentsWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListTrialSegmentsWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListTrialSegmentsWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListFilesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListFilesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListFilesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListFilesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListFilesWithAttributesXMLSoapIn">
+		<wsdl:part name="parameters" element="tns:ListFilesWithAttributesXML"/>
+	</wsdl:message>
+	<wsdl:message name="ListFilesWithAttributesXMLSoapOut">
+		<wsdl:part name="parameters" element="tns:ListFilesWithAttributesXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="_PerformQuerySoapIn">
+		<wsdl:part name="parameters" element="tns:_PerformQuery"/>
+	</wsdl:message>
+	<wsdl:message name="_PerformQuerySoapOut">
+		<wsdl:part name="parameters" element="tns:_PerformQueryResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListAttributesDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListAttributesDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListAttributesDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListAttributesDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListAttributeGroupsDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListAttributeGroupsDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionGroupsDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListSessionGroupsDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ListMotionKindsDefinedSoapIn">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="ListMotionKindsDefinedSoapOut">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="BasicQueriesServiceSoap">
+		<wsdl:operation name="ListPerformerSessions">
+			<wsdl:input message="tns:ListPerformerSessionsSoapIn"/>
+			<wsdl:output message="tns:ListPerformerSessionsSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionFiles">
+			<wsdl:input message="tns:ListSessionFilesSoapIn"/>
+			<wsdl:output message="tns:ListSessionFilesSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryXML">
+			<wsdl:input message="tns:GenericQueryXMLSoapIn"/>
+			<wsdl:output message="tns:GenericQueryXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<wsdl:input message="tns:GenericQueryUniformXMLSoapIn"/>
+			<wsdl:output message="tns:GenericQueryUniformXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<wsdl:input message="tns:GetPerformerByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetPerformerByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<wsdl:input message="tns:GetSessionByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetSessionByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<wsdl:input message="tns:GetTrialByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetTrialByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<wsdl:input message="tns:GetSegmentByIdXMLSoapIn"/>
+			<wsdl:output message="tns:GetSegmentByIdXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<wsdl:input message="tns:ListPerformersXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformersXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<wsdl:input message="tns:ListPerformersWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformersWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<wsdl:input message="tns:ListLabPerformersWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListLabPerformersWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsXML">
+			<wsdl:input message="tns:ListPerformerSessionsXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformerSessionsXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+			<wsdl:input message="tns:ListPerformerSessionsWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListPerformerSessionsWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<wsdl:input message="tns:ListLabSessionsWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListLabSessionsWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsXML">
+			<wsdl:input message="tns:ListSessionTrialsXMLSoapIn"/>
+			<wsdl:output message="tns:ListSessionTrialsXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsWithAttributesXML">
+			<wsdl:input message="tns:ListSessionTrialsWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListSessionTrialsWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsXML">
+			<wsdl:input message="tns:ListTrialSegmentsXMLSoapIn"/>
+			<wsdl:output message="tns:ListTrialSegmentsXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsWithAttributesXML">
+			<wsdl:input message="tns:ListTrialSegmentsWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListTrialSegmentsWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesXML">
+			<wsdl:input message="tns:ListFilesXMLSoapIn"/>
+			<wsdl:output message="tns:ListFilesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesWithAttributesXML">
+			<wsdl:input message="tns:ListFilesWithAttributesXMLSoapIn"/>
+			<wsdl:output message="tns:ListFilesWithAttributesXMLSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="_PerformQuery">
+			<wsdl:input message="tns:_PerformQuerySoapIn"/>
+			<wsdl:output message="tns:_PerformQuerySoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributesDefined">
+			<wsdl:input message="tns:ListAttributesDefinedSoapIn"/>
+			<wsdl:output message="tns:ListAttributesDefinedSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<wsdl:input message="tns:ListAttributeGroupsDefinedSoapIn"/>
+			<wsdl:output message="tns:ListAttributeGroupsDefinedSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<wsdl:input message="tns:ListSessionGroupsDefinedSoapIn"/>
+			<wsdl:output message="tns:ListSessionGroupsDefinedSoapOut"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<wsdl:input message="tns:ListMotionKindsDefinedSoapIn"/>
+			<wsdl:output message="tns:ListMotionKindsDefinedSoapOut"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicQueriesServiceSoap" type="tns:BasicQueriesServiceSoap">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ListPerformerSessions">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessions" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionFiles">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryUniformXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetPerformerByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSessionByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetTrialByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSegmentByIdXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionTrialsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionTrialsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListTrialSegmentsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListTrialSegmentsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListFilesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesWithAttributesXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListFilesWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="_PerformQuery">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/_PerformQuery" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributesDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListAttributesDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListAttributeGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="BasicQueriesServiceSoap12" type="tns:BasicQueriesServiceSoap">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ListPerformerSessions">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessions" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionFiles">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionFiles" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GenericQueryUniformXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GenericQueryUniformXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetPerformerByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetPerformerByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSessionByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSessionByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTrialByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetTrialByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSegmentByIdXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/GetSegmentByIdXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformersWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabPerformersWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabPerformersWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListPerformerSessionsWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListPerformerSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListLabSessionsWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListLabSessionsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionTrialsXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionTrialsWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionTrialsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListTrialSegmentsXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListTrialSegmentsWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListTrialSegmentsWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListFilesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListFilesWithAttributesXML">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListFilesWithAttributesXML" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="_PerformQuery">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/_PerformQuery" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributesDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListAttributesDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListAttributeGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap12:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BasicQueriesService">
+		<wsdl:port name="BasicQueriesServiceSoap" binding="tns:BasicQueriesServiceSoap">
+			<soap:address location="http://dbpawell.pjwstk.edu.pl//Motion/BasicQueriesService.asmx"/>
+		</wsdl:port>
+		<wsdl:port name="BasicQueriesServiceSoap12" binding="tns:BasicQueriesServiceSoap12">
+			<soap12:address location="http://dbpawell.pjwstk.edu.pl//Motion/BasicQueriesService.asmx"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

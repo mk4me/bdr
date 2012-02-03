@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+  <xsd:element name="SegmentDetailsWithAttributes">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="SegmentID" type="xsd:int" />
+        <xsd:element name="TrialID" type="xsd:int" />
+        <xsd:element name="SegmentName" type="xsd:string" />
+        <xsd:element name="StartTime" type="xsd:int" />
+        <xsd:element name="EndTime" type="xsd:int" />
+        <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

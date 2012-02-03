@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="UserList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+      <xsd:element name="UserList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="UserDetails" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="Login" type="xsd:string" />
+                <xsd:attribute name="FirstName" type="xsd:string" />
+                <xsd:attribute name="LastName" type="xsd:string" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+</xsd:schema>
