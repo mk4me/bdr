@@ -34,7 +34,7 @@ namespace MotionDBWebServices
 
         // !! TODO - docelowo zmienic na bazujace implicite na sciezce localWriteDir - ale po aktualizacji klienta BDR dopiero
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int StoreMeasurementConfFile(int mcID, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -103,7 +103,8 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-        // SECURE ME !!!
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -171,7 +172,8 @@ namespace MotionDBWebServices
             }
             return newFileId;
         }
-        // SECURE ME !!!
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
 
@@ -242,7 +244,7 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void ReplaceFile(int fileID, string path, string filename)
         {
   
@@ -302,7 +304,7 @@ namespace MotionDBWebServices
             }
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void StoreMeasurementConfFiles(int mcID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -397,7 +399,7 @@ namespace MotionDBWebServices
             }
             return;
         }
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -489,7 +491,8 @@ namespace MotionDBWebServices
             }
             return;
         }
-        // SECURE ME !!!
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void StoreTrialFiles(int trialId, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -586,7 +589,7 @@ namespace MotionDBWebServices
         }
 
         /*
-                // SECURE ME !!!
+                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
                 public int StoreMeasurementResultFile(int measurementID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -651,7 +654,7 @@ namespace MotionDBWebServices
                     return newFileId;
                 }
 
-                // SECURE ME !!!
+                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
                 public int StorePreviewFile(int sourceFileID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -714,7 +717,7 @@ namespace MotionDBWebServices
                 }
          */
 
- 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")] 
         public void DownloadComplete(int fileID, string path)
         {
 
@@ -768,7 +771,7 @@ namespace MotionDBWebServices
             }
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public FileData RetrieveFile(int fileID)
         {
             string relativePath = "";
@@ -850,8 +853,8 @@ namespace MotionDBWebServices
             fData.SubdirPath = filePath;
             return fData;
         }
-      
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetShallowCopy()
         {
             string filePath = "";
@@ -905,7 +908,7 @@ namespace MotionDBWebServices
             return fileLocation;
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetShallowCopyIncrement(DateTime since)
         {
             string filePath = "";
@@ -962,7 +965,7 @@ namespace MotionDBWebServices
             return fileLocation;
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public string GetMetadata()
         {
             string filePath = "";
@@ -1017,7 +1020,7 @@ namespace MotionDBWebServices
         }
 
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreateSessionFromFiles(string path)
         {
 

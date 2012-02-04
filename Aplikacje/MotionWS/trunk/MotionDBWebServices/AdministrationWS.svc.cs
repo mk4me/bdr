@@ -16,7 +16,7 @@ namespace MotionDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")]
     public class AdministrationWS : DatabaseAccessService, IAdministrationWS
     {
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void DefineAttriubeGroup(string groupName, string entity)
         {
             int resultCode = 0;
@@ -71,7 +71,7 @@ namespace MotionDBWebServices
         }
 
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void RemoveAttributeGroup(string groupName, string entity)
         {
             int resultCode = 0;
@@ -121,7 +121,7 @@ namespace MotionDBWebServices
 
         }
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void DefineAttribute(string attributeName, string groupName, string entity, bool isEnum, string pluginDescriptor, 
             string type, string unit)
         {
@@ -190,7 +190,7 @@ namespace MotionDBWebServices
 
         }
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void RemoveAttribute(string attributeName, string groupName, string entity)
         {
             int resultCode = 0;
@@ -242,7 +242,7 @@ namespace MotionDBWebServices
 
         }
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting)
         {
             int resultCode = 0;
@@ -302,7 +302,7 @@ namespace MotionDBWebServices
 
         }
 
-        // DOUBLE SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void DownloadAreaCleanup(int olderThanMinutes)
         {
             string fileLocation = "";

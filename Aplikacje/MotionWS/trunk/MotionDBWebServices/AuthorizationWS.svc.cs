@@ -120,7 +120,7 @@ namespace MotionDBWebServices
             return "random_pass";
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -156,7 +156,7 @@ namespace MotionDBWebServices
         }
 
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void RemoveSessionPrivileges(string grantedUserLogin, int sessionID)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -188,7 +188,7 @@ namespace MotionDBWebServices
             }
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -220,7 +220,7 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
         }
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public XmlElement ListUsers()
         {
             XmlDocument xd = new XmlDocument();
@@ -258,7 +258,7 @@ namespace MotionDBWebServices
 
 
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListSessionPrivileges(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
@@ -302,7 +302,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public bool IfCanUpdate(int resourceID, string entity)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;

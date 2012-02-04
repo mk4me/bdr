@@ -18,7 +18,7 @@ namespace MotionDBWebServices
     public class UserPersonalSpace : DatabaseAccessService, IUserPersonalSpaceWS
     {
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void UpdateStoredFilters(FilterPredicateCollection filter)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -47,7 +47,7 @@ namespace MotionDBWebServices
             }
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListStoredFilters()
         {
             XmlDocument xd = new XmlDocument();
@@ -86,7 +86,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListUserBaskets()
         {
             XmlDocument xd = new XmlDocument();
@@ -125,7 +125,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void CreateBasket(string basketName)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -177,7 +177,7 @@ namespace MotionDBWebServices
             }        
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void RemoveBasket(string basketName)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -230,7 +230,7 @@ namespace MotionDBWebServices
         }
 
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void AddEntityToBasket(string basketName, int resourceID, string entity)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -289,6 +289,7 @@ namespace MotionDBWebServices
             }
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void RemoveEntityFromBasket(string basketName, int resourceID, string entity)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
@@ -344,6 +345,7 @@ namespace MotionDBWebServices
             }
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListBasketPerformersWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
@@ -383,6 +385,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListBasketSessionsWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
@@ -422,7 +425,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListBasketTrialsWithAttributesXML(string basketName)
         {
             XmlDocument xd = new XmlDocument();
@@ -460,9 +463,9 @@ namespace MotionDBWebServices
             }
 
             return xd.DocumentElement;
-        }          
+        }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public void UpdateViewConfiguration(AttributeGroupViewSettingCollection attrGroupViewSettings, AttributeViewSettingCollection attrViewSettings)
         {
             int result = 0;
@@ -516,7 +519,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
         public XmlElement ListViewConfiguration()
         {
             XmlDocument xd = new XmlDocument();

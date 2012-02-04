@@ -71,7 +71,9 @@
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="FileStoremanWS.svc" />
     <Content Include="res\XMLFile1.xml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAuthValidator.cs" />

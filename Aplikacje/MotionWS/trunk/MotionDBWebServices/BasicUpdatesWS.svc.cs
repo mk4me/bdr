@@ -17,7 +17,7 @@ namespace MotionDBWebServices
     public class BasicUpdatesWS : DatabaseAccessService, IBasicUpdatesWS
     {
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreatePerformer(int PerformerID)
         {
             try
@@ -55,7 +55,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
@@ -150,7 +150,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreateTrial(int sessionID, string trialName, string trialDescription)
         {
             int newTrialId = 0;
@@ -190,7 +190,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int CreateMeasurementConfiguration(string mcName, string mcKind, string mcDescription)
         {
             int newMeasurementConf = 0;
@@ -232,7 +232,7 @@ namespace MotionDBWebServices
 
         // Group Assignment operations
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public bool AssignSessionToGroup(int sessionID, int groupID)
         {
 
@@ -265,7 +265,7 @@ namespace MotionDBWebServices
         }
 
         // Performer to session assignment
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public int AssignPerformerToSession(int sessionID, int performerID)
         {
             int newPerfConfId = 0;
@@ -424,7 +424,7 @@ namespace MotionDBWebServices
         6 - the value provided is not valid for this numeric-type attribute
         7 - other exception
         */
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetSessionAttribute(int sessionID, string attributeName, string attributeValue, bool update)
         {
 
@@ -495,7 +495,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetTrialAttribute(int trialID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -565,7 +565,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetMeasurementConfAttribute(int measurementConfID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -636,7 +636,7 @@ namespace MotionDBWebServices
         }
 
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetPerformerConfAttribute(int performerConfID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -706,7 +706,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -776,7 +776,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void ClearAttributeValue(int resourceID, string attributeName, string entity)
         {
             int resultCode = 0;
@@ -822,7 +822,7 @@ namespace MotionDBWebServices
 
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
         public void SetFileTypedAttributeValue(int resourceID, string entity, string attributeName, int fileID, bool update)
         {
             // UWAGA: nie dopuszczono mozliwosci wprowadzania atrybutow plikowych dla encji PLIK !
