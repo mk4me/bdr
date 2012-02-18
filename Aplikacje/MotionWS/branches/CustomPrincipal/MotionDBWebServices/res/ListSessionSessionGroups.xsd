@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="SessionSessionGroupList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:include schemaLocation="SessionGroupDefinitionElement.xsd" />
+  <xsd:element name="SessionSessionGroupList" >
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SessionGroupDefinition" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

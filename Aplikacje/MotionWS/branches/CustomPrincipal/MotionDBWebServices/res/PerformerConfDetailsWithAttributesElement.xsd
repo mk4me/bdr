@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="AttributesElement.xsd" />
+    <xsd:element name="PerformerConfDetailsWithAttributes">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="PerformerConfID" type="xsd:int" />
+          <xsd:element name="SessionID" type="xsd:int" />
+          <xsd:element name="PerformerID" type="xsd:int" />
+          <xsd:element ref="Attributes" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

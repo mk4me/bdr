@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<test>
+
+    <MedicalRecords xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB">
+            <Patients>
+                <Patient PatientID="1" FirstName="Anna" LastName="Job" Gender="K" BirthDate="1943-08-06" />
+                <Patient PatientID="2" FirstName="Andrzej" LastName="Kulik" Gender="M" BirthDate="1948-09-19" />
+                <Patient PatientID="3" FirstName="Marian" LastName="Szyda" Gender="M" BirthDate="1945-04-09" />
+                <Patient PatientID="4" FirstName="Urszula" LastName="Białoń" Gender="K" BirthDate="1950-10-09" />
+                <Patient PatientID="5" FirstName="Kazimierz" LastName="Ogieniewski" Gender="M" BirthDate="1944-07-12" />
+                <Patient PatientID="6" FirstName="Wanda" LastName="Uczniak" Gender="F" BirthDate="1948-03-07" />
+                <Patient PatientID="7" FirstName="Danuta" LastName="Kaps" Gender="K" BirthDate="1950-04-03" />
+                <Patient PatientID="8" FirstName="Renata" LastName="Raszka" Gender="K" BirthDate="1956-03-07" />
+                <Patient PatientID="9" FirstName="Helena" LastName="Korżał" Gender="K" BirthDate="1949-08-18" />
+                <Patient PatientID="10" FirstName="Aleksandra" LastName="Liszkiewicz" Gender="K" BirthDate="1942-01-23" />
+                <Patient PatientID="11" FirstName="Jolanta" LastName="Jarmul" Gender="K" BirthDate="1941-06-09" />
+                <Patient PatientID="12" FirstName="Romuald" LastName="Jarmul" Gender="M" BirthDate="1944-03-31" />
+                <Patient PatientID="13" FirstName="Maria" LastName="Chałupka" Gender="K" BirthDate="1943-10-01" />
+                <Patient PatientID="14" FirstName="Janina" LastName="Jagiełło" Gender="K" BirthDate="1934-12-14" />
+                <Patient PatientID="15" FirstName="Agnieszka" LastName="Janik" Gender="K" BirthDate="1950-01-20" />
+                <Patient PatientID="16" FirstName="Bogumiła" LastName="Międlar" Gender="K" BirthDate="1951-01-30" />
+                <Patient PatientID="17" FirstName="Alicja" LastName="Orłowska" Gender="K" BirthDate="1946-07-28" />
+                <Patient PatientID="18" FirstName="Alina" LastName="Smendek" Gender="K" BirthDate="1951-03-06" />
+                <Patient PatientID="19" FirstName="Zygmunt" LastName="Szałkiewicz" Gender="M" BirthDate="1945-05-02" />
+                <Patient PatientID="20" FirstName="Kazimiera" LastName="Wójcik" Gender="K" BirthDate="1942-09-05" />
+                <Patient PatientID="21" FirstName="Kazimierz" LastName="Betler" Gender="M" BirthDate="1951-01-01" />
+                <Patient PatientID="22" FirstName="Krystyna" LastName="Czubek" Gender="K" BirthDate="1943-07-24" />
+                <Patient PatientID="23" FirstName="Teresa" LastName="Woszczak" Gender="K" BirthDate="1947-01-25" />
+                <Patient PatientID="24" FirstName="Marzena" LastName="Adamczyk" Gender="K" BirthDate="1965-08-01" />
+                <Patient PatientID="25" FirstName="Wiesław" LastName="Kowalczyk" Gender="M" BirthDate="1950-12-17" />
+                <Patient PatientID="26" FirstName="Sławomir" LastName="Stempiński" Gender="M" BirthDate="1957-07-24" />
+                <Patient PatientID="27" FirstName="Maria" LastName="Kopciak" Gender="K" BirthDate="1950-03-09" />
+                <Patient PatientID="28" FirstName="Bogusława" LastName="Juraszek" Gender="K" BirthDate="1955-05-25" />
+                <Patient PatientID="29" FirstName="Marian" LastName="Rajda" Gender="M" BirthDate="1957-08-13" />
+                <Patient PatientID="30" FirstName="Marek" LastName="Sajdak" Gender="M" BirthDate="1945-01-23" />
+                <Patient PatientID="31" FirstName="Janina" LastName="Wujak" Gender="K" BirthDate="1942-01-22" />
+                <Patient PatientID="32" FirstName="Henryk" LastName="Oczkowski" Gender="M" BirthDate="1954-09-21" />
+                <Patient PatientID="33" FirstName="Teresa" LastName="Piekarska" Gender="K" BirthDate="1939-05-24" />
+                <Patient PatientID="34" FirstName="Barbara" LastName="Midor" Gender="K" BirthDate="1949-11-05" />
+            </Patients>
+            <DisorderOccurences>
+                <DisorderOccurence PatientID="1" DisorderID="15" Focus="primary" />
+                <DisorderOccurence PatientID="2" DisorderID="14" Focus="primary" />
+                <DisorderOccurence PatientID="3" DisorderID="6" Focus="primary" />
+                <DisorderOccurence PatientID="3" DisorderID="10" Focus="primary" />
+                <DisorderOccurence PatientID="3" DisorderID="11" Focus="primary" />
+                <DisorderOccurence PatientID="4" DisorderID="3" Comment="zmniejszony zakres ruchomości lewj ręki" Focus="primary" />
+                <DisorderOccurence PatientID="5" DisorderID="14" Focus="primary" />
+                <DisorderOccurence PatientID="6" DisorderID="3" Focus="primary" />
+                <DisorderOccurence PatientID="7" DisorderID="3" DiagnosisDate="1997-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="8" DisorderID="2" DiagnosisDate="2005-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="8" DisorderID="3" DiagnosisDate="2005-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="9" DisorderID="2" Focus="primary" />
+                <DisorderOccurence PatientID="9" DisorderID="3" Focus="primary" />
+                <DisorderOccurence PatientID="9" DisorderID="6" DiagnosisDate="2010-09-06" Comment="Data zabiegu" Focus="primary" />
+                <DisorderOccurence PatientID="10" DisorderID="5" Focus="primary" />
+                <DisorderOccurence PatientID="10" DisorderID="7" Focus="primary" />
+                <DisorderOccurence PatientID="10" DisorderID="9" Focus="primary" />
+                <DisorderOccurence PatientID="11" DisorderID="3" DiagnosisDate="1976-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="12" DisorderID="2" Focus="primary" />
+                <DisorderOccurence PatientID="12" DisorderID="3" Comment="Problem z miednicą" Focus="primary" />
+                <DisorderOccurence PatientID="13" DisorderID="10" Focus="primary" />
+                <DisorderOccurence PatientID="13" DisorderID="11" Focus="primary" />
+                <DisorderOccurence PatientID="13" DisorderID="23" Focus="primary" />
+                <DisorderOccurence PatientID="13" DisorderID="24" Focus="primary" />
+                <DisorderOccurence PatientID="14" DisorderID="2" DiagnosisDate="1995-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="14" DisorderID="3" DiagnosisDate="1995-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="14" DisorderID="5" DiagnosisDate="2008-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="15" DisorderID="3" DiagnosisDate="2001-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="15" DisorderID="10" DiagnosisDate="2001-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="15" DisorderID="11" DiagnosisDate="2001-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="16" DisorderID="12" DiagnosisDate="2008-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="16" DisorderID="16" Focus="primary" />
+                <DisorderOccurence PatientID="16" DisorderID="19" Focus="primary" />
+                <DisorderOccurence PatientID="17" DisorderID="3" DiagnosisDate="1993-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="17" DisorderID="10" DiagnosisDate="2001-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="17" DisorderID="11" DiagnosisDate="2001-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="17" DisorderID="20" Focus="secondary" />
+                <DisorderOccurence PatientID="17" DisorderID="21" Focus="primary" />
+                <DisorderOccurence PatientID="18" DisorderID="19" DiagnosisDate="1995-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="19" DisorderID="3" Focus="primary" />
+                <DisorderOccurence PatientID="20" DisorderID="4" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="21" DisorderID="2" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="21" DisorderID="3" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="22" DisorderID="2" DiagnosisDate="2009-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="22" DisorderID="3" DiagnosisDate="2007-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="23" DisorderID="2" DiagnosisDate="1995-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="23" DisorderID="3" DiagnosisDate="1995-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="23" DisorderID="13" DiagnosisDate="2008-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="24" DisorderID="3" DiagnosisDate="2007-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="25" DisorderID="3" DiagnosisDate="2005-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="26" DisorderID="3" DiagnosisDate="2008-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="26" DisorderID="10" DiagnosisDate="2006-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="26" DisorderID="11" DiagnosisDate="2006-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="27" DisorderID="2" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="27" DisorderID="3" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="28" DisorderID="6" DiagnosisDate="2011-04-08" Focus="primary" />
+                <DisorderOccurence PatientID="28" DisorderID="18" Focus="primary" />
+                <DisorderOccurence PatientID="28" DisorderID="19" DiagnosisDate="1990-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="29" DisorderID="1" Focus="secondary" />
+                <DisorderOccurence PatientID="29" DisorderID="15" DiagnosisDate="2011-05-01" Comment="Duże problemy z koncentracją i pamięcią" Focus="primary" />
+                <DisorderOccurence PatientID="30" DisorderID="1" Focus="secondary" />
+                <DisorderOccurence PatientID="30" DisorderID="14" DiagnosisDate="2011-03-01" Focus="primary" />
+                <DisorderOccurence PatientID="31" DisorderID="6" DiagnosisDate="2011-03-08" Focus="primary" />
+                <DisorderOccurence PatientID="32" DisorderID="1" Focus="secondary" />
+                <DisorderOccurence PatientID="32" DisorderID="5" DiagnosisDate="2008-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="32" DisorderID="7" Focus="primary" />
+                <DisorderOccurence PatientID="32" DisorderID="12" DiagnosisDate="1998-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="33" DisorderID="1" Focus="secondary" />
+                <DisorderOccurence PatientID="33" DisorderID="2" DiagnosisDate="2010-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="33" DisorderID="3" DiagnosisDate="2010-01-01" Focus="primary" />
+                <DisorderOccurence PatientID="33" DisorderID="6" DiagnosisDate="2010-05-25" Focus="primary" />
+                <DisorderOccurence PatientID="34" DisorderID="6" DiagnosisDate="2011-03-01" Focus="primary" />
+                <DisorderOccurence PatientID="34" DisorderID="7" DiagnosisDate="2011-01-01" Focus="primary" />
+            </DisorderOccurences>
+            <Examinations>
+                <Examination ExamID="1" PatientID="2" ExamDate="2011-11-11T12:12:12" Notes="Notes" Description="Desc" BDRSessionID="1" ExamTypeID="1" />
+            </Examinations>
+            <Dictionaries>
+                <ExamTypes>
+                    <ExamType ExamTypeID="1" ExamType="Goczałkowice" />
+                </ExamTypes>
+                <Disorders>
+                    <Disorder DisorderID="1" DisorderName="Nadciśnienie tętnicze" />
+                    <Disorder DisorderID="2" DisorderName="Zwyrodnienie kręgosłupa - odcinek szyjny" />
+                    <Disorder DisorderID="3" DisorderName="Zwyrodnienie kręgosłupa - odcinek lędźwiowy" />
+                    <Disorder DisorderID="4" DisorderName="Zwyrodnienie kręgosłupa - cała długość" />
+                    <Disorder DisorderID="5" DisorderName="Endoproteza stawu biodrowego - lewa strona" />
+                    <Disorder DisorderID="6" DisorderName="Endoproteza stawu biodrowego - prawa strona" />
+                    <Disorder DisorderID="7" DisorderName="Biodro zakwalifikowane do operacji - prawe" />
+                    <Disorder DisorderID="8" DisorderName="Biodro zakwalifikowane do operacji - lewe" />
+                    <Disorder DisorderID="9" DisorderName="Bóle kończyn górnych" />
+                    <Disorder DisorderID="10" DisorderName="Zwyrodnienie stawu kolanowego - prawego" />
+                    <Disorder DisorderID="11" DisorderName="Zwyrodnienie stawu kolanowego - lewego" />
+                    <Disorder DisorderID="12" DisorderName="Zwyrodnienie stawu biodrowego - prawego" />
+                    <Disorder DisorderID="13" DisorderName="Zwyrodnienie stawu biodrowego - lewego" />
+                    <Disorder DisorderID="14" DisorderName="Udar mózgu - prawa strona" />
+                    <Disorder DisorderID="15" DisorderName="Udar mózgu - lewa strona" />
+                    <Disorder DisorderID="16" DisorderName="Uszkodzona łękotka - prawa" />
+                    <Disorder DisorderID="17" DisorderName="Uszkodzona łękotka - lewa" />
+                    <Disorder DisorderID="18" DisorderName="Zwyrodnienie stawów" />
+                    <Disorder DisorderID="19" DisorderName="Zwyrodnienie kręgosłupa" />
+                    <Disorder DisorderID="20" DisorderName="Cukrzyca" />
+                    <Disorder DisorderID="21" DisorderName="Kolano zakwalifikowane do endoprotezy - prawe" />
+                    <Disorder DisorderID="22" DisorderName="Kolano zakwalifikowane do endoprotezy - lewe" />
+                    <Disorder DisorderID="23" DisorderName="Dyskopatia" />
+                    <Disorder DisorderID="24" DisorderName="Osteoporoza" />
+                </Disorders>
+            </Dictionaries>
+        </MedicalRecords>
+
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" elementFormDefault="qualified" >
+        <xsd:element name="MedicalRecords">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Patients" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Patient" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:attribute name="PatientID" type="xsd:int" />
+                                        <xsd:attribute name="FirstName" type="xsd:string" />
+                                        <xsd:attribute name="LastName" type="xsd:string" />
+                                        <xsd:attribute name="Gender">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string">
+                                                    <xsd:enumeration value="M" />
+                                                    <xsd:enumeration value="K" />
+                                                </xsd:restriction>
+                                            </xsd:simpleType>
+                                        </xsd:attribute>
+                                        <xsd:attribute name="BirthDate" type="xsd:date" />
+                                        <xsd:attribute name="BDRPerformerID" type="xsd:int" />
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="DisorderOccurences" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="DisorderOccurence" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:attribute name="PatientID" type="xsd:int" />
+                                        <xsd:attribute name="DisorderID" type="xsd:int" />
+                                        <xsd:attribute name="DiagnosisDate" type="xsd:date" />
+                                        <xsd:attribute name="Comment" type="xsd:string" />
+                                        <xsd:attribute name="Focus">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string">
+                                                    <xsd:enumeration value="primary" />
+                                                    <xsd:enumeration value="secondary" />
+                                                </xsd:restriction>
+                                            </xsd:simpleType>                                           
+                                        </xsd:attribute>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Examinations" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="Examination" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:attribute name="ExamID" type="xsd:int" />
+                                        <xsd:attribute name="PatientID" type="xsd:int" />
+                                        <xsd:attribute name="ExamDate" type="xsd:dateTime" />
+                                        <xsd:attribute name="Notes" type="xsd:string" />
+                                        <xsd:attribute name="Description" type="xsd:string" />
+                                        <xsd:attribute name="BDRSessionID" type="xsd:int" />
+                                        <xsd:attribute name="ExamTypeID" type="xsd:int" />
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="Dictionaries" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="ExamTypes" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="ExamType" maxOccurs="unbounded">
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="ExamTypeID" type="xsd:int" />
+                                                    <xsd:attribute name="ExamType" type="xsd:string" />
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                                <xsd:element name="Disorders" minOccurs="0">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="Disorder" maxOccurs="unbounded">
+                                                <xsd:complexType>
+                                                    <xsd:attribute name="DisorderID" type="xsd:int" />
+                                                    <xsd:attribute name="DisorderName" type="xsd:string" />
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+
+
+</test>
