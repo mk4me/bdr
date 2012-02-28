@@ -109,6 +109,33 @@ namespace MotionDBWebServices
         }
     }
 
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AccountFactoryService")]
+    public class AccountFactoryException
+    {
+        string _fault_source;
+        string _details;
+
+        [DataMember]
+        public string IssueKind
+        {
+            get { return _fault_source; }
+            set { _fault_source = value; }
+        }
+        [DataMember]
+        public string Details
+        {
+            get { return _details; }
+            set { _details = value; }
+        }
+
+        public AccountFactoryException(string src, string det)
+        {
+            _fault_source = src;
+            _details = det;
+        }
+    }
+
+
     [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/UserPersonalSpaceService")]
     public class UPSException
     {

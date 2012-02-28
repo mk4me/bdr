@@ -122,6 +122,7 @@
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
+      <xsd:attribute name="LastModified" type="xsd:dateTime" use="required" />
     </xsd:complexType>
   </xsd:element>
 

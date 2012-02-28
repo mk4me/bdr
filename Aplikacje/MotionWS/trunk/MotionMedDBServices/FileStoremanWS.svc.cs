@@ -186,7 +186,6 @@ namespace MotionMedDBWebServices
             string fileLocation = "";
             Random r = new Random();
             StringBuilder b = new StringBuilder();
-            char ch;
 
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();

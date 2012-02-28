@@ -4,13 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace MotionDBCommons
 {
     public class DatabaseAccessService
     {
         protected SqlConnection conn = null;
-        protected SqlCommand cmd = null;
+        public SqlCommand cmd = null;
         protected const bool debug = false;
         protected static string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
         protected string GetConnectionString()
@@ -18,14 +19,22 @@ namespace MotionDBCommons
             return @"server = .; integrated security = true; database = Motion";
         }
 
-        protected void OpenConnection()
+        public string ProduceRandomCode(int len)
+        {
+            Random r = new Random();
+            StringBuilder b = new StringBuilder();
+
+            for (int i = 0; i < len; i++) b.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(26 * r.NextDouble() + 65))));
+            return b.ToString();
+        }
+        public void OpenConnection()
         {
             conn = new SqlConnection(GetConnectionString());
             conn.Open();
             cmd = conn.CreateCommand();
         }
 
-        protected void CloseConnection()
+        public void CloseConnection()
         {
             conn.Close();
         }

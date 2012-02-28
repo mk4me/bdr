@@ -4,30 +4,53 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Permissions;
 using System.Xml;
-
-using System.DirectoryServices.AccountManagement;
-
 using MotionDBCommons;
 
 
 namespace MotionDBWebServices
 {
-    // NOTE: If you change the class name "AuthorizationWS" here, you must also update the reference to "AuthorizationWS" in Web.config.
-
-    
+    // NOTE: If you change the class name "AuthorizationWS" here, you must also update the reference to 
+"AuthorizationWS" in Web.config.
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")]
-    [ErrorLoggerBehaviorAttribute]
     public class AuthorizationWS : DatabaseAccessService, IAuthorizationWS   
     {
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
+        public void RemoveUserAccount()
+        {
+            // wg statusu rezultatu - wynik lub exception
+        }
+
+        public void ChangePassword(string login, string oldPass, string newPass)
+        {
+            // czy login = username
+            // wykonanie
+        }
+
+
+        // ADMINISTRATOR!
+        public void EvokeGroupMembership(string login, string groupName)
+        {
+            // autoryzacja
+            // wykonanie (czy grupa istnieje, czy login istnieje)
+        }
+
+        // ADMINISTRATOR!
+        public void RevokeGroupMembership(string login, string groupName)
+        {
+            // autoryzacja
+            // wykonanie (czy grupa istnieje, czy login istnieje)
+        }
+
+        // SECURE ME !!!
         public bool CheckUserAccount()
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int result = 0;
 
@@ -49,8 +72,11 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
+                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + 
+OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + 
+OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new 
+FaultCode("CheckUserAccount")));
             }
             finally
             {
@@ -58,72 +84,11 @@ namespace MotionDBWebServices
             }
             return result == 1;
         }
-        // SPrawdzić !!!!
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionAdmins")]
-        public string CreateUserAccount(string username, string email)
-        {
-            string password = "aplet4Motion";
-
-            try
-            {
-                PrincipalContext context = new PrincipalContext(ContextType.Machine);
-                UserPrincipal user = new UserPrincipal(context);
-                user.SetPassword(password);
-                user.DisplayName = username;
-                user.Name = username;
-                user.Description = "";
-                user.UserCannotChangePassword = false;
-                user.PasswordNeverExpires = true;
-                user.Save();
-
-                //now add user to "Users" group so it displays in Control Panel
-                GroupPrincipal group = GroupPrincipal.FindByIdentity(context, "Users");
-                group.Members.Add(user);
-                group.Save();
-            }
-            catch (Exception ex1)
-            {
-                AuthorizationException exc = new AuthorizationException("account_management", "Account creation failed");
-                throw new FaultException<AuthorizationException>(exc, "Failed to create user account "+ ex1.Message , FaultCode.CreateReceiverFaultCode(new FaultCode("CreateUserAccount")));
-
-            }
-            
-            /*
-            try
-            {
-
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "create_user_account";
-                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                cmd.Parameters.Add("@user_first_name", SqlDbType.VarChar, 30);
-                cmd.Parameters.Add("@user_last_name", SqlDbType.VarChar, 50);
-
-                cmd.Parameters["@user_login"].Value = userName;
-                cmd.Parameters["@user_first_name"].Value = firstName;
-                cmd.Parameters["@user_last_name"].Value = lastName;
-
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (SqlException ex)
-            {
-                AuthorizationException exc = new AuthorizationException("unknown", "User creation failed");
-                throw new FaultException<AuthorizationException>(exc, "Failed to create user", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateUserAccount")));
-            }
-            finally
-            {
-                CloseConnection();
-            } */
-
-            return "random_pass";
-        }
-
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -146,8 +111,10 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant by "+userName+" to "+grantedUserLogin+" failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant by 
+"+userName+" to "+grantedUserLogin+" failed");
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
+FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             }
             finally
             {
@@ -156,10 +123,10 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void RemoveSessionPrivileges(string grantedUserLogin, int sessionID)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -180,7 +147,8 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
+FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
             }
             finally
             {
@@ -188,10 +156,10 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             try
             {
@@ -213,14 +181,15 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
+FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
             }
             finally
             {
                 CloseConnection();
             }
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        // SECURE ME !!!
         public XmlElement ListUsers()
         {
             XmlDocument xd = new XmlDocument();
@@ -238,14 +207,16 @@ namespace MotionDBWebServices
                 }
                 if (xd.DocumentElement == null)
                 {
-                    xd.AppendChild(xd.CreateElement("UserList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
+                    xd.AppendChild(xd.CreateElement("UserList", 
+"http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
                 }
                 dr.Close();
             }
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
-                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", 
+FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
 
             }
             finally
@@ -258,11 +229,11 @@ namespace MotionDBWebServices
 
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public XmlElement ListSessionPrivileges(int sessionID)
         {
             XmlDocument xd = new XmlDocument();
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -285,14 +256,16 @@ namespace MotionDBWebServices
                 }
                 if (xd.DocumentElement == null)
                 {
-                    xd.AppendChild(xd.CreateElement("SessionPrivilegeList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                    xd.AppendChild(xd.CreateElement("SessionPrivilegeList", 
+"http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
                 }
                 dr.Close();
             }
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
-                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", 
+FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
 
             }
             finally
@@ -302,10 +275,10 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+        // SECURE ME !!!
         public bool IfCanUpdate(int resourceID, string entity)
         {
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
             int result = 0;
 
@@ -331,8 +304,11 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("IfCanUpdate")));
+                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + 
+OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + 
+OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new 
+FaultCode("IfCanUpdate")));
             }
             finally
             {
