@@ -14,8 +14,7 @@ using MotionDBCommons;
 
 namespace MotionDBWebServices
 {
-    // NOTE: If you change the class name "AuthorizationWS" here, you must also update the reference to 
-"AuthorizationWS" in Web.config.
+    // NOTE: If you change the class name "AuthorizationWS" here, you must also update the reference to "AuthorizationWS" in Web.config.
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")]
     public class AuthorizationWS : DatabaseAccessService, IAuthorizationWS   
     {
@@ -34,14 +33,14 @@ namespace MotionDBWebServices
 
 
         // ADMINISTRATOR!
-        public void EvokeGroupMembership(string login, string groupName)
+        public void EvokeGroupMembership(string grantedUserLogin, string groupName)
         {
             // autoryzacja
             // wykonanie (czy grupa istnieje, czy login istnieje)
         }
 
         // ADMINISTRATOR!
-        public void RevokeGroupMembership(string login, string groupName)
+        public void RevokeGroupMembership(string grantedUserLogin, string groupName)
         {
             // autoryzacja
             // wykonanie (czy grupa istnieje, czy login istnieje)
@@ -72,11 +71,8 @@ namespace MotionDBWebServices
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + 
-OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + 
-OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new 
-FaultCode("CheckUserAccount")));
+                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
             }
             finally
             {
@@ -111,10 +107,8 @@ FaultCode("CheckUserAccount")));
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant by 
-"+userName+" to "+grantedUserLogin+" failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
-FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
+                AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant by "+userName+" to "+grantedUserLogin+" failed");
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             }
             finally
             {
@@ -147,8 +141,7 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("GrantSessionPrivileges")));
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
-FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
             }
             finally
             {
@@ -181,8 +174,7 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("RemoveSessionPrivileges")));
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("SQL error", "Privilege grant failed");
-                throw new FaultException<AuthorizationException>(exc, "Database-side error", 
-FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
+                throw new FaultException<AuthorizationException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
             }
             finally
             {
@@ -207,7 +199,8 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
                 }
                 if (xd.DocumentElement == null)
                 {
-                    xd.AppendChild(xd.CreateElement("UserList", 
+                    xd.AppendChild(xd.CreateElement("UserList", 
+
 "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
                 }
                 dr.Close();
@@ -215,8 +208,7 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("AlterSessionVisibility")));
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
-                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", 
-FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
 
             }
             finally
@@ -256,16 +248,14 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("ListUsers")));
                 }
                 if (xd.DocumentElement == null)
                 {
-                    xd.AppendChild(xd.CreateElement("SessionPrivilegeList", 
-"http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                    xd.AppendChild(xd.CreateElement("SessionPrivilegeList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
                 }
                 dr.Close();
             }
             catch (SqlException ex)
             {
                 AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
-                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", 
-FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
+                throw new FaultException<AuthorizationException>(exc, "Could not retrieve user list", FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
 
             }
             finally
@@ -304,11 +294,8 @@ FaultCode.CreateReceiverFaultCode(new FaultCode("ListSessionPrivileges")));
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + 
-OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + 
-OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new 
-FaultCode("IfCanUpdate")));
+                AuthorizationException exc = new AuthorizationException("database", "Check failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
+                throw new FaultException<AuthorizationException>(exc, "Update authorization check failed" + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("IfCanUpdate")));
             }
             finally
             {

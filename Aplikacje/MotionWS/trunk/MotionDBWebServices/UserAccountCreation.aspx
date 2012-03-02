@@ -32,7 +32,7 @@
     </p>
     <p>
         <asp:Label ID="Label2" runat="server" Text="Password"></asp:Label>
-        <asp:TextBox ID="tbPassword" runat="server"></asp:TextBox>
+        <asp:TextBox ID="tbPassword" runat="server" TextMode="Password"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
             ControlToValidate="tbPassword" 
             ErrorMessage="Password needs to be 6 to 20 chars long and include uppercase, lowercase and a digit." 

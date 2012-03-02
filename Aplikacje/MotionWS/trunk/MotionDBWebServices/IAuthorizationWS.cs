@@ -12,9 +12,6 @@ namespace MotionDBWebServices
     [ServiceContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"), XmlSerializerFormat(Style = OperationFormatStyle.Document, Use = OperationFormatUse.Literal)]
     public interface IAuthorizationWS
     {
-        [OperationContract]
-        [FaultContract(typeof(AuthorizationException))]
-        bool CheckUserAccount();
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
@@ -26,11 +23,11 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void EvokeGroupMembership(string login, string groupName);
+        void EvokeGroupMembership(string grantedUserLogin, string groupName);
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
-        void RevokeGroupMembership(string login, string groupName);
+        void RevokeGroupMembership(string grantedUserLogin, string groupName);
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]

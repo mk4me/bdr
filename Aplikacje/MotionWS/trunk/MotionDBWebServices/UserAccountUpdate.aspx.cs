@@ -28,29 +28,35 @@ namespace MotionDBWebServices
             Boolean fault = false;
             int result = 0;
 
-            if (pass.Length < 6 || pass.Length > 20)
+            if (firstName != "-nochange-")
             {
-                faultMessage = faultMessage + " Password length invalid. Required at least 6 characters";
-                fault = true;
-            }
+                if (pass.Length < 6 || pass.Length > 20)
+                {
+                    faultMessage = faultMessage + " Password length invalid. Required at least 6 characters";
+                    fault = true;
+                }
 
-            if (!(Regex.IsMatch(pass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
-            {
-                faultMessage = faultMessage + " Password not valid. Must include uppercase, lowercase, digit and be 6-20 characters long";
-                fault = true;
-            }
 
-            if (!(Regex.IsMatch(email, @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b")))
-            {
-                faultMessage = faultMessage + " Email syntax invalid.";
-                fault = true;
+                if (!(Regex.IsMatch(email, @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b")))
+                {
+                    faultMessage = faultMessage + " Email syntax invalid.";
+                    fault = true;
+                }
+                if (email.Length > 50)
+                {
+                    faultMessage = faultMessage + " Email too long. Maximum 50 characters supported.";
+                    fault = true;
+                }
             }
-            if (email.Length > 50)
+            if (pass != "-nochange-")
             {
-                faultMessage = faultMessage + " Email too long. Maximum 50 characters supported.";
-                fault = true;
-            }
+                if (!(Regex.IsMatch(pass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
+                {
+                    faultMessage = faultMessage + " Password not valid. Must include uppercase, lowercase, digit and be 6-20 characters long";
+                    fault = true;
+                }
 
+            }
             if (fault)
             {
                 lblStatus.Text = faultMessage;
@@ -123,9 +129,15 @@ namespace MotionDBWebServices
 
         protected void btnCreateUserAccount_Click(object sender, EventArgs e)
         {
+            if (!(cbChangeDetails.Checked || cbChangePassword.Checked))
+            {
+                lblStatus.Text = "Engage at least one section of the form!";
+            }
             string pass = "-nochange-";
+            string firstname = "-nochange-";
             if (cbChangePassword.Checked) pass = tbPassword.Text;
-            if (!this.UpdateUserAccount(tbLogin.Text, tbEmail.Text, tbOldPassword.Text, pass, tbFirstName.Text, tbLastName.Text))
+            if (cbChangeDetails.Checked) firstname = tbFirstName.Text;
+            if (!this.UpdateUserAccount(tbLogin.Text, tbEmail.Text, tbOldPassword.Text, pass, firstname, tbLastName.Text))
                 lblStatus.Text = faultMessage;
             else
                 lblStatus.Text = "User account updated";
@@ -144,6 +156,25 @@ namespace MotionDBWebServices
                 tbRetypePassword.Text = "";
                 tbPassword.Enabled = false;
                 tbRetypePassword.Enabled = false;
+            }
+        }
+
+        protected void cbChangeDetails_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbChangeDetails.Checked)
+            {
+                tbEmail.Enabled = true;
+                tbFirstName.Enabled = true;
+                tbLastName.Enabled = true;
+            }
+            else
+            {
+                tbEmail.Text = "";
+                tbFirstName.Text = "";
+                tbLastName.Text = "";
+                tbEmail.Enabled = false;
+                tbFirstName.Enabled = false;
+                tbLastName.Enabled = false;
             }
         }
 

@@ -30,7 +30,8 @@
             ValidationExpression="[A-Za-z][A-Za-z0-9]{3,19}"></asp:RegularExpressionValidator>
     </p>
     <p>
-        Current Password<asp:TextBox ID="tbOldPassword" runat="server"></asp:TextBox>
+        Current Password<asp:TextBox ID="tbOldPassword" runat="server" 
+            TextMode="Password"></asp:TextBox>
         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
             ControlToValidate="tbOldPassword" 
             ErrorMessage="Current password cannot be empty"></asp:RequiredFieldValidator>
@@ -43,7 +44,7 @@
         <p>
             New
         <asp:Label ID="Label2" runat="server" Text="Password"></asp:Label>
-        <asp:TextBox ID="tbPassword" runat="server" Enabled="False"></asp:TextBox>
+        <asp:TextBox ID="tbPassword" runat="server" Enabled="False" TextMode="Password"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
             ControlToValidate="tbPassword" 
             ErrorMessage="Password needs to be 6 to 20 chars long and include uppercase, lowercase and a digit." 
@@ -51,25 +52,31 @@
     </p>
         <p>
             <asp:Label ID="Label6" runat="server" Text="Retype New Password"></asp:Label>
-            <asp:TextBox ID="tbRetypePassword" runat="server" Enabled="False"></asp:TextBox>
+            <asp:TextBox ID="tbRetypePassword" runat="server" Enabled="False" 
+                TextMode="Password"></asp:TextBox>
             <asp:CompareValidator ID="CompareValidator1" runat="server" 
                 ControlToCompare="tbPassword" ControlToValidate="tbRetypePassword" 
                 ErrorMessage="CompareValidator"></asp:CompareValidator>
     </p>
+        <p>
+            <asp:CheckBox ID="cbChangeDetails" runat="server" AutoPostBack="True" 
+                oncheckedchanged="cbChangeDetails_CheckedChanged" 
+                Text="I want to change my email and name data" />
+    </p>
     <p>
         <asp:Label ID="Label3" runat="server" Text="Email"></asp:Label>
-        <asp:TextBox ID="tbEmail" runat="server"></asp:TextBox>
+        <asp:TextBox ID="tbEmail" runat="server" Enabled="False"></asp:TextBox>
         <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" 
             ControlToValidate="tbEmail" ErrorMessage="Email syntax invalid." 
             ValidationExpression="\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b"></asp:RegularExpressionValidator>
     </p>
     <p>
         <asp:Label ID="Label4" runat="server" Text="First Name"></asp:Label>
-        <asp:TextBox ID="tbFirstName" runat="server"></asp:TextBox>
+        <asp:TextBox ID="tbFirstName" runat="server" Enabled="False"></asp:TextBox>
     </p>
     <p>
         <asp:Label ID="Label5" runat="server" Text="Last Name"></asp:Label>
-        <asp:TextBox ID="tbLastName" runat="server"></asp:TextBox>
+        <asp:TextBox ID="tbLastName" runat="server" Enabled="False"></asp:TextBox>
     </p>
     <p>
         <asp:Button ID="btnUpdateUserAccount" runat="server" 
