@@ -12,7 +12,8 @@ go
         Zdjecie				varbinary(max) filestream,
         rowguid				uniqueidentifier rowguidcol  not null unique default NEWSEQUENTIALID(),
         Uwagi				varchar(255),
-        IdPerformer			int
+        IdPerformer			int,
+        Ostatnia_zmiana datetime default getdate() not null
 )
 go
  ALTER TABLE Pacjent
@@ -42,7 +43,8 @@ create table Badanie (
 	Opis varchar(255),
 	Notatki	varchar(255),
 	IdSesja int,
-	IdGrupa_badan int
+	IdGrupa_badan int,
+	Ostatnia_zmiana datetime default getdate() not null
 )
 go
 
@@ -84,7 +86,8 @@ go
 
 create table Jednostka_chorobowa (
 	IdJednostka_chorobowa	int IDENTITY,
-	Nazwa	varchar(60)
+	Nazwa	varchar(60),
+	Ostatnia_zmiana datetime default getdate() not null
 )
 go
 
@@ -97,7 +100,8 @@ create table Pacjent_Jednostka_chorobowa (
 	IdJednostka_chorobowa	int not null,
 	Komentarz varchar(255),
 	Data_diagnozy date,
-	Glowna bit
+	Glowna bit,
+	Ostatnia_zmiana datetime default getdate() not null
 )
 go
 
@@ -125,7 +129,8 @@ go
 
 create table Grupa_badan (
 	IdGrupa_badan int IDENTITY,
-	Nazwa varchar (50)
+	Nazwa varchar (50),
+    Ostatnia_zmiana datetime default getdate() not null
 )
 go
 
@@ -148,6 +153,12 @@ create table Badanie_kontekst_badania (
 )
 go
 
+create table Kontekst_badania (
+        IdKontekst_badania    int IDENTITY,
+        Nazwa					varchar(100) NOT NULL,
+        Ostatnia_zmiana datetime default getdate() not null
+ )
+go
 
 alter table Kontekst_badania
 	add primary key (IdKontekst_badania)
@@ -245,4 +256,50 @@ go
         ADD FOREIGN KEY (IdGrupa_uzytkownikow)
                               REFERENCES Grupa_uzytkownikow on delete cascade;
 go
+
+
+
+
+create index X3Pacjent on Pacjent
+ (
+        Ostatnia_zmiana
+ )
+go
+
+
+
+create index X3Badanie on Badanie
+ (
+        Ostatnia_zmiana
+ )
+go
+
+
+create index X3Pacjent_Jednostka_chorobowa on Pacjent_Jednostka_chorobowa
+ (
+        Ostatnia_zmiana
+ )
+go
+
+
+
+create index X1Jednostka_chorobowa on Jednostka_chorobowa
+ (
+        Ostatnia_zmiana
+ )
+go
+
+
+create index X1Grupa_badan on Grupa_badan
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X1Kontekst_badania on Kontekst_badania
+ (
+        Ostatnia_zmiana
+ )
+go
+
 

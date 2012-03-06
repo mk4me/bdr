@@ -899,29 +899,128 @@ select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
     for XML PATH('UserDetails'), root ('UserList')
 go
 
--- last rev. 2011-12-28
+-- last rev. 2012-02-28
 create procedure validate_password(@login varchar(30), @pass varchar(25), @res bit OUTPUT)
 as
 begin
 declare @c int = 0;
-select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass);
+select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass) and Status > 0;
 if (@c = 1) set @res = 1; else set @res = 0;
 end;
 go
 
--- last rev. 2011-12-28
-create procedure create_user(@name varchar(30), @surname varchar(50),  @login varchar(50), @pass varchar(25), @res int OUTPUT)
+-- last rev. 2012-03-02
+create procedure get_user_roles @login varchar(30)
+as
+select gu.Nazwa from Uzytkownik u join Uzytkownik_grupa_uzytkownikow ugu on u.IdUzytkownik = ugu.IdUzytkownik join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+where u.Login = @login
+go
+
+-- last rev. 2012-02-22
+-- Error codes:
+-- 1 login already in use
+-- 2 email already in use
+-- 3 obligatory parameter empty (length 0)
+create procedure create_user_account(@user_login varchar(30), @user_password varchar(20),  @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @activation_code varchar(10), @result int OUTPUT)
 as
 begin
-if exists(select * from Uzytkownik where Login = @login)
-	begin
-		set @res = 1;
-		return;
-	end;
-insert into Uzytkownik ( Imie, Nazwisko, Login, Haslo ) values ( @name, @surname, @login, HashBytes('SHA1',@pass));
-return 0;
+
+	declare @email_title as varchar (120);
+	declare @email_body as varchar (200);
+	set @result = 0;
+
+	if ( LEN(@user_login)=0 or LEN(@user_password)=0 or LEN(@user_email) = 0 )
+		begin
+			set @result = 3;
+			return;
+		end;
+
+	if exists(select * from Uzytkownik where Login = @user_login)
+		begin
+			set @result = 1;
+			return;
+		end;
+	if exists(select * from Uzytkownik where Email = @user_email)
+		begin
+			set @result = 2;
+			return;
+		end;
+
+	insert into Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
+
+	set @email_title = 'Human Motion Database account activation for ' + @user_login;
+	set @email_body = 'Your activation code for login '+@user_login +' is: ' + @activation_code +' . Please visit the webpage https://v21.pjwstk.edu.pl/HMDB/UserAccountCreation.aspx to authenticate and perform your account activatio using this code.';
+
+	exec msdb.dbo.sp_send_dbmail @profile_name='HMDB_Mail',
+	@recipients=@user_email,
+	@subject= @email_title,
+	@body= @email_body;
+	return 0;
 end;
 go
+
+-- last rev. 2012-02-22
+-- Error codes:
+-- 1 authentication negative
+create procedure activate_user_account(@user_login varchar(30), @user_password varchar(20),  @activation_code varchar(10), @result int OUTPUT)
+as
+begin
+	set @result = 0;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code )
+		begin
+			set @result = 1;
+			return;
+		end;
+	update Uzytkownik  set Status = 1  where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code;
+
+	return 0;
+end;
+go
+
+-- last rev. 2012-02-28
+-- Error codes:
+-- 1 authentication failed
+-- 2 email already in use
+-- 3 obligatory parameter empty (length 0)
+create procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @result int OUTPUT)
+as
+begin
+
+	set @result = 0;
+
+	if ( LEN(@user_login)=0 or LEN(@user_password)=0 )
+		begin
+			set @result = 3;
+			return;
+		end;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Status > 0 )
+		begin
+			set @result = 1;
+			return;
+		end;
+	if exists(select * from Uzytkownik where Login != @user_login and Email = @user_email)
+		begin
+			set @result = 2;
+			return;
+		end;
+
+	if ( @user_first_name != '-nochange-' )
+	begin
+		update Uzytkownik 
+		set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+	end;	
+	if ( @user_new_password != '-nochange-' )
+	begin
+		update Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+	end;
+	
+	return @result;
+end;
+go
+
+
 
 -- last rev. 2011-12-28
 create procedure reset_password(@login varchar(30), @old varchar(25), @new varchar(25), @res int OUTPUT )
@@ -1391,7 +1490,7 @@ go
 -- Shallow copy retrieval
 -- ==========================
 -- TODO: konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2011-12-28
+-- last rev. 2012-02-22
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1401,6 +1500,7 @@ UAT as (select * from Proba Trial where exists (select * from UAS where UAS.IdSe
 UAP as (select * from Performer Performer where exists (select * from Konfiguracja_performera KP where exists (select * from UAS where UAS.IdSesja = KP.IdSesja) )),
 UAPC as (select * from Konfiguracja_performera PerformerConf where exists(select * from UAS where UAS.IdSesja = PerformerConf.IdSesja))
 select
+ dbo.f_time_stamp() LastModified,
 (select 
 	IdSesja as SessionID,
 	IdUzytkownik as UserID,
@@ -1449,6 +1549,7 @@ select
  ) PerformerConfs
  for XML RAW ('ShallowCopy'), TYPE;
 go
+
 
 -- last rev. 2011-10-24
 create procedure get_shallow_copy_increment @user_login varchar(30), @since datetime
@@ -1511,7 +1612,7 @@ go
 
 
 
--- last rev. 2011-11-03
+-- last rev. 2012-02-28
 create procedure get_metadata @user_login varchar(30)
 as
 with
@@ -1520,7 +1621,8 @@ MK as (select * from Rodzaj_ruchu MotionKind),
 LB as (select * from Laboratorium Lab),
 AG as (select * from Grupa_atrybutow AttributeGroup )
 select
-(select 
+ dbo.f_metadata_time_stamp() LastModified,
+ (select 
 	IdGrupa_sesji as SessionGroupID,
 	Nazwa as SessionGroupName
 	from SG SessionGroup for XML AUTO, TYPE
@@ -1776,6 +1878,32 @@ begin
 end
 go
 
+
+
+-- last rev. 2012-02-22
+create function f_time_stamp()
+returns datetime
+as
+begin
+return ( select max(ts) as time_stamp from
+	(
+	select max(Ostatnia_zmiana) as ts from Konfiguracja_performera 
+	union
+	select max(Ostatnia_zmiana) as ts from Konfiguracja_pomiarowa 
+	union
+	select max(Ostatnia_zmiana) as ts from Performer
+	union 
+	select max(Ostatnia_zmiana) as ts from Plik 
+	union
+	select max(Ostatnia_zmiana) as ts from Proba 
+	union
+	select max(Ostatnia_zmiana) as ts from Sesja
+	union
+	select max(Zmieniony) as ts from Plik
+	) as q1 );
+end
+go
+
 -- last rev. 2011-10-17
 create procedure time_stamp
 as
@@ -1839,6 +1967,27 @@ begin
 	update Grupa_atrybutow
 	set Ostatnia_zmiana = getdate()
 	from inserted i join Grupa_atrybutow ga on i.IdGrupa_atrybutow = ga.IdGrupa_atrybutow
+end
+go
+
+
+-- last rev. 2012-02-28
+create function f_metadata_time_stamp()
+returns datetime
+as
+begin
+return ( 
+select max(ts) as time_stamp from
+	(
+	select max(Ostatnia_zmiana) as ts from Grupa_atrybutow 
+	union
+	select max(Ostatnia_zmiana) as ts from Laboratorium 
+	union
+	select max(Ostatnia_zmiana) as ts from Rodzaj_ruchu
+	union 
+	select max(Ostatnia_zmiana) as ts from Grupa_sesji 
+	) as q1
+ );
 end
 go
 

@@ -1291,6 +1291,49 @@ go
 go
 
 
+create index X3Konfiguracja_performera on Konfiguracja_performera
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X2Konfiguracja_pomiarowa on Konfiguracja_pomiarowa
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X1Performer on Performer
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X4Plik on Plik
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X5Plik on Plik
+ (
+        Zmieniony
+ )
+go
+
+create index X3Proba on Proba
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X4Sesja on Sesja
+ (
+        Ostatnia_zmiana
+ )
+go
+
+
 /*
 SELECT OBJECT_NAME(id) AS TableName, OBJECT_NAME(constid) AS ConstraintName
 FROM sysconstraints where OBJECT_NAME(id) = 'Uzytkownik'

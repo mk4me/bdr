@@ -24,6 +24,48 @@ go
 alter table Plik add Zmieniony datetime;
 go
 
+create index X3Konfiguracja_performera on Konfiguracja_performera
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X2Konfiguracja_pomiarowa on Konfiguracja_pomiarowa
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X1Performer on Performer
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X4Plik on Plik
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X5Plik on Plik
+ (
+        Zmieniony
+ )
+go
+
+create index X3Proba on Proba
+ (
+        Ostatnia_zmiana
+ )
+go
+
+create index X4Sesja on Sesja
+ (
+        Ostatnia_zmiana
+ )
+go
+
 create trigger tr_Wartosc_atrybutu_konfiguracji_performera_Update on Wartosc_atrybutu_konfiguracji_performera
 for update, insert
 as
