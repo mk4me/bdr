@@ -54,6 +54,7 @@
                   <xsd:attribute name="SessionName" type="xsd:string" />
                   <xsd:attribute name="Tags" type="xsd:string" />
                   <xsd:attribute name="SessionDescription" type="xsd:string" />
+                  <xsd:attribute name="EMGConf" type="xsd:string" use="optional" />
                </xsd:complexType>
              </xsd:element>
            </xsd:sequence>

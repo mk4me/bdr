@@ -91,6 +91,8 @@
     <Compile Include="AttributeViewSettingCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="AuthorizationPolicy.cs" />
     <Compile Include="AuthorizationWS.svc.cs">
       <DependentUpon>AuthorizationWS.svc</DependentUpon>
     </Compile>
@@ -103,6 +105,8 @@
     <Compile Include="AttributeGroupViewSetting.cs" />
     <Compile Include="AttributeGroupViewSettingCollection.cs" />
     <Compile Include="CustomAuthValidator.cs" />
+    <Compile Include="CustomPrincipal.cs" />
+    <Compile Include="CustomRoleProvider.cs" />
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="FileNameEntry.cs" />

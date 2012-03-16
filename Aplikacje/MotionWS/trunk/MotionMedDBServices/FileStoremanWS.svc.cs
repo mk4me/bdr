@@ -46,7 +46,7 @@ namespace MotionMedDBWebServices
             cmd = conn.CreateCommand();
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
+        // [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
         public void DownloadComplete(int resourceID, string resourceType, string path)
         {
 
@@ -99,7 +99,7 @@ namespace MotionMedDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
+        //[PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
         public FileData RetrievePhoto(int photoID)
         {
             string relativePath = "";
@@ -127,7 +127,7 @@ namespace MotionMedDBWebServices
                 while (fileReader.Read())
                 {
                     fileData = (byte[])fileReader.GetValue(0);
-                    fileName = photoID+".jpg";
+                    fileName = photoID+".png";
                     found = true;
                 }
 
@@ -178,7 +178,7 @@ namespace MotionMedDBWebServices
             return fData;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
+        //[PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
         public string GetShallowCopy()
         {
             string filePath = "";
@@ -190,7 +190,7 @@ namespace MotionMedDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
             string subdirName = "/dump";
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             for(int i=0; i<20; i++) b.Append( Convert.ToChar( Convert.ToInt32 ( Math.Floor(26 * r.NextDouble()+65))));
@@ -234,7 +234,7 @@ namespace MotionMedDBWebServices
             return localReadDirSuffix + fileLocation;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
+        //[PrincipalPermission(SecurityAction.Demand, Role = @"MotionMedUsers")]
         public string GetMetadata()
         {
             string filePath = "";
@@ -247,7 +247,7 @@ namespace MotionMedDBWebServices
             XmlDocument xd1 = new XmlDocument(); // --
             // XmlElement xe = xd.CreateElement("Metadata", "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB");
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();

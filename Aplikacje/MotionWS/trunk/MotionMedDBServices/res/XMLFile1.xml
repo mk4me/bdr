@@ -1,67 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <test>
 
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-        <xsd:element name="MedMetadata">
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" elementFormDefault="qualified"  >
+    <xsd:element name="MedMetadata">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="ExamGroups">
             <xsd:complexType>
-                <xsd:sequence>
-                    <xsd:element name="ExamTypes">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name="ExamType" minOccurs="1" maxOccurs="unbounded">
-                                    <xsd:complexType>
-                                        <xsd:attribute name="ExamTypeID" type="xsd:int" use="required" />
-                                        <xsd:attribute name="ExamTypeName" type="xsd:string" use="required" />
-                                    </xsd:complexType>
-                                </xsd:element>
-                            </xsd:sequence>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name="Disorders">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name="Disorder" minOccurs="1" maxOccurs="unbounded">
-                                    <xsd:complexType>
-                                        <xsd:attribute name="DisorderID" type="xsd:int" use="required" />
-                                        <xsd:attribute name="DisorderName" type="xsd:string" use="required" />
-                                    </xsd:complexType>
-                                </xsd:element>
-                            </xsd:sequence>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
+              <xsd:sequence>
+                <xsd:element name="ExamGroup" minOccurs="1" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:attribute name="ExamGroupID" type="xsd:int" use="required" />
+                    <xsd:attribute name="ExamGroupName" type="xsd:string" use="required" />
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
             </xsd:complexType>
-        </xsd:element>
-    </xsd:schema>
+          </xsd:element>
+          <xsd:element name="Disorders">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Disorder" minOccurs="1" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:attribute name="DisorderID" type="xsd:int" use="required" />
+                    <xsd:attribute name="DisorderName" type="xsd:string" use="required" />
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="ExamContexts" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="ExamContext" minOccurs="1" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:attribute name="ExamContextID" type="xsd:int" use="required" />
+                    <xsd:attribute name="ContextName" type="xsd:string" use="required" />
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="LastModified" type="xsd:dateTime" use="required" />
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
 
-    <MedMetadata>
-        <ExamTypes>
-            <ExamType ExamTypeID="1" ExamTypeName="Testowe" />
-        </ExamTypes>
-        <Disorders>
-            <Disorder DisorderID="1" DisorderName="Nadciśnienie tętnicze" />
-            <Disorder DisorderID="2" DisorderName="Zwyrodnienie kolan" />
-            <Disorder DisorderID="3" DisorderName="Zwyrodnienie kręgosłupa - odcinek lędźwiowy" />
-            <Disorder DisorderID="4" DisorderName="Zwyrodnienie kręgosłupa - cała długość" />
-            <Disorder DisorderID="5" DisorderName="Endoproteza stawu biodrowego - lewa strona" />
-            <Disorder DisorderID="6" DisorderName="Endoproteza stawu biodrowego - prawa strona" />
-            <Disorder DisorderID="7" DisorderName="Biodro zakwalifikowane do operacji - prawe" />
-            <Disorder DisorderID="8" DisorderName="Biodro zakwalifikowane do operacji - lewe" />
-            <Disorder DisorderID="9" DisorderName="Bóle kończyn górnych" />
-            <Disorder DisorderID="10" DisorderName="Zwyrodnienie kolana - prawego" />
-            <Disorder DisorderID="11" DisorderName="Zwyrodnienie kolana - lewego" />
-            <Disorder DisorderID="12" DisorderName="Zwyrodnienie stawu biodrowego - prawego" />
-            <Disorder DisorderID="13" DisorderName="Zwyrodnienie stawu biodrowego - lewego" />
-            <Disorder DisorderID="14" DisorderName="Kolano zakwalifikowane do endoprotezy - prawe" />
-            <Disorder DisorderID="15" DisorderName="Kolano zakwalifikowane do endoprotezy - lewe" />
-            <Disorder DisorderID="16" DisorderName="Udar mózgu - prawa strona" />
-            <Disorder DisorderID="17" DisorderName="Udar mózgu - lewa strona" />
-            <Disorder DisorderID="18" DisorderName="Uszkodzona łękotka - prawa" />
-            <Disorder DisorderID="19" DisorderName="Uszkodzona łękotka - lewa" />
-            <Disorder DisorderID="20" DisorderName="Zwyrodnienie stawów" />
-            <Disorder DisorderID="21" DisorderName="Zwyrodnienie kręgosłupa" />
-            <Disorder DisorderID="22" DisorderName="Zwyrodnienie kręgosłupa - odcinek szyjny" />
-            <Disorder DisorderID="23" DisorderName="Cukrzyca" />
-        </Disorders>
-    </MedMetadata>
+
+  <MedMetadata LastModified="2012-03-06T18:34:23.187" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB">
+    <ExamGroups>
+      <ExamGroup ExamGroupID="1" ExamGroupName="Goczałkowice" />
+    </ExamGroups>
+    <Disorders>
+      <Disorder DisorderID="1" DisorderName="Nadciśnienie tętnicze" />
+      <Disorder DisorderID="2" DisorderName="Zwyrodnienie kręgosłupa - odcinek szyjny" />
+      <Disorder DisorderID="3" DisorderName="Zwyrodnienie kręgosłupa - odcinek lędźwiowy" />
+      <Disorder DisorderID="4" DisorderName="Zwyrodnienie kręgosłupa - cała długość" />
+      <Disorder DisorderID="5" DisorderName="Endoproteza stawu biodrowego - lewa strona" />
+      <Disorder DisorderID="6" DisorderName="Endoproteza stawu biodrowego - prawa strona" />
+      <Disorder DisorderID="7" DisorderName="Biodro zakwalifikowane do operacji - prawe" />
+      <Disorder DisorderID="8" DisorderName="Biodro zakwalifikowane do operacji - lewe" />
+      <Disorder DisorderID="9" DisorderName="Bóle kończyn górnych" />
+      <Disorder DisorderID="10" DisorderName="Zwyrodnienie stawu kolanowego - prawego" />
+      <Disorder DisorderID="11" DisorderName="Zwyrodnienie stawu kolanowego - lewego" />
+      <Disorder DisorderID="12" DisorderName="Zwyrodnienie stawu biodrowego - prawego" />
+      <Disorder DisorderID="13" DisorderName="Zwyrodnienie stawu biodrowego - lewego" />
+      <Disorder DisorderID="14" DisorderName="Udar mózgu - prawa strona" />
+      <Disorder DisorderID="15" DisorderName="Udar mózgu - lewa strona" />
+      <Disorder DisorderID="16" DisorderName="Uszkodzona łękotka - prawa" />
+      <Disorder DisorderID="17" DisorderName="Uszkodzona łękotka - lewa" />
+      <Disorder DisorderID="18" DisorderName="Zwyrodnienie stawów" />
+      <Disorder DisorderID="19" DisorderName="Zwyrodnienie kręgosłupa" />
+      <Disorder DisorderID="20" DisorderName="Cukrzyca" />
+      <Disorder DisorderID="21" DisorderName="Kolano zakwalifikowane do endoprotezy - prawe" />
+      <Disorder DisorderID="22" DisorderName="Kolano zakwalifikowane do endoprotezy - lewe" />
+      <Disorder DisorderID="23" DisorderName="Dyskopatia" />
+      <Disorder DisorderID="24" DisorderName="Osteoporoza" />
+    </Disorders>
+  </MedMetadata>
 </test>

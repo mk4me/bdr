@@ -1,33 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
-    <xsd:element name="MedMetadata">
-        <xsd:complexType>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB" elementFormDefault="qualified"  >
+  <xsd:element name="MedMetadata">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ExamGroups">
+          <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="ExamTypes">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="ExamType" minOccurs="1" maxOccurs="unbounded">
-                                <xsd:complexType>
-                                    <xsd:attribute name="ExamTypeID" type="xsd:int" use="required" />
-                                    <xsd:attribute name="ExamTypeName" type="xsd:string" use="required" />
-                                </xsd:complexType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-                <xsd:element name="Disorders">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="Disorder" minOccurs="1" maxOccurs="unbounded">
-                                <xsd:complexType>
-                                    <xsd:attribute name="DisorderID" type="xsd:int" use="required" />
-                                    <xsd:attribute name="DisorderName" type="xsd:string" use="required" />
-                                </xsd:complexType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
+              <xsd:element name="ExamGroup" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="ExamGroupID" type="xsd:int" use="required" />
+                  <xsd:attribute name="ExamGroupName" type="xsd:string" use="required" />
+                </xsd:complexType>
+              </xsd:element>
             </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Disorders">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Disorder" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="DisorderID" type="xsd:int" use="required" />
+                  <xsd:attribute name="DisorderName" type="xsd:string" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="ExamContexts" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="ExamContext" minOccurs="1" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="ExamContextID" type="xsd:int" use="required" />
+                  <xsd:attribute name="ContextName" type="xsd:string" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="LastModified" type="xsd:dateTime" use="required" />
+    </xsd:complexType>
+  </xsd:element>
 </xsd:schema>

@@ -48,7 +48,7 @@ namespace MotionMedDBWebServices
                 throw new SecurityTokenException("Unknown Username or Password");
             } 
             */
-
+           
             int result = 0;
             if (userName == null || password == null)
             {
@@ -84,6 +84,7 @@ namespace MotionMedDBWebServices
             {
                 throw new SecurityTokenException("Unknown Username or Password");
             }
+           
         }
 
     }
