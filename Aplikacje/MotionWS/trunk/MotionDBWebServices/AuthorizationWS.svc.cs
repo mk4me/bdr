@@ -304,6 +304,11 @@ namespace MotionDBWebServices
             return result == 1;
         }
 
+        public bool CheckMyLogin()
+        {
+            return true;
+        }
+
     }
 }
 

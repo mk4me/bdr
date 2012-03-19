@@ -208,6 +208,10 @@ namespace MotionMedDBWebServices
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "m_get_patient_list";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+
                 XmlReader dr = cmd.ExecuteXmlReader();
                 if (dr.Read())
                 {

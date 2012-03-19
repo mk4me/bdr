@@ -53,5 +53,9 @@ namespace MotionDBWebServices
         [FaultContract(typeof(AuthorizationException))]
         bool IfCanUpdate(int resourceID, string entity);
 
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
+        bool CheckMyLogin();
+
     }
 }

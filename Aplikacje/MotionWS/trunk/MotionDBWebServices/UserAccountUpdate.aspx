@@ -27,7 +27,7 @@
         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
             ControlToValidate="tbLogin" 
             ErrorMessage="At least 4 at most 20 alphanumeric characters required for  login. The first char must be a letter." 
-            ValidationExpression="[A-Za-z][A-Za-z0-9]{3,19}"></asp:RegularExpressionValidator>
+            ValidationExpression="[A-Za-z][A-Za-z0-9_]{3,19}"></asp:RegularExpressionValidator>
     </p>
     <p>
         Current Password<asp:TextBox ID="tbOldPassword" runat="server" 
