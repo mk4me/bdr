@@ -1489,8 +1489,8 @@ go
 
 -- Shallow copy retrieval
 -- ==========================
--- TODO: konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2012-02-22
+-- TODO: pozosta³e konfiguracje pomiarowe / ew. - grupy atrybutow
+-- last rev. 2012-03-15
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1510,6 +1510,7 @@ select
 	Nazwa as SessionName,
 	Tagi as Tags,
 	Opis_sesji as SessionDescription,
+	(select kp.Nazwa from Konfiguracja_pomiarowa kp join Sesja_Konfiguracja_pomiarowa skp on kp.IdKonfiguracja_pomiarowa = skp.IdKonfiguracja_pomiarowa where skp.IdSesja = Session.IdSesja) as EMGConf,
 	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
 	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed", DATALENGTH(p.Plik) "@Size",
 	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs

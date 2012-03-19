@@ -26,7 +26,10 @@ CREATE TABLE Uzytkownik (
         Imie                varchar(30) NOT NULL,
         Nazwisko            varchar(50) NOT NULL,
         LoginBDR			varchar(30),
-        Haslo				varbinary(100) default 0x00 not null
+        Haslo				varbinary(100) default 0x00 not null,
+        Email				varchar(50) not null default 'NO_EMAIL',
+		Kod_Aktywacji		varchar(20),
+		Status				int not null default 0        
  )
 go
  
@@ -303,3 +306,66 @@ create index X1Kontekst_badania on Kontekst_badania
 go
 
 
+
+create table Grupa_pacjentow (
+	IdGrupa_pacjentow int IDENTITY,
+	Nazwa varchar (50)
+)
+go
+
+alter table Grupa_pacjentow
+	add primary key (IdGrupa_pacjentow)
+go
+
+
+create table Grupa_pacjentow_grupa_uzytkownikow (
+	IdGrupa_uzytkownikow	int not null,
+	IdGrupa_pacjentow	int not null
+)
+go
+
+CREATE INDEX X1Grupa_pacjentow_grupa_uzytkownikow ON Grupa_pacjentow_grupa_uzytkownikow
+ (
+        IdGrupa_pacjentow
+ )
+go
+
+CREATE INDEX X2Grupa_pacjentow_grupa_uzytkownikow ON Grupa_pacjentow_grupa_uzytkownikow
+ (
+        IdGrupa_uzytkownikow
+ )
+go
+
+ALTER TABLE Grupa_pacjentow_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_pacjentow)
+                              REFERENCES Grupa_pacjentow;
+go
+ 
+ 
+ ALTER TABLE Grupa_pacjentow_grupa_uzytkownikow
+        ADD FOREIGN KEY (IdGrupa_uzytkownikow)
+                              REFERENCES Grupa_uzytkownikow on delete cascade;
+go
+
+CREATE TABLE Pacjent_grupa_Pacjentow (
+        IdPacjent              int NOT NULL,
+        IdGrupa_Pacjentow        int NOT NULL
+ )
+go
+ 
+CREATE INDEX X1Pacjent_grupa_Pacjentow ON Pacjent_grupa_Pacjentow
+ (
+        IdPacjent
+ )
+go
+ 
+CREATE INDEX X2Pacjent_grupa_Pacjentow ON Pacjent_grupa_Pacjentow
+ (
+        IdGrupa_Pacjentow
+ )
+go
+ 
+ 
+ALTER TABLE Pacjent_grupa_Pacjentow
+        ADD PRIMARY KEY (IdPacjent, IdGrupa_Pacjentow)
+go

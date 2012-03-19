@@ -252,10 +252,10 @@ as
 select
 dbo.f_metadata_time_stamp() LastModified,
 (select 
-	IdGrupa_badan as ExamTypeID,
-	Nazwa as ExamTypeName
+	IdGrupa_badan as ExamGroupID,
+	Nazwa as ExamGroupName
 	from Grupa_badan ExamGroup for XML AUTO, TYPE
- ) ExamTypes,
+ ) ExamGroups,
  (select 
 	IdJednostka_chorobowa as DisorderID,
 	Nazwa as DisorderName
@@ -265,7 +265,7 @@ dbo.f_metadata_time_stamp() LastModified,
 	IdKontekst_badania as ExamContextID,
 	Nazwa as ContextName
 	from Kontekst_badania ExamContext for XML AUTO, TYPE
- ) Disorders
+ ) ExamContexts
  for XML RAW ('MedMetadata'), TYPE;
 go
 

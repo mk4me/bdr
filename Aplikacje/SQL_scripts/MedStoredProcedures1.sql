@@ -19,11 +19,11 @@ go
 
 
 
--- last mod. 2012-03-06
-create procedure m_get_patient_list
+-- last mod. 2012-03-19
+create procedure m_get_patient_list ( @user_login as varchar(30) )
 as
 with
-P as (select * from Pacjent Patient ),
+P as (select * from user_accessible_patients_by_login (@user_login ) Patient ),
 DO as (select * from Pacjent_Jednostka_chorobowa DisorderOccurence where exists(select * from P where P.IdPacjent = DisorderOccurence.IdPacjent)),
 E as (select * from Badanie Examination where exists (select * from P where P.IdPacjent = Examination.IdPacjent))
 select
@@ -70,7 +70,6 @@ from DO DisorderOccurence for XML AUTO, TYPE) DisorderOccurences,
 for XML RAW('Dictionaries') , TYPE)
 for XML RAW ('MedicalRecords'), TYPE
 go
-
 
 
 -- last modified 2012-03-06
@@ -147,10 +146,10 @@ as
 select
 dbo.f_metadata_time_stamp() LastModified,
 (select 
-	IdGrupa_badan as ExamTypeID,
-	Nazwa as ExamTypeName
+	IdGrupa_badan as ExamGroupID,
+	Nazwa as ExamGroupName
 	from Grupa_badan ExamGroup for XML AUTO, TYPE
- ) ExamTypes,
+ ) ExamGroups,
  (select 
 	IdJednostka_chorobowa as DisorderID,
 	Nazwa as DisorderName
@@ -160,25 +159,26 @@ dbo.f_metadata_time_stamp() LastModified,
 	IdKontekst_badania as ExamContextID,
 	Nazwa as ContextName
 	from Kontekst_badania ExamContext for XML AUTO, TYPE
- ) Disorders
+ ) ExamContexts
  for XML RAW ('MedMetadata'), TYPE;
 go
+
 
 -- Password related
 -- ================
 
 
--- last mod. 2012-01-14
+-- last mod. 2012-03-19
 create procedure validate_password(@login varchar(30), @pass varchar(25), @res bit OUTPUT)
 as
 begin
 declare @c int = 0;
-select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass);
+select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass) and Status > 0;
 if (@c = 1) set @res = 1; else set @res = 0;
 end;
 go
 
--- last mod. 2012-01-14
+-- last mod. 2012-01-14 // CZY NADAL POTRZEBNE?
 create procedure create_user(@name varchar(30), @surname varchar(50),  @login varchar(50), @bdr_login varchar(50), @pass varchar(25), @res int OUTPUT)
 as
 begin
@@ -189,6 +189,112 @@ if exists(select * from Uzytkownik where Login = @login)
 	end;
 insert into Uzytkownik ( Imie, Nazwisko, Login, LoginBDR, Haslo ) values ( @name, @surname, @login, @bdr_login, HashBytes('SHA1',@pass));
 return 0;
+end;
+go
+
+-- last mod. 2012-03-19
+-- Error codes:
+-- 1 login already in use
+-- 2 email already in use
+-- 3 obligatory parameter empty (length 0)
+create procedure create_user_account(@user_login varchar(30), @user_password varchar(20),  @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @activation_code varchar(20), @result int OUTPUT)
+as
+begin
+
+	declare @email_title as varchar (120);
+	declare @email_body as varchar (200);
+	set @result = 0;
+
+	if ( LEN(@user_login)=0 or LEN(@user_password)=0 or LEN(@user_email) = 0 )
+		begin
+			set @result = 3;
+			return;
+		end;
+
+	if exists(select * from Uzytkownik where Login = @user_login)
+		begin
+			set @result = 1;
+			return;
+		end;
+	if exists(select * from Uzytkownik where Email = @user_email)
+		begin
+			set @result = 2;
+			return;
+		end;
+
+	insert into Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
+
+	set @email_title = 'Human Motion Database account activation for ' + @user_login;
+	set @email_body = 'Your activation code for login '+@user_login +' is: ' + @activation_code +' . Please visit the webpage https://v21.pjwstk.edu.pl/HMDBMed/UserAccountCreation.aspx to authenticate and perform your account activatio using this code.';
+
+	exec msdb.dbo.sp_send_dbmail @profile_name='HMDB_Mail',
+	@recipients=@user_email,
+	@subject= @email_title,
+	@body= @email_body;
+	return 0;
+end;
+go
+
+
+-- last mod. 2012-03-19
+-- Error codes:
+-- 1 authentication negative
+create procedure activate_user_account(@user_login varchar(30), @user_password varchar(20),  @activation_code varchar(20), @result int OUTPUT)
+as
+begin
+	set @result = 0;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code )
+		begin
+			set @result = 1;
+			return;
+		end;
+	update Uzytkownik  set Status = 1  where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code;
+
+	return 0;
+end;
+go
+
+
+-- last mod. 2012-03-19
+-- Error codes:
+-- 1 authentication failed
+-- 2 email already in use
+-- 3 obligatory parameter empty (length 0)
+alter procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @result int OUTPUT)
+as
+begin
+
+	set @result = 0;
+
+	if ( LEN(@user_login)=0 or LEN(@user_password)=0 or LEN(@user_email) = 0 )
+		begin
+			set @result = 3;
+			return;
+		end;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Status > 0 )
+		begin
+			set @result = 1;
+			return;
+		end;
+	if exists(select * from Uzytkownik where Login != @user_login and Email = @user_email)
+		begin
+			set @result = 2;
+			return;
+		end;
+
+	if ( @user_first_name != '-nochange-' )
+	begin
+		update Uzytkownik 
+		set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+	end;	
+	if ( @user_new_password != '-nochange-' )
+	begin
+		update Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+	end;
+	
+	return @result;
 end;
 go
 
@@ -205,6 +311,57 @@ update Uzytkownik set Haslo = HashBytes('SHA1',@new) where Login = @login and Ha
 return 0;
 end;
 go
+
+
+-- last mod. 2012-03-19
+create procedure get_user_roles @login varchar(30)
+as
+select gu.Nazwa from Uzytkownik u join Uzytkownik_grupa_uzytkownikow ugu on u.IdUzytkownik = ugu.IdUzytkownik join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+where u.Login = @login
+go
+
+-- last rev. 2012-03-19
+create function user_group_assigned_patient_ids( @user_id int )
+returns table
+as
+return
+select pgp.IdPacjent from Uzytkownik_grupa_uzytkownikow ugu
+join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
+join Grupa_pacjentow_grupa_uzytkownikow gpgu on gu.IdGrupa_uzytkownikow = gpgu.IdGrupa_uzytkownikow
+join Grupa_pacjentow gp on gp.IdGrupa_pacjentow = gpgu.IdGrupa_pacjentow
+join Pacjent_grupa_pacjentow pgp on gp.IdGrupa_pacjentow = pgp.IdGrupa_pacjentow
+where ugu.IdUzytkownik = @user_id;
+go
+
+
+-- last rev. 2012-03-19
+create function user_accessible_patients( @user_id int )
+returns table
+as
+return
+(SELECT [IdPacjent], [Imie], [Nazwisko], [Plec], [Data_urodzenia], [Zdjecie], [rowguid], [Uwagi], [IdPerformer], [Ostatnia_zmiana] FROM [Pacjent] p
+ where p.IdPacjent in ( select * from user_group_assigned_patient_ids( @user_id) ) )  
+go
+
+
+-- last rev. 2012-03-19
+create function identify_user( @user_login varchar(30) )
+returns int
+as
+begin
+return ( select top 1 IdUzytkownik from Uzytkownik where Login = @user_login );
+end
+go
+
+-- last rev. 2012-03-19
+create function user_accessible_patients_by_login( @user_login varchar(30) )
+returns table
+as
+return
+select [IdPacjent], [Imie], [Nazwisko], [Plec], [Data_urodzenia], [Zdjecie], [rowguid], [Uwagi], [IdPerformer], [Ostatnia_zmiana] FROM user_accessible_patients( dbo.identify_user( @user_login ))
+go
+
+
 
 -- last mod. 2012-03-06
 create trigger tr_Pacjent_Update on Pacjent
