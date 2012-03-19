@@ -76,7 +76,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="AuthorizationPolicy.cs" />
     <Compile Include="CustomAuthValidator.cs" />
+    <Compile Include="CustomPrincipal.cs" />
+    <Compile Include="CustomRoleProvider.cs" />
     <Compile Include="DatabaseAccessService.cs">
       <SubType>Component</SubType>
     </Compile>
