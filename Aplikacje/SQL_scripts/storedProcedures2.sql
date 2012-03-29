@@ -899,6 +899,15 @@ select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
     for XML PATH('UserDetails'), root ('UserList')
 go
 
+-- last rev. 2012-03-29
+create procedure get_user ( @user_login varchar(30) )
+as
+select Login, Imie, Nazwisko, Email
+	from Uzytkownik
+	where Login = @user_login
+go
+
+
 -- last rev. 2012-02-28
 create procedure validate_password(@login varchar(30), @pass varchar(25), @res bit OUTPUT)
 as
@@ -916,7 +925,8 @@ select gu.Nazwa from Uzytkownik u join Uzytkownik_grupa_uzytkownikow ugu on u.Id
 where u.Login = @login
 go
 
--- last rev. 2012-02-22
+
+-- last rev. 2012-03-29
 -- Error codes:
 -- 1 login already in use
 -- 2 email already in use
@@ -926,7 +936,7 @@ as
 begin
 
 	declare @email_title as varchar (120);
-	declare @email_body as varchar (200);
+	declare @email_body as varchar (500);
 	set @result = 0;
 
 	if ( LEN(@user_login)=0 or LEN(@user_password)=0 or LEN(@user_email) = 0 )
@@ -949,7 +959,10 @@ begin
 	insert into Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
 
 	set @email_title = 'Human Motion Database account activation for ' + @user_login;
-	set @email_body = 'Your activation code for login '+@user_login +' is: ' + @activation_code +' . Please visit the webpage https://v21.pjwstk.edu.pl/HMDB/UserAccountCreation.aspx to authenticate and perform your account activatio using this code.';
+	set @email_body = 'Your account with login '+@user_login+' has been created successfully.'+CHAR(13)
+	+' To activate your account use the following link: https://v21.pjwstk.edu.pl/HMDB/AccountActivation.aspx?login='+@user_login+'&code='+@activation_code+CHAR(13)
+	+'Alternatively, use activation code for login '+@user_login +' and activation code ' + @activation_code +' to perform the activation manually '
+	+CHAR(13)+'on the webpage https://v21.pjwstk.edu.pl/HMDB/UserAccountCreation.aspx or through your client application.';
 
 	exec msdb.dbo.sp_send_dbmail @profile_name='HMDB_Mail',
 	@recipients=@user_email,
@@ -959,20 +972,20 @@ begin
 end;
 go
 
--- last rev. 2012-02-22
+-- last rev. 2012-03-29
 -- Error codes:
 -- 1 authentication negative
-create procedure activate_user_account(@user_login varchar(30), @user_password varchar(20),  @activation_code varchar(10), @result int OUTPUT)
+create procedure activate_user_account(@user_login varchar(30), @activation_code varchar(10), @result int OUTPUT)
 as
 begin
 	set @result = 0;
 
-	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code )
+	if not exists(select * from Uzytkownik where Login = @user_login and Kod_aktywacji = @activation_code )
 		begin
 			set @result = 1;
 			return;
 		end;
-	update Uzytkownik  set Status = 1  where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code;
+	update Uzytkownik  set Status = 1  where Login = @user_login and Kod_aktywacji = @activation_code;
 
 	return 0;
 end;
@@ -1490,8 +1503,8 @@ go
 -- Shallow copy retrieval
 -- ==========================
 -- TODO: pozosta³e konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2012-03-15
-create procedure get_shallow_copy @user_login varchar(30)
+-- last rev. 2012-03-29
+alter procedure get_shallow_copy @user_login varchar(30)
 as
 with
 UAS as (select * from dbo.user_accessible_sessions_by_login (@user_login) Session ),
@@ -1510,6 +1523,8 @@ select
 	Nazwa as SessionName,
 	Tagi as Tags,
 	Opis_sesji as SessionDescription,
+	Publiczna as P,
+	PublicznaZapis as PW,
 	(select kp.Nazwa from Konfiguracja_pomiarowa kp join Sesja_Konfiguracja_pomiarowa skp on kp.IdKonfiguracja_pomiarowa = skp.IdKonfiguracja_pomiarowa where skp.IdSesja = Session.IdSesja) as EMGConf,
 	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
 	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed", DATALENGTH(p.Plik) "@Size",
