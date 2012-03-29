@@ -17,7 +17,7 @@ namespace MotionDBWebServices
     public class BasicUpdatesWS : DatabaseAccessService, IBasicUpdatesWS
     {
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int CreatePerformer(int PerformerID)
         {
             try
@@ -38,7 +38,7 @@ namespace MotionDBWebServices
                 if (ex.ErrorCode == -2146232060)
                 {
                     UpdateException exc = new UpdateException("Parameter", "Identifier value already exists");
-                    throw new FaultException<UpdateException>(exc, "The PerformerID = "+PerformerID+" already exists", FaultCode.CreateReceiverFaultCode(new FaultCode("CreatePerformer")));
+                    throw new FaultException<UpdateException>(exc, "The PerformerID = " + PerformerID + " already exists", FaultCode.CreateReceiverFaultCode(new FaultCode("CreatePerformer")));
 
                 }
                 else
@@ -55,12 +55,12 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int CreateSession(int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs)
         {
             int newSessionId = 0;
             int result = 0;
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
 
 
             try
@@ -73,22 +73,24 @@ namespace MotionDBWebServices
                 cmd.CommandText = "validate_session_group_id";
                 SqlParameter idPar = cmd.Parameters.Add("@group_id", SqlDbType.Int);
                 idPar.Direction = ParameterDirection.Input;
-                if(sessionGroupIDs!=null) foreach (int sg in sessionGroupIDs) {
-                    idPar.Value = sg;
-                    dr = cmd.ExecuteReader();
+                if (sessionGroupIDs != null) foreach (int sg in sessionGroupIDs)
+                    {
+                        idPar.Value = sg;
+                        dr = cmd.ExecuteReader();
 
-                
-                if (dr.Read())
-                {
-                   if(int.Parse(dr[0].ToString())!=1) {
-                       UpdateException exc = new UpdateException("Invalid ID" , "Group with ID ="+sg.ToString()+" not found");
-                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
-                   }
-                   dr.Dispose();
 
-                }
-                }
-                if(dr!=null) dr.Close();
+                        if (dr.Read())
+                        {
+                            if (int.Parse(dr[0].ToString()) != 1)
+                            {
+                                UpdateException exc = new UpdateException("Invalid ID", "Group with ID =" + sg.ToString() + " not found");
+                                throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                            }
+                            dr.Dispose();
+
+                        }
+                    }
+                if (dr != null) dr.Close();
                 //
                 cmd.Parameters.Remove(idPar);
 
@@ -109,7 +111,7 @@ namespace MotionDBWebServices
                     new SqlParameter("@result", SqlDbType.Int);
                 resultParameter.Direction = ParameterDirection.Output;
                 cmd.Parameters.Add(resultParameter);
-                userName = userName.Substring(userName.LastIndexOf('\\')+1);
+                userName = userName.Substring(userName.LastIndexOf('\\') + 1);
                 cmd.Parameters["@sess_user"].Value = userName;
                 cmd.Parameters["@sess_lab"].Value = labID;
                 cmd.Parameters["@mk_name"].Value = motionKindName;
@@ -119,15 +121,17 @@ namespace MotionDBWebServices
                 cmd.Parameters["@sess_desc"].Value = sessionDescription;
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
-                result = (int) resultParameter.Value;
-                if(result==1) {
-                       UpdateException exc = new UpdateException("Wrong motion kind name" , "Motion kind"+motionKindName+" not found");
-                        throw new FaultException<UpdateException>(exc, "Illegal motion kind", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
-                   }
-                else if(result==2) {
-                       UpdateException exc = new UpdateException("DB-side" , "DB-side failure");
-                        throw new FaultException<UpdateException>(exc, "DB-side failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
-                   }
+                result = (int)resultParameter.Value;
+                if (result == 1)
+                {
+                    UpdateException exc = new UpdateException("Wrong motion kind name", "Motion kind" + motionKindName + " not found");
+                    throw new FaultException<UpdateException>(exc, "Illegal motion kind", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                }
+                else if (result == 2)
+                {
+                    UpdateException exc = new UpdateException("DB-side", "DB-side failure");
+                    throw new FaultException<UpdateException>(exc, "DB-side failure", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                }
 
                 newSessionId = (int)sessionIdParameter.Value;
 
@@ -137,7 +141,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
 
             }
             finally
@@ -150,7 +154,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int CreateTrial(int sessionID, string trialName, string trialDescription)
         {
             int newTrialId = 0;
@@ -178,7 +182,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateTrial")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateTrial")));
 
             }
             finally
@@ -190,7 +194,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int CreateMeasurementConfiguration(string mcName, string mcKind, string mcDescription)
         {
             int newMeasurementConf = 0;
@@ -232,7 +236,7 @@ namespace MotionDBWebServices
 
         // Group Assignment operations
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public bool AssignSessionToGroup(int sessionID, int groupID)
         {
 
@@ -265,13 +269,13 @@ namespace MotionDBWebServices
         }
 
         // Performer to session assignment
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int AssignPerformerToSession(int sessionID, int performerID)
         {
             int newPerfConfId = 0;
             int res = 0;
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -296,7 +300,7 @@ namespace MotionDBWebServices
                 cmd.Parameters["@perf_id"].Value = performerID;
                 cmd.ExecuteNonQuery();
                 res = (int)resultCodeParameter.Value;
-                if(res == 0) newPerfConfId = (int) pcIdParameter.Value;
+                if (res == 0) newPerfConfId = (int)pcIdParameter.Value;
             }
             catch (SqlException ex)
             {
@@ -324,11 +328,11 @@ namespace MotionDBWebServices
                 UpdateException exc = new UpdateException("authorization", "Unknown user");
                 throw new FaultException<UpdateException>(exc, "UpdateException");
 
-            } 
+            }
             return newPerfConfId;
         }
 
-       
+
 
         // Attribute update operations
 
@@ -343,7 +347,7 @@ namespace MotionDBWebServices
         6 - the value provided is not valid for this numeric-type attribute
         7 - other exception
         */
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetPerformerAttribute(int performerID, string attributeName, string attributeValue, bool update)
         {
 
@@ -382,26 +386,27 @@ namespace MotionDBWebServices
             {
                 CloseConnection();
             }
-            if(resultCode!=0){
+            if (resultCode != 0)
+            {
                 UpdateException exc;
                 string resName = "performer";
 
                 switch (resultCode)
                 {
                     case 1:
-                        exc = new UpdateException("Invalid attribute", "Attribute of name " + attributeName + " is not applicable to "+resName);
+                        exc = new UpdateException("Invalid attribute", "Attribute of name " + attributeName + " is not applicable to " + resName);
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 2:
-                        exc = new UpdateException("Invalid enum value", "the value "+attributeValue+" is not valid for the enum-type attribute "+attributeName);
+                        exc = new UpdateException("Invalid enum value", "the value " + attributeValue + " is not valid for the enum-type attribute " + attributeName);
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 3:
-                        exc = new UpdateException("Invalid resource ID", "the "+resName+" of ID " + performerID + "not found");
+                        exc = new UpdateException("Invalid resource ID", "the " + resName + " of ID " + performerID + "not found");
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 5:
-                        exc = new UpdateException("Value already exists", "value of attribute "+attributeName+" for this "+resName+ " already exists, while you called this operation in no overwrite mode");
+                        exc = new UpdateException("Value already exists", "value of attribute " + attributeName + " for this " + resName + " already exists, while you called this operation in no overwrite mode");
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
                     case 6:
-                        exc = new UpdateException("Invalid numeric value", "the value "+attributeValue+" provided is not valid for this numeric-type attribute "+attributeName);
+                        exc = new UpdateException("Invalid numeric value", "the value " + attributeValue + " provided is not valid for this numeric-type attribute " + attributeName);
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
 
                     default:
@@ -409,7 +414,7 @@ namespace MotionDBWebServices
                         throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("SetPerformerAttribute")));
 
                 }
-                }
+            }
 
         }
 
@@ -424,7 +429,7 @@ namespace MotionDBWebServices
         6 - the value provided is not valid for this numeric-type attribute
         7 - other exception
         */
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetSessionAttribute(int sessionID, string attributeName, string attributeValue, bool update)
         {
 
@@ -457,7 +462,7 @@ namespace MotionDBWebServices
             {
                 // log the exception
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionAttribute")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetSessionAttribute")));
             }
             finally
             {
@@ -495,7 +500,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetTrialAttribute(int trialID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -565,7 +570,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetMeasurementConfAttribute(int measurementConfID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -636,7 +641,7 @@ namespace MotionDBWebServices
         }
 
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetPerformerConfAttribute(int performerConfID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -706,7 +711,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetFileAttribute(int fileID, string attributeName, string attributeValue, bool update)
         {
             int resultCode = 0;
@@ -776,7 +781,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void ClearAttributeValue(int resourceID, string attributeName, string entity)
         {
             int resultCode = 0;
@@ -805,7 +810,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 // log the exception
-                UpdateException exc = new UpdateException("unknown", "Update failed: "+ex.Message);
+                UpdateException exc = new UpdateException("unknown", "Update failed: " + ex.Message);
                 throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("ClearAttributeValue")));
             }
             finally
@@ -822,7 +827,7 @@ namespace MotionDBWebServices
 
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void SetFileTypedAttributeValue(int resourceID, string entity, string attributeName, int fileID, bool update)
         {
             // UWAGA: nie dopuszczono mozliwosci wprowadzania atrybutow plikowych dla encji PLIK !
@@ -871,14 +876,14 @@ namespace MotionDBWebServices
                 cmd.Parameters[paramName].Value = resourceID;
                 cmd.Parameters["@attr_name"].Value = attributeName;
                 cmd.Parameters["@attr_value"].Value = fileID.ToString();
-                cmd.Parameters["@update"].Value = update?1:0;
+                cmd.Parameters["@update"].Value = update ? 1 : 0;
 
                 cmd.ExecuteNonQuery();
             }
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("database", "Database-side failure");
-                throw new FaultException<UpdateException>(exc, "Update invocation failed: "+ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetFileTypedAttributeValue")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failed: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("SetFileTypedAttributeValue")));
 
             }
             finally
