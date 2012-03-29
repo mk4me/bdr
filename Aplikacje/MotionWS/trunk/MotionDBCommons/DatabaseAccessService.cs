@@ -47,5 +47,6 @@ namespace MotionDBCommons
                             values ( ERROR_NUMBER() , ERROR_SEVERITY(), ERROR_STATE(), ERROR_PROCEDURE(), ERROR_LINE(), ERROR_MESSAGE() )
                         END CATCH;":query;
         }
+
     }
 }

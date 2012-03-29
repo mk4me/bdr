@@ -18,19 +18,20 @@ namespace MotionDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService")]
     public class AuthorizationWS : DatabaseAccessService, IAuthorizationWS   
     {
-
-
+        LoginManagerHelper lmh = new LoginManagerHelper();
+        /*
         public void RemoveUserAccount()
         {
             // wg statusu rezultatu - wynik lub exception
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
         public void ChangePassword(string login, string oldPass, string newPass)
         {
             // czy login = username
             // wykonanie
         }
-
+       
 
         // ADMINISTRATOR!
         public void EvokeGroupMembership(string grantedUserLogin, string groupName)
@@ -45,47 +46,79 @@ namespace MotionDBWebServices
             // autoryzacja
             // wykonanie (czy grupa istnieje, czy login istnieje)
         }
+        */
 
-        // SECURE ME !!!
-        public bool CheckUserAccount()
+        public UserData GetMyUserData()
         {
+            bool found = false;
+            UserData ud = new UserData();
             string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
-            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
-            int result = 0;
-
+            SqlDataReader reader = null;
             try
             {
+                // TO DO: generowanie losowej nazwy katalogu
+                // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
+
                 OpenConnection();
+                cmd.CommandText = @"get_user";
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "check_user_account";
-                cmd.Parameters.Add("@user_login", SqlDbType.VarChar,30);
-                SqlParameter resultParameter =
-                    new SqlParameter("@result", SqlDbType.Int);
-                resultParameter.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(resultParameter);
-
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 cmd.Parameters["@user_login"].Value = userName;
+                reader = cmd.ExecuteReader();
 
-                cmd.ExecuteNonQuery();
-                result = (int)resultParameter.Value;
+
+                while (reader.Read())
+                {
+                    ud.Login = (string)reader.GetValue(0);
+                    ud.FirstName = (string)reader.GetValue(1);
+                    ud.LastName = (string)reader.GetValue(2);
+                    ud.Email = (string)reader.GetValue(3);
+                    found = true;
+                }
+
+                if (!found)
+                {
+                    AuthorizationException exc = new AuthorizationException("not found", "User not found");
+                    throw new FaultException<AuthorizationException>(exc, "Cannot locate user "+userName, FaultCode.CreateReceiverFaultCode(new FaultCode("GetMyUserData")));
+                }
+
+
             }
             catch (SqlException ex)
             {
-                AuthorizationException exc = new AuthorizationException("unknown", "Validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name);
-                throw new FaultException<AuthorizationException>(exc, "Login validation failed for user " + OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CheckUserAccount")));
+                // log the exception
+                AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
+                throw new FaultException<AuthorizationException>(exc, "Database access failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+
+
             }
             finally
             {
                 CloseConnection();
             }
-            return result == 1;
+
+            return ud;
+
         }
 
-        // SECURE ME !!!
+        
+        public bool UpdateUserAccount(string login, string email, string pass, string newPass, string firstName, string lastName)
+        {
+            string faultMessage = "";
+
+
+            if (!lmh.UpdateUserAccount(login, email, pass, newPass, firstName, lastName, out faultMessage))
+            {
+                AuthorizationException exc = new AuthorizationException("parameter", faultMessage);
+                throw new FaultException<AuthorizationException>(exc, "Login, password or email invalid", FaultCode.CreateReceiverFaultCode(new FaultCode("UpdateUserAccount")));
+            }
+            else return true;
+        }
+
         public void GrantSessionPrivileges(string grantedUserLogin, int sessionID, bool write)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
-            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+  
 
             try
             {
@@ -117,7 +150,6 @@ namespace MotionDBWebServices
         }
 
 
-        // SECURE ME !!!
         public void RemoveSessionPrivileges(string grantedUserLogin, int sessionID)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
@@ -149,7 +181,7 @@ namespace MotionDBWebServices
             }
         }
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void AlterSessionVisibility(int sessionID, bool isPublic, bool isWritable)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
@@ -181,7 +213,8 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
         }
-        // SECURE ME !!!
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public XmlElement ListUsers()
         {
             XmlDocument xd = new XmlDocument();
@@ -199,9 +232,7 @@ namespace MotionDBWebServices
                 }
                 if (xd.DocumentElement == null)
                 {
-                    xd.AppendChild(xd.CreateElement("UserList", 
-
-"http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
+                    xd.AppendChild(xd.CreateElement("UserList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService"));
                 }
                 dr.Close();
             }
@@ -221,7 +252,7 @@ namespace MotionDBWebServices
 
 
 
-        // SECURE ME !!!
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public XmlElement ListSessionPrivileges(int sessionID)
         {
             XmlDocument xd = new XmlDocument();

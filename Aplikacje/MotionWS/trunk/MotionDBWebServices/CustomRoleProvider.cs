@@ -72,8 +72,10 @@ namespace MotionDBWebServices
                 CloseConnection();
             }
 
-            return alRoles.ToArray(typeof(string)) as string[];
+            
 
+            // alRoles.Add("motion_administrators");
+            return alRoles.ToArray(typeof(string)) as string[];
         }
 
         public override bool IsUserInRole(string username, string roleName)

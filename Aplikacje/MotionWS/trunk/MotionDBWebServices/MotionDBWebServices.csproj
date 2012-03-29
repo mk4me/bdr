@@ -71,6 +71,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AccountActivation.aspx" />
     <Content Include="AccountFactoryWS.svc" />
     <Content Include="BasicQueriesWS.svc" />
     <Content Include="UserAccountCreation.aspx" />
@@ -79,6 +80,13 @@
     <Content Include="web\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountActivation.aspx.cs">
+      <DependentUpon>AccountActivation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AccountActivation.aspx.designer.cs">
+      <DependentUpon>AccountActivation.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AccountFactoryWS.svc.cs">
       <DependentUpon>AccountFactoryWS.svc</DependentUpon>
     </Compile>
@@ -141,6 +149,7 @@
     <Compile Include="UserAccountUpdate.aspx.designer.cs">
       <DependentUpon>UserAccountUpdate.aspx</DependentUpon>
     </Compile>
+    <Compile Include="UserData.cs" />
     <Compile Include="UserPersonalSpaceWS.svc.cs">
       <DependentUpon>UserPersonalSpaceWS.svc</DependentUpon>
     </Compile>

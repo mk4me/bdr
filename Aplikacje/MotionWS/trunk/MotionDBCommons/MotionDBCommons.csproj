@@ -70,6 +70,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DatabaseAccessService.cs">
     </Compile>
+    <Compile Include="LoginManagerHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

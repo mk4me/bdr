@@ -16,7 +16,11 @@ namespace MotionDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/AdministrationService")]
     public class AdministrationWS : DatabaseAccessService, IAdministrationWS
     {
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void DefineAttriubeGroup(string groupName, string entity)
         {
             int resultCode = 0;
@@ -71,7 +75,11 @@ namespace MotionDBWebServices
         }
 
 
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void RemoveAttributeGroup(string groupName, string entity)
         {
             int resultCode = 0;
@@ -121,7 +129,11 @@ namespace MotionDBWebServices
 
         }
 
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void DefineAttribute(string attributeName, string groupName, string entity, bool isEnum, string pluginDescriptor, 
             string type, string unit)
         {
@@ -190,7 +202,11 @@ namespace MotionDBWebServices
 
         }
 
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void RemoveAttribute(string attributeName, string groupName, string entity)
         {
             int resultCode = 0;
@@ -242,7 +258,11 @@ namespace MotionDBWebServices
 
         }
 
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void AddAttributeEnumValue(string attributeName, string groupName, string entity, string value, bool clearExisting)
         {
             int resultCode = 0;
@@ -302,10 +322,16 @@ namespace MotionDBWebServices
 
         }
 
+<<<<<<< .mine
+        [PrincipalPermission(SecurityAction.Demand, Role = "motion_administrators")]
+=======
         [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+>>>>>>> .r956
         public void DownloadAreaCleanup(int olderThanMinutes)
         {
             string fileLocation = "";
+
+
 
             try
             {

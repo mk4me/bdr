@@ -17,6 +17,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AccountFactoryException))]
-        bool ActivateUserAccount(string login, string password, string activationCode);
+        bool ActivateUserAccount(string login, string activationCode);
     }
 }
