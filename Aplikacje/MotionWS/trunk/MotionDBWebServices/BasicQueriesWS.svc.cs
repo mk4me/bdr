@@ -141,8 +141,7 @@ namespace MotionDBWebServices
 
         } 
        
-        // BY ID RETRIEVAL
-        // SECURE ME !!!
+
        public XmlElement GetPerformerByIdXML(int id) // UWAGA - performer sam w sobie nie jest poki co zabezpieczany!
         {
             XmlDocument xd = new XmlDocument();
@@ -175,8 +174,8 @@ namespace MotionDBWebServices
             CloseConnection();
             if (notFound)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any performer");
-                throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetPerformerById")));
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any performer available for user authenticated");
+                throw new FaultException<QueryException>(exc, "Performer not available", FaultCode.CreateReceiverFaultCode(new FaultCode("GetPerformerById")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
             return xd.DocumentElement;
@@ -216,7 +215,7 @@ namespace MotionDBWebServices
             CloseConnection();
             if (notFound)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session");
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session available for user "+userName);
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionByIdXML")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
@@ -259,7 +258,7 @@ namespace MotionDBWebServices
             CloseConnection();
             if (!found)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session");
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session available for user " + userName);
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionLabel")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
@@ -302,7 +301,7 @@ namespace MotionDBWebServices
             CloseConnection();
             if (notFound)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any measurement");
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any session available for user " + userName);
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetSessionContent")));
             }
             return xd.DocumentElement;
@@ -310,7 +309,6 @@ namespace MotionDBWebServices
 
 
 
-        // SECURE ME !!!
         public XmlElement GetTrialByIdXML(int id)  // UWAGA - docelowo nalezaloby zabronic pobrania danych Trial-a z niedostepnej danemu uzytkownikowi sesji!
         {
             XmlDocument xd = new XmlDocument();
@@ -340,7 +338,7 @@ namespace MotionDBWebServices
             CloseConnection();
             if (notFound)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any trial");
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any trial available for user authenticated");
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetTrialByIdXML")));
             }
             //if (xd.DocumentElement == null) xd.AppendChild(xd.CreateElement("PerformerDetailsWithAttributes", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
@@ -382,8 +380,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        // SECURE ME !!!
-        public XmlElement GetPerformerConfigurationByIdXML(int id)
+        public XmlElement GetPerformerConfigurationByIdXML(int id)  
         {
             XmlDocument xd = new XmlDocument();
             bool notFound = false;
@@ -412,14 +409,13 @@ namespace MotionDBWebServices
             CloseConnection();
             if (notFound)
             {
-                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any performer configuration");
+                QueryException exc = new QueryException(id.ToString(), "The id provided does not match any performer configuration for user authenticated");
                 throw new FaultException<QueryException>(exc, "Wrong identifier", FaultCode.CreateReceiverFaultCode(new FaultCode("GetPerformerConfigurationByIdXML")));
             }
             return xd.DocumentElement;
         }
 
 
-        // SECURE ME !!!
         public XmlElement GetFileDataByIdXML(int id)
         {
             XmlDocument xd = new XmlDocument();
@@ -455,8 +451,6 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        // PERFORMER QUERIES
-        // SECURE ME !!!
         public XmlElement ListPerformersXML()  // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
@@ -494,7 +488,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
 
         }
-        // SECURE ME !!!
+
         public XmlElement ListPerformersWithAttributesXML() // UWAGA - moze okazac sie potrzebne filtrowanie performerow wg uprawnien!
         {
             XmlDocument xd = new XmlDocument();
@@ -609,42 +603,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        // SECURE ME !!!
-        // sprawdzic !!!
-        public XmlElement ListMeasurementPerformersWithAttributesXML(int measurementID)
-        {
-            XmlDocument xd = new XmlDocument();
 
-            try
-            {
-                OpenConnection();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_measurement_performers_attributes_xml";
-                SqlParameter measId = cmd.Parameters.Add("@meas_id", SqlDbType.Int);
-                measId.Direction = ParameterDirection.Input;
-                measId.Value = measurementID;
-                XmlReader dr = cmd.ExecuteXmlReader();
-                if (dr.Read())
-                {
-                    xd.Load(dr);
-                }
-                if (xd.DocumentElement == null)
-                {
-                    xd.AppendChild(xd.CreateElement("MeasurementPerformerWithAttributesList", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
-                }
-                dr.Close();
-            }
-            catch (SqlException ex)
-            {
-                // report exception
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return xd.DocumentElement;
-        }
 
 
     // SESSION QUERIES
@@ -688,7 +647,7 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-
+        // -- przeglad - cd.
         public XmlElement ListPerformerSessionsWithAttributesXML(int performerID)
         {
             XmlDocument xd = new XmlDocument();

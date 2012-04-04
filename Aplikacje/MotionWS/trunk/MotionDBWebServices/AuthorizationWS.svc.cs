@@ -105,9 +105,9 @@ namespace MotionDBWebServices
         public bool UpdateUserAccount(string login, string email, string pass, string newPass, string firstName, string lastName)
         {
             string faultMessage = "";
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
 
-
-            if (!lmh.UpdateUserAccount(login, email, pass, newPass, firstName, lastName, out faultMessage))
+            if (!lmh.UpdateUserAccount(userName, email, pass, newPass, firstName, lastName, out faultMessage))
             {
                 AuthorizationException exc = new AuthorizationException("parameter", faultMessage);
                 throw new FaultException<AuthorizationException>(exc, "Login, password or email invalid", FaultCode.CreateReceiverFaultCode(new FaultCode("UpdateUserAccount")));
@@ -296,7 +296,6 @@ namespace MotionDBWebServices
             return xd.DocumentElement;
         }
 
-        // SECURE ME !!!
         public bool IfCanUpdate(int resourceID, string entity)
         {
             string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;

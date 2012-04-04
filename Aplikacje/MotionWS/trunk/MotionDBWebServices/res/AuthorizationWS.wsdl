@@ -45,34 +45,6 @@
 		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService">
 			<xsd:include schemaLocation="ListUsers.xsd"/>
 			<xsd:include schemaLocation="ListSessionPrivileges.xsd"/>
-			<xsd:element name="CheckUserAccount">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="CheckUserAccountResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="1" maxOccurs="1" name="CheckUserAccountResult" type="xsd:boolean"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:complexType name="AuthorizationException">
-				<xsd:sequence>
-					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
-					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:element name="AuthorizationException" nillable="true" type="tns:AuthorizationException"/>
-			<xsd:element name="CreateUserAccount">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="firstName" type="xsd:string"/>
-						<xsd:element minOccurs="0" maxOccurs="1" name="lastName" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="CreateUserAccountResponse">
-				<xsd:complexType/>
-			</xsd:element>
 			<xsd:element name="ListUsers">
 				<xsd:complexType/>
 			</xsd:element>
@@ -86,6 +58,50 @@
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="AuthorizationException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="AuthorizationException" nillable="true" type="tns:AuthorizationException"/>
+			<xsd:element name="GetMyUserData">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="GetMyUserDataResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="GetMyUserDataResult" type="tns:UserData"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="UserData">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Login" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="FirstName" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="LastName" type="xsd:string"/>
+					<xsd:element minOccurs="0" maxOccurs="1" name="Email" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="UpdateUserAccount">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="login" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="email" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="pass" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="newPass" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="firstName" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="lastName" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UpdateUserAccountResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="UpdateUserAccountResult" type="xsd:boolean"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -159,6 +175,16 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="CheckMyLogin">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="CheckMyLoginResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="CheckMyLoginResult" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xsd:include schemaLocation="ListUsers.xsd"/>
@@ -204,24 +230,6 @@
 			<xs:attribute name="Ref" type="xs:IDREF"/>
 		</xs:schema>
 	</wsdl:types>
-	<wsdl:message name="IAuthorizationWS_CheckUserAccount_InputMessage">
-		<wsdl:part name="parameters" element="tns:CheckUserAccount"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_CheckUserAccount_OutputMessage">
-		<wsdl:part name="parameters" element="tns:CheckUserAccountResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_CheckUserAccount_AuthorizationExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:AuthorizationException"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_CreateUserAccount_InputMessage">
-		<wsdl:part name="parameters" element="tns:CreateUserAccount"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_CreateUserAccount_OutputMessage">
-		<wsdl:part name="parameters" element="tns:CreateUserAccountResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:AuthorizationException"/>
-	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_ListUsers_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListUsers"/>
 	</wsdl:message>
@@ -229,6 +237,24 @@
 		<wsdl:part name="parameters" element="tns:ListUsersResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GetMyUserData_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetMyUserData"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GetMyUserData_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetMyUserDataResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_GetMyUserData_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_UpdateUserAccount_InputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateUserAccount"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_UpdateUserAccount_OutputMessage">
+		<wsdl:part name="parameters" element="tns:UpdateUserAccountResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_UpdateUserAccount_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_GrantSessionPrivileges_InputMessage">
@@ -276,21 +302,30 @@
 	<wsdl:message name="IAuthorizationWS_IfCanUpdate_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CheckMyLogin_InputMessage">
+		<wsdl:part name="parameters" element="tns:CheckMyLogin"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CheckMyLogin_OutputMessage">
+		<wsdl:part name="parameters" element="tns:CheckMyLoginResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_CheckMyLogin_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
 	<wsdl:portType name="IAuthorizationWS">
-		<wsdl:operation name="CheckUserAccount">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccount" message="tns:IAuthorizationWS_CheckUserAccount_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccountResponse" message="tns:IAuthorizationWS_CheckUserAccount_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CheckUserAccount_AuthorizationExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="CreateUserAccount">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccount" message="tns:IAuthorizationWS_CreateUserAccount_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountResponse" message="tns:IAuthorizationWS_CreateUserAccount_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CreateUserAccount_AuthorizationExceptionFault_FaultMessage"/>
-		</wsdl:operation>
 		<wsdl:operation name="ListUsers">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" message="tns:IAuthorizationWS_ListUsers_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersResponse" message="tns:IAuthorizationWS_ListUsers_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsersAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListUsers_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="GetMyUserData">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserData" message="tns:IAuthorizationWS_GetMyUserData_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserDataResponse" message="tns:IAuthorizationWS_GetMyUserData_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserDataAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_GetMyUserData_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateUserAccount">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccount" message="tns:IAuthorizationWS_UpdateUserAccount_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccountResponse" message="tns:IAuthorizationWS_UpdateUserAccount_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccountAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_UpdateUserAccount_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="GrantSessionPrivileges">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GrantSessionPrivileges" message="tns:IAuthorizationWS_GrantSessionPrivileges_InputMessage"/>
@@ -317,36 +352,41 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdateResponse" message="tns:IAuthorizationWS_IfCanUpdate_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdateAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_IfCanUpdate_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="CheckMyLogin">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckMyLogin" message="tns:IAuthorizationWS_CheckMyLogin_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckMyLoginResponse" message="tns:IAuthorizationWS_CheckMyLogin_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckMyLoginAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_CheckMyLogin_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicHttpBinding_IAuthorizationWS" type="tns:IAuthorizationWS">
 		<wsp:PolicyReference URI="#BasicHttpBinding_IAuthorizationWS_policy"/>
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
-		<wsdl:operation name="CheckUserAccount">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckUserAccount" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="AuthorizationExceptionFault">
-				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="CreateUserAccount">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CreateUserAccount" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="AuthorizationExceptionFault">
-				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
 		<wsdl:operation name="ListUsers">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListUsers" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetMyUserData">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserData" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="UpdateUserAccount">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccount" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -407,6 +447,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="IfCanUpdate">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/IfCanUpdate" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="CheckMyLogin">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/CheckMyLogin" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
