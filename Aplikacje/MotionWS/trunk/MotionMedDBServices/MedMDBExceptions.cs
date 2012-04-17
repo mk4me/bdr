@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace MotionMedDBWebServices
 {
     // NOTE: If you change the interface name "IBasicQueriesWS" here, you must also update the reference to "IBasicQueriesWS" in Web.config.
-    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService")]
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/BasicQueriesService")]
     public class QueryException
     {
         string _fault_source;
@@ -31,7 +31,7 @@ namespace MotionMedDBWebServices
         }
     }
 
-    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicUpdatesService")]
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/BasicUpdatesService")]
     public class UpdateException
     {
         string _fault_source;
@@ -57,7 +57,7 @@ namespace MotionMedDBWebServices
         }
     }
 
-    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/FileStoremanService")]
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/FileStoremanService")]
     public class FileAccessServiceException
     {
         string _fault_source;
@@ -77,6 +77,32 @@ namespace MotionMedDBWebServices
         }
 
         public FileAccessServiceException(string src, string det)
+        {
+            _fault_source = src;
+            _details = det;
+        }
+    }
+
+    [DataContract(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionMedDB/AccountFactoryService")]
+    public class AccountFactoryException
+    {
+        string _fault_source;
+        string _details;
+
+        [DataMember]
+        public string IssueKind
+        {
+            get { return _fault_source; }
+            set { _fault_source = value; }
+        }
+        [DataMember]
+        public string Details
+        {
+            get { return _details; }
+            set { _details = value; }
+        }
+
+        public AccountFactoryException(string src, string det)
         {
             _fault_source = src;
             _details = det;

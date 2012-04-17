@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MotionMedDBWebServices.AccountFactoryWS" Factory="Thinktecture.ServiceModel.Extensions.Description.FlatWsdlServiceHostFactory" CodeBehind="AccountFactoryWS.svc.cs" %>

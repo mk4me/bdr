@@ -71,6 +71,7 @@
     <Compile Include="DatabaseAccessService.cs">
     </Compile>
     <Compile Include="LoginManagerHelper.cs" />
+    <Compile Include="MotionDBUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

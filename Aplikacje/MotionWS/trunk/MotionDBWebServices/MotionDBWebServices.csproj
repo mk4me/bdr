@@ -113,6 +113,7 @@
     <Compile Include="AttributeGroupViewSetting.cs" />
     <Compile Include="AttributeGroupViewSettingCollection.cs" />
     <Compile Include="CustomAuthValidator.cs" />
+    <Compile Include="CustomDummyValidator.cs" />
     <Compile Include="CustomPrincipal.cs" />
     <Compile Include="CustomRoleProvider.cs" />
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
@@ -187,7 +188,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AttributesElement.xsd" />
     <None Include="FileListType.xsd" />
     <None Include="res\AttributesElement.xsd" />
     <None Include="res\AuthorizationWS.wsdl" />
