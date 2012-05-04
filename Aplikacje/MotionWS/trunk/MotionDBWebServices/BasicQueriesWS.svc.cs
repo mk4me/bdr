@@ -1705,6 +1705,77 @@ namespace MotionDBWebServices
         }
 
 
+        public XmlElement GetCurrentClientSWVersionInfo()
+        {
+            XmlDocument xd = new XmlDocument();
+            try
+            {
+                OpenConnection();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_current_client_version_info";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("ClientVersionInfo", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return xd.DocumentElement;
+
+        }
+
+        public bool IsNewerClientSWAvailable(string version)
+        {
+            bool response = false;
+            SqlDataReader dr;
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "check_for_newer_client";
+                cmd.Parameters.Add("@version", SqlDbType.VarChar, 10);
+                cmd.Parameters["@version"].Value = version;
+                SqlParameter resultParameter =
+                    new SqlParameter("@result", SqlDbType.Bit);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
+                cmd.ExecuteNonQuery();
+                response = ((bool)resultParameter.Value);
+
+            }
+            catch (SqlException ex)
+            {
+                QueryException exc = new QueryException("DB-side", "Stored procedure execution error: " + ex.Message);
+                throw new FaultException<QueryException>(exc, "Database-side error", FaultCode.CreateReceiverFaultCode(new FaultCode("IsNewerClientSWAvailable")));
+            }
+            catch (Exception ex1)
+            {
+                QueryException exc = new QueryException("unknown", "Other error: " + ex1.Message + " " + ex1.Source);
+                throw new FaultException<QueryException>(exc, "Other error", FaultCode.CreateReceiverFaultCode(new FaultCode("IsNewerClientSWAvailable")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return response;
+        }
+
         public DateTime GetMetadataTimestamp()
         {
             DateTime stamp = DateTime.Now;

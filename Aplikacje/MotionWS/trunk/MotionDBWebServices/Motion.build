@@ -51,7 +51,7 @@
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\StandaloneWSDLCompositor.xslt /in res\UserPersonalSpaceWSStandalone.wsdl /out res\UserPersonalSpaceWSStandalone.wsdl" />
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\StandaloneWSDLCompositor.xslt /in res\UserPersonalSpaceWSStandalone.wsdl /out res\UserPersonalSpaceWSStandalone.wsdl" />
 
-    <echo message="Assembling WSDL for UserPersonalSpace" />
+    <echo message="Assembling WSDL for SampleOps" />
     <get src="https://v21.pjwstk.edu.pl/HMDB/SampleOpsWS.svc?wsdl" dest="res/SampleOpsWS.wsdl"></get>
     <exec program="D:\Dydaktyka\TIN\xq\AltovaXML.exe" commandline="/xslt1 res\PreciseXSDWeaverWCF.xslt /in res/SampleOpsWS.wsdl /out res/SampleOpsWS.wsdl" />
     <copy file="res/SampleOpsWS.wsdl" tofile="res/SampleOpsWSStandalone.wsdl" inputencoding="utf-8" outputencoding="utf-8" overwrite="true" />

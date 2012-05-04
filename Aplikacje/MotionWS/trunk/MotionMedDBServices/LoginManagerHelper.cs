@@ -132,13 +132,12 @@ namespace MotionMedDBWebServices
             return !fault;
         }
 
-        public bool ActivateUserAccount(string login, string activationCode, out string faultMessage)
+        public bool ActivateUserAccount(string login, string activationCode, bool propagateToHMDB, out string faultMessage)
         {
 
             int result = 0;
-
+            int propagate = propagateToHMDB ? 1 : 0;
             faultMessage = "";
-
             try
             {
 
@@ -147,9 +146,11 @@ namespace MotionMedDBWebServices
                 das.cmd.CommandText = "activate_user_account";
                 das.cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 das.cmd.Parameters.Add("@activation_code", SqlDbType.VarChar, 10);
+                das.cmd.Parameters.Add("@hmdb_propagate", SqlDbType.Bit);
 
                 das.cmd.Parameters["@user_login"].Value = login;
                 das.cmd.Parameters["@activation_code"].Value = activationCode;
+                das.cmd.Parameters["@hmdb_propagate"].Value = propagate;
                 SqlParameter resultParameter =
                     new SqlParameter("@result", SqlDbType.Int);
                 resultParameter.Direction = ParameterDirection.Output;
@@ -157,16 +158,17 @@ namespace MotionMedDBWebServices
                 das.cmd.ExecuteNonQuery();
 
                 result = (int)resultParameter.Value;
-                if (result == 1)
+                if (result > 0)
                 {
-                    faultMessage = "User login, password and activation code combination is invalid";
+                    if ( result == 1) faultMessage = "Authentication negative";
+                    if ( result == 2) faultMessage = "HMDB account activation requested but account missing";
                     return false;
                 }
-
+               
             }
             catch (SqlException ex)
             {
-                faultMessage = "Account activation failed at database level ";
+                faultMessage = "Database system access error";
                 return false;
             }
             finally
@@ -175,6 +177,7 @@ namespace MotionMedDBWebServices
             }
             return true;
         }
+
 
         public bool UpdateUserAccount(string login, string email, string pass, string newPass, string firstName, string lastName, out string faultMessage)
         {

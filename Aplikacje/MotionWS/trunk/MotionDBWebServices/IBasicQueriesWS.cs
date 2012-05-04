@@ -165,6 +165,16 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         DateTime GetMetadataTimestamp();
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement GetCurrentClientSWVersionInfo();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        bool IsNewerClientSWAvailable(string version);
+
+
+
     }
 
 }

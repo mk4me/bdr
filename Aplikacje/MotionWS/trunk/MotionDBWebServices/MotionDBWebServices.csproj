@@ -236,6 +236,9 @@
     <None Include="res\SessionDetailsWithAttributesElement.xsd" />
     <None Include="res\SessionGroupDefinitionElement.xsd" />
     <None Include="res\ShallowCopy.xsd" />
+    <None Include="res\UserAssignments.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\UserPersonalSpaceWSStandalone.wsdl" />
     <None Include="res\UserPersonalSpaceWS.wsdl" />
     <None Include="res\ListBasketSessionsWithAttributesXML.xsd" />
@@ -243,7 +246,9 @@
     <None Include="res\GenericQueryUniformXML.xsd" />
     <None Include="res\GenericQueryXML.xsd" />
     <None Include="res\GetPerformerByIdXML.xsd" />
-    <None Include="res\GetSegmentByIdXML.xsd" />
+    <None Include="res\GetCurrentClientSWVersionInfo.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\GetSessionByIdXML.xsd" />
     <None Include="res\GetTrialByIdXML.xsd" />
     <None Include="res\ListAttributeGroupsDefined.xsd" />

@@ -88,6 +88,12 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="ClientVersionInfo">
+				<xsd:complexType>
+					<xsd:attribute name="Version" type="xsd:string" use="required"/>
+					<xsd:attribute name="Details" type="xsd:string" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="Attributes">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -554,6 +560,36 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element minOccurs="1" maxOccurs="1" name="GetMetadataTimestampResult" type="xsd:dateTime"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GetCurrentClientSWVersionInfo">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="GetCurrentClientSWVersionInfoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="GetCurrentClientSWVersionInfoResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:ClientVersionInfo"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IsNewerClientSWAvailable">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="version" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="IsNewerClientSWAvailableResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="IsNewerClientSWAvailableResult" type="xsd:boolean"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -1291,6 +1327,24 @@
 	<wsdl:message name="IBasicQueriesWS_GetMetadataTimestamp_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetCurrentClientSWVersionInfo_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetCurrentClientSWVersionInfo"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetCurrentClientSWVersionInfo_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetCurrentClientSWVersionInfoResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_GetCurrentClientSWVersionInfo_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_IsNewerClientSWAvailable_InputMessage">
+		<wsdl:part name="parameters" element="tns:IsNewerClientSWAvailable"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_IsNewerClientSWAvailable_OutputMessage">
+		<wsdl:part name="parameters" element="tns:IsNewerClientSWAvailableResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_IsNewerClientSWAvailable_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
 		<wsdl:part name="parameters" element="tns:GenericQueryXML"/>
 	</wsdl:message>
@@ -1605,6 +1659,16 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestampResponse" message="tns:IBasicQueriesWS_GetMetadataTimestamp_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestampQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetMetadataTimestamp_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="GetCurrentClientSWVersionInfo">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetCurrentClientSWVersionInfo" message="tns:IBasicQueriesWS_GetCurrentClientSWVersionInfo_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetCurrentClientSWVersionInfoResponse" message="tns:IBasicQueriesWS_GetCurrentClientSWVersionInfo_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetCurrentClientSWVersionInfoQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_GetCurrentClientSWVersionInfo_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="IsNewerClientSWAvailable">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailable" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailableResponse" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailableQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1819,6 +1883,30 @@
 		</wsdl:operation>
 		<wsdl:operation name="GetMetadataTimestamp">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetMetadataTimestamp" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCurrentClientSWVersionInfo">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GetCurrentClientSWVersionInfo" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="IsNewerClientSWAvailable">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailable" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

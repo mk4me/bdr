@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="UserAssignments" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB" targetNamespace ="http://ruch.bytom.pjwstk.edu.pl/MotionDB">
+
+  <xsd:element name="UserAssignments">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="SessionGroups" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="SessionGroup" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="SessionGroupID" type="xsd:int" />
+                  <xsd:attribute name="SessionGroupName" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="UserGroups" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="UserGroup" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="UserGroupID" type="xsd:int" />
+                  <xsd:attribute name="UserGroupName" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="UserGroupAssignments" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="UserGroupAssignment" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="UserGroupID" type="xsd:int" />
+                  <xsd:attribute name="SessionGroupID" type="xsd:int" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="DBUsers" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="DBUser" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="UserID" type="xsd:int" />
+                  <xsd:attribute name="FirstName" type="xsd:string" />
+                  <xsd:attribute name="LastName" type="xsd:string" />
+                  <xsd:attribute name="Email" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="UserAssignments" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="UserAssignment" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="UserID" type="xsd:int" />
+                  <xsd:attribute name="UserGroupID" type="xsd:int" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+</xsd:schema>
