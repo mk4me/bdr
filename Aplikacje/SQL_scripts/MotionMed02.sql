@@ -369,3 +369,16 @@ go
 ALTER TABLE Pacjent_grupa_Pacjentow
         ADD PRIMARY KEY (IdPacjent, IdGrupa_Pacjentow)
 go
+
+create table Konfiguracja (
+		Klucz		varchar(20) NOT NULL UNIQUE,
+		Wartosc		varchar(100) NOT NULL,
+		Szczegoly	varchar(500)
+)
+go
+
+CREATE INDEX X1Konfiguracja ON Konfiguracja
+ (
+         Klucz
+ )
+go

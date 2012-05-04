@@ -2023,3 +2023,23 @@ select max(ts) as time_stamp from
 	) as q1
 )
 go
+
+-- last rev. 2012-04-17
+create procedure get_current_client_version_info 
+as
+			with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+			select 
+				Wartosc as Version,
+				Szczegoly as Details
+			from Konfiguracja ClientVersionInfo where Klucz='curr_client_ver'
+			for XML AUTO
+go 
+
+-- last rev. 2012-04-17
+create procedure check_for_newer_client  ( @version varchar(10), @result bit OUTPUT )
+as
+begin
+	set @result = 1;
+	if exists ( select Wartosc from Konfiguracja where Klucz = 'curr_client_ver' and Wartosc = @version ) set @result = 0;
+	return;
+end

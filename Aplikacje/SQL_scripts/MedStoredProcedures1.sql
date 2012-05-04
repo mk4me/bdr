@@ -192,17 +192,125 @@ return 0;
 end;
 go
 
--- last mod. 2012-03-19
+
+-- last rev. 2012-04-16
+-- Error codes:
+-- 1 authentication negative
+-- 2 hmdb account activation requested but account missing
+create procedure activate_user_account(@user_login varchar(30), @activation_code varchar(10), @hmdb_propagate bit, @result int OUTPUT)
+as
+begin
+	set @result = 0;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Kod_aktywacji = @activation_code )
+		begin
+			set @result = 1;
+			return;
+		end;
+
+	if @hmdb_propagate = 1 and not exists(select * from Motion.dbo.Uzytkownik where Login = @user_login )
+		begin
+			set @result = 2;
+			return;
+		end;
+		
+	
+	update Uzytkownik  set Status = 1  where Login = @user_login and Kod_aktywacji = @activation_code;
+	if @hmdb_propagate = 1
+		begin
+			update Motion.dbo.Uzytkownik  set Status = 1  where Login = @user_login and Kod_aktywacji = @activation_code;
+		end;
+
+	return 0;
+end;
+go
+
+-- last rev. 2012-05-04
+-- Error codes:
+-- 1 authentication negative
+-- 2 email already in use
+-- 3 obligatory parameter empty (length 0)
+-- 4 hmdb account activation requested but account missing
+create procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @hmdb_propagate bit, @result int OUTPUT)
+as
+begin
+
+	set @result = 0;
+
+	if ( LEN(@user_login)=0 or LEN(@user_password)=0 )
+		begin
+			set @result = 3;
+			return;
+		end;
+
+	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Status > 0 )
+		begin
+			set @result = 1;
+			return;
+		end;
+	if exists(select * from Uzytkownik where Login != @user_login and Email = @user_email)
+		begin
+			set @result = 2;
+			return;
+		end;
+
+	if @hmdb_propagate = 1 and not exists(select * from Motion.dbo.Uzytkownik where Login = @user_login )
+		begin
+			set @result = 4;
+			return;
+		end;
+
+	if ( @user_first_name != '-nochange-' )
+	begin
+		update Uzytkownik 
+		set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+		if @hmdb_propagate = 1
+		begin
+		update Motion.dbo.Uzytkownik 
+		set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+
+		end;		
+	end;	
+	if ( @user_new_password != '-nochange-' )
+	begin
+		update Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+		if @hmdb_propagate = 1
+		begin
+			update Motion.dbo.Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+		end;
+	end;
+	
+	return @result;
+end;
+go
+
+
+
+-- last rev. 2012-04-16
+create procedure get_user ( @user_login varchar(30) )
+as
+select Login, Imie, Nazwisko, Email
+	from Uzytkownik
+	where Login = @user_login
+go
+
+
+
+-- last rev. 2012-04-16
 -- Error codes:
 -- 1 login already in use
 -- 2 email already in use
 -- 3 obligatory parameter empty (length 0)
-create procedure create_user_account(@user_login varchar(30), @user_password varchar(20),  @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @activation_code varchar(20), @result int OUTPUT)
+-- 4/5 login or email already in use at HMDB
+alter procedure create_user_account(@user_login varchar(30), @user_password varchar(20),  @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @activation_code varchar(10), @hmdb_propagate bit, @result int OUTPUT)
 as
 begin
 
 	declare @email_title as varchar (120);
-	declare @email_body as varchar (200);
+	declare @email_body as varchar (500);
+	declare @link_command as varchar(30);
+	
+	set @link_command = '';
 	set @result = 0;
 
 	if ( LEN(@user_login)=0 or LEN(@user_password)=0 or LEN(@user_email) = 0 )
@@ -222,10 +330,34 @@ begin
 			return;
 		end;
 
-	insert into Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
+	if @hmdb_propagate = 1 and exists(select * from Motion.dbo.Uzytkownik where Login = @user_login)
+		begin
+			set @result = 4;
+			return;
+		end;
+	if @hmdb_propagate = 1 and exists(select * from Motion.dbo.Uzytkownik where Email = @user_email)
+		begin
+			set @result = 5;
+			return;
+		end;
 
-	set @email_title = 'Human Motion Database account activation for ' + @user_login;
-	set @email_body = 'Your activation code for login '+@user_login +' is: ' + @activation_code +' . Please visit the webpage https://v21.pjwstk.edu.pl/HMDBMed/UserAccountCreation.aspx to authenticate and perform your account activatio using this code.';
+
+	insert into Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
+	
+	if @hmdb_propagate = 1
+	begin
+		insert into Motion.dbo.Uzytkownik ( Login, Haslo, Email, Imie, Nazwisko, Kod_aktywacji ) values ( @user_login, HashBytes('SHA1',@user_password), @user_email, @user_first_name, @user_last_name, @activation_code );
+	end
+
+	if @hmdb_propagate = 1
+	begin
+		set @link_command = '&hmdb=true';
+	end;
+	set @email_title = 'Human Motion MEDICAL Database account activation for ' + @user_login;
+	set @email_body = 'Your account with login '+@user_login+' has been created successfully.'+CHAR(13)
+	+' To activate your account use the following link: https://v21.pjwstk.edu.pl/HMDBMed/AccountActivation.aspx?login='+@user_login+'&code='+@activation_code+CHAR(13)+@link_command
+	+'Alternatively, use activation code for login '+@user_login +' and activation code ' + @activation_code +' to perform the activation manually '
+	+CHAR(13)+'on the webpage https://v21.pjwstk.edu.pl/HMDBMed/UserAccountCreation.aspx or through your client application.';
 
 	exec msdb.dbo.sp_send_dbmail @profile_name='HMDB_Mail',
 	@recipients=@user_email,
@@ -235,25 +367,6 @@ begin
 end;
 go
 
-
--- last mod. 2012-03-19
--- Error codes:
--- 1 authentication negative
-create procedure activate_user_account(@user_login varchar(30), @user_password varchar(20),  @activation_code varchar(20), @result int OUTPUT)
-as
-begin
-	set @result = 0;
-
-	if not exists(select * from Uzytkownik where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code )
-		begin
-			set @result = 1;
-			return;
-		end;
-	update Uzytkownik  set Status = 1  where Login = @user_login and Haslo = HashBytes('SHA1',@user_password) and Kod_aktywacji = @activation_code;
-
-	return 0;
-end;
-go
 
 
 -- last mod. 2012-03-19

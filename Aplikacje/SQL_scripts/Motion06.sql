@@ -1358,3 +1358,15 @@ ADD CONSTRAINT U_UzytkownikLogin UNIQUE (Login)
 go
 */
 
+create table Konfiguracja (
+		Klucz		varchar(20) NOT NULL UNIQUE,
+		Wartosc		varchar(100) NOT NULL,
+		Szczegoly	varchar(500)
+)
+go
+
+CREATE INDEX X1Konfiguracja ON Konfiguracja
+ (
+         Klucz
+ )
+go
