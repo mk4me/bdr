@@ -306,6 +306,118 @@ namespace MotionDBWebServices
 
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+        public void AlterUserToUserGroupAssignment(int userID, int userGroupID, bool assign)
+        {
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "assign_user_to_user_group";
+                cmd.Parameters.Add("@user_id", SqlDbType.Int);
+                cmd.Parameters.Add("@user_group_id", SqlDbType.Int);
+                cmd.Parameters.Add("@assigned", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+                cmd.Parameters["@user_id"].Value = userID;
+                cmd.Parameters["@user_group_id"].Value = userGroupID;
+                cmd.Parameters["@assigned"].Value = assign ? 1 : 0;
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("Database fault", "Unknown database fault");
+                throw new FaultException<UpdateException>(exc, "Unknown database fault", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserToUserGroupAssignment")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (resultCode != 0)
+            {
+                UpdateException exc;
+                switch (resultCode)
+                {
+                    case 1:
+                        exc = new UpdateException("User not found", "User of a given ID not found");
+                        throw new FaultException<UpdateException>(exc, "User not found", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserToUserGroupAssignment")));
+                    case 2:
+                        exc = new UpdateException("User group not found", "User group of a given ID not found");
+                        throw new FaultException<UpdateException>(exc, "User group not found", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserToUserGroupAssignment")));
+
+
+                    default:
+                        exc = new UpdateException("Unknown error", "unknown error occured");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserToUserGroupAssignment")));
+
+                }
+            }
+        }
+
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_administrators")]
+        public void AlterUserGroupToSessionGroupAssignment(int userGroupID, int sessionGroupID, bool assign)
+        {
+            int resultCode = 0;
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "AlterUserGroupToSessionGroupAssignment";
+                cmd.Parameters.Add("@session_group_id", SqlDbType.Int);
+                cmd.Parameters.Add("@user_group_id", SqlDbType.Int);
+                cmd.Parameters.Add("@assigned", SqlDbType.Bit);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+                cmd.Parameters["@session_group_id"].Value = sessionGroupID;
+                cmd.Parameters["@user_group_id"].Value = userGroupID;
+                cmd.Parameters["@assigned"].Value = assign ? 1 : 0;
+
+                cmd.ExecuteNonQuery();
+                resultCode = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("Database fault", "Unknown database fault");
+                throw new FaultException<UpdateException>(exc, "Unknown database fault", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserGroupToSessionGroupAssignment")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (resultCode != 0)
+            {
+                UpdateException exc;
+                switch (resultCode)
+                {
+                    case 1:
+                        exc = new UpdateException("Session group not found", "Session group of a given ID not found");
+                        throw new FaultException<UpdateException>(exc, "Session group not found", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserGroupToSessionGroupAssignment")));
+                    case 2:
+                        exc = new UpdateException("User group not found", "User group of a given ID not found");
+                        throw new FaultException<UpdateException>(exc, "User group not found", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserGroupToSessionGroupAssignment")));
+
+
+                    default:
+                        exc = new UpdateException("Unknown error", "unknown error occured");
+                        throw new FaultException<UpdateException>(exc, "Update invocation failure", FaultCode.CreateReceiverFaultCode(new FaultCode("AlterUserGroupToSessionGroupAssignment")));
+
+                }
+            }
+        }
+
+
 
         [PrincipalPermission(SecurityAction.Demand, Role = "motion_administrators")]
         public void DownloadAreaCleanup(int olderThanMinutes)

@@ -34,6 +34,14 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AdministrationOperationException))]
+        void AlterUserToUserGroupAssignment(int userID, int userGroupID, bool assign);
+
+        [OperationContract]
+        [FaultContract(typeof(AdministrationOperationException))]
+        void AlterUserGroupToSessionGroupAssignment(int userID, int userGroupID, bool assign);
+
+        [OperationContract]
+        [FaultContract(typeof(AdministrationOperationException))]
         void DownloadAreaCleanup(int olderThanMinutes);
 
     }
