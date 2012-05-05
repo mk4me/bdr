@@ -1199,7 +1199,6 @@ namespace MotionDBWebServices
             }             
             return sessionId; 
         }
-
     }
 
 }
