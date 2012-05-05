@@ -26,15 +26,15 @@ namespace MotionDBWebServices
         byte[] fileData = null;
 
         static string localReadDirSuffix = "BDR/";
-        static string localReadDir =  baseLocalFilePath+localReadDirSuffix;
-        static string localWriteDirSuffix = localReadDirSuffix+"w/";
-        static string localWriteDir = localReadDir+localWriteDirSuffix;
+        static string localReadDir = baseLocalFilePath + localReadDirSuffix;
+        static string localWriteDirSuffix = localReadDirSuffix + "w/";
+        static string localWriteDir = localReadDir + localWriteDirSuffix;
 
         SqlDataReader fileReader = null;
 
         // !! TODO - docelowo zmienic na bazujace implicite na sciezce localWriteDir - ale po aktualizacji klienta BDR dopiero
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int StoreMeasurementConfFile(int mcID, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -104,7 +104,7 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int StoreSessionFile(int sessionId, string path, string description, string filename)
         {
             string dirLocation = baseLocalFilePath + path;
@@ -173,7 +173,7 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int StoreTrialFile(int trialID, string path, string description, string filename)
         {
 
@@ -244,10 +244,10 @@ namespace MotionDBWebServices
             return newFileId;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void ReplaceFile(int fileID, string path, string filename)
         {
-  
+
             string dirLocation = baseLocalFilePath + path;
             string fileLocation = dirLocation + @"\" + filename;
             /* To be activated after the BDR client update
@@ -271,7 +271,7 @@ namespace MotionDBWebServices
                 OpenConnection();
                 cmd.CommandText = @"update Plik 
                                         set Plik = @file_data, Nazwa_pliku = @file_name
-                                        where IdPlik = @file_id";                                 
+                                        where IdPlik = @file_id";
                 cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
                 cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
@@ -295,7 +295,7 @@ namespace MotionDBWebServices
             }
             catch (SystemException ex1)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("system", "File access failure: "+ex1.Message);
+                FileAccessServiceException exc = new FileAccessServiceException("system", "File access failure: " + ex1.Message);
                 throw new FaultException<FileAccessServiceException>(exc, "File access failure", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
             }
             finally
@@ -304,7 +304,7 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void StoreMeasurementConfFiles(int mcID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -399,7 +399,8 @@ namespace MotionDBWebServices
             }
             return;
         }
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void StoreSessionFiles(int sessionID, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -492,7 +493,7 @@ namespace MotionDBWebServices
             return;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public void StoreTrialFiles(int trialId, string path, string description)
         {
             string dirLocation = baseLocalFilePath;
@@ -589,7 +590,7 @@ namespace MotionDBWebServices
         }
 
         /*
-                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+                // SECURE ME !!!
                 public int StoreMeasurementResultFile(int measurementID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -654,7 +655,7 @@ namespace MotionDBWebServices
                     return newFileId;
                 }
 
-                [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+                // SECURE ME !!!
                 public int StorePreviewFile(int sourceFileID, string path, string description, string filename)
                 {
                     string dirLocation = baseLocalFilePath + path;
@@ -717,19 +718,19 @@ namespace MotionDBWebServices
                 }
          */
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")] 
+
         public void DownloadComplete(int fileID, string path)
         {
 
             string fileLocation = "NOT_FOUND";
             path = path.Substring(0, path.LastIndexOf('/'));
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             if ((fileID == 0) && path.Contains(userName))
             {
-                if (Directory.Exists( baseLocalFilePath + path ))
+                if (Directory.Exists(baseLocalFilePath + path))
                     Directory.Delete(baseLocalFilePath + path, true);
                 return;
             }
@@ -738,7 +739,7 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
 
-     
+
                 cmd.CommandText = @"select Lokalizacja from Plik_udostepniony where IdPlik_udostepniony = @file_id and Lokalizacja = @file_path";
                 cmd.Parameters.Add("@file_id", SqlDbType.Int);
                 cmd.Parameters["@file_id"].Value = fileID;
@@ -771,7 +772,7 @@ namespace MotionDBWebServices
             }
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
         public FileData RetrieveFile(int fileID)
         {
             string relativePath = "";
@@ -784,7 +785,7 @@ namespace MotionDBWebServices
 
             fileData = null;
             fileName = "";
-            relativePath = localReadDirSuffix+DateTime.Now.Ticks.ToString(); 
+            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString();
             try
             {
                 // TO DO: generowanie losowej nazwy katalogu
@@ -812,7 +813,7 @@ namespace MotionDBWebServices
                     throw new FaultException<FileAccessServiceException>(exc, "Cannot retrieve this file", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
                 }
 
-                if(!Directory.Exists(baseLocalFilePath + relativePath))
+                if (!Directory.Exists(baseLocalFilePath + relativePath))
                     Directory.CreateDirectory(baseLocalFilePath + relativePath);
 
                 fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
@@ -849,12 +850,12 @@ namespace MotionDBWebServices
             {
                 CloseConnection();
             }
-            fData.FileLocation = relativePath+"/"+fileName;
+            fData.FileLocation = relativePath + "/" + fileName;
             fData.SubdirPath = filePath;
             return fData;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
         public string GetShallowCopy()
         {
             string filePath = "";
@@ -865,7 +866,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -875,40 +876,40 @@ namespace MotionDBWebServices
 
             fileLocation = localReadDirSuffix + filePath + "/" + fileName;
             try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_shallow_copy";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
                 {
-                    OpenConnection();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "get_shallow_copy";
-                    SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
-                    usernamePar.Direction = ParameterDirection.Input;
-                    usernamePar.Value = userName;
-                    XmlReader dr = cmd.ExecuteXmlReader();
-                    if (dr.Read())
-                    {
-                        xd.Load(dr);
-                    }
-                    dr.Close();
+                    xd.Load(dr);
+                }
+                dr.Close();
 
-                    xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
-                    xd1.LoadXml(xd.OuterXml);
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+                xd1.LoadXml(xd.OuterXml);
 
-                    xd.Save(baseLocalFilePath + fileLocation);
-                    
-                }
-                catch (SqlException ex)
-                {
-                    FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
-                    throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetShallowCopy")));
-                }
-                finally
-                {
-                    CloseConnection();
-                }
+                xd.Save(baseLocalFilePath + fileLocation);
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetShallowCopy")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
 
             return fileLocation;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
         public string GetShallowCopyIncrement(DateTime since)
         {
             string filePath = "";
@@ -919,7 +920,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -965,7 +966,7 @@ namespace MotionDBWebServices
             return fileLocation;
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionUsers")]
+
         public string GetMetadata()
         {
             string filePath = "";
@@ -976,7 +977,7 @@ namespace MotionDBWebServices
             XmlDocument xd = new XmlDocument();
             XmlDocument xd1 = new XmlDocument();
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             filePath = userName + "/" + DateTime.Now.Ticks.ToString();
@@ -1019,14 +1020,64 @@ namespace MotionDBWebServices
             return fileLocation;
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
+        public string GetUserAssignments()
+        {
+            string filePath = "";
+            string fileName = "userAssignments.xml";
+            string fileLocation = "";
 
-        [PrincipalPermission(SecurityAction.Demand, Role = @"MotionOperators")]
+
+            XmlDocument xd = new XmlDocument();
+            XmlDocument xd1 = new XmlDocument();
+
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
+
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
+
+            fileLocation = localReadDirSuffix + filePath + "/" + fileName;
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_user_assignments";
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+                xd1.LoadXml(xd.OuterXml);
+
+                xd.Save(baseLocalFilePath + fileLocation);
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetUserAssignments")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return fileLocation;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
         public int CreateSessionFromFiles(string path)
         {
 
             // int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             int result = 0;
@@ -1059,10 +1110,10 @@ namespace MotionDBWebServices
                 OpenConnection();
                 connF.Open();
                 connA.Open();
-                
-                 
+
+
                 DirectoryInfo di = new DirectoryInfo(dirLocation);
-                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.??*", SearchOption.TopDirectoryOnly) )
+                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.??*", SearchOption.TopDirectoryOnly))
                 {
 
                     if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-B\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
@@ -1086,7 +1137,7 @@ namespace MotionDBWebServices
                 cmd.Parameters["@user_login"].Value = userName;
                 cmd.Parameters["@files"].Value = fileNames;
                 SqlDataReader sdr = cmd.ExecuteReader();
-                
+
                 if (resultParameter.Value != null)
                 {
                     result = (int)resultParameter.Value;
@@ -1155,7 +1206,7 @@ namespace MotionDBWebServices
                             cmdA.ExecuteNonQuery();
                         }
                     }
-                    
+
                     fullPath = dirLocation + fileName;
 
                     fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
@@ -1170,14 +1221,14 @@ namespace MotionDBWebServices
                     br.Close();
                     fs.Close();
                     /* File.Delete(fullPath); */
-                } 
+                }
 
                 Directory.Delete(di.FullName, true);
 
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated: "+ex.Message);
+                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated: " + ex.Message);
                 throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed: " + ex.Message, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSessionFromFiles")));
             }
             catch (Exception ex1)
@@ -1185,7 +1236,7 @@ namespace MotionDBWebServices
                 if (ex1 is FaultException) throw ex1;
                 else
                 {
-                    FileAccessServiceException exc = new FileAccessServiceException("other", "Other exception: "+ex1.Message + ex1.StackTrace);
+                    FileAccessServiceException exc = new FileAccessServiceException("other", "Other exception: " + ex1.Message + ex1.StackTrace);
                     throw new FaultException<FileAccessServiceException>(exc, "Other exception", FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSessionFromFiles")));
                 }
 
@@ -1196,9 +1247,11 @@ namespace MotionDBWebServices
                 connA.Close();
                 connF.Close();
                 CloseConnection();
-            }             
-            return sessionId; 
+            }
+            return sessionId;
         }
+
     }
 
 }
+
