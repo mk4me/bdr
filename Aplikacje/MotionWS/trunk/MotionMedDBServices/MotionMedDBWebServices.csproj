@@ -63,6 +63,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AccountActivation.aspx" />
     <Content Include="AccountFactoryWS.svc" />
     <Content Include="bin\MotionDBCommons.dll" />
     <Content Include="bin\MotionDBCommons.pdb" />
@@ -73,6 +74,7 @@
     <Content Include="FileStoremanWS.svc" />
     <Content Include="res\XMLFile1.xml" />
     <Content Include="UserAccountCreation.aspx" />
+    <Content Include="UserAccountUpdate.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -80,6 +82,13 @@
     <Content Include="web\logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountActivation.aspx.cs">
+      <DependentUpon>AccountActivation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AccountActivation.aspx.designer.cs">
+      <DependentUpon>AccountActivation.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AccountFactoryWS.svc.cs">
       <DependentUpon>AccountFactoryWS.svc</DependentUpon>
     </Compile>
@@ -106,6 +115,13 @@
     </Compile>
     <Compile Include="UserAccountCreation.aspx.designer.cs">
       <DependentUpon>UserAccountCreation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserAccountUpdate.aspx.cs">
+      <DependentUpon>UserAccountUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserAccountUpdate.aspx.designer.cs">
+      <DependentUpon>UserAccountUpdate.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

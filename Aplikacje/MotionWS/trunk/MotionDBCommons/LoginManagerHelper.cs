@@ -14,6 +14,11 @@ namespace MotionDBCommons
 
         DatabaseAccessService das = new DatabaseAccessService();
 
+        public string ProduceRandomCode(int l)
+        {
+            return das.ProduceRandomCode(l);
+        }
+
 
         public bool CreateUserAccount(string login, string email, string pass, string firstName, string lastName, out string faultMessage)
         {
@@ -173,7 +178,7 @@ namespace MotionDBCommons
 
             if (firstName != "-nochange-")
             {
-                if (pass.Length < 6 || pass.Length > 20)
+                if (newPass.Length < 6 || newPass.Length > 20)
                 {
                     faultMessage = faultMessage + " Password length invalid. Required at least 6 characters";
                     fault = true;
@@ -193,7 +198,7 @@ namespace MotionDBCommons
             }
             if (pass != "-nochange-")
             {
-                if (!(Regex.IsMatch(pass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
+                if (!(Regex.IsMatch(newPass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
                 {
                     faultMessage = faultMessage + " Password not valid. Must include uppercase, lowercase, digit and be 6-20 characters long";
                     fault = true;

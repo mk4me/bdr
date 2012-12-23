@@ -74,6 +74,7 @@
     <Content Include="AccountActivation.aspx" />
     <Content Include="AccountFactoryWS.svc" />
     <Content Include="BasicQueriesWS.svc" />
+    <Content Include="Download.aspx" />
     <Content Include="UserAccountCreation.aspx" />
     <Content Include="UserAccountUpdate.aspx" />
     <Content Include="web\bottom.png" />
@@ -116,6 +117,13 @@
     <Compile Include="CustomDummyValidator.cs" />
     <Compile Include="CustomPrincipal.cs" />
     <Compile Include="CustomRoleProvider.cs" />
+    <Compile Include="Download.aspx.cs">
+      <DependentUpon>Download.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Download.aspx.designer.cs">
+      <DependentUpon>Download.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ErrorLoggerBehaviorAttribute.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="FileNameEntry.cs" />
@@ -174,7 +182,9 @@
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="config_bak.xml" />
     <Content Include="FileStoremanWS.svc" />
-    <None Include="Motion.build" />
+    <None Include="Motion.build">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="index.html" />
     <Content Include="res\Motion.build.xml" />
     <Content Include="res\PreciseXSDWeaver.xslt" />

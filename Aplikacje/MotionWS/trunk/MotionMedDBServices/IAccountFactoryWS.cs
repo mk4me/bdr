@@ -17,5 +17,9 @@ namespace MotionMedDBWebServices
         [OperationContract]
         [FaultContract(typeof(AccountFactoryException))]
         bool ActivateUserAccount(string login, string activationCode, bool propagateToHMDB);
+
+        [OperationContract]
+        [FaultContract(typeof(AccountFactoryException))]
+        bool ResetPassword(string email, bool propagateToHMDB);
     }
 }

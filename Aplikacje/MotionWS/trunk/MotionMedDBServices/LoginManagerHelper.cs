@@ -14,6 +14,11 @@ namespace MotionMedDBWebServices
 
         MedDatabaseAccessService das = new MedDatabaseAccessService();
 
+        public string ProduceRandomCode(int l)
+        {
+            return das.ProduceRandomCode(l);
+        }
+
 
         public bool CreateUserAccount(string login, string email, string pass, string firstName, string lastName, out string faultMessage, bool propagateToHMDB)
         {
@@ -206,9 +211,9 @@ namespace MotionMedDBWebServices
                     fault = true;
                 }
             }
-            if (pass != "-nochange-")
+            if (newPass != "-nochange-")
             {
-                if (!(Regex.IsMatch(pass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
+                if (!(Regex.IsMatch(newPass, @"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}")))
                 {
                     faultMessage = faultMessage + " Password not valid. Must include uppercase, lowercase, digit and be 6-20 characters long";
                     fault = true;
@@ -233,14 +238,12 @@ namespace MotionMedDBWebServices
                 das.cmd.Parameters.Add("@user_email", SqlDbType.VarChar, 50);
                 das.cmd.Parameters.Add("@user_first_name", SqlDbType.VarChar, 30);
                 das.cmd.Parameters.Add("@user_last_name", SqlDbType.VarChar, 50);
-
                 das.cmd.Parameters["@user_login"].Value = login;
                 das.cmd.Parameters["@user_password"].Value = pass;
                 das.cmd.Parameters["@user_new_password"].Value = newPass;
                 das.cmd.Parameters["@user_email"].Value = email;
                 das.cmd.Parameters["@user_first_name"].Value = firstName;
                 das.cmd.Parameters["@user_last_name"].Value = lastName;
-
                 SqlParameter resultParameter =
                     new SqlParameter("@result", SqlDbType.Int);
                 resultParameter.Direction = ParameterDirection.Output;

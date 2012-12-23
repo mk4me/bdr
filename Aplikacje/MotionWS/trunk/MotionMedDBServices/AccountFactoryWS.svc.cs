@@ -76,6 +76,51 @@ namespace MotionMedDBWebServices
             return true;
         }
 
+        public bool ResetPassword(string email, bool propagateToHMDB)
+        {
+            int result = 0;
+            int propagate = propagateToHMDB ? 1 : 0;
+            string code = "";
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "forgot_password";
+                cmd.Parameters.Add("@user_email", SqlDbType.VarChar, 50);
+                cmd.Parameters.Add("@activation_code", SqlDbType.VarChar, 50);
+                cmd.Parameters.Add("@hmdb_propagate", SqlDbType.Bit);
+
+                code = lmh.ProduceRandomCode(20);
+
+                cmd.Parameters["@user_email"].Value = email;
+                cmd.Parameters["@activation_code"].Value = code;
+                cmd.Parameters["@hmdb_propagate"].Value = propagate;
+                SqlParameter resultParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultParameter);
+                cmd.ExecuteNonQuery();
+
+                result = (int)resultParameter.Value;
+                if (result > 0)
+                {
+                    return false;
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                AccountFactoryException exc = new AccountFactoryException("database", "Account activation failed at database level " + ex.Message);
+                throw new FaultException<AccountFactoryException>(exc, "Failed to reset the password", FaultCode.CreateReceiverFaultCode(new FaultCode("ResetPassword")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return true;
+
+        }
 
     }
 }
