@@ -583,7 +583,10 @@ CREATE TABLE Uzytkownik (
         Login                varchar(50) NOT NULL UNIQUE,
         Imie                 varchar(30) NOT NULL,
         Nazwisko             varchar(50) NOT NULL,
-        Haslo				varbinary(100) default 0x00 not null
+        Haslo				varbinary(100) default 0x00 not null,
+        Email				varchar(50) not null default 'NO_EMAIL',
+		Kod_Aktywacji		varchar(20),
+		Status				int not null default 0      
  )
 go
 
