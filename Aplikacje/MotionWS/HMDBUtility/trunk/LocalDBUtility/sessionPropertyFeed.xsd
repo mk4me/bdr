@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="session">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="trial" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ExerciseNo" type="xs:int" />
+             
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="performerConf">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attribute">
+                <xs:complexType>
+                  <xs:attribute name="name" type="xs:token" />
+                  <xs:attribute name="value" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:token" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

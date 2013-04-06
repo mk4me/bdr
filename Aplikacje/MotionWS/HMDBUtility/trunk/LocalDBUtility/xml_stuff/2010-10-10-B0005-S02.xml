@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<session name="2010-10-10-B0005-S02" date="2010-10-10" subjectId="B0005" shortName="S02">
+  <trial name="T01">
+    <ExerciseNo>4</ExerciseNo>
+  </trial>
+  <trial name="T02">
+    <ExerciseNo>3</ExerciseNo>
+  </trial>
+
+</session>

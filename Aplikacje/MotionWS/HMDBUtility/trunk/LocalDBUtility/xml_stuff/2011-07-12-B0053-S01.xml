@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<session name="2011-07-12-B0053-S01" date="2011-07-12" subjectId="B0053" shortName="S01">
+  <trial name="T01">
+    <ExerciseNo>1</ExerciseNo>
+  </trial>
+  <trial name="T02">
+    <ExerciseNo>1</ExerciseNo>
+  </trial>
+  <trial name="T03">
+    <ExerciseNo>2</ExerciseNo>
+  </trial>
+  <trial name="T04">
+    <ExerciseNo>2</ExerciseNo>
+  </trial>
+  <trial name="T05">
+    <ExerciseNo>2</ExerciseNo>
+  </trial>
+  <trial name="T06">
+    <ExerciseNo>3</ExerciseNo>
+  </trial>
+  <trial name="T07">
+    <ExerciseNo>3</ExerciseNo>
+  </trial>
+  <trial name="T08">
+    <ExerciseNo>3</ExerciseNo>
+  </trial>
+  <trial name="T09">
+    <ExerciseNo>4</ExerciseNo>
+  </trial>
+  <trial name="T10">
+    <ExerciseNo>4</ExerciseNo>
+  </trial>
+  <trial name="T11">
+    <ExerciseNo>5</ExerciseNo>
+  </trial>
+  <trial name="T12">
+    <ExerciseNo>5</ExerciseNo>
+  </trial>
+  <trial name="T13">
+    <ExerciseNo>5</ExerciseNo>
+  </trial>
+  <trial name="T14">
+    <ExerciseNo>7</ExerciseNo>
+  </trial>
+  <trial name="T15">
+    <ExerciseNo>7</ExerciseNo>
+  </trial>
+  <trial name="T16">
+    <ExerciseNo>7</ExerciseNo>
+  </trial>
+  <trial name="T17">
+    <ExerciseNo>8</ExerciseNo>
+  </trial>
+  <trial name="T18">
+    <ExerciseNo>8</ExerciseNo>
+  </trial>
+  <trial name="T19">
+    <ExerciseNo>8</ExerciseNo>
+  </trial>
+</session>
