@@ -1,3 +1,14 @@
+CREATE DATABASE TPP 
+ON
+PRIMARY ( NAME = TPP1,
+    FILENAME = 'e:\TPP\TPP.mdf'),
+FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
+    FILENAME = 'e:\TPP\filestream')
+LOG ON  ( NAME = TPPlog1,
+    FILENAME = 'e:\TPP\TPPlog.ldf')
+GO
+
+
 -- Pytania
 -- 	Wartości wymagane, wartości opcjonalne ? Dopuszczamy wartości NULL we wszystkich polach, z wyjątkiem kluczy obcych oraz identyfikatra wizyty
 -- 	Atrybuty dla przechowywania plików ? Zrobione
@@ -9,7 +20,7 @@
 -- 		Uwagi na czerwono z pliku Excela
 -- 		Dane !!!
 
-use tpp;
+use TPP;
 go
 CREATE TABLE Badanie (
 	IdBadanie 			int IDENTITY,
@@ -143,4 +154,16 @@ go
 CREATE INDEX X1Plik ON Plik (
 	IdBadanie
 )
+go
+
+-- added 2013-05-27
+CREATE TABLE Slownik (
+	Atrybut	varchar(40) not null,
+	Klucz	tinyint not null,
+	Wartosc	tinyint not null
+)
+go
+
+ALTER TABLE Slownik
+	ADD PRIMARY KEY (Atrybut, Klucz)
 go
