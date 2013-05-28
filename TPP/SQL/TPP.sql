@@ -122,6 +122,7 @@ go
 
 CREATE TABLE Pacjent (
 	IdPacjent 	int IDENTITY,
+	NumerPacjenta int not null unique
 )
 go
 
