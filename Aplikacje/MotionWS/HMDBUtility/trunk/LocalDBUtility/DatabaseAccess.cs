@@ -68,15 +68,23 @@ namespace LocalDBUtility
         protected const bool debug = false;
         protected static string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
 
+        System.Globalization.NumberFormatInfo nfi = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+
         int maxFileSize = 40000000;
         byte[] fileData = null;
 
         SqlDataReader fileReader = null;
 
+        protected int ExtractInt(string s)
+        {
+            return (int)Math.Round(decimal.Parse(s, nfi), MidpointRounding.AwayFromZero);
+        }
+
 
         public static string GetConnectionString()
         {
             return @"server = 172.16.1.43; integrated security = true; database = Motion";
+            // return @"server = .; integrated security = true; database = Motion";
             //"Data Source=192.168.0.5\SQL2008R2;Initial Catalog=MWDB;Persist Security Info=True;User ID=user;Password=password"
         }
 
@@ -205,7 +213,7 @@ namespace LocalDBUtility
         public void FeedAnthropometricData(string data)
         {
 
-            System.Globalization.NumberFormatInfo nfi = new System.Globalization.CultureInfo("en-US", false).NumberFormat;
+            
 
 
             int resultCode = 0;
@@ -264,30 +272,30 @@ namespace LocalDBUtility
                 cmd.Parameters["@pid"].Value = pid;
                 cmd.Parameters["@sname"].Value = sid;
                 cmd.Parameters["@BodyMass"].Value = decimal.Parse(atrybuty[1], nfi);
-                cmd.Parameters["@Height"].Value = int.Parse(atrybuty[2]);
-                cmd.Parameters["@InterAsisDistance"].Value = int.Parse(atrybuty[3]); 
-                cmd.Parameters["@LeftLegLength"].Value = int.Parse(atrybuty[4]); 
-                cmd.Parameters["@RightLegLenght"].Value = int.Parse(atrybuty[5]); 
-                cmd.Parameters["@LeftKneeWidth"].Value = int.Parse(atrybuty[6]); 
-                cmd.Parameters["@RightKneeWidth"].Value = int.Parse(atrybuty[7]); 
-                cmd.Parameters["@LeftAnkleWidth"].Value = int.Parse(atrybuty[8]); 
-                cmd.Parameters["@RightAnkleWidth"].Value = int.Parse(atrybuty[9]); 
-                cmd.Parameters["@LeftCircuitThigh"].Value = int.Parse(atrybuty[10]); 
-                cmd.Parameters["@RightCircuitThight"].Value = int.Parse(atrybuty[11]); 
-                cmd.Parameters["@LeftCircuitShank"].Value = int.Parse(atrybuty[12]); 
-                cmd.Parameters["@RightCircuitShank"].Value = int.Parse(atrybuty[13]); 
-                cmd.Parameters["@LeftShoulderOffset"].Value = int.Parse(atrybuty[14]); 
-                cmd.Parameters["@RightShoulderOffset"].Value = int.Parse(atrybuty[15]); 
-                cmd.Parameters["@LeftElbowWidth"].Value = int.Parse(atrybuty[16]); 
-                cmd.Parameters["@RightElbowWidth"].Value = int.Parse(atrybuty[17]); 
-                cmd.Parameters["@LeftWristWidth"].Value = int.Parse(atrybuty[18]); 
-                cmd.Parameters["@RightWristWidth"].Value = int.Parse(atrybuty[19]); 
-                cmd.Parameters["@LeftWristThickness"].Value = int.Parse(atrybuty[20]); 
-                cmd.Parameters["@RightWristThickness"].Value = int.Parse(atrybuty[21]); 
-                cmd.Parameters["@LeftHandWidth"].Value = int.Parse(atrybuty[22]); 
-                cmd.Parameters["@RightHandWidth"].Value = int.Parse(atrybuty[23]); 
-                cmd.Parameters["@LeftHandThickness"].Value = int.Parse(atrybuty[24]); 
-                cmd.Parameters["@RightHandThickness"].Value = int.Parse(atrybuty[25]); 
+                cmd.Parameters["@Height"].Value = ExtractInt(atrybuty[2]);
+                cmd.Parameters["@InterAsisDistance"].Value = ExtractInt(atrybuty[3]); 
+                cmd.Parameters["@LeftLegLength"].Value = ExtractInt(atrybuty[4]); 
+                cmd.Parameters["@RightLegLenght"].Value = ExtractInt(atrybuty[5]); 
+                cmd.Parameters["@LeftKneeWidth"].Value = ExtractInt(atrybuty[6]); 
+                cmd.Parameters["@RightKneeWidth"].Value = ExtractInt(atrybuty[7]); 
+                cmd.Parameters["@LeftAnkleWidth"].Value = ExtractInt(atrybuty[8]); 
+                cmd.Parameters["@RightAnkleWidth"].Value = ExtractInt(atrybuty[9]); 
+                cmd.Parameters["@LeftCircuitThigh"].Value = ExtractInt(atrybuty[10]); 
+                cmd.Parameters["@RightCircuitThight"].Value = ExtractInt(atrybuty[11]); 
+                cmd.Parameters["@LeftCircuitShank"].Value = ExtractInt(atrybuty[12]); 
+                cmd.Parameters["@RightCircuitShank"].Value = ExtractInt(atrybuty[13]); 
+                cmd.Parameters["@LeftShoulderOffset"].Value = ExtractInt(atrybuty[14]); 
+                cmd.Parameters["@RightShoulderOffset"].Value = ExtractInt(atrybuty[15]); 
+                cmd.Parameters["@LeftElbowWidth"].Value = ExtractInt(atrybuty[16]); 
+                cmd.Parameters["@RightElbowWidth"].Value = ExtractInt(atrybuty[17]); 
+                cmd.Parameters["@LeftWristWidth"].Value = ExtractInt(atrybuty[18]); 
+                cmd.Parameters["@RightWristWidth"].Value = ExtractInt(atrybuty[19]); 
+                cmd.Parameters["@LeftWristThickness"].Value = ExtractInt(atrybuty[20]); 
+                cmd.Parameters["@RightWristThickness"].Value = ExtractInt(atrybuty[21]); 
+                cmd.Parameters["@LeftHandWidth"].Value = ExtractInt(atrybuty[22]); 
+                cmd.Parameters["@RightHandWidth"].Value = ExtractInt(atrybuty[23]); 
+                cmd.Parameters["@LeftHandThickness"].Value = ExtractInt(atrybuty[24]); 
+                cmd.Parameters["@RightHandThickness"].Value = ExtractInt(atrybuty[25]); 
 
                 cmd.ExecuteNonQuery();
                 resultCode = (int)resultCodeParameter.Value;
