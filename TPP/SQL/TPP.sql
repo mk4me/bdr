@@ -20,8 +20,21 @@ GO
 -- 		Uwagi na czerwono z pliku Excela
 -- 		Dane !!!
 
-use TPP;
+
+
+CREATE TABLE Uzytkownik (
+        IdUzytkownik         int IDENTITY,
+        Login                varchar(50) NOT NULL UNIQUE,
+        Imie                 varchar(30) NOT NULL,
+        Nazwisko             varchar(50) NOT NULL,
+        Haslo				varbinary(100) default 0x00 not null,
+        Email				varchar(50) not null default 'NO_EMAIL',
+		Kod_Aktywacji		varchar(20),
+		Status				int not null default 0      
+ )
 go
+
+
 CREATE TABLE Badanie (
 	IdBadanie 			int IDENTITY,
 	IdPacjent			int not null,
@@ -120,16 +133,22 @@ ALTER TABLE Badanie
 	ADD PRIMARY KEY (IdBadanie)
 go
 
+
+
+
 CREATE TABLE Pacjent (
 	IdPacjent 	int IDENTITY,
-	NumerPacjenta int not null unique
+	NumerPacjenta	varchar(20) not null unique,
+	RokUrodzenia tinyint,
+	MiesiacUrodzenia tinyint,
+	Plec bit
 )
 go
 
--- CREATE INDEX X1Pacjent ON Pacjent (
---     IdPacjent
--- )
--- go
+CREATE INDEX X1Pacjent ON Pacjent (
+     NumerPacjenta
+ )
+ go
 
 ALTER TABLE Pacjent
 	ADD PRIMARY KEY (IdPacjent)
@@ -159,6 +178,7 @@ go
 
 -- added 2013-05-27
 CREATE TABLE Slownik (
+	Tabela  varchar(30) not null,
 	Atrybut	varchar(40) not null,
 	Klucz	tinyint not null,
 	Wartosc	tinyint not null
@@ -166,5 +186,5 @@ CREATE TABLE Slownik (
 go
 
 ALTER TABLE Slownik
-	ADD PRIMARY KEY (Atrybut, Klucz)
+	ADD PRIMARY KEY (Tabela, Atrybut, Klucz)
 go
