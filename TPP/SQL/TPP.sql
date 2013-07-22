@@ -8,6 +8,11 @@ LOG ON  ( NAME = TPPlog1,
     FILENAME = 'e:\TPP\TPPlog.ldf')
 GO
 
+use TPP;
+go
+
+
+
 
 -- Pytania
 -- 	Wartości wymagane, wartości opcjonalne ? Dopuszczamy wartości NULL we wszystkich polach, z wyjątkiem kluczy obcych oraz identyfikatra wizyty
@@ -35,6 +40,56 @@ CREATE TABLE Uzytkownik (
 go
 
 
+CREATE TABLE Pacjent (
+	IdPacjent 	int IDENTITY,
+	NumerPacjenta	varchar(20) not null unique,
+	RokUrodzenia smallint,
+	MiesiacUrodzenia tinyint,
+	Plec tinyint,	-- bit + b.d.
+	Lokalizacja varchar(10), -- do potwierdzenia !!!
+	LiczbaElektrod tinyint	-- do potwierdzenia, czy tutaj !!!
+)
+go
+
+CREATE INDEX X1Pacjent ON Pacjent (
+     NumerPacjenta
+ )
+ go
+
+ALTER TABLE Pacjent
+	ADD PRIMARY KEY (IdPacjent)
+go
+
+
+create table Wizyta (	-- na razie tylko grupa danych zatytulowana "Wywiad" !
+	IdWizyta	int		IDENTITY,
+	RodzajWizyty tinyint not null,
+	IdPacjent	int	not null,
+	Wyksztalcenie	tinyint,
+	Rodzinnosc	tinyint,		-- bit + b.d.
+	RokZachorowania	smallint,
+	MiesiacZachorowania tinyint,
+	PierwszyObjaw	tinyint,
+	CzasOdPoczObjDoWlLDopy	tinyint,
+	DyskinezyObecnie	tinyint, 	-- bit + b.d.
+	CzasDyskinez	decimal(3,1),
+	FluktuacjeObecnie	tinyint,	-- bit + b.d.
+	FluktuacjeOdLat	decimal(3,1),
+	Papierosy	tinyint,
+	Kawa	tinyint,
+	ZielonaHerbata tinyint,
+	Alkohol	tinyint,
+	ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,
+	Zamieszkanie tinyint,
+	NarazenieNaToks	tinyint
+)
+
+alter table Wizyta
+        add foreign key (IdPacjent)
+                              references Pacjent on delete cascade;
+go
+
+/*
 CREATE TABLE Badanie (
 	IdBadanie 			int IDENTITY,
 	IdPacjent			int not null,
@@ -133,26 +188,11 @@ ALTER TABLE Badanie
 	ADD PRIMARY KEY (IdBadanie)
 go
 
+*/
 
 
 
-CREATE TABLE Pacjent (
-	IdPacjent 	int IDENTITY,
-	NumerPacjenta	varchar(20) not null unique,
-	RokUrodzenia tinyint,
-	MiesiacUrodzenia tinyint,
-	Plec bit
-)
-go
 
-CREATE INDEX X1Pacjent ON Pacjent (
-     NumerPacjenta
- )
- go
-
-ALTER TABLE Pacjent
-	ADD PRIMARY KEY (IdPacjent)
-go
 
 CREATE TABLE Plik (
     IdPlik		int IDENTITY,
@@ -176,15 +216,25 @@ CREATE INDEX X1Plik ON Plik (
 )
 go
 
--- added 2013-05-27
+
 CREATE TABLE Slownik (
 	Tabela  varchar(30) not null,
-	Atrybut	varchar(40) not null,
+	Atrybut	varchar(50) not null,
 	Klucz	tinyint not null,
-	Wartosc	tinyint not null
+	Wartosc	varchar(50) not null
 )
 go
 
 ALTER TABLE Slownik
 	ADD PRIMARY KEY (Tabela, Atrybut, Klucz)
+go
+
+
+CREATE INDEX X1Slownik ON Slownik (
+	Tabela, Atrybut
+)
+
+CREATE INDEX X2Slownik ON Slownik (
+	Klucz
+)
 go
