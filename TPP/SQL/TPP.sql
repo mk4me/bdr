@@ -1,15 +1,19 @@
 CREATE DATABASE TPP 
+
 ON
 PRIMARY ( NAME = TPP1,
-    FILENAME = 'e:\TPP\TPP.mdf'),
+    FILENAME = 'S:\Baza\TPP.mdf'),
 FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
-    FILENAME = 'e:\TPP\filestream')
+    FILENAME = 'S:\Baza\filestream')
 LOG ON  ( NAME = TPPlog1,
-    FILENAME = 'e:\TPP\TPPlog.ldf')
+    FILENAME = 'S:\Baza\TPPlog.ldf')
+COLLATE Polish_CI_AS;
 GO
 
 use TPP;
 go
+
+
 
 
 
@@ -38,6 +42,12 @@ CREATE TABLE Uzytkownik (
 		Status				int not null default 0      
  )
 go
+
+CREATE INDEX X1Uzytkownik ON Uzytkownik (
+     Login
+ )
+ go
+
 
 
 CREATE TABLE Pacjent (
@@ -221,7 +231,7 @@ CREATE TABLE Slownik (
 	Tabela  varchar(30) not null,
 	Atrybut	varchar(50) not null,
 	Klucz	tinyint not null,
-	Wartosc	varchar(50) not null
+	Definicja	varchar(50) not null
 )
 go
 

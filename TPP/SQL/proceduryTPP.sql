@@ -275,7 +275,7 @@ begin
 
 	if ( exists (select * from Badanie where IdPacjent = @id_pacjenta and Wizyta = @Wizyta ) )
 		begin
-			set @komunikat = 'Badanie rodzaju '+ cast ( @Wizyta as varchar )+' pacjenta o numerze '+ cast ( @NrPacjenta as varchar )+' ju¿ istnieje w bazie.';
+			set @komunikat = 'Badanie rodzaju '+ cast ( @Wizyta as varchar )+' pacjenta o numerze '+ cast ( @NrPacjenta as varchar )+' ju? istnieje w bazie.';
 			set @result = 3;
 			return;
 		end;
@@ -529,6 +529,9 @@ begin
 end;
 
 
+/*
+
+delete from Slownik
 
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	0,	'przedoperacyjna' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	5,	'po pó³ roku' );
@@ -546,8 +549,8 @@ insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wy
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	1,	'zaburzenia równowagi' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	2,	'spowolnienie' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	3,	'sztywnoœæ' );
-insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	4,	'dr¿ênie' );
-insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	5,	'otêpnienie' );
+insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	4,	'dr¿enie' );
+insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	5,	'otêpienie' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	6,	'dyskinezy i fluktuacje' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	7,	'objawy autonomiczne' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	8,	'inne' );
@@ -573,9 +576,14 @@ insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Na
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'NarazenieNaToks',	2,	'toksyczne substancje przemys³owe' );
 insert into Slownik ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'NarazenieNaToks',	3,	'narkotyki' );
 
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'test', HashBytes('SHA1','pass'), 'U¿ytkownik1', 'Testowy')
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'testowy', HashBytes('SHA1','testowy'), 'U¿ytkownik2', 'Testowy')
 
 
-select dbo.validate_input ('Wizyta', 'PierwszyObjaw', 23 )
+*/
+
+
+select dbo.validate_input ('Wizyta', 'PierwszyObjaw', 3 )
 
 exec get_enumeration  'Wizyta', 'PierwszyObjaw'
 
