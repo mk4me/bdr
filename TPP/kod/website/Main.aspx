@@ -9,5 +9,14 @@
     <p>
         Pacjenci.
     </p>
+    <table ID="Table1" runat="server">
+        <tr>
+            <td>
+                <asp:ListBox ID="listPatients" runat="server" Rows="10"></asp:ListBox>
+            
+            </td>
+        </tr>
+    </table>
+    <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
 </asp:Content>
 
