@@ -323,9 +323,9 @@ go
 -- WGRYWANIE DANYCH I WALIDACJA
 -- ============================
 
+-- last rev. 2013-07-25
 -- @res codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
-
-create procedure update_patient  (	@NumerPacjenta	varchar(20), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_updtate_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
+create procedure update_patient  (	@NumerPacjenta	varchar(20), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
 	declare @update bit;
@@ -334,7 +334,7 @@ begin
 	set @message = '';
 	if(( select count(*) from Pacjent where NumerPacjenta = @NumerPacjenta )>0 )
 	begin
-		if ( @allow_updtate_existing = 0 )
+		if ( @allow_update_existing = 0 )
 		begin
 			set @result = 1;
 			return;
@@ -390,11 +390,12 @@ begin
 end;
 go
 
+-- last rev. 2013-07-25
 -- @res codes: 0 = OK, 3 = patient of this number not found, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message
 create procedure update_examination_questionnaire  (@NumerPacjenta varchar(20), @RodzajWizyty tinyint, @Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, @MiesiacZachorowania tinyint,
 	@PierwszyObjaw	tinyint, @CzasOdPoczObjDoWlLDopy	tinyint, @DyskinezyObecnie	tinyint, @CzasDyskinez	decimal(3,1), @FluktuacjeObecnie tinyint, @FluktuacjeOdLat	decimal(3,1), @Papierosy tinyint,
 	@Kawa	tinyint, @ZielonaHerbata tinyint,	@Alkohol	tinyint, @ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,	@Zamieszkanie tinyint, @NarazenieNaToks	tinyint, 
-	@allow_updtate_existing bit,
+	@allow_update_existing bit,
 	@result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
@@ -413,7 +414,7 @@ begin
 	end;
 	if (select count(*) from Wizyta where IdPacjent = @patient_id and RodzajWizyty = @RodzajWizyty ) > 0 
 	begin
-		if (@allow_updtate_existing = 0)
+		if (@allow_update_existing = 0)
 			begin
 				set @result = 1;
 				return;
