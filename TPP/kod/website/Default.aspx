@@ -8,10 +8,13 @@
         Strona Powitalna
     </h2>
     <p>
-        To learn more about ASP.NET visit <a href="http://www.asp.net" title="ASP.NET Website">www.asp.net</a>.
+        Pacjenci <a href="Main.aspx" title="Main.aspx">Main.aspx</a>.
     </p>
     <p>
-        You can also find <a href="http://go.microsoft.com/fwlink/?LinkID=152368&amp;clcid=0x409"
-            title="MSDN ASP.NET Docs">documentation on ASP.NET at MSDN</a>.
+        Nowy pacjent <a href="PatientForm.aspx" title="PatientForm.aspx">PatientForm.aspx</a>.
+    </p>
+    <p>
+        Nowa wizyta - wywiad <a href="ExaminationForm.aspx"
+            title="ExaminationForm.aspx">ExaminationForm.aspx</a>.
     </p>
 </asp:Content>
