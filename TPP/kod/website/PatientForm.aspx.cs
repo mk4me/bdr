@@ -10,6 +10,8 @@ using System.Data;
 
 public partial class PatientForm : System.Web.UI.Page
 {
+    private bool update = false;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -33,6 +35,18 @@ public partial class PatientForm : System.Web.UI.Page
             }
             dropElectrodes.SelectedIndex = 2;
         }
+
+        string patientNumber = Request.QueryString["PatientNumber"];
+        if (patientNumber != null)
+        {
+            update = true;
+            if (!IsPostBack)
+            {
+                textPatientNumber.Text = patientNumber;
+                textPatientNumber.Enabled = false;
+                loadPatient(patientNumber);
+            }
+        }
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)
@@ -48,7 +62,7 @@ public partial class PatientForm : System.Web.UI.Page
             sex = 1;
         }
         savePatient(textPatientNumber.Text, int.Parse(dropYear.SelectedValue), int.Parse(dropMonth.SelectedValue), sex,
-            textLocation.Text, int.Parse(dropElectrodes.SelectedValue), false);
+            textLocation.Text, int.Parse(dropElectrodes.SelectedValue), update);
     }
 
     private void savePatient(string number, int birthYear, int birthMonth, int sex,
@@ -84,6 +98,51 @@ public partial class PatientForm : System.Web.UI.Page
             else
             {
                 Response.Redirect("~/Main.aspx");
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    private void loadPatient(string patientNumber)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";
+        cmd.Connection = con;
+
+        List<string> list = new List<string>();
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                dropYear.SelectedValue = ((short)rdr["RokUrodzenia"]).ToString();
+                dropMonth.SelectedValue = ((byte)rdr["MiesiacUrodzenia"]).ToString();
+                int sex = ((byte)rdr["Plec"]); ;
+                if (sex == 0)
+                {
+                    radioWoman.Checked = true;
+                }
+                else
+                {
+                    radioMan.Checked = true;
+                }
+                textLocation.Text = (string)rdr["Lokalizacja"];
+                dropElectrodes.SelectedValue = ((byte)rdr["LiczbaElektrod"]).ToString();
             }
         }
         catch (SqlException ex)

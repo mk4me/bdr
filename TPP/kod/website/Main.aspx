@@ -12,8 +12,42 @@
     <table ID="Table1" runat="server">
         <tr>
             <td>
-                <asp:ListBox ID="listPatients" runat="server" Rows="10"></asp:ListBox>
+                <asp:ListBox ID="listPatients" runat="server" Rows="10" Width="200px"></asp:ListBox>
             
+            </td>
+            <td>
+                <table ID="Table2" runat="server">
+                    <tr>
+                        <td>
+                            <asp:Button ID="buttonNewPatient" runat="server" Text="Wprowadź nowego pacjenta" 
+                                onclick="buttonNewPatient_Click" Width="200px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Button ID="buttonEditPatient" runat="server" Text="Edytuj dane pacjenta" 
+                                Width="200px" onclick="buttonEditPatient_Click" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Button ID="buttonDeletePatient" runat="server" Text="Usuń dane pacjenta" 
+                                Width="200px" onclick="buttonDeletePatient_Click" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Button ID="buttonShowAppointments" runat="server" Text="Wyświetl listę wizyt" 
+                                Width="200px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Button ID="buttonShowExaminations" runat="server" Text="Wyświetl listę badań" 
+                                Width="200px" />
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
