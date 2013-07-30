@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
 using System.Web.Configuration;
+using System.Web.Security;
 
 public partial class Login : System.Web.UI.Page
 {
@@ -24,7 +25,8 @@ public partial class Login : System.Web.UI.Page
         {
             if (Validate_Login(user, password))
             {
-                Response.Redirect(AppLogin.DestinationPageUrl);
+                FormsAuthentication.RedirectFromLoginPage(user, false);
+                //Response.Redirect(AppLogin.DestinationPageUrl);
             }
         }
     }
