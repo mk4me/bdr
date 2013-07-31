@@ -62,7 +62,9 @@
         <tr>
             <td>Dyskinezy obecnie:</td>
             <td>
-                <asp:DropDownList ID="dropDiskinesia" runat="server">
+                <asp:DropDownList ID="dropDiskinesia" runat="server" 
+                    onselectedindexchanged="dropDiskinesia_SelectedIndexChanged" 
+                    AutoPostBack="True">
                     <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
                 </asp:DropDownList>
@@ -81,7 +83,9 @@
         <tr>
             <td>Fluktuacje obecnie:</td>
             <td>
-                <asp:DropDownList ID="dropFluctuations" runat="server">
+                <asp:DropDownList ID="dropFluctuations" runat="server"
+                    onselectedindexchanged="dropFluctuations_SelectedIndexChanged" 
+                    AutoPostBack="True">
                     <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
                 </asp:DropDownList>

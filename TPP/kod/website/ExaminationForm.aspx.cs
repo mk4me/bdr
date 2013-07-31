@@ -28,45 +28,45 @@ public partial class ExaminationForm : System.Web.UI.Page
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "RodzajWizyty"))
-            {
-                dropExaminationType.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropExaminationType.DataSource = getEnumeration("Wizyta", "RodzajWizyty");
+            dropExaminationType.DataTextField = "Value";
+            dropExaminationType.DataValueField = "Key";
+            dropExaminationType.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "Wyksztalcenie"))
-            {
-                dropEducation.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropEducation.DataSource = getEnumeration("Wizyta", "Wyksztalcenie");
+            dropEducation.DataTextField = "Value";
+            dropEducation.DataValueField = "Key";
+            dropEducation.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "PierwszyObjaw"))
-            {
-                dropSymptom.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropSymptom.DataSource = getEnumeration("Wizyta", "PierwszyObjaw");
+            dropSymptom.DataTextField = "Value";
+            dropSymptom.DataValueField = "Key";
+            dropSymptom.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "Papierosy"))
-            {
-                dropCigarettes.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropCigarettes.DataSource = getEnumeration("Wizyta", "Papierosy");
+            dropCigarettes.DataTextField = "Value";
+            dropCigarettes.DataValueField = "Key";
+            dropCigarettes.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "Kawa"))
-            {
-                dropCoffee.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropCoffee.DataSource = getEnumeration("Wizyta", "Kawa");
+            dropCoffee.DataTextField = "Value";
+            dropCoffee.DataValueField = "Key";
+            dropCoffee.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "Alkohol"))
-            {
-                dropAlcohol.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropAlcohol.DataSource = getEnumeration("Wizyta", "Alkohol");
+            dropAlcohol.DataTextField = "Value";
+            dropAlcohol.DataValueField = "Key";
+            dropAlcohol.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "Zamieszkanie"))
-            {
-                dropPlace.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropPlace.DataSource = getEnumeration("Wizyta", "Zamieszkanie");
+            dropPlace.DataTextField = "Value";
+            dropPlace.DataValueField = "Key";
+            dropPlace.DataBind();
 
-            foreach (KeyValuePair<byte, string> entry in getEnumeration("Wizyta", "NarazenieNaToks"))
-            {
-                dropToxic.Items.Add(new ListItem(entry.Value, entry.Key.ToString()));
-            }
+            dropToxic.DataSource = getEnumeration("Wizyta", "NarazenieNaToks");
+            dropToxic.DataTextField = "Value";
+            dropToxic.DataValueField = "Key";
+            dropToxic.DataBind();
         }
     }
 
@@ -193,6 +193,32 @@ public partial class ExaminationForm : System.Web.UI.Page
             {
                 con.Close();
             }
+        }
+    }
+
+    protected void dropDiskinesia_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (byte.Parse(dropDiskinesia.SelectedValue) == 1)
+        {
+            textTimeDiskinesia.Enabled = true;
+        }
+        else
+        {
+            textTimeDiskinesia.Enabled = false;
+            textTimeDiskinesia.Text = "";
+        }
+    }
+
+    protected void dropFluctuations_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (byte.Parse(dropFluctuations.SelectedValue) == 1)
+        {
+            textYearsFluctuations.Enabled = true;
+        }
+        else
+        {
+            textYearsFluctuations.Enabled = false;
+            textYearsFluctuations.Text = "";
         }
     }
 }
