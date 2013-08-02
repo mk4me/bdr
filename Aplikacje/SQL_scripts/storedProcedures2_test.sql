@@ -1,5 +1,71 @@
 use Motion;
 
+create type FileNameListUdt as table
+(
+	Name varchar(255)
+)
+go
+
+declare @nazwy as FileNameListUdt;
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T03.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T04.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T05.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T06.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T08.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T09.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01.asf	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01.zip	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.59461898.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.60981847.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.amc	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T01.c3d	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.53875336.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.56339527.avi	'	);
+insert into @nazwy values ('	2013-02-28-B0114-S01-T02.59461898.avi	'	);
+
+
+
+
+exec validate_file_list_xml @nazwy;
+
+
+
+
 declare @filters as PredicateUdt;
 
 
