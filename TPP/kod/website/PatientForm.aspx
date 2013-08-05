@@ -38,9 +38,11 @@
         <tr>
             <td>Lokalizacja:</td>
             <td>
-                <asp:TextBox ID="textLocation" runat="server"></asp:TextBox>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
-                    ControlToValidate="textLocation" ErrorMessage="Proszę podać lokalizację."></asp:RequiredFieldValidator>
+                <asp:DropDownList ID="dropLocation" runat="server">
+                    <asp:ListItem>STN</asp:ListItem>
+                    <asp:ListItem>Gpi</asp:ListItem>
+                    <asp:ListItem>Vim</asp:ListItem>
+                </asp:DropDownList>
             </td>
         </tr>
         <tr>

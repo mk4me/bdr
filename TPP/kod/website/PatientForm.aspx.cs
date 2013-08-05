@@ -62,7 +62,7 @@ public partial class PatientForm : System.Web.UI.Page
             sex = 1;
         }
         savePatient(textPatientNumber.Text, int.Parse(dropYear.SelectedValue), int.Parse(dropMonth.SelectedValue), sex,
-            textLocation.Text, int.Parse(dropElectrodes.SelectedValue), update);
+            dropLocation.SelectedValue, int.Parse(dropElectrodes.SelectedValue), update);
     }
 
     private void savePatient(string number, int birthYear, int birthMonth, int sex,
@@ -141,7 +141,7 @@ public partial class PatientForm : System.Web.UI.Page
                 {
                     radioMan.Checked = true;
                 }
-                textLocation.Text = (string)rdr["Lokalizacja"];
+                dropLocation.SelectedValue = (string)rdr["Lokalizacja"];
                 dropElectrodes.SelectedValue = ((byte)rdr["LiczbaElektrod"]).ToString();
             }
         }

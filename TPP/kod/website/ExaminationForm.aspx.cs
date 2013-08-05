@@ -28,42 +28,42 @@ public partial class ExaminationForm : System.Web.UI.Page
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
 
-            dropExaminationType.DataSource = getEnumeration("Wizyta", "RodzajWizyty");
+            dropExaminationType.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "RodzajWizyty");
             dropExaminationType.DataTextField = "Value";
             dropExaminationType.DataValueField = "Key";
             dropExaminationType.DataBind();
 
-            dropEducation.DataSource = getEnumeration("Wizyta", "Wyksztalcenie");
+            dropEducation.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Wyksztalcenie");
             dropEducation.DataTextField = "Value";
             dropEducation.DataValueField = "Key";
             dropEducation.DataBind();
 
-            dropSymptom.DataSource = getEnumeration("Wizyta", "PierwszyObjaw");
+            dropSymptom.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "PierwszyObjaw");
             dropSymptom.DataTextField = "Value";
             dropSymptom.DataValueField = "Key";
             dropSymptom.DataBind();
 
-            dropCigarettes.DataSource = getEnumeration("Wizyta", "Papierosy");
+            dropCigarettes.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Papierosy");
             dropCigarettes.DataTextField = "Value";
             dropCigarettes.DataValueField = "Key";
             dropCigarettes.DataBind();
 
-            dropCoffee.DataSource = getEnumeration("Wizyta", "Kawa");
+            dropCoffee.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Kawa");
             dropCoffee.DataTextField = "Value";
             dropCoffee.DataValueField = "Key";
             dropCoffee.DataBind();
 
-            dropAlcohol.DataSource = getEnumeration("Wizyta", "Alkohol");
+            dropAlcohol.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Alkohol");
             dropAlcohol.DataTextField = "Value";
             dropAlcohol.DataValueField = "Key";
             dropAlcohol.DataBind();
 
-            dropPlace.DataSource = getEnumeration("Wizyta", "Zamieszkanie");
+            dropPlace.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Zamieszkanie");
             dropPlace.DataTextField = "Value";
             dropPlace.DataValueField = "Key";
             dropPlace.DataBind();
 
-            dropToxic.DataSource = getEnumeration("Wizyta", "NarazenieNaToks");
+            dropToxic.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "NarazenieNaToks");
             dropToxic.DataTextField = "Value";
             dropToxic.DataValueField = "Key";
             dropToxic.DataBind();
@@ -82,47 +82,6 @@ public partial class ExaminationForm : System.Web.UI.Page
             byte.Parse(dropDiskinesia.SelectedValue), decimal.Parse(textTimeDiskinesia.Text), byte.Parse(dropFluctuations.SelectedValue), decimal.Parse(textYearsFluctuations.Text),
             byte.Parse(dropCigarettes.SelectedValue), byte.Parse(dropCoffee.SelectedValue), byte.Parse(dropGreenTea.SelectedValue), byte.Parse(dropAlcohol.SelectedValue),
             byte.Parse(textTreatmentNumber.Text), byte.Parse(dropPlace.SelectedValue), byte.Parse(dropToxic.SelectedValue), false);
-    }
-
-    private Dictionary<byte, string> getEnumeration(string table, string attribute)
-    {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
-        SqlCommand cmd = new SqlCommand();
-        cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[get_enumeration]";
-        cmd.Parameters.Add("@table_name", SqlDbType.VarChar, 30).Value = table;
-        cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 50).Value = attribute;
-        cmd.Connection = con;
-
-        Dictionary<byte, string> enumeration = new Dictionary<byte, string>();
-
-        try
-        {
-            con.Open();
-            SqlDataReader rdr = cmd.ExecuteReader();
-
-            while (rdr.Read())
-            {
-                byte value = (byte) rdr["Value"];
-                string label = (string) rdr["Label"];
-
-                enumeration.Add(value, label);
-            }
-        }
-        catch (SqlException ex)
-        {
-            labelMessage.Text = ex.Message;
-        }
-        finally
-        {
-            cmd.Dispose();
-            if (con != null)
-            {
-                con.Close();
-            }
-        }
-
-        return enumeration;
     }
 
     private void saveExamination(string number, byte examinationType, byte education, byte family, short symptomYear, byte symptomMonth, byte firstSymptom, byte timeSymptom,

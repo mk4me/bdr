@@ -11,10 +11,15 @@
         Pacjenci <a href="Main.aspx" title="Main.aspx">Main.aspx</a>.
     </p>
     <p>
-        Nowy pacjent <a href="PatientForm.aspx" title="PatientForm.aspx">PatientForm.aspx</a>.
+        Nowa wizyta <a href="AppointmentForm.aspx"
+            title="AppointmentForm.aspx">AppointmentForm.aspx</a>.
     </p>
     <p>
         Nowa wizyta - wywiad <a href="ExaminationForm.aspx"
             title="ExaminationForm.aspx">ExaminationForm.aspx</a>.
+    </p>
+    <p>
+        Leki <a href="MedicineForm.aspx"
+            title="MedicineForm.aspx">MedicineForm.aspx</a>.
     </p>
 </asp:Content>
