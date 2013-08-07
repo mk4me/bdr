@@ -1582,22 +1582,124 @@ end;
 go
 
 
+-- @res codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+create procedure update_variant_examination_data_partB  (	@IdBadanie int,
+	@Tremorometria bit,
+	@TestSchodkowy bit,
+	@TestSchodkowyCzas1 decimal(4,2),
+	@TestSchodkowyCzas2 decimal(4,2),
+	@TestMarszu bit,
+	@TestMarszuCzas1 decimal(4,2),
+	@TestMarszuCzas2 decimal(4,2),
+	@Posturografia bit,
+	@MotionAnalysis bit,
+	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	
+	declare @user_id int;
+	set @user_id = 0;
 
+	set @result = 0;
 
-
-	if dbo.validate_input_decimal('Wizyta', 'xxx', @xxx) = 0
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
 	begin
-		set @result = 2;
-		set @message = 'Invalid value for attribute xxx - see enumeration for allowed values';
+		set @result = 4;
+		set @message = 'user of this login not found';
 		return;
 	end;
 
-	if( dbo.validate_ext_bit( @Dxxx ) = 0 )
+
+	if(not exists(select * from Badanie where IdBadanie = @IdBadanie ) )
 	begin
-		set @result = 2;
-		set @message = 'xxx  - invalid value. Allowed: 0, 1, 2.';
+		set @result = 3;
+		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
 		return;
 	end;
+
+
+
+	update Badanie
+		set 
+			Tremorometria	= @Tremorometria,
+			TestSchodkowy	= @TestSchodkowy,
+			TestSchodkowyCzas1	= @TestSchodkowyCzas1,
+			TestSchodkowyCzas2	= @TestSchodkowyCzas2,
+			TestMarszu	= @TestMarszu,
+			TestMarszuCzas1	= @TestMarszuCzas1,
+			TestMarszuCzas2	= @TestMarszuCzas2,
+			Posturografia	= @Posturografia,
+			MotionAnalysis	= @MotionAnalysis
+		where IdBadanie = @IdBadanie;
+
+	return;
+end;
+go
+
+
+
+
+-- @res codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+create procedure update_variant_examination_data_partC  (	@IdBadanie int,
+	@UpAndGo	decimal(3,1),
+	@UpAndGoLiczby	decimal(3,1),
+	@UpAndGoKubekPrawa	decimal(3,1),
+	@UpAndGoKubekLewa	decimal(3,1),
+	@TST	decimal(3,1),
+	@TandemPivot	tinyint,
+	@WTT	decimal(3,1),
+	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	
+	declare @user_id int;
+	set @user_id = 0;
+
+	set @result = 0;
+
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
+
+	if(not exists(select * from Badanie where IdBadanie = @IdBadanie ) )
+	begin
+		set @result = 3;
+		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
+		return;
+	end;
+
+	-- validation
+	if dbo.validate_input_int('Badanie', 'TandemPivot', @TandemPivot) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute TandemPivot - see enumeration for allowed values';
+		return;
+	end;
+
+
+	update Badanie
+		set 
+			UpAndGo	=	@UpAndGo,
+			UpAndGoLiczby	=	@UpAndGoLiczby,
+			UpAndGoKubekPrawa	=	@UpAndGoKubekPrawa,
+			UpAndGoKubekLewa	=	@UpAndGoKubekLewa,
+			TST	=	@TST,
+			TandemPivot	=	@TandemPivot,
+			WTT	=	@WTT
+		where IdBadanie = @IdBadanie;
+
+	return;
+end;
+go
+
+
+
+
 
 
 
@@ -1620,7 +1722,7 @@ insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyt
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	1,	'podstawowe' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	2,	'zawodowe' );
-insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	3,	'?rednie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	3,	'œrednie' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	4,	'wy¿sze' );
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	1,	'zaburzenia równowagi' );
@@ -1645,7 +1747,7 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Alkohol',	3,	'codziennie niewiele' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Alkohol',	4,	'nadu¿ywa' );
 
-insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Zamieszkanie',	0,	'wie?' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Zamieszkanie',	0,	'wieœ' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Zamieszkanie',	1,	'miasto' );
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'NarazenieNaToks',	0,	'brak' );
@@ -2033,6 +2135,14 @@ insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badan
 insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	4,	'4' );
 insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	5,	'5' );
 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	0,	'0' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	1,	'1' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	2,	'2' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	3,	'3' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	4,	'4' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	5,	'5' );
+
+
 */
 
 
@@ -2187,6 +2297,45 @@ update_variant_examination_data_partA  1, 3, 0,
 'test',
 @res OUTPUT, @variant_id OUTPUT, @message OUTPUT
 select @message as Message, @res as Result, @variant_id as IdBadanie;
+
+select * from Badanie
+
+
+declare @message varchar(200);
+declare @res int;
+
+exec
+update_variant_examination_data_partB  1,
+0,
+1,
+30.3,
+31.3,
+1,
+20.0,
+21,
+1,
+0,
+'test',
+@res OUTPUT, @message OUTPUT
+select @message as Message, @res as Result;
+
+select * from Badanie
+
+declare @message varchar(200);
+declare @res int;
+
+exec
+update_variant_examination_data_partC  1,
+	30.1,
+	28.1,
+	10.2,
+	10.3,
+	0.5,
+	5,
+	11.9,
+'test',
+@res OUTPUT, @message OUTPUT
+select @message as Message, @res as Result;
 
 select * from Badanie
 
