@@ -16,6 +16,7 @@ public partial class Main : System.Web.UI.Page
         {
             listPatients.DataSource = getPatients();
             listPatients.DataBind();
+            toggleButtons(false);
         }
     }
 
@@ -56,14 +57,19 @@ public partial class Main : System.Web.UI.Page
 
         return list;
     }
+
     protected void buttonNewPatient_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PatientForm.aspx");
     }
+
     protected void buttonDeletePatient_Click(object sender, EventArgs e)
     {
-        deletePatient(listPatients.SelectedValue);
-        Response.Redirect(Request.RawUrl);
+        if (listPatients.SelectedIndex >= 0)
+        {
+            deletePatient(listPatients.SelectedValue);
+            Response.Redirect(Request.RawUrl);
+        }
     }
 
     private void deletePatient(string patientNumber)
@@ -97,6 +103,33 @@ public partial class Main : System.Web.UI.Page
 
     protected void buttonEditPatient_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/PatientForm.aspx?PatientNumber=" + listPatients.SelectedValue);
+        if (listPatients.SelectedIndex >= 0)
+        {
+            Response.Redirect("~/PatientForm.aspx?PatientNumber=" + listPatients.SelectedValue);
+        }
+    }
+
+    protected void buttonShowAppointments_Click(object sender, EventArgs e)
+    {
+        if (listPatients.SelectedIndex >= 0)
+        {
+            Response.Redirect("~/AppointmentList.aspx?PatientNumber=" + listPatients.SelectedValue);
+        }
+    }
+
+    protected void listPatients_SelectedIndexChanged(object sender, System.EventArgs e)
+    {
+        if (listPatients.SelectedIndex >= 0)
+        {
+            toggleButtons(true);
+        }
+    }
+
+    private void toggleButtons(bool enable)
+    {
+        buttonEditPatient.Enabled = enable;
+        buttonDeletePatient.Enabled = enable;
+        buttonShowAppointments.Enabled = enable;
+        buttonShowExaminations.Enabled = false;
     }
 }

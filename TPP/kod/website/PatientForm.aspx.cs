@@ -29,6 +29,11 @@ public partial class PatientForm : System.Web.UI.Page
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
 
+            dropLocation.DataSource = DatabaseProcedures.getEnumerationString("Pacjent", "Lokalizacja");
+            dropLocation.DataTextField = "Value";
+            dropLocation.DataValueField = "Key";
+            dropLocation.DataBind();
+
             for (int i = 0; i <= 10; i++)
             {
                 dropElectrodes.Items.Add(new ListItem("" + i, "" + i));

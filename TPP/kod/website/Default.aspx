@@ -11,10 +11,6 @@
         Pacjenci <a href="Main.aspx" title="Main.aspx">Main.aspx</a>.
     </p>
     <p>
-        Nowa wizyta <a href="AppointmentForm.aspx"
-            title="AppointmentForm.aspx">AppointmentForm.aspx</a>.
-    </p>
-    <p>
         Nowa wizyta - wywiad <a href="ExaminationForm.aspx"
             title="ExaminationForm.aspx">ExaminationForm.aspx</a>.
     </p>

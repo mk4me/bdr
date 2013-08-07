@@ -28,42 +28,42 @@ public partial class ExaminationForm : System.Web.UI.Page
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
 
-            dropExaminationType.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "RodzajWizyty");
+            dropExaminationType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
             dropExaminationType.DataTextField = "Value";
             dropExaminationType.DataValueField = "Key";
             dropExaminationType.DataBind();
 
-            dropEducation.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Wyksztalcenie");
+            dropEducation.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Wyksztalcenie");
             dropEducation.DataTextField = "Value";
             dropEducation.DataValueField = "Key";
             dropEducation.DataBind();
 
-            dropSymptom.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "PierwszyObjaw");
+            dropSymptom.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "PierwszyObjaw");
             dropSymptom.DataTextField = "Value";
             dropSymptom.DataValueField = "Key";
             dropSymptom.DataBind();
 
-            dropCigarettes.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Papierosy");
+            dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Papierosy");
             dropCigarettes.DataTextField = "Value";
             dropCigarettes.DataValueField = "Key";
             dropCigarettes.DataBind();
 
-            dropCoffee.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Kawa");
+            dropCoffee.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Kawa");
             dropCoffee.DataTextField = "Value";
             dropCoffee.DataValueField = "Key";
             dropCoffee.DataBind();
 
-            dropAlcohol.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Alkohol");
+            dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Alkohol");
             dropAlcohol.DataTextField = "Value";
             dropAlcohol.DataValueField = "Key";
             dropAlcohol.DataBind();
 
-            dropPlace.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "Zamieszkanie");
+            dropPlace.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Zamieszkanie");
             dropPlace.DataTextField = "Value";
             dropPlace.DataValueField = "Key";
             dropPlace.DataBind();
 
-            dropToxic.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "NarazenieNaToks");
+            dropToxic.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "NarazenieNaToks");
             dropToxic.DataTextField = "Value";
             dropToxic.DataValueField = "Key";
             dropToxic.DataBind();

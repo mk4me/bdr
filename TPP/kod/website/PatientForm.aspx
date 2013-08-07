@@ -39,9 +39,6 @@
             <td>Lokalizacja:</td>
             <td>
                 <asp:DropDownList ID="dropLocation" runat="server">
-                    <asp:ListItem>STN</asp:ListItem>
-                    <asp:ListItem>Gpi</asp:ListItem>
-                    <asp:ListItem>Vim</asp:ListItem>
                 </asp:DropDownList>
             </td>
         </tr>

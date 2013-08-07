@@ -12,7 +12,8 @@
     <table ID="Table1" runat="server">
         <tr>
             <td>
-                <asp:ListBox ID="listPatients" runat="server" Rows="10" Width="200px"></asp:ListBox>
+                <asp:ListBox ID="listPatients" runat="server" Rows="10" Width="200px" 
+                    AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
             
             </td>
             <td>
@@ -38,7 +39,7 @@
                     <tr>
                         <td>
                             <asp:Button ID="buttonShowAppointments" runat="server" Text="Wyświetl listę wizyt" 
-                                Width="200px" />
+                                Width="200px" onclick="buttonShowAppointments_Click" />
                         </td>
                     </tr>
                     <tr>

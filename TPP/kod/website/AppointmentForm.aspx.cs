@@ -11,18 +11,27 @@ public partial class AppointmentForm : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            dropAppointmentType.DataSource = DatabaseProcedures.getEnumeration("Wizyta", "RodzajWizyty");
+            dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
             dropAppointmentType.DataTextField = "Value";
             dropAppointmentType.DataValueField = "Key";
             dropAppointmentType.DataBind();
+            buttonOK.Enabled = false;
+        }
+
+        string patientNumber = Request.QueryString["PatientNumber"];
+        if (patientNumber != null)
+        {
+            labelPatientNumber.Text = patientNumber;
         }
     }
+
     protected void buttonOK_Click(object sender, EventArgs e)
     {
 
     }
+
     protected void buttonCancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/Main.aspx");
+        Response.Redirect("~/AppointmentList.aspx?" + Request.QueryString["PatientNumber"]);
     }
 }
