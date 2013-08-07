@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-<table ID="Table1" runat="server">
+    <table ID="Table1" runat="server">
         <tr>
             <th>Lek</th>
             <th>Przyjmowanie</th>
@@ -13,8 +13,8 @@
             <td>LDopa:</td>
             <td>
                 <asp:DropDownList ID="dropLDopa" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -25,8 +25,8 @@
             <td>Agonista:</td>
             <td>
                 <asp:DropDownList ID="dropAgonista" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -37,8 +37,8 @@
             <td>Amantadyna:</td>
             <td>
                 <asp:DropDownList ID="dropAmantadyna" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -49,8 +49,8 @@
             <td>MAOBinh:</td>
             <td>
                 <asp:DropDownList ID="dropMAOBinh" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -61,8 +61,8 @@
             <td>COMTinh</td>
             <td>
                 <asp:DropDownList ID="dropCOMTinh" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -70,17 +70,29 @@
             </td>
         </tr>
         <tr>
-            <td>Cholinotyk:</td>
+            <td>Cholinolityk:</td>
             <td>
                 <asp:DropDownList ID="dropCholinotyk" runat="server">
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
                     <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
                 <asp:TextBox ID="textCholinotyk" runat="server"></asp:TextBox>
             </td>
         </tr>
-</table>
+        <tr>
+            <td>Leki inne:</td>
+            <td>
+                <asp:DropDownList ID="DropDownList1" runat="server">
+                    <asp:ListItem Value="0">Nie</asp:ListItem>
+                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+    </table>
 </asp:Content>
 
