@@ -353,7 +353,7 @@ go
 -- last rev. 2013-08-05
 -- Dodano sufiks nazwy: _partA
 -- @res codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
-alter procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty tinyint,
+alter procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty decimal(2,1),
 	@DataPrzyjecia date,	@DataWypisu date,
 	@Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, @MiesiacZachorowania tinyint,
 	@PierwszyObjaw	tinyint, @CzasOdPoczObjDoWlLDopy	tinyint, @DyskinezyObecnie	tinyint, @CzasDyskinez	decimal(3,1), @FluktuacjeObecnie tinyint, @FluktuacjeOdLat	decimal(3,1), @Papierosy tinyint,
@@ -762,13 +762,13 @@ go
 
 
 -- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_examination_questionnaire_partD  (
+alter procedure update_examination_questionnaire_partD  (
 	@IdWizyta int,
 	@PrzebyteLeczenieOperacyjnePD tinyint,
 	@Nadcisnienie tinyint,
 	@BlokeryKanWapn tinyint,
 	@DominujacyObjawObecnie tinyint,
-	@Dominuj¹cyObjawUwagi varchar(50),
+	@DominujacyObjawUwagi varchar(50),
 	@BadanieWechu bit,
 	@WynikWechu tinyint,
 	@LimitDysfagii tinyint,
@@ -842,7 +842,7 @@ begin
 			Nadcisnienie  = @Nadcisnienie,
 			BlokeryKanWapn  = @BlokeryKanWapn,
 			DominujacyObjawObecnie  = @DominujacyObjawObecnie,
-			Dominuj¹cyObjawUwagi  = @Dominuj¹cyObjawUwagi,
+			DominujacyObjawUwagi  = @DominujacyObjawUwagi,
 			BadanieWechu  = @BadanieWechu,
 			WynikWechu  = @WynikWechu,
 			LimitDysfagii  = @LimitDysfagii
@@ -1331,6 +1331,260 @@ end;
 go
 
 
+
+-- @res codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
+create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
+	@UPDRS_I	tinyint,
+	@UPDRS_II	tinyint,
+	@UPDRS_18	tinyint,
+	@UPDRS_19 	tinyint,
+	@UPDRS_20_FaceLipsChin	tinyint,
+	@UPDRS_20_RHand	tinyint,
+	@UPDRS_20_LHand	tinyint,
+	@UPDRS_20_RFoot	tinyint,
+	@UPDRS_20_LFoot	tinyint,
+	@UPDRS_21_RHand	tinyint,
+	@UPDRS_21_LHand	tinyint,
+	@UPDRS_22_Neck	tinyint,
+	@UPDRS_22_RHand	tinyint,
+	@UPDRS_22_LHand	tinyint,
+	@UPDRS_22_RFoot	tinyint,
+	@UPDRS_22_LFoot	tinyint,
+	@UPDRS_23_R	tinyint,
+	@UPDRS_23_L	tinyint,
+	@UPDRS_24_R	tinyint,
+	@UPDRS_24_L	tinyint,
+	@UPDRS_25_R	tinyint,
+	@UPDRS_25_L	tinyint,
+	@UPDRS_26_R	tinyint,
+	@UPDRS_26_L	tinyint,
+	@UPDRS_27	tinyint,
+	@UPDRS_28	tinyint,
+	@UPDRS_29	tinyint,
+	@UPDRS_30	tinyint,
+	@UPDRS_31	tinyint,
+	@UPDRS_III	tinyint,
+	@UPDRS_IV	tinyint,
+	@UPDRS_TOTAL	tinyint,
+	@HYscale	decimal(2,1),
+	@SchwabEnglandScale	tinyint,
+	@OkulografiaUrzadzenie	tinyint,
+	@Wideo	bit,	
+	@allow_update_existing bit,
+	@actor_login varchar(50),
+	@result int OUTPUT, @variant_id int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	declare @user_id int;
+	declare @update int;
+	set @result = 0;
+	set @message = '';
+	set @update = 0;
+
+	
+	if( not exists (select * from Wizyta where IdWizyta = @IdWizyta) )
+	begin
+		set @result = 3;
+		set @message = 'visit of this number not found';
+		return;
+	end;
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
+
+
+	if (select count(*) from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ) > 0 
+	begin
+		if (@allow_update_existing = 0)
+			begin
+				set @result = 1;
+				return;
+			end;
+		set @update = 1;
+	end;
+
+	-- validations
+
+	-- TODO!
+	if dbo.validate_input_int('Badanie', 'DBS', @DBS) = 0	begin	set @result = 2;	set @message = 'Invalid value for attribute DBS';	return;	end;
+
+	if dbo.validate_input_int('Badanie', 'UPDRS_I', @UPDRS_I) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_I'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_II', @UPDRS_II) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_II'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_18', @UPDRS_18) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_18'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_19', @UPDRS_19) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_19'; return; end; 
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_FaceLipsChin', @UPDRS_20_FaceLipsChin) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_FaceLipsChin'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_RHand', @UPDRS_20_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_LHand', @UPDRS_20_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_RFoot', @UPDRS_20_RFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_RFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_LFoot', @UPDRS_20_LFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_LFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_21_RHand', @UPDRS_21_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_21_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_21_LHand', @UPDRS_21_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_21_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_Neck', @UPDRS_22_Neck) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_Neck'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_RHand', @UPDRS_22_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_LHand', @UPDRS_22_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_RFoot', @UPDRS_22_RFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_RFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_LFoot', @UPDRS_22_LFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_LFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_23_R', @UPDRS_23_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_23_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_23_L', @UPDRS_23_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_23_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_24_R', @UPDRS_24_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_24_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_24_L', @UPDRS_24_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_24_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_25_R', @UPDRS_25_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_25_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_25_L', @UPDRS_25_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_25_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_26_R', @UPDRS_26_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_26_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_26_L', @UPDRS_26_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_26_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_27', @UPDRS_27) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_27'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_28', @UPDRS_28) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_28'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_29', @UPDRS_29) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_29'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_30', @UPDRS_30) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_30'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_31', @UPDRS_31) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_31'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_IV', @UPDRS_IV) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_IV'; return; end;
+
+	if dbo.validate_input_int('Badanie', 'SchwabEnglandScale', @SchwabEnglandScale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute SchwabEnglandScale'; return; end;
+	if dbo.validate_input_int('Badanie', 'OkulografiaUrzadzenie', @OkulografiaUrzadzenie) = 0 begin set @result = 2; set @message = 'Invalid value for attribute OkulografiaUrzadzenie'; return; end;
+	if dbo.validate_input_decimal('Badanie', 'HYscale', @HYscale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute HYscale'; return; end;
+
+	-- /validations
+	-- depending on update
+	if(@update = 0)
+		begin
+		insert into Badanie (
+			IdWizyta,
+			DBS,
+			BMT,
+			UPDRS_I,
+			UPDRS_II,
+			UPDRS_18,
+			UPDRS_19 ,
+			UPDRS_20_FaceLipsChin,
+			UPDRS_20_RHand,
+			UPDRS_20_LHand,
+			UPDRS_20_RFoot,
+			UPDRS_20_LFoot,
+			UPDRS_21_RHand,
+			UPDRS_21_LHand,
+			UPDRS_22_Neck,
+			UPDRS_22_RHand,
+			UPDRS_22_LHand,
+			UPDRS_22_RFoot,
+			UPDRS_22_LFoot,
+			UPDRS_23_R,
+			UPDRS_23_L,
+			UPDRS_24_R,
+			UPDRS_24_L,
+			UPDRS_25_R,
+			UPDRS_25_L,
+			UPDRS_26_R,
+			UPDRS_26_L,
+			UPDRS_27,
+			UPDRS_28,
+			UPDRS_29,
+			UPDRS_30,
+			UPDRS_31,
+			UPDRS_III,
+			UPDRS_IV,
+			UPDRS_TOTAL,
+			HYscale,
+			SchwabEnglandScale,
+			OkulografiaUrzadzenie,
+			Wideo
+		 )
+		values (
+			@IdWizyta,
+			@DBS,
+			@BMT,
+			@UPDRS_I,
+			@UPDRS_II,
+			@UPDRS_18,
+			@UPDRS_19 ,
+			@UPDRS_20_FaceLipsChin,
+			@UPDRS_20_RHand,
+			@UPDRS_20_LHand,
+			@UPDRS_20_RFoot,
+			@UPDRS_20_LFoot,
+			@UPDRS_21_RHand,
+			@UPDRS_21_LHand,
+			@UPDRS_22_Neck,
+			@UPDRS_22_RHand,
+			@UPDRS_22_LHand,
+			@UPDRS_22_RFoot,
+			@UPDRS_22_LFoot,
+			@UPDRS_23_R,
+			@UPDRS_23_L,
+			@UPDRS_24_R,
+			@UPDRS_24_L,
+			@UPDRS_25_R,
+			@UPDRS_25_L,
+			@UPDRS_26_R,
+			@UPDRS_26_L,
+			@UPDRS_27,
+			@UPDRS_28,
+			@UPDRS_29,
+			@UPDRS_30,
+			@UPDRS_31,
+			@UPDRS_III,
+			@UPDRS_IV,
+			@UPDRS_TOTAL,
+			@HYscale,
+			@SchwabEnglandScale,
+			@OkulografiaUrzadzenie,
+			@Wideo					
+		)  set @variant_id = SCOPE_IDENTITY();
+		end;
+	else
+		begin
+			update Badanie
+			set 
+				UPDRS_I	=	@UPDRS_I,
+				UPDRS_II	=	@UPDRS_II,
+				UPDRS_18	=	@UPDRS_18,
+				UPDRS_19 	=	@UPDRS_19,
+				UPDRS_20_FaceLipsChin	=	@UPDRS_20_FaceLipsChin,
+				UPDRS_20_RHand	=	@UPDRS_20_RHand,
+				UPDRS_20_LHand	=	@UPDRS_20_LHand,
+				UPDRS_20_RFoot	=	@UPDRS_20_RFoot,
+				UPDRS_20_LFoot	=	@UPDRS_20_LFoot,
+				UPDRS_21_RHand	=	@UPDRS_21_RHand,
+				UPDRS_21_LHand	=	@UPDRS_21_LHand,
+				UPDRS_22_Neck	=	@UPDRS_22_Neck,
+				UPDRS_22_RHand	=	@UPDRS_22_RHand,
+				UPDRS_22_LHand	=	@UPDRS_22_LHand,
+				UPDRS_22_RFoot	=	@UPDRS_22_RFoot,
+				UPDRS_22_LFoot	=	@UPDRS_22_LFoot,
+				UPDRS_23_R	=	@UPDRS_23_R,
+				UPDRS_23_L	=	@UPDRS_23_L,
+				UPDRS_24_R	=	@UPDRS_24_R,
+				UPDRS_24_L	=	@UPDRS_24_L,
+				UPDRS_25_R	=	@UPDRS_25_R,
+				UPDRS_25_L	=	@UPDRS_25_L,
+				UPDRS_26_R	=	@UPDRS_26_R,
+				UPDRS_26_L	=	@UPDRS_26_L,
+				UPDRS_27	=	@UPDRS_27,
+				UPDRS_28	=	@UPDRS_28,
+				UPDRS_29	=	@UPDRS_29,
+				UPDRS_30	=	@UPDRS_30,
+				UPDRS_31	=	@UPDRS_31,
+				UPDRS_III	=	@UPDRS_III,
+				UPDRS_IV	=	@UPDRS_IV,
+				UPDRS_TOTAL	=	@UPDRS_TOTAL,
+				HYscale	=	@HYscale,
+				SchwabEnglandScale	=	@SchwabEnglandScale,
+				OkulografiaUrzadzenie	=	@OkulografiaUrzadzenie,
+				Wideo	=	@Wideo
+			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT 
+			set @variant_id = SCOPE_IDENTITY();
+		end;
+	return;
+end;
+go
+
+
+
+
+
 	if dbo.validate_input_decimal('Wizyta', 'xxx', @xxx) = 0
 	begin
 		set @result = 2;
@@ -1448,6 +1702,337 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	1,	'brak hyperechogenicznoœci' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	2,	'hyperechogenicznoœæ' );
 
+-- warainty A
+
+-- DBS
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'DBS',	0,	'OFF' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'DBS',	1,	'ON-L' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'DBS',	2,	'ON-P' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'DBS',	3,	'ON-LP' );
+
+
+-- UPDRS_I
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 0, '0'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 1, '1'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 2, '2'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 3, '3'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 4, '4'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 5, '5'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 6, '6'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 7, '7'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 8, '8'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 9, '9'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 10, '10'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 11, '11'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 12, '12'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 13, '13'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 14, '14'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 15, '15'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_I', 16, '16'); 
+
+
+-- UPDRS_II
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 0, '0'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 1, '1'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 2, '2'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 3, '3'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 4, '4'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 5, '5'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 6, '6'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 7, '7'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 8, '8'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 9, '9'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 10, '10'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 11, '11'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 12, '12'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 13, '13'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 14, '14'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 15, '15'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 16, '16'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 17, '17'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 18, '18'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 19, '19'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 20, '20'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 21, '21'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 22, '22'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 23, '23'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 24, '24'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 25, '25'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 26, '26'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 27, '27'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 28, '28'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 29, '29'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 30, '30'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 31, '31'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 32, '32'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 33, '33'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 34, '34'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 35, '35'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 36, '36'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 37, '37'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 38, '38'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 39, '39'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 40, '40'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 41, '41'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 42, '42'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 43, '43'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 44, '44'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 45, '45'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 46, '46'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 47, '47'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 48, '48'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 49, '49'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 50, '50'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 51, '51'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_II', 52, '52'); 
+
+
+-- UPDRS_18
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_18',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_18',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_18',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_18',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_18',	4,	'ciê¿kie' );
+
+
+-- UPDRS_19 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_19',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_19',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_19',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_19',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_19',	4,	'ciê¿kie' );
+
+-- UPDRS_20_FaceLipsChin
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_FaceLipsChin',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_FaceLipsChin',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_FaceLipsChin',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_FaceLipsChin',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_FaceLipsChin',	4,	'ciê¿kie' );
+
+-- UPDRS_20_RHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RHand',	4,	'ciê¿kie' );
+
+-- UPDRS_20_LHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LHand',	4,	'ciê¿kie' );
+
+-- UPDRS_20_RFoot
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RFoot',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RFoot',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RFoot',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RFoot',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_RFoot',	4,	'ciê¿kie' );
+
+-- UPDRS_20_LFoot
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LFoot',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LFoot',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LFoot',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LFoot',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_20_LFoot',	4,	'ciê¿kie' );
+
+-- UPDRS_21_RHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_RHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_RHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_RHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_RHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_RHand',	4,	'ciê¿kie' );
+
+-- UPDRS_21_LHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_LHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_LHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_LHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_LHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_21_LHand',	4,	'ciê¿kie' );
+
+-- UPDRS_22_Neck
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_Neck',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_Neck',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_Neck',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_Neck',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_Neck',	4,	'ciê¿kie' );
+
+-- UPDRS_22_RHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RHand',	4,	'ciê¿kie' );
+
+-- UPDRS_22_LHand
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LHand',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LHand',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LHand',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LHand',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LHand',	4,	'ciê¿kie' );
+
+-- UPDRS_22_RFoot
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RFoot',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RFoot',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RFoot',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RFoot',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_RFoot',	4,	'ciê¿kie' );
+
+-- UPDRS_22_LFoot
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LFoot',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LFoot',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LFoot',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LFoot',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_22_LFoot',	4,	'ciê¿kie' );
+
+-- UPDRS_23_R
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_R',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_R',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_R',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_R',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_R',	4,	'ciê¿kie' );
+
+-- UPDRS_23_L
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_L',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_L',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_L',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_L',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_23_L',	4,	'ciê¿kie' );
+
+-- UPDRS_24_R
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_R',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_R',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_R',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_R',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_R',	4,	'ciê¿kie' );
+
+-- UPDRS_24_L
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_L',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_L',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_L',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_L',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_24_L',	4,	'ciê¿kie' );
+
+-- UPDRS_25_R
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_R',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_R',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_R',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_R',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_R',	4,	'ciê¿kie' );
+
+-- UPDRS_25_L
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_L',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_L',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_L',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_L',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_25_L',	4,	'ciê¿kie' );
+
+-- UPDRS_26_R
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_R',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_R',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_R',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_R',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_R',	4,	'ciê¿kie' );
+
+-- UPDRS_26_L
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_L',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_L',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_L',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_L',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_26_L',	4,	'ciê¿kie' );
+
+-- UPDRS_27
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_27',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_27',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_27',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_27',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_27',	4,	'ciê¿kie' );
+
+-- UPDRS_28
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_28',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_28',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_28',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_28',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_28',	4,	'ciê¿kie' );
+
+-- UPDRS_29
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_29',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_29',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_29',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_29',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_29',	4,	'ciê¿kie' );
+
+-- UPDRS_30
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_30',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_30',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_30',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_30',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_30',	4,	'ciê¿kie' );
+
+-- UPDRS_31
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_31',	0,	'norma' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_31',	1,	'niewielkie' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_31',	2,	'umiarkowane' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_31',	3,	'powa¿ne' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'UPDRS_31',	4,	'ciê¿kie' );
+
+-- UPDRS_III
+-- N/A 
+
+-- UPDRS_IV
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 0, '0'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 1, '1'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 2, '2'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 3, '3'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 4, '4'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 5, '5'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 6, '6'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 7, '7'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 8, '8'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 9, '9'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 10, '10'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 11, '11'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 12, '12'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 13, '13'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 14, '14'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 15, '15'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 16, '16'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 17, '17'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 18, '18'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 19, '19'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 20, '20'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 21, '21'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 22, '22'); 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie','UPDRS_IV', 23, '23'); 
+
+
+
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	0,	'0%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	10,	'10%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	20,	'20%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	30,	'30%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	40,	'40%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	50,	'50%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	60,	'60%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	70,	'70%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	80,	'80%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	90,	'90%' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'SchwabEnglandScale',	100,	'100%' );
+
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'OkulografiaUrzadzenie',	0,	'LatencyMeter' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'OkulografiaUrzadzenie',	1,	'JazzNovo' );
+
+
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	0,	'0' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	1,	'1' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	1.5,	'1.5' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	2,	'2' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	2.5,	'2.5' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	3,	'3' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	4,	'4' );
+insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'HYscale',	5,	'5' );
+
 */
 
 
@@ -1464,26 +2049,7 @@ select @res, @message;
 select * from Pacjent
 
 
-declare @res int;
-declare @message varchar(200);
-
-exec update_examination_questionnaire  'NUMER/TESTOWY', 0, 3, 2, 1999, 11,
-	3, 1, 1, 5.5, 0, null, 
-	1, 1, 1, 2, 1, 1, 2,
-	1,
-	@res OUTPUT, @message OUTPUT 
-
-select @res, @message;
-
-select * from Wizyta
-@NumerPacjenta varchar(20), @RodzajWizyty tinyint, @Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, @MiesiacZachorowania tinyint,
-	@PierwszyObjaw	tinyint, @CzasOdPoczObjDoWlLDopy	tinyint, @DyskinezyObecnie	tinyint, @CzasDyskinez	decimal(3,1), @FluktuacjeObecnie tinyint, @FluktuacjeOdLat	decimal(3,1), 
-	@Papierosy tinyint,	@Kawa	tinyint, @ZielonaHerbata tinyint,	@Alkohol	tinyint, @ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,	@Zamieszkanie tinyint, @NarazenieNaToks	tinyint, 
-	@allow_updtate_existing bit,
-	@result int OUTPUT, @message varchar(200) OUTPUT
-
 */
-select * from SlownikInt
 
 -- testowanie wprowadzania wizyt
 -- ==============================
@@ -1499,10 +2065,11 @@ select @message, @res;
 declare @message varchar(200);
 declare @res int;
 declare @vis_id int;
-exec update_examination_questionnaire_partA '2013-08-06/TEST1', 0, '2011-11-12', '2011-11-13', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
+exec update_examination_questionnaire_partA '2013-08-06/TEST1', 0.5, '2012-11-12', '2012-11-13', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
  1, 0, 2, 1, 0, 0, 
  1, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
 select @message as Message, @vis_id as Visit_ID, @res as Result;
+go
 
 declare @message varchar(200);
 declare @res int;
@@ -1511,7 +2078,7 @@ exec update_examination_questionnaire_partB 1, 1, 2, 0, 0.5, 0, 2, 1, 1, 1, 2, 1
 select @message as Message, @res as Result;
 
 select * from Wizyta
-
+go
 
 declare @message varchar(200);
 declare @res int;
@@ -1520,7 +2087,7 @@ exec update_examination_questionnaire_partC 1, 1, 10, 1, 30, 0, null, 0, null, 0
 select @message as Message, @res as Result;
 
 select * from Wizyta
-
+go
 
 declare @message varchar(200);
 declare @res int;
@@ -1529,7 +2096,7 @@ exec update_examination_questionnaire_partD 1, 3, 1, 0, 3, 'uwagi', 1, 100, 200,
 select @message as Message, @res as Result;
 
 select * from Wizyta
-
+go
 
 declare @message varchar(200);
 declare @res int;
@@ -1537,8 +2104,8 @@ exec update_examination_questionnaire_partE 1,
 	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1,
  'test', @res OUTPUT,  @message OUTPUT;
 select @message as Message, @res as Result;
-
 select * from Wizyta
+go
 
 declare @message varchar(200);
 declare @res int;
@@ -1548,7 +2115,7 @@ exec update_examination_questionnaire_partF 1,
 select @message as Message, @res as Result;
 
 select * from Wizyta
-
+go
 
 
 declare @message varchar(200);
@@ -1559,7 +2126,7 @@ exec update_examination_questionnaire_partG 1,
 select @message as Message, @res as Result;
 
 select * from Wizyta
-
+go
 
 
 declare @message varchar(200);
@@ -1570,3 +2137,57 @@ exec update_examination_questionnaire_partH 1,
 select @message as Message, @res as Result;
 
 select * from Wizyta
+go
+
+-- testowanie wariantow
+
+
+declare @message varchar(200);
+declare @res int;
+declare @variant_id int;
+exec
+update_variant_examination_data_partA  1, 3, 0,
+14,
+52,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+3,
+40,
+23,
+87,
+2.5,
+70,
+1,
+0,
+1,
+'test',
+@res OUTPUT, @variant_id OUTPUT, @message OUTPUT
+select @message as Message, @res as Result, @variant_id as IdBadanie;
+
+select * from Badanie
+
+*/

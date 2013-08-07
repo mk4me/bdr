@@ -78,7 +78,7 @@ go
 create table Wizyta (
 -- dane epidemiologiczne (część A)
 	IdWizyta	int		IDENTITY,
-	RodzajWizyty tinyint not null,
+	RodzajWizyty decimal(2,1) not null,
 	IdPacjent	int	not null,
 	DataPrzyjecia date,
 	DataWypisu date,
@@ -139,7 +139,7 @@ create table Wizyta (
 	Nadcisnienie tinyint,
 	BlokeryKanWapn tinyint,
 	DominujacyObjawObecnie tinyint,
-	DominującyObjawUwagi varchar(50),
+	DominujacyObjawUwagi varchar(50),
 	BadanieWechu bit,
 	WynikWechu tinyint,
 	LimitDysfagii tinyint,
@@ -209,6 +209,11 @@ create table Wizyta (
 go
 
 alter table Wizyta
+		add primary key ( IdWizyta)
+go
+
+
+alter table Wizyta
         add foreign key (IdPacjent)
                               references Pacjent on delete cascade;
 go
@@ -219,10 +224,84 @@ alter table Wizyta
 go
 
 
+create table Badanie  (
+	IdBadanie	int	identity,
+	IdWizyta	int not null,
+	DBS	tinyint not null,
+	BMT bit	not null,
+-- variant tests A
+	UPDRS_I	tinyint,
+	UPDRS_II	tinyint,
+	UPDRS_18	tinyint,
+	UPDRS_19 	tinyint,
+	UPDRS_20_FaceLipsChin	tinyint,
+	UPDRS_20_RHand	tinyint,
+	UPDRS_20_LHand	tinyint,
+	UPDRS_20_RFoot	tinyint,
+	UPDRS_20_LFoot	tinyint,
+	UPDRS_21_RHand	tinyint,
+	UPDRS_21_LHand	tinyint,
+	UPDRS_22_Neck	tinyint,
+	UPDRS_22_RHand	tinyint,
+	UPDRS_22_LHand	tinyint,
+	UPDRS_22_RFoot	tinyint,
+	UPDRS_22_LFoot	tinyint,
+	UPDRS_23_R	tinyint,
+	UPDRS_23_L	tinyint,
+	UPDRS_24_R	tinyint,
+	UPDRS_24_L	tinyint,
+	UPDRS_25_R	tinyint,
+	UPDRS_25_L	tinyint,
+	UPDRS_26_R	tinyint,
+	UPDRS_26_L	tinyint,
+	UPDRS_27	tinyint,
+	UPDRS_28	tinyint,
+	UPDRS_29	tinyint,
+	UPDRS_30	tinyint,
+	UPDRS_31	tinyint,
+	UPDRS_III	tinyint,
+	UPDRS_IV	tinyint,
+	UPDRS_TOTAL	tinyint,
+	HYscale	decimal(2,1),
+	SchwabEnglandScale	tinyint,
+	OkulografiaUrzadzenie	tinyint,
+	Wideo	bit,
+-- variant tests B
+	Tremorometria	bit,
+	TestSchodkowy	bit,
+	TestSchodkowyCzas1	decimal(4,2),
+	TestSchodkowyCzas2	decimal(4,2),
+	TestMarszu	bit,
+	TestMarszuCzas1	decimal(4,2),
+	TestMarszuCzas2	decimal(4,2),
+	Posturografia	bit,
+	MotionAnalysis	bit,
+-- variant tests C
+	UpAndGo	decimal(3,1),
+	UpAndGoLiczby	decimal(3,1),
+	UpAndGoKubekPrawa	decimal(3,1),
+	UpAndGoKubekLewa	decimal(3,1),
+	TST	decimal(3,1),
+	TandemPivot	tinyint,
+	WTT	decimal(3,1)
+)
+go
 
 
+alter table Badanie
+	add primary key (IdBadanie)
+go
+
+alter table Badanie
+	add foreign key ( IdWizyta )
+		references Wizyta;
+go
+	
 
 
+CREATE UNIQUE NONCLUSTERED INDEX X1Badanie
+ON Badanie ( IdWizyta, DBS, BMT)
+go
 
 CREATE TABLE Plik (
     IdPlik		int IDENTITY,
@@ -230,7 +309,7 @@ CREATE TABLE Plik (
     OpisPliku	varchar(100) not null,
     Plik 		varbinary(max) not null,
 	rowguid		uniqueidentifier rowguidcol not null unique default NEWSEQUENTIALID(),
-	NazwaPliku 	varchar(255) null,	-- zmiana na 100 (20100726) ???
+	NazwaPliku 	varchar(255) null,
 	-- Sciezka 	varchar(100) null,
 	-- OstatniaZmiana datetime default getdate() not null,
 	-- Zmieniony datetime
@@ -244,6 +323,11 @@ go
 CREATE INDEX X1Plik ON Plik (
 	IdBadanie
 )
+go
+
+alter table Plik
+	add foreign key ( IdBadanie )
+		references Badanie;
 go
 
 
