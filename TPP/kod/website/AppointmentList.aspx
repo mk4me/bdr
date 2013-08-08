@@ -6,12 +6,8 @@
     <table ID="Table1" runat="server">
         <tr>
             <td>
-                <asp:Table ID="tableAppointments" runat="server">
+                <asp:Table ID="tableAppointments" runat="server" Width="250px">
                     <asp:TableHeaderRow>
-                        <asp:TableHeaderCell></asp:TableHeaderCell>
-                        <asp:TableHeaderCell>Data</asp:TableHeaderCell>
-                        <asp:TableHeaderCell>Typ wizyty</asp:TableHeaderCell>
-                        <asp:TableHeaderCell></asp:TableHeaderCell>
                     </asp:TableHeaderRow>
                 </asp:Table>
             </td>

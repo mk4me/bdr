@@ -22,20 +22,44 @@ public partial class AppointmentList : System.Web.UI.Page
         string patientNumber = Request.QueryString["PatientNumber"];
         if (patientNumber != null)
         {
-            foreach (AppointmentSelection appointment in getAppointments(patientNumber))
+            List<AppointmentSelection> list = getAppointments(patientNumber);
+            if (list.Count() > 0)
+            {
+                TableHeaderRow header = new TableHeaderRow();
+                TableHeaderCell headerCell1 = new TableHeaderCell();
+                TableHeaderCell headerCell2 = new TableHeaderCell();
+                TableHeaderCell headerCell3 = new TableHeaderCell();
+                header.Cells.Add(headerCell1);
+                header.Cells.Add(headerCell2);
+                header.Cells.Add(headerCell3);
+                tableAppointments.Rows.Add(header);
+                headerCell1.Text = "";
+                headerCell2.Text = "Data";
+                headerCell3.Text = "Typ wizyty";
+                foreach (AppointmentSelection appointment in getAppointments(patientNumber))
+                {
+
+
+                    TableRow row = new TableRow();
+                    TableCell cell1 = new TableCell();
+                    TableCell cell2 = new TableCell();
+                    TableCell cell3 = new TableCell();
+                    row.Cells.Add(cell1);
+                    row.Cells.Add(cell2);
+                    row.Cells.Add(cell3);
+                    tableAppointments.Rows.Add(row);
+                    cell1.Controls.Add(appointment.radioSelected);
+                    cell2.Controls.Add(appointment.date);
+                    cell3.Controls.Add(appointment.type);
+                }
+            }
+            else
             {
                 TableRow row = new TableRow();
                 TableCell cell1 = new TableCell();
-                TableCell cell2 = new TableCell();
-                TableCell cell3 = new TableCell();
                 row.Cells.Add(cell1);
-                row.Cells.Add(cell2);
-                row.Cells.Add(cell3);
                 tableAppointments.Rows.Add(row);
-
-                cell1.Controls.Add(appointment.radioSelected);
-                cell2.Controls.Add(appointment.date);
-                cell3.Controls.Add(appointment.type);
+                cell1.Text = "Brak wizyt.";
             }
         }
     }
@@ -88,7 +112,7 @@ public partial class AppointmentList : System.Web.UI.Page
             radioSelected = new RadioButton();
             radioSelected.GroupName = radioGroup;
             date = new Label();
-            date.Text = dateValue.ToShortDateString();
+            date.Text = dateValue.ToString("yyyy-MM-dd");
             type = new Label();
             string typeValue;
             typeList.TryGetValue(typeKey, out typeValue);

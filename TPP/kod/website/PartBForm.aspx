@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PhsychologyForm.aspx.cs" Inherits="PhsychologyForm" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartBForm.aspx.cs" Inherits="PhsychologyForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>

@@ -14,6 +14,10 @@ public partial class AppointmentForm : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            textDateIn.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            textDateOut.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            textDateIn.Enabled = false;
+            textDateOut.Enabled = false;
             dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
             dropAppointmentType.DataTextField = "Value";
             dropAppointmentType.DataValueField = "Key";
@@ -72,7 +76,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         string patientNumber = Request.QueryString["PatientNumber"];
         if (patientNumber != null)
         {
-            labelPatientNumber.Text = patientNumber;
+            labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
         }
     }
 
@@ -194,6 +198,34 @@ public partial class AppointmentForm : System.Web.UI.Page
 
     protected void buttonCancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/AppointmentList.aspx?" + Request.QueryString["PatientNumber"]);
+        Response.Redirect("~/AppointmentList.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartB_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartBForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartC_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartCForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartD_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartDForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartE_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartEForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartF_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartFForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartG_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartGForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+    }
+    protected void buttonPartH_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/PartHForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
     }
 }

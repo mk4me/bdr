@@ -8,10 +8,6 @@
         Strona Powitalna
     </h2>
     <p>
-        Pacjenci <a href="Main.aspx" title="Main.aspx">Main.aspx</a>.
-    </p>
-    <p>
-        Leki <a href="MedicineForm.aspx"
-            title="MedicineForm.aspx">MedicineForm.aspx</a>.
+        <a href="Main.aspx" title="Main.aspx">Lista pacjentów</a>
     </p>
 </asp:Content>
