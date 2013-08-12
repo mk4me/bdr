@@ -7,88 +7,89 @@
         <tr>
             <td>Test zegara:</td>
             <td>
-                <asp:DropDownList ID="DropDownList1" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                <asp:DropDownList ID="dropTestZegara" runat="server">
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
         </tr>
         <tr>
             <td>MMSE:</td>
             <td>
-                <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+                <asp:TextBox ID="dropMMSE" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>WAIS-R - wiadomości:</td>
             <td>
-                <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textWAISR_Wiadomosci" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>WAIS-R - powtarzanie cyfr:</td>
             <td>
-                <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textWAISR_PowtarzanieCyfr" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Skala depresji Becka:</td>
             <td>
-                <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textSkalaDepresjiBecka" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test fluencji zwierzęta:</td>
             <td>
-                <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestFluencjiZwierzeta" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test fluencji ostre:</td>
             <td>
-                <asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestFluencjiOstre" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test fluencji K:</td>
             <td>
-                <asp:TextBox ID="TextBox7" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestFluencjiK" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test łączenia punktów A:</td>
             <td>
-                <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestLaczeniaPunktowA" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test łączenia punktów B:</td>
             <td>
-                <asp:TextBox ID="TextBox9" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestLaczeniaPunktowB" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test uczenia słowno-słuchowego:</td>
             <td>
-                <asp:TextBox ID="TextBox10" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestUczeniaSlownoSluchowego" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test Stroopa:</td>
             <td>
-                <asp:TextBox ID="TextBox11" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestStroopa" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Test Minnesota:</td>
             <td>
-                <asp:TextBox ID="TextBox12" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestMinnesota" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
             <td>Inne psychologiczne:</td>
             <td>
-                <asp:TextBox ID="TextBox13" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textInnePsychologiczne" runat="server"></asp:TextBox>
             </td>
         </tr>
     </table>

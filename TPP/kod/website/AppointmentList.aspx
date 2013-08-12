@@ -6,33 +6,14 @@
     <table ID="Table1" runat="server">
         <tr>
             <td>
-                <asp:Table ID="tableAppointments" runat="server" Width="250px">
+                <asp:Table ID="tableAppointments" runat="server" Width="450px">
                     <asp:TableHeaderRow>
                     </asp:TableHeaderRow>
                 </asp:Table>
             </td>
-            <td>
-                <table ID="Table3" runat="server">
-                    <tr>
-                        <td><asp:Button ID="buttonNewAppointment" runat="server" Text="Dodaj nową wizytę" 
-                                Width="150px" onclick="buttonNewAppointment_Click" /></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Button ID="buttonEditAppointment" runat="server" Text="Edytuj wizytę" 
-                                Width="150px" /></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Button ID="buttonDeleteAppointment" runat="server" Text="Usuń wizytę" 
-                                Width="150px" /></td>
-                    </tr>
-                    <tr>
-                        <td><asp:Button ID="buttonBack" runat="server" Text="Powrót" 
-                                Width="150px" onclick="buttonBack_Click" /></td>
-                    </tr>
-                </table>
-            </td>
         </tr>
     </table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+    <asp:Button ID="buttonBack" runat="server" Text="Powrót" onclick="buttonBack_Click" />
 </asp:Content>
 

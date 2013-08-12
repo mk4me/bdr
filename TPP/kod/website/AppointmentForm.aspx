@@ -20,6 +20,19 @@
         </script>
         <script type="text/javascript" language="javascript">
             $(document).ready(function () {
+                $("#<%= textDateSurgery.ClientID %>").datepicker({
+                    showOn: 'button',
+                    buttonImage: 'img/calendar_datepicker.png',
+                    buttonImageOnly: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    showAnim: 'slideDown',
+                    duration: 'fast'
+                });
+            });
+        </script>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () {
                 $("#<%= textDateOut.ClientID %>").datepicker({
                     showOn: 'button',
                     buttonImage: 'img/calendar_datepicker.png',
@@ -52,6 +65,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Data operacji:</td>
+                        <td>
+                            <asp:TextBox ID="textDateSurgery" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Data wypisu:</td>
                         <td>
                             <asp:TextBox ID="textDateOut" runat="server"></asp:TextBox>
@@ -68,8 +87,8 @@
                         <td>Rodzinność:</td>
                         <td>
                             <asp:DropDownList ID="dropFamily" runat="server">
-                                <asp:ListItem Value="1">Tak</asp:ListItem>
-                                <asp:ListItem Value="0">Nie</asp:ListItem>
+                                <asp:ListItem Value="1">tak</asp:ListItem>
+                                <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -107,8 +126,8 @@
                             <asp:DropDownList ID="dropDiskinesia" runat="server" 
                                 onselectedindexchanged="dropDiskinesia_SelectedIndexChanged" 
                                 AutoPostBack="True">
-                                <asp:ListItem Value="1">Tak</asp:ListItem>
-                                <asp:ListItem Value="0">Nie</asp:ListItem>
+                                <asp:ListItem Value="1">tak</asp:ListItem>
+                                <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -130,8 +149,8 @@
                             <asp:DropDownList ID="dropFluctuations" runat="server"
                                 onselectedindexchanged="dropFluctuations_SelectedIndexChanged" 
                                 AutoPostBack="True">
-                                <asp:ListItem Value="1">Tak</asp:ListItem>
-                                <asp:ListItem Value="0">Nie</asp:ListItem>
+                                <asp:ListItem Value="1">tak</asp:ListItem>
+                                <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -165,8 +184,8 @@
                         <td>Zielona herbata:</td>
                         <td>
                             <asp:DropDownList ID="dropGreenTea" runat="server">
-                                <asp:ListItem Value="1">Tak</asp:ListItem>
-                                <asp:ListItem Value="0">Nie</asp:ListItem>
+                                <asp:ListItem Value="1">tak</asp:ListItem>
+                                <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -201,6 +220,12 @@
                         <td>
                             <asp:DropDownList ID="dropToxic" runat="server">
                             </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Uwagi:</td>
+                        <td>
+                            <asp:TextBox ID="textNotes" runat="server"></asp:TextBox>
                         </td>
                     </tr>
                 </table>

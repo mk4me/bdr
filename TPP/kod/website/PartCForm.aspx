@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartCForm.aspx.cs" Inherits="MedicineForm" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartCForm.aspx.cs" Inherits="PartCForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
@@ -13,8 +13,9 @@
             <td>LDopa:</td>
             <td>
                 <asp:DropDownList ID="dropLDopa" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -25,8 +26,9 @@
             <td>Agonista:</td>
             <td>
                 <asp:DropDownList ID="dropAgonista" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -37,8 +39,9 @@
             <td>Amantadyna:</td>
             <td>
                 <asp:DropDownList ID="dropAmantadyna" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -49,8 +52,9 @@
             <td>MAOBinh:</td>
             <td>
                 <asp:DropDownList ID="dropMAOBinh" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -61,8 +65,9 @@
             <td>COMTinh</td>
             <td>
                 <asp:DropDownList ID="dropCOMTinh" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -73,8 +78,9 @@
             <td>Cholinolityk:</td>
             <td>
                 <asp:DropDownList ID="dropCholinotyk" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
@@ -84,13 +90,14 @@
         <tr>
             <td>Leki inne:</td>
             <td>
-                <asp:DropDownList ID="DropDownList1" runat="server">
-                    <asp:ListItem Value="0">Nie</asp:ListItem>
-                    <asp:ListItem Value="1">Tak</asp:ListItem>
+                <asp:DropDownList ID="dropLekiInne" runat="server">
+                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
-                <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textLekiInne" runat="server"></asp:TextBox>
             </td>
         </tr>
     </table>

@@ -12,59 +12,56 @@ public partial class AppointmentList : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
-        {
-            buttonEditAppointment.Enabled = false;
-            buttonDeleteAppointment.Enabled = false;
-
-        }
-
         string patientNumber = Request.QueryString["PatientNumber"];
         if (patientNumber != null)
         {
-            List<AppointmentSelection> list = getAppointments(patientNumber);
-            if (list.Count() > 0)
-            {
-                TableHeaderRow header = new TableHeaderRow();
-                TableHeaderCell headerCell1 = new TableHeaderCell();
-                TableHeaderCell headerCell2 = new TableHeaderCell();
-                TableHeaderCell headerCell3 = new TableHeaderCell();
-                header.Cells.Add(headerCell1);
-                header.Cells.Add(headerCell2);
-                header.Cells.Add(headerCell3);
-                tableAppointments.Rows.Add(header);
-                headerCell1.Text = "";
-                headerCell2.Text = "Data";
-                headerCell3.Text = "Typ wizyty";
-                foreach (AppointmentSelection appointment in getAppointments(patientNumber))
-                {
+            Dictionary<decimal, string> appointmentTypes = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
+            Dictionary<decimal, DateTime> existingAppointments = getAppointments(patientNumber, appointmentTypes);
 
+            TableHeaderRow header = new TableHeaderRow();
+            TableHeaderCell headerCell1 = new TableHeaderCell();
+            TableHeaderCell headerCell2 = new TableHeaderCell();
+            header.Cells.Add(headerCell1);
+            header.Cells.Add(headerCell2);
+            tableAppointments.Rows.Add(header);
+            headerCell1.Text = "Data";
+            headerCell2.Text = "Typ wizyty";
 
-                    TableRow row = new TableRow();
-                    TableCell cell1 = new TableCell();
-                    TableCell cell2 = new TableCell();
-                    TableCell cell3 = new TableCell();
-                    row.Cells.Add(cell1);
-                    row.Cells.Add(cell2);
-                    row.Cells.Add(cell3);
-                    tableAppointments.Rows.Add(row);
-                    cell1.Controls.Add(appointment.radioSelected);
-                    cell2.Controls.Add(appointment.date);
-                    cell3.Controls.Add(appointment.type);
-                }
-            }
-            else
+            foreach (KeyValuePair<decimal, string> appointmentType in DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty"))
             {
                 TableRow row = new TableRow();
                 TableCell cell1 = new TableCell();
+                TableCell cell2 = new TableCell();
+                TableCell cell3 = new TableCell();
                 row.Cells.Add(cell1);
+                row.Cells.Add(cell2);
+                row.Cells.Add(cell3);
                 tableAppointments.Rows.Add(row);
-                cell1.Text = "Brak wizyt.";
+
+                AppointmentSelection appointment = null;
+                foreach(KeyValuePair<decimal, DateTime> existingAppointment in existingAppointments)
+                {
+                    if (existingAppointment.Key == appointmentType.Key)
+                    {
+                        appointment = new AppointmentSelection(existingAppointment.Value, appointmentType.Value, appointmentType.Key, this);
+                        cell1.Controls.Add(appointment.labelDate);
+                        cell2.Controls.Add(appointment.labelType);
+                        cell3.Controls.Add(appointment.buttonEdit);
+                        cell3.Controls.Add(appointment.buttonDelete);
+                    }
+                }
+
+                if (appointment == null)
+                {
+                    appointment = new AppointmentSelection(appointmentType.Value, appointmentType.Key, this);
+                    cell2.Controls.Add(appointment.labelType);
+                    cell3.Controls.Add(appointment.buttonNew);
+                }
             }
         }
     }
 
-    private List<AppointmentSelection> getAppointments(string patientNumber)
+    private Dictionary<decimal, DateTime> getAppointments(string patientNumber, Dictionary<decimal, string> appointmentTypes)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
         SqlCommand cmd = new SqlCommand();
@@ -72,7 +69,7 @@ public partial class AppointmentList : System.Web.UI.Page
         cmd.CommandText = "select DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = '" + patientNumber + "')";
         cmd.Connection = con;
 
-        List<AppointmentSelection> list = new List<AppointmentSelection>();
+        Dictionary<decimal, DateTime> dictrionary = new Dictionary<decimal, DateTime>();
 
         try
         {
@@ -81,8 +78,7 @@ public partial class AppointmentList : System.Web.UI.Page
 
             while (rdr.Read())
             {
-                AppointmentSelection appointmentSelection = new AppointmentSelection("SelectionGroup", (DateTime)rdr["DataPrzyjecia"], (decimal)rdr["RodzajWizyty"], DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty"));
-                list.Add(appointmentSelection);
+                dictrionary.Add((decimal)rdr["RodzajWizyty"], (DateTime)rdr["DataPrzyjecia"]);
             }
         }
         catch (SqlException ex)
@@ -98,35 +94,52 @@ public partial class AppointmentList : System.Web.UI.Page
             }
         }
 
-        return list;
+        return dictrionary;
     }
 
     private class AppointmentSelection
     {
-        public RadioButton radioSelected;
-        public Label date;
-        public Label type;
+        public decimal typeKey;
+        public Label labelDate;
+        public Label labelType;
+        public Button buttonNew;
+        public Button buttonEdit;
+        public Button buttonDelete;
+        private Page page;
 
-        public AppointmentSelection(string radioGroup, DateTime dateValue, decimal typeKey, Dictionary<decimal, string> typeList)
+        public AppointmentSelection(string typeValue, decimal typeKey, Page page)
         {
-            radioSelected = new RadioButton();
-            radioSelected.GroupName = radioGroup;
-            date = new Label();
-            date.Text = dateValue.ToString("yyyy-MM-dd");
-            type = new Label();
-            string typeValue;
-            typeList.TryGetValue(typeKey, out typeValue);
-            type.Text = typeValue;
+            this.page = page;
+            labelType = new Label();
+            labelType.Text = typeValue;
+            this.typeKey = typeKey;
+            buttonNew = new Button();
+            buttonNew.Text = "Utwórz";
+            buttonNew.Click += new System.EventHandler(buttonNew_Click);
+        }
+
+        public AppointmentSelection(DateTime date, string typeValue, decimal typeKey, Page page)
+        {
+            this.page = page;
+            labelDate = new Label();
+            labelDate.Text = date.ToString("yyyy-MM-dd");
+            labelType = new Label();
+            labelType.Text = typeValue;
+            this.typeKey = typeKey;
+            buttonEdit = new Button();
+            buttonEdit.Text = "Edytuj";
+            buttonDelete = new Button();
+            buttonDelete.Text = "Usuń";
+        }
+
+        protected void buttonNew_Click(object sender, EventArgs e)
+        {
+            page.Response.Redirect("~/AppointmentForm.aspx?PatientNumber=" + page.Request.QueryString["PatientNumber"] + "&AppointmentType=" + typeKey);
         }
     }
 
     protected void buttonBack_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/Main.aspx");
-    }
-
-    protected void buttonNewAppointment_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("~/AppointmentForm.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
     }
 }

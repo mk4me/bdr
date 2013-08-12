@@ -15,13 +15,17 @@ public partial class AppointmentForm : System.Web.UI.Page
         if (!IsPostBack)
         {
             textDateIn.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            textDateSurgery.Text = DateTime.Now.ToString("yyyy-MM-dd");
             textDateOut.Text = DateTime.Now.ToString("yyyy-MM-dd");
             textDateIn.Enabled = false;
+            textDateSurgery.Enabled = false;
             textDateOut.Enabled = false;
+
             dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
             dropAppointmentType.DataTextField = "Value";
             dropAppointmentType.DataValueField = "Key";
             dropAppointmentType.DataBind();
+            dropAppointmentType.Enabled = false;
 
             int minYear = 1920;
             int currentYear = DateTime.Now.Year;
@@ -78,11 +82,17 @@ public partial class AppointmentForm : System.Web.UI.Page
         {
             labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
         }
+
+        string appointmentType = Request.QueryString["AppointmentType"];
+        if (patientNumber != null)
+        {
+            dropAppointmentType.SelectedValue = appointmentType;
+        }
     }
 
     private void saveExamination(string number, decimal examinationType, byte education, byte family, short symptomYear, byte symptomMonth, byte firstSymptom, byte timeSymptom,
         byte dyskinesia, decimal timeDiskinesia, byte fluctuations, decimal yearsFluctuations, byte cigarettes, byte coffee, byte greenTea, byte alcohol, byte treatmentNumber,
-        byte place, byte toxic, DateTime dateIn, DateTime dateOut, string login, bool update)
+        byte place, byte toxic, DateTime dateIn, DateTime dateSurgery, DateTime dateOut, string login, string notes, bool update)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
         SqlCommand cmd = new SqlCommand();
@@ -95,6 +105,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         examinationTypeDecimal.Value = examinationType;
         cmd.Parameters.Add(examinationTypeDecimal);
         cmd.Parameters.Add("@DataPrzyjecia", SqlDbType.Date).Value = dateIn;
+        cmd.Parameters.Add("@DataOperacji", SqlDbType.Date).Value = dateSurgery;
         cmd.Parameters.Add("@DataWypisu", SqlDbType.Date).Value = dateOut;
         cmd.Parameters.Add("@Wyksztalcenie", SqlDbType.TinyInt).Value = education;
         cmd.Parameters.Add("@Rodzinnosc", SqlDbType.TinyInt).Value = family;
@@ -121,6 +132,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = treatmentNumber;
         cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = place;
         cmd.Parameters.Add("@NarazenieNaToks", SqlDbType.TinyInt).Value = toxic;
+        cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = notes;
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = login;
         cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -165,11 +177,13 @@ public partial class AppointmentForm : System.Web.UI.Page
         if (byte.Parse(dropDiskinesia.SelectedValue) == 1)
         {
             textTimeDiskinesia.Enabled = true;
+            RequiredFieldValidator2.Enabled = true;
         }
         else
         {
             textTimeDiskinesia.Enabled = false;
             textTimeDiskinesia.Text = "";
+            RequiredFieldValidator2.Enabled = false;
         }
     }
 
@@ -178,11 +192,13 @@ public partial class AppointmentForm : System.Web.UI.Page
         if (byte.Parse(dropFluctuations.SelectedValue) == 1)
         {
             textYearsFluctuations.Enabled = true;
+            RequiredFieldValidator3.Enabled = true;
         }
         else
         {
             textYearsFluctuations.Enabled = false;
             textYearsFluctuations.Text = "";
+            RequiredFieldValidator3.Enabled = false;
         }
     }
 
@@ -192,8 +208,8 @@ public partial class AppointmentForm : System.Web.UI.Page
             short.Parse(dropYear.SelectedValue), byte.Parse(dropMonth.SelectedValue), byte.Parse(dropSymptom.SelectedValue), byte.Parse(textTimeSymptom.Text),
             byte.Parse(dropDiskinesia.SelectedValue), decimal.Parse(textTimeDiskinesia.Text), byte.Parse(dropFluctuations.SelectedValue), decimal.Parse(textYearsFluctuations.Text),
             byte.Parse(dropCigarettes.SelectedValue), byte.Parse(dropCoffee.SelectedValue), byte.Parse(dropGreenTea.SelectedValue), byte.Parse(dropAlcohol.SelectedValue),
-            byte.Parse(textTreatmentNumber.Text), byte.Parse(dropPlace.SelectedValue), byte.Parse(dropToxic.SelectedValue), DateTime.Parse(textDateIn.Text), DateTime.Parse(textDateOut.Text),
-            User.Identity.Name, false);
+            byte.Parse(textTreatmentNumber.Text), byte.Parse(dropPlace.SelectedValue), byte.Parse(dropToxic.SelectedValue), DateTime.Parse(textDateIn.Text), DateTime.Parse(textDateSurgery.Text),
+            DateTime.Parse(textDateOut.Text), User.Identity.Name, textNotes.Text, false);
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)
