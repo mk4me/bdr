@@ -45,7 +45,7 @@
                     <tr>
                         <td>
                             <asp:Button ID="buttonShowExaminations" runat="server" Text="Wyświetl listę badań" 
-                                Width="200px" />
+                                Width="200px" onclick="buttonShowExaminations_Click" />
                         </td>
                     </tr>
                 </table>

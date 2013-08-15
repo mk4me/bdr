@@ -234,44 +234,44 @@
                 <table ID="Table3" runat="server">
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartB" runat="server" Text="Wywiad B" 
-                                Width="250px" onclick="buttonPartB_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartB" runat="server" Text="Objawy i epidemiologia" 
+                                Width="265px" onclick="buttonPartB_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartC" runat="server" Text="Wywiad C - Leki" 
-                                Width="250px" onclick="buttonPartC_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartC" runat="server" Text="Przyjmowane leki" 
+                                Width="265px" onclick="buttonPartC_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <asp:Button ID="buttonPartD" runat="server" Text="Wywiad D" 
-                                Width="250px" onclick="buttonPartD_Click" CausesValidation="false" />
+                                Width="265px" onclick="buttonPartD_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartE" runat="server" Text="Wywiad E - Objawy autonomiczne" 
-                                Width="250px" onclick="buttonPartE_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartE" runat="server" Text="Kwestionariusz zaburzeń autonomicznych" 
+                                Width="265px" onclick="buttonPartE_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartF" runat="server" Text="Wywiad F" 
-                                Width="250px" onclick="buttonPartF_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartF" runat="server" Text="UPDRS i skale oceny klinicznej" 
+                                Width="265px" onclick="buttonPartF_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartG" runat="server" Text="Wywiad G - Psycholog" 
-                                Width="250px" onclick="buttonPartG_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartG" runat="server" Text="Badanie i testy psychologiczne" 
+                                Width="265px" onclick="buttonPartG_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartH" runat="server" Text="Wywiad H" 
-                                Width="250px" onclick="buttonPartH_Click" CausesValidation="false" />
+                            <asp:Button ID="buttonPartH" runat="server" Text="Badania dodatkowe" 
+                                Width="265px" onclick="buttonPartH_Click" CausesValidation="false" />
                         </td>
                     </tr>
                 </table>

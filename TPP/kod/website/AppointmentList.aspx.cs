@@ -12,11 +12,11 @@ public partial class AppointmentList : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string patientNumber = Request.QueryString["PatientNumber"];
-        if (patientNumber != null)
+        if (Session["PatientNumber"] != null)
         {
+            labelPatientNumber.Text = "Numer pacjenta: " + Session["PatientNumber"].ToString();
             Dictionary<decimal, string> appointmentTypes = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
-            Dictionary<decimal, DateTime> existingAppointments = getAppointments(patientNumber, appointmentTypes);
+            Dictionary<decimal, DateTime> existingAppointments = getAppointments(Session["PatientNumber"].ToString(), appointmentTypes);
 
             TableHeaderRow header = new TableHeaderRow();
             TableHeaderCell headerCell1 = new TableHeaderCell();
@@ -128,13 +128,25 @@ public partial class AppointmentList : System.Web.UI.Page
             this.typeKey = typeKey;
             buttonEdit = new Button();
             buttonEdit.Text = "Edytuj";
+            buttonEdit.Click += new System.EventHandler(buttonEdit_Click);
             buttonDelete = new Button();
             buttonDelete.Text = "Usuń";
         }
 
         protected void buttonNew_Click(object sender, EventArgs e)
         {
-            page.Response.Redirect("~/AppointmentForm.aspx?PatientNumber=" + page.Request.QueryString["PatientNumber"] + "&AppointmentType=" + typeKey);
+            page.Session["PatientNumber"] = page.Session["PatientNumber"];
+            page.Session["AppointmentType"] = typeKey;
+            page.Session["Update"] = false;
+            page.Response.Redirect("~/AppointmentForm.aspx");
+        }
+
+        protected void buttonEdit_Click(object sender, EventArgs e)
+        {
+            page.Session["PatientNumber"] = page.Session["PatientNumber"];
+            page.Session["AppointmentType"] = typeKey;
+            page.Session["Update"] = true;
+            page.Response.Redirect("~/AppointmentForm.aspx");
         }
     }
 

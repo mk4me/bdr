@@ -10,6 +10,9 @@ using System.Data;
 
 public partial class AppointmentForm : System.Web.UI.Page
 {
+    private bool update = false;
+    private string patientNumber;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
@@ -77,16 +80,32 @@ public partial class AppointmentForm : System.Web.UI.Page
             dropToxic.DataBind();
         }
 
-        string patientNumber = Request.QueryString["PatientNumber"];
-        if (patientNumber != null)
+        if (Session["AppointmentType"] != null)
         {
-            labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
+            dropAppointmentType.SelectedValue = Session["AppointmentType"].ToString();
+        }
+        else
+        {
+            Response.Redirect("~/Main.aspx");
         }
 
-        string appointmentType = Request.QueryString["AppointmentType"];
-        if (patientNumber != null)
+        if (Session["PatientNumber"] != null)
         {
-            dropAppointmentType.SelectedValue = appointmentType;
+            patientNumber = Session["PatientNumber"].ToString();
+            labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
+        }
+        else
+        {
+            Response.Redirect("~/Main.aspx");
+        }
+
+        if (Session["Update"] != null)
+        {
+            update = (bool)Session["Update"];
+        }
+        else
+        {
+            Response.Redirect("~/Main.aspx");
         }
     }
 
@@ -151,7 +170,8 @@ public partial class AppointmentForm : System.Web.UI.Page
             success = (int)cmd.Parameters["@result"].Value;
             if (success == 0 || success == 1)
             {
-                Response.Redirect("~/AppointmentList.aspx?PatientNumber=" + Request.QueryString["PatientNumber"]);
+                Session["Update"] = false;
+                Response.Redirect("~/AppointmentList.aspx");
             }
             else
             {
@@ -170,6 +190,11 @@ public partial class AppointmentForm : System.Web.UI.Page
                 con.Close();
             }
         }
+    }
+
+    private void loadAppointment()
+    {
+
     }
 
     protected void dropDiskinesia_SelectedIndexChanged(object sender, EventArgs e)
@@ -204,12 +229,12 @@ public partial class AppointmentForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
-        saveExamination(Request.QueryString["PatientNumber"], decimal.Parse(dropAppointmentType.SelectedValue), byte.Parse(dropEducation.SelectedValue), byte.Parse(dropFamily.SelectedValue),
+        saveExamination(patientNumber, decimal.Parse(dropAppointmentType.SelectedValue), byte.Parse(dropEducation.SelectedValue), byte.Parse(dropFamily.SelectedValue),
             short.Parse(dropYear.SelectedValue), byte.Parse(dropMonth.SelectedValue), byte.Parse(dropSymptom.SelectedValue), byte.Parse(textTimeSymptom.Text),
             byte.Parse(dropDiskinesia.SelectedValue), decimal.Parse(textTimeDiskinesia.Text), byte.Parse(dropFluctuations.SelectedValue), decimal.Parse(textYearsFluctuations.Text),
             byte.Parse(dropCigarettes.SelectedValue), byte.Parse(dropCoffee.SelectedValue), byte.Parse(dropGreenTea.SelectedValue), byte.Parse(dropAlcohol.SelectedValue),
             byte.Parse(textTreatmentNumber.Text), byte.Parse(dropPlace.SelectedValue), byte.Parse(dropToxic.SelectedValue), DateTime.Parse(textDateIn.Text), DateTime.Parse(textDateSurgery.Text),
-            DateTime.Parse(textDateOut.Text), User.Identity.Name, textNotes.Text, false);
+            DateTime.Parse(textDateOut.Text), User.Identity.Name, textNotes.Text, update);
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)

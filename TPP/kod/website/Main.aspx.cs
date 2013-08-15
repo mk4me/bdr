@@ -105,6 +105,7 @@ public partial class Main : System.Web.UI.Page
     {
         if (listPatients.SelectedIndex >= 0)
         {
+
             Response.Redirect("~/PatientForm.aspx?PatientNumber=" + listPatients.SelectedValue);
         }
     }
@@ -113,7 +114,17 @@ public partial class Main : System.Web.UI.Page
     {
         if (listPatients.SelectedIndex >= 0)
         {
-            Response.Redirect("~/AppointmentList.aspx?PatientNumber=" + listPatients.SelectedValue);
+            Session["PatientNumber"] = listPatients.SelectedValue;
+            Response.Redirect("~/AppointmentList.aspx");
+        }
+    }
+
+    protected void buttonShowExaminations_Click(object sender, EventArgs e)
+    {
+        if (listPatients.SelectedIndex >= 0)
+        {
+            Session["PatientNumber"] = listPatients.SelectedValue;
+            Response.Redirect("~/ExaminationList.aspx");
         }
     }
 
@@ -130,6 +141,6 @@ public partial class Main : System.Web.UI.Page
         buttonEditPatient.Enabled = enable;
         buttonDeletePatient.Enabled = enable;
         buttonShowAppointments.Enabled = enable;
-        buttonShowExaminations.Enabled = false;
+        buttonShowExaminations.Enabled = enable;
     }
 }
