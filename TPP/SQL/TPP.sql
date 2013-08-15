@@ -75,12 +75,15 @@ go
 
 
 
+
+
 create table Wizyta (
 -- dane epidemiologiczne (część A)
 	IdWizyta	int		IDENTITY,
 	RodzajWizyty decimal(2,1) not null,
 	IdPacjent	int	not null,
 	DataPrzyjecia date,
+	DataOperacji date,
 	DataWypisu date,
 	Wprowadzil int,
 	Wyksztalcenie	tinyint,
@@ -100,6 +103,7 @@ create table Wizyta (
 	ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,
 	Zamieszkanie tinyint,
 	NarazenieNaToks	tinyint,
+	Uwagi varchar(50),
 -- wywiad część B
 	RLS	tinyint,
 	ObjawyPsychotyczne	tinyint,

@@ -276,7 +276,7 @@ go
 -- ============================
 
 -- last rev. 2013-07-25
--- @res codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
+-- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
 create procedure update_patient  (	@NumerPacjenta	varchar(20), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
@@ -319,7 +319,7 @@ begin
 					values (@NumerPacjenta, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
 	else
 		update Pacjent
-		set NumerPacjenta = @NumerPacjenta, RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
+		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
 		LiczbaElektrod = @LiczbaElektrod
 		where NumerPacjenta = @NumerPacjenta;		
 end;
@@ -350,14 +350,13 @@ end;
 go
 
 
--- last rev. 2013-08-05
--- Dodano sufiks nazwy: _partA
--- @res codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
+-- last rev. 2013-08-11
+-- @result codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
 alter procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty decimal(2,1),
-	@DataPrzyjecia date,	@DataWypisu date,
+	@DataPrzyjecia date,	@DataOperacji date,		@DataWypisu date,
 	@Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, @MiesiacZachorowania tinyint,
 	@PierwszyObjaw	tinyint, @CzasOdPoczObjDoWlLDopy	tinyint, @DyskinezyObecnie	tinyint, @CzasDyskinez	decimal(3,1), @FluktuacjeObecnie tinyint, @FluktuacjeOdLat	decimal(3,1), @Papierosy tinyint,
-	@Kawa	tinyint, @ZielonaHerbata tinyint,	@Alkohol	tinyint, @ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,	@Zamieszkanie tinyint, @NarazenieNaToks	tinyint, 
+	@Kawa	tinyint, @ZielonaHerbata tinyint,	@Alkohol	tinyint, @ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,	@Zamieszkanie tinyint, @NarazenieNaToks	tinyint, @Uwagi varchar(50),
 	@allow_update_existing bit,
 	@actor_login varchar(50),
 	@result int OUTPUT, @visit_id int OUTPUT, @message varchar(200) OUTPUT )
@@ -487,21 +486,21 @@ begin
 	-- depending on update
 	if(@update = 0)
 		begin
-		insert into Wizyta (	RodzajWizyty, IdPacjent, DataPrzyjecia, DataWypisu, Wyksztalcenie,	Rodzinnosc,	RokZachorowania, MiesiacZachorowania, PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie,
+		insert into Wizyta (	RodzajWizyty, IdPacjent, DataPrzyjecia, DataOperacji, DataWypisu, Wyksztalcenie,	Rodzinnosc,	RokZachorowania, MiesiacZachorowania, PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie,
 								CzasDyskinez, FluktuacjeObecnie, FluktuacjeOdLat,	Papierosy,	Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD,
-								Zamieszkanie, NarazenieNaToks, Wprowadzil )
-					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataWypisu, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @MiesiacZachorowania, @PierwszyObjaw, @CzasOdPoczObjDoWlLDopy, @DyskinezyObecnie,
+								Zamieszkanie, NarazenieNaToks, Uwagi, Wprowadzil )
+					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataOperacji, @DataWypisu, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @MiesiacZachorowania, @PierwszyObjaw, @CzasOdPoczObjDoWlLDopy, @DyskinezyObecnie,
 								@CzasDyskinez, @FluktuacjeObecnie, @FluktuacjeOdLat, @Papierosy,	@Kawa, @ZielonaHerbata, @Alkohol, @ZabiegowWZnieczOgPrzedRozpoznaniemPD,
-								@Zamieszkanie, @NarazenieNaToks, @user_id )  set @visit_id = SCOPE_IDENTITY();
+								@Zamieszkanie, @NarazenieNaToks, @Uwagi, @user_id )  set @visit_id = SCOPE_IDENTITY();
 		end;
 	else
 		begin
 		update Wizyta
-		set DataPrzyjecia = @DataPrzyjecia, DataWypisu = @DataWypisu, Wyksztalcenie = @Wyksztalcenie,	Rodzinnosc = @Rodzinnosc,	RokZachorowania = @RokZachorowania, 
+		set DataPrzyjecia = @DataPrzyjecia, DataOperacji = @DataOperacji, DataWypisu = @DataWypisu, Wyksztalcenie = @Wyksztalcenie,	Rodzinnosc = @Rodzinnosc,	RokZachorowania = @RokZachorowania, 
 				MiesiacZachorowania = @MiesiacZachorowania, PierwszyObjaw = @PierwszyObjaw, CzasOdPoczObjDoWlLDopy = @CzasOdPoczObjDoWlLDopy, DyskinezyObecnie = @DyskinezyObecnie,
 								CzasDyskinez = @CzasDyskinez, FluktuacjeObecnie = @FluktuacjeObecnie, FluktuacjeOdLat = @FluktuacjeOdLat,	Papierosy = @Papierosy,	Kawa = @Kawa, 
 								ZielonaHerbata = @ZielonaHerbata, Alkohol = @Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD = @ZabiegowWZnieczOgPrzedRozpoznaniemPD,
-								Zamieszkanie = @Zamieszkanie, NarazenieNaToks = @NarazenieNaToks 
+								Zamieszkanie = @Zamieszkanie, NarazenieNaToks = @NarazenieNaToks, Uwagi = @Uwagi 
 		where RodzajWizyty = @RodzajWizyty and IdPacjent = @patient_id  set @visit_id = SCOPE_IDENTITY();
 		end;
 	return;
@@ -509,10 +508,11 @@ end;
 go
 
 
--- created 2013-08-05
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_examination_questionnaire_partB  (@IdWizyta int,
+-- last rev. 2013-08-15
+
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+alter procedure update_examination_questionnaire_partB  (@IdWizyta int,
 	@RLS	tinyint,
 	@ObjawyPsychotyczne	tinyint,
 	@Depresja	tinyint,
@@ -531,6 +531,11 @@ create procedure update_examination_questionnaire_partB  (@IdWizyta int,
 	@ObjawyInneJakie	varchar(80),
 	@CzasOFF	tinyint,
 	@PoprawaPoLDopie	tinyint,
+	@PrzebyteLeczenieOperacyjnePD tinyint,
+	@Nadcisnienie tinyint,
+	@BlokeryKanWapn tinyint,
+	@DominujacyObjawObecnie tinyint,
+	@DominujacyObjawUwagi varchar(50),
 	@actor_login varchar(50),
 	@result int OUTPUT, @message varchar(200) OUTPUT )
 as
@@ -667,6 +672,34 @@ begin
 		return;
 	end;
 
+	if dbo.validate_input_int('Wizyta', 'PrzebyteLeczenieOperacyjnePD', @PrzebyteLeczenieOperacyjnePD) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute PrzebyteLeczenieOperacyjnePD - see enumeration for allowed values';
+		return;
+	end;
+
+	if( dbo.validate_ext_bit( @Nadcisnienie ) = 0 )
+	begin
+		set @result = 2;
+		set @message = 'Nadcisnienie - invalid value. Allowed: 0, 1, 2.';
+		return;
+	end;
+
+	if( dbo.validate_ext_bit( @BlokeryKanWapn ) = 0 )
+	begin
+		set @result = 2;
+		set @message = 'BlokeryKanWapn - invalid value. Allowed: 0, 1, 2.';
+		return;
+	end;
+
+	if dbo.validate_input_int('Wizyta', 'DominujacyObjawObecnie', @DominujacyObjawObecnie) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute DominujacyObjawObecnie - see enumeration for allowed values';
+		return;
+	end;
+
 
 	update Wizyta
 		set 
@@ -687,14 +720,19 @@ begin
 			ObjawyInne	= @ObjawyInne,
 			ObjawyInneJakie	= @ObjawyInneJakie,
 			CzasOFF	= @CzasOFF,
-			PoprawaPoLDopie	= @PoprawaPoLDopie
+			PoprawaPoLDopie	= @PoprawaPoLDopie,
+			PrzebyteLeczenieOperacyjnePD  = @PrzebyteLeczenieOperacyjnePD,
+			Nadcisnienie  = @Nadcisnienie,
+			BlokeryKanWapn  = @BlokeryKanWapn,
+			DominujacyObjawObecnie  = @DominujacyObjawObecnie,
+			DominujacyObjawUwagi  = @DominujacyObjawUwagi
 		where IdWizyta = @IdWizyta;
 
 	return;
 end;
 go
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partC  (
 	@IdWizyta int,
 	@Ldopa tinyint,
@@ -760,9 +798,9 @@ begin
 end;
 go
 
-
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-alter procedure update_examination_questionnaire_partD  (
+-- DEPRECATED. 2013-08-15 (attributes moved to B and H)
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+create procedure update_examination_questionnaire_partD  (
 	@IdWizyta int,
 	@PrzebyteLeczenieOperacyjnePD tinyint,
 	@Nadcisnienie tinyint,
@@ -834,6 +872,19 @@ begin
 		return;
 	end;
 
+	if dbo.validate_input_int('Wizyta', 'WynikWechu', @WynikWechu) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute WynikWechu - see enumeration for allowed values';
+		return;
+	end;
+
+	if dbo.validate_input_int('Wizyta', 'LimitDysfagii', @LimitDysfagii) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute LimitDysfagii - see enumeration for allowed values';
+		return;
+	end;
 
 
 	update Wizyta
@@ -853,7 +904,7 @@ end;
 go
 
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partE  (
 	@IdWizyta int,
 	@WydzielanieSliny	tinyint,
@@ -1138,7 +1189,7 @@ begin
 end;
 go
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partF  (
 	@IdWizyta int,
 	@PDQ39	tinyint,
@@ -1188,7 +1239,7 @@ begin
 end;
 go
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
 	@TestZegara bit,
@@ -1253,10 +1304,15 @@ begin
 end;
 go
 
--- @res codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_examination_questionnaire_partH  (
+
+
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+alter procedure update_examination_questionnaire_partH  (
 	@IdWizyta int,
 	@Holter bit,
+	@BadanieWechu bit,
+	@WynikWechu tinyint,
+	@LimitDysfagii tinyint,
 	@pH_metriaPrze³yku bit,
 	@SPECT bit,
 	@MRI bit,
@@ -1295,6 +1351,27 @@ begin
 
 	-- validators
 
+	if( dbo.validate_ext_bit( @BadanieWechu ) = 0 )
+	begin
+		set @result = 2;
+		set @message = 'BadanieWechu - invalid value. Allowed: 0, 1, 2.';
+		return;
+	end;
+
+	if dbo.validate_input_int('Wizyta', 'WynikWechu', @WynikWechu) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute WynikWechu - see enumeration for allowed values';
+		return;
+	end;
+
+	if dbo.validate_input_int('Wizyta', 'LimitDysfagii', @LimitDysfagii) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute LimitDysfagii - see enumeration for allowed values';
+		return;
+	end;
+
 	if( dbo.validate_ext_bit( @USGsrodmozgowia ) = 0 )
 	begin
 		set @result = 2;
@@ -1313,6 +1390,9 @@ begin
 	update Wizyta
 		set 
 			Holter = @Holter,
+			BadanieWechu  = @BadanieWechu,
+			WynikWechu  = @WynikWechu,
+			LimitDysfagii  = @LimitDysfagii,
 			pH_metriaPrze³yku = @pH_metriaPrze³yku,
 			SPECT = @SPECT,
 			MRI = @MRI,
@@ -1332,7 +1412,7 @@ go
 
 
 
--- @res codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
+-- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
 create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
 	@UPDRS_I	tinyint,
 	@UPDRS_II	tinyint,
@@ -1582,7 +1662,7 @@ end;
 go
 
 
--- @res codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit,
 	@TestSchodkowy bit,
@@ -1640,7 +1720,7 @@ go
 
 
 
--- @res codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+-- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partC  (	@IdBadanie int,
 	@UpAndGo	decimal(3,1),
 	@UpAndGoLiczby	decimal(3,1),
@@ -1698,6 +1778,18 @@ end;
 go
 
 
+-- wsparcie generowania numerow pacjenta
+
+
+create procedure suggest_new_patient_number( @admission_date date, @patient_number varchar(20) OUTPUT )
+as
+begin
+	declare @maxnum int;
+	set @patient_number = '/PD/DBS/'+CAST(YEAR(@admission_date) as varchar);
+	select @maxnum = max(IdPacjent)+1 from Pacjent;
+	set @patient_number = cast(@maxnum as varchar)+@patient_number; -- rozwiazanie tymczasowe
+	return;
+end;
 
 
 
@@ -1774,11 +1866,37 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'DominujacyObjawObecnie',	8,	'inne' );
 
 
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	0,	'0' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	1,	'1' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	2,	'2' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	3,	'3' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	4,	'4' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	5,	'5' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	6,	'6' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	7,	'7' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	8,	'8' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	9,	'9' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	10,	'10' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	11,	'11' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'WynikWechu',	12,	'12' );
+
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	0,	'0' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	1,	'1' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	2,	'2' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	3,	'3' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	4,	'4' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	5,	'5' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	6,	'6' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	7,	'7' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	8,	'8' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	9,	'9' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'LimitDysfagii',	10,	'10' );
 
 
 
-insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'test', HashBytes('SHA1','pass'), 'U¿ytkownik1', 'Testowy')
-insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'testowy', HashBytes('SHA1','testowy'), 'U¿ytkownik2', 'Testowy')
+
+-- insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'test', HashBytes('SHA1','pass'), 'U¿ytkownik1', 'Testowy')
+-- insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'testowy', HashBytes('SHA1','testowy'), 'U¿ytkownik2', 'Testowy')
 
 -- wywiad B
 
@@ -1802,7 +1920,39 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	0,	'brak okna' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	1,	'brak hyperechogenicznoœci' );
-insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	2,	'hyperechogenicznoœæ' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	2,	'hyperechogenicznoœæ - L' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	4,	'hyperechogenicznoœæ - P' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'USGWynik',	6,	'hyperechogenicznoœæ - Obydwie' );
+
+
+
+
+/*
+-- TO DO:
+
+ alter Table Wizyta
+	add DataOperacji date;
+
+ alter Table Wizyta
+	add Uwagi varchar(50);
+
+ alter procedure:
+	suggest_new_patient_number
+	update_examination_questionnaire_partA 
+	update_examination_questionnaire_partD
+
+ inserts updates:
+
+ select * from SlownikInt where Atrybut = 'USGWynik'
+
+ ( delete from SlownikInt where Definicja = 'hyperechogenicznoœæ' )
+
+ insert:
+	'hyperechogenicznoœæ 
+		wechu
+		dysfagii
+
+*/
 
 -- warainty A
 
@@ -2175,15 +2325,18 @@ select @message, @res;
 declare @message varchar(200);
 declare @res int;
 declare @vis_id int;
-exec update_examination_questionnaire_partA '2013-08-06/TEST1', 0.5, '2012-11-12', '2012-11-13', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
- 1, 0, 2, 1, 0, 0, 
- 1, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
+exec update_examination_questionnaire_partA '2013-08-06/TEST1', 1, '2012-11-13', '2012-11-13', '2012-11-14', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
+ 1, 0, 2, 1, 0, 0, 'Uwagi',
+ 0, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
 select @message as Message, @vis_id as Visit_ID, @res as Result;
 go
+
+select * from Wizyta
 
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partB 1, 1, 2, 0, 0.5, 0, 2, 1, 1, 1, 2, 100.5, 0, 1, 0, 1, 'jeszcze inne', 10, 1,
+  1, 0, 2, 4, 'uwagi objaw',
  'test', @res OUTPUT,  @message OUTPUT;
 select @message as Message, @res as Result;
 
@@ -2201,9 +2354,12 @@ go
 
 declare @message varchar(200);
 declare @res int;
-exec update_examination_questionnaire_partD 1, 3, 1, 0, 3, 'uwagi', 1, 100, 200,
+exec update_examination_questionnaire_partD 1, 3, 1, 0, 3, 'uwagi', 1, 12, 10,
  'test', @res OUTPUT,  @message OUTPUT;
 select @message as Message, @res as Result;
+
+select dbo.validate_input_int('Wizyta', 'LimitDysfagii', 10)
+select dbo.validate_input_int('Wizyta', 'WynikWechu', 10)
 
 select * from Wizyta
 go
@@ -2231,7 +2387,8 @@ go
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partG 1, 
-	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 'psychologiczne inne',
+	1, 
+	2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 'psychologiczne inne',
  'test', @res OUTPUT,  @message OUTPUT;
 select @message as Message, @res as Result;
 
@@ -2242,7 +2399,9 @@ go
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partH 1, 
-	1, 0, 1, 1, 'MRI wynik', 1, 2, 300.55, 1, 'genetyka wynik', 1, 'surowica pozosta³o',
+	1, 
+	1, 5, 10,
+	0, 1, 1, 'MRI wynik', 1, 2, 300.55, 1, 'genetyka wynik', 1, 'surowica pozosta³o',
  'test', @res OUTPUT,  @message OUTPUT;
 select @message as Message, @res as Result;
 
