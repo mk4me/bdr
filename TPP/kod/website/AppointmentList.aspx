@@ -4,16 +4,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <asp:Label ID="labelPatientNumber" runat="server" Text="labelPatientNumber"></asp:Label>
-    <table ID="Table1" runat="server">
-        <tr>
-            <td>
-                <asp:Table ID="tableAppointments" runat="server" Width="450px">
-                    <asp:TableHeaderRow>
-                    </asp:TableHeaderRow>
-                </asp:Table>
-            </td>
-        </tr>
-    </table>
+    <asp:Table ID="tableAppointments" runat="server" Width="450px">
+        <asp:TableHeaderRow>
+        </asp:TableHeaderRow>
+    </asp:Table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
     <asp:Button ID="buttonBack" runat="server" Text="Powrót" onclick="buttonBack_Click" />
 </asp:Content>

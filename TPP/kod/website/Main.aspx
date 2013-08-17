@@ -42,12 +42,6 @@
                                 Width="200px" onclick="buttonShowAppointments_Click" />
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <asp:Button ID="buttonShowExaminations" runat="server" Text="Wyświetl listę badań" 
-                                Width="200px" onclick="buttonShowExaminations_Click" />
-                        </td>
-                    </tr>
                 </table>
             </td>
         </tr>

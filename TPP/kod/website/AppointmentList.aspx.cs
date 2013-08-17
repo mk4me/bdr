@@ -16,7 +16,7 @@ public partial class AppointmentList : System.Web.UI.Page
         {
             labelPatientNumber.Text = "Numer pacjenta: " + Session["PatientNumber"].ToString();
             Dictionary<decimal, string> appointmentTypes = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
-            Dictionary<decimal, DateTime> existingAppointments = getAppointments(Session["PatientNumber"].ToString(), appointmentTypes);
+            List<AppointmentSelection> existingAppointments = getAppointments(Session["PatientNumber"].ToString(), appointmentTypes);
 
             TableHeaderRow header = new TableHeaderRow();
             TableHeaderCell headerCell1 = new TableHeaderCell();
@@ -27,7 +27,7 @@ public partial class AppointmentList : System.Web.UI.Page
             headerCell1.Text = "Data";
             headerCell2.Text = "Typ wizyty";
 
-            foreach (KeyValuePair<decimal, string> appointmentType in DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty"))
+            foreach (KeyValuePair<decimal, string> appointmentType in appointmentTypes)
             {
                 TableRow row = new TableRow();
                 TableCell cell1 = new TableCell();
@@ -38,22 +38,23 @@ public partial class AppointmentList : System.Web.UI.Page
                 row.Cells.Add(cell3);
                 tableAppointments.Rows.Add(row);
 
-                AppointmentSelection appointment = null;
-                foreach(KeyValuePair<decimal, DateTime> existingAppointment in existingAppointments)
+                bool exists = false;
+                foreach(AppointmentSelection existingAppointment in existingAppointments)
                 {
-                    if (existingAppointment.Key == appointmentType.Key)
+                    if (existingAppointment.typeKey == appointmentType.Key)
                     {
-                        appointment = new AppointmentSelection(existingAppointment.Value, appointmentType.Value, appointmentType.Key, this);
-                        cell1.Controls.Add(appointment.labelDate);
-                        cell2.Controls.Add(appointment.labelType);
-                        cell3.Controls.Add(appointment.buttonEdit);
-                        cell3.Controls.Add(appointment.buttonDelete);
+                        exists = true;
+                        cell1.Controls.Add(existingAppointment.labelDate);
+                        cell2.Controls.Add(existingAppointment.labelType);
+                        cell3.Controls.Add(existingAppointment.buttonEdit);
+                        cell3.Controls.Add(existingAppointment.buttonShowExaminations);
+                        cell3.Controls.Add(existingAppointment.buttonDelete);
                     }
                 }
 
-                if (appointment == null)
+                if (!exists)
                 {
-                    appointment = new AppointmentSelection(appointmentType.Value, appointmentType.Key, this);
+                    AppointmentSelection appointment = new AppointmentSelection(appointmentType.Value, appointmentType.Key, this);
                     cell2.Controls.Add(appointment.labelType);
                     cell3.Controls.Add(appointment.buttonNew);
                 }
@@ -61,15 +62,15 @@ public partial class AppointmentList : System.Web.UI.Page
         }
     }
 
-    private Dictionary<decimal, DateTime> getAppointments(string patientNumber, Dictionary<decimal, string> appointmentTypes)
+    private List<AppointmentSelection> getAppointments(string patientNumber, Dictionary<decimal, string> appointmentTypes)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = '" + patientNumber + "')";
+        cmd.CommandText = "select IdWizyta, DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = '" + patientNumber + "')";
         cmd.Connection = con;
 
-        Dictionary<decimal, DateTime> dictrionary = new Dictionary<decimal, DateTime>();
+        List<AppointmentSelection> list = new List<AppointmentSelection>();
 
         try
         {
@@ -78,7 +79,11 @@ public partial class AppointmentList : System.Web.UI.Page
 
             while (rdr.Read())
             {
-                dictrionary.Add((decimal)rdr["RodzajWizyty"], (DateTime)rdr["DataPrzyjecia"]);
+                decimal typeKey = (decimal)rdr["RodzajWizyty"];
+                string typeValue = "";
+                appointmentTypes.TryGetValue(typeKey, out typeValue);
+                AppointmentSelection appointment = new AppointmentSelection((int)rdr["IdWizyta"], (DateTime)rdr["DataPrzyjecia"], typeValue, typeKey, this);
+                list.Add(appointment);
             }
         }
         catch (SqlException ex)
@@ -94,20 +99,22 @@ public partial class AppointmentList : System.Web.UI.Page
             }
         }
 
-        return dictrionary;
+        return list;
     }
 
     private class AppointmentSelection
     {
+        private int idAppointment;
         public decimal typeKey;
         public Label labelDate;
         public Label labelType;
         public Button buttonNew;
         public Button buttonEdit;
         public Button buttonDelete;
-        private Page page;
+        public Button buttonShowExaminations;
+        private AppointmentList page;
 
-        public AppointmentSelection(string typeValue, decimal typeKey, Page page)
+        public AppointmentSelection(string typeValue, decimal typeKey, AppointmentList page)
         {
             this.page = page;
             labelType = new Label();
@@ -118,9 +125,10 @@ public partial class AppointmentList : System.Web.UI.Page
             buttonNew.Click += new System.EventHandler(buttonNew_Click);
         }
 
-        public AppointmentSelection(DateTime date, string typeValue, decimal typeKey, Page page)
+        public AppointmentSelection(int id, DateTime date, string typeValue, decimal typeKey, AppointmentList page)
         {
             this.page = page;
+            idAppointment = id;
             labelDate = new Label();
             labelDate.Text = date.ToString("yyyy-MM-dd");
             labelType = new Label();
@@ -129,8 +137,12 @@ public partial class AppointmentList : System.Web.UI.Page
             buttonEdit = new Button();
             buttonEdit.Text = "Edytuj";
             buttonEdit.Click += new System.EventHandler(buttonEdit_Click);
+            buttonShowExaminations = new Button();
+            buttonShowExaminations.Text = "Wyświetl badania";
+            buttonShowExaminations.Click += new System.EventHandler(buttonShowExaminations_Click);
             buttonDelete = new Button();
             buttonDelete.Text = "Usuń";
+            buttonDelete.Click += new System.EventHandler(buttonDelete_Click);
         }
 
         protected void buttonNew_Click(object sender, EventArgs e)
@@ -141,12 +153,49 @@ public partial class AppointmentList : System.Web.UI.Page
             page.Response.Redirect("~/AppointmentForm.aspx");
         }
 
+        protected void buttonShowExaminations_Click(object sender, EventArgs e)
+        {
+            page.Session["AppointmentId"] = idAppointment;
+            page.Response.Redirect("~/ExaminationList.aspx");
+        }
+
         protected void buttonEdit_Click(object sender, EventArgs e)
         {
             page.Session["PatientNumber"] = page.Session["PatientNumber"];
             page.Session["AppointmentType"] = typeKey;
             page.Session["Update"] = true;
+            page.Session["AppointmentId"] = idAppointment;
             page.Response.Redirect("~/AppointmentForm.aspx");
+        }
+
+        protected void buttonDelete_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment;
+            cmd.Connection = con;
+
+            List<string> list = new List<string>();
+
+            try
+            {
+                con.Open();
+                SqlDataReader rdr = cmd.ExecuteReader();
+            }
+            catch (SqlException ex)
+            {
+                page.labelMessage.Text = ex.Message;
+            }
+            finally
+            {
+                cmd.Dispose();
+                if (con != null)
+                {
+                    con.Close();
+                }
+                page.Response.Redirect(page.Request.RawUrl);
+            }
         }
     }
 

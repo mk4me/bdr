@@ -3,20 +3,15 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <asp:Label ID="labelPatientNumber" runat="server" Text="labelPatientNumber"></asp:Label>
-    <table ID="Table2" runat="server">
-        <tr>
-            <td>
-                <asp:Button ID="buttonNewUPDRS" runat="server" Text="Dodaj nowe badanie - UPDRS" 
-                    onclick="buttonNewUPDRS_Click" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <asp:Button ID="buttonNewOculography" runat="server" Text="Dodaj nowe badanie - okulografia i testy" 
-                    onclick="buttonNewOculography_Click" />
-            </td>
-        </tr>
-    </table>
+    <asp:Label ID="labelAppointmentId" runat="server" Text="labelPatientNumber"></asp:Label>
+    <asp:Table ID="tableExaminations" runat="server">
+        <asp:TableHeaderRow>
+        </asp:TableHeaderRow>
+    </asp:Table>
+    <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:Button ID="buttonNewUPDRS" runat="server" Text="Dodaj nowe badanie - UPDRS" 
+        onclick="buttonNewUPDRS_Click" />
+    <asp:Button ID="buttonBack" runat="server" Text="Powrót" onclick="buttonBack_Click" />
 </asp:Content>
 

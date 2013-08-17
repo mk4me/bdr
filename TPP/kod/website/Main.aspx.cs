@@ -119,15 +119,6 @@ public partial class Main : System.Web.UI.Page
         }
     }
 
-    protected void buttonShowExaminations_Click(object sender, EventArgs e)
-    {
-        if (listPatients.SelectedIndex >= 0)
-        {
-            Session["PatientNumber"] = listPatients.SelectedValue;
-            Response.Redirect("~/ExaminationList.aspx");
-        }
-    }
-
     protected void listPatients_SelectedIndexChanged(object sender, System.EventArgs e)
     {
         if (listPatients.SelectedIndex >= 0)
@@ -141,6 +132,5 @@ public partial class Main : System.Web.UI.Page
         buttonEditPatient.Enabled = enable;
         buttonDeletePatient.Enabled = enable;
         buttonShowAppointments.Enabled = enable;
-        buttonShowExaminations.Enabled = enable;
     }
 }
