@@ -33,7 +33,7 @@ public partial class Login : System.Web.UI.Page
 
     private bool Validate_Login(String Username, String Password)
     {//test/pass
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
 
         cmd.CommandType = CommandType.StoredProcedure;

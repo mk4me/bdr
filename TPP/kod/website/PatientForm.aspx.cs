@@ -41,9 +41,9 @@ public partial class PatientForm : System.Web.UI.Page
             dropElectrodes.SelectedIndex = 2;
         }
 
-        string patientNumber = Request.QueryString["PatientNumber"];
-        if (patientNumber != null)
+        if (Session["PatientNumber"] != null)
         {
+            String patientNumber = Session["PatientNumber"].ToString();
             update = true;
             if (!IsPostBack)
             {
@@ -73,7 +73,7 @@ public partial class PatientForm : System.Web.UI.Page
     private void savePatient(string number, int birthYear, int birthMonth, int sex,
         string location, int electrodes, bool update)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_patient]";
@@ -121,7 +121,7 @@ public partial class PatientForm : System.Web.UI.Page
 
     private void loadPatient(string patientNumber)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";

@@ -16,6 +16,24 @@ public partial class AppointmentForm : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["AppointmentType"] != null && Session["PatientNumber"] != null && Session["Update"] != null)
+        {
+            patientNumber = Session["PatientNumber"].ToString();
+            labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
+
+            dropAppointmentType.SelectedValue = Session["AppointmentType"].ToString();
+
+            update = (bool)Session["Update"];
+            if (update && !IsPostBack)
+            {
+                loadAppointment((int)Session["AppointmentId"]);
+            }
+        }
+        else
+        {
+            Response.Redirect("~/Main.aspx");
+        }
+
         if (!IsPostBack)
         {
             textDateIn.Text = DateTime.Now.ToString(DATE_FORMAT);
@@ -31,6 +49,7 @@ public partial class AppointmentForm : System.Web.UI.Page
             dropAppointmentType.DataValueField = "Key";
             dropAppointmentType.DataBind();
             dropAppointmentType.Enabled = false;
+            toggleButtons(update);
 
             int minYear = 1920;
             int currentYear = DateTime.Now.Year;
@@ -81,45 +100,13 @@ public partial class AppointmentForm : System.Web.UI.Page
             dropToxic.DataValueField = "Key";
             dropToxic.DataBind();
         }
-
-        if (Session["AppointmentType"] != null)
-        {
-            dropAppointmentType.SelectedValue = Session["AppointmentType"].ToString();
-        }
-        else
-        {
-            Response.Redirect("~/Main.aspx");
-        }
-
-        if (Session["PatientNumber"] != null)
-        {
-            patientNumber = Session["PatientNumber"].ToString();
-            labelPatientNumber.Text = "Numer pacjenta: " + patientNumber;
-        }
-        else
-        {
-            Response.Redirect("~/Main.aspx");
-        }
-
-        if (Session["Update"] != null)
-        {
-            update = (bool)Session["Update"];
-            if (update && !IsPostBack)
-            {
-                loadAppointment((int)Session["AppointmentId"]);
-            }
-        }
-        else
-        {
-            Response.Redirect("~/Main.aspx");
-        }
     }
 
     private void saveAppointment(string number, decimal examinationType, byte education, byte family, short symptomYear, byte symptomMonth, byte firstSymptom, byte timeSymptom,
         byte dyskinesia, string timeDiskinesia, byte fluctuations, string yearsFluctuations, byte cigarettes, byte coffee, byte greenTea, byte alcohol, byte treatmentNumber,
         byte place, byte toxic, DateTime dateIn, DateTime dateSurgery, DateTime dateOut, string login, string notes, bool update)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_examination_questionnaire_partA]";
@@ -188,10 +175,19 @@ public partial class AppointmentForm : System.Web.UI.Page
             con.Open();
             cmd.ExecuteNonQuery();
             success = (int)cmd.Parameters["@result"].Value;
-            if (success == 0 || success == 1)
+            
+            if (success == 0)
             {
-                Session["Update"] = false;
-                Response.Redirect("~/AppointmentList.aspx");
+                if (!update)
+                {
+                    toggleButtons(true);
+                    Session["AppointmentId"] = (int)cmd.Parameters["@visit_id"].Value;
+                }
+                else
+                {
+                    Session.Remove("Update");
+                    Response.Redirect("~/AppointmentList.aspx");
+                }
             }
             else
             {
@@ -214,11 +210,11 @@ public partial class AppointmentForm : System.Web.UI.Page
 
     private void loadAppointment(int appointmentId)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select DataPrzyjecia, DataWypisu, Wyksztalcenie, Rodzinnosc, RokZachorowania, MiesiacZachorowania," +
-            "PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, CzasDyskinez, FluktuacjeObecnie, FluktuacjeOdLat," +
+        cmd.CommandText = "select DataPrzyjecia, DataWypisu, Wyksztalcenie, Rodzinnosc, RokZachorowania, MiesiacZachorowania, " +
+            "PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, CzasDyskinez, FluktuacjeObecnie, FluktuacjeOdLat, " +
             "Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, Zamieszkanie, NarazenieNaToks, DataOperacji, Uwagi from Wizyta where IdWizyta = " + appointmentId;
         cmd.Connection = con;
 
@@ -337,10 +333,6 @@ public partial class AppointmentForm : System.Web.UI.Page
     {
         Response.Redirect("~/PartCForm.aspx");
     }
-    protected void buttonPartD_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("~/PartDForm.aspx");
-    }
     protected void buttonPartE_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PartEForm.aspx");
@@ -356,5 +348,24 @@ public partial class AppointmentForm : System.Web.UI.Page
     protected void buttonPartH_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/PartHForm.aspx");
+    }
+
+    private void toggleButtons(bool enable)
+    {
+        if (enable)
+        {
+            Session["AppointmentName"] = dropAppointmentType.SelectedItem.ToString();
+            labelAppointment.Text = "Badania dla wizyty: " + Session["AppointmentName"];
+        }
+        else
+        {
+            labelAppointment.Text = "";
+        }
+        buttonPartB.Enabled = enable;
+        buttonPartC.Enabled = enable;
+        buttonPartE.Enabled = enable;
+        buttonPartF.Enabled = enable;
+        buttonPartG.Enabled = enable;
+        buttonPartH.Enabled = enable;
     }
 }

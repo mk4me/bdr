@@ -47,7 +47,6 @@ public partial class AppointmentList : System.Web.UI.Page
                         cell1.Controls.Add(existingAppointment.labelDate);
                         cell2.Controls.Add(existingAppointment.labelType);
                         cell3.Controls.Add(existingAppointment.buttonEdit);
-                        cell3.Controls.Add(existingAppointment.buttonShowExaminations);
                         cell3.Controls.Add(existingAppointment.buttonDelete);
                     }
                 }
@@ -64,7 +63,7 @@ public partial class AppointmentList : System.Web.UI.Page
 
     private List<AppointmentSelection> getAppointments(string patientNumber, Dictionary<decimal, string> appointmentTypes)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select IdWizyta, DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = '" + patientNumber + "')";
@@ -111,7 +110,6 @@ public partial class AppointmentList : System.Web.UI.Page
         public Button buttonNew;
         public Button buttonEdit;
         public Button buttonDelete;
-        public Button buttonShowExaminations;
         private AppointmentList page;
 
         public AppointmentSelection(string typeValue, decimal typeKey, AppointmentList page)
@@ -137,9 +135,6 @@ public partial class AppointmentList : System.Web.UI.Page
             buttonEdit = new Button();
             buttonEdit.Text = "Edytuj";
             buttonEdit.Click += new System.EventHandler(buttonEdit_Click);
-            buttonShowExaminations = new Button();
-            buttonShowExaminations.Text = "Wyświetl badania";
-            buttonShowExaminations.Click += new System.EventHandler(buttonShowExaminations_Click);
             buttonDelete = new Button();
             buttonDelete.Text = "Usuń";
             buttonDelete.Click += new System.EventHandler(buttonDelete_Click);
@@ -170,7 +165,7 @@ public partial class AppointmentList : System.Web.UI.Page
 
         protected void buttonDelete_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+            SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment;

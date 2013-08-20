@@ -59,7 +59,7 @@ public partial class ExaminationList : System.Web.UI.Page
 
     private List<ExaminationSelection> getExaminations(int appointmentId)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select IdBadanie from Badanie where exists (select IdWizyta from Wizyta where Badanie.IdWizyta = Wizyta.IdWizyta and Wizyta.IdWizyta = " + appointmentId + ")";
@@ -132,7 +132,7 @@ public partial class ExaminationList : System.Web.UI.Page
 
         protected void buttonDelete_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+            SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "delete from Badanie where IdBadanie = " + idBadanie;

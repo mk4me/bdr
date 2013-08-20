@@ -11,15 +11,7 @@ public partial class PartDForm : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "PrzebyteLeczenieOperacyjnePD");
-            dropPrzebyteLeczenieOperacyjne.DataTextField = "Value";
-            dropPrzebyteLeczenieOperacyjne.DataValueField = "Key";
-            dropPrzebyteLeczenieOperacyjne.DataBind();
-
-            dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "DominujacyObjawObecnie");
-            dropDominujacyObjawObecnie.DataTextField = "Value";
-            dropDominujacyObjawObecnie.DataValueField = "Key";
-            dropDominujacyObjawObecnie.DataBind();
+            
 
             dropWynikWechu.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "WynikWechu");
             dropWynikWechu.DataTextField = "Value";

@@ -20,6 +20,12 @@
                 <table ID="Table2" runat="server">
                     <tr>
                         <td>
+                            <asp:Button ID="buttonShowAppointments" runat="server" Text="Wyświetl listę wizyt" 
+                                Width="200px" onclick="buttonShowAppointments_Click" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <asp:Button ID="buttonNewPatient" runat="server" Text="Wprowadź nowego pacjenta" 
                                 onclick="buttonNewPatient_Click" Width="200px" />
                         </td>
@@ -34,12 +40,6 @@
                         <td>
                             <asp:Button ID="buttonDeletePatient" runat="server" Text="Usuń dane pacjenta" 
                                 Width="200px" onclick="buttonDeletePatient_Click" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <asp:Button ID="buttonShowAppointments" runat="server" Text="Wyświetl listę wizyt" 
-                                Width="200px" onclick="buttonShowAppointments_Click" />
                         </td>
                     </tr>
                 </table>

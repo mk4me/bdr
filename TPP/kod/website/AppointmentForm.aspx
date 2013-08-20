@@ -46,7 +46,7 @@
         </script>
     </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
-    <asp:Label ID="labelPatientNumber" runat="server" Text="labelPatientNumber"></asp:Label>
+    <asp:Label ID="labelPatientNumber" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
             <td>
@@ -234,6 +234,11 @@
                 <table ID="Table3" runat="server">
                     <tr>
                         <td>
+                            <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <asp:Button ID="buttonPartB" runat="server" Text="Objawy i epidemiologia" 
                                 Width="265px" onclick="buttonPartB_Click" CausesValidation="false" />
                         </td>
@@ -242,12 +247,6 @@
                         <td>
                             <asp:Button ID="buttonPartC" runat="server" Text="Przyjmowane leki" 
                                 Width="265px" onclick="buttonPartC_Click" CausesValidation="false" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <asp:Button ID="buttonPartD" runat="server" Text="Wywiad D" 
-                                Width="265px" onclick="buttonPartD_Click" CausesValidation="false" />
                         </td>
                     </tr>
                     <tr>
@@ -264,7 +263,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Button ID="buttonPartG" runat="server" Text="Badanie i testy psychologiczne" 
+                            <asp:Button ID="buttonPartG" runat="server" Text="Badania i testy psychologiczne" 
                                 Width="265px" onclick="buttonPartG_Click" CausesValidation="false" />
                         </td>
                     </tr>

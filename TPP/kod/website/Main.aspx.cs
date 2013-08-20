@@ -22,7 +22,7 @@ public partial class Main : System.Web.UI.Page
 
     private List<string> getPatients()
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select NumerPacjenta from Pacjent";
@@ -74,7 +74,7 @@ public partial class Main : System.Web.UI.Page
 
     private void deletePatient(string patientNumber)
     {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["TPPServer"].ToString());
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "delete from Pacjent where NumerPacjenta = '" + patientNumber + "'";
@@ -105,8 +105,8 @@ public partial class Main : System.Web.UI.Page
     {
         if (listPatients.SelectedIndex >= 0)
         {
-
-            Response.Redirect("~/PatientForm.aspx?PatientNumber=" + listPatients.SelectedValue);
+            Session["PatientNumber"] = listPatients.SelectedValue;
+            Response.Redirect("~/PatientForm.aspx");
         }
     }
 
