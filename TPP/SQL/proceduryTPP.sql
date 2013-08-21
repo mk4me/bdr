@@ -235,9 +235,11 @@ create function validate_input_int( @table_name varchar(30), @attr_name varchar(
 returns bit
 as
 begin
+if @value IS NULL  return 1;
 return ( select count(*) from SlownikInt where Tabela = @table_name and Atrybut = @attr_name and Klucz = @value   );
 end
 go
+
 
 create procedure get_enumeration_int( @table_name varchar(30), @attr_name varchar(50) )
 as
@@ -248,6 +250,7 @@ create function validate_input_decimal( @table_name varchar(30), @attr_name varc
 returns bit
 as
 begin
+if @value IS NULL  return 1;
 return ( select count(*) from SlownikDecimal where Tabela = @table_name and Atrybut = @attr_name and Klucz = @value   );
 end
 go
@@ -261,6 +264,7 @@ create function validate_input_varchar( @table_name varchar(30), @attr_name varc
 returns bit
 as
 begin
+if @value IS NULL  return 1;
 return ( select count(*) from SlownikVarchar where Tabela = @table_name and Atrybut = @attr_name and Klucz = @value   );
 end
 go
@@ -269,7 +273,6 @@ create procedure get_enumeration_varchar( @table_name varchar(30), @attr_name va
 as
 select Klucz as Value, Definicja as Label  from SlownikVarchar where Tabela = @table_name and Atrybut = @attr_name
 go
-
 
 
 -- WGRYWANIE DANYCH I WALIDACJA
