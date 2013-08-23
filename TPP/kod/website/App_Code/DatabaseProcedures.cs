@@ -100,6 +100,15 @@ public class DatabaseProcedures
         return enumeration;
     }
 
+    public static Dictionary<byte, string> getEnumerationByteWithNoData(string table, string attribute, byte noData)
+    {
+        Dictionary<byte, string> dictionary = getEnumerationByte(table, attribute);
+        dictionary.Add(noData, "brak danych");
+        
+
+        return dictionary;
+    }
+
     public static Dictionary<decimal, string> getEnumerationDecimal(string table, string attribute)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -145,14 +154,64 @@ public class DatabaseProcedures
         return (value == "") ? DBNull.Value : (object)byte.Parse(value);
     }
 
+    public static object getByteOrNullWithNoData(string value, string noData)
+    {
+        return (value == noData) ? DBNull.Value : (object)byte.Parse(value);
+    }
+
+    public static object getShortOrNull(string value)
+    {
+        return (value == "") ? DBNull.Value : (object)short.Parse(value);
+    }
+
+    public static object getBitOrNull(string value)
+    {
+        return (value == "2") ? DBNull.Value : (object)Convert.ToBoolean(int.Parse(value));
+    }
+
+    public static object getStringOrNull(string value)
+    {
+        return (value == "") ? DBNull.Value : (object)value;
+    }
+
+    public static object getDecimalOrNull(string value)
+    {
+        return (value == "") ? DBNull.Value : (object)decimal.Parse(value);
+    }
+
     public static string getDropYesNoValue(object value)
     {
         return value == DBNull.Value ? "2" : ((byte)value).ToString();
     }
 
+    public static string getDropBitValue(object value)
+    {
+        if (value == DBNull.Value)
+        {
+            return "2";
+        }
+        else if ((bool)value == false)
+        {
+            return "0";
+        }
+        else if ((bool)value == true)
+        {
+            return "1";
+        }
+        else
+        {
+            return "2";
+        }
+    }
+
     public static string getDropMultiValue(object value)
     {
         return value == DBNull.Value ? "1" : ((byte)value).ToString();
+    }
+
+    public static string getDropMultiValueWithNoData(object value, string noData)
+    {
+        return value == DBNull.Value ? noData : ((byte)value).ToString();
     }
 
     public static string getDropDecimalValue(object value)
@@ -173,5 +232,10 @@ public class DatabaseProcedures
     public static string getTextByteValue(object value)
     {
         return value == DBNull.Value ? "" : ((byte)value).ToString();
+    }
+
+    public static string getTextShortValue(object value)
+    {
+        return value == DBNull.Value ? "" : ((short)value).ToString();
     }
 }

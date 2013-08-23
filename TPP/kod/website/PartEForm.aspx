@@ -3,6 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
             <td>Wydzielanie śliny:</td>
@@ -194,5 +195,11 @@
             </td>
         </tr>
     </table>
+    <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:Button ID="buttonOK" runat="server" Text="Zatwierdź" 
+        onclick="buttonOK_Click" />
+    <asp:Button ID="buttonCancel" runat="server" Text="Anuluj" 
+        CausesValidation="False" onclick="buttonCancel_Click" />
 </asp:Content>
 

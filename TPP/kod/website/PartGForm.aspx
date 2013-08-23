@@ -3,12 +3,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
             <td>Test zegara:</td>
             <td>
                 <asp:DropDownList ID="dropTestZegara" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -17,7 +18,7 @@
         <tr>
             <td>MMSE:</td>
             <td>
-                <asp:TextBox ID="dropMMSE" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textMMSE" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -93,5 +94,11 @@
             </td>
         </tr>
     </table>
+    <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:Button ID="buttonOK" runat="server" Text="Zatwierdź" 
+        onclick="buttonOK_Click" />
+    <asp:Button ID="buttonCancel" runat="server" Text="Anuluj" 
+        CausesValidation="False" onclick="buttonCancel_Click" />
 </asp:Content>
 

@@ -127,29 +127,15 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = timeSymptom;
         cmd.Parameters.Add("@DyskinezyObecnie", SqlDbType.TinyInt).Value = dyskinesia;
         SqlParameter dyskinesiaDecimal = new SqlParameter("@CzasDyskinez", SqlDbType.Decimal);
-        if (timeDiskinesia != "")
-        {
-            dyskinesiaDecimal.Precision = 3;
-            dyskinesiaDecimal.Scale = 1;
-            dyskinesiaDecimal.Value = decimal.Parse(timeDiskinesia);
-        }
-        else
-        {
-            dyskinesiaDecimal.Value = DBNull.Value;
-        }
+        dyskinesiaDecimal.Precision = 3;
+        dyskinesiaDecimal.Scale = 1;
+        dyskinesiaDecimal.Value = DatabaseProcedures.getDecimalOrNull(timeDiskinesia);
         cmd.Parameters.Add(dyskinesiaDecimal);
         cmd.Parameters.Add("@FluktuacjeObecnie", SqlDbType.TinyInt).Value = fluctuations;
         SqlParameter fluctuationsDecimal = new SqlParameter("@FluktuacjeOdLat", SqlDbType.Decimal);
-        if (yearsFluctuations != "")
-        {
-            fluctuationsDecimal.Precision = 3;
-            fluctuationsDecimal.Scale = 1;
-            fluctuationsDecimal.Value = decimal.Parse(yearsFluctuations);
-        }
-        else
-        {
-            fluctuationsDecimal.Value = DBNull.Value;
-        }
+        fluctuationsDecimal.Precision = 3;
+        fluctuationsDecimal.Scale = 1;
+        fluctuationsDecimal.Value = DatabaseProcedures.getDecimalOrNull(yearsFluctuations);
         cmd.Parameters.Add(fluctuationsDecimal);
         cmd.Parameters.Add("@Papierosy", SqlDbType.TinyInt).Value = cigarettes;
         cmd.Parameters.Add("@Kawa", SqlDbType.TinyInt).Value = coffee;

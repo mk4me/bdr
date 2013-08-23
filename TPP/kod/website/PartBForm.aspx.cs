@@ -10,6 +10,8 @@ using System.Data;
 
 public partial class PartBForm : System.Web.UI.Page
 {
+    private static byte NO_DATA = 100;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["PatientNumber"] != null && Session["AppointmentId"] != null && Session["AppointmentName"] != null)
@@ -32,12 +34,12 @@ public partial class PartBForm : System.Web.UI.Page
             dropOtepienie.DataValueField = "Key";
             dropOtepienie.DataBind();
 
-            dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "PrzebyteLeczenieOperacyjnePD");
+            dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PrzebyteLeczenieOperacyjnePD", NO_DATA);
             dropPrzebyteLeczenieOperacyjne.DataTextField = "Value";
             dropPrzebyteLeczenieOperacyjne.DataValueField = "Key";
             dropPrzebyteLeczenieOperacyjne.DataBind();
 
-            dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "DominujacyObjawObecnie");
+            dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "DominujacyObjawObecnie", NO_DATA);
             dropDominujacyObjawObecnie.DataTextField = "Value";
             dropDominujacyObjawObecnie.DataValueField = "Key";
             dropDominujacyObjawObecnie.DataBind();
@@ -57,7 +59,7 @@ public partial class PartBForm : System.Web.UI.Page
         SqlParameter otepienieDecimal = new SqlParameter("@Otepienie", SqlDbType.Decimal);
         otepienieDecimal.Precision = 2;
         otepienieDecimal.Scale = 1;
-        otepienieDecimal.Value = decimal.Parse(dropOtepienie.SelectedValue);
+        otepienieDecimal.Value = DatabaseProcedures.getDecimalOrNull(dropOtepienie.SelectedValue);
         cmd.Parameters.Add(otepienieDecimal);
         cmd.Parameters.Add("@Dyzartria", SqlDbType.TinyInt).Value = byte.Parse(dropDyzartia.SelectedValue);
         cmd.Parameters.Add("@RBD", SqlDbType.TinyInt).Value = byte.Parse(dropRBD.SelectedValue);
@@ -68,7 +70,7 @@ public partial class PartBForm : System.Web.UI.Page
         SqlParameter masaCialaDecimal = new SqlParameter("@MasaCiala", SqlDbType.Decimal);
         masaCialaDecimal.Precision = 4;
         masaCialaDecimal.Scale = 1;
-        masaCialaDecimal.Value = decimal.Parse(textMasa.Text);
+        masaCialaDecimal.Value = DatabaseProcedures.getDecimalOrNull(textMasa.Text);
         cmd.Parameters.Add(masaCialaDecimal);
         cmd.Parameters.Add("@Drzenie", SqlDbType.TinyInt).Value = byte.Parse(dropDrzenie.SelectedValue);
         cmd.Parameters.Add("@Sztywnosc", SqlDbType.TinyInt).Value = byte.Parse(dropSztywnosc.SelectedValue);
@@ -77,10 +79,10 @@ public partial class PartBForm : System.Web.UI.Page
         cmd.Parameters.Add("@ObjawyInneJakie", SqlDbType.VarChar, 80).Value = textObjawy.Text.ToString();
         cmd.Parameters.Add("@CzasOFF", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCzasOFF.Text);
         cmd.Parameters.Add("@PoprawaPoLDopie", SqlDbType.TinyInt).Value = byte.Parse(dropPoprawa.SelectedValue);
-        cmd.Parameters.Add("@PrzebyteLeczenieOperacyjnePD", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropPrzebyteLeczenieOperacyjne.SelectedValue);
+        cmd.Parameters.Add("@PrzebyteLeczenieOperacyjnePD", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropPrzebyteLeczenieOperacyjne.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Nadcisnienie", SqlDbType.TinyInt).Value = byte.Parse(dropNadcisnienie.SelectedValue);
         cmd.Parameters.Add("@BlokeryKanWapn", SqlDbType.TinyInt).Value = byte.Parse(dropBlokery.SelectedValue);
-        cmd.Parameters.Add("@DominujacyObjawObecnie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropDominujacyObjawObecnie.SelectedValue);
+        cmd.Parameters.Add("@DominujacyObjawObecnie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropDominujacyObjawObecnie.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@DominujacyObjawUwagi", SqlDbType.VarChar, 50).Value = textDominujacyObjawUwagi.Text.ToString();
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -156,10 +158,10 @@ public partial class PartBForm : System.Web.UI.Page
                 textObjawy.Text = DatabaseProcedures.getTextStringValue(rdr["ObjawyInneJakie"]);
                 textCzasOFF.Text = DatabaseProcedures.getTextByteValue(rdr["CzasOFF"]);
                 dropPoprawa.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["PoprawaPoLDopie"]);
-                dropPrzebyteLeczenieOperacyjne.SelectedValue = DatabaseProcedures.getDropMultiValue(rdr["PrzebyteLeczenieOperacyjnePD"]);
+                dropPrzebyteLeczenieOperacyjne.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PrzebyteLeczenieOperacyjnePD"], NO_DATA.ToString());
                 dropNadcisnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Nadcisnienie"]);
                 dropBlokery.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["BlokeryKanWapn"]);
-                dropDominujacyObjawObecnie.SelectedValue = DatabaseProcedures.getDropMultiValue(rdr["DominujacyObjawObecnie"]);
+                dropDominujacyObjawObecnie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DominujacyObjawObecnie"], NO_DATA.ToString());
                 textDominujacyObjawUwagi.Text = DatabaseProcedures.getTextStringValue(rdr["DominujacyObjawUwagi"]);
             }
         }

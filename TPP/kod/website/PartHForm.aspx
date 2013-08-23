@@ -3,14 +3,39 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
             <td>Holter:</td>
             <td>
                 <asp:DropDownList ID="dropHolter" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Badanie węchu:</td>
+            <td>
+                <asp:DropDownList ID="dropBadanieWechu" runat="server">
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Wynik węchu:</td>
+            <td>
+                <asp:DropDownList ID="dropWynikWechu" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Limit dysfagii:</td>
+            <td>
+                <asp:DropDownList ID="dropLimitDysfagii" runat="server">
                 </asp:DropDownList>
             </td>
         </tr>
@@ -18,7 +43,7 @@
             <td>pH-metria przełyku:</td>
             <td>
                 <asp:DropDownList ID="droppHmetriaPrzełyku" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -28,7 +53,7 @@
             <td>SPECT:</td>
             <td>
                 <asp:DropDownList ID="dropSPECT" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -38,7 +63,7 @@
             <td>MRI:</td>
             <td>
                 <asp:DropDownList ID="dropMRI" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -54,7 +79,7 @@
             <td>USG śródmózgowia:</td>
             <td>
                 <asp:DropDownList ID="dropUSGsrodmozgowia" runat="server">
-                    <asp:ListItem Value="2">nie wiadomo</asp:ListItem>
+                    <asp:ListItem Value="2">brak danych</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -106,5 +131,11 @@
             </td>
         </tr>
     </table>
+    <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:Button ID="buttonOK" runat="server" Text="Zatwierdź" 
+        onclick="buttonOK_Click" />
+    <asp:Button ID="buttonCancel" runat="server" Text="Anuluj" 
+        CausesValidation="False" onclick="buttonCancel_Click" />
 </asp:Content>
 
