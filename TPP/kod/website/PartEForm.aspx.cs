@@ -52,6 +52,7 @@ public partial class PartEForm : System.Web.UI.Page
             }
         }
     }
+
     private void savePartE()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -135,8 +136,6 @@ public partial class PartEForm : System.Web.UI.Page
             "SpadekPotliwosciKonczynyDolneStopy, NietolerancjaWysokichTemp, NietolerancjaNiskichTemp, Lojotok, SpadekLibido, KlopotyOsiagnieciaErekcji, KlopotyUtrzymaniaErekcji " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
-
-        List<string> list = new List<string>();
 
         try
         {

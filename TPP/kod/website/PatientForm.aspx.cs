@@ -127,8 +127,6 @@ public partial class PatientForm : System.Web.UI.Page
         cmd.CommandText = "select RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";
         cmd.Connection = con;
 
-        List<string> list = new List<string>();
-
         try
         {
             con.Open();

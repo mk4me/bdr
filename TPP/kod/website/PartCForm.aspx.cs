@@ -95,8 +95,6 @@ public partial class PartCForm : System.Web.UI.Page
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
 
-        List<string> list = new List<string>();
-
         try
         {
             con.Open();

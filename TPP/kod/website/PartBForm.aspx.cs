@@ -132,8 +132,6 @@ public partial class PartBForm : System.Web.UI.Page
             "ObjawyInne, ObjawyInneJakie, CzasOFF, PoprawaPoLDopie, PrzebyteLeczenieOperacyjnePD, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
 
-        List<string> list = new List<string>();
-
         try
         {
             con.Open();

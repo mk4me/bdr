@@ -204,8 +204,6 @@ public partial class AppointmentForm : System.Web.UI.Page
             "Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, Zamieszkanie, NarazenieNaToks, DataOperacji, Uwagi from Wizyta where IdWizyta = " + appointmentId;
         cmd.Connection = con;
 
-        List<string> list = new List<string>();
-
         try
         {
             con.Open();

@@ -80,8 +80,6 @@ public partial class Main : System.Web.UI.Page
         cmd.CommandText = "delete from Pacjent where NumerPacjenta = '" + patientNumber + "'";
         cmd.Connection = con;
 
-        List<string> list = new List<string>();
-
         try
         {
             con.Open();
