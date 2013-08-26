@@ -162,7 +162,7 @@ public partial class PartFForm : System.Web.UI.Page
             TableCell cell = new TableCell();
             row.Controls.Add(cell);
             DropDownList drop = new DropDownList();
-            drop.Width = new Unit(103);
+            drop.Width = new Unit(104);
             drop.DataSource = dictionary;
             drop.DataTextField = "Value";
             drop.DataValueField = "Key";
@@ -254,7 +254,7 @@ public partial class PartFForm : System.Web.UI.Page
         }
         cmd.Parameters.Add("@" + UPDRSListCalculated1.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated1.Item1[variant].Text);
         cmd.Parameters.Add("@" + UPDRSListCalculated2.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated2.Item1[variant].Text);
-        SqlParameter HYscaleDecimal = new SqlParameter("@" + variantsHYscale.Item2, SqlDbType.TinyInt);
+        SqlParameter HYscaleDecimal = new SqlParameter("@" + variantsHYscale.Item2, SqlDbType.Decimal);
         HYscaleDecimal.Precision = 2;
         HYscaleDecimal.Scale = 1;
         HYscaleDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsHYscale.Item1[variant].SelectedValue);
@@ -288,7 +288,7 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-
+                
             }
             else
             {
@@ -454,7 +454,6 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-                Session["Update"] = true;
                 Response.Redirect("~/AppointmentForm.aspx");
             }
             else
@@ -520,34 +519,74 @@ public partial class PartFForm : System.Web.UI.Page
     }
 
     private int getVariantId(byte DBS, bool BMT)
-    {
+    {/*
         if (DBS == 0)
         {
             if (BMT)
-                return 0;
+                return 3;
             else
-                return 1;
+                return 7;
         }
         else if (DBS == 1)
         {
             if (BMT)
-                return 2;
+                return 0;
             else
-                return 3;
+                return 4;
         }
         else if (DBS == 2)
         {
             if (BMT)
-                return 4;
+                return 1;
             else
                 return 5;
         }
         else if (DBS == 3)
         {
             if (BMT)
-                return 6;
+                return 2;
             else
+                return 6;
+        }
+        */
+
+        if (BMT)
+        {
+            if (DBS == 3)
+            {
+                return 0;
+            }
+            else if (DBS == 1)
+            {
+                return 1;
+            }
+            else if (DBS == 2)
+            {
+                return 2;
+            }
+            else if (DBS == 0)
+            {
+                return 3;
+            }
+        }
+        else
+        {
+            if (DBS == 3)
+            {
+                return 4;
+            }
+            else if (DBS == 1)
+            {
+                return 5;
+            }
+            else if (DBS == 2)
+            {
+                return 6;
+            }
+            else if (DBS == 0)
+            {
                 return 7;
+            }
         }
 
         return 0;
@@ -772,11 +811,13 @@ public partial class PartFForm : System.Web.UI.Page
     {
         calculateUPDRS();
         int[] variantIds = new int[VARIANTS];
-        for (byte i = 0, j = 0; j < VARIANTS; i++, j++)
+        for (byte DBS = 0, i = 0; i < VARIANTS; DBS++, i++)
         {
-            variantIds[j] = saveVariantPartA(i, true, j);
-            j++;
-            variantIds[j] = saveVariantPartA(i, false, j);
+            bool BMT = true;
+            variantIds[i] = saveVariantPartA(DBS, BMT, getVariantId(DBS, BMT));
+            BMT = false;
+            i++;
+            variantIds[i] = saveVariantPartA(DBS, BMT, getVariantId(DBS, BMT));
         }
         if (variantIds.Length > 0)
         {
@@ -790,9 +831,13 @@ public partial class PartFForm : System.Web.UI.Page
         int[] variantIds = (int[])ViewState["VariantIds"];
         if (variantIds != null)
         {
-            for (int i = 0; i < variantIds.Length; i++)
+            for (byte DBS = 0, i = 0; i < variantIds.Length; DBS++, i++)
             {
-                saveVariantPartB(variantIds[i], i);
+                bool BMT = true;
+                saveVariantPartB(variantIds[i], getVariantId(DBS, BMT));
+                BMT = false;
+                i++;
+                saveVariantPartB(variantIds[i], getVariantId(DBS, BMT));
             }
         }
     }
@@ -801,9 +846,13 @@ public partial class PartFForm : System.Web.UI.Page
         int[] variantIds = (int[])ViewState["VariantIds"];
         if (variantIds != null)
         {
-            for (int i = 0; i < variantIds.Length; i++)
+            for (byte DBS = 0, i = 0; i < variantIds.Length; DBS++, i++)
             {
-                saveVariantPartC(variantIds[i], i);
+                bool BMT = true;
+                saveVariantPartC(variantIds[i], getVariantId(DBS, BMT));
+                BMT = false;
+                i++;
+                saveVariantPartC(variantIds[i], getVariantId(DBS, BMT));
             }
         }
     }

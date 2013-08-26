@@ -9,7 +9,7 @@
             <td>Holter:</td>
             <td>
                 <asp:DropDownList ID="dropHolter" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -19,7 +19,7 @@
             <td>Badanie węchu:</td>
             <td>
                 <asp:DropDownList ID="dropBadanieWechu" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -43,7 +43,7 @@
             <td>pH-metria przełyku:</td>
             <td>
                 <asp:DropDownList ID="droppHmetriaPrzełyku" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -53,7 +53,7 @@
             <td>SPECT:</td>
             <td>
                 <asp:DropDownList ID="dropSPECT" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -63,7 +63,7 @@
             <td>MRI:</td>
             <td>
                 <asp:DropDownList ID="dropMRI" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -79,7 +79,7 @@
             <td>USG śródmózgowia:</td>
             <td>
                 <asp:DropDownList ID="dropUSGsrodmozgowia" runat="server">
-                    <asp:ListItem Value="2">brak danych</asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -102,7 +102,7 @@
             <td>Genetyka:</td>
             <td>
                 <asp:DropDownList ID="dropGenetyka" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="-1" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -118,7 +118,7 @@
             <td>Surowica:</td>
             <td>
                 <asp:DropDownList ID="dropSurowica" runat="server">
-                    <asp:ListItem Value="-1">brak danych</asp:ListItem>
+                    <asp:ListItem Value="-1" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>

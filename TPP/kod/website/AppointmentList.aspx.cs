@@ -168,7 +168,7 @@ public partial class AppointmentList : System.Web.UI.Page
             SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment;
+            cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment + ";delete from Badanie where IdWizyta = " + idAppointment;
             cmd.Connection = con;
 
             List<string> list = new List<string>();

@@ -87,6 +87,7 @@
                         <td>Rodzinność:</td>
                         <td>
                             <asp:DropDownList ID="dropFamily" runat="server">
+                                <asp:ListItem Value="2" Text=""></asp:ListItem>
                                 <asp:ListItem Value="1">tak</asp:ListItem>
                                 <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
@@ -109,7 +110,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Czas od począku objawów do<br />włączenia LDopy:</td>
+                        <td>Czas od począku objawów do<br />włączenia LDopy [mies.]:</td>
                         <td>
                             <asp:TextBox ID="textTimeSymptom" runat="server"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
@@ -126,13 +127,14 @@
                             <asp:DropDownList ID="dropDiskinesia" runat="server" 
                                 onselectedindexchanged="dropDiskinesia_SelectedIndexChanged" 
                                 AutoPostBack="True">
+                                <asp:ListItem Value="2" Text=""></asp:ListItem>
                                 <asp:ListItem Value="1">tak</asp:ListItem>
                                 <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
                         </td>
                     </tr>
                     <tr>
-                        <td>Czas dyskinez:</td>
+                        <td>Czas dyskinez od lat:</td>
                         <td>
                             <asp:TextBox ID="textTimeDiskinesia" runat="server"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
@@ -149,6 +151,7 @@
                             <asp:DropDownList ID="dropFluctuations" runat="server"
                                 onselectedindexchanged="dropFluctuations_SelectedIndexChanged" 
                                 AutoPostBack="True">
+                                <asp:ListItem Value="2" Text=""></asp:ListItem>
                                 <asp:ListItem Value="1">tak</asp:ListItem>
                                 <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
@@ -184,6 +187,7 @@
                         <td>Zielona herbata:</td>
                         <td>
                             <asp:DropDownList ID="dropGreenTea" runat="server">
+                                <asp:ListItem Value="2" Text=""></asp:ListItem>
                                 <asp:ListItem Value="1">tak</asp:ListItem>
                                 <asp:ListItem Value="0">nie</asp:ListItem>
                             </asp:DropDownList>
@@ -281,7 +285,7 @@
     <br />
     <asp:Button ID="buttonOK" runat="server" Text="Zatwierdź" 
         onclick="buttonOK_Click" />
-    <asp:Button ID="buttonCancel" runat="server" Text="Anuluj" 
+    <asp:Button ID="buttonCancel" runat="server" Text="Powrót" 
         CausesValidation="False" onclick="buttonCancel_Click" />
 </asp:Content>
 

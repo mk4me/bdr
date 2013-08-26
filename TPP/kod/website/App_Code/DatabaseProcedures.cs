@@ -103,7 +103,7 @@ public class DatabaseProcedures
     public static Dictionary<byte, string> getEnumerationByteWithNoData(string table, string attribute, byte noData)
     {
         Dictionary<byte, string> dictionary = getEnumerationByte(table, attribute);
-        dictionary.Add(noData, "brak danych");
+        dictionary.Add(noData, "");
         
 
         return dictionary;
@@ -149,19 +149,44 @@ public class DatabaseProcedures
         return enumeration;
     }
 
+    public static Dictionary<decimal, string> getEnumerationDecimalWithNoData(string table, string attribute, decimal noData)
+    {
+        Dictionary<decimal, string> dictionary = getEnumerationDecimal(table, attribute);
+        dictionary.Add(noData, "");
+
+
+        return dictionary;
+    }
+
     public static object getByteOrNull(string value)
     {
-        return (value == "") ? DBNull.Value : (object)byte.Parse(value);
+        return getByteOrNullWithNoData(value, "");
     }
 
     public static object getByteOrNullWithNoData(string value, string noData)
     {
-        return (value == noData) ? DBNull.Value : (object)byte.Parse(value);
+        byte b;
+        if (value == noData || !byte.TryParse(value, out b))
+        {
+            return DBNull.Value;
+        }
+        else
+        {
+            return b;
+        }
     }
 
     public static object getShortOrNull(string value)
     {
-        return (value == "") ? DBNull.Value : (object)short.Parse(value);
+        short s;
+        if (value == "" || !short.TryParse(value, out s))
+        {
+            return DBNull.Value;
+        }
+        else
+        {
+            return s;
+        }
     }
 
     public static object getBitOrNull(string value)
@@ -176,7 +201,20 @@ public class DatabaseProcedures
 
     public static object getDecimalOrNull(string value)
     {
-        return (value == "") ? DBNull.Value : (object)decimal.Parse(value);
+        return getDecimalOrNullWithNoData(value, "");
+    }
+
+    public static object getDecimalOrNullWithNoData(string value, string noData)
+    {
+        decimal d;
+        if (value == noData || !decimal.TryParse(value, out d))
+        {
+            return DBNull.Value;
+        }
+        else
+        {
+            return d;
+        }
     }
 
     public static string getDropYesNoValue(object value)
@@ -217,6 +255,11 @@ public class DatabaseProcedures
     public static string getDropDecimalValue(object value)
     {
         return value == DBNull.Value ? "2.0" : ((decimal)value).ToString();
+    }
+
+    public static string getDropDecimalValueWithNoData(object value, string noData)
+    {
+        return value == DBNull.Value ? noData : ((decimal)value).ToString();
     }
 
     public static string getTextDecimalValue(object value)

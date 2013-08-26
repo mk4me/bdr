@@ -11,6 +11,7 @@ using System.Data;
 public partial class PartBForm : System.Web.UI.Page
 {
     private static byte NO_DATA = 100;
+    private static decimal NO_DATA_DECIMAL = 100;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -29,7 +30,7 @@ public partial class PartBForm : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "Otepienie");
+            dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
             dropOtepienie.DataTextField = "Value";
             dropOtepienie.DataValueField = "Key";
             dropOtepienie.DataBind();
@@ -59,7 +60,7 @@ public partial class PartBForm : System.Web.UI.Page
         SqlParameter otepienieDecimal = new SqlParameter("@Otepienie", SqlDbType.Decimal);
         otepienieDecimal.Precision = 2;
         otepienieDecimal.Scale = 1;
-        otepienieDecimal.Value = DatabaseProcedures.getDecimalOrNull(dropOtepienie.SelectedValue);
+        otepienieDecimal.Value = DatabaseProcedures.getDecimalOrNullWithNoData(dropOtepienie.SelectedValue, NO_DATA_DECIMAL.ToString());
         cmd.Parameters.Add(otepienieDecimal);
         cmd.Parameters.Add("@Dyzartria", SqlDbType.TinyInt).Value = byte.Parse(dropDyzartia.SelectedValue);
         cmd.Parameters.Add("@RBD", SqlDbType.TinyInt).Value = byte.Parse(dropRBD.SelectedValue);
@@ -100,7 +101,6 @@ public partial class PartBForm : System.Web.UI.Page
 
             if (success == 0)
             {
-                Session["Update"] = true;
                 Response.Redirect("~/AppointmentForm.aspx");
             }
             else
@@ -141,7 +141,7 @@ public partial class PartBForm : System.Web.UI.Page
                 dropRLS.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["RLS"]);
                 dropPsychotyczne.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ObjawyPsychotyczne"]);
                 dropDepresja.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Depresja"]);
-                dropOtepienie.SelectedValue = DatabaseProcedures.getDropDecimalValue(rdr["Otepienie"]);
+                dropOtepienie.SelectedValue = DatabaseProcedures.getDropDecimalValueWithNoData(rdr["Otepienie"], NO_DATA_DECIMAL.ToString());
                 dropDyzartia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Dyzartria"]);
                 dropRBD.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["RBD"]);
                 dropZaburzeniaGalek.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ZaburzenieRuchomosciGalekOcznych"]);

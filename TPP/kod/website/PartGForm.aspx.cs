@@ -63,7 +63,6 @@ public partial class PartGForm : System.Web.UI.Page
 
             if (success == 0)
             {
-                Session["Update"] = true;
                 Response.Redirect("~/AppointmentForm.aspx");
             }
             else

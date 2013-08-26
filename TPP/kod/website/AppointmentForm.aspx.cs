@@ -13,6 +13,7 @@ public partial class AppointmentForm : System.Web.UI.Page
     private bool update = false;
     private string patientNumber;
     private static string DATE_FORMAT = "yyyy-MM-dd";
+    private static byte NO_DATA = 100;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -24,9 +25,16 @@ public partial class AppointmentForm : System.Web.UI.Page
             dropAppointmentType.SelectedValue = Session["AppointmentType"].ToString();
 
             update = (bool)Session["Update"];
-            if (update && !IsPostBack)
+            if (!IsPostBack)
             {
-                loadAppointment((int)Session["AppointmentId"]);
+                if (update)
+                {
+                    loadAppointment((int)Session["AppointmentId"]);
+                }
+                else
+                {
+                    initAppointment();
+                }
             }
         }
         else
@@ -65,88 +73,86 @@ public partial class AppointmentForm : System.Web.UI.Page
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
 
-            dropEducation.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Wyksztalcenie");
+            dropEducation.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Wyksztalcenie", NO_DATA);
             dropEducation.DataTextField = "Value";
             dropEducation.DataValueField = "Key";
             dropEducation.DataBind();
 
-            dropSymptom.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "PierwszyObjaw");
+            dropSymptom.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PierwszyObjaw", NO_DATA);
             dropSymptom.DataTextField = "Value";
             dropSymptom.DataValueField = "Key";
             dropSymptom.DataBind();
 
-            dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Papierosy");
+            dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Papierosy", NO_DATA);
             dropCigarettes.DataTextField = "Value";
             dropCigarettes.DataValueField = "Key";
             dropCigarettes.DataBind();
 
-            dropCoffee.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Kawa");
+            dropCoffee.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Kawa", NO_DATA);
             dropCoffee.DataTextField = "Value";
             dropCoffee.DataValueField = "Key";
             dropCoffee.DataBind();
 
-            dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Alkohol");
+            dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Alkohol", NO_DATA);
             dropAlcohol.DataTextField = "Value";
             dropAlcohol.DataValueField = "Key";
             dropAlcohol.DataBind();
 
-            dropPlace.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "Zamieszkanie");
+            dropPlace.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Zamieszkanie", NO_DATA);
             dropPlace.DataTextField = "Value";
             dropPlace.DataValueField = "Key";
             dropPlace.DataBind();
 
-            dropToxic.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "NarazenieNaToks");
+            dropToxic.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "NarazenieNaToks", NO_DATA);
             dropToxic.DataTextField = "Value";
             dropToxic.DataValueField = "Key";
             dropToxic.DataBind();
         }
     }
 
-    private void saveAppointment(string number, decimal examinationType, byte education, byte family, short symptomYear, byte symptomMonth, byte firstSymptom, byte timeSymptom,
-        byte dyskinesia, string timeDiskinesia, byte fluctuations, string yearsFluctuations, byte cigarettes, byte coffee, byte greenTea, byte alcohol, byte treatmentNumber,
-        byte place, byte toxic, DateTime dateIn, DateTime dateSurgery, DateTime dateOut, string login, string notes, bool update)
+    private void saveAppointment()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_examination_questionnaire_partA]";
-        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = number;
+        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
         SqlParameter examinationTypeDecimal = new SqlParameter("@RodzajWizyty", SqlDbType.Decimal);
         examinationTypeDecimal.Precision = 2;
         examinationTypeDecimal.Scale = 1;
-        examinationTypeDecimal.Value = examinationType;
+        examinationTypeDecimal.Value = decimal.Parse(dropAppointmentType.SelectedValue);
         cmd.Parameters.Add(examinationTypeDecimal);
-        cmd.Parameters.Add("@DataPrzyjecia", SqlDbType.Date).Value = dateIn;
-        cmd.Parameters.Add("@DataOperacji", SqlDbType.Date).Value = dateSurgery;
-        cmd.Parameters.Add("@DataWypisu", SqlDbType.Date).Value = dateOut;
-        cmd.Parameters.Add("@Wyksztalcenie", SqlDbType.TinyInt).Value = education;
-        cmd.Parameters.Add("@Rodzinnosc", SqlDbType.TinyInt).Value = family;
-        cmd.Parameters.Add("@RokZachorowania", SqlDbType.SmallInt).Value = symptomYear;
-        cmd.Parameters.Add("@MiesiacZachorowania", SqlDbType.TinyInt).Value = symptomMonth;
-        cmd.Parameters.Add("@PierwszyObjaw", SqlDbType.TinyInt).Value = firstSymptom;
-        cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = timeSymptom;
-        cmd.Parameters.Add("@DyskinezyObecnie", SqlDbType.TinyInt).Value = dyskinesia;
+        cmd.Parameters.Add("@DataPrzyjecia", SqlDbType.Date).Value = DateTime.Parse(textDateIn.Text);
+        cmd.Parameters.Add("@DataOperacji", SqlDbType.Date).Value = DateTime.Parse(textDateSurgery.Text);
+        cmd.Parameters.Add("@DataWypisu", SqlDbType.Date).Value = DateTime.Parse(textDateOut.Text);
+        cmd.Parameters.Add("@Wyksztalcenie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropEducation.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Rodzinnosc", SqlDbType.TinyInt).Value = byte.Parse(dropFamily.SelectedValue);
+        cmd.Parameters.Add("@RokZachorowania", SqlDbType.SmallInt).Value = short.Parse(dropYear.SelectedValue);
+        cmd.Parameters.Add("@MiesiacZachorowania", SqlDbType.TinyInt).Value = byte.Parse(dropMonth.SelectedValue);
+        cmd.Parameters.Add("@PierwszyObjaw", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSymptom.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = byte.Parse(textTimeSymptom.Text);
+        cmd.Parameters.Add("@DyskinezyObecnie", SqlDbType.TinyInt).Value = byte.Parse(dropDiskinesia.SelectedValue);
         SqlParameter dyskinesiaDecimal = new SqlParameter("@CzasDyskinez", SqlDbType.Decimal);
         dyskinesiaDecimal.Precision = 3;
         dyskinesiaDecimal.Scale = 1;
-        dyskinesiaDecimal.Value = DatabaseProcedures.getDecimalOrNull(timeDiskinesia);
+        dyskinesiaDecimal.Value = DatabaseProcedures.getDecimalOrNull(textTimeDiskinesia.Text);
         cmd.Parameters.Add(dyskinesiaDecimal);
-        cmd.Parameters.Add("@FluktuacjeObecnie", SqlDbType.TinyInt).Value = fluctuations;
+        cmd.Parameters.Add("@FluktuacjeObecnie", SqlDbType.TinyInt).Value = byte.Parse(dropFluctuations.SelectedValue);
         SqlParameter fluctuationsDecimal = new SqlParameter("@FluktuacjeOdLat", SqlDbType.Decimal);
         fluctuationsDecimal.Precision = 3;
         fluctuationsDecimal.Scale = 1;
-        fluctuationsDecimal.Value = DatabaseProcedures.getDecimalOrNull(yearsFluctuations);
+        fluctuationsDecimal.Value = DatabaseProcedures.getDecimalOrNull(textYearsFluctuations.Text);
         cmd.Parameters.Add(fluctuationsDecimal);
-        cmd.Parameters.Add("@Papierosy", SqlDbType.TinyInt).Value = cigarettes;
-        cmd.Parameters.Add("@Kawa", SqlDbType.TinyInt).Value = coffee;
-        cmd.Parameters.Add("@ZielonaHerbata", SqlDbType.TinyInt).Value = greenTea;
-        cmd.Parameters.Add("@Alkohol", SqlDbType.TinyInt).Value = alcohol;
-        cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = treatmentNumber;
-        cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = place;
-        cmd.Parameters.Add("@NarazenieNaToks", SqlDbType.TinyInt).Value = toxic;
-        cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = notes;
+        cmd.Parameters.Add("@Papierosy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropCigarettes.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Kawa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropCoffee.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@ZielonaHerbata", SqlDbType.TinyInt).Value = byte.Parse(dropGreenTea.SelectedValue);
+        cmd.Parameters.Add("@Alkohol", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropAlcohol.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = byte.Parse(textTreatmentNumber.Text);
+        cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropPlace.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@NarazenieNaToks", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropToxic.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = textNotes.Text;
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
-        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = login;
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
         cmd.Parameters.Add("@visit_id", SqlDbType.Int);
@@ -168,11 +174,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                 {
                     toggleButtons(true);
                     Session["AppointmentId"] = (int)cmd.Parameters["@visit_id"].Value;
-                }
-                else
-                {
-                    Session.Remove("Update");
-                    Response.Redirect("~/AppointmentList.aspx");
+                    Session["Update"] = true;
                 }
             }
             else
@@ -213,13 +215,13 @@ public partial class AppointmentForm : System.Web.UI.Page
                 textDateIn.Text = ((DateTime)rdr["DataPrzyjecia"]).ToString(DATE_FORMAT);
                 textDateSurgery.Text = ((DateTime)rdr["DataOperacji"]).ToString(DATE_FORMAT);
                 textDateOut.Text = ((DateTime)rdr["DataWypisu"]).ToString(DATE_FORMAT);
-                dropEducation.SelectedValue = ((byte)rdr["Wyksztalcenie"]).ToString();
-                dropFamily.SelectedValue = ((byte)rdr["Rodzinnosc"]).ToString();
+                dropEducation.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Wyksztalcenie"], NO_DATA.ToString());
+                dropFamily.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Rodzinnosc"]);
                 dropYear.SelectedValue = ((short)rdr["RokZachorowania"]).ToString();
                 dropMonth.SelectedValue = ((byte)rdr["MiesiacZachorowania"]).ToString();
-                dropSymptom.SelectedValue = ((byte)rdr["PierwszyObjaw"]).ToString();
+                dropSymptom.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PierwszyObjaw"], NO_DATA.ToString());
                 textTimeSymptom.Text = ((byte)rdr["CzasOdPoczObjDoWlLDopy"]).ToString();
-                dropDiskinesia.SelectedValue = ((byte)rdr["DyskinezyObecnie"]).ToString();
+                dropDiskinesia.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DyskinezyObecnie"], NO_DATA.ToString());
                 if (dropDiskinesia.SelectedValue == "0")
                 {
                     textTimeDiskinesia.Enabled = false;
@@ -227,10 +229,10 @@ public partial class AppointmentForm : System.Web.UI.Page
                 }
                 else
                 {
-                    textTimeDiskinesia.Text = ((decimal)rdr["CzasDyskinez"]).ToString();
+                    textTimeDiskinesia.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasDyskinez"]);
                     RequiredFieldValidator2.Enabled = true;
                 }
-                dropFluctuations.SelectedValue = ((byte)rdr["FluktuacjeObecnie"]).ToString();
+                dropFluctuations.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["FluktuacjeObecnie"], NO_DATA.ToString());
                 if (dropFluctuations.SelectedValue == "0")
                 {
                     textYearsFluctuations.Enabled = false;
@@ -238,16 +240,16 @@ public partial class AppointmentForm : System.Web.UI.Page
                 }
                 else
                 {
-                    textYearsFluctuations.Text = ((decimal)rdr["FluktuacjeOdLat"]).ToString();
+                    textYearsFluctuations.Text = DatabaseProcedures.getTextDecimalValue(rdr["FluktuacjeOdLat"]);
                     RequiredFieldValidator3.Enabled = true;
                 }
-                dropCigarettes.SelectedValue = ((byte)rdr["Papierosy"]).ToString();
-                dropCoffee.SelectedValue = ((byte)rdr["Kawa"]).ToString();
-                dropGreenTea.SelectedValue = ((byte)rdr["ZielonaHerbata"]).ToString();
-                dropAlcohol.SelectedValue = ((byte)rdr["Alkohol"]).ToString();
+                dropCigarettes.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Papierosy"], NO_DATA.ToString());
+                dropCoffee.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Kawa"], NO_DATA.ToString());
+                dropGreenTea.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ZielonaHerbata"], NO_DATA.ToString());
+                dropAlcohol.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Alkohol"], NO_DATA.ToString());
                 textTreatmentNumber.Text = ((byte)rdr["ZabiegowWZnieczOgPrzedRozpoznaniemPD"]).ToString();
-                dropPlace.SelectedValue = ((byte)rdr["Zamieszkanie"]).ToString();
-                dropToxic.SelectedValue = ((byte)rdr["NarazenieNaToks"]).ToString();
+                dropPlace.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Zamieszkanie"], NO_DATA.ToString());
+                dropToxic.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["NarazenieNaToks"], NO_DATA.ToString());
                 textNotes.Text = (string)rdr["Uwagi"];
             }
         }
@@ -263,6 +265,21 @@ public partial class AppointmentForm : System.Web.UI.Page
                 con.Close();
             }
         }
+    }
+
+    private void initAppointment()
+    {
+        dropEducation.SelectedValue = NO_DATA.ToString();
+        dropSymptom.SelectedValue = NO_DATA.ToString();
+        dropCigarettes.SelectedValue = NO_DATA.ToString();
+        dropCoffee.SelectedValue = NO_DATA.ToString();
+        dropAlcohol.SelectedValue = NO_DATA.ToString();
+        dropPlace.SelectedValue = NO_DATA.ToString();
+        dropToxic.SelectedValue = NO_DATA.ToString();
+        textTimeDiskinesia.Enabled = false;
+        RequiredFieldValidator2.Enabled = false;
+        textYearsFluctuations.Enabled = false;
+        RequiredFieldValidator3.Enabled = false;
     }
 
     protected void dropDiskinesia_SelectedIndexChanged(object sender, EventArgs e)
@@ -297,12 +314,7 @@ public partial class AppointmentForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
-        saveAppointment(patientNumber, decimal.Parse(dropAppointmentType.SelectedValue), byte.Parse(dropEducation.SelectedValue), byte.Parse(dropFamily.SelectedValue),
-            short.Parse(dropYear.SelectedValue), byte.Parse(dropMonth.SelectedValue), byte.Parse(dropSymptom.SelectedValue), byte.Parse(textTimeSymptom.Text),
-            byte.Parse(dropDiskinesia.SelectedValue), textTimeDiskinesia.Text, byte.Parse(dropFluctuations.SelectedValue), textYearsFluctuations.Text,
-            byte.Parse(dropCigarettes.SelectedValue), byte.Parse(dropCoffee.SelectedValue), byte.Parse(dropGreenTea.SelectedValue), byte.Parse(dropAlcohol.SelectedValue),
-            byte.Parse(textTreatmentNumber.Text), byte.Parse(dropPlace.SelectedValue), byte.Parse(dropToxic.SelectedValue), DateTime.Parse(textDateIn.Text), DateTime.Parse(textDateSurgery.Text),
-            DateTime.Parse(textDateOut.Text), User.Identity.Name, textNotes.Text, update);
+        saveAppointment();
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)
