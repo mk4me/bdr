@@ -32,46 +32,49 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsMotionAnalysis;
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
+    private static byte NO_DATA = 101;  //SchwabEnglandScale 100%
+    private static decimal NO_DATA_DECIMAL = 100;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        UPDRSList2.Add(addVariantDropDowns("UPDRS_I", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_I")));
-        UPDRSList2.Add(addVariantDropDowns("UPDRS_II", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_II")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_18", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_18")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_19", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_19")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_FaceLipsChin", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_20_FaceLipsChin")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_20_RHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_20_LHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_RFoot", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_20_RFoot")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_LFoot", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_20_LFoot")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_21_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_21_RHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_21_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_21_LHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_Neck", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_22_Neck")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_22_RHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_22_LHand")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_RFoot", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_22_RFoot")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_LFoot", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_22_LFoot")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_23_R", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_23_R")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_23_L", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_23_L")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_24_R", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_24_R")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_24_L", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_24_L")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_25_R", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_25_R")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_25_L", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_25_L")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_26_R", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_26_R")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_26_L", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_26_L")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_27", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_27")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_28", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_28")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_29", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_29")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_30", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_30")));
-        UPDRSList1.Add(addVariantDropDowns("UPDRS_31", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_31")));
+        UPDRSList2.Add(addVariantDropDowns("UPDRS_I", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_I", NO_DATA)));
+        UPDRSList2.Add(addVariantDropDowns("UPDRS_II", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_II", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_18", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_18", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_19", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_19", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_FaceLipsChin", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_20_FaceLipsChin", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_20_RHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_20_LHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_RFoot", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_20_RFoot", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_20_LFoot", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_20_LFoot", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_21_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_21_RHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_21_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_21_LHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_Neck", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_22_Neck", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_RHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_22_RHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_LHand", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_22_LHand", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_RFoot", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_22_RFoot", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_22_LFoot", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_22_LFoot", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_23_R", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_23_R", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_23_L", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_23_L", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_24_R", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_24_R", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_24_L", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_24_L", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_25_R", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_25_R", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_25_L", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_25_L", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_26_R", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_26_R", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_26_L", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_26_L", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_27", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_27", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_28", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_28", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_29", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_29", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_30", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_30", NO_DATA)));
+        UPDRSList1.Add(addVariantDropDowns("UPDRS_31", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_31", NO_DATA)));
         UPDRSListCalculated1 = addVariantTextBoxes("UPDRS_III", tableUPDRS, false);
-        UPDRSList2.Add(addVariantDropDowns("UPDRS_IV", tableUPDRS, DatabaseProcedures.getEnumerationByte("Badanie", "UPDRS_IV")));
+        UPDRSList2.Add(addVariantDropDowns("UPDRS_IV", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_IV", NO_DATA)));
         UPDRSListCalculated2 = addVariantTextBoxes("UPDRS_TOTAL", tableUPDRS, false);
 
-        variantsHYscale = addVariantDropDowns("HYscale", tableUPDRSExtra, DatabaseProcedures.getEnumerationDecimal("Badanie", "HYscale"));
-        variantsSchwabEnglandScale = addVariantDropDowns("SchwabEnglandScale", tableUPDRSExtra, DatabaseProcedures.getEnumerationByte("Badanie", "SchwabEnglandScale"));
-        variantsOkulografiaUrzadzenie = addVariantDropDowns("OkulografiaUrzadzenie", tableUPDRSExtra, DatabaseProcedures.getEnumerationByte("Badanie", "OkulografiaUrzadzenie"));
+        variantsHYscale = addVariantDropDowns("HYscale", tableUPDRSExtra, DatabaseProcedures.getEnumerationDecimalWithNoData("Badanie", "HYscale", NO_DATA_DECIMAL));
+        variantsSchwabEnglandScale = addVariantDropDowns("SchwabEnglandScale", tableUPDRSExtra, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "SchwabEnglandScale", NO_DATA));
+        variantsOkulografiaUrzadzenie = addVariantDropDowns("OkulografiaUrzadzenie", tableUPDRSExtra, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "OkulografiaUrzadzenie", NO_DATA));
         Dictionary<byte, string> dictionaryYesNo = new Dictionary<byte, string>();
+        dictionaryYesNo.Add(2, "");
         dictionaryYesNo.Add(0, "nie");
         dictionaryYesNo.Add(1, "tak");
         variantsWideo = addVariantDropDowns("Wideo", tableUPDRSExtra, dictionaryYesNo);
@@ -100,8 +103,10 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekPrawa", tablePart3, true));
         variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekLewa", tablePart3, true));
         variantsPartCList.Add(addVariantTextBoxes("TST", tablePart3, true));
-        variantsTandemPivot = addVariantDropDowns("TandemPivot", tablePart3, DatabaseProcedures.getEnumerationByte("Badanie", "TandemPivot"));
+        variantsTandemPivot = addVariantDropDowns("TandemPivot", tablePart3, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "TandemPivot", NO_DATA));
         variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true));
+
+        disablePhases();
 
         if (Session["PatientNumber"] != null && Session["AppointmentId"] != null && Session["AppointmentName"] != null)
         {
@@ -127,8 +132,7 @@ public partial class PartFForm : System.Web.UI.Page
                 }
                 else
                 {
-                    buttonSavePartB.Enabled = false;
-                    buttonSavePartC.Enabled = false;
+                    initParts();
                 }
                 loadPartF();
             }
@@ -178,18 +182,10 @@ public partial class PartFForm : System.Web.UI.Page
         return tuple;
     }
 
-    protected void dropUPDRS_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        for (int i = 0; i < VARIANTS; i++)
-        {
-            int sum = 0;
-            foreach (Tuple<DropDownList[], string> dropVariants in UPDRSList1)
-            {
-                sum += int.Parse(dropVariants.Item1[i].SelectedValue);
-            }
-            UPDRSListCalculated1.Item1[i].Text = sum.ToString();
-        }
-    }
+    //protected void dropUPDRS_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    calculateUPDRS();
+    //}
 
     private Tuple<TextBox[], string> addVariantTextBoxes(String label, Table table, bool enabled)
     {
@@ -220,19 +216,24 @@ public partial class PartFForm : System.Web.UI.Page
     {
         for (int i = 0; i < VARIANTS; i++)
         {
-            int sum = 0;
-            foreach (Tuple<DropDownList[], string> dropVariants in UPDRSList1)
-            {
-                sum += int.Parse(dropVariants.Item1[i].SelectedValue);
-            }
-            UPDRSListCalculated1.Item1[i].Text = sum.ToString();
-
-            foreach (Tuple<DropDownList[], string> dropVariants in UPDRSList2)
-            {
-                sum += int.Parse(dropVariants.Item1[i].SelectedValue);
-            }
-            UPDRSListCalculated2.Item1[i].Text = sum.ToString();
+            UPDRSListCalculated1.Item1[i].Text = calculateSum(UPDRSList1, i).ToString();
+            UPDRSListCalculated2.Item1[i].Text = calculateSum(UPDRSList2, i).ToString();
         }
+    }
+
+    private int calculateSum(List<Tuple<DropDownList[], string>> UPDRSList, int variant)
+    {
+        int sum = 0;
+        foreach (Tuple<DropDownList[], string> dropVariants in UPDRSList)
+        {
+            int value = int.Parse(dropVariants.Item1[variant].SelectedValue);
+            if (value != NO_DATA)
+            {
+                sum += value;
+            }
+        }
+
+        return sum;
     }
 
     private int saveVariantPartA(byte DBS, bool BMT, int variant)
@@ -246,21 +247,21 @@ public partial class PartFForm : System.Web.UI.Page
         cmd.Parameters.Add("@BMT", SqlDbType.Bit).Value = BMT;
         for (int i = 0; i < UPDRSList2.Count; i++)
         {
-            cmd.Parameters.Add("@" + UPDRSList2[i].Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSList2[i].Item1[variant].SelectedValue);
+            cmd.Parameters.Add("@" + UPDRSList2[i].Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(UPDRSList2[i].Item1[variant].SelectedValue, NO_DATA.ToString());
         }
         for (int i = 0; i < UPDRSList1.Count; i++)
         {
-            cmd.Parameters.Add("@" + UPDRSList1[i].Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSList1[i].Item1[variant].SelectedValue);
+            cmd.Parameters.Add("@" + UPDRSList1[i].Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(UPDRSList1[i].Item1[variant].SelectedValue, NO_DATA.ToString());
         }
         cmd.Parameters.Add("@" + UPDRSListCalculated1.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated1.Item1[variant].Text);
         cmd.Parameters.Add("@" + UPDRSListCalculated2.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated2.Item1[variant].Text);
         SqlParameter HYscaleDecimal = new SqlParameter("@" + variantsHYscale.Item2, SqlDbType.Decimal);
         HYscaleDecimal.Precision = 2;
         HYscaleDecimal.Scale = 1;
-        HYscaleDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsHYscale.Item1[variant].SelectedValue);
+        HYscaleDecimal.Value = DatabaseProcedures.getDecimalOrNullWithNoData(variantsHYscale.Item1[variant].SelectedValue, NO_DATA_DECIMAL.ToString());
         cmd.Parameters.Add(HYscaleDecimal);
-        cmd.Parameters.Add("@" + variantsSchwabEnglandScale.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(variantsSchwabEnglandScale.Item1[variant].SelectedValue);
-        cmd.Parameters.Add("@" + variantsOkulografiaUrzadzenie.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsSchwabEnglandScale.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsSchwabEnglandScale.Item1[variant].SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@" + variantsOkulografiaUrzadzenie.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@" + variantsWideo.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsWideo.Item1[variant].SelectedValue);
         bool update = false;
         if (ViewState["VariantIds"] != null)
@@ -384,7 +385,7 @@ public partial class PartFForm : System.Web.UI.Page
             UpAndGoDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartCList[i].Item1[variant].Text);
             cmd.Parameters.Add(UpAndGoDecimal);
         }
-        cmd.Parameters.Add("@" + variantsTandemPivot.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(variantsTandemPivot.Item1[variant].Text);
+        cmd.Parameters.Add("@" + variantsTandemPivot.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsTandemPivot.Item1[variant].Text, NO_DATA.ToString());
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
@@ -496,7 +497,7 @@ public partial class PartFForm : System.Web.UI.Page
                 byte DBS = (byte)rdr["DBS"];
                 bool BMT = (bool)rdr["BMT"];
                 int variantId = (int)rdr["IdBadanie"];
-                variantIds[getVariantId(DBS, BMT)] = (int)rdr["IdBadanie"];
+                variantIds[getVariantColumn(DBS, BMT)] = variantId;
                 i++;
             }
             if (i > 0)
@@ -518,38 +519,8 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
-    private int getVariantId(byte DBS, bool BMT)
-    {/*
-        if (DBS == 0)
-        {
-            if (BMT)
-                return 3;
-            else
-                return 7;
-        }
-        else if (DBS == 1)
-        {
-            if (BMT)
-                return 0;
-            else
-                return 4;
-        }
-        else if (DBS == 2)
-        {
-            if (BMT)
-                return 1;
-            else
-                return 5;
-        }
-        else if (DBS == 3)
-        {
-            if (BMT)
-                return 2;
-            else
-                return 6;
-        }
-        */
-
+    private int getVariantColumn(byte DBS, bool BMT)
+    {
         if (BMT)
         {
             if (DBS == 3)
@@ -646,17 +617,17 @@ public partial class PartFForm : System.Web.UI.Page
             {
                 for (int i = 0; i < UPDRSList2.Count; i++)
                 {
-                    UPDRSList2[i].Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValue(rdr[UPDRSList2[i].Item2]);
+                    UPDRSList2[i].Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[UPDRSList2[i].Item2], NO_DATA.ToString());
                 }
                 for (int i = 0; i < UPDRSList1.Count; i++)
                 {
-                    UPDRSList1[i].Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValue(rdr[UPDRSList1[i].Item2]);
+                    UPDRSList1[i].Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[UPDRSList1[i].Item2], NO_DATA.ToString());
                 }
                 UPDRSListCalculated1.Item1[variant].Text = DatabaseProcedures.getTextByteValue(rdr[UPDRSListCalculated1.Item2]);
                 UPDRSListCalculated2.Item1[variant].Text = DatabaseProcedures.getTextByteValue(rdr[UPDRSListCalculated2.Item2]);
-                variantsHYscale.Item1[variant].SelectedValue = DatabaseProcedures.getDropDecimalValue(rdr[variantsHYscale.Item2]);
-                variantsSchwabEnglandScale.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValue(rdr[variantsSchwabEnglandScale.Item2]);
-                variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValue(rdr[variantsOkulografiaUrzadzenie.Item2]);
+                variantsHYscale.Item1[variant].SelectedValue = DatabaseProcedures.getDropDecimalValueWithNoData(rdr[variantsHYscale.Item2], NO_DATA_DECIMAL.ToString());
+                variantsSchwabEnglandScale.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsSchwabEnglandScale.Item2], NO_DATA.ToString());
+                variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsOkulografiaUrzadzenie.Item2], NO_DATA.ToString());
                 variantsWideo.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsWideo.Item2]);
             }
         }
@@ -746,7 +717,7 @@ public partial class PartFForm : System.Web.UI.Page
                 {
                     variantsPartCList[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartCList[i].Item2]);
                 }
-                variantsTandemPivot.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValue(rdr[variantsTandemPivot.Item2]);
+                variantsTandemPivot.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsTandemPivot.Item2], NO_DATA.ToString());
             }
         }
         catch (SqlException ex)
@@ -799,6 +770,59 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
+    private void initParts()
+    {
+        buttonSavePartB.Enabled = false;
+        buttonSavePartC.Enabled = false;
+
+        for (int variant = 0; variant < VARIANTS; variant++)
+        {
+            for (int i = 0; i < UPDRSList2.Count; i++)
+            {
+                UPDRSList2[i].Item1[variant].SelectedValue = NO_DATA.ToString();
+            }
+            for (int i = 0; i < UPDRSList1.Count; i++)
+            {
+                UPDRSList1[i].Item1[variant].SelectedValue = NO_DATA.ToString();
+            }
+            variantsHYscale.Item1[variant].SelectedValue = NO_DATA_DECIMAL.ToString();
+            variantsSchwabEnglandScale.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsTandemPivot.Item1[variant].SelectedValue = NO_DATA.ToString();
+        }
+    }
+
+    private void disablePhases()
+    {
+        List<int> variantList = new List<int>();
+        variantList.Add(getVariantColumn(1, true));
+        variantList.Add(getVariantColumn(1, false));
+        variantList.Add(getVariantColumn(2, true));
+        variantList.Add(getVariantColumn(2, false));
+
+        disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
+        disableWebControlVariants(variantsTestSchodkowyCzas1.Item1, variantList);
+        disableWebControlVariants(variantsTestSchodkowyCzas2.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszu.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
+        disableWebControlVariants(variantsPosturografia.Item1, variantList);
+        disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
+        foreach (Tuple<TextBox[], string> variantsPartC in variantsPartCList)
+        {
+            disableWebControlVariants(variantsPartC.Item1, variantList);
+        }
+        disableWebControlVariants(variantsTandemPivot.Item1, variantList);
+    }
+
+    private void disableWebControlVariants(WebControl[] webControlVariants, List<int> variantList)
+    {
+        foreach (int i in variantList)
+        {
+            webControlVariants[i].Enabled = false;
+        }
+    }
+
     protected void buttonOK_Click(object sender, EventArgs e)
     {
         savePartF();
@@ -814,10 +838,12 @@ public partial class PartFForm : System.Web.UI.Page
         for (byte DBS = 0, i = 0; i < VARIANTS; DBS++, i++)
         {
             bool BMT = true;
-            variantIds[i] = saveVariantPartA(DBS, BMT, getVariantId(DBS, BMT));
-            BMT = false;
+            int variant = getVariantColumn(DBS, BMT);
+            variantIds[variant] = saveVariantPartA(DBS, BMT, variant);
             i++;
-            variantIds[i] = saveVariantPartA(DBS, BMT, getVariantId(DBS, BMT));
+            BMT = false;
+            variant = getVariantColumn(DBS, BMT);
+            variantIds[variant] = saveVariantPartA(DBS, BMT, variant);
         }
         if (variantIds.Length > 0)
         {
@@ -831,13 +857,11 @@ public partial class PartFForm : System.Web.UI.Page
         int[] variantIds = (int[])ViewState["VariantIds"];
         if (variantIds != null)
         {
-            for (byte DBS = 0, i = 0; i < variantIds.Length; DBS++, i++)
+            for (int i = 0; i < variantIds.Length; i++)
             {
-                bool BMT = true;
-                saveVariantPartB(variantIds[i], getVariantId(DBS, BMT));
-                BMT = false;
+                saveVariantPartB(variantIds[i], i);
                 i++;
-                saveVariantPartB(variantIds[i], getVariantId(DBS, BMT));
+                saveVariantPartB(variantIds[i], i);
             }
         }
     }
@@ -846,13 +870,11 @@ public partial class PartFForm : System.Web.UI.Page
         int[] variantIds = (int[])ViewState["VariantIds"];
         if (variantIds != null)
         {
-            for (byte DBS = 0, i = 0; i < variantIds.Length; DBS++, i++)
+            for (int i = 0; i < variantIds.Length; i++)
             {
-                bool BMT = true;
-                saveVariantPartC(variantIds[i], getVariantId(DBS, BMT));
-                BMT = false;
+                saveVariantPartC(variantIds[i], i);
                 i++;
-                saveVariantPartC(variantIds[i], getVariantId(DBS, BMT));
+                saveVariantPartC(variantIds[i], i);
             }
         }
     }

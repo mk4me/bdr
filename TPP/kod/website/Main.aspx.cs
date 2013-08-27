@@ -60,6 +60,7 @@ public partial class Main : System.Web.UI.Page
 
     protected void buttonNewPatient_Click(object sender, EventArgs e)
     {
+        Session.Remove("PatientNumber");
         Response.Redirect("~/PatientForm.aspx");
     }
 
