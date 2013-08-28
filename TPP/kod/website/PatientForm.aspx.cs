@@ -52,6 +52,13 @@ public partial class PatientForm : System.Web.UI.Page
                 loadPatient(patientNumber);
             }
         }
+        else
+        {
+            if (!IsPostBack)
+            {
+                textPatientNumber.Text = suggestNewPatientNumber();
+            }
+        }
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)
@@ -160,5 +167,39 @@ public partial class PatientForm : System.Web.UI.Page
                 con.Close();
             }
         }
+    }
+
+    private string suggestNewPatientNumber()
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[suggest_new_patient_number]";
+        cmd.Parameters.Add("@admission_date", SqlDbType.Date).Value = DateTime.Now.ToString("yyyy-MM-dd");
+        cmd.Parameters.Add("@patient_number", SqlDbType.VarChar, 20);
+        cmd.Parameters["@patient_number"].Direction = ParameterDirection.Output;
+        cmd.Connection = con;
+
+        string patientNumber = "";
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+            patientNumber = (string)cmd.Parameters["@patient_number"].Value;
+        }
+        catch (SqlException ex)
+        {
+
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return patientNumber;
     }
 }
