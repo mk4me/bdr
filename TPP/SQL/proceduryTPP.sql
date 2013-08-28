@@ -397,6 +397,7 @@ begin
 				return;
 			end;
 		set @update = 1;
+		select @visit_id = IdWizyta from Wizyta where IdPacjent = @patient_id and RodzajWizyty = @RodzajWizyty;
 	end;
 
 	-- validations
@@ -504,7 +505,7 @@ begin
 								CzasDyskinez = @CzasDyskinez, FluktuacjeObecnie = @FluktuacjeObecnie, FluktuacjeOdLat = @FluktuacjeOdLat,	Papierosy = @Papierosy,	Kawa = @Kawa, 
 								ZielonaHerbata = @ZielonaHerbata, Alkohol = @Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD = @ZabiegowWZnieczOgPrzedRozpoznaniemPD,
 								Zamieszkanie = @Zamieszkanie, NarazenieNaToks = @NarazenieNaToks, Uwagi = @Uwagi 
-		where RodzajWizyty = @RodzajWizyty and IdPacjent = @patient_id  set @visit_id = SCOPE_IDENTITY();
+		where RodzajWizyty = @RodzajWizyty and IdPacjent = @patient_id;
 		end;
 	return;
 end;
@@ -1320,7 +1321,7 @@ alter procedure update_examination_questionnaire_partH  (
 	@SPECT bit,
 	@MRI bit,
 	@MRIwynik varchar(50),
-	@USGsrodmozgowia tinyint,
+	@USGsrodmozgowia bit,
 	@USGWynik tinyint,
 	@KwasMoczowy decimal(6,2),
 	@Genetyka bit,
@@ -1353,13 +1354,6 @@ begin
 	end;
 
 	-- validators
-
-	if( dbo.validate_ext_bit( @BadanieWechu ) = 0 )
-	begin
-		set @result = 2;
-		set @message = 'BadanieWechu - invalid value. Allowed: 0, 1, 2.';
-		return;
-	end;
 
 	if dbo.validate_input_int('Wizyta', 'WynikWechu', @WynikWechu) = 0
 	begin
@@ -1416,7 +1410,7 @@ go
 
 
 -- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
-create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
+alter procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
 	@UPDRS_I	tinyint,
 	@UPDRS_II	tinyint,
 	@UPDRS_18	tinyint,
@@ -1488,6 +1482,7 @@ begin
 				return;
 			end;
 		set @update = 1;
+		select @variant_id = IdBadanie from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT;
 	end;
 
 	-- validations
@@ -1657,8 +1652,7 @@ begin
 				SchwabEnglandScale	=	@SchwabEnglandScale,
 				OkulografiaUrzadzenie	=	@OkulografiaUrzadzenie,
 				Wideo	=	@Wideo
-			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT 
-			set @variant_id = SCOPE_IDENTITY();
+			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ;
 		end;
 	return;
 end;
@@ -1932,28 +1926,6 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 
 /*
 -- TO DO:
-
- alter Table Wizyta
-	add DataOperacji date;
-
- alter Table Wizyta
-	add Uwagi varchar(50);
-
- alter procedure:
-	suggest_new_patient_number
-	update_examination_questionnaire_partA 
-	update_examination_questionnaire_partD
-
- inserts updates:
-
- select * from SlownikInt where Atrybut = 'USGWynik'
-
- ( delete from SlownikInt where Definicja = 'hyperechogenicznoœæ' )
-
- insert:
-	'hyperechogenicznoœæ 
-		wechu
-		dysfagii
 
 */
 
@@ -2328,9 +2300,9 @@ select @message, @res;
 declare @message varchar(200);
 declare @res int;
 declare @vis_id int;
-exec update_examination_questionnaire_partA '2013-08-06/TEST1', 1, '2012-11-13', '2012-11-13', '2012-11-14', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
+exec update_examination_questionnaire_partA '2013-08-06/TEST1', 1, '2012-11-23', '2012-11-23', '2012-11-24', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
  1, 0, 2, 1, 0, 0, 'Uwagi',
- 0, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
+ 1, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
 select @message as Message, @vis_id as Visit_ID, @res as Result;
 go
 
