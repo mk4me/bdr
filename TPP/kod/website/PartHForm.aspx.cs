@@ -59,19 +59,26 @@ public partial class PartHForm : System.Web.UI.Page
         cmd.Parameters.Add("@LimitDysfagii", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropLimitDysfagii.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@pH_metriaPrzełyku", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(droppHmetriaPrzełyku.SelectedValue);
         cmd.Parameters.Add("@SPECT", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropSPECT.SelectedValue);
+        cmd.Parameters.Add("@SPECTWynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textSPECTWynik.Text);
         cmd.Parameters.Add("@MRI", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropMRI.SelectedValue);
-        cmd.Parameters.Add("@MRIwynik", SqlDbType.VarChar, 50).Value = DatabaseProcedures.getStringOrNull(textMRIwynik.Text);
+        cmd.Parameters.Add("@MRIwynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textMRIwynik.Text);
         cmd.Parameters.Add("@USGsrodmozgowia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropUSGsrodmozgowia.SelectedValue);
-        cmd.Parameters.Add("@USGWynik", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropUSGsrodmozgowia.SelectedValue, NO_DATA.ToString());
-        SqlParameter kwasMoczowyDecimal = new SqlParameter("@KwasMoczowy", SqlDbType.Decimal);
-        kwasMoczowyDecimal.Precision = 6;
-        kwasMoczowyDecimal.Scale = 2;
-        kwasMoczowyDecimal.Value = DatabaseProcedures.getDecimalOrNull(textKwasMoczowy.Text);
-        cmd.Parameters.Add(kwasMoczowyDecimal);
+        cmd.Parameters.Add("@USGWynik", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropUSGWynik.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Genetyka", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropGenetyka.SelectedValue);
         cmd.Parameters.Add("@GenetykaWynik", SqlDbType.VarChar, 50).Value = DatabaseProcedures.getStringOrNull(textGenetykaWynik.Text);
         cmd.Parameters.Add("@Surowica", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropSurowica.SelectedValue);
         cmd.Parameters.Add("@SurowicaPozostało", SqlDbType.VarChar, 50).Value = DatabaseProcedures.getStringOrNull(textSurowicaPozostało.Text);
+        cmd.Parameters.Add(saveDecimal("@Ferrytyna", textFerrytyna));
+        cmd.Parameters.Add(saveDecimal("@CRP", textCRP));
+        cmd.Parameters.Add(saveDecimal("@NTproCNP", textNTproCNP));
+        cmd.Parameters.Add(saveDecimal("@URCA", textURCA));
+        cmd.Parameters.Add(saveDecimal("@WitD", textWitD));
+        cmd.Parameters.Add(saveDecimal("@CHOL", textCHOL));
+        cmd.Parameters.Add(saveDecimal("@TGI", textTGI));
+        cmd.Parameters.Add(saveDecimal("@HDL", textFerrytyna));
+        cmd.Parameters.Add(saveDecimal("@LDL", textLDL));
+        cmd.Parameters.Add(saveDecimal("@olLDL", textolLDL));
+        cmd.Parameters.Add("@LaboratoryjneInne", SqlDbType.VarChar, 1000).Value = DatabaseProcedures.getStringOrNull(textLaboratoryjneInne.Text);
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
@@ -109,13 +116,24 @@ public partial class PartHForm : System.Web.UI.Page
         }
     }
 
+    private SqlParameter saveDecimal(string parameter, TextBox textBox)
+    {
+        SqlParameter decimalParameter = new SqlParameter(parameter, SqlDbType.Decimal);
+        decimalParameter.Precision = 7;
+        decimalParameter.Scale = 3;
+        decimalParameter.Value = DatabaseProcedures.getDecimalOrNull(textBox.Text);
+
+        return decimalParameter;
+    }
+
     private void loadPartH()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select Holter, BadanieWechu, WynikWechu, LimitDysfagii, pH_metriaPrzełyku, SPECT, MRI, " +
-            "MRIwynik, USGsrodmozgowia, USGWynik, KwasMoczowy, Genetyka, GenetykaWynik, Surowica, SurowicaPozostało " +
+        cmd.CommandText = "select Holter, BadanieWechu, WynikWechu, LimitDysfagii, pH_metriaPrzełyku, SPECT, SPECTWynik, MRI, " +
+            "MRIwynik, USGsrodmozgowia, USGWynik, Genetyka, GenetykaWynik, Surowica, SurowicaPozostało, " +
+            "Ferrytyna, CRP, NTproCNP, URCA, WitD, CHOL, TGI, HDL, LDL, olLDL, LaboratoryjneInne " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
 
@@ -131,15 +149,26 @@ public partial class PartHForm : System.Web.UI.Page
                 dropLimitDysfagii.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["LimitDysfagii"], NO_DATA.ToString());
                 droppHmetriaPrzełyku.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["pH_metriaPrzełyku"]);
                 dropSPECT.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["SPECT"]);
+                textSPECTWynik.Text = DatabaseProcedures.getTextStringValue(rdr["SPECTWynik"]);
                 dropMRI.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["MRI"]);
                 textMRIwynik.Text = DatabaseProcedures.getTextStringValue(rdr["MRIwynik"]);
                 dropUSGsrodmozgowia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["USGsrodmozgowia"]);
                 dropUSGWynik.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["USGWynik"], NO_DATA.ToString());
-                textKwasMoczowy.Text = DatabaseProcedures.getTextDecimalValue(rdr["KwasMoczowy"]);
                 dropGenetyka.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["Genetyka"]);
                 textGenetykaWynik.Text = DatabaseProcedures.getTextStringValue(rdr["GenetykaWynik"]);
                 dropSurowica.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["Surowica"]);
                 textSurowicaPozostało.Text = DatabaseProcedures.getTextStringValue(rdr["SurowicaPozostało"]);
+                textFerrytyna.Text = DatabaseProcedures.getTextDecimalValue(rdr["Ferrytyna"]);
+                textCRP.Text = DatabaseProcedures.getTextDecimalValue(rdr["CRP"]);
+                textNTproCNP.Text = DatabaseProcedures.getTextDecimalValue(rdr["NTproCNP"]);
+                textURCA.Text = DatabaseProcedures.getTextDecimalValue(rdr["URCA"]);
+                textWitD.Text = DatabaseProcedures.getTextDecimalValue(rdr["WitD"]);
+                textCHOL.Text = DatabaseProcedures.getTextDecimalValue(rdr["CHOL"]);
+                textTGI.Text = DatabaseProcedures.getTextDecimalValue(rdr["TGI"]);
+                textHDL.Text = DatabaseProcedures.getTextDecimalValue(rdr["HDL"]);
+                textLDL.Text = DatabaseProcedures.getTextDecimalValue(rdr["LDL"]);
+                textolLDL.Text = DatabaseProcedures.getTextDecimalValue(rdr["olLDL"]);
+                textLaboratoryjneInne.Text = DatabaseProcedures.getTextStringValue(rdr["LaboratoryjneInne"]);
             }
         }
         catch (SqlException ex)

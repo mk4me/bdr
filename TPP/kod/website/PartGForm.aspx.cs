@@ -47,6 +47,8 @@ public partial class PartGForm : System.Web.UI.Page
         cmd.Parameters.Add("@TestStroopa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTestStroopa.Text);
         cmd.Parameters.Add("@TestMinnesota", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTestMinnesota.Text);
         cmd.Parameters.Add("@InnePsychologiczne", SqlDbType.VarChar, 150).Value = DatabaseProcedures.getStringOrNull(textInnePsychologiczne.Text);
+        cmd.Parameters.Add("@OpisBadania", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textOpisBadania.Text);
+        cmd.Parameters.Add("@Wnioski", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textWnioski.Text);
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
@@ -90,7 +92,8 @@ public partial class PartGForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select TestZegara, MMSE, WAIS_R_Wiadomosci, WAIS_R_PowtarzanieCyfr, SkalaDepresjiBecka, TestFluencjiZwierzeta, TestFluencjiOstre, " +
-            "TestFluencjiK, TestLaczeniaPunktowA, TestLaczeniaPunktowB, TestUczeniaSlownoSluchowego, TestStroopa, TestMinnesota, InnePsychologiczne " +
+            "TestFluencjiK, TestLaczeniaPunktowA, TestLaczeniaPunktowB, TestUczeniaSlownoSluchowego, TestStroopa, TestMinnesota, InnePsychologiczne, " +
+            "OpisBadania, Wnioski " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
 
@@ -114,6 +117,8 @@ public partial class PartGForm : System.Web.UI.Page
                 textTestStroopa.Text = DatabaseProcedures.getTextByteValue(rdr["TestStroopa"]);
                 textTestMinnesota.Text = DatabaseProcedures.getTextByteValue(rdr["TestMinnesota"]);
                 textInnePsychologiczne.Text = DatabaseProcedures.getTextStringValue(rdr["InnePsychologiczne"]);
+                textOpisBadania.Text = DatabaseProcedures.getTextStringValue(rdr["OpisBadania"]);
+                textWnioski.Text = DatabaseProcedures.getTextStringValue(rdr["Wnioski"]);
             }
         }
         catch (SqlException ex)

@@ -132,7 +132,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.Parameters.Add("@PierwszyObjaw", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSymptom.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = byte.Parse(textTimeSymptom.Text);
         cmd.Parameters.Add("@DyskinezyObecnie", SqlDbType.TinyInt).Value = byte.Parse(dropDiskinesia.SelectedValue);
-        SqlParameter dyskinesiaDecimal = new SqlParameter("@CzasDyskinez", SqlDbType.Decimal);
+        SqlParameter dyskinesiaDecimal = new SqlParameter("@CzasDyskinezOdLat", SqlDbType.Decimal);
         dyskinesiaDecimal.Precision = 3;
         dyskinesiaDecimal.Scale = 1;
         dyskinesiaDecimal.Value = DatabaseProcedures.getDecimalOrNull(textTimeDiskinesia.Text);
@@ -202,7 +202,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select DataPrzyjecia, DataWypisu, Wyksztalcenie, Rodzinnosc, RokZachorowania, MiesiacZachorowania, " +
-            "PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, CzasDyskinez, FluktuacjeObecnie, FluktuacjeOdLat, " +
+            "PierwszyObjaw, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, CzasDyskinezOdLat, FluktuacjeObecnie, FluktuacjeOdLat, " +
             "Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, Zamieszkanie, NarazenieNaToks, DataOperacji, Uwagi from Wizyta where IdWizyta = " + appointmentId;
         cmd.Connection = con;
 
@@ -229,7 +229,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                 }
                 else
                 {
-                    textTimeDiskinesia.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasDyskinez"]);
+                    textTimeDiskinesia.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasDyskinezOdLat"]);
                     RequiredFieldValidator2.Enabled = true;
                 }
                 dropFluctuations.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["FluktuacjeObecnie"], NO_DATA.ToString());

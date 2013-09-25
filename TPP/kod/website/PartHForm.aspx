@@ -60,6 +60,12 @@
             </td>
         </tr>
         <tr>
+            <td>SPECT wynik:</td>
+            <td>
+                <asp:TextBox ID="textSPECTWynik" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td>MRI:</td>
             <td>
                 <asp:DropDownList ID="dropMRI" runat="server">
@@ -72,7 +78,7 @@
         <tr>
             <td>MRI wynik:</td>
             <td>
-                <asp:TextBox ID="textMRIwynik" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textMRIwynik" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -90,12 +96,6 @@
             <td>
                 <asp:DropDownList ID="dropUSGWynik" runat="server">
                 </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Kwas moczowy:</td>
-            <td>
-                <asp:TextBox ID="textKwasMoczowy" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -128,6 +128,72 @@
             <td>Surowica pozostało:</td>
             <td>
                 <asp:TextBox ID="textSurowicaPozostało" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Ferrytyna:</td>
+            <td>
+                <asp:TextBox ID="textFerrytyna" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>CRP:</td>
+            <td>
+                <asp:TextBox ID="textCRP" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>NTproCNP:</td>
+            <td>
+                <asp:TextBox ID="textNTproCNP" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>URCA:</td>
+            <td>
+                <asp:TextBox ID="textURCA" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>WitD:</td>
+            <td>
+                <asp:TextBox ID="textWitD" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>CHOL:</td>
+            <td>
+                <asp:TextBox ID="textCHOL" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>TGI:</td>
+            <td>
+                <asp:TextBox ID="textTGI" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>HDL:</td>
+            <td>
+                <asp:TextBox ID="textHDL" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>LDL:</td>
+            <td>
+                <asp:TextBox ID="textLDL" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>olLDL:</td>
+            <td>
+                <asp:TextBox ID="textolLDL" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Laboratoryjne inne:</td>
+            <td>
+                <asp:TextBox ID="textLaboratoryjneInne" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
             </td>
         </tr>
     </table>

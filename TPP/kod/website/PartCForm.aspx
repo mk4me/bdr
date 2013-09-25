@@ -13,7 +13,7 @@
         <tr>
             <td>LDopa:</td>
             <td>
-                <asp:DropDownList ID="dropLDopa" runat="server">
+                <asp:DropDownList ID="dropLdopa" runat="server">
                     <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
@@ -78,14 +78,14 @@
         <tr>
             <td>Cholinolityk:</td>
             <td>
-                <asp:DropDownList ID="dropCholinotyk" runat="server">
+                <asp:DropDownList ID="dropCholinolityk" runat="server">
                     <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
             <td>
-                <asp:TextBox ID="textCholinotyk" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textCholinolityk" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -99,6 +99,209 @@
             </td>
             <td>
                 <asp:TextBox ID="textLekiInne" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMOpis:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textL_STIMOpis" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMAmplitude:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textL_STIMAmplitude" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMDuration:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textL_STIMDuration" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMFrequency:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textL_STIMFrequency" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMOpis:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textR_STIMOpis" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMAmplitude:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textR_STIMAmplitude" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMDuration:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textR_STIMDuration" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMFrequency:</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textR_STIMFrequency" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>LDopa (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_Ldopa" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_LDopa" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Agonista (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_Agonista" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_Agonista" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Amantadyna (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_Amantadyna" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_Amantadyna" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>MAOBinh (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_MAOBinh" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_MAOBinh" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>COMTinh (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_COMTinh" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_COMTinh" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Cholinolityk (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_Cholinolityk" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_Cholinolityk" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>LekiInne (wypis):</td>
+            <td>
+                <asp:DropDownList ID="dropWypis_LekiInne" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+            <td>
+                <asp:TextBox ID="textWypis_LekiInne" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMOpis (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_L_STIMOpis" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMAmplitude (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_L_STIMAmplitude" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMDuration (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_L_STIMDuration" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>L_STIMFrequency (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_L_STIMFrequency" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMOpis (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_R_STIMOpis" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMAmplitude (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_R_STIMAmplitude" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMDuration (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_R_STIMDuration" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>R_STIMFrequenc (wypis):</td>
+            <td></td>
+            <td>
+                <asp:TextBox ID="textWypis_R_STIMFrequency" runat="server"></asp:TextBox>
             </td>
         </tr>
     </table>

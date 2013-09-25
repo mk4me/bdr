@@ -93,6 +93,18 @@
                 <asp:TextBox ID="textInnePsychologiczne" runat="server"></asp:TextBox>
             </td>
         </tr>
+        <tr>
+            <td>Opis badania:</td>
+            <td>
+                <asp:TextBox ID="textOpisBadania" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Wnioski:</td>
+            <td>
+                <asp:TextBox ID="textWnioski" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
+            </td>
+        </tr>
     </table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
     <br />

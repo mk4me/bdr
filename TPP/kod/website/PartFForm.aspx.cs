@@ -17,11 +17,14 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<TextBox[], string> UPDRSListCalculated2;
     private Tuple<DropDownList[], string> variantsHYscale;
     private Tuple<DropDownList[], string> variantsSchwabEnglandScale;
-    private Tuple<DropDownList[], string> variantsOkulografiaUrzadzenie;
-    private Tuple<DropDownList[], string> variantsWideo;
+    private Tuple<DropDownList[], string> variantsJazzNovo;
+    private Tuple<DropDownList[], string> variantsWideookulograf;
+    private Tuple<DropDownList[], string> variantsLatencymeter;
+    private List<Tuple<TextBox[], string>> variantsPartAList = new List<Tuple<TextBox[], string>>();
     private List<Tuple<DropDownList[], string>> variantsPartBList = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<TextBox[], string>> variantsPartBList2 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTremorometria;
+    private List<Tuple<TextBox[], string>> variantsPartBList3 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTestSchodkowy;
     private Tuple<TextBox[], string> variantsTestSchodkowyCzas1;
     private Tuple<TextBox[], string> variantsTestSchodkowyCzas2;
@@ -72,14 +75,50 @@ public partial class PartFForm : System.Web.UI.Page
 
         variantsHYscale = addVariantDropDowns("HYscale", tableUPDRSExtra, DatabaseProcedures.getEnumerationDecimalWithNoData("Badanie", "HYscale", NO_DATA_DECIMAL));
         variantsSchwabEnglandScale = addVariantDropDowns("SchwabEnglandScale", tableUPDRSExtra, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "SchwabEnglandScale", NO_DATA));
-        variantsOkulografiaUrzadzenie = addVariantDropDowns("OkulografiaUrzadzenie", tableUPDRSExtra, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "OkulografiaUrzadzenie", NO_DATA));
         Dictionary<byte, string> dictionaryYesNo = new Dictionary<byte, string>();
         dictionaryYesNo.Add(2, "");
         dictionaryYesNo.Add(0, "nie");
         dictionaryYesNo.Add(1, "tak");
-        variantsWideo = addVariantDropDowns("Wideo", tableUPDRSExtra, dictionaryYesNo);
+        variantsJazzNovo = addVariantDropDowns("JazzNovo", tableUPDRSExtra, dictionaryYesNo);
+        variantsWideookulograf = addVariantDropDowns("Wideookulograf", tableUPDRSExtra, dictionaryYesNo);
+        variantsLatencymeter = addVariantDropDowns("Latencymeter", tableUPDRSExtra, dictionaryYesNo);
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationLEFT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyLEFT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeLEFT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityLEFT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationRIGHT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyRIGHT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeRIGHT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityRIGHT", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationALL", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyALL", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeALL", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityALL", tableUPDRSExtra, true));
 
         variantsTremorometria = addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo);
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_3_4", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_4_5", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_5_6", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_6_7", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_7_8", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_8_9", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_9_10", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_23_24", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_0_1", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_1_2", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_2_3", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_3_4", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_4_5", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_5_6", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_6_7", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_7_8", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_8_9", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_9_10", tablePart2, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true));
+
         variantsTestSchodkowy = addVariantDropDowns("TestSchodkowy", tablePart2, dictionaryYesNo);
         variantsTestSchodkowyCzas1 = addVariantTextBoxes("TestSchodkowyCzas1", tablePart2, true);
         variantsTestSchodkowyCzas2 = addVariantTextBoxes("TestSchodkowyCzas2", tablePart2, true);
@@ -261,8 +300,17 @@ public partial class PartFForm : System.Web.UI.Page
         HYscaleDecimal.Value = DatabaseProcedures.getDecimalOrNullWithNoData(variantsHYscale.Item1[variant].SelectedValue, NO_DATA_DECIMAL.ToString());
         cmd.Parameters.Add(HYscaleDecimal);
         cmd.Parameters.Add("@" + variantsSchwabEnglandScale.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsSchwabEnglandScale.Item1[variant].SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@" + variantsOkulografiaUrzadzenie.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@" + variantsWideo.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsWideo.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsJazzNovo.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsJazzNovo.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsWideookulograf.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsWideookulograf.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsLatencymeter.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsLatencymeter.Item1[variant].SelectedValue);
+        for (int i = 0; i < variantsPartAList.Count; i++)
+        {
+            SqlParameter latencymeterDecimal = new SqlParameter("@" + variantsPartAList[i].Item2, SqlDbType.Decimal);
+            latencymeterDecimal.Precision = 6;
+            latencymeterDecimal.Scale = 2;
+            latencymeterDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartAList[i].Item1[variant].Text);
+            cmd.Parameters.Add(latencymeterDecimal);
+        }
         bool update = false;
         if (ViewState["VariantIds"] != null)
         {
@@ -331,6 +379,15 @@ public partial class PartFForm : System.Web.UI.Page
             testDecimal.Scale = 2;
             testDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartBList2[i].Item1[variant].Text);
             cmd.Parameters.Add(testDecimal);
+        }
+
+        for (int i = 0; i < variantsPartBList3.Count; i++)
+        {
+            SqlParameter tremorometriaDecimal = new SqlParameter("@" + variantsPartBList3[i].Item2, SqlDbType.Decimal);
+            tremorometriaDecimal.Precision = 7;
+            tremorometriaDecimal.Scale = 2;
+            tremorometriaDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartBList3[i].Item1[variant].Text);
+            cmd.Parameters.Add(tremorometriaDecimal);
         }
 
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
@@ -604,8 +661,21 @@ public partial class PartFForm : System.Web.UI.Page
             "UPDRS_TOTAL, " +
             "HYscale, " +
             "SchwabEnglandScale, " +
-            "OkulografiaUrzadzenie, " +
-            "Wideo " +
+            "JazzNovo, " +
+            "Wideookulograf, " +
+            "Latencymeter, " +
+            "LatencymeterDurationLEFT, " +
+            "LatencymeterLatencyLEFT, " +
+            "LatencymeterAmplitudeLEFT, " +
+            "LatencymeterPeakVelocityLEFT, " +
+            "LatencymeterDurationRIGHT, " +
+            "LatencymeterLatencyRIGHT, " +
+            "LatencymeterAmplitudeRIGHT, " +
+            "LatencymeterPeakVelocityRIGHT, " +
+            "LatencymeterDurationALL, " +
+            "LatencymeterLatencyALL, " +
+            "LatencymeterAmplitudeALL, " +
+            "LatencymeterPeakVelocityALL " +
             "from Badanie where IdBadanie = " + variantId;
         cmd.Connection = con;
         
@@ -627,8 +697,13 @@ public partial class PartFForm : System.Web.UI.Page
                 UPDRSListCalculated2.Item1[variant].Text = DatabaseProcedures.getTextByteValue(rdr[UPDRSListCalculated2.Item2]);
                 variantsHYscale.Item1[variant].SelectedValue = DatabaseProcedures.getDropDecimalValueWithNoData(rdr[variantsHYscale.Item2], NO_DATA_DECIMAL.ToString());
                 variantsSchwabEnglandScale.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsSchwabEnglandScale.Item2], NO_DATA.ToString());
-                variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsOkulografiaUrzadzenie.Item2], NO_DATA.ToString());
-                variantsWideo.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsWideo.Item2]);
+                variantsJazzNovo.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsJazzNovo.Item2]);
+                variantsWideookulograf.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsWideookulograf.Item2]);
+                variantsLatencymeter.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsLatencymeter.Item2]);
+                for (int i = 0; i < variantsPartAList.Count; i++)
+                {
+                    variantsPartAList[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartAList[i].Item2]);
+                }
             }
         }
         catch (SqlException ex)
@@ -651,6 +726,28 @@ public partial class PartFForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select Tremorometria, " +
+            "TremorometriaLEFT_0_1, " +
+            "TremorometriaLEFT_1_2, " +
+            "TremorometriaLEFT_2_3, " +
+            "TremorometriaLEFT_3_4, " +
+            "TremorometriaLEFT_4_5, " +
+            "TremorometriaLEFT_5_6, " +
+            "TremorometriaLEFT_6_7, " +
+            "TremorometriaLEFT_7_8, " +
+            "TremorometriaLEFT_8_9, " +
+            "TremorometriaLEFT_9_10, " +
+            "TremorometriaLEFT_23_24, " +
+            "TremorometriaRIGHT_0_1, " +
+            "TremorometriaRIGHT_1_2, " +
+            "TremorometriaRIGHT_2_3, " +
+            "TremorometriaRIGHT_3_4, " +
+            "TremorometriaRIGHT_4_5, " +
+            "TremorometriaRIGHT_5_6, " +
+            "TremorometriaRIGHT_6_7, " +
+            "TremorometriaRIGHT_7_8, " +
+            "TremorometriaRIGHT_8_9, " +
+            "TremorometriaRIGHT_9_10, " +
+            "TremorometriaRIGHT_23_24, " +
             "TestSchodkowy, " +
             "TestSchodkowyCzas1, " +
             "TestSchodkowyCzas2, " +
@@ -675,6 +772,10 @@ public partial class PartFForm : System.Web.UI.Page
                 for (int i = 0; i < variantsPartBList2.Count; i++)
                 {
                     variantsPartBList2[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartBList2[i].Item2]);
+                }
+                for (int i = 0; i < variantsPartBList3.Count; i++)
+                {
+                    variantsPartBList3[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartBList3[i].Item2]);
                 }
             }
         }
@@ -787,7 +888,9 @@ public partial class PartFForm : System.Web.UI.Page
             }
             variantsHYscale.Item1[variant].SelectedValue = NO_DATA_DECIMAL.ToString();
             variantsSchwabEnglandScale.Item1[variant].SelectedValue = NO_DATA.ToString();
-            variantsOkulografiaUrzadzenie.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsJazzNovo.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsWideookulograf.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsLatencymeter.Item1[variant].SelectedValue = NO_DATA.ToString();
             variantsTandemPivot.Item1[variant].SelectedValue = NO_DATA.ToString();
         }
     }
