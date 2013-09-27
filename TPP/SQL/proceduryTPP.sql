@@ -7,7 +7,7 @@ go
 create procedure list_users_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/TPPDB/AuthorizationService')
-	@elect Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
+	select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
 	from Uzytkownik
     for XML PATH('UserDetails'), root ('UserList')
 go
@@ -15,7 +15,7 @@ go
 -- last rev. 
 create procedure get_user ( @user_login varchar(30) )
 as
-	@elect Login, Imie, Nazwisko, Email
+	select Login, Imie, Nazwisko, Email
 	from Uzytkownik
 	where Login = @user_login
 go
@@ -26,7 +26,7 @@ create procedure validate_password(@login varchar(30), @pass varchar(25), @res b
 as
 begin
 declare @c int = 0;
-	@elect @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass) and Status > 0;
+	select @c = COUNT(*) from Uzytkownik where Login = @login and Haslo = HashBytes('SHA1',@pass) and Status > 0;
 if (@c = 1) set @res = 1; else set @res = 0;
 end;
 go
@@ -243,7 +243,7 @@ go
 
 create procedure get_enumeration_int( @table_name varchar(30), @attr_name varchar(50) )
 as
-	@elect Klucz as Value, Definicja as Label  from SlownikInt where Tabela = @table_name and Atrybut = @attr_name
+	select Klucz as Value, Definicja as Label  from SlownikInt where Tabela = @table_name and Atrybut = @attr_name
 go
 
 create function validate_input_decimal( @table_name varchar(30), @attr_name varchar(50), @value decimal(3,1) )
@@ -257,7 +257,7 @@ go
 
 create procedure get_enumeration_decimal( @table_name varchar(30), @attr_name varchar(50) )
 as
-	@elect Klucz as Value, Definicja as Label  from SlownikDecimal where Tabela = @table_name and Atrybut = @attr_name
+	select Klucz as Value, Definicja as Label  from SlownikDecimal where Tabela = @table_name and Atrybut = @attr_name
 go
 
 create function validate_input_varchar( @table_name varchar(30), @attr_name varchar(50), @value varchar(20) )
@@ -271,7 +271,7 @@ go
 
 create procedure get_enumeration_varchar( @table_name varchar(30), @attr_name varchar(50) )
 as
-	@elect Klucz as Value, Definicja as Label  from SlownikVarchar where Tabela = @table_name and Atrybut = @attr_name
+	select Klucz as Value, Definicja as Label  from SlownikVarchar where Tabela = @table_name and Atrybut = @attr_name
 go
 
 
@@ -1366,7 +1366,7 @@ begin
 			TestMinnesota = @TestMinnesota,
 			InnePsychologiczne = @InnePsychologiczne,
 			OpisBadania = @OpisBadania,
-			Wnioski = @Wnioski,
+			Wnioski = @Wnioski
 		where IdWizyta = @IdWizyta;
 
 	return;
@@ -1622,7 +1622,6 @@ begin
 	if dbo.validate_input_int('Badanie', 'UPDRS_IV', @UPDRS_IV) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_IV'; return; end;
 
 	if dbo.validate_input_int('Badanie', 'SchwabEnglandScale', @SchwabEnglandScale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute SchwabEnglandScale'; return; end;
-	if dbo.validate_input_int('Badanie', 'OkulografiaUrzadzenie', @OkulografiaUrzadzenie) = 0 begin set @result = 2; set @message = 'Invalid value for attribute OkulografiaUrzadzenie'; return; end;
 	if dbo.validate_input_decimal('Badanie', 'HYscale', @HYscale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute HYscale'; return; end;
 
 	-- /validations
@@ -1790,7 +1789,7 @@ begin
 				LatencymeterDurationALL = @LatencymeterDurationALL ,
 				LatencymeterLatencyALL = @LatencymeterLatencyALL ,
 				LatencymeterAmplitudeALL = @LatencymeterAmplitudeALL ,
-				LatencymeterPeakVelocityALL = @LatencymeterPeakVelocityALL ,
+				LatencymeterPeakVelocityALL = @LatencymeterPeakVelocityALL
 			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ;
 		end;
 	return;
@@ -1800,7 +1799,7 @@ go
 
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
-	@Tremorometria tinyint, 
+	@Tremorometria bit, 
 	@TremorometriaLEFT_0_1 decimal(7,2),
 	@TremorometriaLEFT_1_2 decimal(7,2),
 	@TremorometriaLEFT_2_3 decimal(7,2),
@@ -1822,7 +1821,7 @@ create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@TremorometriaRIGHT_7_8 decimal(7,2),
 	@TremorometriaRIGHT_8_9 decimal(7,2),
 	@TremorometriaRIGHT_9_10 decimal(7,2),
-	@TremorometriaRIGHT_23_24 decimal(7,2),	@	@-- ZMIANY - END
+	@TremorometriaRIGHT_23_24 decimal(7,2),	
 	@TestSchodkowy bit,
 	@TestSchodkowyCzas1 decimal(4,2),
 	@TestSchodkowyCzas2 decimal(4,2),
@@ -1975,7 +1974,7 @@ begin
 	set @patient_number = cast(@maxnum as varchar)+@patient_number; -- rozwiazanie tymczasowe
 	return;
 end;
-
+go
 
 
 
@@ -2467,9 +2466,9 @@ declare @message varchar(200);
 
 exec update_patient 'NUMER/TESTOWY', 1922, 12, 2, 'yxz', 2, 1, @res OUTPUT, @message OUTPUT;
 
-	@elect @res, @message;
+	select @res, @message;
 
-	@elect * from Pacjent
+	select * from Pacjent
 
 
 */
@@ -2483,7 +2482,7 @@ exec update_patient 'NUMER/TESTOWY', 1922, 12, 2, 'yxz', 2, 1, @res OUTPUT, @mes
 declare @message varchar(200);
 declare @res int;
 exec update_patient '2013-08-06/TEST1', 1950, 11, 1, 'Gpi', 2, 1, @res OUTPUT, @message OUTPUT;
-	@elect @message, @res;
+	select @message, @res;
 
 declare @message varchar(200);
 declare @res int;
@@ -2491,40 +2490,45 @@ declare @vis_id int;
 exec update_examination_questionnaire_partA '2013-08-06/TEST1', 1, '2012-11-23', '2012-11-23', '2012-11-24', 2, 1, 2008, 1, 6, 1, 1, 3.5, 1, 2.5, 1,
  1, 0, 2, 1, 0, 0, 'Uwagi',
  1, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
-	@elect @message as Message, @vis_id as Visit_ID, @res as Result;
+	select @message as Message, @vis_id as Visit_ID, @res as Result;
 go
 
-	@elect * from Wizyta
+	select * from Wizyta
 
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partB 1, 1, 2, 0, 0.5, 0, 2, 1, 1, 1, 2, 100.5, 0, 1, 0, 1, 'jeszcze inne', 10, 1,
   1, 0, 2, 4, 'uwagi objaw',
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
+
 
 declare @message varchar(200);
 declare @res int;
-exec update_examination_questionnaire_partC 1, 1, 10, 1, 30, 0, null, 0, null, 0, null, 1, 30, 1, 'leki inne xyz',
+exec update_examination_questionnaire_partC 1, 
+	1, 10, 1, 30, 0, null, 0, null, 0, null, 1, 30, 1, 'leki inne xyz',
+	'opis LS', 3300.1, 2200.1, 1000.0, 'opis RS', 2000.1, 1200.1, 1000.0, 
+	null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+	'opis LS', 3300.1, 2200.1, 1000.0, 'opis RS', 2000.1, 1200.1, 1000.0, 
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
 
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partD 1, 3, 1, 0, 3, 'uwagi', 1, 12, 10,
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect dbo.validate_input_int('Wizyta', 'LimitDysfagii', 10)
-	@elect dbo.validate_input_int('Wizyta', 'WynikWechu', 10)
+	select dbo.validate_input_int('Wizyta', 'LimitDysfagii', 10)
+	select dbo.validate_input_int('Wizyta', 'WynikWechu', 10)
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
 
 declare @message varchar(200);
@@ -2532,8 +2536,8 @@ declare @res int;
 exec update_examination_questionnaire_partE 1, 
 	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1,
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
-	@elect * from Wizyta
+	select @message as Message, @res as Result;
+	select * from Wizyta
 go
 
 declare @message varchar(200);
@@ -2541,22 +2545,22 @@ declare @res int;
 exec update_examination_questionnaire_partF 1, 
 	4, 7, 10, 13, 17,
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
 
 
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partG 1, 
-	1, 
-	2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 'psychologiczne inne',
+	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 'psychologiczne inne', 'opis', 'wnioski',
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
+
 
 
 declare @message varchar(200);
@@ -2564,11 +2568,12 @@ declare @res int;
 exec update_examination_questionnaire_partH 1, 
 	1, 
 	1, 5, 10,
-	0, 1, 1, 'MRI wynik', 1, 2, 300.55, 1, 'genetyka wynik', 1, 'surowica pozosta³o',
+	0, 1, 'SPECT wynik', 1, 'MRI wynik', 1, 2, 1, 'genetyka wynik', 1, 'surowica pozosta³o',
+	3333.333, 1111.111, 2222.222, 3333.333, 1111.111, 2222.222, 3333.333, 1111.111, 2222.222, 4444.444, 'wynik laboratoryjne',
  'test', @res OUTPUT,  @message OUTPUT;
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Wizyta
+	select * from Wizyta
 go
 
 -- testowanie wariantow
@@ -2614,13 +2619,17 @@ update_variant_examination_data_partA  1, 3, 0,
 2.5,
 70,
 1,
+1,
 0,
 1,
+2222.00, 2222.00, 2222.00, 2222.00,
+2222.00, 2222.00, 2222.00, 2222.00,
+2222.00, 2222.00, 2222.00, 2222.00,
 'test',
 @res OUTPUT, @variant_id OUTPUT, @message OUTPUT
-	@elect @message as Message, @res as Result, @variant_id as IdBadanie;
+	select @message as Message, @res as Result, @variant_id as IdBadanie;
 
-	@elect * from Badanie
+	select * from Badanie
 
 
 declare @message varchar(200);
@@ -2628,20 +2637,16 @@ declare @res int;
 
 exec
 update_variant_examination_data_partB  1,
-0,
 1,
-30.3,
-31.3,
-1,
-20.0,
-21,
-1,
-0,
+44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50,
+44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50, 44444.50,
+1, 11.11, 11.11, 1, 22.22, 22.22,
+1, 0,
 'test',
 @res OUTPUT, @message OUTPUT
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Badanie
+	select * from Badanie
 
 declare @message varchar(200);
 declare @res int;
@@ -2657,8 +2662,8 @@ update_variant_examination_data_partC  1,
 	11.9,
 'test',
 @res OUTPUT, @message OUTPUT
-	@elect @message as Message, @res as Result;
+	select @message as Message, @res as Result;
 
-	@elect * from Badanie
+	select * from Badanie
 
 */

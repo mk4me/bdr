@@ -2,11 +2,11 @@ CREATE DATABASE TPP
 
 ON
 PRIMARY ( NAME = TPP1,
-    FILENAME = 'E:\Baza\TPP.mdf'),
+    FILENAME = 'S:\Baza\TPP.mdf'),
 FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
-    FILENAME = 'E:\Baza\filestream')
+    FILENAME = 'S:\Baza\filestream')
 LOG ON  ( NAME = TPPlog1,
-    FILENAME = 'E:\Baza\TPPlog.ldf')
+    FILENAME = 'S:\Baza\TPPlog.ldf')
 COLLATE Polish_CI_AS;
 GO
 
@@ -20,12 +20,7 @@ go
 -- 	Wartości wymagane, wartości opcjonalne ? Dopuszczamy wartości NULL we wszystkich polach, z wyjątkiem kluczy obcych oraz identyfikatra wizyty
 -- 	Atrybuty dla przechowywania plików ? Zrobione
 
--- 	Sobota
---		Identyfikacja pacjenta ? (Numer, Hash Imienia oraz Nazwiska)
--- 		Weryfikacja danych z Excela
--- 		Wartości wymagane, wartości opcjonalne ?
--- 		Uwagi na czerwono z pliku Excela
--- 		Dane !!!
+
 
 
 
@@ -239,7 +234,6 @@ create table Wizyta (
 	MRIwynik varchar(2000),
 	USGsrodmozgowia tinyint,
 	USGWynik tinyint,
-	KwasMoczowy decimal(6,2),
 	Genetyka bit,
 	GenetykaWynik varchar(50),
 	Surowica bit,
@@ -331,7 +325,7 @@ create table Badanie  (
 	LatencymeterAmplitudeALL decimal(6,2),
 	LatencymeterPeakVelocityALL decimal(6,2),
 -- variant tests B
-	Tremorometria	tinyint, -- zmiana z bit
+	Tremorometria	bit,
 	TremorometriaLEFT_0_1 decimal(7,2),
 	TremorometriaLEFT_1_2 decimal(7,2),
 	TremorometriaLEFT_2_3 decimal(7,2),
