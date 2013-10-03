@@ -83,7 +83,7 @@ public partial class PatientForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[update_patient]";
+        cmd.CommandText = "[dbo].[update_patient_l]";
         cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = number;
         cmd.Parameters.Add("@RokUrodzenia", SqlDbType.SmallInt).Value = (short)birthYear;
         cmd.Parameters.Add("@MiesiacUrodzenia", SqlDbType.TinyInt).Value = (byte)birthMonth;
@@ -91,6 +91,7 @@ public partial class PatientForm : System.Web.UI.Page
         cmd.Parameters.Add("@Lokalizacja", SqlDbType.VarChar, 10).Value = location;
         cmd.Parameters.Add("@LiczbaElektrod", SqlDbType.TinyInt).Value = (byte)electrodes;
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
         cmd.Parameters.Add("@message", SqlDbType.VarChar, 200);
