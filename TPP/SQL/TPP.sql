@@ -53,9 +53,12 @@ CREATE TABLE Pacjent (
 	NumerPacjenta	varchar(20) not null unique,
 	RokUrodzenia smallint,
 	MiesiacUrodzenia tinyint,
-	Plec tinyint,	-- bit + b.d.
-	Lokalizacja varchar(10), -- do potwierdzenia !!!
-	LiczbaElektrod tinyint	-- do potwierdzenia, czy tutaj !!!
+	Plec tinyint,
+	Lokalizacja varchar(10), 
+	LiczbaElektrod tinyint,	
+	Wprowadzil	int not null,
+	Zmodyfikowal int not null,
+	OstatniaZmiana datetime not null
 )
 go
 
@@ -69,8 +72,25 @@ ALTER TABLE Pacjent
 go
 
 
+select * from Uzytkownik
+
+/* 
+alter table Pacjent add Wprowadzil int not null default 1;
+alter table Pacjent add Zmodyfikowal int not null default 1;
+alter table Pacjent add OstatniaZmiana datetime not null default '2013-10-01T12:12:12.000';
+*/
+alter table Pacjent
+	add foreign key ( Wprowadzil ) references Uzytkownik;
+go
+
+alter table Pacjent
+	add foreign key ( Zmodyfikowal ) references Uzytkownik;
+go
 
 
+-- drop table Plik;
+-- drop table Badanie;
+-- drop table Wizyta;
 
 create table Wizyta (
 -- dane epidemiologiczne (część A)
@@ -78,51 +98,65 @@ create table Wizyta (
 	RodzajWizyty decimal(2,1) not null,
 	IdPacjent	int	not null,
 	DataPrzyjecia date,
-	DataOperacji date,
 	DataWypisu date,
-	Wprowadzil int,
+	MasaCiala	decimal(4,1),
+	DataOperacji date,
 	Wyksztalcenie	tinyint,
 	Rodzinnosc	tinyint,		-- bit + b.d.
 	RokZachorowania	smallint,
 	MiesiacZachorowania tinyint,
+	RokBadania smallint,
+	MiesiacBadania tinyint,
 	PierwszyObjaw	tinyint,
+	Drzenie	tinyint,
+	Sztywnosc	tinyint,
+	Spowolnienie	tinyint,
+	ObjawyInne	tinyint,
+	ObjawyInneJakie	varchar(80),
 	CzasOdPoczObjDoWlLDopy	tinyint,	-- miesiecy
 	DyskinezyObecnie	tinyint, 	-- bit + b.d.
-	CzasDyskinezOdLat	decimal(3,1), -- od lat
+	DyskinezyOdLat	decimal(3,1), -- od lat
 	FluktuacjeObecnie	tinyint,	-- bit + b.d.
 	FluktuacjeOdLat	decimal(3,1),
+	CzasDyskinez decimal(3,1), -- h/dobe
+	CzasOFF decimal(3,1), -- h/dobe
+	PoprawaPoLDopie	tinyint,
+
+
+
+-- wywiad część B
+
+	PrzebyteLeczenieOperacyjnePD tinyint,
 	Papierosy	tinyint,
 	Kawa	tinyint,
 	ZielonaHerbata tinyint,
 	Alkohol	tinyint,
 	ZabiegowWZnieczOgPrzedRozpoznaniemPD tinyint,
 	Zamieszkanie tinyint,
-	NarazenieNaToks	tinyint,
 	Uwagi varchar(50),
--- wywiad część B
+	Nadcisnienie tinyint,
+	BlokeryKanWapn tinyint,
+	DominujacyObjawObecnie tinyint,
+	DominujacyObjawUwagi varchar(50),
+	ObjawyAutonomiczne tinyint,
+
 	RLS	tinyint,
 	ObjawyPsychotyczne	tinyint,
 	Depresja	tinyint,
 	Otepienie	decimal(2,1),
 	Dyzartria 	tinyint,
+	DysfagiaObjaw tinyint,
 	RBD	tinyint,
 	ZaburzenieRuchomosciGalekOcznych	tinyint,
 	Apraksja	tinyint,
 	TestKlaskania	tinyint,
 	ZaburzeniaWechowe	tinyint,
-	MasaCiala	decimal(4,1),
-	Drzenie	tinyint,
-	Sztywnosc	tinyint,
-	Spowolnienie	tinyint,
-	ObjawyInne	tinyint,
-	ObjawyInneJakie	varchar(80),
-	CzasOFF	tinyint,
-	PoprawaPoLDopie	tinyint,
-	PrzebyteLeczenieOperacyjnePD tinyint,
-	Nadcisnienie tinyint,
-	BlokeryKanWapn tinyint,
-	DominujacyObjawObecnie tinyint,
-	DominujacyObjawUwagi varchar(50),
+
+
+
+
+
+
 -- leki - dotychczasowe (czesc C)
 	Ldopa tinyint,
 	LDopaObecnie smallint,
@@ -229,7 +263,7 @@ create table Wizyta (
 	LimitDysfagii tinyint,
 	pH_metriaPrzełyku bit,
 	SPECT bit,
-	SPECTWynik varchar(2000),
+	-- SPECTWynik - zastapiony wielowarosciowym;
 	MRI	bit,
 	MRIwynik varchar(2000),
 	USGsrodmozgowia tinyint,
@@ -249,7 +283,10 @@ create table Wizyta (
 	HDL decimal(7,3),
 	LDL decimal(7,3),
 	olLDL decimal(7,3),
-	LaboratoryjneInne varchar(1000)
+	LaboratoryjneInne varchar(1000),
+	Wprowadzil	int not null,
+	Zmodyfikowal int not null,
+	OstatniaZmiana datetime not null
 )
 go
 
@@ -257,6 +294,18 @@ alter table Wizyta
 		add primary key ( IdWizyta)
 go
 
+/* 
+alter table Wizyta add Wprowadzil int not null default 1;
+alter table Wizyta add Zmodyfikowal int not null default 1;
+alter table Wizyta add OstatniaZmiana datetime not null default '2013-10-01T12:12:12.000';
+*/
+alter table Wizyta
+	add foreign key ( Wprowadzil ) references Uzytkownik;
+go
+
+alter table Wizyta
+	add foreign key ( Zmodyfikowal ) references Uzytkownik;
+go
 
 alter table Wizyta
         add foreign key (IdPacjent)
@@ -363,7 +412,10 @@ create table Badanie  (
 	UpAndGoKubekLewa	decimal(3,1),
 	TST	decimal(3,1),
 	TandemPivot	tinyint,
-	WTT	decimal(3,1)
+	WTT	decimal(3,1),
+	Wprowadzil	int not null,
+	Zmodyfikowal int not null,
+	OstatniaZmiana datetime not null	
 )
 go
 
@@ -377,7 +429,16 @@ alter table Badanie
 		references Wizyta;
 go
 	
+/* 
+alter table Badanie add Wprowadzil int not null default 1;
+alter table Badanie add Zmodyfikowal int not null default 1;
+alter table Badanie add OstatniaZmiana datetime not null default '2013-10-01T12:12:12.000';
+*/
+alter table Badanie
+	add foreign key ( Wprowadzil ) references Uzytkownik;
 
+alter table Badanie
+	add foreign key ( Zmodyfikowal ) references Uzytkownik;
 
 CREATE UNIQUE NONCLUSTERED INDEX X1Badanie
 ON Badanie ( IdWizyta, DBS, BMT)
@@ -411,11 +472,14 @@ alter table Plik
 go
 
 
+-- drop table SlownikInt
+
 CREATE TABLE SlownikInt (
+	IdSlownikInt int identity,
 	Tabela  varchar(30) not null,
 	Atrybut	varchar(50) not null,
 	Klucz	tinyint not null,
-	Definicja	varchar(50) not null
+	Definicja	varchar(100) not null
 )
 go
 
@@ -432,6 +496,59 @@ CREATE INDEX X2SlownikInt ON SlownikInt (
 	Klucz
 )
 go
+
+CREATE TABLE Atrybut (
+	IdAtrybut int identity,
+	Tabela  varchar(30) not null,
+	Nazwa	varchar(50) not null,
+)
+go
+
+ALTER TABLE Atrybut
+	ADD PRIMARY KEY (IdAtrybut)
+go
+
+
+CREATE INDEX X1Atrybut ON Atrybut (
+	Tabela, Nazwa
+)
+go
+
+create table WartoscAtrybutuWizytyInt (
+	IdAtrybut int not null,
+	IdWizyta int not null,
+	Wartosc int
+)
+go
+
+alter table WartoscAtrybutuWizytyInt
+	add foreign key  (IdAtrybut) references Atrybut;
+go
+
+alter table WartoscAtrybutuWizytyInt
+	add foreign key  (IdWizyta) references Wizyta;
+go
+
+
+
+
+create table WartoscAtrybutuBadaniaInt (
+	IdAtrybut int not null,
+	IdBadanie int not null,
+	Wartosc int
+)
+go
+
+alter table WartoscAtrybutuBadaniaInt
+	add foreign key  (IdAtrybut) references Atrybut;
+go
+
+alter table WartoscAtrybutuBadaniaInt
+	add foreign key  (IdBadanie) references Badanie;
+go
+
+
+
 
 CREATE TABLE SlownikDecimal (
 	Tabela  varchar(30) not null,
