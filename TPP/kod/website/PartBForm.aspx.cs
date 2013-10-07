@@ -30,20 +30,50 @@ public partial class PartBForm : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
-            dropOtepienie.DataTextField = "Value";
-            dropOtepienie.DataValueField = "Key";
-            dropOtepienie.DataBind();
-
             dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PrzebyteLeczenieOperacyjnePD", NO_DATA);
             dropPrzebyteLeczenieOperacyjne.DataTextField = "Value";
             dropPrzebyteLeczenieOperacyjne.DataValueField = "Key";
             dropPrzebyteLeczenieOperacyjne.DataBind();
 
+            dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Papierosy", NO_DATA);
+            dropCigarettes.DataTextField = "Value";
+            dropCigarettes.DataValueField = "Key";
+            dropCigarettes.DataBind();
+
+            dropCoffee.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Kawa", NO_DATA);
+            dropCoffee.DataTextField = "Value";
+            dropCoffee.DataValueField = "Key";
+            dropCoffee.DataBind();
+
+            dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Alkohol", NO_DATA);
+            dropAlcohol.DataTextField = "Value";
+            dropAlcohol.DataValueField = "Key";
+            dropAlcohol.DataBind();
+            /*
+            dropToxic.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "NarazenieNaToks", NO_DATA);
+            dropToxic.DataTextField = "Value";
+            dropToxic.DataValueField = "Key";
+            dropToxic.DataBind();
+            */
+            dropZamieszkanie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Zamieszkanie", NO_DATA);
+            dropZamieszkanie.DataTextField = "Value";
+            dropZamieszkanie.DataValueField = "Key";
+            dropZamieszkanie.DataBind();
+
             dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "DominujacyObjawObecnie", NO_DATA);
             dropDominujacyObjawObecnie.DataTextField = "Value";
             dropDominujacyObjawObecnie.DataValueField = "Key";
             dropDominujacyObjawObecnie.DataBind();
+
+            dropObjawyAutonomiczne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "ObjawyAutonomiczne", NO_DATA);
+            dropObjawyAutonomiczne.DataTextField = "Value";
+            dropObjawyAutonomiczne.DataValueField = "Key";
+            dropObjawyAutonomiczne.DataBind();
+
+            dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
+            dropOtepienie.DataTextField = "Value";
+            dropOtepienie.DataValueField = "Key";
+            dropOtepienie.DataBind();
         }
     }
 
@@ -54,6 +84,20 @@ public partial class PartBForm : System.Web.UI.Page
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_examination_questionnaire_partB]";
         cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
+        cmd.Parameters.Add("@PrzebyteLeczenieOperacyjnePD", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropPrzebyteLeczenieOperacyjne.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Papierosy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropCigarettes.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Kawa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropCoffee.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@ZielonaHerbata", SqlDbType.TinyInt).Value = byte.Parse(dropGreenTea.SelectedValue);
+        cmd.Parameters.Add("@Alkohol", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropAlcohol.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = byte.Parse(textTreatmentNumber.Text);
+        //cmd.Parameters.Add("@NarazenieNaToks", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropToxic.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropZamieszkanie.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = textNotes.Text;
+        cmd.Parameters.Add("@Nadcisnienie", SqlDbType.TinyInt).Value = byte.Parse(dropNadcisnienie.SelectedValue);
+        cmd.Parameters.Add("@BlokeryKanWapn", SqlDbType.TinyInt).Value = byte.Parse(dropBlokery.SelectedValue);
+        cmd.Parameters.Add("@DominujacyObjawObecnie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropDominujacyObjawObecnie.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@DominujacyObjawUwagi", SqlDbType.VarChar, 50).Value = textDominujacyObjawUwagi.Text.ToString();
+        cmd.Parameters.Add("@ObjawyAutonomiczne", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropObjawyAutonomiczne.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@RLS", SqlDbType.TinyInt).Value = byte.Parse(dropRLS.SelectedValue);
         cmd.Parameters.Add("@ObjawyPsychotyczne", SqlDbType.TinyInt).Value = byte.Parse(dropPsychotyczne.SelectedValue);
         cmd.Parameters.Add("@Depresja", SqlDbType.TinyInt).Value = byte.Parse(dropDepresja.SelectedValue);
@@ -63,28 +107,12 @@ public partial class PartBForm : System.Web.UI.Page
         otepienieDecimal.Value = DatabaseProcedures.getDecimalOrNullWithNoData(dropOtepienie.SelectedValue, NO_DATA_DECIMAL.ToString());
         cmd.Parameters.Add(otepienieDecimal);
         cmd.Parameters.Add("@Dyzartria", SqlDbType.TinyInt).Value = byte.Parse(dropDyzartia.SelectedValue);
+        cmd.Parameters.Add("@DysfagiaObjaw", SqlDbType.TinyInt).Value = byte.Parse(dropDysfagiaObjaw.SelectedValue);
         cmd.Parameters.Add("@RBD", SqlDbType.TinyInt).Value = byte.Parse(dropRBD.SelectedValue);
         cmd.Parameters.Add("@ZaburzenieRuchomosciGalekOcznych", SqlDbType.TinyInt).Value = byte.Parse(dropZaburzeniaGalek.SelectedValue);
         cmd.Parameters.Add("@Apraksja", SqlDbType.TinyInt).Value = byte.Parse(dropApraksja.SelectedValue);
         cmd.Parameters.Add("@TestKlaskania", SqlDbType.TinyInt).Value = byte.Parse(dropKlaskanie.SelectedValue);
         cmd.Parameters.Add("@ZaburzeniaWechowe", SqlDbType.TinyInt).Value = byte.Parse(dropZaburzeniaWechowe.SelectedValue);
-        SqlParameter masaCialaDecimal = new SqlParameter("@MasaCiala", SqlDbType.Decimal);
-        masaCialaDecimal.Precision = 4;
-        masaCialaDecimal.Scale = 1;
-        masaCialaDecimal.Value = DatabaseProcedures.getDecimalOrNull(textMasa.Text);
-        cmd.Parameters.Add(masaCialaDecimal);
-        cmd.Parameters.Add("@Drzenie", SqlDbType.TinyInt).Value = byte.Parse(dropDrzenie.SelectedValue);
-        cmd.Parameters.Add("@Sztywnosc", SqlDbType.TinyInt).Value = byte.Parse(dropSztywnosc.SelectedValue);
-        cmd.Parameters.Add("@Spowolnienie", SqlDbType.TinyInt).Value = byte.Parse(dropSpowolnienie.SelectedValue);
-        cmd.Parameters.Add("@ObjawyInne", SqlDbType.TinyInt).Value = byte.Parse(dropObjawy.SelectedValue);
-        cmd.Parameters.Add("@ObjawyInneJakie", SqlDbType.VarChar, 80).Value = textObjawy.Text.ToString();
-        cmd.Parameters.Add("@CzasOFF", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCzasOFF.Text);
-        cmd.Parameters.Add("@PoprawaPoLDopie", SqlDbType.TinyInt).Value = byte.Parse(dropPoprawa.SelectedValue);
-        cmd.Parameters.Add("@PrzebyteLeczenieOperacyjnePD", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropPrzebyteLeczenieOperacyjne.SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@Nadcisnienie", SqlDbType.TinyInt).Value = byte.Parse(dropNadcisnienie.SelectedValue);
-        cmd.Parameters.Add("@BlokeryKanWapn", SqlDbType.TinyInt).Value = byte.Parse(dropBlokery.SelectedValue);
-        cmd.Parameters.Add("@DominujacyObjawObecnie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropDominujacyObjawObecnie.SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@DominujacyObjawUwagi", SqlDbType.VarChar, 50).Value = textDominujacyObjawUwagi.Text.ToString();
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
         cmd.Parameters["@result"].Direction = ParameterDirection.Output;
@@ -127,9 +155,11 @@ public partial class PartBForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select RLS, ObjawyPsychotyczne, Depresja, Otepienie, Dyzartria, RBD, ZaburzenieRuchomosciGalekOcznych, " +
+        cmd.CommandText = "select PrzebyteLeczenieOperacyjnePD, Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, " +
+            //NarazenieNaToks,
+            "Zamieszkanie, Uwagi, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi, ObjawyAutonomiczne, RLS, ObjawyPsychotyczne, Depresja, Otepienie, Dyzartria, DysfagiaObjaw, RBD, ZaburzenieRuchomosciGalekOcznych, " +
             "Apraksja, TestKlaskania, ZaburzeniaWechowe, MasaCiala, Drzenie, Sztywnosc, Spowolnienie, " +
-            "ObjawyInne, ObjawyInneJakie, CzasOFF, PoprawaPoLDopie, PrzebyteLeczenieOperacyjnePD, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi from Wizyta where IdWizyta = " + Session["AppointmentId"];
+            "ObjawyInne, ObjawyInneJakie, CzasOFF, PoprawaPoLDopie from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
 
         try
@@ -138,29 +168,31 @@ public partial class PartBForm : System.Web.UI.Page
             SqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
+                dropPrzebyteLeczenieOperacyjne.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PrzebyteLeczenieOperacyjnePD"], NO_DATA.ToString());
+                dropCigarettes.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Papierosy"], NO_DATA.ToString());
+                dropCoffee.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Kawa"], NO_DATA.ToString());
+                dropGreenTea.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ZielonaHerbata"], NO_DATA.ToString());
+                dropAlcohol.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Alkohol"], NO_DATA.ToString());
+                textTreatmentNumber.Text = DatabaseProcedures.getTextByteValue(rdr["ZabiegowWZnieczOgPrzedRozpoznaniemPD"]);
+                //dropToxic.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["NarazenieNaToks"], NO_DATA.ToString());
+                dropZamieszkanie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Zamieszkanie"], NO_DATA.ToString());
+                textNotes.Text = DatabaseProcedures.getTextStringValue(rdr["Uwagi"]);
+                dropNadcisnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Nadcisnienie"]);
+                dropBlokery.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["BlokeryKanWapn"]);
+                dropDominujacyObjawObecnie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DominujacyObjawObecnie"], NO_DATA.ToString());
+                textDominujacyObjawUwagi.Text = DatabaseProcedures.getTextStringValue(rdr["DominujacyObjawUwagi"]);
+                dropObjawyAutonomiczne.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ObjawyAutonomiczne"], NO_DATA.ToString());
                 dropRLS.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["RLS"]);
                 dropPsychotyczne.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ObjawyPsychotyczne"]);
                 dropDepresja.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Depresja"]);
                 dropOtepienie.SelectedValue = DatabaseProcedures.getDropDecimalValueWithNoData(rdr["Otepienie"], NO_DATA_DECIMAL.ToString());
                 dropDyzartia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Dyzartria"]);
+                dropDysfagiaObjaw.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DysfagiaObjaw"], NO_DATA.ToString());
                 dropRBD.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["RBD"]);
                 dropZaburzeniaGalek.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ZaburzenieRuchomosciGalekOcznych"]);
                 dropApraksja.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Apraksja"]);
                 dropKlaskanie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["TestKlaskania"]);
                 dropZaburzeniaWechowe.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ZaburzeniaWechowe"]);
-                textMasa.Text = DatabaseProcedures.getTextDecimalValue(rdr["MasaCiala"]);
-                dropDrzenie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Drzenie"]);
-                dropSztywnosc.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Sztywnosc"]);
-                dropSpowolnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Spowolnienie"]);
-                dropObjawy.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ObjawyInne"]);
-                textObjawy.Text = DatabaseProcedures.getTextStringValue(rdr["ObjawyInneJakie"]);
-                textCzasOFF.Text = DatabaseProcedures.getTextByteValue(rdr["CzasOFF"]);
-                dropPoprawa.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["PoprawaPoLDopie"]);
-                dropPrzebyteLeczenieOperacyjne.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PrzebyteLeczenieOperacyjnePD"], NO_DATA.ToString());
-                dropNadcisnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Nadcisnienie"]);
-                dropBlokery.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["BlokeryKanWapn"]);
-                dropDominujacyObjawObecnie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DominujacyObjawObecnie"], NO_DATA.ToString());
-                textDominujacyObjawUwagi.Text = DatabaseProcedures.getTextStringValue(rdr["DominujacyObjawUwagi"]);
             }
         }
         catch (SqlException ex)

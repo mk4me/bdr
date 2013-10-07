@@ -59,7 +59,7 @@ public partial class PartHForm : System.Web.UI.Page
         cmd.Parameters.Add("@LimitDysfagii", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropLimitDysfagii.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@pH_metriaPrzełyku", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(droppHmetriaPrzełyku.SelectedValue);
         cmd.Parameters.Add("@SPECT", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropSPECT.SelectedValue);
-        cmd.Parameters.Add("@SPECTWynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textSPECTWynik.Text);
+        //cmd.Parameters.Add("@SPECTWynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textSPECTWynik.Text);
         cmd.Parameters.Add("@MRI", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropMRI.SelectedValue);
         cmd.Parameters.Add("@MRIwynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textMRIwynik.Text);
         cmd.Parameters.Add("@USGsrodmozgowia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropUSGsrodmozgowia.SelectedValue);
@@ -131,8 +131,9 @@ public partial class PartHForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select Holter, BadanieWechu, WynikWechu, LimitDysfagii, pH_metriaPrzełyku, SPECT, SPECTWynik, MRI, " +
-            "MRIwynik, USGsrodmozgowia, USGWynik, Genetyka, GenetykaWynik, Surowica, SurowicaPozostało, " +
+        cmd.CommandText = "select Holter, BadanieWechu, WynikWechu, LimitDysfagii, pH_metriaPrzełyku, SPECT, " +
+        //SPECTWynik
+            "MRI, MRIwynik, USGsrodmozgowia, USGWynik, Genetyka, GenetykaWynik, Surowica, SurowicaPozostało, " +
             "Ferrytyna, CRP, NTproCNP, URCA, WitD, CHOL, TGI, HDL, LDL, olLDL, LaboratoryjneInne " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
@@ -149,7 +150,7 @@ public partial class PartHForm : System.Web.UI.Page
                 dropLimitDysfagii.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["LimitDysfagii"], NO_DATA.ToString());
                 droppHmetriaPrzełyku.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["pH_metriaPrzełyku"]);
                 dropSPECT.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["SPECT"]);
-                textSPECTWynik.Text = DatabaseProcedures.getTextStringValue(rdr["SPECTWynik"]);
+                //textSPECTWynik.Text = DatabaseProcedures.getTextStringValue(rdr["SPECTWynik"]);
                 dropMRI.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["MRI"]);
                 textMRIwynik.Text = DatabaseProcedures.getTextStringValue(rdr["MRIwynik"]);
                 dropUSGsrodmozgowia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["USGsrodmozgowia"]);

@@ -6,6 +6,118 @@
     <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
+            <td>Przebyte leczenie operacyjne:</td>
+            <td>
+                <asp:DropDownList ID="dropPrzebyteLeczenieOperacyjne" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Papierosy:</td>
+            <td>
+                <asp:DropDownList ID="dropCigarettes" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Kawa:</td>
+            <td>
+                <asp:DropDownList ID="dropCoffee" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Zielona herbata:</td>
+            <td>
+                <asp:DropDownList ID="dropGreenTea" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Alkohol:</td>
+            <td>
+                <asp:DropDownList ID="dropAlcohol" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Liczba zabiegów w znieczuleniu<br />ogólnym przed rozpoznaniem PD:</td>
+            <td>
+                <asp:TextBox ID="textTreatmentNumber" runat="server"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
+                    ErrorMessage="*" ControlToValidate="textTreatmentNumber"></asp:RequiredFieldValidator>
+                <asp:RegularExpressionValidator Runat="server" ID="RegularExpressionValidator4" 
+                    ControlToValidate="textTreatmentNumber"
+                    ErrorMessage="Proszę podać liczbę od 0 do 255."
+                    ValidationExpression="^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$"></asp:RegularExpressionValidator>
+            </td>
+        </tr>
+        <%--
+        <tr>
+            <td>Narażenie na toksyczność:</td>
+            <td>
+                <asp:DropDownList ID="dropToxic" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        --%>
+        <tr>
+            <td>Zamieszkanie:</td>
+            <td>
+                <asp:DropDownList ID="dropZamieszkanie" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Uwagi:</td>
+            <td>
+                <asp:TextBox ID="textNotes" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Nadciśnienie:</td>
+            <td>
+                <asp:DropDownList ID="dropNadcisnienie" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Blokery kanału wapniowego:</td>
+            <td>
+                <asp:DropDownList ID="dropBlokery" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Dominujący objaw obecnie:</td>
+            <td>
+                <asp:DropDownList ID="dropDominujacyObjawObecnie" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Dominujący objaw uwagi:</td>
+            <td>
+                <asp:TextBox ID="textDominujacyObjawUwagi" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Objawy autonomiczne:</td>
+            <td>
+                <asp:DropDownList ID="dropObjawyAutonomiczne" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
             <td>RLS:</td>
             <td>
                 <asp:DropDownList ID="dropRLS" runat="server">
@@ -49,6 +161,16 @@
                     <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Dysfagia objaw:</td>
+            <td>
+                <asp:DropDownList ID="dropDysfagiaObjaw" runat="server">
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
+                    <asp:ListItem Value="0">nie</asp:ListItem>
                 </asp:DropDownList>
             </td>
         </tr>
@@ -100,114 +222,6 @@
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Masa ciała:</td>
-            <td>
-                <asp:TextBox ID="textMasa" runat="server"></asp:TextBox>
-            </td>
-        </tr>
-        <tr>
-            <td>Drżenie:</td>
-            <td>
-                <asp:DropDownList ID="dropDrzenie" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Sztywność:</td>
-            <td>
-                <asp:DropDownList ID="dropSztywnosc" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Spowolnienie:</td>
-            <td>
-                <asp:DropDownList ID="dropSpowolnienie" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Objawy inne:</td>
-            <td>
-                <asp:DropDownList ID="dropObjawy" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Objawy inne. Jakie?:</td>
-            <td>
-                <asp:TextBox ID="textObjawy" runat="server"></asp:TextBox>
-            </td>
-        </tr>
-        <tr>
-            <td>Czas OFF:</td>
-            <td>
-                <asp:TextBox ID="textCzasOFF" runat="server"></asp:TextBox>
-            </td>
-        </tr>
-        <tr>
-            <td>Poprawa po LDopie:</td>
-            <td>
-                <asp:DropDownList ID="dropPoprawa" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Przebyte leczenie operacyjne:</td>
-            <td>
-                <asp:DropDownList ID="dropPrzebyteLeczenieOperacyjne" runat="server">
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Nadciśnienie:</td>
-            <td>
-                <asp:DropDownList ID="dropNadcisnienie" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Blokery kanału wapniowego:</td>
-            <td>
-                <asp:DropDownList ID="dropBlokery" runat="server">
-                    <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Dominujący objaw obecnie:</td>
-            <td>
-                <asp:DropDownList ID="dropDominujacyObjawObecnie" runat="server">
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Dominujący objaw uwagi:</td>
-            <td>
-                <asp:TextBox ID="textDominujacyObjawUwagi" runat="server"></asp:TextBox>
             </td>
         </tr>
     </table>
