@@ -55,20 +55,18 @@
                     ValidationExpression="^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$"></asp:RegularExpressionValidator>
             </td>
         </tr>
-        <%--
-        <tr>
-            <td>Narażenie na toksyczność:</td>
-            <td>
-                <asp:DropDownList ID="dropToxic" runat="server">
-                </asp:DropDownList>
-            </td>
-        </tr>
-        --%>
         <tr>
             <td>Zamieszkanie:</td>
             <td>
                 <asp:DropDownList ID="dropZamieszkanie" runat="server">
                 </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Narażenie na toksyczność:</td>
+            <td>
+                <asp:CheckBoxList ID="checkListToxic" runat="server">
+                </asp:CheckBoxList>
             </td>
         </tr>
         <tr>

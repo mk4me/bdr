@@ -39,10 +39,25 @@ public partial class PartHForm : System.Web.UI.Page
             dropLimitDysfagii.DataValueField = "Key";
             dropLimitDysfagii.DataBind();
 
+            checkListSPECTWynik.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "SPECTWynik");
+            checkListSPECTWynik.DataTextField = "Value";
+            checkListSPECTWynik.DataValueField = "Key";
+            checkListSPECTWynik.DataBind();
+
             dropUSGWynik.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "USGWynik", NO_DATA);
             dropUSGWynik.DataTextField = "Value";
             dropUSGWynik.DataValueField = "Key";
             dropUSGWynik.DataBind();
+
+            List<string> selectedValues = DatabaseProcedures.getMultiChoice("SPECTWynik", int.Parse(Session["AppointmentId"].ToString()));
+            foreach (string value in selectedValues)
+            {
+                ListItem listItem = checkListSPECTWynik.Items.FindByValue(value);
+                if (listItem != null)
+                {
+                    listItem.Selected = true;
+                }
+            }
         }
     }
 
@@ -59,7 +74,6 @@ public partial class PartHForm : System.Web.UI.Page
         cmd.Parameters.Add("@LimitDysfagii", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropLimitDysfagii.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@pH_metriaPrzełyku", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(droppHmetriaPrzełyku.SelectedValue);
         cmd.Parameters.Add("@SPECT", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropSPECT.SelectedValue);
-        //cmd.Parameters.Add("@SPECTWynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textSPECTWynik.Text);
         cmd.Parameters.Add("@MRI", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropMRI.SelectedValue);
         cmd.Parameters.Add("@MRIwynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textMRIwynik.Text);
         cmd.Parameters.Add("@USGsrodmozgowia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropUSGsrodmozgowia.SelectedValue);
@@ -132,7 +146,6 @@ public partial class PartHForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select Holter, BadanieWechu, WynikWechu, LimitDysfagii, pH_metriaPrzełyku, SPECT, " +
-        //SPECTWynik
             "MRI, MRIwynik, USGsrodmozgowia, USGWynik, Genetyka, GenetykaWynik, Surowica, SurowicaPozostało, " +
             "Ferrytyna, CRP, NTproCNP, URCA, WitD, CHOL, TGI, HDL, LDL, olLDL, LaboratoryjneInne " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
@@ -150,7 +163,6 @@ public partial class PartHForm : System.Web.UI.Page
                 dropLimitDysfagii.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["LimitDysfagii"], NO_DATA.ToString());
                 droppHmetriaPrzełyku.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["pH_metriaPrzełyku"]);
                 dropSPECT.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["SPECT"]);
-                //textSPECTWynik.Text = DatabaseProcedures.getTextStringValue(rdr["SPECTWynik"]);
                 dropMRI.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["MRI"]);
                 textMRIwynik.Text = DatabaseProcedures.getTextStringValue(rdr["MRIwynik"]);
                 dropUSGsrodmozgowia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["USGsrodmozgowia"]);
@@ -188,6 +200,15 @@ public partial class PartHForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
+        List<string> selectedValues = new List<string>();
+        foreach (ListItem listItem in checkListSPECTWynik.Items)
+        {
+            if (listItem.Selected)
+            {
+                selectedValues.Add(listItem.Value);
+            }
+        }
+        DatabaseProcedures.saveMultiChoice(selectedValues, "SPECTWynik", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
         savePartH();
     }
     protected void buttonCancel_Click(object sender, EventArgs e)

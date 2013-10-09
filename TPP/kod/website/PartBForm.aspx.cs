@@ -12,6 +12,7 @@ public partial class PartBForm : System.Web.UI.Page
 {
     private static byte NO_DATA = 100;
     private static decimal NO_DATA_DECIMAL = 100;
+    private List<Tuple<CheckBox, byte>> toxicChoiceList = new List<Tuple<CheckBox, byte>>();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -49,17 +50,17 @@ public partial class PartBForm : System.Web.UI.Page
             dropAlcohol.DataTextField = "Value";
             dropAlcohol.DataValueField = "Key";
             dropAlcohol.DataBind();
-            /*
-            dropToxic.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "NarazenieNaToks", NO_DATA);
-            dropToxic.DataTextField = "Value";
-            dropToxic.DataValueField = "Key";
-            dropToxic.DataBind();
-            */
+            
             dropZamieszkanie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Zamieszkanie", NO_DATA);
             dropZamieszkanie.DataTextField = "Value";
             dropZamieszkanie.DataValueField = "Key";
             dropZamieszkanie.DataBind();
-
+            
+            checkListToxic.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "NarazenieNaToks");
+            checkListToxic.DataTextField = "Value";
+            checkListToxic.DataValueField = "Key";
+            checkListToxic.DataBind();
+            
             dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "DominujacyObjawObecnie", NO_DATA);
             dropDominujacyObjawObecnie.DataTextField = "Value";
             dropDominujacyObjawObecnie.DataValueField = "Key";
@@ -74,6 +75,16 @@ public partial class PartBForm : System.Web.UI.Page
             dropOtepienie.DataTextField = "Value";
             dropOtepienie.DataValueField = "Key";
             dropOtepienie.DataBind();
+
+            List<string> selectedValues = DatabaseProcedures.getMultiChoice("NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()));
+            foreach (string value in selectedValues)
+            {
+                ListItem listItem = checkListToxic.Items.FindByValue(value);
+                if (listItem != null)
+                {
+                    listItem.Selected = true;
+                }
+            }
         }
     }
 
@@ -90,7 +101,6 @@ public partial class PartBForm : System.Web.UI.Page
         cmd.Parameters.Add("@ZielonaHerbata", SqlDbType.TinyInt).Value = byte.Parse(dropGreenTea.SelectedValue);
         cmd.Parameters.Add("@Alkohol", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropAlcohol.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = byte.Parse(textTreatmentNumber.Text);
-        //cmd.Parameters.Add("@NarazenieNaToks", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropToxic.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropZamieszkanie.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = textNotes.Text;
         cmd.Parameters.Add("@Nadcisnienie", SqlDbType.TinyInt).Value = byte.Parse(dropNadcisnienie.SelectedValue);
@@ -150,6 +160,63 @@ public partial class PartBForm : System.Web.UI.Page
         }
     }
 
+    private void savePartBMultiChoice()
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[update_exam_int_attribute]";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
+        cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 50).Value = "NarazenieNaToks";
+
+        DataTable dataTable = new DataTable();
+        DataColumn dataColumn = new DataColumn();
+        dataColumn = new DataColumn("Value", typeof(System.Int32));
+        dataTable.Columns.Add(dataColumn);
+        foreach (ListItem listItem in checkListToxic.Items)
+        {
+            if (listItem.Selected)
+            {
+                DataRow dataRow = dataTable.NewRow();
+                dataRow[0] = listItem.Value;
+                dataTable.Rows.Add(dataRow);
+            }
+        }
+        SqlParameter param = cmd.Parameters.AddWithValue("@values", dataTable);
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
+        cmd.Parameters.Add("@result", SqlDbType.Int);
+        cmd.Parameters["@result"].Direction = ParameterDirection.Output;
+        cmd.Connection = con;
+
+        int success = 0;
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+            success = (int)cmd.Parameters["@result"].Value;
+
+            if (success == 0)
+            {
+            }
+            else
+            {
+                labelMessage.Text = "Error saving multiple choice attributes";
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
     private void loadPartB()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -174,7 +241,6 @@ public partial class PartBForm : System.Web.UI.Page
                 dropGreenTea.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ZielonaHerbata"], NO_DATA.ToString());
                 dropAlcohol.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Alkohol"], NO_DATA.ToString());
                 textTreatmentNumber.Text = DatabaseProcedures.getTextByteValue(rdr["ZabiegowWZnieczOgPrzedRozpoznaniemPD"]);
-                //dropToxic.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["NarazenieNaToks"], NO_DATA.ToString());
                 dropZamieszkanie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Zamieszkanie"], NO_DATA.ToString());
                 textNotes.Text = DatabaseProcedures.getTextStringValue(rdr["Uwagi"]);
                 dropNadcisnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Nadcisnienie"]);
@@ -211,6 +277,15 @@ public partial class PartBForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
+        List<string> selectedValues = new List<string>();
+        foreach (ListItem listItem in checkListToxic.Items)
+        {
+            if (listItem.Selected)
+            {
+                selectedValues.Add(listItem.Value);
+            }
+        }
+        DatabaseProcedures.saveMultiChoice(selectedValues, "NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
         savePartB();
     }
     protected void buttonCancel_Click(object sender, EventArgs e)

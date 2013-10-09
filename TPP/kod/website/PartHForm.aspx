@@ -59,14 +59,13 @@
                 </asp:DropDownList>
             </td>
         </tr>
-        <%--
         <tr>
             <td>SPECT wynik:</td>
             <td>
-                <asp:TextBox ID="textSPECTWynik" runat="server" Rows="5" TextMode="MultiLine"></asp:TextBox>
+                <asp:CheckBoxList ID="checkListSPECTWynik" runat="server">
+                </asp:CheckBoxList>
             </td>
         </tr>
-        --%>
         <tr>
             <td>MRI:</td>
             <td>

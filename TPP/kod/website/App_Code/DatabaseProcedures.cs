@@ -281,4 +281,84 @@ public class DatabaseProcedures
     {
         return value == DBNull.Value ? "" : ((short)value).ToString();
     }
+
+    public static void saveMultiChoice(List<string> selectedValues, string attributeName, int appointmentId, string actor)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[update_exam_int_attribute]";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = appointmentId;
+        cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 50).Value = attributeName;
+
+        DataTable dataTable = new DataTable();
+        DataColumn dataColumn = new DataColumn();
+        dataColumn = new DataColumn("Value", typeof(System.Int32));
+        dataTable.Columns.Add(dataColumn);
+        foreach (string value in selectedValues)
+        {
+            DataRow dataRow = dataTable.NewRow();
+            dataRow[0] = value;
+            dataTable.Rows.Add(dataRow);
+        }
+        SqlParameter param = cmd.Parameters.AddWithValue("@values", dataTable);
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = actor;
+        cmd.Parameters.Add("@result", SqlDbType.Int);
+        cmd.Parameters["@result"].Direction = ParameterDirection.Output;
+        cmd.Connection = con;
+
+        int success = 0;
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+            success = (int)cmd.Parameters["@result"].Value;
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    public static List<string> getMultiChoice(string attributeName, int appointmentId)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select * from dbo.get_exam_multi_values('" + attributeName + "', " + appointmentId + ")";
+        cmd.Connection = con;
+
+        List<string> selectedValues = new List<string>();
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                string value = rdr["Wartosc"].ToString();
+                selectedValues.Add(value);
+
+            }
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return selectedValues;
+    }
 }
