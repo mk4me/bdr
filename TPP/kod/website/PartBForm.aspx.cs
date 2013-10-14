@@ -21,6 +21,7 @@ public partial class PartBForm : System.Web.UI.Page
             labelAppointment.Text = "Pacjent: " + Session["PatientNumber"] + "<br />Wizyta: " + Session["AppointmentName"];
             if (!IsPostBack)
             {
+                initControls();
                 loadPartB();
             }
         }
@@ -28,62 +29,62 @@ public partial class PartBForm : System.Web.UI.Page
         {
             Response.Redirect("~/Main.aspx");
         }
+    }
 
-        if (!IsPostBack)
+    private void initControls()
+    {
+        dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PrzebyteLeczenieOperacyjnePD", NO_DATA);
+        dropPrzebyteLeczenieOperacyjne.DataTextField = "Value";
+        dropPrzebyteLeczenieOperacyjne.DataValueField = "Key";
+        dropPrzebyteLeczenieOperacyjne.DataBind();
+
+        dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Papierosy", NO_DATA);
+        dropCigarettes.DataTextField = "Value";
+        dropCigarettes.DataValueField = "Key";
+        dropCigarettes.DataBind();
+
+        dropCoffee.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Kawa", NO_DATA);
+        dropCoffee.DataTextField = "Value";
+        dropCoffee.DataValueField = "Key";
+        dropCoffee.DataBind();
+
+        dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Alkohol", NO_DATA);
+        dropAlcohol.DataTextField = "Value";
+        dropAlcohol.DataValueField = "Key";
+        dropAlcohol.DataBind();
+
+        dropZamieszkanie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Zamieszkanie", NO_DATA);
+        dropZamieszkanie.DataTextField = "Value";
+        dropZamieszkanie.DataValueField = "Key";
+        dropZamieszkanie.DataBind();
+
+        checkListToxic.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "NarazenieNaToks");
+        checkListToxic.DataTextField = "Value";
+        checkListToxic.DataValueField = "Key";
+        checkListToxic.DataBind();
+
+        dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "DominujacyObjawObecnie", NO_DATA);
+        dropDominujacyObjawObecnie.DataTextField = "Value";
+        dropDominujacyObjawObecnie.DataValueField = "Key";
+        dropDominujacyObjawObecnie.DataBind();
+
+        dropObjawyAutonomiczne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "ObjawyAutonomiczne", NO_DATA);
+        dropObjawyAutonomiczne.DataTextField = "Value";
+        dropObjawyAutonomiczne.DataValueField = "Key";
+        dropObjawyAutonomiczne.DataBind();
+
+        dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
+        dropOtepienie.DataTextField = "Value";
+        dropOtepienie.DataValueField = "Key";
+        dropOtepienie.DataBind();
+
+        List<string> selectedValues = DatabaseProcedures.getMultiChoice("NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()));
+        foreach (string value in selectedValues)
         {
-            dropPrzebyteLeczenieOperacyjne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PrzebyteLeczenieOperacyjnePD", NO_DATA);
-            dropPrzebyteLeczenieOperacyjne.DataTextField = "Value";
-            dropPrzebyteLeczenieOperacyjne.DataValueField = "Key";
-            dropPrzebyteLeczenieOperacyjne.DataBind();
-
-            dropCigarettes.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Papierosy", NO_DATA);
-            dropCigarettes.DataTextField = "Value";
-            dropCigarettes.DataValueField = "Key";
-            dropCigarettes.DataBind();
-
-            dropCoffee.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Kawa", NO_DATA);
-            dropCoffee.DataTextField = "Value";
-            dropCoffee.DataValueField = "Key";
-            dropCoffee.DataBind();
-
-            dropAlcohol.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Alkohol", NO_DATA);
-            dropAlcohol.DataTextField = "Value";
-            dropAlcohol.DataValueField = "Key";
-            dropAlcohol.DataBind();
-            
-            dropZamieszkanie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Zamieszkanie", NO_DATA);
-            dropZamieszkanie.DataTextField = "Value";
-            dropZamieszkanie.DataValueField = "Key";
-            dropZamieszkanie.DataBind();
-            
-            checkListToxic.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "NarazenieNaToks");
-            checkListToxic.DataTextField = "Value";
-            checkListToxic.DataValueField = "Key";
-            checkListToxic.DataBind();
-            
-            dropDominujacyObjawObecnie.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "DominujacyObjawObecnie", NO_DATA);
-            dropDominujacyObjawObecnie.DataTextField = "Value";
-            dropDominujacyObjawObecnie.DataValueField = "Key";
-            dropDominujacyObjawObecnie.DataBind();
-
-            dropObjawyAutonomiczne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "ObjawyAutonomiczne", NO_DATA);
-            dropObjawyAutonomiczne.DataTextField = "Value";
-            dropObjawyAutonomiczne.DataValueField = "Key";
-            dropObjawyAutonomiczne.DataBind();
-
-            dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
-            dropOtepienie.DataTextField = "Value";
-            dropOtepienie.DataValueField = "Key";
-            dropOtepienie.DataBind();
-
-            List<string> selectedValues = DatabaseProcedures.getMultiChoice("NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()));
-            foreach (string value in selectedValues)
+            ListItem listItem = checkListToxic.Items.FindByValue(value);
+            if (listItem != null)
             {
-                ListItem listItem = checkListToxic.Items.FindByValue(value);
-                if (listItem != null)
-                {
-                    listItem.Selected = true;
-                }
+                listItem.Selected = true;
             }
         }
     }
@@ -223,7 +224,6 @@ public partial class PartBForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select PrzebyteLeczenieOperacyjnePD, Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, " +
-            //NarazenieNaToks,
             "Zamieszkanie, Uwagi, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi, ObjawyAutonomiczne, RLS, ObjawyPsychotyczne, Depresja, Otepienie, Dyzartria, DysfagiaObjaw, RBD, ZaburzenieRuchomosciGalekOcznych, " +
             "Apraksja, TestKlaskania, ZaburzeniaWechowe, MasaCiala, Drzenie, Sztywnosc, Spowolnienie, " +
             "ObjawyInne, ObjawyInneJakie, CzasOFF, PoprawaPoLDopie from Wizyta where IdWizyta = " + Session["AppointmentId"];

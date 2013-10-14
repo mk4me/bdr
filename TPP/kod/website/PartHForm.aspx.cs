@@ -19,6 +19,7 @@ public partial class PartHForm : System.Web.UI.Page
             labelAppointment.Text = "Pacjent: " + Session["PatientNumber"] + "<br />Wizyta: " + Session["AppointmentName"];
             if (!IsPostBack)
             {
+                initControls();
                 loadPartH();
             }
         }
@@ -26,37 +27,37 @@ public partial class PartHForm : System.Web.UI.Page
         {
             Response.Redirect("~/Main.aspx");
         }
+    }
 
-        if (!IsPostBack)
+    private void initControls()
+    {
+        dropWynikWechu.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "WynikWechu", NO_DATA);
+        dropWynikWechu.DataTextField = "Value";
+        dropWynikWechu.DataValueField = "Key";
+        dropWynikWechu.DataBind();
+
+        dropLimitDysfagii.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "LimitDysfagii", NO_DATA);
+        dropLimitDysfagii.DataTextField = "Value";
+        dropLimitDysfagii.DataValueField = "Key";
+        dropLimitDysfagii.DataBind();
+
+        checkListSPECTWynik.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "SPECTWynik");
+        checkListSPECTWynik.DataTextField = "Value";
+        checkListSPECTWynik.DataValueField = "Key";
+        checkListSPECTWynik.DataBind();
+
+        dropUSGWynik.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "USGWynik", NO_DATA);
+        dropUSGWynik.DataTextField = "Value";
+        dropUSGWynik.DataValueField = "Key";
+        dropUSGWynik.DataBind();
+
+        List<string> selectedValues = DatabaseProcedures.getMultiChoice("SPECTWynik", int.Parse(Session["AppointmentId"].ToString()));
+        foreach (string value in selectedValues)
         {
-            dropWynikWechu.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "WynikWechu", NO_DATA);
-            dropWynikWechu.DataTextField = "Value";
-            dropWynikWechu.DataValueField = "Key";
-            dropWynikWechu.DataBind();
-
-            dropLimitDysfagii.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "LimitDysfagii", NO_DATA);
-            dropLimitDysfagii.DataTextField = "Value";
-            dropLimitDysfagii.DataValueField = "Key";
-            dropLimitDysfagii.DataBind();
-
-            checkListSPECTWynik.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "SPECTWynik");
-            checkListSPECTWynik.DataTextField = "Value";
-            checkListSPECTWynik.DataValueField = "Key";
-            checkListSPECTWynik.DataBind();
-
-            dropUSGWynik.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "USGWynik", NO_DATA);
-            dropUSGWynik.DataTextField = "Value";
-            dropUSGWynik.DataValueField = "Key";
-            dropUSGWynik.DataBind();
-
-            List<string> selectedValues = DatabaseProcedures.getMultiChoice("SPECTWynik", int.Parse(Session["AppointmentId"].ToString()));
-            foreach (string value in selectedValues)
+            ListItem listItem = checkListSPECTWynik.Items.FindByValue(value);
+            if (listItem != null)
             {
-                ListItem listItem = checkListSPECTWynik.Items.FindByValue(value);
-                if (listItem != null)
-                {
-                    listItem.Selected = true;
-                }
+                listItem.Selected = true;
             }
         }
     }
@@ -72,11 +73,11 @@ public partial class PartHForm : System.Web.UI.Page
         cmd.Parameters.Add("@BadanieWechu", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropBadanieWechu.SelectedValue);
         cmd.Parameters.Add("@WynikWechu", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWynikWechu.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@LimitDysfagii", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropLimitDysfagii.SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@pH_metriaPrzełyku", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(droppHmetriaPrzełyku.SelectedValue);
+        cmd.Parameters.Add("@pH_metriaPrzełyku", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(droppHmetriaPrzełyku.SelectedValue);
         cmd.Parameters.Add("@SPECT", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropSPECT.SelectedValue);
         cmd.Parameters.Add("@MRI", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropMRI.SelectedValue);
         cmd.Parameters.Add("@MRIwynik", SqlDbType.VarChar, 2000).Value = DatabaseProcedures.getStringOrNull(textMRIwynik.Text);
-        cmd.Parameters.Add("@USGsrodmozgowia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(dropUSGsrodmozgowia.SelectedValue);
+        cmd.Parameters.Add("@USGsrodmozgowia", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropUSGsrodmozgowia.SelectedValue);
         cmd.Parameters.Add("@USGWynik", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropUSGWynik.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Genetyka", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropGenetyka.SelectedValue);
         cmd.Parameters.Add("@GenetykaWynik", SqlDbType.VarChar, 50).Value = DatabaseProcedures.getStringOrNull(textGenetykaWynik.Text);
@@ -165,7 +166,7 @@ public partial class PartHForm : System.Web.UI.Page
                 dropSPECT.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["SPECT"]);
                 dropMRI.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["MRI"]);
                 textMRIwynik.Text = DatabaseProcedures.getTextStringValue(rdr["MRIwynik"]);
-                dropUSGsrodmozgowia.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["USGsrodmozgowia"]);
+                dropUSGsrodmozgowia.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["USGsrodmozgowia"]);
                 dropUSGWynik.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["USGWynik"], NO_DATA.ToString());
                 dropGenetyka.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["Genetyka"]);
                 textGenetykaWynik.Text = DatabaseProcedures.getTextStringValue(rdr["GenetykaWynik"]);

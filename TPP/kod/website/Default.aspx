@@ -10,6 +10,6 @@
     <p>
         <a href="Main.aspx" title="Main.aspx">Lista pacjentów</a>
     </p>
-    <asp:Button ID="buttonTestCSV" runat="server" Text="Test CSV" 
-        onclick="buttonTestCSV_Click" />
+    <asp:Button ID="buttonExportCSV" runat="server" Text="Pobierz plik CSV" 
+        onclick="buttonExportCSV_Click" />
 </asp:Content>

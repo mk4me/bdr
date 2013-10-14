@@ -27,6 +27,7 @@ public partial class AppointmentForm : System.Web.UI.Page
             update = (bool)Session["Update"];
             if (!IsPostBack)
             {
+                initControls();
                 if (update)
                 {
                     loadAppointment((int)Session["AppointmentId"]);
@@ -41,55 +42,56 @@ public partial class AppointmentForm : System.Web.UI.Page
         {
             Response.Redirect("~/Main.aspx");
         }
+    }
 
-        if (!IsPostBack)
+    private void initControls()
+    {
+        textDateIn.Text = DateTime.Now.ToString(DATE_FORMAT);
+        textDateSurgery.Text = DateTime.Now.ToString(DATE_FORMAT);
+        textDateOut.Text = DateTime.Now.ToString(DATE_FORMAT);
+        // date not setting when disabled textbox?
+        //textDateIn.Enabled = false;
+        //textDateSurgery.Enabled = false;
+        //textDateOut.Enabled = false;
+
+        dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
+        dropAppointmentType.DataTextField = "Value";
+        dropAppointmentType.DataValueField = "Key";
+        dropAppointmentType.DataBind();
+        dropAppointmentType.Enabled = false;
+        toggleButtons(update);
+
+        int minYear = 1920;
+        int currentYear = DateTime.Now.Year;
+        for (int i = minYear; i <= currentYear; i++)
         {
-            textDateIn.Text = DateTime.Now.ToString(DATE_FORMAT);
-            textDateSurgery.Text = DateTime.Now.ToString(DATE_FORMAT);
-            textDateOut.Text = DateTime.Now.ToString(DATE_FORMAT);
-            // date not setting when disabled textbox?
-            //textDateIn.Enabled = false;
-            //textDateSurgery.Enabled = false;
-            //textDateOut.Enabled = false;
-
-            dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
-            dropAppointmentType.DataTextField = "Value";
-            dropAppointmentType.DataValueField = "Key";
-            dropAppointmentType.DataBind();
-            dropAppointmentType.Enabled = false;
-            toggleButtons(update);
-
-            int minYear = 1920;
-            int currentYear = DateTime.Now.Year;
-            for (int i = minYear; i <= currentYear; i++)
-            {
-                dropRokZachorowania.Items.Add(new ListItem("" + i, "" + i));
-            }
-            dropRokZachorowania.SelectedIndex = currentYear - minYear - 10;
-
-            for (int i = minYear; i <= currentYear; i++)
-            {
-                dropRokZachorowania.Items.Add(new ListItem("" + i, "" + i));
-            }
-            dropRokBadania.Items.Add(new ListItem("" + currentYear, "" + currentYear));
-
-            for (int i = 1; i <= 12; i++)
-            {
-                dropMiesiacZachorowania.Items.Add(new ListItem("" + i, "" + i));
-                dropMiesiacBadania.Items.Add(new ListItem("" + i, "" + i));
-            }
-            dropMiesiacBadania.SelectedIndex = DateTime.Now.Month - 1;
-
-            dropEducation.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Wyksztalcenie", NO_DATA);
-            dropEducation.DataTextField = "Value";
-            dropEducation.DataValueField = "Key";
-            dropEducation.DataBind();
-
-            dropSymptom.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PierwszyObjaw", NO_DATA);
-            dropSymptom.DataTextField = "Value";
-            dropSymptom.DataValueField = "Key";
-            dropSymptom.DataBind();
+            dropRokZachorowania.Items.Add(new ListItem("" + i, "" + i));
         }
+        dropRokZachorowania.SelectedIndex = currentYear - minYear - 10;
+
+        int startYear = 2013;
+        for (int i = startYear; i <= currentYear; i++)
+        {
+            dropRokBadania.Items.Add(new ListItem("" + i, "" + i));
+        }
+        dropRokBadania.SelectedIndex = currentYear - startYear;
+
+        for (int i = 1; i <= 12; i++)
+        {
+            dropMiesiacZachorowania.Items.Add(new ListItem("" + i, "" + i));
+            dropMiesiacBadania.Items.Add(new ListItem("" + i, "" + i));
+        }
+        dropMiesiacBadania.SelectedIndex = DateTime.Now.Month - 1;
+
+        dropEducation.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Wyksztalcenie", NO_DATA);
+        dropEducation.DataTextField = "Value";
+        dropEducation.DataValueField = "Key";
+        dropEducation.DataBind();
+
+        dropSymptom.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "PierwszyObjaw", NO_DATA);
+        dropSymptom.DataTextField = "Value";
+        dropSymptom.DataValueField = "Key";
+        dropSymptom.DataBind();
     }
 
     private void saveAppointment()
@@ -217,10 +219,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                 dropFamily.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Rodzinnosc"]);
                 dropRokZachorowania.SelectedValue = ((short)rdr["RokZachorowania"]).ToString();
                 dropMiesiacZachorowania.SelectedValue = ((byte)rdr["MiesiacZachorowania"]).ToString();
-                string rokBadaniaString = ((short)rdr["RokBadania"]).ToString();
-                dropRokBadania.Items.Clear();
-                dropRokBadania.Items.Add(rokBadaniaString);
-                dropRokBadania.SelectedValue = rokBadaniaString;
+                dropRokBadania.SelectedValue = ((short)rdr["RokBadania"]).ToString();
                 dropMiesiacBadania.SelectedValue = ((byte)rdr["MiesiacBadania"]).ToString();
                 dropSymptom.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PierwszyObjaw"], NO_DATA.ToString());
                 dropDrzenie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Drzenie"]);

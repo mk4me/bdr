@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data;
+using System.Data.SqlClient;
+using System.Web.Configuration;
 
 /// <summary>
 /// Summary description for CSVExporter
@@ -20,8 +22,9 @@ public class CSVExporter
     {
         HttpContext.Current.Response.Clear();
         HttpContext.Current.Response.ContentType = "text/csv";
-        HttpContext.Current.Response.AppendHeader("Content-Disposition",
-            string.Format("attachment; filename={0}", fileName));
+        HttpContext.Current.Response.Charset = "utf-8";
+        HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("windows-1250");
+        HttpContext.Current.Response.AppendHeader("Content-Disposition", string.Format("attachment; filename={0}", fileName));
 
         for (int i = 0; i < dataTable.Columns.Count; i++)
         {
@@ -41,19 +44,33 @@ public class CSVExporter
         HttpContext.Current.Response.End();
     }
 
-    public static DataTable getTestDataTable()
+    public static DataTable getDatabaseCopy()
     {
-        String table = "Wizyta";
-        String attribute = "PierwszyObjaw";
-        Dictionary<byte, string> dictionary = DatabaseProcedures.getEnumerationByte(table, attribute);
-        DataTable dataTable = new DataTable();
-        dataTable.Columns.Add("Klucz", typeof(byte));
-        dataTable.Columns.Add("Definicja", typeof(string));
-        DataRow row = dataTable.NewRow();
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[get_database_copy]";
+        cmd.Connection = con;
 
-        foreach (KeyValuePair<byte, string> entry in dictionary)
+        DataTable dataTable = new DataTable();
+
+        try
         {
-            dataTable.Rows.Add(entry.Key, entry.Value);
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            dataTable.Load(rdr);
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
         }
 
         return dataTable;

@@ -103,7 +103,7 @@
             <td>Genetyka:</td>
             <td>
                 <asp:DropDownList ID="dropGenetyka" runat="server">
-                    <asp:ListItem Value="-1" Text=""></asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
@@ -119,7 +119,7 @@
             <td>Surowica:</td>
             <td>
                 <asp:DropDownList ID="dropSurowica" runat="server">
-                    <asp:ListItem Value="-1" Text=""></asp:ListItem>
+                    <asp:ListItem Value="2" Text=""></asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
                     <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>

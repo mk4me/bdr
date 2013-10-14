@@ -111,9 +111,9 @@
                     <tr>
                         <td>Miesiąc i rok badania:</td>
                         <td>
-                            <asp:DropDownList ID="dropMiesiacBadania" runat="server" Enabled="False">
+                            <asp:DropDownList ID="dropMiesiacBadania" runat="server">
                             </asp:DropDownList>
-                            <asp:DropDownList ID="dropRokBadania" runat="server" Enabled="False">
+                            <asp:DropDownList ID="dropRokBadania" runat="server">
                             </asp:DropDownList>
                         </td>
                     </tr>

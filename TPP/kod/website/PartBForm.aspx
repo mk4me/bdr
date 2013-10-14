@@ -167,8 +167,8 @@
             <td>
                 <asp:DropDownList ID="dropDysfagiaObjaw" runat="server">
                     <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
                     <asp:ListItem Value="0">nie</asp:ListItem>
+                    <asp:ListItem Value="1">tak</asp:ListItem>
                 </asp:DropDownList>
             </td>
         </tr>

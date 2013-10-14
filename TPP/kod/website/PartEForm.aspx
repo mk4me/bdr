@@ -69,7 +69,7 @@
             </td>
         </tr>
         <tr>
-            <td>Częstotliowość oddawania moczu:</td>
+            <td>Częstotliwość oddawania moczu:</td>
             <td>
                 <asp:DropDownList ID="dropCzestotliwowscOddawaniaMoczu" runat="server">
                 </asp:DropDownList>
