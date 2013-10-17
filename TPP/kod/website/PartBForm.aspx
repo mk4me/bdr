@@ -3,6 +3,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <h2>Objawy i epidemiologia</h2>
+    <br />
     <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
@@ -111,8 +113,8 @@
         <tr>
             <td>Objawy autonomiczne:</td>
             <td>
-                <asp:DropDownList ID="dropObjawyAutonomiczne" runat="server">
-                </asp:DropDownList>
+                <asp:CheckBoxList ID="checkListObjawyAutonomiczne" runat="server">
+                </asp:CheckBoxList>
             </td>
         </tr>
         <tr>

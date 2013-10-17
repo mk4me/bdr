@@ -46,6 +46,8 @@
         </script>
     </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <h2>Dane demograficzne i objawy ruchowe</h2>
+    <br />
     <asp:Label ID="labelPatientNumber" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
@@ -71,7 +73,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Data operacji:</td>
+                        <td>
+                            <asp:Label ID="labelDateSurgery" runat="server" Text="DataOperacji"></asp:Label>
+                        </td>
                         <td>
                             <asp:TextBox ID="textDateSurgery" runat="server"></asp:TextBox>
                         </td>

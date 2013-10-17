@@ -92,6 +92,12 @@ public partial class AppointmentForm : System.Web.UI.Page
         dropSymptom.DataTextField = "Value";
         dropSymptom.DataValueField = "Key";
         dropSymptom.DataBind();
+
+        if (Session["AppointmentName"].ToString() != "przedoperacyjna")
+        {
+            textDateSurgery.Visible = false;
+            labelDateSurgery.Visible = false;
+        }
     }
 
     private void saveAppointment()

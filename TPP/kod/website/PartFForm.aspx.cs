@@ -903,6 +903,41 @@ public partial class PartFForm : System.Web.UI.Page
         variantList.Add(getVariantColumn(2, true));
         variantList.Add(getVariantColumn(2, false));
 
+        if (Session["AppointmentName"].ToString() == "przedoperacyjna")
+        {
+            variantList.Add(getVariantColumn(3, true));
+            variantList.Add(getVariantColumn(3, false));
+            foreach (Tuple<DropDownList[], string> tuple in UPDRSList1)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            foreach (Tuple<DropDownList[], string> tuple in UPDRSList2)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            foreach (Tuple<TextBox[], string> tuple in variantsPartAList)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            foreach (Tuple<DropDownList[], string> tuple in variantsPartBList)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            foreach (Tuple<TextBox[], string> tuple in variantsPartBList2)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            foreach (Tuple<TextBox[], string> tuple in variantsPartBList3)
+            {
+                disableWebControlVariants(tuple.Item1, variantList);
+            }
+            disableWebControlVariants(variantsHYscale.Item1, variantList);
+            disableWebControlVariants(variantsSchwabEnglandScale.Item1, variantList);
+            disableWebControlVariants(variantsJazzNovo.Item1, variantList);
+            disableWebControlVariants(variantsWideookulograf.Item1, variantList);
+            disableWebControlVariants(variantsLatencymeter.Item1, variantList);
+        }
+
         disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
         disableWebControlVariants(variantsTestSchodkowyCzas1.Item1, variantList);
         disableWebControlVariants(variantsTestSchodkowyCzas2.Item1, variantList);

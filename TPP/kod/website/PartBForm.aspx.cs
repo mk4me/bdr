@@ -68,25 +68,18 @@ public partial class PartBForm : System.Web.UI.Page
         dropDominujacyObjawObecnie.DataValueField = "Key";
         dropDominujacyObjawObecnie.DataBind();
 
-        dropObjawyAutonomiczne.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "ObjawyAutonomiczne", NO_DATA);
-        dropObjawyAutonomiczne.DataTextField = "Value";
-        dropObjawyAutonomiczne.DataValueField = "Key";
-        dropObjawyAutonomiczne.DataBind();
+        checkListObjawyAutonomiczne.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "ObjawyAutonomiczne");
+        checkListObjawyAutonomiczne.DataTextField = "Value";
+        checkListObjawyAutonomiczne.DataValueField = "Key";
+        checkListObjawyAutonomiczne.DataBind();
 
         dropOtepienie.DataSource = DatabaseProcedures.getEnumerationDecimalWithNoData("Wizyta", "Otepienie", NO_DATA_DECIMAL);
         dropOtepienie.DataTextField = "Value";
         dropOtepienie.DataValueField = "Key";
         dropOtepienie.DataBind();
 
-        List<string> selectedValues = DatabaseProcedures.getMultiChoice("NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()));
-        foreach (string value in selectedValues)
-        {
-            ListItem listItem = checkListToxic.Items.FindByValue(value);
-            if (listItem != null)
-            {
-                listItem.Selected = true;
-            }
-        }
+        Utils.setSelectedCheckListItems(DatabaseProcedures.getMultiChoice("NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString())), checkListToxic);
+        Utils.setSelectedCheckListItems(DatabaseProcedures.getMultiChoice("ObjawyAutonomiczne", int.Parse(Session["AppointmentId"].ToString())), checkListObjawyAutonomiczne);
     }
 
     private void savePartB()
@@ -108,7 +101,6 @@ public partial class PartBForm : System.Web.UI.Page
         cmd.Parameters.Add("@BlokeryKanWapn", SqlDbType.TinyInt).Value = byte.Parse(dropBlokery.SelectedValue);
         cmd.Parameters.Add("@DominujacyObjawObecnie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropDominujacyObjawObecnie.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@DominujacyObjawUwagi", SqlDbType.VarChar, 50).Value = textDominujacyObjawUwagi.Text.ToString();
-        cmd.Parameters.Add("@ObjawyAutonomiczne", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropObjawyAutonomiczne.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@RLS", SqlDbType.TinyInt).Value = byte.Parse(dropRLS.SelectedValue);
         cmd.Parameters.Add("@ObjawyPsychotyczne", SqlDbType.TinyInt).Value = byte.Parse(dropPsychotyczne.SelectedValue);
         cmd.Parameters.Add("@Depresja", SqlDbType.TinyInt).Value = byte.Parse(dropDepresja.SelectedValue);
@@ -161,70 +153,13 @@ public partial class PartBForm : System.Web.UI.Page
         }
     }
 
-    private void savePartBMultiChoice()
-    {
-        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
-        SqlCommand cmd = new SqlCommand();
-        cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[update_exam_int_attribute]";
-        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
-        cmd.Parameters.Add("@attr_name", SqlDbType.VarChar, 50).Value = "NarazenieNaToks";
-
-        DataTable dataTable = new DataTable();
-        DataColumn dataColumn = new DataColumn();
-        dataColumn = new DataColumn("Value", typeof(System.Int32));
-        dataTable.Columns.Add(dataColumn);
-        foreach (ListItem listItem in checkListToxic.Items)
-        {
-            if (listItem.Selected)
-            {
-                DataRow dataRow = dataTable.NewRow();
-                dataRow[0] = listItem.Value;
-                dataTable.Rows.Add(dataRow);
-            }
-        }
-        SqlParameter param = cmd.Parameters.AddWithValue("@values", dataTable);
-        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
-        cmd.Parameters.Add("@result", SqlDbType.Int);
-        cmd.Parameters["@result"].Direction = ParameterDirection.Output;
-        cmd.Connection = con;
-
-        int success = 0;
-        try
-        {
-            con.Open();
-            cmd.ExecuteNonQuery();
-            success = (int)cmd.Parameters["@result"].Value;
-
-            if (success == 0)
-            {
-            }
-            else
-            {
-                labelMessage.Text = "Error saving multiple choice attributes";
-            }
-        }
-        catch (SqlException ex)
-        {
-            labelMessage.Text = ex.Message;
-        }
-        finally
-        {
-            cmd.Dispose();
-            if (con != null)
-            {
-                con.Close();
-            }
-        }
-    }
-
     private void loadPartB()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select PrzebyteLeczenieOperacyjnePD, Papierosy, Kawa, ZielonaHerbata, Alkohol, ZabiegowWZnieczOgPrzedRozpoznaniemPD, " +
-            "Zamieszkanie, Uwagi, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi, ObjawyAutonomiczne, RLS, ObjawyPsychotyczne, Depresja, Otepienie, Dyzartria, DysfagiaObjaw, RBD, ZaburzenieRuchomosciGalekOcznych, " +
+            "Zamieszkanie, Uwagi, Nadcisnienie, BlokeryKanWapn, DominujacyObjawObecnie, DominujacyObjawUwagi, RLS, ObjawyPsychotyczne, Depresja, Otepienie, Dyzartria, DysfagiaObjaw, RBD, ZaburzenieRuchomosciGalekOcznych, " +
             "Apraksja, TestKlaskania, ZaburzeniaWechowe, MasaCiala, Drzenie, Sztywnosc, Spowolnienie, " +
             "ObjawyInne, ObjawyInneJakie, CzasOFF, PoprawaPoLDopie from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
@@ -247,7 +182,6 @@ public partial class PartBForm : System.Web.UI.Page
                 dropBlokery.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["BlokeryKanWapn"]);
                 dropDominujacyObjawObecnie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DominujacyObjawObecnie"], NO_DATA.ToString());
                 textDominujacyObjawUwagi.Text = DatabaseProcedures.getTextStringValue(rdr["DominujacyObjawUwagi"]);
-                dropObjawyAutonomiczne.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ObjawyAutonomiczne"], NO_DATA.ToString());
                 dropRLS.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["RLS"]);
                 dropPsychotyczne.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ObjawyPsychotyczne"]);
                 dropDepresja.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Depresja"]);
@@ -277,15 +211,8 @@ public partial class PartBForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
-        List<string> selectedValues = new List<string>();
-        foreach (ListItem listItem in checkListToxic.Items)
-        {
-            if (listItem.Selected)
-            {
-                selectedValues.Add(listItem.Value);
-            }
-        }
-        DatabaseProcedures.saveMultiChoice(selectedValues, "NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
+        DatabaseProcedures.saveMultiChoice(Utils.getSelectedCheckListItems(checkListToxic), "NarazenieNaToks", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
+        DatabaseProcedures.saveMultiChoice(Utils.getSelectedCheckListItems(checkListObjawyAutonomiczne), "ObjawyAutonomiczne", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
         savePartB();
     }
     protected void buttonCancel_Click(object sender, EventArgs e)

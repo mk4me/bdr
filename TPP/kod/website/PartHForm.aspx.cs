@@ -50,16 +50,8 @@ public partial class PartHForm : System.Web.UI.Page
         dropUSGWynik.DataTextField = "Value";
         dropUSGWynik.DataValueField = "Key";
         dropUSGWynik.DataBind();
-
-        List<string> selectedValues = DatabaseProcedures.getMultiChoice("SPECTWynik", int.Parse(Session["AppointmentId"].ToString()));
-        foreach (string value in selectedValues)
-        {
-            ListItem listItem = checkListSPECTWynik.Items.FindByValue(value);
-            if (listItem != null)
-            {
-                listItem.Selected = true;
-            }
-        }
+        
+        Utils.setSelectedCheckListItems(DatabaseProcedures.getMultiChoice("SPECTWynik", int.Parse(Session["AppointmentId"].ToString())), checkListSPECTWynik);
     }
 
     private void savePartH()
@@ -201,15 +193,7 @@ public partial class PartHForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
-        List<string> selectedValues = new List<string>();
-        foreach (ListItem listItem in checkListSPECTWynik.Items)
-        {
-            if (listItem.Selected)
-            {
-                selectedValues.Add(listItem.Value);
-            }
-        }
-        DatabaseProcedures.saveMultiChoice(selectedValues, "SPECTWynik", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
+        DatabaseProcedures.saveMultiChoice(Utils.getSelectedCheckListItems(checkListSPECTWynik), "SPECTWynik", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
         savePartH();
     }
     protected void buttonCancel_Click(object sender, EventArgs e)

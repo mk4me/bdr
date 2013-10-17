@@ -33,6 +33,8 @@
             }
         };
     </script>
+    <h2>UPDRS i skale oceny klinicznej</h2>
+    <br />
     <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <asp:Table ID="tableUPDRS" runat="server">
         <asp:TableHeaderRow>
