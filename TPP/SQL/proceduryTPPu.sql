@@ -602,9 +602,8 @@ go
 
 
 
-
--- last rev. 2013-08-15
-
+-- drop procedure update_examination_questionnaire_partB
+-- last rev. 2013-10-15
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partB  (@IdWizyta int,
 	@PrzebyteLeczenieOperacyjnePD tinyint,
@@ -619,7 +618,6 @@ create procedure update_examination_questionnaire_partB  (@IdWizyta int,
 	@BlokeryKanWapn tinyint,
 	@DominujacyObjawObecnie tinyint,
 	@DominujacyObjawUwagi varchar(50),
-	@ObjawyAutonomiczne tinyint,
 	@RLS	tinyint,
 	@ObjawyPsychotyczne	tinyint,
 	@Depresja	tinyint,
@@ -721,13 +719,6 @@ begin
 		return;
 	end;
 
-	if dbo.validate_input_int('Wizyta', 'ObjawyAutonomiczne', @ObjawyAutonomiczne) = 0
-	begin
-		set @result = 2;
-		set @message = 'Invalid value for attribute ObjawyAutonomiczne - see enumeration for allowed values';
-		return;
-	end;
-
 	if( dbo.validate_ext_bit( @RLS) = 0 )
 	begin
 		set @result = 2;
@@ -820,7 +811,7 @@ begin
 			BlokeryKanWapn  = @BlokeryKanWapn,
 			DominujacyObjawObecnie  = @DominujacyObjawObecnie,
 			DominujacyObjawUwagi  = @DominujacyObjawUwagi,
-			ObjawyAutonomiczne = @ObjawyAutonomiczne,
+
 			RLS	= @RLS,
 			ObjawyPsychotyczne	= @ObjawyPsychotyczne,
 			Depresja	= @Depresja,
@@ -1494,7 +1485,9 @@ end;
 go
 
 
--- created 2013-09-08
+drop procedure update_examination_questionnaire_partH
+
+-- updated 2013-10-14
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partH  (
 	@IdWizyta int,
@@ -1563,14 +1556,6 @@ begin
 		set @message = 'Invalid value for attribute LimitDysfagii - see enumeration for allowed values';
 		return;
 	end;
-
-	if( dbo.validate_ext_bit( @USGsrodmozgowia ) = 0 )
-	begin
-		set @result = 2;
-		set @message = 'USGsrodmozgowia  - invalid value. Allowed: 0, 1, 2.';
-		return;
-	end;
-
 
 	if dbo.validate_input_int('Wizyta', 'USGWynik ', @USGWynik ) = 0
 	begin
@@ -2213,7 +2198,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 
 
 -- created: 2013-10-09
-create procedure get_database_copy
+alter procedure get_database_copy
 as
 SELECT 
 /* PACJENT */
@@ -2265,7 +2250,7 @@ SELECT
       ,W.[BlokeryKanWapn]
       ,W.[DominujacyObjawObecnie]
       ,W.[DominujacyObjawUwagi]
-      ,W.[ObjawyAutonomiczne]
+	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'ObjawyAutonomiczne' and IdWizyta = W.IdWizyta) as ObjawyAutonomiczne
       ,W.[RLS]
       ,W.[ObjawyPsychotyczne]
       ,W.[Depresja]
@@ -2588,6 +2573,8 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'DominujacyObjawObecnie',	6,	'dyskinezy i fluktuacje' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'DominujacyObjawObecnie',	7,	'objawy autonomiczne' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'DominujacyObjawObecnie',	8,	'inne' );
+
+insert into Atrybut ( Tabela, Nazwa ) values ( 'Wizyta', 'ObjawyAutonomiczne');
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'ObjawyAutonomiczne',	1,	'zaparcia' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'ObjawyAutonomiczne',	2,	'objawy dyzuryczne' );
@@ -3092,7 +3079,17 @@ insert into @vals values ( 2 );
 exec update_exam_int_attribute  1, 'NarazenieNaToks', @vals, 'test', @res OUTPUT
 select @res;
 select * from WartoscAtrybutuWizytyInt
+go 
 
+declare @vals as IntValueListUdt;
+declare @res int;
+insert into @vals values ( 1 );
+insert into @vals values ( 6 );
+
+exec update_exam_int_attribute  1, 'ObjawyAutonomiczne', @vals, 'test', @res OUTPUT
+select @res;
+select * from WartoscAtrybutuWizytyInt
+go
 
 declare @vals as IntValueListUdt;
 declare @res int;
@@ -3102,6 +3099,7 @@ insert into @vals values ( 3 );
 exec update_exam_int_attribute  1, 'SPECTWynik', @vals, 'test', @res OUTPUT
 select @res;
 select * from WartoscAtrybutuWizytyInt
+go
 
 select * from dbo.get_exam_multi_values( 'SPECTWynik', 1 )
 
@@ -3266,4 +3264,19 @@ update_variant_examination_data_partC  1,
 
 	select * from Badanie
 
+*/
+
+/*
+delete from Badanie
+DBCC CHECKIDENT ('Badanie', RESEED, 0)
+delete from Wizyta
+DBCC CHECKIDENT ('Wizyta', RESEED, 0)
+delete from Pacjent
+DBCC CHECKIDENT ('Pacjent', RESEED, 0)
+delete from Uzytkownik
+DBCC CHECKIDENT ('Uzytkownik', RESEED, 0)
+
+select * from Uzytkownik
+
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 's.szlufik', HashBytes('SHA1','pass4tpp'), 'Stanisław', 'Szlufik', 'stanislaw.szlufik@gmail.com', 1 )
 */

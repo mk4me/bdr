@@ -88,9 +88,6 @@ alter table Pacjent
 go
 
 
--- drop table Plik;
--- drop table Badanie;
--- drop table Wizyta;
 
 create table Wizyta (
 -- dane epidemiologiczne (część A)
@@ -138,7 +135,7 @@ create table Wizyta (
 	BlokeryKanWapn tinyint,
 	DominujacyObjawObecnie tinyint,
 	DominujacyObjawUwagi varchar(50),
-	ObjawyAutonomiczne tinyint,
+--	ObjawyAutonomiczne tinyint,
 
 	RLS	tinyint,
 	ObjawyPsychotyczne	tinyint,
@@ -266,7 +263,7 @@ create table Wizyta (
 	-- SPECTWynik - zastapiony wielowarosciowym;
 	MRI	bit,
 	MRIwynik varchar(2000),
-	USGsrodmozgowia tinyint,
+	USGsrodmozgowia bit,
 	USGWynik tinyint,
 	Genetyka bit,
 	GenetykaWynik varchar(50),
@@ -293,6 +290,7 @@ go
 alter table Wizyta
 		add primary key ( IdWizyta)
 go
+
 
 /* 
 alter table Wizyta add Wprowadzil int not null default 1;
