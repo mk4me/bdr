@@ -14,18 +14,20 @@ public partial class Main : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            listPatients.DataSource = getPatients();
-            listPatients.DataBind();
+            listPatientsBMT.DataSource = getPatients("BMT");
+            listPatientsBMT.DataBind();
+            listPatientsDBS.DataSource = getPatients("DBS");
+            listPatientsDBS.DataBind();
             toggleButtons(false);
         }
     }
 
-    private List<string> getPatients()
+    private List<string> getPatients(string group)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select NumerPacjenta from Pacjent";
+        cmd.CommandText = "select NumerPacjenta from Pacjent where NazwaGrupy = '" + group + "'";
         cmd.Connection = con;
 
         List<string> list = new List<string>();
@@ -66,9 +68,14 @@ public partial class Main : System.Web.UI.Page
 
     protected void buttonDeletePatient_Click(object sender, EventArgs e)
     {
-        if (listPatients.SelectedIndex >= 0)
+        if (listPatientsBMT.SelectedIndex >= 0)
         {
-            deletePatient(listPatients.SelectedValue);
+            deletePatient(listPatientsBMT.SelectedValue);
+            Response.Redirect(Request.RawUrl);
+        }
+        else if (listPatientsDBS.SelectedIndex >= 0)
+        {
+            deletePatient(listPatientsDBS.SelectedValue);
             Response.Redirect(Request.RawUrl);
         }
     }
@@ -102,25 +109,43 @@ public partial class Main : System.Web.UI.Page
 
     protected void buttonEditPatient_Click(object sender, EventArgs e)
     {
-        if (listPatients.SelectedIndex >= 0)
+        if (listPatientsBMT.SelectedIndex >= 0)
         {
-            Session["PatientNumber"] = listPatients.SelectedValue;
+            Session["PatientNumber"] = listPatientsBMT.SelectedValue;
+            Response.Redirect("~/PatientForm.aspx");
+        }
+        else if (listPatientsDBS.SelectedIndex >= 0)
+        {
+            Session["PatientNumber"] = listPatientsDBS.SelectedValue;
             Response.Redirect("~/PatientForm.aspx");
         }
     }
 
     protected void buttonShowAppointments_Click(object sender, EventArgs e)
     {
-        if (listPatients.SelectedIndex >= 0)
+        if (listPatientsBMT.SelectedIndex >= 0)
         {
-            Session["PatientNumber"] = listPatients.SelectedValue;
+            Session["PatientNumber"] = listPatientsBMT.SelectedValue;
+            Response.Redirect("~/AppointmentList.aspx");
+        }
+        else if (listPatientsDBS.SelectedIndex >= 0)
+        {
+            Session["PatientNumber"] = listPatientsDBS.SelectedValue;
             Response.Redirect("~/AppointmentList.aspx");
         }
     }
 
     protected void listPatients_SelectedIndexChanged(object sender, System.EventArgs e)
     {
-        if (listPatients.SelectedIndex >= 0)
+        if (sender.Equals(listPatientsBMT))
+        {
+            listPatientsDBS.ClearSelection();
+        }
+        else if (sender.Equals(listPatientsDBS))
+        {
+            listPatientsBMT.ClearSelection();
+        }
+        if (listPatientsBMT.SelectedIndex >= 0 || listPatientsDBS.SelectedIndex >= 0)
         {
             toggleButtons(true);
         }

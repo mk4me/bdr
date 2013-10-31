@@ -16,6 +16,11 @@ public partial class PatientForm : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
+            dropGroup.DataSource = DatabaseProcedures.getEnumerationString("Pacjent", "NazwaGrupy");
+            dropGroup.DataTextField = "Value";
+            dropGroup.DataValueField = "Key";
+            dropGroup.DataBind();
+
             int minYear = 1920;
             int currentYear = DateTime.Now.Year;
             for (int i = minYear; i <= currentYear; i++)
@@ -49,6 +54,7 @@ public partial class PatientForm : System.Web.UI.Page
             {
                 textPatientNumber.Text = patientNumber;
                 textPatientNumber.Enabled = false;
+                dropGroup.Enabled = false;
                 loadPatient(patientNumber);
             }
         }
@@ -56,7 +62,7 @@ public partial class PatientForm : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                textPatientNumber.Text = suggestNewPatientNumber();
+                textPatientNumber.Text = suggestNewPatientNumber(dropGroup.SelectedValue);
             }
         }
     }
@@ -73,11 +79,12 @@ public partial class PatientForm : System.Web.UI.Page
         {
             sex = 1;
         }
-        savePatient(textPatientNumber.Text, int.Parse(dropYear.SelectedValue), int.Parse(dropMonth.SelectedValue), sex,
+
+        savePatient(textPatientNumber.Text, dropGroup.SelectedValue, int.Parse(dropYear.SelectedValue), int.Parse(dropMonth.SelectedValue), sex,
             dropLocation.SelectedValue, int.Parse(dropElectrodes.SelectedValue), update);
     }
 
-    private void savePatient(string number, int birthYear, int birthMonth, int sex,
+    private void savePatient(string number, string group, int birthYear, int birthMonth, int sex,
         string location, int electrodes, bool update)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -85,6 +92,7 @@ public partial class PatientForm : System.Web.UI.Page
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_patient_l]";
         cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = number;
+        cmd.Parameters.Add("@NazwaGrupy", SqlDbType.VarChar, 3).Value = group;
         cmd.Parameters.Add("@RokUrodzenia", SqlDbType.SmallInt).Value = (short)birthYear;
         cmd.Parameters.Add("@MiesiacUrodzenia", SqlDbType.TinyInt).Value = (byte)birthMonth;
         cmd.Parameters.Add("@Plec", SqlDbType.TinyInt).Value = sex;
@@ -170,13 +178,14 @@ public partial class PatientForm : System.Web.UI.Page
         }
     }
 
-    private string suggestNewPatientNumber()
+    private string suggestNewPatientNumber(string group)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[suggest_new_patient_number]";
+        cmd.CommandText = "[dbo].[suggest_new_patient_number_with_group]";
         cmd.Parameters.Add("@admission_date", SqlDbType.Date).Value = DateTime.Now.ToString("yyyy-MM-dd");
+        cmd.Parameters.Add("@patient_group", SqlDbType.VarChar, 3).Value = group;
         cmd.Parameters.Add("@patient_number", SqlDbType.VarChar, 20);
         cmd.Parameters["@patient_number"].Direction = ParameterDirection.Output;
         cmd.Connection = con;
@@ -186,11 +195,11 @@ public partial class PatientForm : System.Web.UI.Page
         {
             con.Open();
             cmd.ExecuteNonQuery();
-            patientNumber = (string)cmd.Parameters["@patient_number"].Value;
+            patientNumber = DatabaseProcedures.getTextStringValue(cmd.Parameters["@patient_number"].Value);
         }
         catch (SqlException ex)
         {
-
+            labelMessage.Text = ex.Message;
         }
         finally
         {
@@ -202,5 +211,10 @@ public partial class PatientForm : System.Web.UI.Page
         }
 
         return patientNumber;
+    }
+
+    protected void dropGroup_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        textPatientNumber.Text = suggestNewPatientNumber(dropGroup.SelectedValue);
     }
 }

@@ -11,10 +11,17 @@
     </p>
     <table ID="Table1" runat="server">
         <tr>
+            <td>BMT</td>
+            <td>DBS</td>
+        </tr>
+        <tr>
             <td>
-                <asp:ListBox ID="listPatients" runat="server" Rows="10" Width="200px" 
+                <asp:ListBox ID="listPatientsBMT" runat="server" Rows="10" Width="200px" 
                     AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
-            
+            </td>
+            <td>
+                <asp:ListBox ID="listPatientsDBS" runat="server" Rows="10" Width="200px" 
+                    AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
             </td>
             <td>
                 <table ID="Table2" runat="server">

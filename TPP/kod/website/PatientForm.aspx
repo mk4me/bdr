@@ -5,6 +5,14 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <table ID="Table1" runat="server">
         <tr>
+            <td>Grupa:</td>
+            <td>
+                <asp:DropDownList ID="dropGroup" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="dropGroup_SelectedIndexChanged">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
             <td>Numer pacjenta:</td>
             <td>
                 <asp:TextBox ID="textPatientNumber" runat="server"></asp:TextBox>
@@ -49,23 +57,6 @@
                 </asp:DropDownList>
             </td>
         </tr>
-        <%--
-        <tr>
-            <td>Rodzinność:</td>
-            <td>
-                <asp:DropDownList ID="DropDownList4" runat="server">
-                    <asp:ListItem>Tak</asp:ListItem>
-                    <asp:ListItem>Nie</asp:ListItem>
-                </asp:DropDownList>
-            </td>
-        </tr>
-        <tr>
-            <td>Wykształcenei:</td>
-            <td>
-                <asp:DropDownList ID="DropDownList5" runat="server">
-                </asp:DropDownList>
-            </td>
-        </tr>--%>
     </table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
     <br />

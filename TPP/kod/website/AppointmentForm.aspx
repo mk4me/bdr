@@ -74,7 +74,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Label ID="labelDateSurgery" runat="server" Text="DataOperacji"></asp:Label>
+                            <asp:Label ID="labelDateSurgery" runat="server" Text="Data operacji"></asp:Label>
                         </td>
                         <td>
                             <asp:TextBox ID="textDateSurgery" runat="server"></asp:TextBox>
