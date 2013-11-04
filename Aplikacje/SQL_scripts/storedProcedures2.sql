@@ -16,7 +16,6 @@ create type PredicateUdt as table
 )
 go
 
--- created: 2010-11-25
 create type FileNameListUdt as table
 (
 	Name varchar(255)
@@ -1050,7 +1049,7 @@ go
 -- 1 authentication failed
 -- 2 email already in use
 -- 3 obligatory parameter empty (length 0)
-alter procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @result int OUTPUT)
+create procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @result int OUTPUT)
 as
 begin
 
@@ -1313,7 +1312,7 @@ go
 -- Wizard procedures
 -- -----------------
 
--- last rev. 2011-10-06
+-- last rev. 2013-10-04
 create procedure validate_file_list_xml (  @files as FileNameListUdt readonly )
 as
 	declare @errorList table(err varchar(200) );
@@ -1346,10 +1345,10 @@ as
 		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)<>4
 
       if exists( select * from @trialNames tn where 
-		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
-		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having 1 .c3d file') 
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and ( CHARINDEX ('.c3d', Name ) > 0 or CHARINDEX ('.xml', Name ) > 0 ))<>1)		
+		insert into @errorList select ('Trial '+tname+' does not meet the requirement of having 1 .c3d file or 1 .xml file') 
 		from @trialNames tn where 
-		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1	
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and ( CHARINDEX ('.c3d', Name ) > 0 or CHARINDEX ('.xml', Name ) > 0 ))<>1	
 
 	end;
 	
@@ -1451,7 +1450,7 @@ as
 go
 
 
--- last rev. 2012-01-14
+-- last rev. 2013-10-04
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1466,10 +1465,14 @@ as
 	declare @labId int;
 	declare @res int;
 	
+	declare @motion_kind varchar(10);
+	set @motion_kind = 'walk';
+
 	declare @perf_id int;
 	
 	declare @trialsToCreate int;
 	set @sessionId = 0;
+	set @perf_id = 0;
 
 	 select top(1) @labId=IdLaboratorium from Laboratorium;
 	
@@ -1485,23 +1488,30 @@ as
 	  select top 1 @sessionName = SUBSTRING (Name, 1, CHARINDEX ('-T', Name )-1 ) from @files where CHARINDEX ('-T', Name ) > 0;
 	  if( ISDATE ( SUBSTRING(@sessionName,1,10))<>1)
 		begin
-			set @result = 1;
+			set @result = 2;
 			return;
 		end;
 	  set @sessionDate = CAST ( SUBSTRING(@sessionName,1,10) as Date);
 	  
+	  -- wykrycie sesji nieposiadajacej wbudowanego numeru performera
+	  if CHARINDEX('-B', @sessionName) = 0 and CHARINDEX('-A', @sessionName) = 0 
+	  begin
+		set @perf_id = -1;
+		set @motion_kind = 'n/a';
+	  end;
+
 	  -- Okreslam numer performera
-	  set @perf_id = CAST ( SUBSTRING(@sessionName,13,4) as int );
+	  if @perf_id = 0 set @perf_id = CAST ( SUBSTRING(@sessionName,13,4) as int );
 	  
 	  -- Czy nie ma plikow o niezgodnych nazwach?
 	  if exists( select * from @files where CHARINDEX (@sessionName , Name)=0 )
 		begin
-			set @result = 1;
+			set @result = 3;
 			return;
 		end;
 	  if exists( select * from Sesja where Nazwa = @sessionName )
 		begin
-			set @result = 1;
+			set @result = 4;
 			return;
 		end;
 	  -- Kompletuje liste triali
@@ -1509,34 +1519,35 @@ as
 	  if exists(select * from @files where CHARINDEX ('.avi', Name ) > 0) and exists( select * from @trialNames tn where 
 		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.avi', Name ) > 0)>4)
 		or
-		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1)		
+		((select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and (CHARINDEX ('.xml', Name ) > 0  or CHARINDEX ('.c3d', Name ) > 0) )<>1)		
 		)
 		begin
-			set @result = 1;
+			set @result = 5;
 			return;
 		end;
 
 	  if exists( select * from @trialNames tn where 
-		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and CHARINDEX ('.c3d', Name ) > 0)<>1		
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and (CHARINDEX ('.xml', Name ) > 0  or CHARINDEX ('.c3d', Name ) > 0) )<>1		
 		)
 		begin
-			set @result = 1;
+			set @result = 6;
 			return;
 		end;
 	
-		if not exists ( select * from Performer where IdPerformer = @perf_id )
+		if @perf_id > 0 and not exists ( select * from Performer where IdPerformer = @perf_id )
 		begin
 			insert into Performer ( IdPerformer ) values ( @perf_id );
 		end;
 	
-	exec create_session  @user_login, 1, 'walk', @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
+	exec create_session  @user_login, 1, @motion_kind, @sessionDate, @sessionName, '', '', @sessionId OUTPUT, @res OUTPUT; 
 	
 	if (@res<>0) 
 		begin
-			set @result = 1;
+			set @result = 7;
 			return;
 		end;
 		
+	if @perf_id > 0
 	insert into Konfiguracja_performera ( IdPerformer, IdSesja ) values (@perf_id, @sessionId );
 	-- po przetestowaniu zamien wykomentowania gora-dol
 	-- set @sessionId = 1;
@@ -1564,7 +1575,7 @@ go
 -- ==========================
 -- TODO: pozosta³e konfiguracje pomiarowe / ew. - grupy atrybutow
 -- last rev. 2012-03-29
-alter procedure get_shallow_copy @user_login varchar(30)
+create procedure get_shallow_copy @user_login varchar(30)
 as
 with
 UAS as (select * from dbo.user_accessible_sessions_by_login (@user_login) Session ),
@@ -1836,7 +1847,7 @@ begin
 	exec set_performer_conf_attribute @pc_id, 'RightHandThickness', @RightHandThickness, 0, @result OUTPUT;
 	if( @result <> 0 ) return;
 end;
-
+go 
 -- Timestamp procedures and triggers
 
 -- last rev. 2011-10-17
@@ -2001,6 +2012,7 @@ select max(ts) as time_stamp from
 	select max(Zmieniony) as ts from Plik
 	) as q1
 )
+go
 
 -- last rev. 2011-10-24
 create trigger tr_Grupa_sesji_Update on Grupa_sesji

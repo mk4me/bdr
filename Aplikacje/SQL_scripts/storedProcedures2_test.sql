@@ -65,6 +65,39 @@ exec validate_file_list_xml @nazwy;
 
 
 
+declare @nazwy as FileNameListUdt;
+declare @res as int;
+
+
+insert into @nazwy values ('2013-02-28-S01.xml'	);
+insert into @nazwy values ('2013-02-28-S01-T01.png'	);
+insert into @nazwy values ('2013-02-28-S01-T01.png'	);
+
+insert into @nazwy values ('2013-02-28-S01-T01.xml'	);
+insert into @nazwy values ('2013-02-28-S01-T02.xml'	);
+insert into @nazwy values ('2013-02-28-S01-T02.png'	);
+insert into @nazwy values ('2013-02-28-S01-T02.png'	);
+
+
+
+
+exec create_session_from_file_list 'habela', @nazwy, @res OUTPUT
+
+select @res
+
+select * from Sesja
+
+select * from Proba
+
+delete from Proba
+delete from Sesja
+
+
+select * from Rodzaj_ruchu
+
+delete from Rodzaj_ruchu where IdRodzaj_ruchu = 9
+
+
 
 declare @filters as PredicateUdt;
 

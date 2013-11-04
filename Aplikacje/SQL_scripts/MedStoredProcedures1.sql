@@ -292,6 +292,9 @@ begin
 end;
 go
 
+
+-- last mod. 2013-08-02
+-- warning: current version depends on co-llocation of HMDB and HMDB_Med
 create procedure update_user_account(@user_login varchar(30), @user_password varchar(20),  @user_new_password varchar(20), @user_email varchar(50), @user_first_name varchar(30), @user_last_name varchar(50), @result int OUTPUT)
 as
 begin
@@ -327,10 +330,19 @@ begin
 	begin
 		update Uzytkownik 
 		set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+		if exists( select * from Motion.dbo.Uzytkownik where Login = @user_login)
+		begin
+			update Motion.dbo.Uzytkownik 
+			set Email = @user_email, Imie = @user_first_name, Nazwisko = @user_last_name where Login = @user_login;
+		end;
 	end;	
 	if ( @user_new_password != '-nochange-' )
 	begin
 		update Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+		if exists( select * from Motion.dbo.Uzytkownik where Login = @user_login)
+		begin
+			update Motion.dbo.Uzytkownik set Haslo = HashBytes('SHA1',@user_new_password) where Login = @user_login;
+		end;
 	end;
 	
 	return @result;

@@ -262,6 +262,9 @@ insert into Rodzaj_ruchu ( Nazwa ) values ('trot')
 go
 insert into Rodzaj_ruchu ( Nazwa ) values ('dance')
 go
+insert into Rodzaj_ruchu ( Nazwa ) values ('n/a')
+go
+
 
 -- select * from Grupa_atrybutow
 
