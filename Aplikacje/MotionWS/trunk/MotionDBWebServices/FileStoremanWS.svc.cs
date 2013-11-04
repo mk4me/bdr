@@ -1116,7 +1116,7 @@ namespace MotionDBWebServices
                 foreach (FileInfo fi in di.GetFiles("????-??-??-[AB]????-S??*.??*", SearchOption.TopDirectoryOnly))
                 {
 
-                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
+                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp|png|xml))"))
                     {
                         FileNameEntry fne = new FileNameEntry();
                         fne.Name = fi.Name;
