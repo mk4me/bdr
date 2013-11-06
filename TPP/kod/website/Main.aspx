@@ -13,6 +13,7 @@
         <tr>
             <td>BMT</td>
             <td>DBS</td>
+            <td>POP</td>
         </tr>
         <tr>
             <td>
@@ -21,6 +22,10 @@
             </td>
             <td>
                 <asp:ListBox ID="listPatientsDBS" runat="server" Rows="10" Width="200px" 
+                    AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
+            </td>
+            <td>
+                <asp:ListBox ID="listPatientsPOP" runat="server" Rows="10" Width="200px" 
                     AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
             </td>
             <td>

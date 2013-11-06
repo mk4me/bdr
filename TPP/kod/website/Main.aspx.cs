@@ -18,6 +18,8 @@ public partial class Main : System.Web.UI.Page
             listPatientsBMT.DataBind();
             listPatientsDBS.DataSource = getPatients("DBS");
             listPatientsDBS.DataBind();
+            listPatientsPOP.DataSource = getPatients("POP");
+            listPatientsPOP.DataBind();
             toggleButtons(false);
         }
     }
@@ -65,7 +67,7 @@ public partial class Main : System.Web.UI.Page
         Session.Remove("PatientNumber");
         Response.Redirect("~/PatientForm.aspx");
     }
-
+    // todo: remove else if's
     protected void buttonDeletePatient_Click(object sender, EventArgs e)
     {
         if (listPatientsBMT.SelectedIndex >= 0)
@@ -76,6 +78,11 @@ public partial class Main : System.Web.UI.Page
         else if (listPatientsDBS.SelectedIndex >= 0)
         {
             deletePatient(listPatientsDBS.SelectedValue);
+            Response.Redirect(Request.RawUrl);
+        }
+        else if (listPatientsPOP.SelectedIndex >= 0)
+        {
+            deletePatient(listPatientsPOP.SelectedValue);
             Response.Redirect(Request.RawUrl);
         }
     }
@@ -119,6 +126,11 @@ public partial class Main : System.Web.UI.Page
             Session["PatientNumber"] = listPatientsDBS.SelectedValue;
             Response.Redirect("~/PatientForm.aspx");
         }
+        else if (listPatientsPOP.SelectedIndex >= 0)
+        {
+            Session["PatientNumber"] = listPatientsPOP.SelectedValue;
+            Response.Redirect("~/PatientForm.aspx");
+        }
     }
 
     protected void buttonShowAppointments_Click(object sender, EventArgs e)
@@ -133,6 +145,11 @@ public partial class Main : System.Web.UI.Page
             Session["PatientNumber"] = listPatientsDBS.SelectedValue;
             Response.Redirect("~/AppointmentList.aspx");
         }
+        else if (listPatientsPOP.SelectedIndex >= 0)
+        {
+            Session["PatientNumber"] = listPatientsPOP.SelectedValue;
+            Response.Redirect("~/AppointmentList.aspx");
+        }
     }
 
     protected void listPatients_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -140,12 +157,19 @@ public partial class Main : System.Web.UI.Page
         if (sender.Equals(listPatientsBMT))
         {
             listPatientsDBS.ClearSelection();
+            listPatientsPOP.ClearSelection();
         }
         else if (sender.Equals(listPatientsDBS))
         {
             listPatientsBMT.ClearSelection();
+            listPatientsPOP.ClearSelection();
         }
-        if (listPatientsBMT.SelectedIndex >= 0 || listPatientsDBS.SelectedIndex >= 0)
+        else if (sender.Equals(listPatientsPOP))
+        {
+            listPatientsBMT.ClearSelection();
+            listPatientsDBS.ClearSelection();
+        }
+        if (listPatientsBMT.SelectedIndex >= 0 || listPatientsDBS.SelectedIndex >= 0 || listPatientsPOP.SelectedIndex >= 0)
         {
             toggleButtons(true);
         }

@@ -48,11 +48,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <h2>Dane demograficzne i objawy ruchowe</h2>
     <br />
-    <asp:Label ID="labelPatientNumber" runat="server" Text=""></asp:Label>
     <table ID="Table1" runat="server">
         <tr>
             <td>
                 <table ID="Table2" runat="server">
+                    <tr>
+                        <td><asp:Label ID="labelPatientNumber" runat="server" Text=""></asp:Label></td>
+                    </tr>
                     <tr>
                         <td>Rodzaj wizyty:</td>
                         <td>
@@ -178,12 +180,14 @@
                         <td>Czas od począku objawów do<br />włączenia LDopy [mies.]:</td>
                         <td>
                             <asp:TextBox ID="textTimeSymptom" runat="server"></asp:TextBox>
+                            <%--
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
                                 ErrorMessage="*" ControlToValidate="textTimeSymptom"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator Runat="server" ID="RegularExpressionValidator1" 
                                 ControlToValidate="textTimeSymptom"
                                 ErrorMessage="Proszę podać liczbę od 0 do 255."
                                 ValidationExpression="^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$"></asp:RegularExpressionValidator>
+                             --%>
                         </td>
                     </tr>
                     <tr>
@@ -202,12 +206,14 @@
                         <td>Czas dyskinez od lat:</td>
                         <td>
                             <asp:TextBox ID="textTimeDiskinesia" runat="server"></asp:TextBox>
+                            <%--
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
                                 ErrorMessage="*" ControlToValidate="textTimeDiskinesia"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
                                 ErrorMessage="Proszę podać liczbę od 0 do 99.9."
                                 ValidationExpression="^[0-9]{1,2}(?:\.[0-9]{1})?$"
                                 ControlToValidate="textTimeDiskinesia"></asp:RegularExpressionValidator>
+                            --%>
                         </td>
                     </tr>
                     <tr>
@@ -226,12 +232,14 @@
                         <td>Fluktuacje od lat:</td>
                         <td>
                             <asp:TextBox ID="textYearsFluctuations" runat="server"></asp:TextBox>
+                            <%--
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" 
                                 ErrorMessage="*" ControlToValidate="textYearsFluctuations"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" 
                                 ErrorMessage="Proszę podać liczbę od 0 do 99.9."
                                 ValidationExpression="^[0-9]{1,2}(?:\.[0-9]{1})?$"
                                 ControlToValidate="textYearsFluctuations"></asp:RegularExpressionValidator>
+                            --%>
                         </td>
                     </tr>
                     <tr>
@@ -258,7 +266,7 @@
                     </tr>
                 </table>
             </td>
-            <td>
+            <td align="center" valign="top" style="padding-left: 100px;">
                 <table ID="Table3" runat="server">
                     <tr>
                         <td>

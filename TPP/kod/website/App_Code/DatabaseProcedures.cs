@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Data.SqlClient;
 using System.Data;
+using System.Globalization;
 
 /// <summary>
 /// Summary description for DatabaseProcedures
@@ -204,10 +205,14 @@ public class DatabaseProcedures
         return getDecimalOrNullWithNoData(value, "");
     }
 
+    /// <summary>
+    /// Accepts a point or a comma for decimals.
+    /// </summary>
     public static object getDecimalOrNullWithNoData(string value, string noData)
     {
+        value = value.Replace(',', '.');
         decimal d;
-        if (value == noData || !decimal.TryParse(value, out d))
+        if (value == noData || !decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out d))
         {
             return DBNull.Value;
         }

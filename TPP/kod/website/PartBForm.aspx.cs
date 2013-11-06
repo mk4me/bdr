@@ -94,7 +94,7 @@ public partial class PartBForm : System.Web.UI.Page
         cmd.Parameters.Add("@Kawa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropCoffee.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@ZielonaHerbata", SqlDbType.TinyInt).Value = byte.Parse(dropGreenTea.SelectedValue);
         cmd.Parameters.Add("@Alkohol", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropAlcohol.SelectedValue, NO_DATA.ToString());
-        cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = byte.Parse(textTreatmentNumber.Text);
+        cmd.Parameters.Add("@ZabiegowWZnieczOgPrzedRozpoznaniemPD", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTreatmentNumber.Text);
         cmd.Parameters.Add("@Zamieszkanie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropZamieszkanie.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Uwagi", SqlDbType.VarChar, 50).Value = textNotes.Text;
         cmd.Parameters.Add("@Nadcisnienie", SqlDbType.TinyInt).Value = byte.Parse(dropNadcisnienie.SelectedValue);

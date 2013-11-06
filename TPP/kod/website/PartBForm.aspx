@@ -49,12 +49,14 @@
             <td>Liczba zabiegów w znieczuleniu<br />ogólnym przed rozpoznaniem PD:</td>
             <td>
                 <asp:TextBox ID="textTreatmentNumber" runat="server"></asp:TextBox>
+                <%--
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" 
                     ErrorMessage="*" ControlToValidate="textTreatmentNumber"></asp:RequiredFieldValidator>
                 <asp:RegularExpressionValidator Runat="server" ID="RegularExpressionValidator4" 
                     ControlToValidate="textTreatmentNumber"
                     ErrorMessage="Proszę podać liczbę od 0 do 255."
                     ValidationExpression="^([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$"></asp:RegularExpressionValidator>
+                --%>
             </td>
         </tr>
         <tr>

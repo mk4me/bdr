@@ -132,7 +132,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.Parameters.Add("@Spowolnienie", SqlDbType.TinyInt).Value = byte.Parse(dropSpowolnienie.SelectedValue);
         cmd.Parameters.Add("@ObjawyInne", SqlDbType.TinyInt).Value = byte.Parse(dropObjawy.SelectedValue);
         cmd.Parameters.Add("@ObjawyInneJakie", SqlDbType.VarChar, 80).Value = textObjawy.Text.ToString();
-        cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = byte.Parse(textTimeSymptom.Text);
+        cmd.Parameters.Add("@CzasOdPoczObjDoWlLDopy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTimeSymptom.Text);
         cmd.Parameters.Add("@DyskinezyObecnie", SqlDbType.TinyInt).Value = byte.Parse(dropDiskinesia.SelectedValue);
         SqlParameter dyskinesiaDecimal = new SqlParameter("@DyskinezyOdLat", SqlDbType.Decimal);
         dyskinesiaDecimal.Precision = 3;
@@ -233,28 +233,28 @@ public partial class AppointmentForm : System.Web.UI.Page
                 dropSpowolnienie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Spowolnienie"]);
                 dropObjawy.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["ObjawyInne"]);
                 textObjawy.Text = DatabaseProcedures.getTextStringValue(rdr["ObjawyInneJakie"]);
-                textTimeSymptom.Text = ((byte)rdr["CzasOdPoczObjDoWlLDopy"]).ToString();
+                textTimeSymptom.Text = DatabaseProcedures.getTextByteValue(rdr["CzasOdPoczObjDoWlLDopy"]);
                 dropDiskinesia.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["DyskinezyObecnie"], NO_DATA.ToString());
                 if (dropDiskinesia.SelectedValue == "0")
                 {
                     textTimeDiskinesia.Enabled = false;
-                    RequiredFieldValidator2.Enabled = false;
+                    //RequiredFieldValidator2.Enabled = false;
                 }
                 else
                 {
                     textTimeDiskinesia.Text = DatabaseProcedures.getTextDecimalValue(rdr["DyskinezyOdLat"]);
-                    RequiredFieldValidator2.Enabled = true;
+                    //RequiredFieldValidator2.Enabled = true;
                 }
                 dropFluctuations.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["FluktuacjeObecnie"], NO_DATA.ToString());
                 if (dropFluctuations.SelectedValue == "0")
                 {
                     textYearsFluctuations.Enabled = false;
-                    RequiredFieldValidator3.Enabled = false;
+                    //RequiredFieldValidator3.Enabled = false;
                 }
                 else
                 {
                     textYearsFluctuations.Text = DatabaseProcedures.getTextDecimalValue(rdr["FluktuacjeOdLat"]);
-                    RequiredFieldValidator3.Enabled = true;
+                    //RequiredFieldValidator3.Enabled = true;
                 }
                 textCzasDyskinez.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasDyskinez"]);
                 textCzasOFF.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasOFF"]);
@@ -280,9 +280,9 @@ public partial class AppointmentForm : System.Web.UI.Page
         dropEducation.SelectedValue = NO_DATA.ToString();
         dropSymptom.SelectedValue = NO_DATA.ToString();
         textTimeDiskinesia.Enabled = false;
-        RequiredFieldValidator2.Enabled = false;
+        //RequiredFieldValidator2.Enabled = false;
         textYearsFluctuations.Enabled = false;
-        RequiredFieldValidator3.Enabled = false;
+        //RequiredFieldValidator3.Enabled = false;
     }
 
     protected void dropDiskinesia_SelectedIndexChanged(object sender, EventArgs e)
@@ -290,13 +290,13 @@ public partial class AppointmentForm : System.Web.UI.Page
         if (byte.Parse(dropDiskinesia.SelectedValue) == 1)
         {
             textTimeDiskinesia.Enabled = true;
-            RequiredFieldValidator2.Enabled = true;
+            //RequiredFieldValidator2.Enabled = true;
         }
         else
         {
             textTimeDiskinesia.Enabled = false;
             textTimeDiskinesia.Text = "";
-            RequiredFieldValidator2.Enabled = false;
+            //RequiredFieldValidator2.Enabled = false;
         }
     }
 
@@ -305,13 +305,13 @@ public partial class AppointmentForm : System.Web.UI.Page
         if (byte.Parse(dropFluctuations.SelectedValue) == 1)
         {
             textYearsFluctuations.Enabled = true;
-            RequiredFieldValidator3.Enabled = true;
+            //RequiredFieldValidator3.Enabled = true;
         }
         else
         {
             textYearsFluctuations.Enabled = false;
             textYearsFluctuations.Text = "";
-            RequiredFieldValidator3.Enabled = false;
+            //RequiredFieldValidator3.Enabled = false;
         }
     }
 

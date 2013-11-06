@@ -140,7 +140,7 @@ public partial class PatientForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";
+        cmd.CommandText = "select NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";
         cmd.Connection = con;
 
         try
@@ -149,6 +149,7 @@ public partial class PatientForm : System.Web.UI.Page
             SqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
+                dropGroup.SelectedValue = rdr["NazwaGrupy"].ToString();
                 dropYear.SelectedValue = ((short)rdr["RokUrodzenia"]).ToString();
                 dropMonth.SelectedValue = ((byte)rdr["MiesiacUrodzenia"]).ToString();
                 int sex = ((byte)rdr["Plec"]); ;
