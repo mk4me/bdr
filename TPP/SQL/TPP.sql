@@ -47,7 +47,7 @@ CREATE INDEX X1Uzytkownik ON Uzytkownik (
  go
 
 
-
+--!
 CREATE TABLE Pacjent (
 	IdPacjent 	int IDENTITY,
 	NumerPacjenta	varchar(20) not null unique,
@@ -55,7 +55,8 @@ CREATE TABLE Pacjent (
 	MiesiacUrodzenia tinyint,
 	Plec tinyint,
 	Lokalizacja varchar(10), 
-	LiczbaElektrod tinyint,	
+	LiczbaElektrod tinyint,
+	NazwaGrupy varchar(3),	
 	Wprowadzil	int not null,
 	Zmodyfikowal int not null,
 	OstatniaZmiana datetime not null
@@ -75,6 +76,7 @@ go
 select * from Uzytkownik
 
 /* 
+alter table Pacjent add NazwaGrupy varchar(3) not null default 'DBS';
 alter table Pacjent add Wprowadzil int not null default 1;
 alter table Pacjent add Zmodyfikowal int not null default 1;
 alter table Pacjent add OstatniaZmiana datetime not null default '2013-10-01T12:12:12.000';

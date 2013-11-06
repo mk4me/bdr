@@ -275,12 +275,14 @@ as
 go
 
 
+
+
 -- WGRYWANIE DANYCH I WALIDACJA
 -- ============================
 
--- last rev. 2013-07-25
+-- last rev. 2013-10-31
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
-alter procedure update_patient  (	@NumerPacjenta	varchar(20), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
+create procedure update_patient  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
 	declare @update bit;
@@ -296,6 +298,14 @@ begin
 		end
 		else set @update = 1;
 	end;
+
+	if( dbo.validate_input_varchar('Pacjent', 'NazwaGrupy', @NazwaGrupy) = 0 )
+	begin
+		set @result = 2;
+		set @message = @message + 'Nazwa grupy - invalid enum value.';
+		return;
+	end;
+
 	if( dbo.validate_ext_bit( @Plec) = 0 )
 	begin
 		set @result = 2;
@@ -318,8 +328,8 @@ begin
 	end;
 
 	if(@update = 0)
-		insert into Pacjent (NumerPacjenta, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod )
-					values (@NumerPacjenta, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
+		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod )
+					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
 	else
 		update Pacjent
 		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
@@ -329,9 +339,9 @@ end;
 go
 
 
--- last rev. 2013-10-02
+-- last rev. 2013-10-31
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message, 3 = login user not found
-alter procedure update_patient_l  (	@NumerPacjenta	varchar(20), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+create procedure update_patient_l  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3),  @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
 	declare @update bit;
@@ -348,6 +358,13 @@ begin
 			return;
 		end
 		else set @update = 1;
+	end;
+
+	if( dbo.validate_input_varchar('Pacjent', 'NazwaGrupy', @NazwaGrupy) = 0 )
+	begin
+		set @result = 2;
+		set @message = @message + 'Nazwa grupy - invalid enum value.';
+		return;
 	end;
 
 	select @userid = dbo.identify_user(@actor_login);
@@ -381,8 +398,8 @@ begin
 	end;
 
 	if(@update = 0)
-		insert into Pacjent (NumerPacjenta, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, Wprowadzil, Zmodyfikowal, OstatniaZmiana  )
-					values (@NumerPacjenta, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod, @userid, @userid, getdate()	 );
+		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod )
+					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
 	else
 		update Pacjent
 		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
@@ -2197,7 +2214,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 
 
--- created: 2013-10-09
+-- created: 2013-10-29
 alter procedure get_database_copy
 as
 SELECT 
@@ -2208,6 +2225,7 @@ SELECT
       ,P.[Plec]
       ,P.[Lokalizacja]
       ,P.[LiczbaElektrod]
+	  ,P.[NazwaGrupy]
 /*    ,P.[Wprowadzil] as WprowadzilDanePacjenta
       ,P.[Zmodyfikowal] as KorygowalDanePacjenta
       ,P.[OstatniaZmiana] as OstatniaKorektaDanychPacjenta */
@@ -2482,18 +2500,34 @@ SELECT
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
 
 
-
+  
 
 
 -- wsparcie generowania numerow pacjenta
 
--- created: 2013-10-01
+-- created: 2013-10-31
 create procedure suggest_new_patient_number( @admission_date date, @patient_number varchar(20) OUTPUT )
 as
 begin
 	declare @maxnum int;
 	set @patient_number = '/PD/DBS/'+CAST(YEAR(@admission_date) as varchar);
 	select @maxnum = max(IdPacjent)+1 from Pacjent;
+	if @maxnum is null
+		set @maxnum = 1;
+	set @patient_number = cast(@maxnum as varchar)+@patient_number; -- rozwiazanie tymczasowe
+	return;
+end;
+go
+
+-- created: 2013-10-31
+create procedure suggest_new_patient_number_with_group( @admission_date date, @patient_group varchar(3), @patient_number varchar(20) OUTPUT )
+as
+begin
+	declare @maxnum int;
+	set @patient_number = '/PD/'+@patient_group+'/'+CAST(YEAR(@admission_date) as varchar);
+	select @maxnum = max(IdPacjent)+1 from Pacjent;
+	if @maxnum is null
+		set @maxnum = 1;
 	set @patient_number = cast(@maxnum as varchar)+@patient_number; -- rozwiazanie tymczasowe
 	return;
 end;
@@ -2632,6 +2666,13 @@ insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyt
 insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'Lokalizacja',	'STN',	'STN' );
 insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'Lokalizacja',	'Gpi',	'Gpi' );
 insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'Lokalizacja',	'Vim',	'Vim' );
+
+
+
+insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'NazwaGrupy',	'DBS',	'DBS' );
+insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'NazwaGrupy',	'BMT',	'BMT' );
+insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'NazwaGrupy',	'POP',	'POP' );
+
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'_ObjawAutonomiczny',	0,	'0=norma' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'_ObjawAutonomiczny',	1,	'1=niewielkie zaburzenia' );
@@ -3022,7 +3063,7 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',
 
 
 */
-
+select * from SlownikVarchar
 
 
 /*
@@ -3030,7 +3071,7 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',
 declare @res int;
 declare @message varchar(200);
 
-exec update_patient 'NUMER/TESTOWY', 1922, 12, 2, 'yxz', 2, 1, @res OUTPUT, @message OUTPUT;
+exec update_patient 'NUMER/TESTOWY', 'BMT', 1922, 13, 2, 'yxz', 2, 1, @res OUTPUT, @message OUTPUT;
 
 	select @res, @message;
 
@@ -3047,7 +3088,7 @@ exec update_patient 'NUMER/TESTOWY', 1922, 12, 2, 'yxz', 2, 1, @res OUTPUT, @mes
 
 declare @message varchar(200);
 declare @res int;
-exec update_patient_l '2013-08-07/TEST1', 1951, 11, 1, 'Gpi', 2, 1, testowy, @res OUTPUT, @message OUTPUT;
+exec update_patient_l '2013-08-07/TEST1', 'BMT', 1951, 12, 1, 'Gpi', 2, 1, testowy, @res OUTPUT, @message OUTPUT;
 	select @message, @res;
 
 	select * from Pacjent
@@ -3266,6 +3307,8 @@ update_variant_examination_data_partC  1,
 
 */
 
+
+
 /*
 delete from Badanie
 DBCC CHECKIDENT ('Badanie', RESEED, 0)
@@ -3278,5 +3321,11 @@ DBCC CHECKIDENT ('Uzytkownik', RESEED, 0)
 
 select * from Uzytkownik
 
+declare @pn varchar(20);
+exec suggest_new_patient_number_with_group '2013-10-29', 'BMT', @pn OUTPUT;
+select @pn
+
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 's.szlufik', HashBytes('SHA1','pass4tpp'), 'Stanisław', 'Szlufik', 'stanislaw.szlufik@gmail.com', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'p.habela', HashBytes('SHA1','pass;'), 'Piotr', 'Hablea', 'habela@pjwstk.edu.pl', 1 )
 */
+
