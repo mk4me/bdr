@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <asp:Label ID="labelDateSurgery" runat="server" Text="Data operacji"></asp:Label>
+                            <asp:Label ID="labelDateSurgery" runat="server" Text="Data operacji:"></asp:Label>
                         </td>
                         <td>
                             <asp:TextBox ID="textDateSurgery" runat="server"></asp:TextBox>
@@ -89,14 +89,18 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Wykształcenie:</td>
+                        <td>
+                            <asp:Label ID="labelEducation" runat="server" Text="Wykształcenie:"></asp:Label>
+                        </td>
                         <td>
                             <asp:DropDownList ID="dropEducation" runat="server">
                             </asp:DropDownList>
                         </td>
                     </tr>
                     <tr>
-                        <td>Rodzinność:</td>
+                        <td>
+                            <asp:Label ID="labelFamily" runat="server" Text="Rodzinność:"></asp:Label>
+                        </td>
                         <td>
                             <asp:DropDownList ID="dropFamily" runat="server">
                                 <asp:ListItem Value="2" Text=""></asp:ListItem>
@@ -124,7 +128,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Pierwszy objaw:</td>
+                        <td>
+                            <asp:Label ID="labelSymptom" runat="server" Text="Pierwszy objaw:"></asp:Label>
+                        </td>
                         <td>
                             <asp:DropDownList ID="dropSymptom" runat="server">
                             </asp:DropDownList>
@@ -177,7 +183,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Czas od począku objawów do<br />włączenia LDopy [mies.]:</td>
+                        <td>
+                            <asp:Label ID="labelTimeSymptom" runat="server" Text="Czas od począku objawów do<br />włączenia LDopy [mies.]:"></asp:Label>
+                        </td>
                         <td>
                             <asp:TextBox ID="textTimeSymptom" runat="server"></asp:TextBox>
                             <%--

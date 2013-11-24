@@ -58,7 +58,7 @@ public partial class PartEForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[update_examination_questionnaire_partE]";
+        cmd.CommandText = "[dbo].[update_examination_questionnaire_partE_x01]";
         cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
         cmd.Parameters.Add("@WydzielanieSliny", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWydzielanieSliny.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Dysfagia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropDysfagia.SelectedValue, NO_DATA.ToString());
@@ -77,9 +77,11 @@ public partial class PartEForm : System.Web.UI.Page
         cmd.Parameters.Add("@ProbaPionizacyjna", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropProbaPionizacyjna.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@WzrostPodtliwosciTwarzKark", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWzrostPodtliwosciTwarzKark.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@WzrostPotliwosciRamionaDlonie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWzrostPotliwosciRamionaDlonie.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@WzrostPotliwosciBrzuchPlecy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWzrostPotliwosciBrzuchPlecy.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@WzrostPotliwosciKonczynyDolneStopy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropWzrostPotliwosciKonczynyDolneStopy.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@SpadekPodtliwosciTwarzKark", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSpadekPodtliwosciTwarzKark.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@SpadekPotliwosciRamionaDlonie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSpadekPotliwosciRamionaDlonie.SelectedValue, NO_DATA.ToString());
+        cmd.Parameters.Add("@SpadekPotliwosciBrzuchPlecy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSpadekPotliwosciBrzuchPlecy.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@SpadekPotliwosciKonczynyDolneStopy", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSpadekPotliwosciKonczynyDolneStopy.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@NietolerancjaWysokichTemp", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropNietolerancjaWysokichTemp.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@NietolerancjaNiskichTemp", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropNietolerancjaNiskichTemp.SelectedValue, NO_DATA.ToString());
@@ -131,7 +133,8 @@ public partial class PartEForm : System.Web.UI.Page
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select WydzielanieSliny, Dysfagia, DysfagiaCzestotliwosc, Nudnosci, Zaparcia, TrudnosciWOddawaniuMoczu, " +
             "PotrzebaNaglegoOddaniaMoczu, NiekompletneOproznieniePecherza, SlabyStrumienMoczu, CzestotliwowscOddawaniaMoczu, Nykturia, NiekontrolowaneOddawanieMoczu, Omdlenia, " +
-            "ZaburzeniaRytmuSerca, ProbaPionizacyjna, WzrostPodtliwosciTwarzKark, WzrostPotliwosciRamionaDlonie, WzrostPotliwosciKonczynyDolneStopy, SpadekPodtliwosciTwarzKark, SpadekPotliwosciRamionaDlonie, " +
+            "ZaburzeniaRytmuSerca, ProbaPionizacyjna, WzrostPodtliwosciTwarzKark, WzrostPotliwosciRamionaDlonie, WzrostPotliwosciBrzuchPlecy, WzrostPotliwosciKonczynyDolneStopy, " +
+            "SpadekPotliwosciBrzuchPlecy, SpadekPodtliwosciTwarzKark, SpadekPotliwosciRamionaDlonie, " +
             "SpadekPotliwosciKonczynyDolneStopy, NietolerancjaWysokichTemp, NietolerancjaNiskichTemp, Lojotok, SpadekLibido, KlopotyOsiagnieciaErekcji, KlopotyUtrzymaniaErekcji " +
             "from Wizyta where IdWizyta = " + Session["AppointmentId"];
         cmd.Connection = con;
@@ -159,9 +162,11 @@ public partial class PartEForm : System.Web.UI.Page
                 dropProbaPionizacyjna.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["ProbaPionizacyjna"], NO_DATA.ToString());
                 dropWzrostPodtliwosciTwarzKark.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["WzrostPodtliwosciTwarzKark"], NO_DATA.ToString());
                 dropWzrostPotliwosciRamionaDlonie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["WzrostPotliwosciRamionaDlonie"], NO_DATA.ToString());
+                dropWzrostPotliwosciBrzuchPlecy.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["WzrostPotliwosciBrzuchPlecy"], NO_DATA.ToString());
                 dropWzrostPotliwosciKonczynyDolneStopy.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["WzrostPotliwosciKonczynyDolneStopy"], NO_DATA.ToString());
                 dropSpadekPodtliwosciTwarzKark.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["SpadekPodtliwosciTwarzKark"], NO_DATA.ToString());
                 dropSpadekPotliwosciRamionaDlonie.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["SpadekPotliwosciRamionaDlonie"], NO_DATA.ToString());
+                dropSpadekPotliwosciBrzuchPlecy.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["SpadekPotliwosciBrzuchPlecy"], NO_DATA.ToString());
                 dropSpadekPotliwosciKonczynyDolneStopy.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["SpadekPotliwosciKonczynyDolneStopy"], NO_DATA.ToString());
                 dropNietolerancjaWysokichTemp.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["NietolerancjaWysokichTemp"], NO_DATA.ToString());
                 dropNietolerancjaNiskichTemp.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["NietolerancjaNiskichTemp"], NO_DATA.ToString());

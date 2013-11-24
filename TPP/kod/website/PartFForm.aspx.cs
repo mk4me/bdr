@@ -10,7 +10,7 @@ using System.Data;
 
 public partial class PartFForm : System.Web.UI.Page
 {
-    private static int VARIANTS = 8;
+    private static int VARIANTS = 4;
     private List<Tuple<DropDownList[], string>> UPDRSList1 = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<DropDownList[], string>> UPDRSList2 = new List<Tuple<DropDownList[], string>>();
     private Tuple<TextBox[], string> UPDRSListCalculated1;
@@ -39,6 +39,44 @@ public partial class PartFForm : System.Web.UI.Page
     private static decimal NO_DATA_DECIMAL = 100;
 
     protected void Page_Load(object sender, EventArgs e)
+    {
+        if (Session["PatientNumber"] != null && Session["AppointmentId"] != null && Session["AppointmentName"] != null)
+        {
+            initControls();
+            labelAppointment.Text = "Pacjent: " + Session["PatientNumber"] + "<br />Wizyta: " + Session["AppointmentName"];
+            if (!IsPostBack)
+            {
+                loadVariantIds();
+                int[] variantIds = (int[])ViewState["VariantIds"];
+                if (variantIds != null)
+                {
+                    for (int i = 0; i < variantIds.Length; i++)
+                    {
+                        loadPartA(variantIds[i], i);
+                    }
+                    for (int i = 0; i < variantIds.Length; i++)
+                    {
+                        loadPartB(variantIds[i], i);
+                    }
+                    for (int i = 0; i < variantIds.Length; i++)
+                    {
+                        loadPartC(variantIds[i], i);
+                    }
+                }
+                else
+                {
+                    initParts();
+                }
+                loadPartF();
+            }
+        }
+        else
+        {
+            Response.Redirect("~/Main.aspx");
+        }
+    }
+
+    private void initControls()
     {
         UPDRSList2.Add(addVariantDropDowns("UPDRS_I", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_I", NO_DATA)));
         UPDRSList2.Add(addVariantDropDowns("UPDRS_II", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_II", NO_DATA)));
@@ -147,48 +185,22 @@ public partial class PartFForm : System.Web.UI.Page
 
         disablePhases();
 
-        if (Session["PatientNumber"] != null && Session["AppointmentId"] != null && Session["AppointmentName"] != null)
-        {
-            labelAppointment.Text = "Pacjent: " + Session["PatientNumber"] + "<br />Wizyta: " + Session["AppointmentName"];
-            if (!IsPostBack)
-            {
-                loadVariantIds();
-                int[] variantIds = (int[])ViewState["VariantIds"];
-                if (variantIds != null)
-                {
-                    for (int i = 0; i < variantIds.Length; i++)
-                    {
-                        loadPartA(variantIds[i], i);
-                    }
-                    for (int i = 0; i < variantIds.Length; i++)
-                    {
-                        loadPartB(variantIds[i], i);
-                    }
-                    for (int i = 0; i < variantIds.Length; i++)
-                    {
-                        loadPartC(variantIds[i], i);
-                    }
-                }
-                else
-                {
-                    initParts();
-                }
-                loadPartF();
-            }
-        }
-        else
-        {
-            Response.Redirect("~/Main.aspx");
-        }
+        
     }
 
     private TableRow addVariantRow(String label, Table table)
     {
         TableRow row = new TableRow();
+        table.CellPadding = 3;
+        table.CellSpacing = 0;
+        if (table.Rows.Count % 2 == 0)
+        {
+            row.BackColor = System.Drawing.Color.FromArgb(255, 255, 240, 178);
+        }
         table.Rows.Add(row);
         Label labelVariant = new Label();
         labelVariant.Text = label;
-        labelVariant.Width = new Unit(150);
+        labelVariant.Width = new Unit(200);
         TableCell cell = new TableCell();
         row.Controls.Add(cell);
         cell.Controls.Add(labelVariant);
@@ -580,40 +592,24 @@ public partial class PartFForm : System.Web.UI.Page
     {
         if (BMT)
         {
-            if (DBS == 3)
+            if (DBS == 1)
             {
                 return 0;
             }
-            else if (DBS == 1)
+            else if (DBS == 0)
             {
                 return 1;
             }
-            else if (DBS == 2)
+        }
+        else
+        {
+            if (DBS == 1)
             {
                 return 2;
             }
             else if (DBS == 0)
             {
                 return 3;
-            }
-        }
-        else
-        {
-            if (DBS == 3)
-            {
-                return 4;
-            }
-            else if (DBS == 1)
-            {
-                return 5;
-            }
-            else if (DBS == 2)
-            {
-                return 6;
-            }
-            else if (DBS == 0)
-            {
-                return 7;
             }
         }
 
@@ -898,15 +894,11 @@ public partial class PartFForm : System.Web.UI.Page
     private void disablePhases()
     {
         List<int> variantList = new List<int>();
-        variantList.Add(getVariantColumn(1, true));
-        variantList.Add(getVariantColumn(1, false));
-        variantList.Add(getVariantColumn(2, true));
-        variantList.Add(getVariantColumn(2, false));
 
         if (Session["AppointmentName"].ToString() == "przedoperacyjna")
         {
-            variantList.Add(getVariantColumn(3, true));
-            variantList.Add(getVariantColumn(3, false));
+            variantList.Add(getVariantColumn(1, true));
+            variantList.Add(getVariantColumn(1, false));
             foreach (Tuple<DropDownList[], string> tuple in UPDRSList1)
             {
                 disableWebControlVariants(tuple.Item1, variantList);
@@ -936,21 +928,21 @@ public partial class PartFForm : System.Web.UI.Page
             disableWebControlVariants(variantsJazzNovo.Item1, variantList);
             disableWebControlVariants(variantsWideookulograf.Item1, variantList);
             disableWebControlVariants(variantsLatencymeter.Item1, variantList);
-        }
 
-        disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
-        disableWebControlVariants(variantsTestSchodkowyCzas1.Item1, variantList);
-        disableWebControlVariants(variantsTestSchodkowyCzas2.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszu.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
-        disableWebControlVariants(variantsPosturografia.Item1, variantList);
-        disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
-        foreach (Tuple<TextBox[], string> variantsPartC in variantsPartCList)
-        {
-            disableWebControlVariants(variantsPartC.Item1, variantList);
+            disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
+            disableWebControlVariants(variantsTestSchodkowyCzas1.Item1, variantList);
+            disableWebControlVariants(variantsTestSchodkowyCzas2.Item1, variantList);
+            disableWebControlVariants(variantsTestMarszu.Item1, variantList);
+            disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
+            disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
+            disableWebControlVariants(variantsPosturografia.Item1, variantList);
+            disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
+            foreach (Tuple<TextBox[], string> variantsPartC in variantsPartCList)
+            {
+                disableWebControlVariants(variantsPartC.Item1, variantList);
+            }
+            disableWebControlVariants(variantsTandemPivot.Item1, variantList);
         }
-        disableWebControlVariants(variantsTandemPivot.Item1, variantList);
     }
 
     private void disableWebControlVariants(WebControl[] webControlVariants, List<int> variantList)

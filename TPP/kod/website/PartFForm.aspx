@@ -39,18 +39,14 @@
     <asp:Table ID="tableUPDRS" runat="server">
         <asp:TableHeaderRow>
             <asp:TableHeaderCell>BMT</asp:TableHeaderCell>
-            <asp:TableHeaderCell ColumnSpan="4">ON</asp:TableHeaderCell>
-            <asp:TableHeaderCell ColumnSpan="4">OFF</asp:TableHeaderCell>
+            <asp:TableHeaderCell ColumnSpan="2">ON</asp:TableHeaderCell>
+            <asp:TableHeaderCell ColumnSpan="2">OFF</asp:TableHeaderCell>
         </asp:TableHeaderRow>
         <asp:TableHeaderRow>
             <asp:TableHeaderCell>DBS</asp:TableHeaderCell>
             <asp:TableHeaderCell>ON-LP</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-L</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-P</asp:TableHeaderCell>
             <asp:TableHeaderCell>OFF</asp:TableHeaderCell>
             <asp:TableHeaderCell>ON-LP</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-L</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-P</asp:TableHeaderCell>
             <asp:TableHeaderCell>OFF</asp:TableHeaderCell>
         </asp:TableHeaderRow>
     </asp:Table>

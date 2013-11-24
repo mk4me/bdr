@@ -92,11 +92,20 @@ public partial class AppointmentForm : System.Web.UI.Page
         dropSymptom.DataTextField = "Value";
         dropSymptom.DataValueField = "Key";
         dropSymptom.DataBind();
-        
-        if (Session["AppointmentType"].ToString() != "0.0")
+
+        if ((Session["AppointmentType"].ToString() != "0.0" && Session["PatientNumber"].ToString().Contains("POP") == false) ||
+            (Session["AppointmentType"].ToString() != "0.0" && Session["AppointmentType"].ToString() != "0.5" && Session["PatientNumber"].ToString().Contains("POP") == true))
         {
             textDateSurgery.Visible = false;
             labelDateSurgery.Visible = false;
+            dropEducation.Visible = false;
+            labelEducation.Visible = false;
+            dropFamily.Visible = false;
+            labelFamily.Visible = false;
+            dropSymptom.Visible = false;
+            labelSymptom.Visible = false;
+            textTimeSymptom.Visible = false;
+            labelTimeSymptom.Visible = false;
         }
     }
 

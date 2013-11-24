@@ -127,6 +127,13 @@
             </td>
         </tr>
         <tr>
+            <td>Wzrost potliwości brzucha i pleców:</td>
+            <td>
+                <asp:DropDownList ID="dropWzrostPotliwosciBrzuchPlecy" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
             <td>Wzrost potliwości kończyn dolnych i stóp:</td>
             <td>
                 <asp:DropDownList ID="dropWzrostPotliwosciKonczynyDolneStopy" runat="server">
@@ -144,6 +151,13 @@
             <td>Spadek potliwości ramion i dłoni:</td>
             <td>
                 <asp:DropDownList ID="dropSpadekPotliwosciRamionaDlonie" runat="server">
+                </asp:DropDownList>
+            </td>
+        </tr>
+        <tr>
+            <td>Spadek potliwości brzucha i pleców:</td>
+            <td>
+                <asp:DropDownList ID="dropSpadekPotliwosciBrzuchPlecy" runat="server">
                 </asp:DropDownList>
             </td>
         </tr>
