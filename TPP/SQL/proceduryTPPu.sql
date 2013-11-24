@@ -338,7 +338,7 @@ begin
 end;
 go
 
-
+drop procedure update_patient_l
 -- last rev. 2013-10-31
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message, 3 = login user not found
 create procedure update_patient_l  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3),  @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
@@ -398,8 +398,8 @@ begin
 	end;
 
 	if(@update = 0)
-		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod )
-					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
+		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, OstatniaZmiana, Wprowadzil, Zmodyfikowal )
+					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod, getdate(), @userid, @userid	 );
 	else
 		update Pacjent
 		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
@@ -1092,9 +1092,9 @@ begin
 end;
 go
 
-
+-- updated (temp. name) 2013-11-21
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_examination_questionnaire_partE  (
+create procedure update_examination_questionnaire_partE_x01  (
 	@IdWizyta int,
 	@WydzielanieSliny	tinyint,
 	@Dysfagia	tinyint,
@@ -1113,9 +1113,11 @@ create procedure update_examination_questionnaire_partE  (
 	@ProbaPionizacyjna	tinyint,
 	@WzrostPodtliwosciTwarzKark	tinyint,
 	@WzrostPotliwosciRamionaDlonie	tinyint,
+	@WzrostPotliwosciBrzuchPlecy tinyint,
 	@WzrostPotliwosciKonczynyDolneStopy	tinyint,
 	@SpadekPodtliwosciTwarzKark	tinyint,
 	@SpadekPotliwosciRamionaDlonie	tinyint,
+	@SpadekPotliwosciBrzuchPlecy tinyint,
 	@SpadekPotliwosciKonczynyDolneStopy	tinyint,
 	@NietolerancjaWysokichTemp	tinyint,
 	@NietolerancjaNiskichTemp	tinyint,
@@ -1272,6 +1274,13 @@ begin
 		return;
 	end;
 
+	if dbo.validate_input_int('Wizyta', '_ObjawAutonomiczny', @WzrostPotliwosciBrzuchPlecy) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute @WzrostPotliwosciBrzuchPlecy - see enumeration for allowed values';
+		return;
+	end;
+
 	if dbo.validate_input_int('Wizyta', '_ObjawAutonomiczny', @WzrostPotliwosciKonczynyDolneStopy) = 0
 	begin
 		set @result = 2;
@@ -1290,6 +1299,13 @@ begin
 	begin
 		set @result = 2;
 		set @message = 'Invalid value for attribute @SpadekPotliwosciRamionaDlonie - see enumeration for allowed values';
+		return;
+	end;
+
+	if dbo.validate_input_int('Wizyta', '_ObjawAutonomiczny', @SpadekPotliwosciBrzuchPlecy) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute @SpadekPotliwosciBrzuchPlecy - see enumeration for allowed values';
 		return;
 	end;
 
@@ -1313,7 +1329,6 @@ begin
 		set @message = 'Invalid value for attribute @NietolerancjaNiskichTemp - see enumeration for allowed values';
 		return;
 	end;
-
 
 	if dbo.validate_input_int('Wizyta', '_ObjawAutonomiczny', @Lojotok) = 0
 	begin
@@ -1362,9 +1377,11 @@ begin
 			ProbaPionizacyjna = @ProbaPionizacyjna,
 			WzrostPodtliwosciTwarzKark = @WzrostPodtliwosciTwarzKark,
 			WzrostPotliwosciRamionaDlonie = @WzrostPotliwosciRamionaDlonie,
+			WzrostPotliwosciBrzuchPlecy = @WzrostPotliwosciBrzuchPlecy,
 			WzrostPotliwosciKonczynyDolneStopy = @WzrostPotliwosciKonczynyDolneStopy,
 			SpadekPodtliwosciTwarzKark = @SpadekPodtliwosciTwarzKark,
 			SpadekPotliwosciRamionaDlonie = @SpadekPotliwosciRamionaDlonie,
+			SpadekPotliwosciBrzuchPlecy = @SpadekPotliwosciBrzuchPlecy,
 			SpadekPotliwosciKonczynyDolneStopy = @SpadekPotliwosciKonczynyDolneStopy,
 			NietolerancjaWysokichTemp = @NietolerancjaWysokichTemp,
 			NietolerancjaNiskichTemp = @NietolerancjaNiskichTemp,
@@ -1502,7 +1519,7 @@ end;
 go
 
 
-drop procedure update_examination_questionnaire_partH
+
 
 -- updated 2013-10-14
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
@@ -1927,6 +1944,8 @@ end;
 go
 
 
+
+-- last rev. 2013-11-24
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit, 
@@ -1982,13 +2001,6 @@ begin
 	begin
 		set @result = 3;
 		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
-		return;
-	end;
-
-	if( dbo.validate_ext_bit( @Tremorometria) = 0 )
-	begin
-		set @result = 2;
-		set @message = 'Tremorometria - invalid value. Allowed: 0, 1, 2.';
 		return;
 	end;
 
@@ -2149,7 +2161,7 @@ begin
 	
 
 end;
-
+go
 
 
 
@@ -2193,6 +2205,7 @@ begin
 	
 
 end;
+go
 
 -- pobieranie plaskiej kopii bazy
 -- ===============================
@@ -2212,10 +2225,10 @@ SELECT  t.IdWIzyta IdWizyta, a.Nazwa NazwaAtrybutu,
 FROM    WartoscAtrybutuWizytyInt t join Atrybut a on t.IdAtrybut = a.IdAtrybut
 GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
+go
 
-
--- created: 2013-10-29
-alter procedure get_database_copy
+-- updated: 2013-11-21
+create procedure get_database_copy
 as
 SELECT 
 /* PACJENT */
@@ -2341,9 +2354,11 @@ SELECT
       ,W.[ProbaPionizacyjna]
       ,W.[WzrostPodtliwosciTwarzKark]
       ,W.[WzrostPotliwosciRamionaDlonie]
+	  ,W.[WzrostPotliwosciBrzuchPlecy]
       ,W.[WzrostPotliwosciKonczynyDolneStopy]
       ,W.[SpadekPodtliwosciTwarzKark]
       ,W.[SpadekPotliwosciRamionaDlonie]
+	  ,W.[SpadekPotliwosciBrzuchPlecy]
       ,W.[SpadekPotliwosciKonczynyDolneStopy]
       ,W.[NietolerancjaWysokichTemp]
       ,W.[NietolerancjaNiskichTemp]
@@ -2498,6 +2513,7 @@ SELECT
 
   FROM Pacjent P left join Wizyta w on P.IdPacjent = W.IdPacjent left join Badanie B on B.IdWizyta = W.IdWizyta
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
+  go
 
 
   
@@ -2651,6 +2667,7 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 -- insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'test', HashBytes('SHA1','pass'), 'Użytkownik1', 'Testowy')
 -- insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko ) values ( 'testowy', HashBytes('SHA1','testowy'), 'Użytkownik2', 'Testowy')
 
+update Uzytkownik set Status = 1
 -- wywiad B
 
 
@@ -2661,7 +2678,7 @@ insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyt
 insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Otepienie',	1,	'tak' );
 insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Otepienie',	2,	'brak danych' );
 
-// /
+
 
 insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'Lokalizacja',	'STN',	'STN' );
 insert into SlownikVarchar ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Pacjent',	'Lokalizacja',	'Gpi',	'Gpi' );
@@ -3068,14 +3085,7 @@ select * from SlownikVarchar
 
 /*
 
-declare @res int;
-declare @message varchar(200);
 
-exec update_patient 'NUMER/TESTOWY', 'BMT', 1922, 13, 2, 'yxz', 2, 1, @res OUTPUT, @message OUTPUT;
-
-	select @res, @message;
-
-	select * from Pacjent
 
 
 */
@@ -3085,10 +3095,10 @@ exec update_patient 'NUMER/TESTOWY', 'BMT', 1922, 13, 2, 'yxz', 2, 1, @res OUTPU
 /*
 
 
-
+-- 
 declare @message varchar(200);
 declare @res int;
-exec update_patient_l '2013-08-07/TEST1', 'BMT', 1951, 12, 1, 'Gpi', 2, 1, testowy, @res OUTPUT, @message OUTPUT;
+exec update_patient_l '2013-08-07/TEST1', 'BMT', 1951, 12, 1, 'STN', 2, 1, 'testowy', @res OUTPUT, @message OUTPUT;
 	select @message, @res;
 
 	select * from Pacjent
@@ -3096,21 +3106,24 @@ exec update_patient_l '2013-08-07/TEST1', 'BMT', 1951, 12, 1, 'Gpi', 2, 1, testo
 declare @message varchar(200);
 declare @res int;
 declare @vis_id int;
-exec update_examination_questionnaire_partA '2013-08-06/TEST1', 1, '2012-11-23', '2012-11-23', '2012-11-24', 50, 2, 1, 2008, 1, 2012, 11, 6, 1, 0, 1, 1, 'Inne jakie', 3, 1, 2, 0, null, 2.5, 2.5, 1,
+exec update_examination_questionnaire_partA '2013-08-07/TEST1', 1, '2012-11-23', '2012-11-23', '2012-11-24', 50, 2, 1, 2008, 1, 2012, 11, 6, 1, 0, 1, 1, 'Inne jakie', 3, 1, 2, 0, null, 2.5, 2.5, 1,
  1, 'test', @res OUTPUT, @vis_id OUTPUT, @message OUTPUT;
 	select @message as Message, @vis_id as Visit_ID, @res as Result;
 go
 
-	select * from Wizyta
+
 
 declare @message varchar(200);
 declare @res int;
-exec update_examination_questionnaire_partB 1, 1, 1, 2, 0, 1, 0, 1, 'uwagi', 1, 1, 2, 'dom.objaw uwagi', null, 1, 0, 0, 1, 1, 2, 1, 1, 1, 2, 1,
+exec update_examination_questionnaire_partB 1, 1, 1, 2, 0, 1, 0, 1, 'uwagi', 1, 1, 2, 'dom.objaw uwagi', 2, 1, 0, 0.5, 1, 1, 2, 1, 1, 1, 2,
  'test', @res OUTPUT,  @message OUTPUT;
 	select @message as Message, @res as Result;
 
 	select * from Wizyta
 go
+
+
+
 
 declare @vals as IntValueListUdt;
 declare @res int;
@@ -3158,6 +3171,7 @@ exec update_examination_questionnaire_partC 1,
 	select * from Wizyta
 go
 
+-- deprecated!
 declare @message varchar(200);
 declare @res int;
 exec update_examination_questionnaire_partD 1, 3, 1, 0, 3, 'uwagi', 1, 12, 10,
@@ -3172,8 +3186,8 @@ go
 
 declare @message varchar(200);
 declare @res int;
-exec update_examination_questionnaire_partE 1, 
-	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1,
+exec update_examination_questionnaire_partE_x01 1, 
+	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1, 2, 3, 3, 4, 0, 1,
  'test', @res OUTPUT,  @message OUTPUT;
 	select @message as Message, @res as Result;
 	select * from Wizyta
@@ -3310,14 +3324,6 @@ update_variant_examination_data_partC  1,
 
 
 /*
-delete from Badanie
-DBCC CHECKIDENT ('Badanie', RESEED, 0)
-delete from Wizyta
-DBCC CHECKIDENT ('Wizyta', RESEED, 0)
-delete from Pacjent
-DBCC CHECKIDENT ('Pacjent', RESEED, 0)
-delete from Uzytkownik
-DBCC CHECKIDENT ('Uzytkownik', RESEED, 0)
 
 select * from Uzytkownik
 
@@ -3326,6 +3332,7 @@ exec suggest_new_patient_number_with_group '2013-10-29', 'BMT', @pn OUTPUT;
 select @pn
 
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 's.szlufik', HashBytes('SHA1','pass4tpp'), 'Stanisław', 'Szlufik', 'stanislaw.szlufik@gmail.com', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'j.dutkiewicz', HashBytes('SHA1','jd4tpp'), 'Justyna', 'Dutkiewicz', 'justyna_dutkiewicz@wp.pl', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'p.habela', HashBytes('SHA1','pass;'), 'Piotr', 'Hablea', 'habela@pjwstk.edu.pl', 1 )
 */
 

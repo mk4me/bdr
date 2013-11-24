@@ -1,4 +1,4 @@
-CREATE DATABASE TPP 
+CREATE DATABASE TP
 
 ON
 PRIMARY ( NAME = TPP1,
@@ -10,9 +10,19 @@ LOG ON  ( NAME = TPPlog1,
 COLLATE Polish_CI_AS;
 GO
 
+CREATE DATABASE TPP_Test
 
+ON
+PRIMARY ( NAME = TPP1,
+    FILENAME = 'S:\Baza_test\TPP.mdf'),
+FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
+    FILENAME = 'S:\Baza_test\filestream')
+LOG ON  ( NAME = TPPlog1,
+    FILENAME = 'S:\Baza_test\TPPlog.ldf')
+COLLATE Polish_CI_AS;
+GO
 
-use TPP;
+use TPP_Test;
 go
 
 
@@ -222,9 +232,11 @@ create table Wizyta (
 	ProbaPionizacyjna tinyint,
 	WzrostPodtliwosciTwarzKark tinyint,
 	WzrostPotliwosciRamionaDlonie tinyint,
+	WzrostPotliwosciBrzuchPlecy tinyint,
 	WzrostPotliwosciKonczynyDolneStopy tinyint,
 	SpadekPodtliwosciTwarzKark tinyint,
 	SpadekPotliwosciRamionaDlonie tinyint,
+	SpadekPotliwosciBrzuchPlecy tinyint,
 	SpadekPotliwosciKonczynyDolneStopy tinyint,
 	NietolerancjaWysokichTemp tinyint,
 	NietolerancjaNiskichTemp tinyint,
