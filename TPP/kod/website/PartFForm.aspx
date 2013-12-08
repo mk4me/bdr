@@ -76,7 +76,54 @@
                     onclick="buttonSavePartC_Click" />
     <br />
     <br />
-    <table ID="Table1" runat="server">
+     <table ID="Table1" runat="server">
+        <tr>
+            <th>Wariant</th>
+            <th>Opis</th>
+            <th>Plik</th>
+        </tr>
+        <tr>
+            <td>BMT ON / DBS ON-LP</td>
+            <td>
+                <asp:TextBox ID="textOpis1" runat="server"></asp:TextBox>
+            </td>
+            <td>
+                <asp:FileUpload ID="fileUploadVariant1" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td>BMT ON / DBS OFF</td>
+            <td>
+                <asp:TextBox ID="textOpis2" runat="server"></asp:TextBox>
+            </td>
+            <td>
+                <asp:FileUpload ID="fileUploadVariant2" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td>BMT OFF / DBS ON-LP</td>
+            <td>
+                <asp:TextBox ID="textOpis3" runat="server"></asp:TextBox>
+            </td>
+            <td>
+                <asp:FileUpload ID="fileUploadVariant3" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td>BMT OFF / DBS OFF</td>
+            <td>
+                <asp:TextBox ID="textOpis4" runat="server"></asp:TextBox>
+            </td>
+            <td>
+                <asp:FileUpload ID="fileUploadVariant4" runat="server" />
+            </td>
+        </tr>
+    </table>
+    <asp:Button runat="server" ID="buttonSaveFiles" Text="Wgraj pliki" onclick="buttonSaveFiles_Click" />
+    
+    <br />
+    <br />
+    <table ID="Table2" runat="server">
         <tr>
             <td>PDQ39:</td>
             <td>

@@ -171,8 +171,6 @@ public partial class AppointmentList : System.Web.UI.Page
             cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment + ";delete from Badanie where IdWizyta = " + idAppointment;
             cmd.Connection = con;
 
-            List<string> list = new List<string>();
-
             try
             {
                 con.Open();

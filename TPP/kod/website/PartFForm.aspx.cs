@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Web.Configuration;
 using System.Data;
+using System.Diagnostics;
 
 public partial class PartFForm : System.Web.UI.Page
 {
@@ -47,6 +48,9 @@ public partial class PartFForm : System.Web.UI.Page
             if (!IsPostBack)
             {
                 loadVariantIds();
+
+                // Persist changes accross postbacks.
+                // Doesn't work on mobile devices?
                 int[] variantIds = (int[])ViewState["VariantIds"];
                 if (variantIds != null)
                 {
@@ -545,6 +549,43 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
+    private void saveVariantFile(int examinationId, string fileName, byte[] fileBytes, TextBox fileDescription)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "update Plik set IdBadanie = @IdBadanie, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku where IdBadanie = @IdBadanie;";
+        cmd.Parameters.Add("@IdBadanie", SqlDbType.Int).Value = examinationId;
+        cmd.Parameters.Add("@OpisPliku", SqlDbType.VarChar, 100).Value = DatabaseProcedures.getStringOrNull(fileDescription.Text);
+        cmd.Parameters.Add("@Plik", SqlDbType.VarBinary).Value = fileBytes;
+        cmd.Parameters.Add("@NazwaPliku", SqlDbType.VarChar, 255).Value = fileName;
+        
+        cmd.Connection = con;
+        
+        try
+        {
+            con.Open();
+            int rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+            {
+                cmd.CommandText = "insert into Plik (IdBadanie, OpisPliku, Plik, NazwaPliku) values (@IdBadanie, @OpisPliku, @Plik, @NazwaPliku);";
+                cmd.ExecuteNonQuery();
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text += ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
     private void loadVariantIds()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -869,8 +910,7 @@ public partial class PartFForm : System.Web.UI.Page
 
     private void initParts()
     {
-        buttonSavePartB.Enabled = false;
-        buttonSavePartC.Enabled = false;
+        toggleButtons(false);
 
         for (int variant = 0; variant < VARIANTS; variant++)
         {
@@ -978,8 +1018,7 @@ public partial class PartFForm : System.Web.UI.Page
         if (variantIds.Length > 0)
         {
             ViewState["VariantIds"] = variantIds;
-            buttonSavePartB.Enabled = true;
-            buttonSavePartC.Enabled = true;
+            toggleButtons(true);
         }
     }
     protected void buttonSavePartB_Click(object sender, EventArgs e)
@@ -989,8 +1028,6 @@ public partial class PartFForm : System.Web.UI.Page
         {
             for (int i = 0; i < variantIds.Length; i++)
             {
-                saveVariantPartB(variantIds[i], i);
-                i++;
                 saveVariantPartB(variantIds[i], i);
             }
         }
@@ -1003,9 +1040,38 @@ public partial class PartFForm : System.Web.UI.Page
             for (int i = 0; i < variantIds.Length; i++)
             {
                 saveVariantPartC(variantIds[i], i);
-                i++;
-                saveVariantPartC(variantIds[i], i);
             }
         }
+    }
+
+    protected void buttonSaveFiles_Click(object sender, EventArgs e)
+    {
+        int[] variantIds = (int[])ViewState["VariantIds"];
+        if (variantIds != null && variantIds.Length >= 4)
+        {
+            if (fileUploadVariant1.HasFile)
+            {
+                saveVariantFile(variantIds[0], fileUploadVariant1.FileName, fileUploadVariant1.FileBytes, textOpis1);
+            }
+            if (fileUploadVariant2.HasFile)
+            {
+                saveVariantFile(variantIds[1], fileUploadVariant2.FileName, fileUploadVariant2.FileBytes, textOpis2);
+            }
+            if (fileUploadVariant3.HasFile)
+            {
+                saveVariantFile(variantIds[2], fileUploadVariant3.FileName, fileUploadVariant3.FileBytes, textOpis3);
+            }
+            if (fileUploadVariant4.HasFile)
+            {
+                saveVariantFile(variantIds[3], fileUploadVariant4.FileName, fileUploadVariant4.FileBytes, textOpis4);
+            }
+        }
+    }
+
+    private void toggleButtons(bool enable)
+    {
+        buttonSavePartB.Enabled = enable;
+        buttonSavePartC.Enabled = enable;
+        buttonSaveFiles.Enabled = enable;
     }
 }
