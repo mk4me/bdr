@@ -36,6 +36,8 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsMotionAnalysis;
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
+    private Tuple<TextBox[], FileUpload[]> variantFiles;
+
     private static byte NO_DATA = 101;  //SchwabEnglandScale 100%
     private static decimal NO_DATA_DECIMAL = 100;
 
@@ -82,6 +84,7 @@ public partial class PartFForm : System.Web.UI.Page
 
     private void initControls()
     {
+        addVariantHeader(tableUPDRS);
         UPDRSList2.Add(addVariantDropDowns("UPDRS_I", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_I", NO_DATA)));
         UPDRSList2.Add(addVariantDropDowns("UPDRS_II", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_II", NO_DATA)));
         UPDRSList1.Add(addVariantDropDowns("UPDRS_18", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_18", NO_DATA)));
@@ -115,6 +118,7 @@ public partial class PartFForm : System.Web.UI.Page
         UPDRSList2.Add(addVariantDropDowns("UPDRS_IV", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_IV", NO_DATA)));
         UPDRSListCalculated2 = addVariantTextBoxes("UPDRS_TOTAL", tableUPDRS, false);
 
+        addVariantHeader(tableUPDRSExtra);
         variantsHYscale = addVariantDropDowns("HYscale", tableUPDRSExtra, DatabaseProcedures.getEnumerationDecimalWithNoData("Badanie", "HYscale", NO_DATA_DECIMAL));
         variantsSchwabEnglandScale = addVariantDropDowns("SchwabEnglandScale", tableUPDRSExtra, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "SchwabEnglandScale", NO_DATA));
         Dictionary<byte, string> dictionaryYesNo = new Dictionary<byte, string>();
@@ -137,6 +141,7 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeALL", tableUPDRSExtra, true));
         variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityALL", tableUPDRSExtra, true));
 
+        addVariantHeader(tablePart2);
         variantsTremorometria = addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo);
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true));
@@ -179,6 +184,7 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList2.Add(variantsTestMarszuCzas1);
         variantsPartBList2.Add(variantsTestMarszuCzas2);
 
+        addVariantHeader(tablePart3);
         variantsPartCList.Add(addVariantTextBoxes("UpAndGo", tablePart3, true));
         variantsPartCList.Add(addVariantTextBoxes("UpAndGoLiczby", tablePart3, true));
         variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekPrawa", tablePart3, true));
@@ -187,9 +193,10 @@ public partial class PartFForm : System.Web.UI.Page
         variantsTandemPivot = addVariantDropDowns("TandemPivot", tablePart3, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "TandemPivot", NO_DATA));
         variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true));
 
-        disablePhases();
+        addVariantHeader(tableFiles);
+        addVariantFiles(tableFiles);
 
-        
+        disablePhases();
     }
 
     private TableRow addVariantRow(String label, Table table)
@@ -260,6 +267,79 @@ public partial class PartFForm : System.Web.UI.Page
         Tuple<TextBox[], string> tuple = new Tuple<TextBox[], string>(columns, label);
 
         return tuple;
+    }
+
+    private void addVariantFiles(Table table)
+    {
+        TableRow row1 = new TableRow();
+        TableRow row2 = new TableRow();
+        TableCell cell1 = new TableCell();
+        TableCell cell2 = new TableCell();
+        cell1.Controls.Add(new LiteralControl("Opis:"));
+        cell2.Controls.Add(new LiteralControl("Plik:"));
+        row1.Controls.Add(cell1);
+        row2.Controls.Add(cell2);
+
+        TextBox[] textBoxes = new TextBox[VARIANTS];
+        FileUpload[] fileUploads = new FileUpload[VARIANTS];
+
+        for (int i = 0; i < VARIANTS; i++)
+        {
+            TableCell cellText = new TableCell();
+            row1.Controls.Add(cellText);
+            TextBox textBox = new TextBox();
+            textBox.Width = new Unit(98, UnitType.Percentage);
+            cellText.Controls.Add(textBox);
+
+            TableCell cellFile = new TableCell();
+            row2.Controls.Add(cellFile);
+            FileUpload fileUpload = new FileUpload();
+            cellFile.Controls.Add(fileUpload);
+
+            textBoxes[i] = textBox;
+            fileUploads[i] = fileUpload;
+        }
+
+        table.Controls.Add(row1);
+        table.Controls.Add(row2);
+
+        variantFiles = new Tuple<TextBox[], FileUpload[]>(textBoxes, fileUploads);
+    }
+
+    private void addVariantHeader(Table table)
+    {
+        TableHeaderRow headerRow1 = new TableHeaderRow();
+        TableHeaderCell headerCellH1C1 = new TableHeaderCell();
+        headerCellH1C1.Controls.Add(new LiteralControl("BMT"));
+        TableHeaderCell headerCellH1C2 = new TableHeaderCell();
+        headerCellH1C2.ColumnSpan = 2;
+        headerCellH1C2.Controls.Add(new LiteralControl("ON"));
+        TableHeaderCell headerCellH1C3 = new TableHeaderCell();
+        headerCellH1C3.ColumnSpan = 2;
+        headerCellH1C3.Controls.Add(new LiteralControl("OFF"));
+        headerRow1.Controls.Add(headerCellH1C1);
+        headerRow1.Controls.Add(headerCellH1C2);
+        headerRow1.Controls.Add(headerCellH1C3);
+
+        TableHeaderRow headerRow2 = new TableHeaderRow();
+        TableHeaderCell headerCellH2C1 = new TableHeaderCell();
+        headerCellH2C1.Controls.Add(new LiteralControl("DBS"));
+        TableHeaderCell headerCellH2C2 = new TableHeaderCell();
+        headerCellH2C2.Controls.Add(new LiteralControl("ON-LP"));
+        TableHeaderCell headerCellH2C3 = new TableHeaderCell();
+        headerCellH2C3.Controls.Add(new LiteralControl("OFF"));
+        TableHeaderCell headerCellH2C4 = new TableHeaderCell();
+        headerCellH2C4.Controls.Add(new LiteralControl("ON-LP"));
+        TableHeaderCell headerCellH2C5 = new TableHeaderCell();
+        headerCellH2C5.Controls.Add(new LiteralControl("OFF"));
+        headerRow2.Controls.Add(headerCellH2C1);
+        headerRow2.Controls.Add(headerCellH2C2);
+        headerRow2.Controls.Add(headerCellH2C3);
+        headerRow2.Controls.Add(headerCellH2C4);
+        headerRow2.Controls.Add(headerCellH2C5);
+
+        table.Controls.Add(headerRow1);
+        table.Controls.Add(headerRow2);
     }
 
     protected void buttonCalculate_Click(object sender, EventArgs e)
@@ -353,7 +433,7 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-                
+                labelSavePartA.Text = "Dane zapisane";
             }
             else
             {
@@ -422,7 +502,7 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-
+                labelSavePartB.Text = "Dane zapisane";
             }
             else
             {
@@ -475,7 +555,7 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-
+                labelSavePartC.Text = "Dane zapisane";
             }
             else
             {
@@ -549,7 +629,7 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
-    private void saveVariantFile(int examinationId, string fileName, byte[] fileBytes, TextBox fileDescription)
+    private bool saveVariantFile(int examinationId, string fileName, byte[] fileBytes, TextBox fileDescription)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
@@ -559,9 +639,9 @@ public partial class PartFForm : System.Web.UI.Page
         cmd.Parameters.Add("@OpisPliku", SqlDbType.VarChar, 100).Value = DatabaseProcedures.getStringOrNull(fileDescription.Text);
         cmd.Parameters.Add("@Plik", SqlDbType.VarBinary).Value = fileBytes;
         cmd.Parameters.Add("@NazwaPliku", SqlDbType.VarChar, 255).Value = fileName;
-        
         cmd.Connection = con;
-        
+
+        bool success = false;
         try
         {
             con.Open();
@@ -569,7 +649,12 @@ public partial class PartFForm : System.Web.UI.Page
             if (rows == 0)
             {
                 cmd.CommandText = "insert into Plik (IdBadanie, OpisPliku, Plik, NazwaPliku) values (@IdBadanie, @OpisPliku, @Plik, @NazwaPliku);";
-                cmd.ExecuteNonQuery();
+                rows = cmd.ExecuteNonQuery();
+            }
+
+            if (rows > 0)
+            {
+                success = true;
             }
         }
         catch (SqlException ex)
@@ -584,6 +669,8 @@ public partial class PartFForm : System.Web.UI.Page
                 con.Close();
             }
         }
+
+        return success;
     }
 
     private void loadVariantIds()
@@ -1047,25 +1134,23 @@ public partial class PartFForm : System.Web.UI.Page
     protected void buttonSaveFiles_Click(object sender, EventArgs e)
     {
         int[] variantIds = (int[])ViewState["VariantIds"];
-        if (variantIds != null && variantIds.Length >= 4)
+
+        int savedFiles = 0;
+        if (variantIds != null)
         {
-            if (fileUploadVariant1.HasFile)
+            for (int i = 0; i < VARIANTS; i++)
             {
-                saveVariantFile(variantIds[0], fileUploadVariant1.FileName, fileUploadVariant1.FileBytes, textOpis1);
-            }
-            if (fileUploadVariant2.HasFile)
-            {
-                saveVariantFile(variantIds[1], fileUploadVariant2.FileName, fileUploadVariant2.FileBytes, textOpis2);
-            }
-            if (fileUploadVariant3.HasFile)
-            {
-                saveVariantFile(variantIds[2], fileUploadVariant3.FileName, fileUploadVariant3.FileBytes, textOpis3);
-            }
-            if (fileUploadVariant4.HasFile)
-            {
-                saveVariantFile(variantIds[3], fileUploadVariant4.FileName, fileUploadVariant4.FileBytes, textOpis4);
+                if (variantFiles.Item2[i].HasFile)
+                {
+                    if (saveVariantFile(variantIds[i], variantFiles.Item2[i].FileName, variantFiles.Item2[i].FileBytes, variantFiles.Item1[i]))
+                    {
+                        savedFiles++;
+                    }
+                }
             }
         }
+
+        labelSavedFiles.Text = "Zapisane pliki: " + savedFiles;
     }
 
     private void toggleButtons(bool enable)

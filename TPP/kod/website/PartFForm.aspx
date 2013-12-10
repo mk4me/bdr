@@ -37,89 +37,41 @@
     <br />
     <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
     <asp:Table ID="tableUPDRS" runat="server">
-        <asp:TableHeaderRow>
-            <asp:TableHeaderCell>BMT</asp:TableHeaderCell>
-            <asp:TableHeaderCell ColumnSpan="2">ON</asp:TableHeaderCell>
-            <asp:TableHeaderCell ColumnSpan="2">OFF</asp:TableHeaderCell>
-        </asp:TableHeaderRow>
-        <asp:TableHeaderRow>
-            <asp:TableHeaderCell>DBS</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-LP</asp:TableHeaderCell>
-            <asp:TableHeaderCell>OFF</asp:TableHeaderCell>
-            <asp:TableHeaderCell>ON-LP</asp:TableHeaderCell>
-            <asp:TableHeaderCell>OFF</asp:TableHeaderCell>
-        </asp:TableHeaderRow>
     </asp:Table>
-
+    <br />
     <asp:Button ID="buttonCalculate" runat="server" Text="Podlicz" 
                     onclick="buttonCalculate_Click" />
     <br />
     <br />
     <asp:Table ID="tableUPDRSExtra" runat="server">
     </asp:Table>
-
+    <br />
     <asp:Button ID="buttonSavePartA" runat="server" Text="Zatwierdź" 
                     onclick="buttonSavePartA_Click" />
+    <asp:Label ID="labelSavePartA" runat="server" Text=""></asp:Label>
     <br />
     <br />
     <asp:Table ID="tablePart2" runat="server">
     </asp:Table>
-
+    <br />
     <asp:Button ID="buttonSavePartB" runat="server" Text="Zatwierdź" 
                     onclick="buttonSavePartB_Click" />
+    <asp:Label ID="labelSavePartB" runat="server" Text=""></asp:Label>
     <br />
     <br />
     <asp:Table ID="tablePart3" runat="server">
     </asp:Table>
-
+    <br />
     <asp:Button ID="buttonSavePartC" runat="server" Text="Zatwierdź" 
                     onclick="buttonSavePartC_Click" />
+    <asp:Label ID="labelSavePartC" runat="server" Text=""></asp:Label>
     <br />
     <br />
-     <table ID="Table1" runat="server">
-        <tr>
-            <th>Wariant</th>
-            <th>Opis</th>
-            <th>Plik</th>
-        </tr>
-        <tr>
-            <td>BMT ON / DBS ON-LP</td>
-            <td>
-                <asp:TextBox ID="textOpis1" runat="server"></asp:TextBox>
-            </td>
-            <td>
-                <asp:FileUpload ID="fileUploadVariant1" runat="server" />
-            </td>
-        </tr>
-        <tr>
-            <td>BMT ON / DBS OFF</td>
-            <td>
-                <asp:TextBox ID="textOpis2" runat="server"></asp:TextBox>
-            </td>
-            <td>
-                <asp:FileUpload ID="fileUploadVariant2" runat="server" />
-            </td>
-        </tr>
-        <tr>
-            <td>BMT OFF / DBS ON-LP</td>
-            <td>
-                <asp:TextBox ID="textOpis3" runat="server"></asp:TextBox>
-            </td>
-            <td>
-                <asp:FileUpload ID="fileUploadVariant3" runat="server" />
-            </td>
-        </tr>
-        <tr>
-            <td>BMT OFF / DBS OFF</td>
-            <td>
-                <asp:TextBox ID="textOpis4" runat="server"></asp:TextBox>
-            </td>
-            <td>
-                <asp:FileUpload ID="fileUploadVariant4" runat="server" />
-            </td>
-        </tr>
-    </table>
+    <asp:Table ID="tableFiles" runat="server">
+    </asp:Table>
+    <br />
     <asp:Button runat="server" ID="buttonSaveFiles" Text="Wgraj pliki" onclick="buttonSaveFiles_Click" />
+    <asp:Label ID="labelSavedFiles" runat="server" Text=""></asp:Label>
     
     <br />
     <br />
