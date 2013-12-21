@@ -3333,6 +3333,9 @@ select @pn
 
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 's.szlufik', HashBytes('SHA1','pass4tpp'), 'Stanisław', 'Szlufik', 'stanislaw.szlufik@gmail.com', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'j.dutkiewicz', HashBytes('SHA1','jd4tpp'), 'Justyna', 'Dutkiewicz', 'justyna_dutkiewicz@wp.pl', 1 )
-insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'p.habela', HashBytes('SHA1','pass;'), 'Piotr', 'Hablea', 'habela@pjwstk.edu.pl', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'p.habela', HashBytes('SHA1','pass;'), 'Piotr', 'Habela', 'habela@pjwstk.edu.pl', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'a.przybyszewski', HashBytes('SHA1','ap4tpp'), 'Andrzej', 'Przybyszewski', 'przy@pjwstk.edu.pl', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'd.koziorowski', HashBytes('SHA1','dk4tpp'), 'Dariusz', 'Koziorowski', 'dkoziorowski@esculap.pl', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'm.tomaszewski', HashBytes('SHA1','mt4tpp'), 'Michał', 'Tomaszewski', 'tomaszew@pjwstk.edu.pl', 1 )
 */
 

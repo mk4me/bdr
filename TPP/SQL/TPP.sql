@@ -1,4 +1,4 @@
-CREATE DATABASE TP
+CREATE DATABASE TPP
 
 ON
 PRIMARY ( NAME = TPP1,
@@ -10,6 +10,10 @@ LOG ON  ( NAME = TPPlog1,
 COLLATE Polish_CI_AS;
 GO
 
+use TPP;
+go
+
+/*
 CREATE DATABASE TPP_Test
 
 ON
@@ -24,7 +28,7 @@ GO
 
 use TPP_Test;
 go
-
+*/
 
 -- Pytania
 -- 	Wartości wymagane, wartości opcjonalne ? Dopuszczamy wartości NULL we wszystkich polach, z wyjątkiem kluczy obcych oraz identyfikatra wizyty
@@ -458,7 +462,8 @@ go
 
 CREATE TABLE Plik (
     IdPlik		int IDENTITY,
-	IdBadanie	int not null,
+	IdWizyta	int,
+	IdBadanie	int,
     OpisPliku	varchar(100) not null,
     Plik 		varbinary(max) not null,
 	rowguid		uniqueidentifier rowguidcol not null unique default NEWSEQUENTIALID(),
