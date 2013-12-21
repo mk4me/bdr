@@ -483,10 +483,10 @@ namespace LocalDBUtility
             
             DirectoryInfo di = new DirectoryInfo(path);
             int i = 0;
-            foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.??*", SearchOption.AllDirectories))
+            foreach (FileInfo fi in di.GetFiles("????-??-??*-S??*.??*", SearchOption.AllDirectories))
             {
                 // ????-??-??-[AB]????-S??*.??*";
-                if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
+                if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml))"))
                 i++;
             }
 
@@ -528,10 +528,11 @@ namespace LocalDBUtility
 
 
                // DirectoryInfo di = new DirectoryInfo(path);
-                foreach (FileInfo fi in di.GetFiles("????-??-??-B????-S??*.??*", SearchOption.TopDirectoryOnly))
+
+                foreach (FileInfo fi in di.GetFiles("????-??-??*-S??*.??*", SearchOption.TopDirectoryOnly))
                 {
 
-                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))"))
+                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml))"))
                     {
                         FileNameEntry fne = new FileNameEntry();
                         fne.Name = fi.Name;
@@ -558,7 +559,7 @@ namespace LocalDBUtility
                     result = (int)resultParameter.Value;
                     if (result != 0)
                     {
-                        FileAccessServiceException exc = new FileAccessServiceException("validation", "File set validation error");
+                        FileAccessServiceException exc = new FileAccessServiceException("validation", "File set validation error: "+result);
                         throw exc;
                     }
                 }
