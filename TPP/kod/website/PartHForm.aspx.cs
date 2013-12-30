@@ -133,6 +133,50 @@ public partial class PartHForm : System.Web.UI.Page
         return decimalParameter;
     }
 
+    private bool saveMRIFile(int appointmentId, string fileName, byte[] fileBytes, TextBox fileDescription)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "update Plik set IdWizyta = @IdWizyta, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku where IdWizyta = @IdWizyta;";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = appointmentId;
+        cmd.Parameters.Add("@OpisPliku", SqlDbType.VarChar, 100).Value = DatabaseProcedures.getStringOrNull(fileDescription.Text);
+        cmd.Parameters.Add("@Plik", SqlDbType.VarBinary).Value = fileBytes;
+        cmd.Parameters.Add("@NazwaPliku", SqlDbType.VarChar, 255).Value = fileName;
+        cmd.Connection = con;
+
+        bool success = false;
+        try
+        {
+            con.Open();
+            int rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+            {
+                cmd.CommandText = "insert into Plik (IdWizyta, OpisPliku, Plik, NazwaPliku) values (@IdWizyta, @OpisPliku, @Plik, @NazwaPliku);";
+                rows = cmd.ExecuteNonQuery();
+            }
+
+            if (rows > 0)
+            {
+                success = true;
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text += ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return success;
+    }
+
     private void loadPartH()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -196,8 +240,21 @@ public partial class PartHForm : System.Web.UI.Page
         DatabaseProcedures.saveMultiChoice(Utils.getSelectedCheckListItems(checkListSPECTWynik), "SPECTWynik", int.Parse(Session["AppointmentId"].ToString()), User.Identity.Name);
         savePartH();
     }
+
     protected void buttonCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/AppointmentForm.aspx");
+    }
+
+    protected void buttonSaveFiles_Click(object sender, EventArgs e)
+    {
+        if (saveMRIFile(int.Parse(Session["AppointmentId"].ToString()), fileMRI.FileName, fileMRI.FileBytes, textMRIfile))
+        {
+            labelSavedFiles.Text = "Plik zapisany";
+        }
+        else
+        {
+            labelSavedFiles.Text = "Plik nie zapisany";
+        }
     }
 }

@@ -202,12 +202,7 @@ public partial class PartFForm : System.Web.UI.Page
     private TableRow addVariantRow(String label, Table table)
     {
         TableRow row = new TableRow();
-        table.CellPadding = 3;
-        table.CellSpacing = 0;
-        if (table.Rows.Count % 2 == 0)
-        {
-            row.BackColor = System.Drawing.Color.FromArgb(255, 255, 240, 178);
-        }
+        Utils.colorRow(table, row);
         table.Rows.Add(row);
         Label labelVariant = new Label();
         labelVariant.Text = label;
@@ -1084,10 +1079,12 @@ public partial class PartFForm : System.Web.UI.Page
     {
         savePartF();
     }
+
     protected void buttonCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/AppointmentForm.aspx");
     }
+
     protected void buttonSavePartA_Click(object sender, EventArgs e)
     {
         calculateUPDRS();
@@ -1108,6 +1105,7 @@ public partial class PartFForm : System.Web.UI.Page
             toggleButtons(true);
         }
     }
+
     protected void buttonSavePartB_Click(object sender, EventArgs e)
     {
         int[] variantIds = (int[])ViewState["VariantIds"];
@@ -1119,6 +1117,7 @@ public partial class PartFForm : System.Web.UI.Page
             }
         }
     }
+
     protected void buttonSavePartC_Click(object sender, EventArgs e)
     {
         int[] variantIds = (int[])ViewState["VariantIds"];

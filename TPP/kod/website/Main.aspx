@@ -28,7 +28,7 @@
                 <asp:ListBox ID="listPatientsPOP" runat="server" Rows="10" Width="200px" 
                     AutoPostBack="True" OnSelectedIndexChanged="listPatients_SelectedIndexChanged"></asp:ListBox>
             </td>
-            <td>
+            <td valign="top">
                 <table ID="Table2" runat="server">
                     <tr>
                         <td>
@@ -49,9 +49,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="padding-top: 50px;">
                             <asp:Button ID="buttonDeletePatient" runat="server" Text="Usuń dane pacjenta" 
-                                Width="200px" onclick="buttonDeletePatient_Click" />
+                                Width="200px" OnClientClick="return confirm('Czy na pewno usunąć dane tego pacjenta?');" onclick="buttonDeletePatient_Click" />
                         </td>
                     </tr>
                 </table>

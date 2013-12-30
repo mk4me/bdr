@@ -36,6 +36,7 @@ public partial class AppointmentList : System.Web.UI.Page
                 row.Cells.Add(cell1);
                 row.Cells.Add(cell2);
                 row.Cells.Add(cell3);
+                Utils.colorRow(tableAppointments, row);
                 tableAppointments.Rows.Add(row);
 
                 bool exists = false;
@@ -111,6 +112,8 @@ public partial class AppointmentList : System.Web.UI.Page
         public Button buttonEdit;
         public Button buttonDelete;
         private AppointmentList page;
+        private static Unit UNIT_WIDTH = new Unit(100);
+        private static Unit UNIT_WIDTH_DELETE = new Unit(50);
 
         public AppointmentSelection(string typeValue, decimal typeKey, AppointmentList page)
         {
@@ -119,6 +122,7 @@ public partial class AppointmentList : System.Web.UI.Page
             labelType.Text = typeValue;
             this.typeKey = typeKey;
             buttonNew = new Button();
+            buttonNew.Width = UNIT_WIDTH;
             buttonNew.Text = "Utwórz";
             buttonNew.Click += new System.EventHandler(buttonNew_Click);
         }
@@ -133,11 +137,15 @@ public partial class AppointmentList : System.Web.UI.Page
             labelType.Text = typeValue;
             this.typeKey = typeKey;
             buttonEdit = new Button();
+            buttonEdit.Width = UNIT_WIDTH;
             buttonEdit.Text = "Edytuj";
             buttonEdit.Click += new System.EventHandler(buttonEdit_Click);
             buttonDelete = new Button();
+            buttonDelete.Width = UNIT_WIDTH_DELETE;
             buttonDelete.Text = "Usuń";
+            buttonDelete.Style.Add("margin-left", "50px");
             buttonDelete.Click += new System.EventHandler(buttonDelete_Click);
+            buttonDelete.OnClientClick = "return confirm('Czy na pewno usunąć daną wizytę?');";
         }
 
         protected void buttonNew_Click(object sender, EventArgs e)

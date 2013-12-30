@@ -41,4 +41,14 @@ public class Utils
 
         return selectedValues;
     }
+
+    public static void colorRow(Table table, TableRow row)
+    {
+        table.CellPadding = 3;
+        table.CellSpacing = 0;
+        if (table.Rows.Count % 2 == 0)
+        {
+            row.BackColor = System.Drawing.Color.FromArgb(255, 255, 240, 178);
+        }
+    }
 }

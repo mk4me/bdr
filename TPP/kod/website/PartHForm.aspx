@@ -85,6 +85,25 @@
             </td>
         </tr>
         <tr>
+            <td>Opis pliku:</td>
+            <td>
+                <asp:TextBox ID="textMRIfile" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Plik:</td>
+            <td>
+                <asp:FileUpload ID="fileMRI" runat="server" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <asp:Button runat="server" ID="buttonSaveFiles" Text="Wgraj plik" onclick="buttonSaveFiles_Click" />
+                <asp:Label ID="labelSavedFiles" runat="server" Text=""></asp:Label>
+            </td>
+        </tr>
+        <tr>
             <td>USG śródmózgowia:</td>
             <td>
                 <asp:DropDownList ID="dropUSGsrodmozgowia" runat="server">
