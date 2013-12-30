@@ -29,7 +29,8 @@ public partial class Main : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select NumerPacjenta from Pacjent where NazwaGrupy = '" + group + "'";
+        cmd.CommandText = "select NumerPacjenta from Pacjent where NazwaGrupy = @NazwaGrupy";
+        cmd.Parameters.Add("@NazwaGrupy", SqlDbType.VarChar, 3).Value = group;
         cmd.Connection = con;
 
         List<string> list = new List<string>();
@@ -42,9 +43,9 @@ public partial class Main : System.Web.UI.Page
             while (rdr.Read())
             {
                 string numerPacjenta = (string) rdr["NumerPacjenta"];
-
                 list.Add(numerPacjenta);
             }
+            list.Sort();
         }
         catch (SqlException ex)
         {
@@ -92,7 +93,8 @@ public partial class Main : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "delete from Pacjent where NumerPacjenta = '" + patientNumber + "'";
+        cmd.CommandText = "delete from Pacjent where NumerPacjenta = @NumerPacjenta";
+        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
         cmd.Connection = con;
 
         try
