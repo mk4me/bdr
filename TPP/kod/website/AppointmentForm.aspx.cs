@@ -63,25 +63,12 @@ public partial class AppointmentForm : System.Web.UI.Page
 
         int minYear = 1920;
         int currentYear = DateTime.Now.Year;
+        int yearsBack = 10;
         for (int i = minYear; i <= currentYear; i++)
         {
             dropRokZachorowania.Items.Add(new ListItem("" + i, "" + i));
         }
-        dropRokZachorowania.SelectedIndex = currentYear - minYear - 10;
-
-        int startYear = 2013;
-        for (int i = startYear; i <= currentYear; i++)
-        {
-            dropRokBadania.Items.Add(new ListItem("" + i, "" + i));
-        }
-        dropRokBadania.SelectedIndex = currentYear - startYear;
-
-        for (int i = 1; i <= 12; i++)
-        {
-            dropMiesiacZachorowania.Items.Add(new ListItem("" + i, "" + i));
-            dropMiesiacBadania.Items.Add(new ListItem("" + i, "" + i));
-        }
-        dropMiesiacBadania.SelectedIndex = DateTime.Now.Month - 1;
+        dropRokZachorowania.SelectedIndex = currentYear - minYear - yearsBack;
 
         dropEducation.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Wyksztalcenie", NO_DATA);
         dropEducation.DataTextField = "Value";
@@ -93,8 +80,9 @@ public partial class AppointmentForm : System.Web.UI.Page
         dropSymptom.DataValueField = "Key";
         dropSymptom.DataBind();
 
-        if ((Session["AppointmentType"].ToString() != "0.0" && Session["PatientNumber"].ToString().Contains("POP") == false) ||
-            (Session["AppointmentType"].ToString() != "0.0" && Session["AppointmentType"].ToString() != "0.5" && Session["PatientNumber"].ToString().Contains("POP") == true))
+        // Wizyta inna niz pierwsza - wygasic ponizsze atrybuty. Dla POP pierwsza wizyta jest po pol roku.
+        if ((Session["PatientNumber"].ToString().Contains(Consts.PATIENT_POP) == false && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_0_0) ||
+            (Session["PatientNumber"].ToString().Contains(Consts.PATIENT_POP) == true && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_0_0 && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_0_5))
         {
             textDateSurgery.Visible = false;
             labelDateSurgery.Visible = false;
@@ -106,6 +94,19 @@ public partial class AppointmentForm : System.Web.UI.Page
             labelSymptom.Visible = false;
             textTimeSymptom.Visible = false;
             labelTimeSymptom.Visible = false;
+            dropRokZachorowania.Visible = false;
+            labelRokZachorowania.Visible = false;
+            textTimeDiskinesia.Visible = false;
+            labelTimeDiskinesia.Visible = false;
+            textYearsFluctuations.Visible = false;
+            labelYearsFluctuations.Visible = false;
+        }
+
+        // W grupie BMT - wygasic date zabiegu.
+        if (Session["PatientNumber"].ToString().Contains(Consts.PATIENT_BMT) == true)
+        {
+            textDateSurgery.Visible = false;
+            labelDateSurgery.Visible = false;
         }
     }
 
@@ -132,9 +133,6 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.Parameters.Add("@Wyksztalcenie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropEducation.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Rodzinnosc", SqlDbType.TinyInt).Value = byte.Parse(dropFamily.SelectedValue);
         cmd.Parameters.Add("@RokZachorowania", SqlDbType.SmallInt).Value = short.Parse(dropRokZachorowania.SelectedValue);
-        cmd.Parameters.Add("@MiesiacZachorowania", SqlDbType.TinyInt).Value = byte.Parse(dropMiesiacZachorowania.SelectedValue);
-        cmd.Parameters.Add("@RokBadania", SqlDbType.SmallInt).Value = short.Parse(dropRokBadania.SelectedValue);
-        cmd.Parameters.Add("@MiesiacBadania", SqlDbType.TinyInt).Value = byte.Parse(dropMiesiacBadania.SelectedValue);
         cmd.Parameters.Add("@PierwszyObjaw", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropSymptom.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@Drzenie", SqlDbType.TinyInt).Value = byte.Parse(dropDrzenie.SelectedValue);
         cmd.Parameters.Add("@Sztywnosc", SqlDbType.TinyInt).Value = byte.Parse(dropSztywnosc.SelectedValue);
@@ -190,6 +188,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                     Session["AppointmentId"] = (int)cmd.Parameters["@visit_id"].Value;
                     Session["Update"] = true;
                 }
+                labelSaved.Text = "Dane zapisane";
             }
             else
             {
@@ -215,9 +214,10 @@ public partial class AppointmentForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select DataPrzyjecia, DataOperacji, DataWypisu, Wyksztalcenie, MasaCiala, Rodzinnosc, RokZachorowania, MiesiacZachorowania, RokBadania, MiesiacBadania, " +
+        cmd.CommandText = "select DataPrzyjecia, DataOperacji, DataWypisu, Wyksztalcenie, MasaCiala, Rodzinnosc, RokZachorowania, " +
             "PierwszyObjaw, Drzenie, Sztywnosc, Spowolnienie, ObjawyInne, ObjawyInneJakie, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat, CzasDyskinez, CzasOFF, PoprawaPoLDopie " +
-            " from Wizyta where IdWizyta = " + appointmentId;
+            " from Wizyta where IdWizyta = @IdWizyta";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = appointmentId;
         cmd.Connection = con;
 
         try
@@ -233,9 +233,6 @@ public partial class AppointmentForm : System.Web.UI.Page
                 dropEducation.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Wyksztalcenie"], NO_DATA.ToString());
                 dropFamily.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Rodzinnosc"]);
                 dropRokZachorowania.SelectedValue = ((short)rdr["RokZachorowania"]).ToString();
-                dropMiesiacZachorowania.SelectedValue = ((byte)rdr["MiesiacZachorowania"]).ToString();
-                dropRokBadania.SelectedValue = ((short)rdr["RokBadania"]).ToString();
-                dropMiesiacBadania.SelectedValue = ((byte)rdr["MiesiacBadania"]).ToString();
                 dropSymptom.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["PierwszyObjaw"], NO_DATA.ToString());
                 dropDrzenie.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Drzenie"]);
                 dropSztywnosc.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["Sztywnosc"]);

@@ -27,8 +27,8 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsTremorometria;
     private List<Tuple<TextBox[], string>> variantsPartBList3 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTestSchodkowy;
-    private Tuple<TextBox[], string> variantsTestSchodkowyCzas1;
-    private Tuple<TextBox[], string> variantsTestSchodkowyCzas2;
+    private Tuple<TextBox[], string> variantsTestSchodkowyWDol;
+    private Tuple<TextBox[], string> variantsTestSchodkowyWGore;
     private Tuple<DropDownList[], string> variantsTestMarszu;
     private Tuple<TextBox[], string> variantsTestMarszuCzas1;
     private Tuple<TextBox[], string> variantsTestMarszuCzas2;
@@ -167,8 +167,8 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true));
 
         variantsTestSchodkowy = addVariantDropDowns("TestSchodkowy", tablePart2, dictionaryYesNo);
-        variantsTestSchodkowyCzas1 = addVariantTextBoxes("TestSchodkowyCzas1", tablePart2, true);
-        variantsTestSchodkowyCzas2 = addVariantTextBoxes("TestSchodkowyCzas2", tablePart2, true);
+        variantsTestSchodkowyWDol = addVariantTextBoxes("TestSchodkowyWDol", tablePart2, true);
+        variantsTestSchodkowyWGore = addVariantTextBoxes("TestSchodkowyWGore", tablePart2, true);
         variantsTestMarszu = addVariantDropDowns("TestMarszu", tablePart2, dictionaryYesNo);
         variantsTestMarszuCzas1 = addVariantTextBoxes("TestMarszuCzas1", tablePart2, true);
         variantsTestMarszuCzas2 = addVariantTextBoxes("TestMarszuCzas2", tablePart2, true);
@@ -179,8 +179,8 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList.Add(variantsTestMarszu);
         variantsPartBList.Add(variantsPosturografia);
         variantsPartBList.Add(variantsMotionAnalysis);
-        variantsPartBList2.Add(variantsTestSchodkowyCzas1);
-        variantsPartBList2.Add(variantsTestSchodkowyCzas2);
+        variantsPartBList2.Add(variantsTestSchodkowyWDol);
+        variantsPartBList2.Add(variantsTestSchodkowyWGore);
         variantsPartBList2.Add(variantsTestMarszuCzas1);
         variantsPartBList2.Add(variantsTestMarszuCzas2);
 
@@ -197,6 +197,7 @@ public partial class PartFForm : System.Web.UI.Page
         addVariantFiles(tableFiles);
 
         disablePhases();
+        disableUPDRS_II();
     }
 
     private TableRow addVariantRow(String label, Table table)
@@ -346,8 +347,10 @@ public partial class PartFForm : System.Web.UI.Page
     {
         for (int i = 0; i < VARIANTS; i++)
         {
-            UPDRSListCalculated1.Item1[i].Text = calculateSum(UPDRSList1, i).ToString();
-            UPDRSListCalculated2.Item1[i].Text = calculateSum(UPDRSList2, i).ToString();
+            int UPDRS_III = calculateSum(UPDRSList1, i);
+            int UPDRS_TOTAL = calculateSum(UPDRSList2, i) + UPDRS_III;
+            UPDRSListCalculated1.Item1[i].Text = UPDRS_III.ToString();
+            UPDRSListCalculated2.Item1[i].Text = UPDRS_TOTAL.ToString();
         }
     }
 
@@ -868,8 +871,8 @@ public partial class PartFForm : System.Web.UI.Page
             "TremorometriaRIGHT_9_10, " +
             "TremorometriaRIGHT_23_24, " +
             "TestSchodkowy, " +
-            "TestSchodkowyCzas1, " +
-            "TestSchodkowyCzas2, " +
+            "TestSchodkowyWDol, " +
+            "TestSchodkowyWGore, " +
             "TestMarszu, " +
             "TestMarszuCzas1, " +
             "TestMarszuCzas2, " +
@@ -1052,8 +1055,8 @@ public partial class PartFForm : System.Web.UI.Page
             disableWebControlVariants(variantsLatencymeter.Item1, variantList);
 
             disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
-            disableWebControlVariants(variantsTestSchodkowyCzas1.Item1, variantList);
-            disableWebControlVariants(variantsTestSchodkowyCzas2.Item1, variantList);
+            disableWebControlVariants(variantsTestSchodkowyWDol.Item1, variantList);
+            disableWebControlVariants(variantsTestSchodkowyWGore.Item1, variantList);
             disableWebControlVariants(variantsTestMarszu.Item1, variantList);
             disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
             disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
@@ -1072,6 +1075,18 @@ public partial class PartFForm : System.Web.UI.Page
         foreach (int i in variantList)
         {
             webControlVariants[i].Enabled = false;
+        }
+    }
+
+    private void disableUPDRS_II()
+    {
+        foreach (Tuple<DropDownList[], string> tuple in UPDRSList2)
+        {
+            if (tuple.Item2 == "UPDRS_II")
+            {
+                tuple.Item1[getVariantColumn(0, true)].Enabled = false;
+                tuple.Item1[getVariantColumn(1, false)].Enabled = false;
+            }
         }
     }
 

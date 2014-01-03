@@ -110,20 +110,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Miesiąc i rok zachorowania:</td>
                         <td>
-                            <asp:DropDownList ID="dropMiesiacZachorowania" runat="server">
-                            </asp:DropDownList>
-                            <asp:DropDownList ID="dropRokZachorowania" runat="server">
-                            </asp:DropDownList>
+                            <asp:Label ID="labelRokZachorowania" runat="server" Text="Rok zachorowania:"></asp:Label>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>Miesiąc i rok badania:</td>
                         <td>
-                            <asp:DropDownList ID="dropMiesiacBadania" runat="server">
-                            </asp:DropDownList>
-                            <asp:DropDownList ID="dropRokBadania" runat="server">
+                            <asp:DropDownList ID="dropRokZachorowania" runat="server">
                             </asp:DropDownList>
                         </td>
                     </tr>
@@ -211,7 +202,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Czas dyskinez od lat:</td>
+                        <td>
+                            <asp:Label ID="labelTimeDiskinesia" runat="server" Text="Dyskinezy od lat:"></asp:Label>
+                        </td>
                         <td>
                             <asp:TextBox ID="textTimeDiskinesia" runat="server"></asp:TextBox>
                             <%--
@@ -237,7 +230,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Fluktuacje od lat:</td>
+                        <td>
+                            <asp:Label ID="labelYearsFluctuations" runat="server" Text="Fluktuacje od lat:"></asp:Label>
+                        </td>
                         <td>
                             <asp:TextBox ID="textYearsFluctuations" runat="server"></asp:TextBox>
                             <%--
@@ -327,5 +322,6 @@
         onclick="buttonOK_Click" />
     <asp:Button ID="buttonCancel" runat="server" Text="Powrót" 
         CausesValidation="False" onclick="buttonCancel_Click" />
+    <asp:Label ID="labelSaved" runat="server" Text=""></asp:Label>
 </asp:Content>
 

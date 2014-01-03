@@ -12,8 +12,8 @@
             <td>
                 <asp:DropDownList ID="dropTestZegara" runat="server">
                     <asp:ListItem Value="2" Text=""></asp:ListItem>
-                    <asp:ListItem Value="0">nie</asp:ListItem>
-                    <asp:ListItem Value="1">tak</asp:ListItem>
+                    <asp:ListItem Value="0">nieprawidłowy</asp:ListItem>
+                    <asp:ListItem Value="1">prawidłowy</asp:ListItem>
                 </asp:DropDownList>
             </td>
         </tr>

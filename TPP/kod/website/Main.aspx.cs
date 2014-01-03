@@ -14,11 +14,11 @@ public partial class Main : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            listPatientsBMT.DataSource = getPatients("BMT");
+            listPatientsBMT.DataSource = getPatients(Consts.PATIENT_BMT);
             listPatientsBMT.DataBind();
-            listPatientsDBS.DataSource = getPatients("DBS");
+            listPatientsDBS.DataSource = getPatients(Consts.PATIENT_DBS);
             listPatientsDBS.DataBind();
-            listPatientsPOP.DataSource = getPatients("POP");
+            listPatientsPOP.DataSource = getPatients(Consts.PATIENT_POP);
             listPatientsPOP.DataBind();
             toggleButtons(false);
         }
