@@ -14,6 +14,7 @@ public partial class PartCForm : System.Web.UI.Page
     {
         if (Session["PatientNumber"] != null && Session["AppointmentId"] != null && Session["AppointmentName"] != null)
         {
+            initControls();
             labelAppointment.Text = "Pacjent: " + Session["PatientNumber"] + "<br />Wizyta: " + Session["AppointmentName"];
             if (!IsPostBack)
             {
@@ -23,6 +24,14 @@ public partial class PartCForm : System.Web.UI.Page
         else
         {
             Response.Redirect("~/Main.aspx");
+        }
+    }
+
+    private void initControls()
+    {
+        if (Session["PatientNumber"].ToString().Contains(Consts.PATIENT_BMT) == true)
+        {
+            disableSTIM();
         }
     }
 
@@ -204,10 +213,48 @@ public partial class PartCForm : System.Web.UI.Page
         }
     }
 
+    private void disableSTIM()
+    {
+        textL_STIMAmplitude.Visible = false;
+        textL_STIMDuration.Visible = false;
+        textL_STIMFrequency.Visible = false;
+        textL_STIMOpis.Visible = false;
+        textR_STIMAmplitude.Visible = false;
+        textR_STIMDuration.Visible = false;
+        textR_STIMFrequency.Visible = false;
+        textR_STIMOpis.Visible = false;
+        textWypis_L_STIMAmplitude.Visible = false;
+        textWypis_L_STIMDuration.Visible = false;
+        textWypis_L_STIMFrequency.Visible = false;
+        textWypis_L_STIMOpis.Visible = false;
+        textWypis_R_STIMAmplitude.Visible = false;
+        textWypis_R_STIMDuration.Visible = false;
+        textWypis_R_STIMFrequency.Visible = false;
+        textWypis_R_STIMOpis.Visible = false;
+
+        labelL_STIMAmplitude.Visible = false;
+        labelL_STIMAmplitudeWypis.Visible = false;
+        labelL_STIMDuration.Visible = false;
+        labelL_STIMDurationWypis.Visible = false;
+        labelL_STIMFrequency.Visible = false;
+        labelL_STIMFrequencyWypis.Visible = false;
+        labelL_STIMOpis.Visible = false;
+        labelL_STIMOpisWypis.Visible = false;
+        labelR_STIMAmplitude.Visible = false;
+        labelR_STIMAmplitudeWypis.Visible = false;
+        labelR_STIMDuration.Visible = false;
+        labelR_STIMDurationWypis.Visible = false;
+        labelR_STIMFrequencWypis.Visible = false;
+        labelR_STIMFrequency.Visible = false;
+        labelR_STIMOpis.Visible = false;
+        labelR_STIMOpisWypis.Visible = false;
+    }
+
     protected void buttonOK_Click(object sender, EventArgs e)
     {
         savePartC();
     }
+
     protected void buttonCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/AppointmentForm.aspx");

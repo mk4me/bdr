@@ -21,6 +21,8 @@ public class Consts
     public static string APPOINTMENT_4_0 = "4.0";
     public static string APPOINTMENT_5_0 = "5.0";
 
+    public static string APPOINTMENT_0_0_text = "przedoperacyjna";
+
 	public Consts()
 	{
 		//

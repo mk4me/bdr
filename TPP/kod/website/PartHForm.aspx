@@ -1,11 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartHForm.aspx.cs" Inherits="PartHForm" %>
+﻿<%@ Page Title="Badania dodatkowe" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartHForm.aspx.cs" Inherits="PartHForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <h2>Badania dodatkowe</h2>
-    <br />
-    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    <p>
+        <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    </p>
     <table ID="Table1" runat="server">
         <tr>
             <td>Holter:</td>

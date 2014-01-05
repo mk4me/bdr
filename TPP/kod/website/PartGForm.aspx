@@ -1,11 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartGForm.aspx.cs" Inherits="PartGForm" %>
+﻿<%@ Page Title="Badania i testy psychologiczne" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartGForm.aspx.cs" Inherits="PartGForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <h2>Badania i testy psychologiczne</h2>
-    <br />
-    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    <p>
+        <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    </p>
     <table ID="Table1" runat="server">
         <tr>
             <td>Test zegara:</td>

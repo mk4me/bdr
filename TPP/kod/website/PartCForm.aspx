@@ -1,11 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartCForm.aspx.cs" Inherits="PartCForm" %>
+﻿<%@ Page Title="Przyjmowane leki" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartCForm.aspx.cs" Inherits="PartCForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <h2>Przyjmowane leki</h2>
-    <br />
-    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    <p>
+        <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    </p>
     <table ID="Table1" runat="server">
         <tr>
             <th>Lek</th>
@@ -104,56 +105,72 @@
             </td>
         </tr>
         <tr>
-            <td>L_STIMOpis:</td>
+            <td>
+                <asp:Label ID="labelL_STIMOpis" runat="server" Text="L_STIMOpis:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textL_STIMOpis" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMAmplitude:</td>
+            <td>
+                <asp:Label ID="labelL_STIMAmplitude" runat="server" Text="L_STIMAmplitude:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textL_STIMAmplitude" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMDuration:</td>
+            <td>
+                <asp:Label ID="labelL_STIMDuration" runat="server" Text="L_STIMDuration:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textL_STIMDuration" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMFrequency:</td>
+            <td>
+                <asp:Label ID="labelL_STIMFrequency" runat="server" Text="L_STIMFrequency:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textL_STIMFrequency" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMOpis:</td>
+            <td>
+                <asp:Label ID="labelR_STIMOpis" runat="server" Text="R_STIMOpis:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textR_STIMOpis" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMAmplitude:</td>
+            <td>
+                <asp:Label ID="labelR_STIMAmplitude" runat="server" Text="R_STIMAmplitude:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textR_STIMAmplitude" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMDuration:</td>
+            <td>
+                <asp:Label ID="labelR_STIMDuration" runat="server" Text="R_STIMDuration:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textR_STIMDuration" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMFrequency:</td>
+            <td>
+                <asp:Label ID="labelR_STIMFrequency" runat="server" Text="R_STIMFrequency:"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textR_STIMFrequency" runat="server"></asp:TextBox>
@@ -251,56 +268,72 @@
             </td>
         </tr>
         <tr>
-            <td>L_STIMOpis (wypis):</td>
+            <td>
+                <asp:Label ID="labelL_STIMOpisWypis" runat="server" Text="L_STIMOpis (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_L_STIMOpis" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMAmplitude (wypis):</td>
+            <td>
+                <asp:Label ID="labelL_STIMAmplitudeWypis" runat="server" Text="L_STIMAmplitude (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_L_STIMAmplitude" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMDuration (wypis):</td>
+            <td>
+                <asp:Label ID="labelL_STIMDurationWypis" runat="server" Text="L_STIMDuration (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_L_STIMDuration" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>L_STIMFrequency (wypis):</td>
+            <td>
+                <asp:Label ID="labelL_STIMFrequencyWypis" runat="server" Text="L_STIMFrequency (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_L_STIMFrequency" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMOpis (wypis):</td>
+            <td>
+                <asp:Label ID="labelR_STIMOpisWypis" runat="server" Text="R_STIMOpis (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_R_STIMOpis" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMAmplitude (wypis):</td>
+            <td>
+                <asp:Label ID="labelR_STIMAmplitudeWypis" runat="server" Text="R_STIMAmplitude (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_R_STIMAmplitude" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMDuration (wypis):</td>
+            <td>
+                <asp:Label ID="labelR_STIMDurationWypis" runat="server" Text="R_STIMDuration (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_R_STIMDuration" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>R_STIMFrequenc (wypis):</td>
+            <td>
+                <asp:Label ID="labelR_STIMFrequencWypis" runat="server" Text="R_STIMFrequenc (wypis):"></asp:Label>
+            </td>
             <td></td>
             <td>
                 <asp:TextBox ID="textWypis_R_STIMFrequency" runat="server"></asp:TextBox>

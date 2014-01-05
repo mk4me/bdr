@@ -1,8 +1,12 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PatientForm.aspx.cs" Inherits="PatientForm" %>
+﻿<%@ Page Title="Pacjent" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PatientForm.aspx.cs" Inherits="PatientForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
+    <h2>
+        Pacjent
+    </h2>
+    <br />
     <table ID="Table1" runat="server">
         <tr>
             <td>Grupa:</td>

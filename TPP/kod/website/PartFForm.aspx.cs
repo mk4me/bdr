@@ -196,7 +196,15 @@ public partial class PartFForm : System.Web.UI.Page
         addVariantHeader(tableFiles);
         addVariantFiles(tableFiles);
 
-        disablePhases();
+        // Jedyne aktywne kolumny - (BMT ON, DBS OFF) oraz (BMT OFF, DBS OFF) dla wizyty przedoperacyjnej lub pacjentow z grupy BMT
+        if (Session["AppointmentName"].ToString() == Consts.APPOINTMENT_0_0_text ||
+            Session["PatientNumber"].ToString().Contains(Consts.PATIENT_BMT) == true)
+        {
+            List<int> variantList = new List<int>();
+            variantList.Add(getVariantColumn(1, true));
+            variantList.Add(getVariantColumn(1, false));
+            disablePhases(variantList);
+        }
         disableUPDRS_II();
     }
 
@@ -1016,58 +1024,51 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
-    private void disablePhases()
+    private void disablePhases(List<int> variantList)
     {
-        List<int> variantList = new List<int>();
-
-        if (Session["AppointmentName"].ToString() == "przedoperacyjna")
+        foreach (Tuple<DropDownList[], string> tuple in UPDRSList1)
         {
-            variantList.Add(getVariantColumn(1, true));
-            variantList.Add(getVariantColumn(1, false));
-            foreach (Tuple<DropDownList[], string> tuple in UPDRSList1)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            foreach (Tuple<DropDownList[], string> tuple in UPDRSList2)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            foreach (Tuple<TextBox[], string> tuple in variantsPartAList)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            foreach (Tuple<DropDownList[], string> tuple in variantsPartBList)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            foreach (Tuple<TextBox[], string> tuple in variantsPartBList2)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            foreach (Tuple<TextBox[], string> tuple in variantsPartBList3)
-            {
-                disableWebControlVariants(tuple.Item1, variantList);
-            }
-            disableWebControlVariants(variantsHYscale.Item1, variantList);
-            disableWebControlVariants(variantsSchwabEnglandScale.Item1, variantList);
-            disableWebControlVariants(variantsJazzNovo.Item1, variantList);
-            disableWebControlVariants(variantsWideookulograf.Item1, variantList);
-            disableWebControlVariants(variantsLatencymeter.Item1, variantList);
-
-            disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
-            disableWebControlVariants(variantsTestSchodkowyWDol.Item1, variantList);
-            disableWebControlVariants(variantsTestSchodkowyWGore.Item1, variantList);
-            disableWebControlVariants(variantsTestMarszu.Item1, variantList);
-            disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
-            disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
-            disableWebControlVariants(variantsPosturografia.Item1, variantList);
-            disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
-            foreach (Tuple<TextBox[], string> variantsPartC in variantsPartCList)
-            {
-                disableWebControlVariants(variantsPartC.Item1, variantList);
-            }
-            disableWebControlVariants(variantsTandemPivot.Item1, variantList);
+            disableWebControlVariants(tuple.Item1, variantList);
         }
+        foreach (Tuple<DropDownList[], string> tuple in UPDRSList2)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        foreach (Tuple<TextBox[], string> tuple in variantsPartAList)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        foreach (Tuple<DropDownList[], string> tuple in variantsPartBList)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        foreach (Tuple<TextBox[], string> tuple in variantsPartBList2)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        foreach (Tuple<TextBox[], string> tuple in variantsPartBList3)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        disableWebControlVariants(variantsHYscale.Item1, variantList);
+        disableWebControlVariants(variantsSchwabEnglandScale.Item1, variantList);
+        disableWebControlVariants(variantsJazzNovo.Item1, variantList);
+        disableWebControlVariants(variantsWideookulograf.Item1, variantList);
+        disableWebControlVariants(variantsLatencymeter.Item1, variantList);
+
+        disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
+        disableWebControlVariants(variantsTestSchodkowyWDol.Item1, variantList);
+        disableWebControlVariants(variantsTestSchodkowyWGore.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszu.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
+        disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
+        disableWebControlVariants(variantsPosturografia.Item1, variantList);
+        disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
+        foreach (Tuple<TextBox[], string> variantsPartC in variantsPartCList)
+        {
+            disableWebControlVariants(variantsPartC.Item1, variantList);
+        }
+        disableWebControlVariants(variantsTandemPivot.Item1, variantList);
     }
 
     private void disableWebControlVariants(WebControl[] webControlVariants, List<int> variantList)

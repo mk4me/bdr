@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartFForm.aspx.cs" Inherits="PartFForm" %>
+﻿<%@ Page Title="UPDRS i skale oceny klinicznej" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="PartFForm.aspx.cs" Inherits="PartFForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
@@ -34,8 +34,9 @@
         };
     </script>
     <h2>UPDRS i skale oceny klinicznej</h2>
-    <br />
-    <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    <p>
+        <asp:Label ID="labelAppointment" runat="server" Text=""></asp:Label>
+    </p>
     <asp:Table ID="tableUPDRS" runat="server">
     </asp:Table>
     <br />

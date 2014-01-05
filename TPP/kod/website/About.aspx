@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About Us" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
+﻿<%@ Page Title="O stronie" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
     CodeFile="About.aspx.cs" Inherits="About" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
@@ -8,6 +8,6 @@
         O stronie
     </h2>
     <p>
-        Opis.
+        Tablet Parkinson Project.
     </p>
 </asp:Content>
