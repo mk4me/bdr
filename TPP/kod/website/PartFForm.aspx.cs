@@ -205,7 +205,9 @@ public partial class PartFForm : System.Web.UI.Page
             variantList.Add(getVariantColumn(1, false));
             disablePhases(variantList);
         }
-        disableUPDRS_II();
+
+        // "Atrybut UPDRS II jest oznaczany tylko w fazie DBS ON i BMT ON oraz DBS OFF i BMT OFF"
+        //disableUPDRS_II();
     }
 
     private TableRow addVariantRow(String label, Table table)

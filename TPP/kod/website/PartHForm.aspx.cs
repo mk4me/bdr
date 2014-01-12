@@ -82,7 +82,7 @@ public partial class PartHForm : System.Web.UI.Page
         cmd.Parameters.Add(saveDecimal("@WitD", textWitD));
         cmd.Parameters.Add(saveDecimal("@CHOL", textCHOL));
         cmd.Parameters.Add(saveDecimal("@TGI", textTGI));
-        cmd.Parameters.Add(saveDecimal("@HDL", textFerrytyna));
+        cmd.Parameters.Add(saveDecimal("@HDL", textHDL));
         cmd.Parameters.Add(saveDecimal("@LDL", textLDL));
         cmd.Parameters.Add(saveDecimal("@olLDL", textolLDL));
         cmd.Parameters.Add("@LaboratoryjneInne", SqlDbType.VarChar, 1000).Value = DatabaseProcedures.getStringOrNull(textLaboratoryjneInne.Text);
