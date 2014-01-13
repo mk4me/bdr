@@ -88,7 +88,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
-                Directory.Delete(di.FullName);
+                //Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -157,7 +157,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
-                Directory.Delete(di.FullName);
+                //Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -227,7 +227,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
-                Directory.Delete(di.FullName);
+                //Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
@@ -285,7 +285,7 @@ namespace MotionDBWebServices
                 br.Close();
                 fs.Close();
                 File.Delete(fileLocation);
-                Directory.Delete(di.FullName);
+                //Directory.Delete(di.FullName);
 
             }
             catch (SqlException ex)
