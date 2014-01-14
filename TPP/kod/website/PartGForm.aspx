@@ -73,9 +73,27 @@
             </td>
         </tr>
         <tr>
-            <td>Test uczenia słowno-słuchowego:</td>
+            <td>Test AVLT średnia:</td>
             <td>
-                <asp:TextBox ID="textTestUczeniaSlownoSluchowego" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textTestAVLTSrednia" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Test AVLT odroczony:</td>
+            <td>
+                <asp:TextBox ID="textTestAVLTOdroczony" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Test AVLT po 20 minutach:</td>
+            <td>
+                <asp:TextBox ID="textTestAVLTPo20min" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Test AVLT rozpoznawanie:</td>
+            <td>
+                <asp:TextBox ID="textTestAVLTRozpoznawanie" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>

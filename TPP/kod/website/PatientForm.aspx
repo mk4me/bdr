@@ -48,7 +48,9 @@
             </td>
         </tr>
         <tr>
-            <td>Lokalizacja:</td>
+            <td>
+                <asp:Label ID="labelLocation" runat="server" Text="Lokalizacja:"></asp:Label>
+            </td>
             <td>
                 <asp:DropDownList ID="dropLocation" runat="server">
                 </asp:DropDownList>

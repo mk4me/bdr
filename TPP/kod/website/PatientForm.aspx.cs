@@ -33,12 +33,12 @@ public partial class PatientForm : System.Web.UI.Page
             {
                 dropMonth.Items.Add(new ListItem("" + i, "" + i));
             }
-
+            
             dropLocation.DataSource = DatabaseProcedures.getEnumerationString("Pacjent", "Lokalizacja");
             dropLocation.DataTextField = "Value";
             dropLocation.DataValueField = "Key";
             dropLocation.DataBind();
-
+            
             for (int i = 0; i <= 10; i++)
             {
                 dropElectrodes.Items.Add(new ListItem("" + i, "" + i));
@@ -65,6 +65,23 @@ public partial class PatientForm : System.Web.UI.Page
                 textPatientNumber.Text = suggestNewPatientNumber(dropGroup.SelectedValue);
             }
         }
+        toggleLocation();
+    }
+
+    // "Można podawać Lokalizację = NULL gdy grupa = BMT" (zawsze null, jak BMT)
+    private void toggleLocation()
+    {
+        if (dropGroup.SelectedValue == Consts.PATIENT_BMT)
+        {
+            dropLocation.Visible = false;
+            labelLocation.Visible = false;
+            
+        }
+        else
+        {
+            dropLocation.Visible = true;
+            labelLocation.Visible = true;
+        }
     }
 
     protected void buttonCancel_Click(object sender, EventArgs e)
@@ -74,30 +91,34 @@ public partial class PatientForm : System.Web.UI.Page
 
     protected void buttonOK_Click(object sender, EventArgs e)
     {
-        int sex = 0;
-        if (radioMan.Checked)
-        {
-            sex = 1;
-        }
-
-        savePatient(textPatientNumber.Text, dropGroup.SelectedValue, int.Parse(dropYear.SelectedValue), int.Parse(dropMonth.SelectedValue), sex,
-            dropLocation.SelectedValue, int.Parse(dropElectrodes.SelectedValue), update);
+        savePatient();
     }
 
-    private void savePatient(string number, string group, int birthYear, int birthMonth, int sex,
-        string location, int electrodes, bool update)
+    private void savePatient()
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_patient_l]";
-        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = number;
-        cmd.Parameters.Add("@NazwaGrupy", SqlDbType.VarChar, 3).Value = group;
-        cmd.Parameters.Add("@RokUrodzenia", SqlDbType.SmallInt).Value = (short)birthYear;
-        cmd.Parameters.Add("@MiesiacUrodzenia", SqlDbType.TinyInt).Value = (byte)birthMonth;
+        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = textPatientNumber.Text;
+        cmd.Parameters.Add("@NazwaGrupy", SqlDbType.VarChar, 3).Value = dropGroup.SelectedValue;
+        cmd.Parameters.Add("@RokUrodzenia", SqlDbType.SmallInt).Value = (short)int.Parse(dropYear.SelectedValue);
+        cmd.Parameters.Add("@MiesiacUrodzenia", SqlDbType.TinyInt).Value = (byte)int.Parse(dropMonth.SelectedValue);
+        int sex = 0;
+        if (radioMan.Checked)
+        {
+            sex = 1;
+        }
         cmd.Parameters.Add("@Plec", SqlDbType.TinyInt).Value = sex;
-        cmd.Parameters.Add("@Lokalizacja", SqlDbType.VarChar, 10).Value = location;
-        cmd.Parameters.Add("@LiczbaElektrod", SqlDbType.TinyInt).Value = (byte)electrodes;
+        if (dropLocation.Visible)
+        {
+            cmd.Parameters.Add("@Lokalizacja", SqlDbType.VarChar, 10).Value = dropLocation.SelectedValue;
+        }
+        else
+        {
+            cmd.Parameters.Add("@Lokalizacja", SqlDbType.VarChar, 10).Value = DBNull.Value;
+        }
+        cmd.Parameters.Add("@LiczbaElektrod", SqlDbType.TinyInt).Value = (byte)int.Parse(dropElectrodes.SelectedValue);
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -161,7 +182,11 @@ public partial class PatientForm : System.Web.UI.Page
                 {
                     radioMan.Checked = true;
                 }
-                dropLocation.SelectedValue = (string)rdr["Lokalizacja"];
+                String location = DatabaseProcedures.getTextStringValue(rdr["Lokalizacja"]);
+                if (location != "")
+                {
+                    dropLocation.SelectedValue = DatabaseProcedures.getTextStringValue(rdr["Lokalizacja"]);
+                }
                 dropElectrodes.SelectedValue = ((byte)rdr["LiczbaElektrod"]).ToString();
             }
         }
@@ -217,5 +242,6 @@ public partial class PatientForm : System.Web.UI.Page
     protected void dropGroup_SelectedIndexChanged(object sender, EventArgs e)
     {
         textPatientNumber.Text = suggestNewPatientNumber(dropGroup.SelectedValue);
+        toggleLocation();
     }
 }

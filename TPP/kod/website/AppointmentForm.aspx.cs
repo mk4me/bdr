@@ -36,6 +36,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                 {
                     initAppointment();
                 }
+                setDisorderDuration();
             }
         }
         else
@@ -209,6 +210,11 @@ public partial class AppointmentForm : System.Web.UI.Page
         }
     }
 
+    private void setDisorderDuration()
+    {
+        labelCzasTrwaniaChorobyText.Text = "" + DatabaseProcedures.getDisorderDuration(short.Parse(dropRokZachorowania.SelectedValue));
+    }
+
     private void loadAppointment(int appointmentId)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -372,5 +378,10 @@ public partial class AppointmentForm : System.Web.UI.Page
         buttonPartF.Enabled = enable;
         buttonPartG.Enabled = enable;
         buttonPartH.Enabled = enable;
+    }
+
+    protected void dropRokZachorowania_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        setDisorderDuration();
     }
 }

@@ -366,4 +366,39 @@ public class DatabaseProcedures
 
         return selectedValues;
     }
+
+    public static decimal getDisorderDuration(short startYear)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select dbo.disorder_duration(@start_year)";
+        cmd.Parameters.Add("@start_year", SqlDbType.SmallInt).Value = startYear;
+        cmd.Connection = con;
+
+        decimal disorderDuration = 0;
+        try
+        {
+            con.Open();
+            object result = cmd.ExecuteScalar();
+            if (result != null)
+            {
+                disorderDuration = (decimal)result;
+            }
+
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return disorderDuration;
+    }
 }

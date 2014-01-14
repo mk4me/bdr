@@ -114,8 +114,17 @@
                             <asp:Label ID="labelRokZachorowania" runat="server" Text="Rok zachorowania:"></asp:Label>
                         </td>
                         <td>
-                            <asp:DropDownList ID="dropRokZachorowania" runat="server">
+                            <asp:DropDownList ID="dropRokZachorowania" runat="server" AutoPostBack="True" 
+                                onselectedindexchanged="dropRokZachorowania_SelectedIndexChanged">
                             </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="labelCzasTrwaniaChoroby" runat="server" Text="Czas trwania choroby:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:Label ID="labelCzasTrwaniaChorobyText" runat="server" Text=""></asp:Label>
                         </td>
                     </tr>
                     <tr>
