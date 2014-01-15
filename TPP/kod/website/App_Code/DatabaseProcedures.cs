@@ -367,13 +367,13 @@ public class DatabaseProcedures
         return selectedValues;
     }
 
-    public static decimal getDisorderDuration(short startYear)
+    public static decimal getDisorderDurationForExamination(int appointmentId)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select dbo.disorder_duration(@start_year)";
-        cmd.Parameters.Add("@start_year", SqlDbType.SmallInt).Value = startYear;
+        cmd.CommandText = "select dbo.disorder_duration_for_examination(@IdWizyta)";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = appointmentId;
         cmd.Connection = con;
 
         decimal disorderDuration = 0;

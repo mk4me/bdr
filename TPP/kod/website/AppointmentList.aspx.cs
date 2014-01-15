@@ -153,20 +153,15 @@ public partial class AppointmentList : System.Web.UI.Page
             page.Session["PatientNumber"] = page.Session["PatientNumber"];
             page.Session["AppointmentType"] = typeKey;
             page.Session["Update"] = false;
+            page.Session["AppointmentId"] = null;
             page.Response.Redirect("~/AppointmentForm.aspx");
-        }
-
-        protected void buttonShowExaminations_Click(object sender, EventArgs e)
-        {
-            page.Session["AppointmentId"] = idAppointment;
-            page.Response.Redirect("~/ExaminationList.aspx");
         }
 
         protected void buttonEdit_Click(object sender, EventArgs e)
         {
             page.Session["PatientNumber"] = page.Session["PatientNumber"];
             page.Session["AppointmentType"] = typeKey;
-            page.Session["Update"] = true;
+            page.Session["Update"] = true;  // todo: use Session["AppointmentType"] != null instead
             page.Session["AppointmentId"] = idAppointment;
             page.Response.Redirect("~/AppointmentForm.aspx");
         }

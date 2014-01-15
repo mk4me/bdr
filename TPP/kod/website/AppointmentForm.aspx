@@ -114,8 +114,7 @@
                             <asp:Label ID="labelRokZachorowania" runat="server" Text="Rok zachorowania:"></asp:Label>
                         </td>
                         <td>
-                            <asp:DropDownList ID="dropRokZachorowania" runat="server" AutoPostBack="True" 
-                                onselectedindexchanged="dropRokZachorowania_SelectedIndexChanged">
+                            <asp:DropDownList ID="dropRokZachorowania" runat="server">
                             </asp:DropDownList>
                         </td>
                     </tr>
