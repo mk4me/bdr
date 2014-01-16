@@ -1,4 +1,4 @@
-use Motion;
+use Motion_test;
 go
 
 
@@ -243,6 +243,11 @@ go
 
 insert into Laboratorium (Nazwa) values ('PJWSTK')
 go
+
+
+
+
+-- insert into Uzytkownik ( Email, Haslo, Imie, Kod_Aktywacji, Login, Nazwisko, Status) select Email, Haslo, Imie, Kod_Aktywacji, Login, Nazwisko, Status from Motion.dbo.Uzytkownik
 
 select * from Konfiguracja_performera
 

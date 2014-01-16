@@ -1108,6 +1108,35 @@ return 0;
 end;
 go
 
+-- last rev. 2013-12-05
+--	Error codes:
+--	1 - Login does not exist in HMDB
+--	3 - Group does not exist in HMDB
+create procedure assign_user_to_group(@user_login varchar(30), @group_name varchar(100), @result int OUTPUT)
+as
+begin
+	set @result = 0;
+
+	if not exists(select * from Uzytkownik where Login = @user_login )
+		begin
+			set @result = 1;
+			return;
+		end;
+
+	if not exists(select * from Grupa_uzytkownikow where Nazwa = @group_name )
+		begin
+			set @result = 3;
+			return;
+		end;
+	
+	insert into Uzytkownik_grupa_uzytkownikow ( IdUzytkownik, IdGrupa_uzytkownikow ) 
+		select u.IdUzytkownik, gu.IdGrupa_uzytkownikow from Uzytkownik u, Grupa_uzytkownikow gu
+		where u.Login = @user_login and gu.Nazwa = @group_name;
+
+	return 0;
+end;
+go
+
 
 -- last rev. 2010-10-28
 create procedure list_session_privileges_xml (@user_login varchar(30), @sess_id int)
@@ -1450,7 +1479,7 @@ as
 go
 
 
--- last rev. 2013-10-04
+-- last rev. 2013-12-09
 create procedure create_session_from_file_list ( @user_login as varchar(30), @files as FileNameListUdt readonly, @result int output )
 as
 	set @result = 0;
@@ -1527,7 +1556,7 @@ as
 		end;
 
 	  if exists( select * from @trialNames tn where 
-		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and (CHARINDEX ('.xml', Name ) > 0  or CHARINDEX ('.c3d', Name ) > 0) )<>1		
+		(select COUNT (*) from @files where CHARINDEX (tn.tname, Name ) > 0 and (CHARINDEX ('.png', Name ) > 0  or CHARINDEX ('.c3d', Name ) > 0) )<>1		
 		)
 		begin
 			set @result = 6;
@@ -1574,7 +1603,7 @@ go
 -- Shallow copy retrieval
 -- ==========================
 -- TODO: pozosta³e konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2012-03-29
+-- last rev. 2014-01-16
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1602,7 +1631,7 @@ select
 	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
 	from Plik p where p.IdSesja=Session.IdSesja
 	for XML PATH('File'), TYPE) as Files
-	from UAS Session for XML AUTO, TYPE
+	from UAS Session order by Nazwa for XML AUTO, TYPE
  ) Sessions,
  (select 
 	IdSesja as SessionID,
@@ -1620,7 +1649,7 @@ select
 		from Plik p 
 		where 
 		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as Files
-	from UAT Trial FOR XML AUTO, TYPE 
+	from UAT Trial order by Nazwa FOR XML AUTO, TYPE 
  ) Trials,
  (select 
 	IdPerformer as PerformerID,
@@ -1698,6 +1727,123 @@ select
 go
 
 
+-- last rev. 2014-01-16
+create procedure get_shallow_copy_branches_increment @user_login varchar(30), @since datetime
+as
+with
+UAS as (select * from dbo.user_accessible_sessions_by_login (@user_login) Session ),
+UAGA as (select * from Sesja_grupa_sesji GroupAssignment where exists(select * from UAS where UAS.IdSesja = GroupAssignment.IdSesja and UAS.Ostatnia_zmiana > @since)),
+UAT as (select * from Proba Trial where exists (select * from UAS where UAS.IdSesja = Trial.IdSesja)),
+UAP as (select * from Performer Performer where exists (select * from Konfiguracja_performera KP where exists (select * from UAS where UAS.IdSesja = KP.IdSesja) )),
+UAPC as (select * from Konfiguracja_performera PerformerConf where exists(select * from UAS where UAS.IdSesja = PerformerConf.IdSesja))
+select
+(select
+(select 
+	IdSesja as SessionID,
+	IdUzytkownik as UserID,
+	IdLaboratorium as LabID,
+	dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+	Data as SessionDate,
+	Nazwa as SessionName,
+	Tagi as Tags,
+	Opis_sesji as SessionDescription,
+	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+	from Plik p where p.IdSesja=Session.IdSesja and  Ostatnia_zmiana > @since and Utworzono < @since
+	for XML PATH('File'), TYPE) as ModifiedFiles,
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+	from Plik p where p.IdSesja=Session.IdSesja and  Utworzono > @since
+	for XML PATH('File'), TYPE) as AddedFiles
+	from UAS Session where Ostatnia_zmiana > @since and Utworzono < @since order by Nazwa for XML AUTO, TYPE
+ ) Sessions,
+ (select 
+	IdSesja as SessionID,
+	IdGrupa_sesji as SessionGroupID 
+	from UAGA GroupAssignment for XML AUTO, TYPE
+ ) GroupAssignments,
+ (select 
+	IdProba as TrialID,
+	IdSesja as SessionID,
+	Nazwa as TrialName,
+	Opis_proby as TrialDescription,
+	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+		from Plik p 
+		where  Ostatnia_zmiana > @since and Utworzono < @since and
+		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as ModifiedFiles,
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+		from Plik p 
+		where  Utworzono > @since and
+		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as AddedFiles
+	from UAT Trial where Ostatnia_zmiana > @since and Utworzono < @since order by Nazwa FOR XML AUTO, TYPE 
+ ) Trials,
+ (select 
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_attributes ( IdPerformer ) A FOR XML AUTO, TYPE ) Attrs
+	from UAP Performer where Ostatnia_zmiana > @since FOR XML AUTO, TYPE 
+ ) Performers,
+ (select 
+	IdKonfiguracja_performera as PerformerConfID,
+	IdSesja as SessionID,
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
+	from UAPC Performer  where Ostatnia_zmiana > @since and Utworzono < @since FOR XML AUTO, TYPE 
+ ) PerformerConfs
+ for XML RAW ('Modified'), TYPE),
+(select
+(select 
+	IdSesja as SessionID,
+	IdUzytkownik as UserID,
+	IdLaboratorium as LabID,
+	dbo.motion_kind_name(IdRodzaj_ruchu) as MotionKind,
+	Data as SessionDate,
+	Nazwa as SessionName,
+	Tagi as Tags,
+	Opis_sesji as SessionDescription,
+	(select Name, Value from list_session_attributes ( IdSesja ) A FOR XML AUTO, TYPE ) Attrs, 
+	(	select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+	(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+	from Plik p where p.IdSesja=Session.IdSesja
+	for XML PATH('File'), TYPE) as AddedFiles
+	from UAS Session where Utworzono > @since order by Nazwa for XML AUTO, TYPE
+ ) Sessions,
+ (select 
+	IdSesja as SessionID,
+	IdGrupa_sesji as SessionGroupID 
+	from UAGA GroupAssignment for XML AUTO, TYPE
+ ) GroupAssignments,
+ (select 
+	IdProba as TrialID,
+	IdSesja as SessionID,
+	Nazwa as TrialName,
+	Opis_proby as TrialDescription,
+	(select Name, Value from list_trial_attributes ( IdProba ) A FOR XML AUTO, TYPE ) Attrs,
+	(select p.IdPlik "@FileID", p.Nazwa_pliku "@FileName", p.Opis_pliku "@FileDescription", p.Sciezka "@SubdirPath", p.Zmieniony "@Changed",
+		(select Name, Value  from list_file_attributes ( IdPlik ) A FOR XML AUTO, TYPE ) as Attrs
+		from Plik p 
+		where
+		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as AddedFiles
+	from UAT Trial where Utworzono > @since order by Nazwa FOR XML AUTO, TYPE 
+ ) Trials,
+ (select 
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_attributes ( IdPerformer ) A FOR XML AUTO, TYPE ) Attrs
+	from UAP Performer where Utworzono > @since FOR XML AUTO, TYPE 
+ ) Performers,
+ (select 
+	IdKonfiguracja_performera as PerformerConfID,
+	IdSesja as SessionID,
+	IdPerformer as PerformerID,
+	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
+	from UAPC Performer  where Utworzono > @since FOR XML AUTO, TYPE 
+ ) PerformerConfs
+ for XML RAW ('Added'), TYPE)
+ for XML RAW ('ShallowCopyBranches'), TYPE;
+go
 
 -- last rev. 2012-02-28
 create procedure get_metadata @user_login varchar(30)
@@ -1938,7 +2084,7 @@ begin
 end
 go
 
--- last rev. 2011-10-17
+-- last rev. 2014-01-16
 create trigger tr_Plik_Update on Plik
 for update, insert
 as
@@ -1946,11 +2092,30 @@ begin
 	update Plik
 	set Ostatnia_zmiana = getdate()
 	from inserted i join Plik p on i.IdPlik = p.IdPlik
-	if( COLUMNS_UPDATED() = 0x20)
+	update Proba
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Proba t on i.IdProba = t.IdProba
+	update Sesja
+	set Ostatnia_zmiana = getdate()
+	from inserted i join Sesja s on i.IdSesja = t.IdSesja
+	if update(Plik)
 	update Plik
 	set Zmieniony = getdate()
 	from inserted i join Plik p on i.IdPlik = p.IdPlik;
+end
 
+
+-- last rev. 2014-01-16
+create trigger tr_Plik_Insert on Plik
+for insert
+as
+begin
+	update Plik
+	set Utworzono = getdate()
+	from inserted i join Plik p on i.IdPlik = p.IdPlik
+	update Plik
+	set Zmieniony = getdate()
+	from inserted i join Plik p on i.IdPlik = p.IdPlik;
 end
 go
 
