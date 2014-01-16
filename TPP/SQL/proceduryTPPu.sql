@@ -231,6 +231,23 @@ go
 -- SLOWNIKOWANIE (listowanie opcji i walidacje)
 -- ============================================
 
+
+create function disorder_duration( @start_year smallint )
+returns decimal(4,2)
+as
+begin
+return CAST(datediff(day, CAST( CAST(@start_year as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2))
+end
+go
+
+create function disorder_duration_for_examination( @IdWizyta int )
+returns decimal(4,2)
+as
+begin
+return CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta w where w.IdPacjent = (select x.IdPacjent from Wizyta x where IdWizyta = @IdWizyta)) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2))
+end
+go
+
 create function validate_input_int( @table_name varchar(30), @attr_name varchar(50), @value tinyint )
 returns bit
 as
@@ -280,7 +297,7 @@ go
 -- WGRYWANIE DANYCH I WALIDACJA
 -- ============================
 
--- last rev. 2013-10-31
+-- last rev. 2014-01-13
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
 create procedure update_patient  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
 as
@@ -320,11 +337,14 @@ begin
 		return;
 	end;
 
-	if( dbo.validate_input_varchar('Pacjent', 'Lokalizacja', @Lokalizacja) = 0 )
+	if(@NazwaGrupy <> 'BMT')
 	begin
-		set @result = 2;
-		set @message = @message + 'Lokalizacja - invalid enum value.';
-		return;
+		if( dbo.validate_input_varchar('Pacjent', 'Lokalizacja', @Lokalizacja) = 0 )
+		begin
+			set @result = 2;
+			set @message = @message + 'Lokalizacja - invalid enum value.';
+			return;
+		end;
 	end;
 
 	if(@update = 0)
@@ -338,8 +358,8 @@ begin
 end;
 go
 
-drop procedure update_patient_l
--- last rev. 2013-10-31
+
+-- last rev. 2014-01-13
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message, 3 = login user not found
 create procedure update_patient_l  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3),  @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
 as
@@ -390,11 +410,14 @@ begin
 		return;
 	end;
 
-	if( dbo.validate_input_varchar('Pacjent', 'Lokalizacja', @Lokalizacja) = 0 )
+	if(@NazwaGrupy <> 'BMT')
 	begin
-		set @result = 2;
-		set @message = @message + 'Lokalizacja - invalid enum value.';
-		return;
+		if( dbo.validate_input_varchar('Pacjent', 'Lokalizacja', @Lokalizacja) = 0 )
+		begin
+			set @result = 2;
+			set @message = @message + 'Lokalizacja - invalid enum value.';
+			return;
+		end;
 	end;
 
 	if(@update = 0)
@@ -434,11 +457,11 @@ end;
 go
 
 
--- last rev. 2013-10-05
+-- last rev. 2014-01-03
 -- @result codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
 create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty decimal(2,1),
 	@DataPrzyjecia date,	@DataOperacji date,	@DataWypisu date, @MasaCiala decimal(4,1),
-	@Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, @MiesiacZachorowania tinyint, @RokBadania	smallint, @MiesiacBadania tinyint,
+	@Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, 
 	@PierwszyObjaw	tinyint, 
 	@Drzenie	tinyint,
 	@Sztywnosc	tinyint,
@@ -508,19 +531,6 @@ begin
 		return;
 	end;
 
-	if( dbo.validate_year_month( @RokZachorowania, @MiesiacZachorowania) = 0 )
-	begin
-		set @result = 2;
-		set @message = 'RokZachorowania / MiesiacZachorowania - invalid value.';
-		return;
-	end;
-
-	if( dbo.validate_year_month( @RokBadania, @MiesiacBadania) = 0 )
-	begin
-		set @result = 2;
-		set @message = 'RokBadania / MiesiacBadania - invalid value.';
-		return;
-	end;
 
 	if dbo.validate_input_int('Wizyta', 'PierwszyObjaw', @PierwszyObjaw) = 0
 	begin
@@ -582,12 +592,12 @@ begin
 	-- depending on update
 	if(@update = 0)
 		begin
-		insert into Wizyta (	RodzajWizyty, IdPacjent, DataPrzyjecia, DataOperacji, DataWypisu, MasaCiala, Wyksztalcenie,	Rodzinnosc,	RokZachorowania, MiesiacZachorowania, RokBadania, MiesiacBadania, PierwszyObjaw, 
+		insert into Wizyta (	RodzajWizyty, IdPacjent, DataPrzyjecia, DataOperacji, DataWypisu, MasaCiala, Wyksztalcenie,	Rodzinnosc,	RokZachorowania, PierwszyObjaw, 
 								Drzenie, Sztywnosc,	Spowolnienie, ObjawyInne, ObjawyInneJakie,
 								CzasOdPoczObjDoWlLDopy, DyskinezyObecnie,
 								DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat,	CzasDyskinez, CzasOFF, PoprawaPoLDopie,
 								Wprowadzil, Zmodyfikowal, OstatniaZmiana )
-					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataOperacji, @DataWypisu, @MasaCiala, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @MiesiacZachorowania, @RokBadania, @MiesiacBadania, @PierwszyObjaw, 
+					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataOperacji, @DataWypisu, @MasaCiala, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @PierwszyObjaw, 
 								@Drzenie, @Sztywnosc,@Spowolnienie, @ObjawyInne, @ObjawyInneJakie,
 								@CzasOdPoczObjDoWlLDopy, @DyskinezyObecnie,
 								@DyskinezyOdLat, @FluktuacjeObecnie, @FluktuacjeOdLat, @CzasDyskinez, @CzasOFF, @PoprawaPoLDopie,
@@ -597,7 +607,7 @@ begin
 		begin
 		update Wizyta
 		set DataPrzyjecia = @DataPrzyjecia, DataOperacji = @DataOperacji, DataWypisu = @DataWypisu, MasaCiala = @MasaCiala, Wyksztalcenie = @Wyksztalcenie,	Rodzinnosc = @Rodzinnosc,	RokZachorowania = @RokZachorowania, 
-				MiesiacZachorowania = @MiesiacZachorowania, RokBadania = @RokBadania, MiesiacBadania = @MiesiacBadania, PierwszyObjaw = @PierwszyObjaw, 
+				PierwszyObjaw = @PierwszyObjaw, 
 				Drzenie	= @Drzenie,
 				Sztywnosc	= @Sztywnosc,
 				Spowolnienie	= @Spowolnienie,
@@ -1447,6 +1457,7 @@ begin
 end;
 go
 
+-- last rev. 2014-01-13
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
@@ -1455,14 +1466,17 @@ create procedure update_examination_questionnaire_partG  (
 	@WAIS_R_Wiadomosci tinyint,
 	@WAIS_R_PowtarzanieCyfr tinyint,
 	@SkalaDepresjiBecka tinyint,
-	@TestFluencjiZwierzeta tinyint,
-	@TestFluencjiOstre tinyint,
-	@TestFluencjiK tinyint,
-	@TestLaczeniaPunktowA tinyint,
-	@TestLaczeniaPunktowB tinyint,
-	@TestUczeniaSlownoSluchowego tinyint,
-	@TestStroopa tinyint,
-	@TestMinnesota tinyint,
+	@TestFluencjiZwierzeta varchar(40),
+	@TestFluencjiOstre varchar(40),
+	@TestFluencjiK varchar(40),
+	@TestLaczeniaPunktowA varchar(40),
+	@TestLaczeniaPunktowB varchar(40),
+	@TestAVLTSrednia varchar(40),
+	@TestAVLTOdroczony varchar(40),
+	@TestAVLTPo20min varchar(40),
+	@TestAVLTRozpoznawanie varchar(40),
+	@TestStroopa varchar(40),
+	@TestMinnesota varchar(40),
 	@InnePsychologiczne varchar(150),
 	@OpisBadania varchar(2000),
 	@Wnioski varchar(2000),
@@ -1504,7 +1518,10 @@ begin
 			TestFluencjiK = @TestFluencjiK,
 			TestLaczeniaPunktowA = @TestLaczeniaPunktowA,
 			TestLaczeniaPunktowB = @TestLaczeniaPunktowB,
-			TestUczeniaSlownoSluchowego = @TestUczeniaSlownoSluchowego,
+			TestAVLTSrednia = @TestAVLTSrednia,
+			TestAVLTOdroczony = @TestAVLTOdroczony,
+			TestAVLTPo20min = @TestAVLTPo20min,
+			TestAVLTRozpoznawanie = @TestAVLTRozpoznawanie,
 			TestStroopa = @TestStroopa,
 			TestMinnesota = @TestMinnesota,
 			InnePsychologiczne = @InnePsychologiczne,
@@ -1517,6 +1534,7 @@ begin
 	return;
 end;
 go
+
 
 
 
@@ -1945,7 +1963,7 @@ go
 
 
 
--- last rev. 2013-11-24
+-- last rev. 2014-01-03
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit, 
@@ -1972,8 +1990,8 @@ create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@TremorometriaRIGHT_9_10 decimal(7,2),
 	@TremorometriaRIGHT_23_24 decimal(7,2),	
 	@TestSchodkowy bit,
-	@TestSchodkowyCzas1 decimal(4,2),
-	@TestSchodkowyCzas2 decimal(4,2),
+	@TestSchodkowyWDol decimal(4,2),
+	@TestSchodkowyWGore decimal(4,2),
 	@TestMarszu bit,
 	@TestMarszuCzas1 decimal(4,2),
 	@TestMarszuCzas2 decimal(4,2),
@@ -2030,8 +2048,8 @@ begin
 			TremorometriaRIGHT_9_10 = @TremorometriaRIGHT_9_10,
 			TremorometriaRIGHT_23_24 = @TremorometriaRIGHT_23_24,
 			TestSchodkowy	= @TestSchodkowy,
-			TestSchodkowyCzas1	= @TestSchodkowyCzas1,
-			TestSchodkowyCzas2	= @TestSchodkowyCzas2,
+			TestSchodkowyWDol	= @TestSchodkowyWDol,
+			TestSchodkowyWGore	= @TestSchodkowyWGore,
 			TestMarszu	= @TestMarszu,
 			TestMarszuCzas1	= @TestMarszuCzas1,
 			TestMarszuCzas2	= @TestMarszuCzas2,
@@ -2227,7 +2245,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- updated: 2013-11-21
+-- updated: 2014-01-15
 create procedure get_database_copy
 as
 SELECT 
@@ -2251,9 +2269,7 @@ SELECT
       ,W.[Wyksztalcenie]
       ,W.[Rodzinnosc]
       ,W.[RokZachorowania]
-      ,W.[MiesiacZachorowania]
-      ,W.[RokBadania]
-      ,W.[MiesiacBadania]
+	  ,CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta x where x.IdPacjent = p.IdPacjent) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2)) as CzasTrwaniaChoroby
       ,W.[PierwszyObjaw]
       ,W.[Drzenie]
       ,W.[Sztywnosc]
@@ -2442,8 +2458,8 @@ SELECT
       ,B.[TremorometriaRIGHT_9_10]
       ,B.[TremorometriaRIGHT_23_24]
       ,B.[TestSchodkowy]
-      ,B.[TestSchodkowyCzas1]
-      ,B.[TestSchodkowyCzas2]
+      ,B.[TestSchodkowyWDol]
+      ,B.[TestSchodkowyWGore]
       ,B.[TestMarszu]
       ,B.[TestMarszuCzas1]
       ,B.[TestMarszuCzas2]
@@ -2475,7 +2491,10 @@ SELECT
       ,W.[TestFluencjiK]
       ,W.[TestLaczeniaPunktowA]
       ,W.[TestLaczeniaPunktowB]
-      ,W.[TestUczeniaSlownoSluchowego]
+	  ,W.[TestAVLTSrednia]
+	  ,W.[TestAVLTOdroczony]
+	  ,W.[TestAVLTPo20min]
+	  ,W.[TestAVLTRozpoznawanie]
       ,W.[TestStroopa]
       ,W.[TestMinnesota]
       ,W.[InnePsychologiczne]
@@ -3080,7 +3099,7 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',
 
 
 */
-select * from SlownikVarchar
+
 
 
 /*

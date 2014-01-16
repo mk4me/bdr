@@ -2,11 +2,11 @@ CREATE DATABASE TPP
 
 ON
 PRIMARY ( NAME = TPP1,
-    FILENAME = 'S:\Baza\TPP.mdf'),
+    FILENAME = 'F:\TPP\TPP.mdf'),
 FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
-    FILENAME = 'S:\Baza\filestream')
+    FILENAME = 'F:\TPP\filestream')
 LOG ON  ( NAME = TPPlog1,
-    FILENAME = 'S:\Baza\TPPlog.ldf')
+    FILENAME = 'F:\TPP\TPPlog.ldf')
 COLLATE Polish_CI_AS;
 GO
 
@@ -18,11 +18,11 @@ CREATE DATABASE TPP_Test
 
 ON
 PRIMARY ( NAME = TPP1,
-    FILENAME = 'S:\Baza_test\TPP.mdf'),
+    FILENAME = 'F:\TPP_test\TPP.mdf'),
 FILEGROUP FileStreamGroup1 CONTAINS FILESTREAM( NAME = TPPFS,
-    FILENAME = 'S:\Baza_test\filestream')
+    FILENAME = 'F:\TPP_test\filestream')
 LOG ON  ( NAME = TPPlog1,
-    FILENAME = 'S:\Baza_test\TPPlog.ldf')
+    FILENAME = 'F:\TPP_test\TPPlog.ldf')
 COLLATE Polish_CI_AS;
 GO
 
@@ -87,13 +87,16 @@ ALTER TABLE Pacjent
 go
 
 
-select * from Uzytkownik
 
 /* 
+alter table Wizyta drop column MiesiacZachorowania
+alter table Wizyta drop column MiesiacBadania
+alter table Wizyta drop column RokBadania
 alter table Pacjent add NazwaGrupy varchar(3) not null default 'DBS';
 alter table Pacjent add Wprowadzil int not null default 1;
 alter table Pacjent add Zmodyfikowal int not null default 1;
 alter table Pacjent add OstatniaZmiana datetime not null default '2013-10-01T12:12:12.000';
+
 */
 alter table Pacjent
 	add foreign key ( Wprowadzil ) references Uzytkownik;
@@ -117,9 +120,10 @@ create table Wizyta (
 	Wyksztalcenie	tinyint,
 	Rodzinnosc	tinyint,		-- bit + b.d.
 	RokZachorowania	smallint,
-	MiesiacZachorowania tinyint,
-	RokBadania smallint,
-	MiesiacBadania tinyint,
+--	MiesiacZachorowania tinyint, -- usunięto 2014-01-03
+--	RokBadania smallint, -- usunięto 2014-01-03
+--	MiesiacBadania tinyint, -- usunięto 2014-01-03
+--	zamast powyższych: atrybut CzasTrwaniaChoroby DD.DD obliczany: today() - styczeń(RokZachorowania)
 	PierwszyObjaw	tinyint,
 	Drzenie	tinyint,
 	Sztywnosc	tinyint,
@@ -260,14 +264,18 @@ create table Wizyta (
 	WAIS_R_Wiadomosci tinyint,
 	WAIS_R_PowtarzanieCyfr tinyint,
 	SkalaDepresjiBecka tinyint,
-	TestFluencjiZwierzeta tinyint,
-	TestFluencjiOstre tinyint,
-	TestFluencjiK tinyint,
-	TestLaczeniaPunktowA tinyint,
-	TestLaczeniaPunktowB tinyint,
-	TestUczeniaSlownoSluchowego tinyint,
-	TestStroopa tinyint,
-	TestMinnesota tinyint,
+	TestFluencjiZwierzeta varchar(40),
+	TestFluencjiOstre varchar(40),
+	TestFluencjiK varchar(40),
+	TestLaczeniaPunktowA varchar(40),
+	TestLaczeniaPunktowB varchar(40),
+	--TestUczeniaSlownoSluchowego tinyint, -- będzie zastąpiony 4 parametrami: AVLT średnia, AVLT odroczony, AVLT po 20 minutach, AVLT rozpoznawanie
+	TestAVLTSrednia varchar(40),
+	TestAVLTOdroczony varchar(40),
+	TestAVLTPo20min varchar(40),
+	TestAVLTRozpoznawanie varchar(40),
+	TestStroopa varchar(40),
+	TestMinnesota varchar(40),
 	InnePsychologiczne varchar(150),
 	OpisBadania varchar(2000),
 	Wnioski varchar(2000),
@@ -414,8 +422,8 @@ create table Badanie  (
 	TremorometriaRIGHT_9_10 decimal(7,2),
 	TremorometriaRIGHT_23_24 decimal(7,2),	
 	TestSchodkowy	bit,
-	TestSchodkowyCzas1	decimal(4,2),
-	TestSchodkowyCzas2	decimal(4,2),
+	TestSchodkowyWDol	decimal(4,2),
+	TestSchodkowyWGore	decimal(4,2),
 	TestMarszu	bit,
 	TestMarszuCzas1	decimal(4,2),
 	TestMarszuCzas2	decimal(4,2),
@@ -434,6 +442,11 @@ create table Badanie  (
 	OstatniaZmiana datetime not null	
 )
 go
+-- 2014-01-03
+/*
+EXEC sp_rename 'Badanie.TestSchodkowyCzas1', 'TestSchodkowyWDol', 'COLUMN'
+EXEC sp_rename 'Badanie.TestSchodkowyCzas2', 'TestSchodkowyWGore', 'COLUMN'
+*/
 
 
 alter table Badanie
@@ -542,8 +555,9 @@ alter table WartoscAtrybutuWizytyInt
 	add foreign key  (IdAtrybut) references Atrybut;
 go
 
+
 alter table WartoscAtrybutuWizytyInt
-	add foreign key  (IdWizyta) references Wizyta;
+	add foreign key  (IdWizyta) references Wizyta on delete cascade;
 go
 
 
@@ -561,7 +575,7 @@ alter table WartoscAtrybutuBadaniaInt
 go
 
 alter table WartoscAtrybutuBadaniaInt
-	add foreign key  (IdBadanie) references Badanie;
+	add foreign key  (IdBadanie) references Badanie on delete cascade;
 go
 
 
