@@ -966,6 +966,62 @@ namespace MotionDBWebServices
             return fileLocation;
         }
 
+        public string GetShallowCopyBranchesIncrement(DateTime since)
+        {
+            string filePath = "";
+            string fileName = "shallowCopyBranchesInc.xml";
+            string fileLocation = "";
+
+
+            XmlDocument xd = new XmlDocument();
+            XmlDocument xd1 = new XmlDocument();
+
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            filePath = userName + "/" + DateTime.Now.Ticks.ToString();
+
+            if (!Directory.Exists(localReadDir + filePath))
+                Directory.CreateDirectory(localReadDir + filePath);
+
+            fileLocation = localReadDirSuffix + filePath + "/" + fileName;
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "get_shallow_copy_branches_increment";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                SqlParameter sincePar = cmd.Parameters.Add("@since", SqlDbType.DateTime);
+                usernamePar.Direction = ParameterDirection.Input;
+                sincePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                sincePar.Value = since;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                dr.Close();
+
+                xd.DocumentElement.SetAttribute("xmlns", "http://ruch.bytom.pjwstk.edu.pl/MotionDB");
+                xd1.LoadXml(xd.OuterXml);
+
+                xd.Save(baseLocalFilePath + fileLocation);
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "Shallow copy dump failed");
+                throw new FaultException<FileAccessServiceException>(exc, "Shallow copy dump failed", FaultCode.CreateReceiverFaultCode(new FaultCode("GetShallowCopyIncrement")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return fileLocation;
+        }
+
 
         public string GetMetadata()
         {

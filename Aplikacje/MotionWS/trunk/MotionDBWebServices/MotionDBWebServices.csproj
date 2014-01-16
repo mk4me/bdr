@@ -253,6 +253,9 @@
     <None Include="res\SessionDetailsWithAttributesElement.xsd" />
     <None Include="res\SessionGroupDefinitionElement.xsd" />
     <None Include="res\ShallowCopy.xsd" />
+    <None Include="res\ShallowCopyBranches.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\UserAssignments.xsd">
       <SubType>Designer</SubType>
     </None>

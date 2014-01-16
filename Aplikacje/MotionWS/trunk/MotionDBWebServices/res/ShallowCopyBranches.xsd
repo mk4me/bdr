@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="ShallowCopyBranches" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB" targetNamespace ="http://ruch.bytom.pjwstk.edu.pl/MotionDB">
+
+  <xsd:element name="Attrs">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="A" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:attribute name="Name" type="xsd:string" />
+            <xsd:attribute name="Value" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="BinaryFlag">
+    <xsd:restriction base="xsd:int">
+      <xsd:enumeration value="0" />
+      <xsd:enumeration value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="ctFiles">
+      <xsd:sequence>
+        <xsd:element name="File" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="FileID" type="xsd:int" />
+            <xsd:attribute name="FileName" type="xsd:string" />
+            <xsd:attribute name="FileDescription" type="xsd:string" />
+            <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
+            <xsd:attribute name="Changed" type="xsd:dateTime" use="optional" />
+            <xsd:attribute name="Size" type="xsd:nonNegativeInteger" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:element name="AddedFiles" type="ctFiles">
+  </xsd:element>
+  <xsd:element name="ModifiedFiles" type="ctFiles">
+  </xsd:element>
+
+
+  <xsd:complexType name="ctShallowCopyContent">
+    <xsd:sequence>
+      <xsd:element name="Sessions" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Session" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                  <xsd:element ref="ModifiedFiles" minOccurs="0" maxOccurs="1" />
+                  <xsd:element ref="AddedFiles" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="UserID"  type="xsd:int" />
+                <xsd:attribute name="LabID" type="xsd:int" />
+                <xsd:attribute name="MotionKind" type="xsd:string" />
+                <xsd:attribute name="SessionDate" type="xsd:date" />
+                <xsd:attribute name="SessionName" type="xsd:string" />
+                <xsd:attribute name="Tags" type="xsd:string" />
+                <xsd:attribute name="SessionDescription" type="xsd:string" />
+                <xsd:attribute name="EMGConf" type="xsd:string" use="optional" />
+                <xsd:attribute name="P" type="BinaryFlag" use="optional" />
+                <xsd:attribute name="PW" type="BinaryFlag" use="optional" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GroupAssignments" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="GroupAssignment" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="SessionGroupID" type="xsd:int" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Trials" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Trial" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                  <xsd:element ref="ModifiedFiles" minOccurs="0" maxOccurs="1" />
+                  <xsd:element ref="AddedFiles" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+                <xsd:attribute name="TrialID" type="xsd:int" />
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="TrialName" type="xsd:string" />
+                <xsd:attribute name="TrialDescription" type="xsd:string" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="Performers" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Performer" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+                <xsd:attribute name="PerformerID" type="xsd:int" />
+                <xsd:attribute name="FirstName" type="xsd:string" />
+                <xsd:attribute name="LastName" type="xsd:string" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="PerformerConfs" minOccurs="0" maxOccurs="1">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="PerformerConf" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                </xsd:sequence>
+                <xsd:attribute name="PerformerConfID" type="xsd:int" />
+                <xsd:attribute name="SessionID" type="xsd:int" />
+                <xsd:attribute name="PerformerID" type="xsd:int" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="LastModified" type="xsd:dateTime" use="required" />
+  </xsd:complexType>
+
+
+  <xsd:element name="ShallowCopyBranches">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Modified" type="ctShallowCopyContent" />
+        <xsd:element name="Added" type="ctShallowCopyContent" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+</xsd:schema>
+
+

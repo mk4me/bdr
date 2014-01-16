@@ -54,6 +54,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
+        string GetShallowCopyBranchesIncrement(DateTime since);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
         string GetMetadata();
 
         [OperationContract]

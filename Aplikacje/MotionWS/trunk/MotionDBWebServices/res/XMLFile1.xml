@@ -1,73 +1,152 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <test>
 
-  <xsd:schema id="UserAssignments" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB" targetNamespace ="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB">
+  <xsd:schema id="ShallowCopyBranches" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB" targetNamespace ="http://ruch.bytom.pjwstk.edu.pl/MotionDB">
 
-    <xsd:element name="UserAssignments">
+    <xsd:element name="Attrs">
       <xsd:complexType>
         <xsd:sequence>
-          <xsd:element name="SessionGroups" minOccurs="0" maxOccurs="1">
+          <xsd:element name="A" minOccurs="0" maxOccurs="unbounded">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="SessionGroup" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:complexType>
-                    <xsd:attribute name="SessionGroupID" type="xsd:int" />
-                    <xsd:attribute name="SessionGroupName" type="xsd:string" />
-                  </xsd:complexType>
-                </xsd:element>
-              </xsd:sequence>
+              <xsd:attribute name="Name" type="xsd:string" />
+              <xsd:attribute name="Value" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
-          <xsd:element name="UserGroups" minOccurs="0" maxOccurs="1">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="UserGroup" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:complexType>
-                    <xsd:attribute name="UserGroupID" type="xsd:int" />
-                    <xsd:attribute name="UserGroupName" type="xsd:string" />
-                  </xsd:complexType>
-                </xsd:element>
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="UserGroupAssignments" minOccurs="0" maxOccurs="1">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="UserGroupAssignment" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:complexType>
-                    <xsd:attribute name="UserGroupID" type="xsd:int" />
-                    <xsd:attribute name="SessionGroupID" type="xsd:int" />
-                  </xsd:complexType>
-                </xsd:element>
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="DBUsers" minOccurs="0" maxOccurs="1">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="DBUser" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:complexType>
-                    <xsd:attribute name="UserID" type="xsd:int" />
-                    <xsd:attribute name="FirstName" type="xsd:string" />
-                    <xsd:attribute name="LastName" type="xsd:string" />
-                    <xsd:attribute name="Email" type="xsd:string" />
-                  </xsd:complexType>
-                </xsd:element>
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="UserAssignments" minOccurs="0" maxOccurs="1">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="UserAssignment" minOccurs="0" maxOccurs="unbounded">
-                  <xsd:complexType>
-                    <xsd:attribute name="UserID" type="xsd:int" />
-                    <xsd:attribute name="UserGroupID" type="xsd:int" />
-                  </xsd:complexType>
-                </xsd:element>
-              </xsd:sequence>
-            </xsd:complexType>
-          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="BinaryFlag">
+      <xsd:restriction base="xsd:int">
+        <xsd:enumeration value="0" />
+        <xsd:enumeration value="1" />
+      </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="ctFiles">
+      <xsd:sequence>
+        <xsd:element name="File" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="FileID" type="xsd:int" />
+            <xsd:attribute name="FileName" type="xsd:string" />
+            <xsd:attribute name="FileDescription" type="xsd:string" />
+            <xsd:attribute name="SubdirPath" type="xsd:string" use="optional" />
+            <xsd:attribute name="Changed" type="xsd:dateTime" use="optional" />
+            <xsd:attribute name="Size" type="xsd:nonNegativeInteger" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="AddedFiles" type="ctFiles">
+    </xsd:element>
+    <xsd:element name="ModifiedFiles" type="ctFiles">
+    </xsd:element>
+
+
+    <xsd:complexType name="ctShallowCopyContent">
+      <xsd:sequence>
+        <xsd:element name="Sessions" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Session" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="ModifiedFiles" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="AddedFiles" minOccurs="0" maxOccurs="1" />
+                  </xsd:sequence>
+                  <xsd:attribute name="SessionID" type="xsd:int" />
+                  <xsd:attribute name="UserID"  type="xsd:int" />
+                  <xsd:attribute name="LabID" type="xsd:int" />
+                  <xsd:attribute name="MotionKind" type="xsd:string" />
+                  <xsd:attribute name="SessionDate" type="xsd:date" />
+                  <xsd:attribute name="SessionName" type="xsd:string" />
+                  <xsd:attribute name="Tags" type="xsd:string" />
+                  <xsd:attribute name="SessionDescription" type="xsd:string" />
+                  <xsd:attribute name="EMGConf" type="xsd:string" use="optional" />
+                  <xsd:attribute name="P" type="BinaryFlag" use="optional" />
+                  <xsd:attribute name="PW" type="BinaryFlag" use="optional" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="GroupAssignments" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="GroupAssignment" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="SessionID" type="xsd:int" />
+                  <xsd:attribute name="SessionGroupID" type="xsd:int" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Trials" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Trial" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="ModifiedFiles" minOccurs="0" maxOccurs="1" />
+                    <xsd:element ref="AddedFiles" minOccurs="0" maxOccurs="1" />
+                  </xsd:sequence>
+                  <xsd:attribute name="TrialID" type="xsd:int" />
+                  <xsd:attribute name="SessionID" type="xsd:int" />
+                  <xsd:attribute name="TrialName" type="xsd:string" />
+                  <xsd:attribute name="TrialDescription" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Performers" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Performer" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                  </xsd:sequence>
+                  <xsd:attribute name="PerformerID" type="xsd:int" />
+                  <xsd:attribute name="FirstName" type="xsd:string" />
+                  <xsd:attribute name="LastName" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="PerformerConfs" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="PerformerConf" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element ref="Attrs" minOccurs="0" maxOccurs="1" />
+                  </xsd:sequence>
+                  <xsd:attribute name="PerformerConfID" type="xsd:int" />
+                  <xsd:attribute name="SessionID" type="xsd:int" />
+                  <xsd:attribute name="PerformerID" type="xsd:int" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:element name="ShallowCopyBranches">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="Modified" type="ctShallowCopyContent" />
+          <xsd:element name="Added" type="ctShallowCopyContent" />
         </xsd:sequence>
       </xsd:complexType>
     </xsd:element>
@@ -76,47 +155,26 @@
 
   </xsd:schema>
 
-  <UserAssignments xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionMedDB">
-      <SessionGroups>
-        <SessionGroup SessionGroupID="1" SessionGroupName="Goczałkowice" />
-        <SessionGroup SessionGroupID="3" SessionGroupName="CZD" />
-        <SessionGroup SessionGroupID="4" SessionGroupName="PJWSTK" />
-      </SessionGroups>
-      <UserGroups>
-        <UserGroup UserGroupID="1" UserGroupName="motion_operators" />
-        <UserGroup UserGroupID="2" UserGroupName="motion_administrators" />
-        <UserGroup UserGroupID="3" UserGroupName="motion_project" />
-      </UserGroups>
-      <UserGroupAssignments>
-        <UserGroupAssignment UserGroupID="1" SessionGroupID="1" />
-        <UserGroupAssignment UserGroupID="3" SessionGroupID="1" />
-        <UserGroupAssignment UserGroupID="3" SessionGroupID="3" />
-        <UserGroupAssignment UserGroupID="3" SessionGroupID="4" />
-      </UserGroupAssignments>
-      <DBUsers>
-        <DBUser UserID="1" FirstName="Piotr" LastName="Habela" Email="habela@pjwstk.edu.pl" />
-        <DBUser UserID="4" FirstName="Dawid" LastName="Pisko" Email="NO_EMAIL" />
-        <DBUser UserID="5" FirstName="Magdalena" LastName="Tabaka" Email="NO_EMAIL" />
-        <DBUser UserID="6" FirstName="Marek" LastName="Kulbacki" Email="kulbacki@pjwstk.edu.pl" />
-        <DBUser UserID="7" FirstName="Uzytkownik" LastName="Testowy" Email="NO_EMAIL" />
-        <DBUser UserID="8" FirstName="Mateusz" LastName="Janiak" Email="mjaniak@pjwstk.edu.pl" />
-        <DBUser UserID="28" FirstName="Mateusz" LastName="Janiak" Email="mati_egon@wp.pl" />
-        <DBUser UserID="29" FirstName="Kamil" LastName="Lebek" Email="kamil.lebek@gmail.com" />
-        <DBUser UserID="30" FirstName="CJ" LastName="Zakopane" Email="razortongue@gmail.com" />
-        <DBUser UserID="31" FirstName="Magdalena" LastName="Tabaka" Email="mtabaka@pjwstk.edu.pl" />
-      </DBUsers>
-      <UserAssignments>
-        <UserAssignment UserID="1" UserGroupID="1" />
-        <UserAssignment UserID="4" UserGroupID="1" />
-        <UserAssignment UserID="5" UserGroupID="1" />
-        <UserAssignment UserID="1" UserGroupID="2" />
-        <UserAssignment UserID="7" UserGroupID="3" />
-        <UserAssignment UserID="4" UserGroupID="3" />
-        <UserAssignment UserID="1" UserGroupID="3" />
-        <UserAssignment UserID="6" UserGroupID="3" />
-        <UserAssignment UserID="8" UserGroupID="3" />
-        <UserAssignment UserID="5" UserGroupID="3" />
-      </UserAssignments>
-    </UserAssignments>
-
+  <ShallowCopyBranches xmlns="http://ruch.bytom.pjwstk.edu.pl/MotionDB">
+    <Modified>
+      <Sessions>
+        <Session SessionID="2" UserID="1" LabID="1" MotionKind="jump" SessionDate="2013-10-10" SessionName="2013-10-10-B0005-S02" Tags="sample2" SessionDescription="desc">
+          <ModifiedFiles>
+            <File FileID="3" FileName="Session2_file" FileDescription="opis pliku" Changed="2014-01-16T20:11:11.530" />
+          </ModifiedFiles>
+          <AddedFiles>
+            <File FileID="4" FileName="Session2_file2" FileDescription="opis pliku2" Changed="2014-01-16T20:11:52.633" />
+          </AddedFiles>
+        </Session>
+      </Sessions>
+      <Trials>
+        <Trial TrialID="1" SessionID="2" TrialName="trial 2-1" TrialDescription="sample desc">
+          <AddedFiles>
+            <File FileID="5" FileName="Trial1_file" FileDescription="opis pliku2" Changed="2014-01-16T20:13:12.883" />
+          </AddedFiles>
+        </Trial>
+      </Trials>
+    </Modified>
+    <Added />
+  </ShallowCopyBranches>
 </test>
