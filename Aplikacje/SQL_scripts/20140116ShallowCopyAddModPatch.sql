@@ -1,4 +1,4 @@
-use Motion;
+use Motion_test;
 go
 
 alter trigger tr_Plik_Update on Plik
@@ -136,7 +136,7 @@ begin
 end
 go
 
--- last rev. 2011-10-24
+-- last rev. 2014-01-16
 create trigger tr_Grupa_sesji_Insert on Grupa_sesji
 for insert
 as
@@ -147,7 +147,7 @@ begin
 end
 go
 
--- last rev. 2011-10-24
+-- last rev. 2014-01-16
 create trigger tr_Rodzaj_ruchu_Insert on Rodzaj_ruchu
 for insert
 as
@@ -158,7 +158,7 @@ begin
 end
 go
 
--- last rev. 2011-10-24
+-- last rev. 2014-01-16
 create trigger tr_Laboratorium_Insert on Laboratorium
 for insert
 as
@@ -169,7 +169,7 @@ begin
 end
 go
 
--- last rev. 2011-10-24
+-- last rev. 2014-01-16
 create trigger tr_Grupa_atrybutow_Insert on Grupa_atrybutow
 for insert
 as
@@ -402,4 +402,60 @@ select
 	from UAPC Performer FOR XML AUTO, TYPE 
  ) PerformerConfs
  for XML RAW ('ShallowCopy'), TYPE;
+go
+
+-- new indices
+
+create index X4Konfiguracja_performera on Konfiguracja_performera
+ (
+        Utworzono
+ )
+go
+
+create index X3Konfiguracja_pomiarowa on Konfiguracja_pomiarowa
+ (
+        Utworzono
+ )
+go
+
+create index X2Performer on Performer
+ (
+        Utworzono
+ )
+go
+
+create index X6Plik on Plik
+ (
+        Utworzono
+ )
+go
+
+create index X4Proba on Proba
+ (
+        Utworzono
+ )
+go
+
+create index X5Sesja on Sesja
+ (
+        Utworzono
+ )
+go
+
+create index X6Sesja on Sesja
+ (
+        Nazwa
+ )
+go
+
+create index X5Proba on Proba
+ (
+        Nazwa
+ )
+go
+
+create index X7Plik on Plik
+ (
+        Nazwa_pliku
+ )
 go

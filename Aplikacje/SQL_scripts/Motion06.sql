@@ -1300,15 +1300,35 @@ create index X3Konfiguracja_performera on Konfiguracja_performera
  )
 go
 
+create index X4Konfiguracja_performera on Konfiguracja_performera
+ (
+        Utworzono
+ )
+go
+
+
 create index X2Konfiguracja_pomiarowa on Konfiguracja_pomiarowa
  (
         Ostatnia_zmiana
  )
 go
 
+create index X3Konfiguracja_pomiarowa on Konfiguracja_pomiarowa
+ (
+        Utworzono
+ )
+go
+
 create index X1Performer on Performer
  (
         Ostatnia_zmiana
+ )
+go
+
+
+create index X2Performer on Performer
+ (
+        Utworzono
  )
 go
 
@@ -1324,15 +1344,51 @@ create index X5Plik on Plik
  )
 go
 
+create index X6Plik on Plik
+ (
+        Utworzono
+ )
+go
+
+create index X7Plik on Plik
+ (
+        Nazwa_pliku
+ )
+go
+
 create index X3Proba on Proba
  (
         Ostatnia_zmiana
  )
 go
 
+create index X4Proba on Proba
+ (
+        Utworzono
+ )
+go
+
+create index X5Proba on Proba
+ (
+        Nazwa
+ )
+go
+
 create index X4Sesja on Sesja
  (
         Ostatnia_zmiana
+ )
+go
+
+create index X5Sesja on Sesja
+ (
+        Utworzono
+ )
+go
+
+create index X6Sesja on Sesja
+ (
+        Nazwa
  )
 go
 
