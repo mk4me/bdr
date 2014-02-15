@@ -231,7 +231,7 @@ go
 -- SLOWNIKOWANIE (listowanie opcji i walidacje)
 -- ============================================
 
-
+/* -- deleted 2014-01-20
 create function disorder_duration( @start_year smallint )
 returns decimal(4,2)
 as
@@ -239,12 +239,17 @@ begin
 return CAST(datediff(day, CAST( CAST(@start_year as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2))
 end
 go
+*/
 
+-- last rev. 2014-01-20
 create function disorder_duration_for_examination( @IdWizyta int )
 returns decimal(4,2)
 as
 begin
-return CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta w where w.IdPacjent = (select x.IdPacjent from Wizyta x where IdWizyta = @IdWizyta)) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2))
+return CAST(
+	datediff(	day, 
+				CAST( CAST((select max(RokZachorowania) from Wizyta w where w.IdPacjent = (select x.IdPacjent from Wizyta x where IdWizyta = @IdWizyta)) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), 
+				(select DataPrzyjecia from Wizyta where IdWizyta = @IdWizyta) )/365.0 as decimal(4,2))
 end
 go
 
@@ -2245,7 +2250,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- updated: 2014-01-15
+-- updated: 2014-01-20
 create procedure get_database_copy
 as
 SELECT 
@@ -2269,7 +2274,7 @@ SELECT
       ,W.[Wyksztalcenie]
       ,W.[Rodzinnosc]
       ,W.[RokZachorowania]
-	  ,CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta x where x.IdPacjent = p.IdPacjent) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), getDate() )/365.0 as decimal(4,2)) as CzasTrwaniaChoroby
+	  ,CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta x where x.IdPacjent = p.IdPacjent) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), W.DataPrzyjecia )/365.0 as decimal(4,2)) as CzasTrwaniaChoroby
       ,W.[PierwszyObjaw]
       ,W.[Drzenie]
       ,W.[Sztywnosc]
@@ -2533,7 +2538,6 @@ SELECT
   FROM Pacjent P left join Wizyta w on P.IdPacjent = W.IdPacjent left join Badanie B on B.IdWizyta = W.IdWizyta
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
   go
-
 
   
 
@@ -3356,5 +3360,6 @@ insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'a.przybyszewski', HashBytes('SHA1','ap4tpp'), 'Andrzej', 'Przybyszewski', 'przy@pjwstk.edu.pl', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'd.koziorowski', HashBytes('SHA1','dk4tpp'), 'Dariusz', 'Koziorowski', 'dkoziorowski@esculap.pl', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'm.tomaszewski', HashBytes('SHA1','mt4tpp'), 'Michał', 'Tomaszewski', 'tomaszew@pjwstk.edu.pl', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'a.szymanski', HashBytes('SHA1','4722tpp'), 'Artur', 'Szymański', 's10248@pjwstk.edu.pl', 1 )
 */
 
