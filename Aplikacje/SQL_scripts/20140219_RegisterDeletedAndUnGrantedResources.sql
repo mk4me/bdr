@@ -1,4 +1,4 @@
-use Motion_test;
+use Motion;
 go
 
 
@@ -66,6 +66,28 @@ go
 go
 
 
+
+/*
+
+select * from Proba
+	
+
+select * from Uzytkownik u join Uzytkownik_grupa_uzytkownikow ugu on ugu.IdUzytkownik = u.IdUzytkownik
+join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_uzytkownikow = ugu.IdGrupa_uzytkownikow
+join Sesja_grupa_sesji sgs on sgs.IdGrupa_sesji = gsgu.IdGrupa_sesji
+
+
+update Grupa_sesji_grupa_uzytkownikow set Adnotuje = 1 where IdGrupa_sesji = 7
+update Grupa_sesji_grupa_uzytkownikow set Weryfikuje_adnotacje = 1 
+
+!!! to do: dodac i uprawnic grupe dla recenzetow adnotacji
+
+
+*/
+
+
+
+select * from Grupa_sesji gs join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_sesji = gs.IdGrupa_sesji join Grupa_uzytkownikow gu on gu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
 /*
 Annotation statuses:
 	0 - rejected. requires corrections
@@ -82,23 +104,7 @@ Procedure error codes:
 	11	-	user not found
 	
 */
-
-
-select * from Proba
-
-declare @r int;
-exec set_my_annotation_status 1, 2, 'Comment', 'habela', @r OUTPUT;
-select @r;
-	
-
-select * from Uzytkownik u join Uzytkownik_grupa_uzytkownikow ugu on ugu.IdUzytkownik = u.IdUzytkownik
-join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_uzytkownikow = ugu.IdGrupa_uzytkownikow
-join Sesja_grupa_sesji sgs on sgs.IdGrupa_sesji = gsgu.IdGrupa_sesji
-
-select * from Grupa_sesji_grupa_uzytkownikow
-update Grupa_sesji_grupa_uzytkownikow set Weryfikuje_adnotacje = 1
-
-
+-- last rev. 2014-02-27
 create procedure set_my_annotation_status ( @trial_id int, @status tinyint, @comment varchar(200), @user_login varchar(30), @result int OUTPUT)
 as
 begin
@@ -110,7 +116,7 @@ begin
 	
 	set @result = 0;
 	
-	if ( @status <> 1 and @status <> 2)
+	if ( @status <> 1 and @status <> 2)	-- annotator can only change the status from 1 (in construction) and 0 - rejected.
 	begin
 		set @result = 3;
 		return;
@@ -140,23 +146,19 @@ begin
 	end
 	else
 	begin
-		if ( @previous_status <> 0 and @previous_status <> 1)
+		if ( @previous_status <> 0 and @previous_status <> 1)	-- annotator may change the status only if its current value is 0 - rejected or 1 - in construction
 		begin
 			set @result =2;
 			return;	
 		end;
 	
-		update Adnotacja set  Status = @status, Komentarz = @comment where IdProba = @trial_id and IdUzytkownik = @user_id;
+		update Adnotacja set  Status = @status, Komentarz = CASE @comment WHEN '' THEN Komentarz ELSE @comment END where IdProba = @trial_id and IdUzytkownik = @user_id;
 	end;
 	
 end;
 go
 
-delete from Adnotacja
 
-declare @r int;
-exec review_annotation 1, 1, 3, 'Comment', 'dpisko', @r OUTPUT;
-select @r;
 
 /*
 Annotation statuses:
@@ -171,6 +173,7 @@ Procedure error codes:
 	1	-	annotation not found
 	2	-	status change not allowed
 	3	-	invalid status code ( only 0, 3, 4 values are allowed)
+	4	-	decision provided while annotation not in the "in review" state
 	11	-	reviewer not found
 	12	-	user not found
 	
@@ -179,13 +182,14 @@ create procedure review_annotation ( @trial_id int, @user_id int, @status tinyin
 as
 begin
 	declare @reviewer_id int;
+	declare @annotation_locker_id int;
 	set @result = 0;
 	
 	declare @previous_status tinyint;
 	
 	set @result = 0;
 	
-	if ( @status <> 0 and @status <> 3 and @status <> 4)
+	if ( @status <> 0 and @status <> 3 and @status <> 4) -- reviewer may only switch state to 3 (in review) or into one of the review results (0 or 4)
 	begin
 		set @result = 3;
 		return;
@@ -200,9 +204,9 @@ begin
 		return;
 	end;
 		
-	select @previous_status = Status from Adnotacja where IdProba = @trial_id and IdUzytkownik = @user_id ;
+	select @previous_status = Status, @annotation_locker_id = IdOceniajacy from Adnotacja where IdProba = @trial_id and IdUzytkownik = @user_id ;	-- check the curent status of the annotation
 	
-	if ( @previous_status is null )
+	if ( @previous_status is null )	-- annotation not found
 	begin
 		set @result = 1;
 		return;
@@ -211,9 +215,9 @@ begin
 	begin
 		if ( @previous_status = 2 )
 		begin
-			if( @status = 3 and exists ( select * from dbo.user_reviewable_annotations (@reviewer_id) where IdProba = @trial_id and IdUzytkownik = @user_id ))
+			if( @status = 3 and exists ( select * from dbo.user_reviewable_annotations (@reviewer_id) where IdProba = @trial_id and IdUzytkownik = @user_id )) -- annotation ready to review and reviewer has necessary privileges
 			begin
-				update Adnotacja set IdOceniajacy = @reviewer_id, Status = 3, Uwagi = @note where IdUzytkownik = @user_id and IdProba = @trial_id;
+				update Adnotacja set IdOceniajacy = @reviewer_id, Status = 3, Uwagi = CASE @note WHEN '' THEN Uwagi ELSE @note END where IdUzytkownik = @user_id and IdProba = @trial_id;
 			end
 			else
 			begin
@@ -224,7 +228,12 @@ begin
 		else
 		if ( @previous_status = 3 )
 		begin
-			if(@status <> 4 and @status <> 0)
+			if( (@annotation_locker_id is null) or (@annotation_locker_id <> @reviewer_id) )
+			begin
+				set @result = 4;
+				return;
+			end;
+			if(@status <> 4 and @status <> 0)  -- review result expected - is the new status a valid grade (0 or 4)?
 			begin
 				set @result = 2;
 				return;	
@@ -237,8 +246,6 @@ begin
 			return;	
 		end		
 	end;
-	
-	
 end;
 go
 
@@ -260,7 +267,7 @@ select
 go
 
 -- created 2014-02-24
-alter function user_reviewable_annotations( @user_id int )
+create function user_reviewable_annotations( @user_id int )
 returns TABLE as
 return 
 select a.IdUzytkownik, a.IdProba, a.Status, a.Komentarz, a.Uwagi from Adnotacja a 
@@ -296,7 +303,7 @@ select
 	Uwagi as Note
 	from Adnotacja Annotation
 	where IdOceniajacy = dbo.identify_user(@user_login) and Status = 3
-    for XML AUTO, ELEMENTS, root ('UserAnnotations')
+    for XML AUTO, ELEMENTS, root ('ReviewedAnnotations')
 go
 
 
@@ -378,7 +385,8 @@ go;
 
 */
 
-alter trigger tr_Plik_Delete on Plik
+
+create trigger tr_Plik_Delete on Plik
 for delete
 as
 begin
@@ -419,53 +427,117 @@ go
 
 
 
--- last rev: 2012-01-14
-create function user_group_assigned_session_ids( @user_id int )
-returns table
-as
-return
-select sgs.IdSesja from Uzytkownik_grupa_uzytkownikow ugu
-join Grupa_uzytkownikow gu on ugu.IdGrupa_uzytkownikow = gu.IdGrupa_uzytkownikow
-join Grupa_sesji_grupa_uzytkownikow gsgu on gu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
-join Grupa_sesji gs on gsgu.IdGrupa_sesji = gs.IdGrupa_sesji
-join Sesja_grupa_sesji sgs on gs.IdGrupa_Sesji = sgs.IdGrupa_sesji
-where ugu.IdUzytkownik = @user_id;
+create table Proba_usunieta (
+        IdProba            int NOT NULL,
+        IdUzytkownik	int NOT NULL,
+        DataUsuniecia	datetime not null
+ )
 go
 
-create function user_accessible_sessions( @user_id int )
-returns table
-as
-return
-(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana, s.Utworzono from Sesja s where s.Publiczna = 1 or dbo.is_superuser(@user_id)=1)
-union
-(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana, s.Utworzono from Sesja s where s.IdUzytkownik = @user_id)
-union
-(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana, s.Utworzono from Sesja s join Uprawnienia_sesja us on s.IdSesja = us.IdSesja where us.IdUzytkownik = @user_id)
-union
-(select s.IdSesja, s.IdUzytkownik, s.IdLaboratorium, s.IdRodzaj_ruchu, s.Data, s.Nazwa, s.Tagi, s.Opis_sesji, s.Publiczna, s.PublicznaZapis, s.Ostatnia_zmiana, s.Utworzono from Sesja s 
- where s.IdSesja in ( select * from user_group_assigned_session_ids( @user_id) ) )  
+create index X1Proba_usunieta on Proba_usunieta
+ (
+        IdProba
+ )
+go
+
+create index X2Proba_usunieta on Proba_usunieta
+ (
+        IdUzytkownik
+ )
+go
+
+create index X3Proba_usunieta on Proba_usunieta
+ (
+        DataUsuniecia
+ )
 go
 
 
+
+
+create trigger tr_Proba_Delete on Proba
+for delete
+as
+begin
+	declare @date datetime;
+	set @date = getdate();
+
+	insert into Proba_usunieta ( IdProba, IdUzytkownik, DataUsuniecia)
+	(
+	select p.IdProba, s.IdUzytkownik, @date from deleted p 
+		join Sesja s on s.IdSesja = p.IdSesja  --  Trial z sesji autorstwa danego Uzytkownika
+	union
+	select p.IdProba, u.IdUzytkownik, @date from deleted p  -- Trial z sesji publiczniej => wszyscy uzytkownicy
+		join Sesja s on s.IdSesja = p.IdSesja, Uzytkownik u where s.Publiczna = 1 
+	union
+	select p.IdProba, u.IdUzytkownik, @date from deleted p -- Triala z uzytkownikami uprawnionymi poprzez powiazania uprawniajace swoich GrupUzytkownikow z GrupamiSesji
+		join Sesja s on s.IdSesja = p.IdSesja 
+		join Sesja_grupa_sesji sgs on sgs.IdSesja = s.IdSesja
+		join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_sesji = sgs.IdGrupa_sesji
+		join Uzytkownik_grupa_uzytkownikow ugu on ugu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
+		join Uzytkownik u on u.IdUzytkownik = ugu.IdUzytkownik	
+	)
+end
+go
+
+
+
+
+
+create table Sesja_usunieta (
+        IdSesja            int NOT NULL,
+        IdUzytkownik	int NOT NULL,
+        DataUsuniecia	datetime not null
+ )
+go
+
+create index X1Sesja_usunieta on Sesja_usunieta
+ (
+        IdSesja
+ )
+go
+
+create index X2Sesja_usunieta on Sesja_usunieta
+ (
+        IdUzytkownik
+ )
+go
+
+create index X3Sesja_usunieta on Sesja_usunieta
+ (
+        DataUsuniecia
+ )
+go
+
+
+
+create trigger tr_Sesja_Delete on Sesja
+for delete
+as
+begin
+	declare @date datetime;
+	set @date = getdate();
+
+	insert into Sesja_usunieta ( IdSesja, IdUzytkownik, DataUsuniecia)
+	(
+	select p.IdSesja, p.IdUzytkownik, @date from deleted p 
+		--  Sesja autorstwa danego Uzytkownika
+	union
+	select p.IdSesja, u.IdUzytkownik, @date from deleted p  -- Sesja publiczna => wszyscy uzytkownicy
+		, Uzytkownik u where p.Publiczna = 1 
+	union
+	select p.IdSesja, u.IdUzytkownik, @date from deleted p -- Sesja z uzytkownikami uprawnionymi poprzez powiazania uprawniajace swoich GrupUzytkownikow z GrupamiSesji
+		join Sesja_grupa_sesji sgs on sgs.IdSesja = p.IdSesja
+		join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_sesji = sgs.IdGrupa_sesji
+		join Uzytkownik_grupa_uzytkownikow ugu on ugu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow
+		join Uzytkownik u on u.IdUzytkownik = ugu.IdUzytkownik	
+	)
+end
+go
 
 
 /*
 
-
-	tryger on delete Plik
-	
-Tabela ProbaUsunieta
-	IdUzytkownik, IdProba, DateTime
-
-	tryger on delete Proba
-
-Tabela SesjaUsunieta
-	IdUzytkownik, IdSesja, DateTime
-
-	tryger on delete 
-
-Tabela	PrzyznaniePrawa
-	IdUzytkownik, IdSesja, DateTime
 
 Tabela	OdebraniePrawa
 	IdUzytkownik, IdSesja, DateTime

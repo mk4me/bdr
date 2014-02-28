@@ -1429,3 +1429,119 @@ CREATE INDEX X1Konfiguracja ON Konfiguracja
          Klucz
  )
 go
+
+
+
+
+create table Plik_usuniety (
+        IdPlik            int NOT NULL,
+        IdUzytkownik	int NOT NULL,
+        DataUsuniecia	datetime not null
+ )
+go
+
+create index X1Plik_usuniety on Plik_usuniety
+ (
+        IdPlik
+ )
+go
+
+create index X2Plik_usuniety on Plik_usuniety
+ (
+        IdUzytkownik
+ )
+go
+
+create index X3Plik_usuniety on Plik_usuniety
+ (
+        DataUsuniecia
+ )
+go
+
+
+
+
+create table Adnotacja (
+	IdUzytkownik int NOT NULL,
+	IdProba int NOT NULL,
+	Status tinyint NOT NULL default 1,
+	Komentarz varchar(200),
+	Uwagi varchar(500),
+	IdOceniajacy int
+)
+
+ alter table Adnotacja
+        ADD FOREIGN KEY (IdUzytkownik)
+                   REFERENCES Uzytkownik on delete cascade;
+go
+
+ alter table Adnotacja
+        ADD FOREIGN KEY (IdProba)
+                   REFERENCES Proba on delete cascade;
+go
+
+
+ alter table Adnotacja
+        add primary key (IdUzytkownik, IdProba)
+ go
+ 
+
+ 
+ 
+ alter table Grupa_sesji_Grupa_uzytkownikow
+	add
+	Adnotuje bit NOT NULL default 0,
+	Weryfikuje_adnotacje bit NOT NULL default 0;
+
+go
+
+
+create table Proba_usunieta (
+        IdProba            int NOT NULL,
+        IdUzytkownik	int NOT NULL,
+        DataUsuniecia	datetime not null
+ )
+go
+
+create index X1Proba_usunieta on Proba_usunieta
+ (
+        IdProba
+ )
+go
+
+create index X2Proba_usunieta on Proba_usunieta
+ (
+        IdUzytkownik
+ )
+go
+
+create index X3Proba_usunieta on Proba_usunieta
+ (
+        DataUsuniecia
+ )
+go
+
+create table Sesja_usunieta (
+        IdSesja            int NOT NULL,
+        IdUzytkownik	int NOT NULL,
+        DataUsuniecia	datetime not null
+ )
+go
+
+create index X1Sesja_usunieta on Sesja_usunieta
+ (
+        IdSesja
+ )
+go
+
+create index X2Sesja_usunieta on Sesja_usunieta
+ (
+        IdUzytkownik
+ )
+go
+
+create index X3Sesja_usunieta on Sesja_usunieta
+ (
+        DataUsuniecia
+ )
+go
