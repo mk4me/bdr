@@ -217,6 +217,18 @@
     <None Include="res\BasicQueriesWS.wsdl" />
     <None Include="res\BasicQueriesWS.xsd" />
     <None Include="res\BasicQueriesWSStandalone.wsdl" />
+    <None Include="res\Annotation.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="res\ListMyReviewedAnnotationsXML.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="res\ListAwaitingAnnotationsXML.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="res\ListMyAnnotationsXML.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\FileDetailsWithAttributesElement.xsd" />
     <None Include="res\GetFileDataByIdXML.xsd" />
     <None Include="res\GetSessionContent.xsd" />

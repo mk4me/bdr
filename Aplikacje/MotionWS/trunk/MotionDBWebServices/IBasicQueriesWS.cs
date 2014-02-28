@@ -173,8 +173,19 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         bool IsNewerClientSWAvailable(string version);
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListMyAnnotationsXML();
+        
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListAwaitingAnnotationsXML();
+        
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListMyReviewedAnnotationsXML();
 
-
+        
     }
 
 }

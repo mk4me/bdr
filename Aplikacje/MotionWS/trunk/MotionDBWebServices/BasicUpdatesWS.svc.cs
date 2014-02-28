@@ -892,5 +892,187 @@ namespace MotionDBWebServices
             }
         }
 
+
+/*
+    Annotation statuses:
+	0 - rejected. requires corrections
+	1 - in construction (initial state)
+	2 - ready for review
+	3 - in review
+	4 - approved
+	
+Procedure error codes:
+	0	-	OK
+	1	-	trial not found
+	2	-	status change not allowed
+	3	-	invalid status code ( only 1-2 switching is allowed)
+	11	-	user not found
+	
+*/
+
+        public void SetMyAnnotationStatus(int trialID, int status, string comment)
+        {
+            int res = 0;
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandText = "set_my_annotation_status";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@trial_id", SqlDbType.Int);
+                cmd.Parameters.Add("@status", SqlDbType.TinyInt);
+                cmd.Parameters.Add("@comment", SqlDbType.VarChar, 30);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+                cmd.Parameters["@user_login"].Value = userName;
+                cmd.Parameters["@trial_id"].Value = trialID;
+                cmd.Parameters["@status"].Value = status;
+                cmd.Parameters["@comment"].Value = comment;
+                cmd.ExecuteNonQuery();
+                res = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("unknown", "Update failed");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (res == 1)
+            {
+                UpdateException exc = new UpdateException("parameter", "Trial not found");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 2)
+            {
+                UpdateException exc = new UpdateException("coordination", "Status change not allowed found");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+            if (res == 3)
+            {
+                UpdateException exc = new UpdateException("parameter", "Wrong status code");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 11)
+            {
+                UpdateException exc = new UpdateException("authorization", "Unknown user");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            return;
+        }
+
+
+
+        /*
+            Annotation statuses:
+            0 - rejected. requires corrections
+            1 - in construction (initial state)
+            2 - ready for review
+            3 - in review
+            4 - approved
+	
+Procedure error codes:
+	0	-	OK
+	1	-	annotation not found
+	2	-	status change not allowed
+	3	-	invalid status code ( only 0, 3, 4 values are allowed)
+	4	-	decision provided while annotation not in the "in review" state
+	11	-	reviewer not found
+	12	-	user not found
+	
+        */
+
+        public void SetAnnotationReview(int trialID, int userID, int status, string note)
+        {
+            int res = 0;
+
+            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+
+                OpenConnection();
+                cmd.CommandText = "review_annotation";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@reviewer_login", SqlDbType.VarChar, 30);
+                cmd.Parameters.Add("@trial_id", SqlDbType.Int);
+                cmd.Parameters.Add("@user_id", SqlDbType.Int);
+                cmd.Parameters.Add("@status", SqlDbType.TinyInt);
+                cmd.Parameters.Add("@note", SqlDbType.VarChar, 30);
+                SqlParameter resultCodeParameter =
+                    new SqlParameter("@result", SqlDbType.Int);
+                resultCodeParameter.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(resultCodeParameter);
+                cmd.Parameters["@reviewer_login"].Value = userName;
+                cmd.Parameters["@trial_id"].Value = trialID;
+                cmd.Parameters["@user_id"].Value = userID;
+                cmd.Parameters["@status"].Value = status;
+                cmd.Parameters["@note"].Value = note;
+                cmd.ExecuteNonQuery();
+                res = (int)resultCodeParameter.Value;
+
+            }
+            catch (SqlException ex)
+            {
+                UpdateException exc = new UpdateException("unknown", "Update failed");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            if (res == 1)
+            {
+                UpdateException exc = new UpdateException("parameter", "Annotation not found");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 2)
+            {
+                UpdateException exc = new UpdateException("coordination", "Status change not allowed found");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+            if (res == 3)
+            {
+                UpdateException exc = new UpdateException("parameter", "Wrong status code");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 4)
+            {
+                UpdateException exc = new UpdateException("coordination", "Decision provided while annotation not in the'in review' state");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+            }
+            if (res == 11)
+            {
+                UpdateException exc = new UpdateException("authorization", "Unknown reviewer");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            if (res == 12)
+            {
+                UpdateException exc = new UpdateException("authorization", "Unknown user");
+                throw new FaultException<UpdateException>(exc, "UpdateException");
+
+            }
+            return;
+        }
+
+
+
     }
 }

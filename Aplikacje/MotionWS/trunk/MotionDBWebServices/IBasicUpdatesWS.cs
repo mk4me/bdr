@@ -66,5 +66,16 @@ namespace MotionDBWebServices
         [OperationContract]
         [FaultContract(typeof(UpdateException))]
         void SetFileTypedAttributeValue(int resourceID, string entity, string attributeName, int fileID, bool update);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        void SetMyAnnotationStatus(int trialID, int status, string comment);
+
+        [OperationContract]
+        [FaultContract(typeof(UpdateException))]
+        void SetAnnotationReview(int trialID, int userID, int status, string note);
+
+
+
     }
 }

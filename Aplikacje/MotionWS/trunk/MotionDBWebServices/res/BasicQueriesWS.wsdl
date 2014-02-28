@@ -33,20 +33,24 @@
 					</wsp:Policy>
 				</sp:SignedSupportingTokens>
 				<sp:Wss10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
-					<wsp:Policy>
-						<sp:MustSupportRefKeyIdentifier/>
-						<sp:MustSupportRefIssuerSerial/>
-					</wsp:Policy>
+					<wsp:Policy/>
 				</sp:Wss10>
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
 	<wsdl:types>
 		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService">
+			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
+			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
+			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
+			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xsd:include schemaLocation="ListSessionContents.xsd"/>
 			<xsd:include schemaLocation="GetSessionContent.xsd"/>
 			<xsd:include schemaLocation="ValidateSessionFileSet.xsd"/>
 			<xsd:include schemaLocation="GetCurrentClientSWVersionInfo.xsd"/>
+			<xsd:include schemaLocation="ListMyAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListAwaitingAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListMyReviewedAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -74,10 +78,86 @@
 			<xsd:include schemaLocation="ListFileAttributeDataXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListAttributesDefined.xsd"/>
-			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
-			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
-			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
-			<xsd:include schemaLocation="ListEnumValues.xsd"/>
+			<xsd:element name="ListAttributeGroupsDefined">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListAttributeGroupsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:AttributeGroupDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="QueryException">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
+					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
+			<xsd:element name="ListSessionGroupsDefined">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListSessionGroupsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:SessionGroupDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListMotionKindsDefined">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListMotionKindsDefinedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:MotionKindDefinitionList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListEnumValues">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
+						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListEnumValuesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:EnumValueList"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="ListSessionContents">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -99,13 +179,6 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:complexType name="QueryException">
-				<xsd:sequence>
-					<xsd:element minOccurs="0" name="Details" nillable="true" type="xsd:string"/>
-					<xsd:element minOccurs="0" name="IssueKind" nillable="true" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:element name="QueryException" nillable="true" type="tns:QueryException"/>
 			<xsd:element name="GetSessionContent">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -203,6 +276,54 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element minOccurs="1" maxOccurs="1" name="IsNewerClientSWAvailableResult" type="xsd:boolean"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListMyAnnotationsXML">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListMyAnnotationsXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListMyAnnotationsXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:UserAnnotations"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListAwaitingAnnotationsXML">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListAwaitingAnnotationsXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListAwaitingAnnotationsXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:AwaitingAnnotations"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListMyReviewedAnnotationsXML">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListMyReviewedAnnotationsXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListMyReviewedAnnotationsXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:ReviewedAnnotations"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -779,85 +900,19 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ListAttributeGroupsDefined">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListAttributeGroupsDefinedResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListAttributeGroupsDefinedResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:AttributeGroupDefinitionList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListSessionGroupsDefined">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListSessionGroupsDefinedResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListSessionGroupsDefinedResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:SessionGroupDefinitionList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListMotionKindsDefined">
-				<xsd:complexType/>
-			</xsd:element>
-			<xsd:element name="ListMotionKindsDefinedResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListMotionKindsDefinedResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:MotionKindDefinitionList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListEnumValues">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="attributeName" type="xsd:string"/>
-						<xsd:element minOccurs="0" maxOccurs="1" name="entityKind" type="xsd:string"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="ListEnumValuesResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element minOccurs="0" maxOccurs="1" name="ListEnumValuesResult">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element ref="tns:EnumValueList"/>
-								</xsd:sequence>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
+			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
+			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
+			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
+			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xsd:include schemaLocation="ListSessionContents.xsd"/>
 			<xsd:include schemaLocation="GetSessionContent.xsd"/>
 			<xsd:include schemaLocation="ValidateSessionFileSet.xsd"/>
 			<xsd:include schemaLocation="GetCurrentClientSWVersionInfo.xsd"/>
+			<xsd:include schemaLocation="ListMyAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListAwaitingAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListMyReviewedAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -885,10 +940,6 @@
 			<xsd:include schemaLocation="ListFileAttributeDataXML.xsd"/>
 			<xsd:include schemaLocation="ListFileAttributeDataWithAttributesXML.xsd"/>
 			<xsd:include schemaLocation="ListAttributesDefined.xsd"/>
-			<xsd:include schemaLocation="ListAttributeGroupsDefined.xsd"/>
-			<xsd:include schemaLocation="ListSessionGroupsDefined.xsd"/>
-			<xsd:include schemaLocation="ListMotionKindsDefined.xsd"/>
-			<xsd:include schemaLocation="ListEnumValues.xsd"/>
 			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
 			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
 			<xs:element name="base64Binary" nillable="true" type="xs:base64Binary"/>
@@ -930,6 +981,42 @@
 			<xs:attribute name="Ref" type="xs:IDREF"/>
 		</xs:schema>
 	</wsdl:types>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValues"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListEnumValuesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListSessionContents_InputMessage">
 		<wsdl:part name="parameters" element="tns:ListSessionContents"/>
 	</wsdl:message>
@@ -991,6 +1078,33 @@
 		<wsdl:part name="parameters" element="tns:IsNewerClientSWAvailableResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_IsNewerClientSWAvailable_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyAnnotationsXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyAnnotationsXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyAnnotationsXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyAnnotationsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyAnnotationsXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAwaitingAnnotationsXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListAwaitingAnnotationsXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAwaitingAnnotationsXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListAwaitingAnnotationsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAwaitingAnnotationsXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyReviewedAnnotationsXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyReviewedAnnotationsXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyReviewedAnnotationsXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyReviewedAnnotationsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListMyReviewedAnnotationsXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
@@ -1245,43 +1359,27 @@
 	<wsdl:message name="IBasicQueriesWS_ListAttributesDefined_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListAttributeGroupsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListSessionGroupsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListMotionKindsDefined"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListMotionKindsDefinedResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_InputMessage">
-		<wsdl:part name="parameters" element="tns:ListEnumValues"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_OutputMessage">
-		<wsdl:part name="parameters" element="tns:ListEnumValuesResponse"/>
-	</wsdl:message>
-	<wsdl:message name="IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage">
-		<wsdl:part name="detail" element="tns:QueryException"/>
-	</wsdl:message>
 	<wsdl:portType name="IBasicQueriesWS">
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" message="tns:IBasicQueriesWS_ListMotionKindsDefined_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedResponse" message="tns:IBasicQueriesWS_ListMotionKindsDefined_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" message="tns:IBasicQueriesWS_ListEnumValues_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="ListSessionContents">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" message="tns:IBasicQueriesWS_ListSessionContents_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContentsResponse" message="tns:IBasicQueriesWS_ListSessionContents_OutputMessage"/>
@@ -1316,6 +1414,21 @@
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailable" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailableResponse" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailableQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_IsNewerClientSWAvailable_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMyAnnotationsXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyAnnotationsXML" message="tns:IBasicQueriesWS_ListMyAnnotationsXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListMyAnnotationsXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMyAnnotationsXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListAwaitingAnnotationsXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAwaitingAnnotationsXML" message="tns:IBasicQueriesWS_ListAwaitingAnnotationsXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAwaitingAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListAwaitingAnnotationsXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAwaitingAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAwaitingAnnotationsXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListMyReviewedAnnotationsXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXML" message="tns:IBasicQueriesWS_ListMyReviewedAnnotationsXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListMyReviewedAnnotationsXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMyReviewedAnnotationsXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
@@ -1457,30 +1570,58 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributesDefinedResponse" message="tns:IBasicQueriesWS_ListAttributesDefined_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributesDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributesDefined_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
-		<wsdl:operation name="ListAttributeGroupsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAttributeGroupsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListSessionGroupsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedResponse" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListSessionGroupsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListMotionKindsDefined">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" message="tns:IBasicQueriesWS_ListMotionKindsDefined_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedResponse" message="tns:IBasicQueriesWS_ListMotionKindsDefined_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefinedQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMotionKindsDefined_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
-		<wsdl:operation name="ListEnumValues">
-			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" message="tns:IBasicQueriesWS_ListEnumValues_InputMessage"/>
-			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesResponse" message="tns:IBasicQueriesWS_ListEnumValues_OutputMessage"/>
-			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValuesQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListEnumValues_QueryExceptionFault_FaultMessage"/>
-		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="BasicHttpBinding_IBasicQueriesWS" type="tns:IBasicQueriesWS">
 		<wsp:PolicyReference URI="#BasicHttpBinding_IBasicQueriesWS_policy"/>
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ListAttributeGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListSessionGroupsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListMotionKindsDefined">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListEnumValues">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
 		<wsdl:operation name="ListSessionContents">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionContents" style="document"/>
 			<wsdl:input>
@@ -1555,6 +1696,42 @@
 		</wsdl:operation>
 		<wsdl:operation name="IsNewerClientSWAvailable">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/IsNewerClientSWAvailable" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListMyAnnotationsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyAnnotationsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListAwaitingAnnotationsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAwaitingAnnotationsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListMyReviewedAnnotationsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -1891,54 +2068,6 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListAttributesDefined">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributesDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListAttributeGroupsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAttributeGroupsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListSessionGroupsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListSessionGroupsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListMotionKindsDefined">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMotionKindsDefined" style="document"/>
-			<wsdl:input>
-				<soap:body use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-			<wsdl:fault name="QueryExceptionFault">
-				<soap:fault name="QueryExceptionFault" use="literal"/>
-			</wsdl:fault>
-		</wsdl:operation>
-		<wsdl:operation name="ListEnumValues">
-			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListEnumValues" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="Annotation" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="Annotation">
+    <xsd:complexType>
+            <xsd:attribute name="TrialID" type="xsd:int" />
+            <xsd:attribute name="Status" type="xsd:int" />
+            <xsd:attribute name="Comment" type="xsd:string" />
+            <xsd:attribute name="Note" type="xsd:string" />
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
