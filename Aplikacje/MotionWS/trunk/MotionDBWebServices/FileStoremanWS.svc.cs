@@ -1307,6 +1307,100 @@ namespace MotionDBWebServices
             return sessionId;
         }
 
+
+        // No FTP
+        public FileByteData RetrieveFileByteData(int fileID)
+        {
+            string relativePath = "";
+            string fileName = "NOT_FOUND";
+            FileByteData fileByteData = new FileByteData();
+
+            fileData = null;
+            fileName = "";
+            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString();
+            try
+            {
+                OpenConnection();
+                cmd.CommandText = @"select Plik, Nazwa_pliku, Sciezka from Plik where IdPlik = @file_id";
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                cmd.Parameters["@file_id"].Value = fileID;
+                fileReader = cmd.ExecuteReader();
+
+
+                while (fileReader.Read())
+                {
+                    fileData = (byte[])fileReader.GetValue(0);
+                    fileName = (string)fileReader.GetValue(1);
+                }
+
+                fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
+                fileName = fileName.Substring(fileName.LastIndexOf('/') + 1);
+                fileReader.Close();
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            fileByteData.FileName = fileName;
+            fileByteData.FileData = fileData;
+
+            return fileByteData;
+        }
+
+        [PrincipalPermission(SecurityAction.Demand, Role = @"motion_operators")]
+        public void StoreFileByteData(int fileID, FileByteData fileByteData, bool update)
+        {
+            if (fileByteData.FileName.Normalize().Contains('\\') || fileByteData.FileName.Normalize().Contains('/'))
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + fileByteData.FileName + "'. Must be a simple file name.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+
+            try
+            {
+                OpenConnection();
+                if (update)
+                {
+                    cmd.CommandText = @"update Plik 
+                                            set Plik = @file_data, Nazwa_pliku = @file_name
+                                            where IdPlik = @file_id";
+                }
+                else
+                {
+                    cmd.CommandText = @"insert into Plik (IdPlik, Plik, Nazwa_pliku)
+                                            values (@file_id, @file_data, @file_name)";
+                }
+                cmd.Parameters.Add("@file_data", SqlDbType.VarBinary, maxFileSize);
+                cmd.Parameters.Add("@file_name", SqlDbType.VarChar, 255);
+                cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                cmd.Parameters["@file_data"].Value = fileByteData.FileData;
+                cmd.Parameters["@file_name"].Value = fileByteData.FileName;
+                cmd.Parameters["@file_id"].Value = fileID;
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (SqlException ex)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("database", "Database operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed at the DBMS side", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+            catch (SystemException ex1)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("system", "File access failure: " + ex1.Message);
+                throw new FaultException<FileAccessServiceException>(exc, "File access failure", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
     }
 
 }

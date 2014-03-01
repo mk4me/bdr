@@ -10,4 +10,10 @@ namespace MotionDBWebServices
         public string FileLocation;
         public string SubdirPath;
     }
+
+    public struct FileByteData
+    {
+        public string FileName;
+        public byte[] FileData;
+    }
 }

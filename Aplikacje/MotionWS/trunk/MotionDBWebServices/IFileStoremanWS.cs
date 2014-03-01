@@ -72,5 +72,13 @@ namespace MotionDBWebServices
         [FaultContract(typeof(FileAccessServiceException))]
         void ReplaceFile(int fileID, string path, string filename);
 
+        // No FTP
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        FileByteData RetrieveFileByteData(int fileID);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
+        void StoreFileByteData(int fileID, FileByteData fileByteData, bool update);
     }
 }
