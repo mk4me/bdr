@@ -324,6 +324,7 @@ select
 		from Plik p 
 		where
 		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as AddedFiles
+		// HERE
 	from UAT Trial where Utworzono > @since order by Nazwa FOR XML AUTO, TYPE 
  ) Trials,
  (select 
@@ -387,6 +388,7 @@ select
 		from Plik p 
 		where 
 		p.IdProba=Trial.IdProba for XML PATH('File'), TYPE) as Files
+		// HERE
 	from UAT Trial order by Nazwa FOR XML AUTO, TYPE 
  ) Trials,
  (select 

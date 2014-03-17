@@ -1600,10 +1600,11 @@ as
 	select * from @fileStoreList order by entity;				
 go
 
+
+
 -- Shallow copy retrieval
 -- ==========================
--- TODO: pozosta³e konfiguracje pomiarowe / ew. - grupy atrybutow
--- last rev. 2014-01-16
+-- last rev. 2014-03-17
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1662,12 +1663,19 @@ select
 	IdPerformer as PerformerID,
 	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
 	from UAPC Performer FOR XML AUTO, TYPE 
- ) PerformerConfs
+ ) PerformerConfs,
+ (select IdProba as TrialID,
+	IdUzytkownik as UserID,
+	Status as Status,
+	Komentarz as Comment,
+	Uwagi as Note
+	from Adnotacja Annotation FOR XML AUTO, TYPE
+ )TrialAnnotations
  for XML RAW ('ShallowCopy'), TYPE;
 go
 
 
--- last rev. 2011-10-24
+
 create procedure get_shallow_copy_increment @user_login varchar(30), @since datetime
 as
 with
@@ -1722,12 +1730,19 @@ select
 	IdPerformer as PerformerID,
 	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
 	from UAPC Performer  where Ostatnia_zmiana > @since FOR XML AUTO, TYPE 
- ) PerformerConfs
+ ) PerformerConfs,
+ (select IdProba as TrialID,
+	IdUzytkownik as UserID,
+	Status as Status,
+	Komentarz as Comment,
+	Uwagi as Note
+	from Adnotacja Annotation FOR XML AUTO, TYPE
+ )TrialAnnotations
  for XML RAW ('ShallowCopy'), TYPE;
 go
 
 
--- last rev. 2014-01-16
+-- last rev. 2014-03-17
 create procedure get_shallow_copy_branches_increment @user_login varchar(30), @since datetime
 as
 with
@@ -1841,7 +1856,14 @@ select
 	(select Name, Value from list_performer_configuration_attributes( IdKonfiguracja_performera ) A FOR XML AUTO, TYPE ) Attrs
 	from UAPC Performer  where Utworzono > @since FOR XML AUTO, TYPE 
  ) PerformerConfs
- for XML RAW ('Added'), TYPE)
+ for XML RAW ('Added'), TYPE),
+ (select IdProba as TrialID,
+	IdUzytkownik as UserID,
+	Status as Status,
+	Komentarz as Comment,
+	Uwagi as Note
+	from Adnotacja Annotation FOR XML AUTO, TYPE
+ )TrialAnnotations
  for XML RAW ('ShallowCopyBranches'), TYPE;
 go
 
