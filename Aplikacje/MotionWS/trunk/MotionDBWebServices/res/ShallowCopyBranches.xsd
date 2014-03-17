@@ -146,6 +146,22 @@
       <xsd:sequence>
         <xsd:element name="Modified" type="ctShallowCopyContent" />
         <xsd:element name="Added" type="ctShallowCopyContent" />
+        <xsd:element name="TrialAnnotations">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Annotation" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="TrialID" type="xsd:int" />
+                  <xsd:attribute name="UserID" type="xsd:int" />
+                  <xsd:attribute name="Status" type="xsd:int" />
+                  <xsd:attribute name="Comment" type="xsd:string" />
+                  <xsd:attribute name="Note" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
