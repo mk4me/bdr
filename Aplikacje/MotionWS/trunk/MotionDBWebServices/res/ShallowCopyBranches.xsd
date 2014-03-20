@@ -146,7 +146,7 @@
       <xsd:sequence>
         <xsd:element name="Modified" type="ctShallowCopyContent" />
         <xsd:element name="Added" type="ctShallowCopyContent" />
-        <xsd:element name="TrialAnnotations">
+        <xsd:element name="TrialAnnotations" minOccurs="0" maxOccurs="1">
           <xsd:complexType>
             <xsd:sequence>
               <xsd:element name="Annotation" minOccurs="0" maxOccurs="unbounded">
@@ -156,6 +156,18 @@
                   <xsd:attribute name="Status" type="xsd:int" />
                   <xsd:attribute name="Comment" type="xsd:string" />
                   <xsd:attribute name="Note" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="MyUserGroupMemberships" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="UserGroup" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:attribute name="UserGroupID" type="xsd:int" />
+                  <xsd:attribute name="UserGroupName" type="xsd:string" />
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
