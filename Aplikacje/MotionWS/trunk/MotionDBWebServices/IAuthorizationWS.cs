@@ -40,6 +40,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(AuthorizationException))]
+        XmlElement ListMyUserGroupsAssigned();
+
+        [OperationContract]
+        [FaultContract(typeof(AuthorizationException))]
         bool UpdateUserAccount(string login, string email, string pass, string newPass, string firstName, string lastName);
 
         [OperationContract]

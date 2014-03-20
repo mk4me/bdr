@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="AttributeDefinitionList" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+  <xsd:element name="MyUserGroupsAssigned">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="UserGroup" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:attribute name="UserGroupID" type="xsd:int" />
+            <xsd:attribute name="UserGroupName" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

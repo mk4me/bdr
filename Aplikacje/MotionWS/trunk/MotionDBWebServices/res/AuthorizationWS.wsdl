@@ -41,6 +41,7 @@
 	<wsdl:types>
 		<xsd:schema elementFormDefault="qualified" targetNamespace="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService">
 			<xsd:include schemaLocation="ListUsers.xsd"/>
+			<xsd:include schemaLocation="ListMyUserGroupsAssigned.xsd"/>
 			<xsd:include schemaLocation="ListSessionPrivileges.xsd"/>
 			<xsd:element name="ListUsers">
 				<xsd:complexType/>
@@ -83,6 +84,22 @@
 					<xsd:element minOccurs="0" maxOccurs="1" name="Email" type="xsd:string"/>
 				</xsd:sequence>
 			</xsd:complexType>
+			<xsd:element name="ListMyUserGroupsAssigned">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListMyUserGroupsAssignedResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListMyUserGroupsAssignedResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:MyUserGroupsAssigned"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<xsd:element name="UpdateUserAccount">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -185,6 +202,7 @@
 		</xsd:schema>
 		<xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/">
 			<xsd:include schemaLocation="ListUsers.xsd"/>
+			<xsd:include schemaLocation="ListMyUserGroupsAssigned.xsd"/>
 			<xsd:include schemaLocation="ListSessionPrivileges.xsd"/>
 			<xs:element name="anyType" nillable="true" type="xs:anyType"/>
 			<xs:element name="anyURI" nillable="true" type="xs:anyURI"/>
@@ -243,6 +261,15 @@
 		<wsdl:part name="parameters" element="tns:GetMyUserDataResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_GetMyUserData_AuthorizationExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:AuthorizationException"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListMyUserGroupsAssigned_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyUserGroupsAssigned"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListMyUserGroupsAssigned_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListMyUserGroupsAssignedResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IAuthorizationWS_ListMyUserGroupsAssigned_AuthorizationExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:AuthorizationException"/>
 	</wsdl:message>
 	<wsdl:message name="IAuthorizationWS_UpdateUserAccount_InputMessage">
@@ -319,6 +346,11 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserDataResponse" message="tns:IAuthorizationWS_GetMyUserData_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserDataAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_GetMyUserData_AuthorizationExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListMyUserGroupsAssigned">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListMyUserGroupsAssigned" message="tns:IAuthorizationWS_ListMyUserGroupsAssigned_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListMyUserGroupsAssignedResponse" message="tns:IAuthorizationWS_ListMyUserGroupsAssigned_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListMyUserGroupsAssignedAuthorizationExceptionFault" name="AuthorizationExceptionFault" message="tns:IAuthorizationWS_ListMyUserGroupsAssigned_AuthorizationExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="UpdateUserAccount">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccount" message="tns:IAuthorizationWS_UpdateUserAccount_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/UpdateUserAccountResponse" message="tns:IAuthorizationWS_UpdateUserAccount_OutputMessage"/>
@@ -372,6 +404,18 @@
 		</wsdl:operation>
 		<wsdl:operation name="GetMyUserData">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/GetMyUserData" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AuthorizationExceptionFault">
+				<soap:fault name="AuthorizationExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListMyUserGroupsAssigned">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService/IAuthorizationWS/ListMyUserGroupsAssigned" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

@@ -101,7 +101,52 @@ namespace MotionDBWebServices
 
         }
 
-        
+        public XmlElement ListMyUserGroupsAssigned()
+        {
+            bool found = false;
+            XmlDocument xd = new XmlDocument(); 
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+
+            try
+            {
+                // TO DO: generowanie losowej nazwy katalogu
+                // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
+
+                OpenConnection();
+                cmd.CommandText = @"get_my_user_group_memberships";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                cmd.Parameters["@user_login"].Value = userName;
+
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("ListMyUserGroupsAssigned", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+
+
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                AuthorizationException exc = new AuthorizationException("unknown", "Database access failed");
+                throw new FaultException<AuthorizationException>(exc, "Database access failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+
+
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+
+        }
         public bool UpdateUserAccount(string login, string email, string pass, string newPass, string firstName, string lastName)
         {
             string faultMessage = "";
