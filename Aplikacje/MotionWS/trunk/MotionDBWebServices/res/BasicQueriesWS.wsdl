@@ -51,6 +51,8 @@
 			<xsd:include schemaLocation="ListMyAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="ListAwaitingAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="ListMyReviewedAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListCompletedAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -321,6 +323,38 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element ref="tns:ReviewedAnnotations"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListAnnotationsXML">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListAnnotationsXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListAnnotationsXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:Annotations"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ListCompletedAnnotationsXML">
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ListCompletedAnnotationsXMLResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="0" maxOccurs="1" name="ListCompletedAnnotationsXMLResult">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element ref="tns:CompletedAnnotations"/>
 								</xsd:sequence>
 							</xsd:complexType>
 						</xsd:element>
@@ -913,6 +947,8 @@
 			<xsd:include schemaLocation="ListMyAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="ListAwaitingAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="ListMyReviewedAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListAnnotationsXML.xsd"/>
+			<xsd:include schemaLocation="ListCompletedAnnotationsXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryXML.xsd"/>
 			<xsd:include schemaLocation="GenericQueryUniformXML.xsd"/>
 			<xsd:include schemaLocation="GetPerformerByIdXML.xsd"/>
@@ -1105,6 +1141,24 @@
 		<wsdl:part name="parameters" element="tns:ListMyReviewedAnnotationsXMLResponse"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_ListMyReviewedAnnotationsXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAnnotationsXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListAnnotationsXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAnnotationsXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListAnnotationsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListAnnotationsXML_QueryExceptionFault_FaultMessage">
+		<wsdl:part name="detail" element="tns:QueryException"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListCompletedAnnotationsXML_InputMessage">
+		<wsdl:part name="parameters" element="tns:ListCompletedAnnotationsXML"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListCompletedAnnotationsXML_OutputMessage">
+		<wsdl:part name="parameters" element="tns:ListCompletedAnnotationsXMLResponse"/>
+	</wsdl:message>
+	<wsdl:message name="IBasicQueriesWS_ListCompletedAnnotationsXML_QueryExceptionFault_FaultMessage">
 		<wsdl:part name="detail" element="tns:QueryException"/>
 	</wsdl:message>
 	<wsdl:message name="IBasicQueriesWS_GenericQueryXML_InputMessage">
@@ -1430,6 +1484,16 @@
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListMyReviewedAnnotationsXML_OutputMessage"/>
 			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListMyReviewedAnnotationsXML_QueryExceptionFault_FaultMessage"/>
 		</wsdl:operation>
+		<wsdl:operation name="ListAnnotationsXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAnnotationsXML" message="tns:IBasicQueriesWS_ListAnnotationsXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListAnnotationsXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListAnnotationsXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ListCompletedAnnotationsXML">
+			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListCompletedAnnotationsXML" message="tns:IBasicQueriesWS_ListCompletedAnnotationsXML_InputMessage"/>
+			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListCompletedAnnotationsXMLResponse" message="tns:IBasicQueriesWS_ListCompletedAnnotationsXML_OutputMessage"/>
+			<wsdl:fault wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListCompletedAnnotationsXMLQueryExceptionFault" name="QueryExceptionFault" message="tns:IBasicQueriesWS_ListCompletedAnnotationsXML_QueryExceptionFault_FaultMessage"/>
+		</wsdl:operation>
 		<wsdl:operation name="GenericQueryXML">
 			<wsdl:input wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXML" message="tns:IBasicQueriesWS_GenericQueryXML_InputMessage"/>
 			<wsdl:output wsaw:Action="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/GenericQueryXMLResponse" message="tns:IBasicQueriesWS_GenericQueryXML_OutputMessage"/>
@@ -1732,6 +1796,30 @@
 		</wsdl:operation>
 		<wsdl:operation name="ListMyReviewedAnnotationsXML">
 			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListMyReviewedAnnotationsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListAnnotationsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListAnnotationsXML" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="QueryExceptionFault">
+				<soap:fault name="QueryExceptionFault" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ListCompletedAnnotationsXML">
+			<soap:operation soapAction="http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService/IBasicQueriesWS/ListCompletedAnnotationsXML" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>

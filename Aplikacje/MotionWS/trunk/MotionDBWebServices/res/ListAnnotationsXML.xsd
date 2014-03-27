@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema id="Annotations" xmlns:xsd="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified" >
+  <xsd:include schemaLocation="Annotation.xsd" />
+  <xsd:element name="Annotations">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Annotation" minOccurs="0" maxOccurs="unbounded">
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

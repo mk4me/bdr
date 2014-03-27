@@ -185,6 +185,14 @@ namespace MotionDBWebServices
         [FaultContract(typeof(QueryException))]
         XmlElement ListMyReviewedAnnotationsXML();
 
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListAnnotationsXML();
+
+        [OperationContract]
+        [FaultContract(typeof(QueryException))]
+        XmlElement ListCompletedAnnotationsXML();
+
         
     }
 

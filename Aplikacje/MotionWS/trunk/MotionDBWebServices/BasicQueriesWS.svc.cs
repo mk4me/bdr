@@ -1823,7 +1823,7 @@ namespace MotionDBWebServices
             {
                 OpenConnection();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "list_session_performers_attributes_xml";
+                cmd.CommandText = "list_authors_annotations_xml";
                 SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
                 usernamePar.Direction = ParameterDirection.Input;
                 usernamePar.Value = userName;
@@ -1924,6 +1924,86 @@ namespace MotionDBWebServices
 
             return xd.DocumentElement;
         }
+
+        public XmlElement ListAnnotationsXML()
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_all_annotations_xml";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("Annotations", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
+
+
+        public XmlElement ListCompletedAnnotationsXML()
+        {
+            XmlDocument xd = new XmlDocument();
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
+
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "list_complete_annotations_xml";
+                SqlParameter usernamePar = cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
+                usernamePar.Direction = ParameterDirection.Input;
+                usernamePar.Value = userName;
+                XmlReader dr = cmd.ExecuteXmlReader();
+                if (dr.Read())
+                {
+                    xd.Load(dr);
+                }
+                if (xd.DocumentElement == null)
+                {
+                    xd.AppendChild(xd.CreateElement("CompletedAnnotations", "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService"));
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                // report exception
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return xd.DocumentElement;
+        }
+
+
+
+
+
 
         private static bool IgnoredFiles(FileNameEntry fne)
         {

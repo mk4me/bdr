@@ -220,6 +220,12 @@
     <None Include="res\Annotation.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="res\ListCompletedAnnotationsXML.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="res\ListAnnotationsXML.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\ListMyUserGroupsAssigned.xsd">
       <SubType>Designer</SubType>
     </None>
