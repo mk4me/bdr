@@ -889,19 +889,19 @@ for XML RAW ('BasketDefinition'), ELEMENTS, root ('BasketDefinitionList')
 go
 
 -- PRIVILEGE AND USER MANAGEMENT
--- last rev. 2010-07-17
+-- last rev. 2014-03-31
 create procedure list_users_xml
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
-select Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
+select IDUzytkownik "@ID" , Login "@Login", Imie "@FirstName", Nazwisko "@LastName"
 	from Uzytkownik
     for XML PATH('UserDetails'), root ('UserList')
 go
 
--- last rev. 2012-03-29
+-- last rev. 2014-03-31
 create procedure get_user ( @user_login varchar(30) )
 as
-select Login, Imie, Nazwisko, Email
+select IdUzytkownik, Login, Imie, Nazwisko, Email
 	from Uzytkownik
 	where Login = @user_login
 go
@@ -1604,7 +1604,7 @@ go
 
 -- Shallow copy retrieval
 -- ==========================
--- last rev. 2014-03-17
+-- last mod. 2014-03-20a
 create procedure get_shallow_copy @user_login varchar(30)
 as
 with
@@ -1676,6 +1676,7 @@ go
 
 
 
+-- last mod. 2014-03-20a
 create procedure get_shallow_copy_increment @user_login varchar(30), @since datetime
 as
 with
@@ -1742,7 +1743,8 @@ select
 go
 
 
--- last rev. 2014-03-17
+
+-- last mod. 2014-03-20a
 create procedure get_shallow_copy_branches_increment @user_login varchar(30), @since datetime
 as
 with
@@ -2361,8 +2363,33 @@ select
     for XML AUTO, ELEMENTS, root ('ReviewedAnnotations')
 go
 
+-- created 2014-03-27
+create procedure list_complete_annotations_xml (@user_login varchar(30))
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select
+	IdProba as TrialID,
+	Status as Status,
+	Komentarz as Comment,
+	Uwagi as Note
+	from dbo.user_reviewable_annotations( dbo.identify_user (@user_login)) Annotation
+	where Annotation.status = 4
+    for XML AUTO, ELEMENTS, root ('CompletedAnnotations')
+go
 
 
+-- created 2014-03-27
+create procedure list_all_annotations_xml (@user_login varchar(30))
+as
+with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
+select
+	IdProba as TrialID,
+	Status as Status,
+	Komentarz as Comment,
+	Uwagi as Note
+	from dbo.user_reviewable_annotations( dbo.identify_user (@user_login)) Annotation
+    for XML AUTO, ELEMENTS, root ('Annotations')
+go
 
 /*
 Annotation statuses:

@@ -17,6 +17,20 @@ go
 -- Authorization-related behavior
 -- ===============================
 
+
+-- last rev. 2014-03-20
+create procedure get_my_user_group_memberships @user_login varchar(30)
+as
+with
+XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/AuthorizationService')
+select 
+	IdGrupa_uzytkownikow as UserGroupID,
+	Nazwa as UserGroupName
+	from Grupa_uzytkownikow UserGroup 
+	where exists(select * from Uzytkownik_grupa_uzytkownikow ugu where ugu.IdUzytkownik = dbo.identify_user(@user_login) 
+	and ugu.IdGrupa_uzytkownikow = UserGroup.IdGrupa_uzytkownikow) FOR XML AUTO, root ('MyUserGroupMemberships')
+go
+
 -- last rev: 2010-11-27
 create function user_sessions_by_user_id( @user_id int)
 returns table
