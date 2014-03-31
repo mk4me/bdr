@@ -69,10 +69,11 @@ namespace MotionDBWebServices
 
                 while (reader.Read())
                 {
-                    ud.Login = (string)reader.GetValue(0);
-                    ud.FirstName = (string)reader.GetValue(1);
-                    ud.LastName = (string)reader.GetValue(2);
-                    ud.Email = (string)reader.GetValue(3);
+                    ud.ID = (int)reader.GetValue(0);
+                    ud.Login = (string)reader.GetValue(1);
+                    ud.FirstName = (string)reader.GetValue(2);
+                    ud.LastName = (string)reader.GetValue(3);
+                    ud.Email = (string)reader.GetValue(4);
                     found = true;
                 }
 

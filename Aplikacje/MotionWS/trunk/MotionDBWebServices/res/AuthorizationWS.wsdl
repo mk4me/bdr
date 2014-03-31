@@ -78,6 +78,7 @@
 			</xsd:element>
 			<xsd:complexType name="UserData">
 				<xsd:sequence>
+					<xsd:element minOccurs="1" maxOccurs="1" name="ID" type="xsd:int"/>
 					<xsd:element minOccurs="0" maxOccurs="1" name="Login" type="xsd:string"/>
 					<xsd:element minOccurs="0" maxOccurs="1" name="FirstName" type="xsd:string"/>
 					<xsd:element minOccurs="0" maxOccurs="1" name="LastName" type="xsd:string"/>

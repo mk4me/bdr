@@ -7,6 +7,7 @@ namespace MotionDBWebServices
 {
     public struct UserData
     {
+        public int ID;
         public string Login;
         public string FirstName;
         public string LastName;

@@ -70,5 +70,6 @@ namespace MotionDBWebServices
         [FaultContract(typeof(AuthorizationException))]
         bool CheckMyLogin();
 
+
     }
 }
