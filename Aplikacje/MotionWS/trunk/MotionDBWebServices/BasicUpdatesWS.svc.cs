@@ -60,7 +60,8 @@ namespace MotionDBWebServices
         {
             int newSessionId = 0;
             int result = 0;
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
+            userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
 
             try
@@ -141,7 +142,7 @@ namespace MotionDBWebServices
             catch (SqlException ex)
             {
                 UpdateException exc = new UpdateException("unknown", "Update failed");
-                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
+                throw new FaultException<UpdateException>(exc, "Update invocation failure: " + ex.Message + " for user: " + userName, FaultCode.CreateReceiverFaultCode(new FaultCode("CreateSession")));
 
             }
             finally
@@ -275,7 +276,7 @@ namespace MotionDBWebServices
             int newPerfConfId = 0;
             int res = 0;
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -914,7 +915,7 @@ Procedure error codes:
         {
             int res = 0;
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try
@@ -967,7 +968,7 @@ Procedure error codes:
             }
             if (res == 11)
             {
-                UpdateException exc = new UpdateException("authorization", "Unknown user");
+                UpdateException exc = new UpdateException("authorization", "Unknown user: "+userName);
                 throw new FaultException<UpdateException>(exc, "UpdateException");
 
             }
@@ -999,7 +1000,7 @@ Procedure error codes:
         {
             int res = 0;
 
-            string userName = OperationContext.Current.ServiceSecurityContext.WindowsIdentity.Name;
+            string userName = OperationContext.Current.ServiceSecurityContext.PrimaryIdentity.Name;
             userName = userName.Substring(userName.LastIndexOf('\\') + 1);
 
             try

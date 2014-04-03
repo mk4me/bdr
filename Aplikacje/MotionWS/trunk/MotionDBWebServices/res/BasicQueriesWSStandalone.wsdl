@@ -144,6 +144,7 @@
 			</xsd:element>
 			<xsd:element name="Annotation">
 				<xsd:complexType>
+					<xsd:attribute name="UserID" type="xsd:int"/>
 					<xsd:attribute name="TrialID" type="xsd:int"/>
 					<xsd:attribute name="Status" type="xsd:int"/>
 					<xsd:attribute name="Comment" type="xsd:string"/>
