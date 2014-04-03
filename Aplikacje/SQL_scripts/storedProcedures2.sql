@@ -2308,13 +2308,13 @@ end
 -- ANNOTATIONS
 -- ===========
 
--- created 2014-02-24
+-- last mod. 2014-04-03
 create procedure list_authors_annotations_xml (@user_login varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
-	IdProba as TrialID,
 	IdUzytkownik as UserID,
+	IdProba as TrialID,
 	Status as Status,
 	Komentarz as Comment,
 	Uwagi as Note
@@ -2323,22 +2323,15 @@ select
     for XML AUTO, ELEMENTS, root ('UserAnnotations')
 go
 
--- created 2014-02-24
-create function user_reviewable_annotations( @user_id int )
-returns TABLE as
-return 
-select a.IdUzytkownik, a.IdProba, a.Status, a.Komentarz, a.Uwagi from Adnotacja a 
-	join Proba p on a.IdProba = p.IdProba join Sesja s on s.IdSesja = p.IdSesja join Sesja_grupa_sesji sgs on sgs.IdSesja = s.IdSesja
-	join Grupa_sesji_grupa_uzytkownikow gsgu on gsgu.IdGrupa_sesji = sgs.IdGrupa_sesji join Uzytkownik_grupa_uzytkownikow ugu on ugu.IdGrupa_uzytkownikow = gsgu.IdGrupa_uzytkownikow where ugu.IdUzytkownik = @user_id and a.Status = 2 and gsgu.Weryfikuje_adnotacje = 1;
-go
 
 
 
--- created 2014-02-24
+-- last mod. 2014-04-03
 create procedure list_awaiting_annotations_xml (@user_login varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
+	IdUzytkownik as UserID,
 	IdProba as TrialID,
 	Status as Status,
 	Komentarz as Comment,
@@ -2349,11 +2342,12 @@ select
 go
 
 
--- created 2014-02-24
+-- last mod. 2014-04-03
 create procedure list_reviewers_annotations_xml (@user_login varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
+	IdUzytkownik as UserID,
 	IdProba as TrialID,
 	Status as Status,
 	Komentarz as Comment,
@@ -2363,31 +2357,33 @@ select
     for XML AUTO, ELEMENTS, root ('ReviewedAnnotations')
 go
 
--- created 2014-03-27
+-- last mod. 2014-04-03
 create procedure list_complete_annotations_xml (@user_login varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
+	IdUzytkownik as UserID,
 	IdProba as TrialID,
 	Status as Status,
 	Komentarz as Comment,
 	Uwagi as Note
-	from dbo.user_reviewable_annotations( dbo.identify_user (@user_login)) Annotation
+	from Adnotacja Annotation
 	where Annotation.status = 4
     for XML AUTO, ELEMENTS, root ('CompletedAnnotations')
 go
 
 
--- created 2014-03-27
+-- last mod. 2014-04-03
 create procedure list_all_annotations_xml (@user_login varchar(30))
 as
 with XMLNAMESPACES (DEFAULT 'http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService')
 select
+	IdUzytkownik as UserID,
 	IdProba as TrialID,
 	Status as Status,
 	Komentarz as Comment,
 	Uwagi as Note
-	from dbo.user_reviewable_annotations( dbo.identify_user (@user_login)) Annotation
+	from Adnotacja Annotation
     for XML AUTO, ELEMENTS, root ('Annotations')
 go
 

@@ -1466,9 +1466,10 @@ create table Adnotacja (
 	IdProba int NOT NULL,
 	Status tinyint NOT NULL default 1,
 	Komentarz varchar(200),
-	Uwagi varchar(500),
+	Uwagi varchar(500) default '',
 	IdOceniajacy int
 )
+go
 
  alter table Adnotacja
         ADD FOREIGN KEY (IdUzytkownik)
