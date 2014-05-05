@@ -94,6 +94,7 @@ namespace LocalDBUtility
             conn = new SqlConnection(GetConnectionString());
             conn.Open();
             cmd = conn.CreateCommand();
+            cmd.CommandTimeout = 120;
         }
 
         public void CloseConnection()
@@ -503,6 +504,8 @@ namespace LocalDBUtility
             int result = 0;
             int sessionId = 0;
 
+            int fileCounter = -2;
+
             string fullPath = null;
             string fileName;
             string entity;
@@ -541,6 +544,7 @@ namespace LocalDBUtility
                 }
 
                 cmd = conn.CreateCommand();
+                cmd.CommandTimeout = 120;
                 cmd.CommandText = "create_session_from_file_list";
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@user_login", SqlDbType.VarChar, 30);
@@ -553,6 +557,8 @@ namespace LocalDBUtility
                 cmd.Parameters["@user_login"].Value = userName;
                 cmd.Parameters["@files"].Value = fileNames;
                 SqlDataReader sdr = cmd.ExecuteReader();
+
+
 
                 if (resultParameter.Value != null)
                 {
@@ -601,6 +607,7 @@ namespace LocalDBUtility
 
                 while (sdr.Read())
                 {
+                    fileCounter++;
                     fileName = sdr[0].ToString();
                     resId = int.Parse(sdr[1].ToString());
                     entity = sdr[2].ToString();
@@ -632,6 +639,7 @@ namespace LocalDBUtility
                     cmdF.Parameters["@file_data"].Value = fileData;
                     cmdF.Parameters["@file_name"].Value = fileName;
                     cmdF.ExecuteNonQuery();
+
                     if (fileName.EndsWith(".asf")) asfFileId = (int)fileIdParameter.Value;
 
                     br.Close();
@@ -644,7 +652,7 @@ namespace LocalDBUtility
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Database could not be updated: " + ex.Message);
+                FileAccessServiceException exc = new FileAccessServiceException("Database access failure", "Other: " + ex.Message + " " + fileCounter);
                 throw exc;
             }
 
