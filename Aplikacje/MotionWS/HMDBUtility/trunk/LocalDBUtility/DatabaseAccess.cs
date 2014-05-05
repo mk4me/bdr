@@ -665,6 +665,32 @@ namespace LocalDBUtility
             return sessionId;
         }
 
+        public void RemoveSessions(int lo, int hi)
+        {
+            try
+            {
+                OpenConnection();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "remove_sessions";
+                cmd.Parameters.Add("@lo", SqlDbType.Int);
+                cmd.Parameters.Add("@hi", SqlDbType.Int);
+
+                cmd.Parameters["@lo"].Value = lo;
+                cmd.Parameters["@hi"].Value = hi;
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                // log the exception
+                UpdateException exc = new UpdateException("Database", "Remove sessions failed");
+                throw exc;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
 
     }
 }

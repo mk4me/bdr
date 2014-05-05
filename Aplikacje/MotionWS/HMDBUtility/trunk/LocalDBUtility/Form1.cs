@@ -114,7 +114,7 @@ namespace LocalDBUtility
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Session group list refersh error ocurred: " + ex.Message);
+                MessageBox.Show("Session group list refresh error ocurred: " + ex.Message);
             }
 
             try
@@ -124,7 +124,7 @@ namespace LocalDBUtility
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Session list refersh error ocurred: " + ex.Message);
+                MessageBox.Show("Session list refresh error ocurred: " + ex.Message);
             }
 
 
@@ -256,6 +256,25 @@ namespace LocalDBUtility
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btRemoveSession_Click(object sender, EventArgs e)
+        {
+            if (dgSessions.SelectedRows.Count != 1)
+            {
+                MessageBox.Show(dgSessions.SelectedRows.Count + "Please select exactly one Session!");
+                return;
+            }
+            
+            DialogResult confirmResult = MessageBox.Show("Are you sure you want to remove the selected Session?",
+                        "Remove Session",
+                        MessageBoxButtons.YesNo);
+            if (confirmResult == DialogResult.Yes)
+            {
+                int sessionId = int.Parse(dgSessions.SelectedRows[0].Cells[0].Value.ToString());
+                dacc.RemoveSessions(sessionId, sessionId);
+                SessionListRefresh();
+            }
         }
     }
 }

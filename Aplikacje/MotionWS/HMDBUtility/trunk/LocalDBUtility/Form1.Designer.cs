@@ -51,6 +51,7 @@
             this.btSelectSessDir = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.fbdSessionDir = new System.Windows.Forms.FolderBrowserDialog();
+            this.btRemoveSession = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -163,7 +164,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(727, 93);
+            this.tabPage1.Size = new System.Drawing.Size(727, 88);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "XML attribs feed";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -271,11 +272,22 @@
             this.label1.Text = "Directory of new session:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
+            // btRemoveSession
+            // 
+            this.btRemoveSession.Location = new System.Drawing.Point(758, 158);
+            this.btRemoveSession.Name = "btRemoveSession";
+            this.btRemoveSession.Size = new System.Drawing.Size(95, 23);
+            this.btRemoveSession.TabIndex = 11;
+            this.btRemoveSession.Text = "Remove session";
+            this.btRemoveSession.UseVisualStyleBackColor = true;
+            this.btRemoveSession.Click += new System.EventHandler(this.btRemoveSession_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 834);
+            this.Controls.Add(this.btRemoveSession);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbSessDir);
             this.Controls.Add(this.btProcessSessionDir);
@@ -326,6 +338,7 @@
         private System.Windows.Forms.Button btSelectSessDir;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FolderBrowserDialog fbdSessionDir;
+        private System.Windows.Forms.Button btRemoveSession;
 
     }
 }
