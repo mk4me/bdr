@@ -548,7 +548,7 @@
 	</wsdl:binding>
 	<wsdl:service name="AuthorizationWS">
 		<wsdl:port name="BasicHttpBinding_IAuthorizationWS" binding="tns:BasicHttpBinding_IAuthorizationWS">
-			<soap:address location="https://v21.pjwstk.edu.pl/HMDB/AuthorizationWS.svc"/>
+			<soap:address location="https://v21.pjwstk.edu.pl/IMU/AuthorizationWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

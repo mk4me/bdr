@@ -653,7 +653,7 @@
 	</wsdl:binding>
 	<wsdl:service name="UserPersonalSpace">
 		<wsdl:port name="BasicHttpBinding_IUserPersonalSpaceWS" binding="tns:BasicHttpBinding_IUserPersonalSpaceWS">
-			<soap:address location="https://v21.pjwstk.edu.pl/HMDB/UserPersonalSpaceWS.svc"/>
+			<soap:address location="https://v21.pjwstk.edu.pl/IMU/UserPersonalSpaceWS.svc"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

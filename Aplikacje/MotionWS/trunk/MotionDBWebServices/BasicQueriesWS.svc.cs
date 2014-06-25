@@ -2009,7 +2009,7 @@ namespace MotionDBWebServices
         {
             string s = fne.Name;
             // return false;
-            return !(System.Text.RegularExpressions.Regex.IsMatch(s, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|mp|vsk))|(\d{4}-\d{2}-\d{2}-S\d{2}(-T\d{2})?\.(png|xml))"));
+            return !(System.Text.RegularExpressions.Regex.IsMatch(s, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|mp|vsk))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml|dat|c3d))"));
 
         }
 

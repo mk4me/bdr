@@ -16,7 +16,7 @@ namespace MotionDBCommons
         protected static string baseLocalFilePath = @"F:\FTPShare\"; // !!! change to F: in production!
         protected virtual string GetConnectionString()
         {
-            return @"server = .; integrated security = true; database = Motion";
+            return @"server = .; integrated security = true; database = IMU_Base";
         }
 
 
