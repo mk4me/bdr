@@ -83,7 +83,7 @@ namespace LocalDBUtility
 
         public static string GetConnectionString()
         {
-            return @"server = 172.16.1.43; integrated security = true; database = Motion";
+            return @"server = 172.16.1.43; integrated security = true; database = IMU_Base";
             // return @"server = .; integrated security = true; database = Motion";
             //"Data Source=192.168.0.5\SQL2008R2;Initial Catalog=MWDB;Persist Security Info=True;User ID=user;Password=password"
         }
@@ -480,6 +480,8 @@ namespace LocalDBUtility
         public int CreateSessionFromFiles(string path)
         {
 
+            // sample trial name for IMU: 2014-06-16-B9100-S0001-T0001.dat
+
             // int labID, string motionKindName, DateTime sessionDate, string sessionName, string tags, string sessionDescription, int[] sessionGroupIDs
             
             DirectoryInfo di = new DirectoryInfo(path);
@@ -487,7 +489,7 @@ namespace LocalDBUtility
             foreach (FileInfo fi in di.GetFiles("????-??-??*-S??*.??*", SearchOption.AllDirectories))
             {
                 // ????-??-??-[AB]????-S??*.??*";
-                if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml))"))
+                if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(\d{2})?(-T\d{2}(\d{2})?)?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp|cfg|dat))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml|cfg|dat))"))
                 i++;
             }
 
@@ -535,7 +537,7 @@ namespace LocalDBUtility
                 foreach (FileInfo fi in di.GetFiles("????-??-??*-S??*.??*", SearchOption.TopDirectoryOnly))
                 {
 
-                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(-T\d{2})?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml))"))
+                    if (Regex.IsMatch(fi.Name, @"(\d{4}-\d{2}-\d{2}-[AB]\d{4}-S\d{2}(\d{2})?(-T\d{2}(\d{2})?)?(\.\d+)?\.(asf|amc|c3d|avi|zip|vsk|mp|cfg|dat))|(\d{4}-\d{2}-\d{2}-S\d{4}(-T\d{4})?\.(png|xml|cfg|dat))"))
                     {
                         FileNameEntry fne = new FileNameEntry();
                         fne.Name = fi.Name;
