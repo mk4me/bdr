@@ -2573,6 +2573,13 @@ end;
 go
 
 
+-- modified: 2014-07-16
+
+create procedure list_variant_files( @variant_id int)
+as
+select IdPlik, IdBadanie, NazwaPliku, OpisPliku from Plik where IdBadanie = @variant_id;
+go
+
 
 
 
