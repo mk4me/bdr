@@ -36,7 +36,9 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsMotionAnalysis;
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
-    private Tuple<TextBox[], FileUpload[]> variantFiles;
+    private Tuple<TextBox[], FileUpload[]> variantFiles1;
+    private Tuple<TextBox[], FileUpload[]> variantFiles2;
+    private Tuple<ListBox[], string> variantFileList;
 
     private static byte NO_DATA = 101;  //SchwabEnglandScale 100%
     private static decimal NO_DATA_DECIMAL = 100;
@@ -67,6 +69,10 @@ public partial class PartFForm : System.Web.UI.Page
                     for (int i = 0; i < variantIds.Length; i++)
                     {
                         loadPartC(variantIds[i], i);
+                    }
+                    for (int i = 0; i < variantIds.Length; i++)
+                    {
+                        loadFiles(variantIds[i], i);
                     }
                 }
                 else
@@ -194,7 +200,9 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true));
 
         addVariantHeader(tableFiles);
-        addVariantFiles(tableFiles);
+        variantFiles1 = addVariantFiles("Coordinates", tableFiles);
+        variantFiles2 = addVariantFiles("Video", tableFiles);
+        variantFileList = addVariantFileLists("Pliki:", tableFiles);
 
         // Jedyne aktywne kolumny - (BMT ON, DBS OFF) oraz (BMT OFF, DBS OFF) dla wizyty przedoperacyjnej lub pacjentow z grupy BMT
         if (Session["AppointmentName"].ToString() == Consts.APPOINTMENT_0_0_text ||
@@ -275,7 +283,7 @@ public partial class PartFForm : System.Web.UI.Page
         return tuple;
     }
 
-    private void addVariantFiles(Table table)
+    private Tuple<TextBox[], FileUpload[]> addVariantFiles(String label, Table table)
     {
         TableRow row1 = new TableRow();
         TableRow row2 = new TableRow();
@@ -300,7 +308,11 @@ public partial class PartFForm : System.Web.UI.Page
             TableCell cellFile = new TableCell();
             row2.Controls.Add(cellFile);
             FileUpload fileUpload = new FileUpload();
+            fileUpload.Width = new Unit(240);
             cellFile.Controls.Add(fileUpload);
+
+            textBox.Text = label;
+            textBox.Enabled = false;
 
             textBoxes[i] = textBox;
             fileUploads[i] = fileUpload;
@@ -309,7 +321,34 @@ public partial class PartFForm : System.Web.UI.Page
         table.Controls.Add(row1);
         table.Controls.Add(row2);
 
-        variantFiles = new Tuple<TextBox[], FileUpload[]>(textBoxes, fileUploads);
+        Tuple<TextBox[], FileUpload[]> tuple = new Tuple<TextBox[], FileUpload[]>(textBoxes, fileUploads);
+
+        return tuple;
+    }
+
+    private Tuple<ListBox[], string> addVariantFileLists(String label, Table table)
+    {
+        TableRow row = new TableRow();
+        Utils.colorRow(table, row);
+        TableCell cell = new TableCell();
+        cell.Controls.Add(new LiteralControl(label));
+        row.Controls.Add(cell);
+        ListBox[] columns = new ListBox[VARIANTS];
+        for (int i = 0; i < VARIANTS; i++)
+        {
+            TableCell cellFiles = new TableCell();
+            row.Controls.Add(cellFiles);
+            ListBox files = new ListBox();
+            files.Width = new Unit(100, UnitType.Percentage);
+            cellFiles.Controls.Add(files);
+            columns[i] = files;
+        }
+
+        table.Controls.Add(row);
+
+        Tuple<ListBox[], string> tuple = new Tuple<ListBox[], string>(columns, label);
+
+        return tuple;
     }
 
     private void addVariantHeader(Table table)
@@ -642,7 +681,7 @@ public partial class PartFForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "update Plik set IdBadanie = @IdBadanie, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku where IdBadanie = @IdBadanie;";
+        cmd.CommandText = "update Plik set IdBadanie = @IdBadanie, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku where IdBadanie = @IdBadanie and OpisPliku = @OpisPliku;";
         cmd.Parameters.Add("@IdBadanie", SqlDbType.Int).Value = examinationId;
         cmd.Parameters.Add("@OpisPliku", SqlDbType.VarChar, 100).Value = DatabaseProcedures.getStringOrNull(fileDescription.Text);
         cmd.Parameters.Add("@Plik", SqlDbType.VarBinary).Value = fileBytes;
@@ -810,7 +849,7 @@ public partial class PartFForm : System.Web.UI.Page
             "LatencymeterPeakVelocityALL " +
             "from Badanie where IdBadanie = " + variantId;
         cmd.Connection = con;
-        
+
         try
         {
             con.Open();
@@ -1003,6 +1042,43 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
+    private void loadFiles(int variantId, int variant)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select NazwaPliku, " +
+            "OpisPliku " +
+            "from Plik where IdBadanie = " + variantId;
+        cmd.Connection = con;
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            List<string> fileList = new List<string>();
+            while (rdr.Read())
+            {
+                fileList.Add(DatabaseProcedures.getTextStringValue(rdr["NazwaPliku"]) +
+                    " (" + DatabaseProcedures.getTextStringValue(rdr["OpisPliku"]) + ")");
+            }
+            variantFileList.Item1[variant].DataSource = fileList;
+            variantFileList.Item1[variant].DataBind();
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
     private void initParts()
     {
         toggleButtons(false);
@@ -1157,12 +1233,31 @@ public partial class PartFForm : System.Web.UI.Page
         {
             for (int i = 0; i < VARIANTS; i++)
             {
-                if (variantFiles.Item2[i].HasFile)
+                if (variantFiles1.Item2[i].HasFile)
                 {
-                    if (saveVariantFile(variantIds[i], variantFiles.Item2[i].FileName, variantFiles.Item2[i].FileBytes, variantFiles.Item1[i]))
+                    if (saveVariantFile(variantIds[i], variantFiles1.Item2[i].FileName, variantFiles1.Item2[i].FileBytes, variantFiles1.Item1[i]))
                     {
                         savedFiles++;
                     }
+                }
+            }
+
+            for (int i = 0; i < VARIANTS; i++)
+            {
+                if (variantFiles2.Item2[i].HasFile)
+                {
+                    if (saveVariantFile(variantIds[i], variantFiles2.Item2[i].FileName, variantFiles2.Item2[i].FileBytes, variantFiles2.Item1[i]))
+                    {
+                        savedFiles++;
+                    }
+                }
+            }
+
+            if (savedFiles > 0)
+            {
+                for (int i = 0; i < variantIds.Length; i++)
+                {
+                    loadFiles(variantIds[i], i);
                 }
             }
         }
