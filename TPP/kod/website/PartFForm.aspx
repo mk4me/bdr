@@ -52,6 +52,13 @@
     <asp:Label ID="labelSavePartA" runat="server" Text=""></asp:Label>
     <br />
     <br />
+    <asp:Table ID="tableFiles" runat="server">
+    </asp:Table>
+    <br />
+    <asp:Button runat="server" ID="buttonSaveFiles" Text="Wgraj pliki" onclick="buttonSaveFiles_Click" />
+    <asp:Label ID="labelSavedFiles" runat="server" Text=""></asp:Label>
+    <br />
+    <br />
     <asp:Table ID="tablePart2" runat="server">
     </asp:Table>
     <br />
@@ -66,13 +73,6 @@
     <asp:Button ID="buttonSavePartC" runat="server" Text="Zatwierdź" 
                     onclick="buttonSavePartC_Click" />
     <asp:Label ID="labelSavePartC" runat="server" Text=""></asp:Label>
-    <br />
-    <br />
-    <asp:Table ID="tableFiles" runat="server">
-    </asp:Table>
-    <br />
-    <asp:Button runat="server" ID="buttonSaveFiles" Text="Wgraj pliki" onclick="buttonSaveFiles_Click" />
-    <asp:Label ID="labelSavedFiles" runat="server" Text=""></asp:Label>
     
     <br />
     <br />
