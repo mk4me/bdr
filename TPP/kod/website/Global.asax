@@ -34,5 +34,10 @@
         // or SQLServer, the event is not raised.
 
     }
+
+    public static void RegisterRoutes(System.Web.Routing.RouteCollection routes)
+    {
+        routes.Ignore("elmah.axd");
+    }
        
 </script>
