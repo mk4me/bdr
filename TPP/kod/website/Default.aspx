@@ -14,7 +14,14 @@
             </p>
         </li>
         <li>
-            <asp:LinkButton ID="linkButtonExportCSV" runat="server" onclick="buttonExportCSV_Click">Pobierz plik CSV</asp:LinkButton>
+            <p>
+                <asp:LinkButton ID="linkButtonExportCSV" runat="server" onclick="buttonExportCSV_Click">Pobierz plik CSV</asp:LinkButton>
+            </p>
+        </li>
+        <li>
+            <p>
+                <a href="Overview.aspx" title="Overview.aspx">Przegląd i pobieranie</a>
+            </p>
         </li>
     </ul>
 </asp:Content>
