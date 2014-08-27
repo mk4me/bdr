@@ -20,7 +20,7 @@ namespace MotionDBWebServices
 
         protected string GetConnectionString()
         {
-            return @"server = .; integrated security = true; database = Motion";
+            return @"server = .; integrated security = true; database = IMU_Base";
         }
 
         protected void OpenConnection()

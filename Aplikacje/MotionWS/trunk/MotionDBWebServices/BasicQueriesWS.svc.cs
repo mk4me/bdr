@@ -15,7 +15,7 @@ namespace MotionDBWebServices
     [ServiceBehavior(Namespace = "http://ruch.bytom.pjwstk.edu.pl/MotionDB/BasicQueriesService", IncludeExceptionDetailInFaults = true)]
     
     [ErrorLoggerBehaviorAttribute]
- //   [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)] 
+
     public class BasicQueriesWS : DatabaseAccessService, IBasicQueriesWS
     {
         // GENERIC QUERIES
