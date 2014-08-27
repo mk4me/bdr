@@ -189,6 +189,7 @@
     <Content Include="bin\Thinktecture.ServiceModel.Extensions.Description.pdb" />
     <Content Include="config_bak.xml" />
     <Content Include="FileStoremanWS.svc" />
+    <Content Include="Doxyfile" />
     <None Include="Motion.build">
       <SubType>Designer</SubType>
     </None>
