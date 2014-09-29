@@ -383,9 +383,11 @@ public class DatabaseProcedures
             object result = cmd.ExecuteScalar();
             if (result != null)
             {
-                disorderDuration = (decimal)result;
+                if (result != DBNull.Value)
+                {
+                    disorderDuration = (decimal)result;
+                }
             }
-
         }
         catch (SqlException ex)
         {
