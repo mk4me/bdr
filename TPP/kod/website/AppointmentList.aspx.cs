@@ -15,7 +15,7 @@ public partial class AppointmentList : System.Web.UI.Page
         if (Session["PatientNumber"] != null)
         {
             labelPatientNumber.Text = "Numer pacjenta: " + Session["PatientNumber"].ToString();
-            Dictionary<decimal, string> appointmentTypes = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
+            Dictionary<byte, string> appointmentTypes = DatabaseProcedures.getEnumerationByte("Wizyta", "RodzajWizyty");
             List<AppointmentSelection> existingAppointments = getAppointments(Session["PatientNumber"].ToString(), appointmentTypes);
 
             TableHeaderRow header = new TableHeaderRow();
@@ -27,7 +27,7 @@ public partial class AppointmentList : System.Web.UI.Page
             headerCell1.Text = "Data";
             headerCell2.Text = "Typ wizyty";
 
-            foreach (KeyValuePair<decimal, string> appointmentType in appointmentTypes)
+            foreach (KeyValuePair<byte, string> appointmentType in appointmentTypes)
             {
                 TableRow row = new TableRow();
                 TableCell cell1 = new TableCell();
@@ -62,7 +62,7 @@ public partial class AppointmentList : System.Web.UI.Page
         }
     }
 
-    private List<AppointmentSelection> getAppointments(string patientNumber, Dictionary<decimal, string> appointmentTypes)
+    private List<AppointmentSelection> getAppointments(string patientNumber, Dictionary<byte, string> appointmentTypes)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
@@ -79,7 +79,7 @@ public partial class AppointmentList : System.Web.UI.Page
 
             while (rdr.Read())
             {
-                decimal typeKey = (decimal)rdr["RodzajWizyty"];
+                byte typeKey = (byte)rdr["RodzajWizyty"];
                 string typeValue = "";
                 appointmentTypes.TryGetValue(typeKey, out typeValue);
                 AppointmentSelection appointment = new AppointmentSelection((int)rdr["IdWizyta"], (DateTime)rdr["DataPrzyjecia"], typeValue, typeKey, this);

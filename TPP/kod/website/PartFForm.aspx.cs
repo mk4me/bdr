@@ -25,6 +25,8 @@ public partial class PartFForm : System.Web.UI.Page
     private List<Tuple<DropDownList[], string>> variantsPartBList = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<TextBox[], string>> variantsPartBList2 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTremorometria;
+    private Tuple<DropDownList[], string> variantsTremorometriaLeft;
+    private Tuple<DropDownList[], string> variantsTremorometriaRight;
     private List<Tuple<TextBox[], string>> variantsPartBList3 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTestSchodkowy;
     private Tuple<TextBox[], string> variantsTestSchodkowyWDol;
@@ -120,9 +122,9 @@ public partial class PartFForm : System.Web.UI.Page
         UPDRSList1.Add(addVariantDropDowns("UPDRS_29", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_29", NO_DATA)));
         UPDRSList1.Add(addVariantDropDowns("UPDRS_30", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_30", NO_DATA)));
         UPDRSList1.Add(addVariantDropDowns("UPDRS_31", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_31", NO_DATA)));
-        UPDRSListCalculated1 = addVariantTextBoxes("UPDRS_III", tableUPDRS, false);
+        UPDRSListCalculated1 = addVariantTextBoxes("UPDRS_III", tableUPDRS, false, true);
         UPDRSList2.Add(addVariantDropDowns("UPDRS_IV", tableUPDRS, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "UPDRS_IV", NO_DATA)));
-        UPDRSListCalculated2 = addVariantTextBoxes("UPDRS_TOTAL", tableUPDRS, false);
+        UPDRSListCalculated2 = addVariantTextBoxes("UPDRS_TOTAL", tableUPDRS, false, true);
 
         addVariantHeader(tableUPDRSExtra);
         variantsHYscale = addVariantDropDowns("HYscale", tableUPDRSExtra, DatabaseProcedures.getEnumerationDecimalWithNoData("Badanie", "HYscale", NO_DATA_DECIMAL));
@@ -134,53 +136,57 @@ public partial class PartFForm : System.Web.UI.Page
         variantsJazzNovo = addVariantDropDowns("JazzNovo", tableUPDRSExtra, dictionaryYesNo);
         variantsWideookulograf = addVariantDropDowns("Wideookulograf", tableUPDRSExtra, dictionaryYesNo);
         variantsLatencymeter = addVariantDropDowns("Latencymeter", tableUPDRSExtra, dictionaryYesNo);
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationLEFT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyLEFT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeLEFT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityLEFT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationRIGHT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyRIGHT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeRIGHT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityRIGHT", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationALL", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyALL", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeALL", tableUPDRSExtra, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityALL", tableUPDRSExtra, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityALL", tableUPDRSExtra, true, true));
 
         addVariantHeader(tablePart2);
         variantsTremorometria = addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo);
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_3_4", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_4_5", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_5_6", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_6_7", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_7_8", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_8_9", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_9_10", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_23_24", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_0_1", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_1_2", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_2_3", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_3_4", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_4_5", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_5_6", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_6_7", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_7_8", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_8_9", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_9_10", tablePart2, true));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true));
+        variantsTremorometriaLeft = addVariantDropDowns("TremorometriaLEFT", tablePart2, dictionaryYesNo);
+        variantsTremorometriaRight = addVariantDropDowns("TremorometriaRIGHT", tablePart2, dictionaryYesNo);
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_3_4", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_4_5", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_5_6", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_6_7", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_7_8", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_8_9", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_9_10", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_23_24", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_0_1", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_1_2", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_2_3", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_3_4", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_4_5", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_5_6", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_6_7", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_7_8", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_8_9", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_9_10", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true, false));
 
         variantsTestSchodkowy = addVariantDropDowns("TestSchodkowy", tablePart2, dictionaryYesNo);
-        variantsTestSchodkowyWDol = addVariantTextBoxes("TestSchodkowyWDol", tablePart2, true);
-        variantsTestSchodkowyWGore = addVariantTextBoxes("TestSchodkowyWGore", tablePart2, true);
+        variantsTestSchodkowyWDol = addVariantTextBoxes("TestSchodkowyWDol", tablePart2, true, true);
+        variantsTestSchodkowyWGore = addVariantTextBoxes("TestSchodkowyWGore", tablePart2, true, true);
         variantsTestMarszu = addVariantDropDowns("TestMarszu", tablePart2, dictionaryYesNo);
-        variantsTestMarszuCzas1 = addVariantTextBoxes("TestMarszuCzas1", tablePart2, true);
-        variantsTestMarszuCzas2 = addVariantTextBoxes("TestMarszuCzas2", tablePart2, true);
+        variantsTestMarszuCzas1 = addVariantTextBoxes("TestMarszuCzas1", tablePart2, true, true);
+        variantsTestMarszuCzas2 = addVariantTextBoxes("TestMarszuCzas2", tablePart2, true, true);
         variantsPosturografia = addVariantDropDowns("Posturografia", tablePart2, dictionaryYesNo);
         variantsMotionAnalysis = addVariantDropDowns("MotionAnalysis", tablePart2, dictionaryYesNo);
         variantsPartBList.Add(variantsTremorometria);
+        variantsPartBList.Add(variantsTremorometriaLeft);
+        variantsPartBList.Add(variantsTremorometriaRight);
         variantsPartBList.Add(variantsTestSchodkowy);
         variantsPartBList.Add(variantsTestMarszu);
         variantsPartBList.Add(variantsPosturografia);
@@ -191,13 +197,13 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList2.Add(variantsTestMarszuCzas2);
 
         addVariantHeader(tablePart3);
-        variantsPartCList.Add(addVariantTextBoxes("UpAndGo", tablePart3, true));
-        variantsPartCList.Add(addVariantTextBoxes("UpAndGoLiczby", tablePart3, true));
-        variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekPrawa", tablePart3, true));
-        variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekLewa", tablePart3, true));
-        variantsPartCList.Add(addVariantTextBoxes("TST", tablePart3, true));
+        variantsPartCList.Add(addVariantTextBoxes("UpAndGo", tablePart3, true, true));
+        variantsPartCList.Add(addVariantTextBoxes("UpAndGoLiczby", tablePart3, true, true));
+        variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekPrawa", tablePart3, true, true));
+        variantsPartCList.Add(addVariantTextBoxes("UpAndGoKubekLewa", tablePart3, true, true));
+        variantsPartCList.Add(addVariantTextBoxes("TST", tablePart3, true, true));
         variantsTandemPivot = addVariantDropDowns("TandemPivot", tablePart3, DatabaseProcedures.getEnumerationByteWithNoData("Badanie", "TandemPivot", NO_DATA));
-        variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true));
+        variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true, true));
 
         addVariantHeader(tableFiles);
         variantFiles1 = addVariantFiles("Coordinates", tableFiles);
@@ -263,7 +269,8 @@ public partial class PartFForm : System.Web.UI.Page
     //    calculateUPDRS();
     //}
 
-    private Tuple<TextBox[], string> addVariantTextBoxes(String label, Table table, bool enabled)
+    // Set visible to false to hide rows. Remove parameter if all visible?
+    private Tuple<TextBox[], string> addVariantTextBoxes(String label, Table table, bool enabled, bool visible)
     {
         TableRow row = addVariantRow(label, table);
         TextBox[] columns = new TextBox[VARIANTS];
@@ -277,6 +284,8 @@ public partial class PartFForm : System.Web.UI.Page
             cell.Controls.Add(text);
             columns[i] = text;
         }
+
+        row.Visible = visible;
 
         Tuple<TextBox[], string> tuple = new Tuple<TextBox[], string>(columns, label);
 
@@ -896,7 +905,7 @@ public partial class PartFForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select Tremorometria, " +
+        cmd.CommandText = "select Tremorometria, TremorometriaLEFT, TremorometriaRIGHT, " +
             "TremorometriaLEFT_0_1, " +
             "TremorometriaLEFT_1_2, " +
             "TremorometriaLEFT_2_3, " +

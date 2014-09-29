@@ -55,7 +55,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         //textDateSurgery.Enabled = false;
         //textDateOut.Enabled = false;
 
-        dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
+        dropAppointmentType.DataSource = DatabaseProcedures.getEnumerationByte("Wizyta", "RodzajWizyty");
         dropAppointmentType.DataTextField = "Value";
         dropAppointmentType.DataValueField = "Key";
         dropAppointmentType.DataBind();
@@ -118,11 +118,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         cmd.CommandType = CommandType.StoredProcedure;
         cmd.CommandText = "[dbo].[update_examination_questionnaire_partA]";
         cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
-        SqlParameter examinationTypeDecimal = new SqlParameter("@RodzajWizyty", SqlDbType.Decimal);
-        examinationTypeDecimal.Precision = 2;
-        examinationTypeDecimal.Scale = 1;
-        examinationTypeDecimal.Value = decimal.Parse(dropAppointmentType.SelectedValue);
-        cmd.Parameters.Add(examinationTypeDecimal);
+        cmd.Parameters.Add("@RodzajWizyty", SqlDbType.TinyInt).Value = byte.Parse(dropAppointmentType.SelectedValue);
         cmd.Parameters.Add("@DataPrzyjecia", SqlDbType.Date).Value = DateTime.Parse(textDateIn.Text);
         cmd.Parameters.Add("@DataOperacji", SqlDbType.Date).Value = DateTime.Parse(textDateSurgery.Text);
         cmd.Parameters.Add("@DataWypisu", SqlDbType.Date).Value = DateTime.Parse(textDateOut.Text);

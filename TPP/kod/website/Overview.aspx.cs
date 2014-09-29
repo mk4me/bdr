@@ -18,7 +18,7 @@ public partial class Overview : System.Web.UI.Page
     {
         //if (!IsPostBack)
         {
-            Dictionary<decimal, string> appointmentTypes = DatabaseProcedures.getEnumerationDecimal("Wizyta", "RodzajWizyty");
+            Dictionary<byte, string> appointmentTypes = DatabaseProcedures.getEnumerationByte("Wizyta", "RodzajWizyty");
             List<OverviewSelection> overviewList = getOverviews(appointmentTypes);
 
             TableHeaderRow header = new TableHeaderRow();
@@ -66,7 +66,7 @@ public partial class Overview : System.Web.UI.Page
         }
     }
 
-    private List<OverviewSelection> getOverviews(Dictionary<decimal, string> appointmentTypes)
+    private List<OverviewSelection> getOverviews(Dictionary<byte, string> appointmentTypes)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
@@ -82,7 +82,7 @@ public partial class Overview : System.Web.UI.Page
             SqlDataReader rdr = cmd.ExecuteReader();
             while (rdr.Read())
             {
-                decimal typeKey = (decimal)rdr["RodzajWizyty"];
+                byte typeKey = (byte)rdr["RodzajWizyty"];
                 string typeValue = "";
                 appointmentTypes.TryGetValue(typeKey, out typeValue);
 
