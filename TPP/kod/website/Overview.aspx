@@ -6,6 +6,11 @@
     <asp:Table ID="tableOverviews" runat="server" GridLines="Both">
     </asp:Table>
     <br />
+    <asp:Button ID="buttonZip" runat="server" Text="Pobierz zaznaczone" 
+        onclick="buttonZip_Click" />
+    <br />
+    <br />
+    <br />
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
     <asp:Button ID="buttonBack" runat="server" Text="Powrót" onclick="buttonBack_Click" />
 </asp:Content>

@@ -7,9 +7,11 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Web.Configuration;
 using System.Data;
+using Ionic.Zip;
 
 public partial class Overview : System.Web.UI.Page
 {
+    private List<OverviewSelection> overviewList;
     private List<string> fileColumns = new List<string> {
         "BMT_DBS_Coord", "BMT_DBS_Video", "BMT_O_Coord", "BMT_O_Video", "O_DBS_Coord", "O_DBS_Video", "O_O_Coord", "O_O_Video"
     };
@@ -19,7 +21,7 @@ public partial class Overview : System.Web.UI.Page
         //if (!IsPostBack)
         {
             Dictionary<byte, string> appointmentTypes = DatabaseProcedures.getEnumerationByte("Wizyta", "RodzajWizyty");
-            List<OverviewSelection> overviewList = getOverviews(appointmentTypes);
+            overviewList = getOverviews(appointmentTypes);
 
             TableHeaderRow header = new TableHeaderRow();
             TableHeaderCell headerCell1 = new TableHeaderCell();
@@ -51,11 +53,13 @@ public partial class Overview : System.Web.UI.Page
                 foreach (string column in fileColumns)
                 {
                     TableCell cellFile = new TableCell();
-                    cellFile.HorizontalAlign = HorizontalAlign.Center;
+                    //cellFile.HorizontalAlign = HorizontalAlign.Center;
                     row.Cells.Add(cellFile);
                     FileLink fileLink = overview.getFileLink(column);
                     if (fileLink != null)
                     {
+                        cellFile.Controls.Add(fileLink.check);
+                        fileLink.check.Width = 30;
                         cellFile.Controls.Add(fileLink.link);
                     }
                 }
@@ -155,6 +159,7 @@ public partial class Overview : System.Web.UI.Page
         public int fileId;
         public string column;
         public LinkButton link = new LinkButton();
+        public CheckBox check = new CheckBox();
 
         public FileLink(int fileId, string column)
         {
@@ -166,17 +171,21 @@ public partial class Overview : System.Web.UI.Page
 
         protected void fileLink_Click(object sender, EventArgs e)
         {
-            DataTable file = getFile(fileId);
-            DataRow row = file.Rows[0];
-            Byte[] data = (Byte[])row["Plik"];
-            HttpContext.Current.Response.AddHeader("Content-type", "text/plain");
-            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + getFileName(fileId));
+            Byte[] data = getFileData();
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ClearContent();
+            HttpContext.Current.Response.ClearHeaders();
+            HttpContext.Current.Response.AddHeader("content-type", "text/plain");
+            HttpContext.Current.Response.AddHeader("content-disposition", "attachment; filename=" + getFileName(fileId));
+            HttpContext.Current.Response.Buffer = false;
+            HttpContext.Current.Response.BufferOutput = false;
+            HttpContext.Current.Response.AddHeader("content-length", data.Length.ToString());
             HttpContext.Current.Response.BinaryWrite(data);
             HttpContext.Current.Response.Flush();
-            HttpContext.Current.Response.End();
+            HttpContext.Current.Response.Close();
         }
 
-        private string getFileName(int fileId)
+        public string getFileName(int fileId)
         {
             SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
@@ -245,6 +254,50 @@ public partial class Overview : System.Web.UI.Page
             }
 
             return file;
+        }
+
+        public Byte[] getFileData()
+        {
+            DataTable file = getFile(fileId);
+            DataRow row = file.Rows[0];
+            Byte[] data = (Byte[])row["Plik"];
+
+            return data;
+        }
+    }
+
+    protected void buttonZip_Click(object sender, EventArgs e)
+    {
+        ZipFile zip = new ZipFile("BD_" + DateTime.Now.ToString("yyyy-MM-dd") + ".zip");
+        foreach (OverviewSelection overviewSelection in overviewList)
+        {
+            foreach (FileLink fileLink in overviewSelection.linkList)
+            {
+                if (fileLink.check.Checked)
+                {
+                    Byte[] data = fileLink.getFileData();
+                    zip.AddEntry(fileLink.getFileName(fileLink.fileId), data);
+                }
+            }
+        }
+
+        if (zip.Entries.Count != 0)
+        {
+            Response.Clear();
+            Response.ClearContent();
+            Response.ClearHeaders();
+            Response.ContentType = "application/zip";
+            Response.AddHeader("content-disposition", "attachment; filename=" + zip.Name);
+            Response.Buffer = false;
+            Response.BufferOutput = false;
+            zip.ParallelDeflateThreshold = -1; // workaround for CRC error for files with sizes of multiples of 128k: dotnetzip.codeplex.com/workitem/14087
+            zip.Save(Response.OutputStream);
+            Response.Flush();
+            Response.Close();
+        }
+        else
+        {
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('Proszę zaznaczyć pliki do pobrania.');", true);
         }
     }
 
