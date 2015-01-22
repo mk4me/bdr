@@ -34,23 +34,23 @@ select
   
   left join Plik PBDC on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'Coordinates'
   left join Plik PBDV on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'Video'
-  left join Plik PBDTE on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PBDTG on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PBDTE on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBDTG on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PBC on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'Coordinates'
   left join Plik PBV on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'Video'
-  left join Plik PBTE on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PBTG on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PBTE on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBTG on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PDC on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'Coordinates'
   left join Plik PDV on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'Video'
-  left join Plik PDTE on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PDTG on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PDTE on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PDTG on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PC on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'Coordinates'
   left join Plik PV on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'Video' 
-  left join Plik PTE on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PTG on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'EyeTrackingGraph' 		
+  left join Plik PTE on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PTG on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTG.OpisPliku = 'EyeTrackingGraph' 		
   group by P.NumerPacjenta, W.RodzajWizyty	
   order by P.NumerPacjenta, W.RodzajWizyty
   go
