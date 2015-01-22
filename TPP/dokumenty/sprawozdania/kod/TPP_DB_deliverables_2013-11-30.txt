@@ -1,0 +1,10 @@
+Oprogramowanie komponentu "Baza danych" i jego interfejsu WWW.
+Stan na dzieñ: 2013-11-30
+==============================================================
+
+Zawartoœæ plików:
+-----------------
+
+TPP_SQL_schema 		- schemat bazy danych
+TPP_SQL_behavior 	- funkcje, procedury, perspektywy i wyzwalacze dza³aj¹ce pod kontrol¹ SZBD
+TPP_WWW 		- implementacja dynamicznych stron WWW stanowi¹cych aktualny interfejs u¿ytkownika bazy

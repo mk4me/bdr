@@ -462,9 +462,9 @@ end;
 go
 
 
--- last rev. 2014-01-03
+-- last rev. 2014-09-25
 -- @result codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
-create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty decimal(2,1),
+create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty tinyint,
 	@DataPrzyjecia date,	@DataOperacji date,	@DataWypisu date, @MasaCiala decimal(4,1),
 	@Wyksztalcenie	tinyint, @Rodzinnosc tinyint, @RokZachorowania	smallint, 
 	@PierwszyObjaw	tinyint, 
@@ -517,7 +517,7 @@ begin
 
 	-- validations
 
-	if dbo.validate_input_decimal('Wizyta', 'RodzajWizyty', @RodzajWizyty) = 0
+	if dbo.validate_input_int('Wizyta', 'RodzajWizyty', @RodzajWizyty) = 0
 	begin
 		set @result = 2;
 		set @message = 'Invalid value for attribute RodzajWizyty';
@@ -1968,10 +1968,12 @@ go
 
 
 
--- last rev. 2014-01-03
+-- last rev. 2014-09-25
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit, 
+	@TremorometriaLEFT bit, 
+	@TremorometriaRIGHT bit, 
 	@TremorometriaLEFT_0_1 decimal(7,2),
 	@TremorometriaLEFT_1_2 decimal(7,2),
 	@TremorometriaLEFT_2_3 decimal(7,2),
@@ -2030,6 +2032,8 @@ begin
 	update Badanie
 		set 
 			Tremorometria = @Tremorometria, 
+			TremorometriaLEFT = @TremorometriaLEFT,
+			TremorometriaRIGHT = @TremorometriaRIGHT,
 			TremorometriaLEFT_0_1 = @TremorometriaLEFT_0_1,
 			TremorometriaLEFT_1_2 = @TremorometriaLEFT_1_2,
 			TremorometriaLEFT_2_3 = @TremorometriaLEFT_2_3,
@@ -2234,7 +2238,7 @@ go
 -- ===============================
 
 
--- created: 2013-10-09
+-- altered: 2014-09-25
 create view AtrybutyWielowartoscioweWizyty as (
 SELECT  t.IdWIzyta IdWizyta, a.Nazwa NazwaAtrybutu, 
         stuff(
@@ -2250,7 +2254,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- updated: 2014-01-20
+-- altered: 2014-11-11
 create procedure get_database_copy
 as
 SELECT 
@@ -2280,7 +2284,7 @@ SELECT
       ,W.[Sztywnosc]
       ,W.[Spowolnienie]
       ,W.[ObjawyInne]
-      ,W.[ObjawyInneJakie]
+      ,REPLACE(W.[ObjawyInneJakie],';','. ')
       ,W.[CzasOdPoczObjDoWlLDopy]
       ,W.[DyskinezyObecnie]
       ,W.[DyskinezyOdLat]
@@ -2297,11 +2301,11 @@ SELECT
       ,W.[ZabiegowWZnieczOgPrzedRozpoznaniemPD]
       ,W.[Zamieszkanie]
 	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'NarazenieNaToks' and IdWizyta = W.IdWizyta) as NarazeniaNaToks
-      ,W.[Uwagi]
+      ,REPLACE(W.[Uwagi],';','. ')
       ,W.[Nadcisnienie]
       ,W.[BlokeryKanWapn]
       ,W.[DominujacyObjawObecnie]
-      ,W.[DominujacyObjawUwagi]
+      ,REPLACE(W.[DominujacyObjawUwagi],';','. ')
 	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'ObjawyAutonomiczne' and IdWizyta = W.IdWizyta) as ObjawyAutonomiczne
       ,W.[RLS]
       ,W.[ObjawyPsychotyczne]
@@ -2327,12 +2331,12 @@ SELECT
       ,W.[Cholinolityk]
       ,W.[CholinolitykObecnie]
       ,W.[LekiInne]
-      ,W.[LekiInneJakie]
-      ,W.[L_STIMOpis]
+      ,REPLACE(W.[LekiInneJakie],';','. ')
+      ,REPLACE(W.[L_STIMOpis],';','. ')
       ,W.[L_STIMAmplitude]
       ,W.[L_STIMDuration]
       ,W.[L_STIMFrequency]
-      ,W.[R_STIMOpis]
+      ,REPLACE(W.[R_STIMOpis],';','. ')
       ,W.[R_STIMAmplitude]
       ,W.[R_STIMDuration]
       ,W.[R_STIMFrequency]
@@ -2350,11 +2354,11 @@ SELECT
       ,W.[Wypis_CholinolitykObecnie]
       ,W.[Wypis_LekiInne]
       ,W.[Wypis_LekiInneJakie]
-      ,W.[Wypis_L_STIMOpis]
+      ,REPLACE(W.[Wypis_L_STIMOpis],';','. ')
       ,W.[Wypis_L_STIMAmplitude]
       ,W.[Wypis_L_STIMDuration]
       ,W.[Wypis_L_STIMFrequency]
-      ,W.[Wypis_R_STIMOpis]
+      ,REPLACE(W.[Wypis_R_STIMOpis],';','. ')
       ,W.[Wypis_R_STIMAmplitude]
       ,W.[Wypis_R_STIMDuration]
       ,W.[Wypis_R_STIMFrequency]
@@ -2440,6 +2444,8 @@ SELECT
       ,B.[LatencymeterAmplitudeALL]
       ,B.[LatencymeterPeakVelocityALL]
       ,B.[Tremorometria]
+      ,B.[TremorometriaLEFT]
+      ,B.[TremorometriaRIGHT]
       ,B.[TremorometriaLEFT_0_1]
       ,B.[TremorometriaLEFT_1_2]
       ,B.[TremorometriaLEFT_2_3]
@@ -2491,20 +2497,20 @@ SELECT
       ,W.[WAIS_R_Wiadomosci]
       ,W.[WAIS_R_PowtarzanieCyfr]
       ,W.[SkalaDepresjiBecka]
-      ,W.[TestFluencjiZwierzeta]
-      ,W.[TestFluencjiOstre]
-      ,W.[TestFluencjiK]
-      ,W.[TestLaczeniaPunktowA]
-      ,W.[TestLaczeniaPunktowB]
-	  ,W.[TestAVLTSrednia]
-	  ,W.[TestAVLTOdroczony]
-	  ,W.[TestAVLTPo20min]
-	  ,W.[TestAVLTRozpoznawanie]
+      ,REPLACE(W.[TestFluencjiZwierzeta],';','. ')
+      ,REPLACE(W.[TestFluencjiOstre],';','. ')
+      ,REPLACE(W.[TestFluencjiK],';','. ')
+      ,REPLACE(W.[TestLaczeniaPunktowA],';','. ')
+      ,REPLACE(W.[TestLaczeniaPunktowB],';','. ')
+	  ,REPLACE(W.[TestAVLTSrednia],';','. ')
+	  ,REPLACE(W.[TestAVLTOdroczony],';','. ')
+	  ,REPLACE(W.[TestAVLTPo20min],';','. ')
+	  ,REPLACE(W.[TestAVLTRozpoznawanie],';','. ')
       ,W.[TestStroopa]
-      ,W.[TestMinnesota]
-      ,W.[InnePsychologiczne]
-      ,W.[OpisBadania]
-      ,W.[Wnioski]
+      ,REPLACE(W.[TestMinnesota],';','. ')
+      ,REPLACE(W.[InnePsychologiczne],';','. ')
+      ,REPLACE(W.[OpisBadania],';','. ')
+      ,REPLACE(W.[Wnioski],';','. ')
       ,W.[Holter]
       ,W.[BadanieWechu]
       ,W.[WynikWechu]
@@ -2513,13 +2519,13 @@ SELECT
       ,W.[SPECT]
 	   ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'SPECTWynik' and IdWizyta = W.IdWizyta) as SPECTWyniki
       ,W.[MRI]
-      ,W.[MRIwynik]
+      ,REPLACE(W.[MRIwynik],';','. ')
       ,W.[USGsrodmozgowia]
       ,W.[USGWynik]
       ,W.[Genetyka]
-      ,W.[GenetykaWynik]
+      ,REPLACE(W.[GenetykaWynik],';','. ')
       ,W.[Surowica]
-      ,W.[SurowicaPozostało]
+      ,REPLACE(W.[SurowicaPozostało],';','. ')
       ,W.[Ferrytyna]
       ,W.[CRP]
       ,W.[NTproCNP]
@@ -2530,7 +2536,7 @@ SELECT
       ,W.[HDL]
       ,W.[LDL]
       ,W.[olLDL]
-      ,W.[LaboratoryjneInne]
+      ,REPLACE(W.[LaboratoryjneInne],';','. ')
       ,W.[Wprowadzil] as WizyteWprowadzil
       ,W.[Zmodyfikowal] as WizyteEdytowal
       ,W.[OstatniaZmiana] as OstatniaModyfikacja
@@ -2540,7 +2546,34 @@ SELECT
   go
 
   
-
+-- updated: 2014-01-20
+create procedure [dbo].[get_database_and_file_overview]
+as
+select 
+	   P.[NumerPacjenta]
+      ,W.[RodzajWizyty]
+      ,max(PBDC.IdPlik) as BMT_DBS_Coord
+      ,max(PBDV.IdPlik) as BMT_DBS_Video
+      ,max(PBC.IdPlik) as BMT_O_Coord
+      ,max(PBV.IdPlik) as BMT_O_Video
+      ,max(PDC.IdPlik) as O_DBS_Coord
+      ,max(PDV.IdPlik) as O_DBS_Video
+      ,max(PC.IdPlik) as O_O_Coord
+      ,max(PV.IdPlik) as O_O_Video
+      
+  from
+  Pacjent P join Wizyta w on P.IdPacjent = W.IdPacjent join Badanie B on B.IdWizyta = W.IdWizyta
+  left join Plik PBDC on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'Coordinates'
+  left join Plik PBDV on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'Video'
+  left join Plik PBC on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'Coordinates'
+  left join Plik PBV on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'Video'
+  left join Plik PDC on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'Coordinates'
+  left join Plik PDV on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'Video'
+  left join Plik PC on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'Coordinates'
+  left join Plik PV on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'Video' 
+		
+  group by P.NumerPacjenta, W.RodzajWizyty	
+  order by P.NumerPacjenta, W.RodzajWizyty
 
 -- wsparcie generowania numerow pacjenta
 
@@ -2582,37 +2615,60 @@ go
 
 
 -- podglad zestawu danych i plikow
--- updated: 2014-01-20
-create procedure get_database_and_file_overview
+-- updated: 2015-01-22
+create pprocedure get_database_and_file_overview
 as
 select 
 	   P.[NumerPacjenta]
       ,W.[RodzajWizyty]
       ,max(PBDC.IdPlik) as BMT_DBS_Coord
       ,max(PBDV.IdPlik) as BMT_DBS_Video
+      ,max(PBDTE.IdPlik) as BMT_DBS_ET_Excel
+      ,max(PBDTG.IdPlik) as BMT_DBS_ET_Graph
+      
       ,max(PBC.IdPlik) as BMT_O_Coord
       ,max(PBV.IdPlik) as BMT_O_Video
+      ,max(PBTE.IdPlik) as BMT_O_ET_Excel
+      ,max(PBTG.IdPlik) as BMT_O_ET_Graph
+
       ,max(PDC.IdPlik) as O_DBS_Coord
       ,max(PDV.IdPlik) as O_DBS_Video
+      ,max(PDTE.IdPlik) as O_DBS_ET_Excel
+      ,max(PDTG.IdPlik) as O_DBS_ET_Graph
+
       ,max(PC.IdPlik) as O_O_Coord
       ,max(PV.IdPlik) as O_O_Video
+      ,max(PTE.IdPlik) as O_O_ET_Excel
+      ,max(PTG.IdPlik) as O_O_ET_Graph
+
       
   from
   Pacjent P join Wizyta w on P.IdPacjent = W.IdPacjent join Badanie B on B.IdWizyta = W.IdWizyta
+  
   left join Plik PBDC on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'Coordinates'
   left join Plik PBDV on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'Video'
+  left join Plik PBDTE on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBDTG on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'EyeTrackingGraph'
+  
   left join Plik PBC on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'Coordinates'
   left join Plik PBV on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'Video'
+  left join Plik PBTE on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBTG on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'EyeTrackingGraph'
+  
   left join Plik PDC on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'Coordinates'
   left join Plik PDV on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'Video'
+  left join Plik PDTE on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PDTG on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'EyeTrackingGraph'
+  
   left join Plik PC on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'Coordinates'
-  left join Plik PV on B.IdBadanie = PV.IdBadanie and B.BMT = 0and B.DBS = 0 and PV.OpisPliku = 'Video' 
-		
+  left join Plik PV on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'Video' 
+  left join Plik PTE on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PTG on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'EyeTrackingGraph' 		
   group by P.NumerPacjenta, W.RodzajWizyty	
   order by P.NumerPacjenta, W.RodzajWizyty
   go
 
--- updated: 2014-01-22
+-- updated: 2015-01-22
 create function generate_file_name( @file_id int )
 returns varchar(80)
 as
@@ -2638,6 +2694,8 @@ select
 	
 	if @file_type = 'Coordinates' set @file_name = '_C'+@file_name;
 	if @file_type = 'Video' set @file_name = '_V'+@file_name;
+	if @file_type = 'EyeTrackingExcel' set @file_name = '_ETe'+@file_name;
+	if @file_type = 'EyeTrackingGraph' set @file_name = '_ETg'+@file_name;
 	
 	if @dbs = 1 set @file_name = '-DBS'+@file_name; else set @file_name = '-O'+@file_name;
 	if @bmt = 1 set @file_name = '-BMT'+@file_name; else set @file_name = '-O'+@file_name;
@@ -2648,9 +2706,9 @@ select
 	set @file_name = @patient_no+@file_name;
 	return @file_name;
 end
-go
+go  
 
--- Coordinates Video
+
 
 /*
 
@@ -2659,13 +2717,17 @@ go
 
 -- wywiad A (część epidemiologiczna)
 
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	0,	'przedoperacyjna' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	0.5,	'po pół roku' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	1,	'rok po DBS' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	2,	'2 lata po DBS' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	3,	'3 lata po DBS' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	4,	'4 lata po DBS' );
-insert into SlownikDecimal ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	5,	'5 lata po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	0,	'przedoperacyjna' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	6,	'po pół roku' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	12,	'rok po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	18,	'półtora roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	24,	'2 lata po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	30,	'2 i pół roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	36,	'3 lata po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	42,	'3 i pół roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	48,	'4 lata po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	54,	'4 i pół roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	60,	'5 lat po DBS' );
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	1,	'podstawowe' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	2,	'zawodowe' );

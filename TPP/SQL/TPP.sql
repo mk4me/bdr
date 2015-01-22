@@ -399,6 +399,8 @@ create table Badanie  (
 	LatencymeterPeakVelocityALL decimal(6,2),
 -- variant tests B
 	Tremorometria	bit,
+	TremorometriaLEFT bit,
+	TremorometriaRIGHT bit,
 	TremorometriaLEFT_0_1 decimal(7,2),
 	TremorometriaLEFT_1_2 decimal(7,2),
 	TremorometriaLEFT_2_3 decimal(7,2),
