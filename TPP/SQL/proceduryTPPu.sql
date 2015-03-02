@@ -2073,6 +2073,92 @@ end;
 go
 
 
+-- last rev. 2015-03-01
+-- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+create procedure update_variant_examination_data_partB_1  (	@IdBadanie int,
+
+	@Otwarte_Srednia_C_o_P_X int,				
+	@Otwarte_Srednia_C_o_P_Y int,				
+	@Otwarte_Srednia_P_T_Predkosc_mm_sec int,	
+	@Otwarte_Srednia_P_B_Predkosc_mm_sec int,	
+	@Otwarte_Perimeter_mm int,					
+	@Otwarte_PoleElipsy_mm2 int,					
+
+	@Zamkniete_Srednia_C_o_P_X int,				
+	@Zamkniete_Srednia_C_o_P_Y int,				
+	@Zamkniete_Srednia_P_T_Predkosc_mm_sec int,	
+	@Zamkniete_Srednia_P_B_Predkosc_mm_sec int,	
+	@Zamkniete_Perimeter_mm int,					
+	@Zamkniete_PoleElipsy_mm2 int,				
+
+	@WspolczynnikPerymetru_E_C_E_O_obie_stopy int,		
+	@WspolczynnikPowierzchni_E_C_E_O_obie_stopy int,	
+
+	@Biofeedback_Srednia_C_o_P_X int,				
+	@Biofeedback_Srednia_C_o_P_Y int,				
+	@Biofeedback_Srednia_P_T_Predkosc_mm_sec int,	
+	@Biofeedback_Srednia_P_B_Predkosc_mm_sec int,	
+	@Biofeedback_Perimeter_mm int,					
+	@Biofeedback_PoleElipsy_mm2 int,					
+
+
+	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	
+	declare @user_id int;
+	set @user_id = 0;
+
+	set @result = 0;
+
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
+
+
+	if(not exists(select * from Badanie where IdBadanie = @IdBadanie ) )
+	begin
+		set @result = 3;
+		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
+		return;
+	end;
+
+	update Badanie
+		set 
+			Otwarte_Srednia_C_o_P_X = @Otwarte_Srednia_C_o_P_X,				
+			Otwarte_Srednia_C_o_P_Y = @Otwarte_Srednia_C_o_P_Y,				
+			Otwarte_Srednia_P_T_Predkosc_mm_sec = @Otwarte_Srednia_P_T_Predkosc_mm_sec,	
+			Otwarte_Srednia_P_B_Predkosc_mm_sec = @Otwarte_Srednia_P_B_Predkosc_mm_sec,	
+			Otwarte_Perimeter_mm = @Otwarte_Perimeter_mm,					
+			Otwarte_PoleElipsy_mm2 = @Otwarte_PoleElipsy_mm2,					
+
+			Zamkniete_Srednia_C_o_P_X = @Zamkniete_Srednia_C_o_P_X,				
+			Zamkniete_Srednia_C_o_P_Y = @Zamkniete_Srednia_C_o_P_Y,				
+			Zamkniete_Srednia_P_T_Predkosc_mm_sec = @Zamkniete_Srednia_P_T_Predkosc_mm_sec,	
+			Zamkniete_Srednia_P_B_Predkosc_mm_sec = @Zamkniete_Srednia_P_B_Predkosc_mm_sec,	
+			Zamkniete_Perimeter_mm = @Zamkniete_Perimeter_mm,					
+			Zamkniete_PoleElipsy_mm2 = @Zamkniete_PoleElipsy_mm2,				
+
+			WspolczynnikPerymetru_E_C_E_O_obie_stopy = @WspolczynnikPerymetru_E_C_E_O_obie_stopy,		
+			WspolczynnikPowierzchni_E_C_E_O_obie_stopy = @WspolczynnikPowierzchni_E_C_E_O_obie_stopy,	
+
+			Biofeedback_Srednia_C_o_P_X = @Biofeedback_Srednia_C_o_P_X,				
+			Biofeedback_Srednia_C_o_P_Y = @Biofeedback_Srednia_C_o_P_Y,				
+			Biofeedback_Srednia_P_T_Predkosc_mm_sec = @Biofeedback_Srednia_P_T_Predkosc_mm_sec,	
+			Biofeedback_Srednia_P_B_Predkosc_mm_sec = @Biofeedback_Srednia_P_B_Predkosc_mm_sec,	
+			Biofeedback_Perimeter_mm = @Biofeedback_Perimeter_mm,					
+			Biofeedback_PoleElipsy_mm2 = @Biofeedback_PoleElipsy_mm2,	
+			Zmodyfikowal = @user_id, 
+			OstatniaZmiana = getdate() 
+		where IdBadanie = @IdBadanie;
+
+	return;
+end;
+go
 
 
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
@@ -2254,7 +2340,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- altered: 2014-11-11
+-- altered: 2015-03-01
 create procedure get_database_copy
 as
 SELECT 
@@ -2476,6 +2562,26 @@ SELECT
       ,B.[TestMarszuCzas2]
       ,B.[Posturografia]
       ,B.[MotionAnalysis]
+      ,B.[Otwarte_Srednia_C_o_P_X]
+      ,B.[Otwarte_Srednia_C_o_P_Y]
+      ,B.[Otwarte_Srednia_P_T_Predkosc_mm_sec]
+      ,B.[Otwarte_Srednia_P_B_Predkosc_mm_sec]
+      ,B.[Otwarte_Perimeter_mm]
+      ,B.[Otwarte_PoleElipsy_mm2]
+      ,B.[Zamkniete_Srednia_C_o_P_X]
+      ,B.[Zamkniete_Srednia_C_o_P_Y]
+      ,B.[Zamkniete_Srednia_P_T_Predkosc_mm_sec]
+      ,B.[Zamkniete_Srednia_P_B_Predkosc_mm_sec]
+      ,B.[Zamkniete_Perimeter_mm]
+      ,B.[Zamkniete_PoleElipsy_mm2]
+      ,B.[WspolczynnikPerymetru_E_C_E_O_obie_stopy]
+      ,B.[WspolczynnikPowierzchni_E_C_E_O_obie_stopy]
+      ,B.[Biofeedback_Srednia_C_o_P_X]
+      ,B.[Biofeedback_Srednia_C_o_P_Y]
+      ,B.[Biofeedback_Srednia_P_T_Predkosc_mm_sec]
+      ,B.[Biofeedback_Srednia_P_B_Predkosc_mm_sec]
+      ,B.[Biofeedback_Perimeter_mm]
+      ,B.[Biofeedback_PoleElipsy_mm2]				
       ,B.[UpAndGo]
       ,B.[UpAndGoLiczby]
       ,B.[UpAndGoKubekPrawa]

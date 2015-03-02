@@ -431,6 +431,32 @@ create table Badanie  (
 	TestMarszuCzas2	decimal(4,2),
 	Posturografia	bit,
 	MotionAnalysis	bit,
+-- variant test B_1
+
+	Otwarte_Srednia_C_o_P_X int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Otwarte_Srednia_C_o_P_Y int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Otwarte_Srednia_P_T_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Otwarte_Srednia_P_B_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Otwarte_Perimeter_mm int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+	Otwarte_PoleElipsy_mm2 int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+
+	Zamkniete_Srednia_C_o_P_X int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Zamkniete_Srednia_C_o_P_Y int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Zamkniete_Srednia_P_T_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Zamkniete_Srednia_P_B_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Zamkniete_Perimeter_mm int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+	Zamkniete_PoleElipsy_mm2 int,				-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+
+	WspolczynnikPerymetru_E_C_E_O_obie_stopy int,		-- (wartości liczbowe - liczby całkowite od 0 do 1 000)
+	WspolczynnikPowierzchni_E_C_E_O_obie_stopy int,	-- (wartości liczbowe - liczby całkowite od 0 do 1 000)
+
+	Biofeedback_Srednia_C_o_P_X int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Biofeedback_Srednia_C_o_P_Y int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
+	Biofeedback_Srednia_P_T_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Biofeedback_Srednia_P_B_Predkosc_mm_sec int,	-- (wartości liczbowe - liczby całkowite od 0 do 500)
+	Biofeedback_Perimeter_mm int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+	Biofeedback_PoleElipsy_mm2 int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
+
 -- variant tests C
 	UpAndGo	decimal(3,1),
 	UpAndGoLiczby	decimal(3,1),
