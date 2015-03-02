@@ -67,7 +67,8 @@ public partial class AppointmentList : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select IdWizyta, DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = '" + patientNumber + "')";
+        cmd.CommandText = "select IdWizyta, DataPrzyjecia, RodzajWizyty from Wizyta where exists (select IdPacjent from Pacjent where Wizyta.IdPacjent = Pacjent.IdPacjent and Pacjent.NumerPacjenta = @NumerPacjenta)";
+        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
         cmd.Connection = con;
 
         List<AppointmentSelection> list = new List<AppointmentSelection>();
@@ -171,9 +172,10 @@ public partial class AppointmentList : System.Web.UI.Page
             SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "delete from Wizyta where IdWizyta = " + idAppointment + ";delete from Badanie where IdWizyta = " + idAppointment;
+            cmd.CommandText = "delete from Plik where exists (select IdBadanie from Badanie where IdWizyta = @IdWizyta and Plik.IdBadanie = IdBadanie);delete from Badanie where IdWizyta = @IdWizyta;delete from Wizyta where IdWizyta = @IdWizyta";
+            cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = idAppointment;
             cmd.Connection = con;
-
+            
             try
             {
                 con.Open();

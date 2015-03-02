@@ -14,15 +14,19 @@ public class Consts
     public static string PATIENT_POP = "POP";
 
     // Appointment types (decimal type matches database. ToString() representation depends on server's language setting: . vs ,)
-    public static decimal APPOINTMENT_0_0 = 0.0m;
-    public static decimal APPOINTMENT_0_5 = 0.5m;
-    public static decimal APPOINTMENT_1_0 = 1.0m;
-    public static decimal APPOINTMENT_2_0 = 2.0m;
-    public static decimal APPOINTMENT_3_0 = 3.0m;
-    public static decimal APPOINTMENT_4_0 = 4.0m;
-    public static decimal APPOINTMENT_5_0 = 5.0m;
-
-    public static string APPOINTMENT_0_0_text = "przedoperacyjna";
+    public static byte APPOINTMENT_0 = 0;
+    public static byte APPOINTMENT_6 = 6;
+    public static byte APPOINTMENT_12 = 12;
+    public static byte APPOINTMENT_18 = 18;
+    public static byte APPOINTMENT_24 = 24;
+    public static byte APPOINTMENT_30 = 30;
+    public static byte APPOINTMENT_36 = 36;
+    public static byte APPOINTMENT_42 = 42;
+    public static byte APPOINTMENT_48 = 48;
+    public static byte APPOINTMENT_54 = 54;
+    public static byte APPOINTMENT_60 = 60;
+    
+    public static string APPOINTMENT_0_text = "przedoperacyjna";
 
 	public Consts()
 	{

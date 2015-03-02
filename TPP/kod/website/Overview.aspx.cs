@@ -13,7 +13,10 @@ public partial class Overview : System.Web.UI.Page
 {
     private List<OverviewSelection> overviewList;
     private List<string> fileColumns = new List<string> {
-        "BMT_DBS_Coord", "BMT_DBS_Video", "BMT_O_Coord", "BMT_O_Video", "O_DBS_Coord", "O_DBS_Video", "O_O_Coord", "O_O_Video"
+        "BMT_DBS_Coord", "BMT_DBS_Video", "BMT_DBS_ET_Excel", "BMT_DBS_ET_Graph",
+        "BMT_O_Coord", "BMT_O_Video", "BMT_O_ET_Excel", "BMT_O_ET_Graph",
+        "O_DBS_Coord", "O_DBS_Video", "O_DBS_ET_Excel", "O_DBS_ET_Graph",
+        "O_O_Coord", "O_O_Video", "O_O_ET_Excel", "O_O_ET_Graph"
     };
 
     protected void Page_Load(object sender, EventArgs e)
@@ -59,7 +62,7 @@ public partial class Overview : System.Web.UI.Page
                     if (fileLink != null)
                     {
                         cellFile.Controls.Add(fileLink.check);
-                        fileLink.check.Width = 30;
+                        fileLink.check.Width = 28;
                         cellFile.Controls.Add(fileLink.link);
                     }
                 }

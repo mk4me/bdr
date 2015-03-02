@@ -38,8 +38,7 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsMotionAnalysis;
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
-    private Tuple<TextBox[], FileUpload[]> variantFiles1;
-    private Tuple<TextBox[], FileUpload[]> variantFiles2;
+    private List<Tuple<TextBox[], FileUpload[]>> variantFileUploadList = new List<Tuple<TextBox[], FileUpload[]>>();
     private Tuple<ListBox[], string> variantFileList;
 
     private static byte NO_DATA = 101;  //SchwabEnglandScale 100%
@@ -206,12 +205,14 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true, true));
 
         addVariantHeader(tableFiles);
-        variantFiles1 = addVariantFiles("Coordinates", tableFiles);
-        variantFiles2 = addVariantFiles("Video", tableFiles);
+        variantFileUploadList.Add(addVariantFiles("Coordinates", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Video", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("EyeTrackingExcel", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("EyeTrackingGraph", tableFiles));
         variantFileList = addVariantFileLists("Pliki:", tableFiles);
 
         // Jedyne aktywne kolumny - (BMT ON, DBS OFF) oraz (BMT OFF, DBS OFF) dla wizyty przedoperacyjnej lub pacjentow z grupy BMT
-        if (Session["AppointmentName"].ToString() == Consts.APPOINTMENT_0_0_text ||
+        if (Session["AppointmentName"].ToString() == Consts.APPOINTMENT_0_text ||
             Session["PatientNumber"].ToString().Contains(Consts.PATIENT_BMT) == true)
         {
             List<int> variantList = new List<int>();
@@ -1242,22 +1243,14 @@ public partial class PartFForm : System.Web.UI.Page
         {
             for (int i = 0; i < VARIANTS; i++)
             {
-                if (variantFiles1.Item2[i].HasFile)
+                foreach (Tuple<TextBox[], FileUpload[]> variantFiles in variantFileUploadList)
                 {
-                    if (saveVariantFile(variantIds[i], variantFiles1.Item2[i].FileName, variantFiles1.Item2[i].FileBytes, variantFiles1.Item1[i]))
+                    if (variantFiles.Item2[i].HasFile)
                     {
-                        savedFiles++;
-                    }
-                }
-            }
-
-            for (int i = 0; i < VARIANTS; i++)
-            {
-                if (variantFiles2.Item2[i].HasFile)
-                {
-                    if (saveVariantFile(variantIds[i], variantFiles2.Item2[i].FileName, variantFiles2.Item2[i].FileBytes, variantFiles2.Item1[i]))
-                    {
-                        savedFiles++;
+                        if (saveVariantFile(variantIds[i], variantFiles.Item2[i].FileName, variantFiles.Item2[i].FileBytes, variantFiles.Item1[i]))
+                        {
+                            savedFiles++;
+                        }
                     }
                 }
             }

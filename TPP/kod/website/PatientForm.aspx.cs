@@ -161,7 +161,8 @@ public partial class PatientForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = '" + patientNumber + "'";
+        cmd.CommandText = "select NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = @NumerPacjenta";
+        cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
         cmd.Connection = con;
 
         try

@@ -190,6 +190,19 @@ public class DatabaseProcedures
         }
     }
 
+    public static object getShortOrNullWithNoData(string value, string noData)
+    {
+        short s;
+        if (value == noData || !short.TryParse(value, out s))
+        {
+            return DBNull.Value;
+        }
+        else
+        {
+            return s;
+        }
+    }
+
     public static object getBitOrNull(string value)
     {
         return (value == "2") ? DBNull.Value : (object)Convert.ToBoolean(int.Parse(value));
@@ -245,6 +258,11 @@ public class DatabaseProcedures
         {
             return "2";
         }
+    }
+
+    public static string getDropShortValueWithNoData(object value, string noData)
+    {
+        return value == DBNull.Value ? noData : ((short)value).ToString();
     }
 
     public static string getDropMultiValue(object value)

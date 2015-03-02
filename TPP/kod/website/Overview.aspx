@@ -5,6 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <asp:Table ID="tableOverviews" runat="server" GridLines="Both">
     </asp:Table>
+
     <br />
     <asp:Button ID="buttonZip" runat="server" Text="Pobierz zaznaczone" 
         onclick="buttonZip_Click" />
