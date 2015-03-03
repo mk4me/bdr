@@ -67,6 +67,14 @@
     <asp:Label ID="labelSavePartB" runat="server" Text=""></asp:Label>
     <br />
     <br />
+    <asp:Table ID="tablePart4" runat="server">
+    </asp:Table>
+    <br />
+    <asp:Button ID="buttonSavePartB1" runat="server" Text="Zatwierdź" 
+                    onclick="buttonSavePartB1_Click" />
+    <asp:Label ID="labelSavePartB1" runat="server" Text=""></asp:Label>
+    <br />
+    <br />
     <asp:Table ID="tablePart3" runat="server">
     </asp:Table>
     <br />

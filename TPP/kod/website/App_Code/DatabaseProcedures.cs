@@ -179,15 +179,7 @@ public class DatabaseProcedures
 
     public static object getShortOrNull(string value)
     {
-        short s;
-        if (value == "" || !short.TryParse(value, out s))
-        {
-            return DBNull.Value;
-        }
-        else
-        {
-            return s;
-        }
+        return getShortOrNullWithNoData(value, "");
     }
 
     public static object getShortOrNullWithNoData(string value, string noData)
@@ -200,6 +192,19 @@ public class DatabaseProcedures
         else
         {
             return s;
+        }
+    }
+
+    public static object getIntOrNull(string value)
+    {
+        int i;
+        if (value == "" || !int.TryParse(value, out i))
+        {
+            return DBNull.Value;
+        }
+        else
+        {
+            return i;
         }
     }
 
@@ -303,6 +308,11 @@ public class DatabaseProcedures
     public static string getTextShortValue(object value)
     {
         return value == DBNull.Value ? "" : ((short)value).ToString();
+    }
+
+    public static string getTextIntValue(object value)
+    {
+        return value == DBNull.Value ? "" : ((int)value).ToString();
     }
 
     public static void saveMultiChoice(List<string> selectedValues, string attributeName, int appointmentId, string actor)
