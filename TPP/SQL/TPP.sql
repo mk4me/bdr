@@ -259,23 +259,68 @@ create table Wizyta (
 	CGI	tinyint,
 	FSS	decimal(3,1),
 -- Psycholog (część G)
-	TestZegara bit,
-	MMSE tinyint,
-	WAIS_R_Wiadomosci tinyint,
-	WAIS_R_PowtarzanieCyfr tinyint,
-	SkalaDepresjiBecka tinyint,
-	TestFluencjiZwierzeta varchar(40),
-	TestFluencjiOstre varchar(40),
-	TestFluencjiK varchar(40),
-	TestLaczeniaPunktowA varchar(40),
-	TestLaczeniaPunktowB varchar(40),
-	--TestUczeniaSlownoSluchowego tinyint, -- będzie zastąpiony 4 parametrami: AVLT średnia, AVLT odroczony, AVLT po 20 minutach, AVLT rozpoznawanie
-	TestAVLTSrednia varchar(40),
-	TestAVLTOdroczony varchar(40),
-	TestAVLTPo20min varchar(40),
-	TestAVLTRozpoznawanie varchar(40),
-	TestStroopa varchar(40),
-	TestMinnesota varchar(40),
+	TestZegara bit,	-- juz bylo; niezmienione
+	MMSE tinyint,	-- juz bylo; niezmienione
+	CLOX1_Rysunek tinyint, -- dodane 2015-03-20
+	CLOX2_Kopia tinyint, -- dodane 2015-03-20
+	AVLT_proba_1 tinyint,-- dodane 2015-03-20
+	AVLT_proba_2 tinyint,-- dodane 2015-03-20
+	AVLT_proba_3 tinyint,-- dodane 2015-03-20
+	AVLT_proba_4 tinyint,-- dodane 2015-03-20
+	AVLT_proba_5 tinyint,-- dodane 2015-03-20
+	AVLT_Suma tinyint,-- dodane 2015-03-20
+	AVLT_Srednia decimal(4,2), -- dodane 2015-03-20
+	AVLT_KrotkieOdroczenie tinyint,-- dodane 2015-03-20
+	AVLT_Odroczony20min decimal(4,2), -- dodane 2015-03-20
+	AVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
+	AVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
+
+	TestAVLTSrednia varchar(40), -- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	TestAVLTOdroczony varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	TestAVLTPo20min varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	TestAVLTRozpoznawanie varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+
+	CVLT_proba_1 tinyint,-- dodane 2015-03-20
+	CVLT_proba_2 tinyint,-- dodane 2015-03-20
+	CVLT_proba_3 tinyint,-- dodane 2015-03-20
+	CVLT_proba_4 tinyint,-- dodane 2015-03-20
+	CVLT_proba_5 tinyint,-- dodane 2015-03-20
+	CVLT_Suma tinyint,-- dodane 2015-03-20
+	CVLT_OSKO_krotkie_odroczenie decimal(4,2), -- dodane 2015-03-20
+	CVLT_OPKO_krotkie_odroczenie_i_pomoc tinyint,-- dodane 2015-03-20
+	CVLT_OSDO_po20min decimal(4,2), -- dodane 2015-03-20
+	CVLT_OPDO_po20min_i_pomoc tinyint,-- dodane 2015-03-20
+	CVLT_perseweracje tinyint,-- dodane 2015-03-20
+	CVLT_WtraceniaOdtwarzanieSwobodne tinyint,-- dodane 2015-03-20
+	CVLT_wtraceniaOdtwarzanieZPomoca tinyint,-- dodane 2015-03-20
+	CVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
+	CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
+	Benton_JOL tinyint,-- dodane 2015-03-20
+	WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
+	WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
+	WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
+	BostonskiTestNazywaniaBMT tinyint, -- dodane 2015-03-20
+	BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
+	SkalaDepresjiBecka tinyint,-- juz bylo; niezmienione
+
+	TestFluencjiK tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
+	TestFluencjiP tinyint, -- dodane 2015-03-20
+	TestFluencjiZwierzeta tinyint,-- bylo; ale zmiana z varchar(40) na tinyint
+	TestFluencjiOwoceWarzywa tinyint, -- dodane 2015-03-20
+	TestFluencjiOstre tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
+	TestLaczeniaPunktowA varchar(40), -- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	TestLaczeniaPunktowB varchar(40),-- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	ToL_SumaRuchow int, -- dodane 2015-03-20
+	ToL_LiczbaPrawidlowych tinyint, -- dodane 2015-03-20
+	ToL_CzasInicjowania_sek int, -- dodane 2015-03-20
+	ToL_CzasWykonania_sek int, -- dodane 2015-03-20
+	ToL_CzasCalkowity_sek int, -- dodane 2015-03-20
+	ToL_CzasPrzekroczony tinyint, -- dodane 2015-03-20
+	ToL_LiczbaPrzekroczenZasad tinyint, -- dodane 2015-03-20
+	ToL_ReakcjeUkierunkowane tinyint, -- dodane 2015-03-20
+
+	-- TestStroopa varchar(40), -- usunieto 2015-03-20
+	-- TestMinnesota varchar(40), -- usunieto 2015-03-20
 	InnePsychologiczne varchar(150),
 	OpisBadania varchar(2000),
 	Wnioski varchar(2000),

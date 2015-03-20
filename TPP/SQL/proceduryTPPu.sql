@@ -1462,7 +1462,10 @@ begin
 end;
 go
 
+
+/*
 -- last rev. 2014-01-13
+-- REPLACED 2015-03-20
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
@@ -1539,9 +1542,172 @@ begin
 	return;
 end;
 go
+*/
+
+-- last rev. 2015-03-20
+-- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
+create procedure update_examination_questionnaire_partG  (
+	@IdWizyta int,
+	@TestZegara bit,	-- juz bylo; niezmienione
+	@MMSE tinyint,	-- juz bylo; niezmienione
+	@CLOX1_Rysunek tinyint, -- dodane 2015-03-20
+	@CLOX2_Kopia tinyint, -- dodane 2015-03-20
+	@AVLT_proba_1 tinyint,-- dodane 2015-03-20
+	@AVLT_proba_2 tinyint,-- dodane 2015-03-20
+	@AVLT_proba_3 tinyint,-- dodane 2015-03-20
+	@AVLT_proba_4 tinyint,-- dodane 2015-03-20
+	@AVLT_proba_5 tinyint,-- dodane 2015-03-20
+	@AVLT_Suma tinyint,-- dodane 2015-03-20
+	@AVLT_Srednia decimal(4,2), -- dodane 2015-03-20
+	@AVLT_KrotkieOdroczenie tinyint,-- dodane 2015-03-20
+	@AVLT_Odroczony20min decimal(4,2), -- dodane 2015-03-20
+	@AVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
+	@AVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
+
+	@TestAVLTSrednia varchar(40), -- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	@TestAVLTOdroczony varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	@TestAVLTPo20min varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+	@TestAVLTRozpoznawanie varchar(40),-- pozostawione jako redundantne ze wzgledu na zgromadzone dane
+
+	@CVLT_proba_1 tinyint,-- dodane 2015-03-20
+	@CVLT_proba_2 tinyint,-- dodane 2015-03-20
+	@CVLT_proba_3 tinyint,-- dodane 2015-03-20
+	@CVLT_proba_4 tinyint,-- dodane 2015-03-20
+	@CVLT_proba_5 tinyint,-- dodane 2015-03-20
+	@CVLT_Suma tinyint,-- dodane 2015-03-20
+	@CVLT_OSKO_krotkie_odroczenie decimal(4,2), -- dodane 2015-03-20
+	@CVLT_OPKO_krotkie_odroczenie_i_pomoc tinyint,-- dodane 2015-03-20
+	@CVLT_OSDO_po20min decimal(4,2), -- dodane 2015-03-20
+	@CVLT_OPDO_po20min_i_pomoc tinyint,-- dodane 2015-03-20
+	@CVLT_perseweracje tinyint,-- dodane 2015-03-20
+	@CVLT_WtraceniaOdtwarzanieSwobodne tinyint,-- dodane 2015-03-20
+	@CVLT_wtraceniaOdtwarzanieZPomoca tinyint,-- dodane 2015-03-20
+	@CVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
+	@CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
+	@Benton_JOL tinyint,-- dodane 2015-03-20
+	@WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
+	@WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
+	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
+	@BostonskiTestNazywaniaBMT tinyint, -- dodane 2015-03-20
+	@BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
+	@SkalaDepresjiBecka tinyint,-- juz bylo; niezmienione
+
+	@TestFluencjiK tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
+	@TestFluencjiP tinyint, -- dodane 2015-03-20
+	@TestFluencjiZwierzeta tinyint,-- bylo; ale zmiana z varchar(40) na tinyint
+	@TestFluencjiOwoceWarzywa tinyint, -- dodane 2015-03-20
+	@TestFluencjiOstre tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
+	@TestLaczeniaPunktowA varchar(40), -- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	@TestLaczeniaPunktowB varchar(40),-- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	@ToL_SumaRuchow int, -- dodane 2015-03-20
+	@ToL_LiczbaPrawidlowych tinyint, -- dodane 2015-03-20
+	@ToL_CzasInicjowania_sek int, -- dodane 2015-03-20
+	@ToL_CzasWykonania_sek int, -- dodane 2015-03-20
+	@ToL_CzasCalkowity_sek int, -- dodane 2015-03-20
+	@ToL_CzasPrzekroczony tinyint, -- dodane 2015-03-20
+	@ToL_LiczbaPrzekroczenZasad tinyint, -- dodane 2015-03-20
+	@ToL_ReakcjeUkierunkowane tinyint, -- dodane 2015-03-20
+	@InnePsychologiczne varchar(150),
+	@OpisBadania varchar(2000),
+	@Wnioski varchar(2000),
+	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	
+	declare @user_id int;
+	set @user_id = 0;
+
+	set @result = 0;
+
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
 
 
+	if(not exists(select * from Wizyta where IdWizyta = @IdWizyta) )
+	begin
+		set @result = 3;
+		set @message = 'visit of this ID ='+ CAST(@IdWizyta as varchar)+' not found';
+		return;
+	end;
 
+
+	update Wizyta
+		set 
+
+			TestZegara = @TestZegara,
+			MMSE = @MMSE,
+			CLOX1_Rysunek = @CLOX1_Rysunek,
+			CLOX2_Kopia = @CLOX2_Kopia,
+			AVLT_proba_1 = @AVLT_proba_1,
+			AVLT_proba_2 = @AVLT_proba_2,
+			AVLT_proba_3 = @AVLT_proba_3,
+			AVLT_proba_4 = @AVLT_proba_4,
+			AVLT_proba_5 = @AVLT_proba_5,
+			AVLT_Suma = @AVLT_Suma,
+			AVLT_Srednia = @AVLT_Srednia,
+			AVLT_KrotkieOdroczenie = @AVLT_KrotkieOdroczenie,
+			AVLT_Odroczony20min = @AVLT_Odroczony20min,
+			AVLT_Rozpoznawanie = @AVLT_Rozpoznawanie,
+			AVLT_BledyRozpoznania = @AVLT_BledyRozpoznania,
+
+			TestAVLTSrednia = @TestAVLTSrednia,
+			TestAVLTOdroczony = @TestAVLTOdroczony,
+			TestAVLTPo20min = @TestAVLTPo20min,
+			TestAVLTRozpoznawanie = @TestAVLTRozpoznawanie,
+
+			CVLT_proba_1 = @CVLT_proba_1,
+			CVLT_proba_2 = @CVLT_proba_2,
+			CVLT_proba_3 = @CVLT_proba_3,
+			CVLT_proba_4 = @CVLT_proba_4,
+			CVLT_proba_5 = @CVLT_proba_5,
+			CVLT_Suma = @CVLT_Suma,
+			CVLT_OSKO_krotkie_odroczenie = @CVLT_OSKO_krotkie_odroczenie,
+			CVLT_OPKO_krotkie_odroczenie_i_pomoc = @CVLT_OPKO_krotkie_odroczenie_i_pomoc,
+			CVLT_OSDO_po20min = @CVLT_OSDO_po20min,
+			CVLT_OPDO_po20min_i_pomoc = @CVLT_OPDO_po20min_i_pomoc,
+			CVLT_perseweracje = @CVLT_perseweracje,
+			CVLT_WtraceniaOdtwarzanieSwobodne = @CVLT_WtraceniaOdtwarzanieSwobodne,
+			CVLT_wtraceniaOdtwarzanieZPomoca = @CVLT_wtraceniaOdtwarzanieZPomoca,
+			CVLT_Rozpoznawanie = @CVLT_Rozpoznawanie,
+			CVLT_BledyRozpoznania = @CVLT_BledyRozpoznania,
+			Benton_JOL = @Benton_JOL,
+			WAIS_R_Wiadomosci = @WAIS_R_Wiadomosci,
+			WAIS_R_PowtarzanieCyfr = @WAIS_R_PowtarzanieCyfr,
+			WAIS_R_Podobienstwa = @WAIS_R_Podobienstwa,
+			BostonskiTestNazywaniaBMT = @BostonskiTestNazywaniaBMT,
+			BMT_SredniCzasReakcji_sek = @BMT_SredniCzasReakcji_sek,
+			SkalaDepresjiBecka = @SkalaDepresjiBecka,
+
+			TestFluencjiK = @TestFluencjiK,
+			TestFluencjiP = @TestFluencjiP,
+			TestFluencjiZwierzeta = @TestFluencjiZwierzeta,
+			TestFluencjiOwoceWarzywa = @TestFluencjiOwoceWarzywa,
+			TestFluencjiOstre = @TestFluencjiOstre,
+			TestLaczeniaPunktowA = @TestLaczeniaPunktowA,
+			TestLaczeniaPunktowB = @TestLaczeniaPunktowB,
+			ToL_SumaRuchow = @ToL_SumaRuchow,
+			ToL_LiczbaPrawidlowych = @ToL_LiczbaPrawidlowych,
+			ToL_CzasInicjowania_sek = @ToL_CzasInicjowania_sek,
+			ToL_CzasWykonania_sek = @ToL_CzasWykonania_sek,
+			ToL_CzasCalkowity_sek = @ToL_CzasCalkowity_sek,
+			ToL_CzasPrzekroczony = @ToL_CzasPrzekroczony,
+			ToL_LiczbaPrzekroczenZasad = @ToL_LiczbaPrzekroczenZasad,
+			ToL_ReakcjeUkierunkowane = @ToL_ReakcjeUkierunkowane,
+			InnePsychologiczne = @InnePsychologiczne,
+			OpisBadania = @OpisBadania,
+
+			Zmodyfikowal = @user_id, 
+			OstatniaZmiana = getdate() 
+		where IdWizyta = @IdWizyta;
+
+	return;
+end;
+go
 
 
 -- updated 2013-10-14
@@ -2340,7 +2506,10 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- altered: 2015-03-01
+
+-- altered: 2015-03-20
+
+
 create procedure get_database_copy
 as
 SELECT 
@@ -2598,25 +2767,68 @@ SELECT
       ,W.[Epworth]
       ,W.[CGI]
       ,W.[FSS]
-      ,W.[TestZegara]
-      ,W.[MMSE]
-      ,W.[WAIS_R_Wiadomosci]
-      ,W.[WAIS_R_PowtarzanieCyfr]
-      ,W.[SkalaDepresjiBecka]
-      ,REPLACE(W.[TestFluencjiZwierzeta],';','. ')
-      ,REPLACE(W.[TestFluencjiOstre],';','. ')
-      ,REPLACE(W.[TestFluencjiK],';','. ')
-      ,REPLACE(W.[TestLaczeniaPunktowA],';','. ')
-      ,REPLACE(W.[TestLaczeniaPunktowB],';','. ')
-	  ,REPLACE(W.[TestAVLTSrednia],';','. ')
-	  ,REPLACE(W.[TestAVLTOdroczony],';','. ')
-	  ,REPLACE(W.[TestAVLTPo20min],';','. ')
-	  ,REPLACE(W.[TestAVLTRozpoznawanie],';','. ')
-      ,W.[TestStroopa]
-      ,REPLACE(W.[TestMinnesota],';','. ')
-      ,REPLACE(W.[InnePsychologiczne],';','. ')
-      ,REPLACE(W.[OpisBadania],';','. ')
-      ,REPLACE(W.[Wnioski],';','. ')
+	,REPLACE(W.[TestZegara],';','. ')
+	,REPLACE(W.[MMSE],';','. ')
+	,REPLACE(W.[CLOX1_Rysunek],';','. ')
+	,REPLACE(W.[CLOX2_Kopia],';','. ')
+	,REPLACE(W.[AVLT_proba_1],';','. ')
+	,REPLACE(W.[AVLT_proba_2],';','. ')
+	,REPLACE(W.[AVLT_proba_3],';','. ')
+	,REPLACE(W.[AVLT_proba_4],';','. ')
+	,REPLACE(W.[AVLT_proba_5],';','. ')
+	,REPLACE(W.[AVLT_Suma],';','. ')
+	,REPLACE(W.[AVLT_Srednia],';','. ')
+	,REPLACE(W.[AVLT_KrotkieOdroczenie],';','. ')
+	,REPLACE(W.[AVLT_Odroczony20min],';','. ')
+	,REPLACE(W.[AVLT_Rozpoznawanie],';','. ')
+	,REPLACE(W.[AVLT_BledyRozpoznania],';','. ')
+
+	,REPLACE(W.[TestAVLTSrednia],';','. ')
+	,REPLACE(W.[TestAVLTOdroczony],';','. ')
+	,REPLACE(W.[TestAVLTPo20min],';','. ')
+	,REPLACE(W.[TestAVLTRozpoznawanie],';','. ')
+
+	,REPLACE(W.[CVLT_proba_1],';','. ')
+	,REPLACE(W.[CVLT_proba_2],';','. ')
+	,REPLACE(W.[CVLT_proba_3],';','. ')
+	,REPLACE(W.[CVLT_proba_4],';','. ')
+	,REPLACE(W.[CVLT_proba_5],';','. ')
+	,REPLACE(W.[CVLT_Suma],';','. ')
+	,REPLACE(W.[CVLT_OSKO_krotkie_odroczenie],';','. ')
+	,REPLACE(W.[CVLT_OPKO_krotkie_odroczenie_i_pomoc],';','. ')
+	,REPLACE(W.[CVLT_OSDO_po20min],';','. ')
+	,REPLACE(W.[CVLT_OPDO_po20min_i_pomoc],';','. ')
+	,REPLACE(W.[CVLT_perseweracje],';','. ')
+	,REPLACE(W.[CVLT_WtraceniaOdtwarzanieSwobodne],';','. ')
+	,REPLACE(W.[CVLT_wtraceniaOdtwarzanieZPomoca],';','. ')
+	,REPLACE(W.[CVLT_Rozpoznawanie],';','. ')
+	,REPLACE(W.[CVLT_BledyRozpoznania],';','. ')
+	,REPLACE(W.[Benton_JOL],';','. ')
+	,REPLACE(W.[WAIS_R_Wiadomosci],';','. ')
+	,REPLACE(W.[WAIS_R_PowtarzanieCyfr],';','. ')
+	,REPLACE(W.[WAIS_R_Podobienstwa],';','. ')
+	,REPLACE(W.[BostonskiTestNazywaniaBMT],';','. ')
+	,REPLACE(W.[BMT_SredniCzasReakcji_sek],';','. ')
+	,REPLACE(W.[SkalaDepresjiBecka],';','. ')
+
+	,REPLACE(W.[TestFluencjiK],';','. ')
+	,REPLACE(W.[TestFluencjiP],';','. ')
+	,REPLACE(W.[TestFluencjiZwierzeta],';','. ')
+	,REPLACE(W.[TestFluencjiOwoceWarzywa],';','. ')
+	,REPLACE(W.[TestFluencjiOstre],';','. ')
+	,REPLACE(W.[TestLaczeniaPunktowA],';','. ')
+	,REPLACE(W.[TestLaczeniaPunktowB],';','. ')
+	,REPLACE(W.[ToL_SumaRuchow],';','. ')
+	,REPLACE(W.[ToL_LiczbaPrawidlowych],';','. ')
+	,REPLACE(W.[ToL_CzasInicjowania_sek],';','. ')
+	,REPLACE(W.[ToL_CzasWykonania_sek],';','. ')
+	,REPLACE(W.[ToL_CzasCalkowity_sek],';','. ')
+	,REPLACE(W.[ToL_CzasPrzekroczony],';','. ')
+	,REPLACE(W.[ToL_LiczbaPrzekroczenZasad],';','. ')
+	,REPLACE(W.[ToL_ReakcjeUkierunkowane],';','. ')
+	,REPLACE(W.[InnePsychologiczne],';','. ')
+	,REPLACE(W.[OpisBadania],';','. ')
+	,REPLACE(W.[Wnioski],';','. ')
       ,W.[Holter]
       ,W.[BadanieWechu]
       ,W.[WynikWechu]
