@@ -321,9 +321,9 @@ create table Wizyta (
 
 	-- TestStroopa varchar(40), -- usunieto 2015-03-20
 	-- TestMinnesota varchar(40), -- usunieto 2015-03-20
-	InnePsychologiczne varchar(150),
-	OpisBadania varchar(2000),
-	Wnioski varchar(2000),
+	InnePsychologiczne varchar(150),-- bez zmian
+	OpisBadania varchar(2000),-- bez zmian
+	Wnioski varchar(2000),-- bez zmian
 -- Badania część H
 	Holter bit,
 	BadanieWechu bit,
