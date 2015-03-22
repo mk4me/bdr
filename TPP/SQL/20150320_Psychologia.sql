@@ -94,6 +94,14 @@ alter table Wizyta
 alter table Wizyta
 	drop column TestMinnesota;
 
+
+alter Table Wizyta
+	alter column SkalaDepresjiBecka decimal(4,1);
+	
+alter table Wizyta add
+	SkalaDepresjiBeckaII decimal(4,1);
+
+
 alter Table Wizyta add
 
 -- Psycholog (część G)
@@ -196,7 +204,8 @@ alter procedure update_examination_questionnaire_partG  (
 	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
 	@BostonskiTestNazywaniaBMT tinyint, -- dodane 2015-03-20
 	@BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
-	@SkalaDepresjiBecka tinyint,-- juz bylo; niezmienione
+	@SkalaDepresjiBecka decimal(4,1),-- zmiana na decimal;
+	@SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
 
 	@TestFluencjiK tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
 	@TestFluencjiP tinyint, -- dodane 2015-03-20
@@ -288,7 +297,7 @@ begin
 			BostonskiTestNazywaniaBMT = @BostonskiTestNazywaniaBMT,
 			BMT_SredniCzasReakcji_sek = @BMT_SredniCzasReakcji_sek,
 			SkalaDepresjiBecka = @SkalaDepresjiBecka,
-
+			SkalaDepresjiBeckaII = @SkalaDepresjiBeckaII,
 			TestFluencjiK = @TestFluencjiK,
 			TestFluencjiP = @TestFluencjiP,
 			TestFluencjiZwierzeta = @TestFluencjiZwierzeta,
@@ -306,7 +315,7 @@ begin
 			ToL_ReakcjeUkierunkowane = @ToL_ReakcjeUkierunkowane,
 			InnePsychologiczne = @InnePsychologiczne,
 			OpisBadania = @OpisBadania,
-
+			Wnioski = @Wnioski,
 			Zmodyfikowal = @user_id, 
 			OstatniaZmiana = getdate() 
 		where IdWizyta = @IdWizyta;
