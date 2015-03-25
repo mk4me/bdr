@@ -9,7 +9,8 @@
     </asp:ContentPlaceHolder>
 </head>
 <body>
-    <form runat="server">
+    <%-- Turn off autocomplete for all forms --%>
+    <form runat="server" autocomplete="off">
     <div class="page">
         <div class="header">
             <div class="title">
