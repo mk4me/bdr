@@ -1,5 +1,7 @@
-﻿use TPP_Test;
+﻿use TPP;
 go
+
+
 
 /*
 
@@ -355,7 +357,7 @@ SELECT
       ,W.[Sztywnosc]
       ,W.[Spowolnienie]
       ,W.[ObjawyInne]
-      ,REPLACE(W.[ObjawyInneJakie],';','. ')
+      ,REPLACE(W.[ObjawyInneJakie],';','. ') ObjawyInneJakie
       ,W.[CzasOdPoczObjDoWlLDopy]
       ,W.[DyskinezyObecnie]
       ,W.[DyskinezyOdLat]
@@ -372,11 +374,11 @@ SELECT
       ,W.[ZabiegowWZnieczOgPrzedRozpoznaniemPD]
       ,W.[Zamieszkanie]
 	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'NarazenieNaToks' and IdWizyta = W.IdWizyta) as NarazeniaNaToks
-      ,REPLACE(W.[Uwagi],';','. ')
+      ,REPLACE(W.[Uwagi],';','. ') Uwagi
       ,W.[Nadcisnienie]
       ,W.[BlokeryKanWapn]
       ,W.[DominujacyObjawObecnie]
-      ,REPLACE(W.[DominujacyObjawUwagi],';','. ')
+      ,REPLACE(W.[DominujacyObjawUwagi],';','. ') DominujacyObjawUwagi
 	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'ObjawyAutonomiczne' and IdWizyta = W.IdWizyta) as ObjawyAutonomiczne
       ,W.[RLS]
       ,W.[ObjawyPsychotyczne]
@@ -402,12 +404,12 @@ SELECT
       ,W.[Cholinolityk]
       ,W.[CholinolitykObecnie]
       ,W.[LekiInne]
-      ,REPLACE(W.[LekiInneJakie],';','. ')
-      ,REPLACE(W.[L_STIMOpis],';','. ')
+      ,REPLACE(W.[LekiInneJakie],';','. ') LekiInneJakie
+      ,REPLACE(W.[L_STIMOpis],';','. ') L_STIMOpis
       ,W.[L_STIMAmplitude]
       ,W.[L_STIMDuration]
       ,W.[L_STIMFrequency]
-      ,REPLACE(W.[R_STIMOpis],';','. ')
+      ,REPLACE(W.[R_STIMOpis],';','. ') R_STIMOpis
       ,W.[R_STIMAmplitude]
       ,W.[R_STIMDuration]
       ,W.[R_STIMFrequency]
@@ -425,11 +427,11 @@ SELECT
       ,W.[Wypis_CholinolitykObecnie]
       ,W.[Wypis_LekiInne]
       ,W.[Wypis_LekiInneJakie]
-      ,REPLACE(W.[Wypis_L_STIMOpis],';','. ')
+      ,REPLACE(W.[Wypis_L_STIMOpis],';','. ') Wypis_L_STIMOpis
       ,W.[Wypis_L_STIMAmplitude]
       ,W.[Wypis_L_STIMDuration]
       ,W.[Wypis_L_STIMFrequency]
-      ,REPLACE(W.[Wypis_R_STIMOpis],';','. ')
+      ,REPLACE(W.[Wypis_R_STIMOpis],';','. ') Wypis_R_STIMOpis
       ,W.[Wypis_R_STIMAmplitude]
       ,W.[Wypis_R_STIMDuration]
       ,W.[Wypis_R_STIMFrequency]
@@ -583,68 +585,68 @@ SELECT
       ,W.[Epworth]
       ,W.[CGI]
       ,W.[FSS]
-	,REPLACE(W.[TestZegara],';','. ')
-	,REPLACE(W.[MMSE],';','. ')
-	,REPLACE(W.[CLOX1_Rysunek],';','. ')
-	,REPLACE(W.[CLOX2_Kopia],';','. ')
-	,REPLACE(W.[AVLT_proba_1],';','. ')
-	,REPLACE(W.[AVLT_proba_2],';','. ')
-	,REPLACE(W.[AVLT_proba_3],';','. ')
-	,REPLACE(W.[AVLT_proba_4],';','. ')
-	,REPLACE(W.[AVLT_proba_5],';','. ')
-	,REPLACE(W.[AVLT_Suma],';','. ')
-	,REPLACE(W.[AVLT_Srednia],';','. ')
-	,REPLACE(W.[AVLT_KrotkieOdroczenie],';','. ')
-	,REPLACE(W.[AVLT_Odroczony20min],';','. ')
-	,REPLACE(W.[AVLT_Rozpoznawanie],';','. ')
-	,REPLACE(W.[AVLT_BledyRozpoznania],';','. ')
+	,REPLACE(W.[TestZegara],';','. ') TestZegara
+	,REPLACE(W.[MMSE],';','. ') MMSE
+	,REPLACE(W.[CLOX1_Rysunek],';','. ') CLOX1_Rysunek
+	,REPLACE(W.[CLOX2_Kopia],';','. ') CLOX2_Kopia
+	,REPLACE(W.[AVLT_proba_1],';','. ') AVLT_proba_1
+	,REPLACE(W.[AVLT_proba_2],';','. ') AVLT_proba_2
+	,REPLACE(W.[AVLT_proba_3],';','. ') AVLT_proba_3
+	,REPLACE(W.[AVLT_proba_4],';','. ') AVLT_proba_4
+	,REPLACE(W.[AVLT_proba_5],';','. ') AVLT_proba_5
+	,REPLACE(W.[AVLT_Suma],';','. ') AVLT_Suma
+	,REPLACE(W.[AVLT_Srednia],';','. ') AVLT_Srednia
+	,REPLACE(W.[AVLT_KrotkieOdroczenie],';','. ') AVLT_KrotkieOdroczenie
+	,REPLACE(W.[AVLT_Odroczony20min],';','. ') AVLT_Odroczony20min
+	,REPLACE(W.[AVLT_Rozpoznawanie],';','. ') AVLT_Rozpoznawanie
+	,REPLACE(W.[AVLT_BledyRozpoznania],';','. ') AVLT_BledyRozpoznania
 
-	,REPLACE(W.[TestAVLTSrednia],';','. ')
-	,REPLACE(W.[TestAVLTOdroczony],';','. ')
-	,REPLACE(W.[TestAVLTPo20min],';','. ')
-	,REPLACE(W.[TestAVLTRozpoznawanie],';','. ')
+	,REPLACE(W.[TestAVLTSrednia],';','. ') TestAVLTSrednia
+	,REPLACE(W.[TestAVLTOdroczony],';','. ') TestAVLTOdroczony
+	,REPLACE(W.[TestAVLTPo20min],';','. ') TestAVLTPo20min
+	,REPLACE(W.[TestAVLTRozpoznawanie],';','. ') TestAVLTRozpoznawanie
 
-	,REPLACE(W.[CVLT_proba_1],';','. ')
-	,REPLACE(W.[CVLT_proba_2],';','. ')
-	,REPLACE(W.[CVLT_proba_3],';','. ')
-	,REPLACE(W.[CVLT_proba_4],';','. ')
-	,REPLACE(W.[CVLT_proba_5],';','. ')
-	,REPLACE(W.[CVLT_Suma],';','. ')
-	,REPLACE(W.[CVLT_OSKO_krotkie_odroczenie],';','. ')
-	,REPLACE(W.[CVLT_OPKO_krotkie_odroczenie_i_pomoc],';','. ')
-	,REPLACE(W.[CVLT_OSDO_po20min],';','. ')
-	,REPLACE(W.[CVLT_OPDO_po20min_i_pomoc],';','. ')
-	,REPLACE(W.[CVLT_perseweracje],';','. ')
-	,REPLACE(W.[CVLT_WtraceniaOdtwarzanieSwobodne],';','. ')
-	,REPLACE(W.[CVLT_wtraceniaOdtwarzanieZPomoca],';','. ')
-	,REPLACE(W.[CVLT_Rozpoznawanie],';','. ')
-	,REPLACE(W.[CVLT_BledyRozpoznania],';','. ')
-	,REPLACE(W.[Benton_JOL],';','. ')
-	,REPLACE(W.[WAIS_R_Wiadomosci],';','. ')
-	,REPLACE(W.[WAIS_R_PowtarzanieCyfr],';','. ')
-	,REPLACE(W.[WAIS_R_Podobienstwa],';','. ')
-	,REPLACE(W.[BostonskiTestNazywaniaBMT],';','. ')
-	,REPLACE(W.[BMT_SredniCzasReakcji_sek],';','. ')
-	,REPLACE(W.[SkalaDepresjiBecka],';','. ')
-
-	,REPLACE(W.[TestFluencjiK],';','. ')
-	,REPLACE(W.[TestFluencjiP],';','. ')
-	,REPLACE(W.[TestFluencjiZwierzeta],';','. ')
-	,REPLACE(W.[TestFluencjiOwoceWarzywa],';','. ')
-	,REPLACE(W.[TestFluencjiOstre],';','. ')
-	,REPLACE(W.[TestLaczeniaPunktowA],';','. ')
-	,REPLACE(W.[TestLaczeniaPunktowB],';','. ')
-	,REPLACE(W.[ToL_SumaRuchow],';','. ')
-	,REPLACE(W.[ToL_LiczbaPrawidlowych],';','. ')
-	,REPLACE(W.[ToL_CzasInicjowania_sek],';','. ')
-	,REPLACE(W.[ToL_CzasWykonania_sek],';','. ')
-	,REPLACE(W.[ToL_CzasCalkowity_sek],';','. ')
-	,REPLACE(W.[ToL_CzasPrzekroczony],';','. ')
-	,REPLACE(W.[ToL_LiczbaPrzekroczenZasad],';','. ')
-	,REPLACE(W.[ToL_ReakcjeUkierunkowane],';','. ')
-	,REPLACE(W.[InnePsychologiczne],';','. ')
-	,REPLACE(W.[OpisBadania],';','. ')
-	,REPLACE(W.[Wnioski],';','. ')
+	,REPLACE(W.[CVLT_proba_1],';','. ') CVLT_proba_1
+	,REPLACE(W.[CVLT_proba_2],';','. ') CVLT_proba_2
+	,REPLACE(W.[CVLT_proba_3],';','. ') CVLT_proba_3
+	,REPLACE(W.[CVLT_proba_4],';','. ') CVLT_proba_4
+	,REPLACE(W.[CVLT_proba_5],';','. ') CVLT_proba_5
+	,REPLACE(W.[CVLT_Suma],';','. ') CVLT_Suma
+	,REPLACE(W.[CVLT_OSKO_krotkie_odroczenie],';','. ') CVLT_OSKO_krotkie_odroczenie
+	,REPLACE(W.[CVLT_OPKO_krotkie_odroczenie_i_pomoc],';','. ') CVLT_OPKO_krotkie_odroczenie_i_pomoc
+	,REPLACE(W.[CVLT_OSDO_po20min],';','. ') CVLT_OSDO_po20min
+	,REPLACE(W.[CVLT_OPDO_po20min_i_pomoc],';','. ') CVLT_OPDO_po20min_i_pomoc
+	,REPLACE(W.[CVLT_perseweracje],';','. ') CVLT_perseweracje
+	,REPLACE(W.[CVLT_WtraceniaOdtwarzanieSwobodne],';','. ') CVLT_WtraceniaOdtwarzanieSwobodne
+	,REPLACE(W.[CVLT_wtraceniaOdtwarzanieZPomoca],';','. ') CVLT_wtraceniaOdtwarzanieZPomoca
+	,REPLACE(W.[CVLT_Rozpoznawanie],';','. ') CVLT_Rozpoznawanie
+	,REPLACE(W.[CVLT_BledyRozpoznania],';','. ') CVLT_BledyRozpoznania
+	,REPLACE(W.[Benton_JOL],';','. ') Benton_JOL
+	,REPLACE(W.[WAIS_R_Wiadomosci],';','. ') WAIS_R_Wiadomosci
+	,REPLACE(W.[WAIS_R_PowtarzanieCyfr],';','. ') WAIS_R_PowtarzanieCyfr
+	,REPLACE(W.[WAIS_R_Podobienstwa],';','. ') WAIS_R_Podobienstwa
+	,REPLACE(W.[BostonskiTestNazywaniaBMT],';','. ') BostonskiTestNazywaniaBMT
+	,REPLACE(W.[BMT_SredniCzasReakcji_sek],';','. ') BMT_SredniCzasReakcji_sek
+	,W.[SkalaDepresjiBecka]
+	,W.[SkalaDepresjiBeckaII]
+	,REPLACE(W.[TestFluencjiK],';','. ') TestFluencjiK
+	,REPLACE(W.[TestFluencjiP],';','. ') TestFluencjiP
+	,REPLACE(W.[TestFluencjiZwierzeta],';','. ') TestFluencjiZwierzeta
+	,REPLACE(W.[TestFluencjiOwoceWarzywa],';','. ') TestFluencjiOwoceWarzywa
+	,REPLACE(W.[TestFluencjiOstre],';','. ') TestFluencjiOstre
+	,REPLACE(W.[TestLaczeniaPunktowA],';','. ') TestLaczeniaPunktowA
+	,REPLACE(W.[TestLaczeniaPunktowB],';','. ') TestLaczeniaPunktowB
+	,REPLACE(W.[ToL_SumaRuchow],';','. ') ToL_SumaRuchow
+	,REPLACE(W.[ToL_LiczbaPrawidlowych],';','. ') ToL_LiczbaPrawidlowych
+	,REPLACE(W.[ToL_CzasInicjowania_sek],';','. ') ToL_CzasInicjowania_sek
+	,REPLACE(W.[ToL_CzasWykonania_sek],';','. ') ToL_CzasWykonania_sek
+	,REPLACE(W.[ToL_CzasCalkowity_sek],';','. ') ToL_CzasCalkowity_sek
+	,REPLACE(W.[ToL_CzasPrzekroczony],';','. ') ToL_CzasPrzekroczony
+	,REPLACE(W.[ToL_LiczbaPrzekroczenZasad],';','. ') ToL_LiczbaPrzekroczenZasad
+	,REPLACE(W.[ToL_ReakcjeUkierunkowane],';','. ') ToL_ReakcjeUkierunkowane
+	,REPLACE(W.[InnePsychologiczne],';','. ') InnePsychologiczne
+	,REPLACE(W.[OpisBadania],';','. ') OpisBadania
+	,REPLACE(W.[Wnioski],';','. ') Wnioski
       ,W.[Holter]
       ,W.[BadanieWechu]
       ,W.[WynikWechu]
@@ -653,11 +655,11 @@ SELECT
       ,W.[SPECT]
 	   ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'SPECTWynik' and IdWizyta = W.IdWizyta) as SPECTWyniki
       ,W.[MRI]
-      ,REPLACE(W.[MRIwynik],';','. ')
+      ,REPLACE(W.[MRIwynik],';','. ') MRIwynik
       ,W.[USGsrodmozgowia]
       ,W.[USGWynik]
       ,W.[Genetyka]
-      ,REPLACE(W.[GenetykaWynik],';','. ')
+      ,REPLACE(W.[GenetykaWynik],';','. ') GenetykaWynik
       ,W.[Surowica]
       ,REPLACE(W.[SurowicaPozostało],';','. ')
       ,W.[Ferrytyna]
@@ -670,7 +672,7 @@ SELECT
       ,W.[HDL]
       ,W.[LDL]
       ,W.[olLDL]
-      ,REPLACE(W.[LaboratoryjneInne],';','. ')
+      ,REPLACE(W.[LaboratoryjneInne],';','. ') LaboratoryjneInne
       ,W.[Wprowadzil] as WizyteWprowadzil
       ,W.[Zmodyfikowal] as WizyteEdytowal
       ,W.[OstatniaZmiana] as OstatniaModyfikacja
