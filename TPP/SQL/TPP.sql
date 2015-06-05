@@ -60,8 +60,21 @@ CREATE INDEX X1Uzytkownik ON Uzytkownik (
  )
  go
 
+create table Atrybut (
+	IdAtrybut	int,
+	PozycjaDomyslna int,
+	Encja	char(1),
+	Nazwa	varchar(50)
+)
+go
 
---!
+
+CREATE INDEX X1Atrybut ON Atrybut (
+     Nazwa
+ )
+ go
+
+
 CREATE TABLE Pacjent (
 	IdPacjent 	int IDENTITY,
 	NumerPacjenta	varchar(20) not null unique,
@@ -71,6 +84,7 @@ CREATE TABLE Pacjent (
 	Lokalizacja varchar(10), 
 	LiczbaElektrod tinyint,
 	NazwaGrupy varchar(3),	
+	ZakonczenieUdzialu varchar(255),
 	Wprowadzil	int not null,
 	Zmodyfikowal int not null,
 	OstatniaZmiana datetime not null
@@ -429,19 +443,44 @@ create table Badanie  (
 	SchwabEnglandScale	tinyint,
 	JazzNovo	bit,
 	Wideookulograf	bit,
-	Latencymeter bit,
-	LatencymeterDurationLEFT decimal(6,2),
-	LatencymeterLatencyLEFT decimal(6,2),
-	LatencymeterAmplitudeLEFT decimal(6,2),
-	LatencymeterPeakVelocityLEFT decimal(6,2),
-	LatencymeterDurationRIGHT decimal(6,2),
-	LatencymeterLatencyRIGHT decimal(6,2),
-	LatencymeterAmplitudeRIGHT decimal(6,2),
-	LatencymeterPeakVelocityRIGHT decimal(6,2),
-	LatencymeterDurationALL decimal(6,2),
-	LatencymeterLatencyALL decimal(6,2),
-	LatencymeterAmplitudeALL decimal(6,2),
-	LatencymeterPeakVelocityALL decimal(6,2),
+	Saccades bit,
+	SaccadesLatencyMeanLEFT decimal(6,2),
+	SaccadesLatencyMeanRIGHT decimal(6,2),
+	SaccadesDurationLEFT decimal(6,2),
+	SaccadesDurationRIGHT decimal(6,2),
+	SaccadesAmplitudeLEFT decimal(6,2),
+	SaccadesAmplitudeRIGHT decimal(6,2),
+	SaccadesPeakVelocityLEFT decimal(6,2),
+	SaccadesPeakVelocityRIGHT decimal(6,2),
+	SaccadesLatencyALL decimal(6,2),
+	SaccadesDurationALL decimal(6,2),
+	SaccadesAmplitudeALL decimal(6,2),
+	SaccadesPeakVelocityALL decimal(6,2), -- ponizsze dodane 2012-06-04
+	Antisaccades bit,
+	AntisaccadesPercentOfCorrectLEFT decimal(5,2),
+	AntisaccadesPercentOfCorrectRIGHT decimal(5,2),
+	AntisaccadesLatencyMeanLEFT decimal(6,2),
+	AntisaccadesLatencyMeanRIGHT decimal(6,2),
+	AntisaccadesDurationLEFT decimal(6,2),
+	AntisaccadesDurationRIGHT decimal(6,2),
+	AntisaccadesAmplitudeLEFT decimal(6,2),
+	AntisaccadesAmplitudeRIGHT decimal(6,2),
+	AntisaccadesPeakVelocityLEFT decimal(6,2),
+	AntisaccadesPeakVelocityRIGHT decimal(6,2),
+	AntisaccadesPercentOfCorrectALL decimal(5,2),
+	AntisaccadesLatencyALL decimal(6,2),
+	AntisaccadesDurationALL decimal(6,2),
+	AntisaccadesAmplitudeALL decimal(6,2),
+	AntisaccadesPeakVelocityALL decimal(6,2),
+	POM_Gain_SlowSinus decimal(6,2),
+	POM_StDev_SlowSinus decimal(6,2),
+	POM_Gain_MediumSinus decimal(6,2),
+	POM_StDev_MediumSinus decimal(6,2),
+	POM_Gain_FastSinus decimal(6,2),
+	POM_StDev_FastSinus decimal(6,2),
+	POM_Accuracy_SlowSinus decimal(6,2),
+	POM_Accuracy_MediumSinus decimal(6,2),
+	POM_Accuracy_FastSinus decimal(6,2), -- /dodane
 -- variant tests B
 	Tremorometria	bit,
 	TremorometriaLEFT bit,

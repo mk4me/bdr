@@ -302,9 +302,9 @@ go
 -- WGRYWANIE DANYCH I WALIDACJA
 -- ============================
 
--- last rev. 2014-01-13
+-- last rev. 2015-06-05
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message
-create procedure update_patient  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
+alter procedure update_patient  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3), @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @ZakonczenieUdzialu varchar(255), @allow_update_existing bit, @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
 	declare @update bit;
@@ -353,20 +353,18 @@ begin
 	end;
 
 	if(@update = 0)
-		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod )
-					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod	 );
+		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, ZakonczenieUdzialu )
+					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod, @ZakonczenieUdzialu	 );
 	else
 		update Pacjent
 		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
-		LiczbaElektrod = @LiczbaElektrod
+		LiczbaElektrod = @LiczbaElektrod, ZakonczenieUdzialu = @ZakonczenieUdzialu
 		where NumerPacjenta = @NumerPacjenta;		
 end;
 go
-
-
--- last rev. 2014-01-13
+-- last rev. 2015-06-05
 -- @result codes: 0 = OK, 1 = patient exists while update existing not allowed, 2 = validation failed - see message, 3 = login user not found
-create procedure update_patient_l  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3),  @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
+create procedure update_patient_l  (	@NumerPacjenta	varchar(20), @NazwaGrupy varchar(3),  @RokUrodzenia smallint, @MiesiacUrodzenia tinyint, @Plec tinyint, @Lokalizacja varchar(10), @LiczbaElektrod tinyint, @ZakonczenieUdzialu varchar(255), @allow_update_existing bit, @actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
 	declare @update bit;
@@ -426,12 +424,13 @@ begin
 	end;
 
 	if(@update = 0)
-		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, OstatniaZmiana, Wprowadzil, Zmodyfikowal )
-					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod, getdate(), @userid, @userid	 );
+		insert into Pacjent (NumerPacjenta, NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, ZakonczenieUdzialu, OstatniaZmiana, Wprowadzil, Zmodyfikowal )
+					values (@NumerPacjenta, @NazwaGrupy, @RokUrodzenia, @MiesiacUrodzenia, @Plec, @Lokalizacja, @LiczbaElektrod, @ZakonczenieUdzialu, getdate(), @userid, @userid	 );
 	else
 		update Pacjent
 		set RokUrodzenia = @RokUrodzenia, MiesiacUrodzenia = @MiesiacUrodzenia, Plec = @Plec, Lokalizacja = @Lokalizacja, 
 		LiczbaElektrod = @LiczbaElektrod,
+		ZakonczenieUdzialu = @ZakonczenieUdzialu,
 		Zmodyfikowal = @userid,
 		OstatniaZmiana = getdate()
 		where NumerPacjenta = @NumerPacjenta;		
@@ -1826,7 +1825,7 @@ end;
 go
 
 
-
+-- altered 2015-06-05
 -- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
 create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
 	@UPDRS_I	tinyint,
@@ -1865,19 +1864,44 @@ create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tin
 	@SchwabEnglandScale	tinyint,
 	@JazzNovo bit,
 	@Wideookulograf bit,
-	@Latencymeter bit,
-	@LatencymeterDurationLEFT decimal(6,2),
-	@LatencymeterLatencyLEFT decimal(6,2),
-	@LatencymeterAmplitudeLEFT decimal(6,2),
-	@LatencymeterPeakVelocityLEFT decimal(6,2),
-	@LatencymeterDurationRIGHT decimal(6,2),
-	@LatencymeterLatencyRIGHT decimal(6,2),
-	@LatencymeterAmplitudeRIGHT decimal(6,2),
-	@LatencymeterPeakVelocityRIGHT decimal(6,2),
-	@LatencymeterDurationALL decimal(6,2),
-	@LatencymeterLatencyALL decimal(6,2),
-	@LatencymeterAmplitudeALL decimal(6,2),
-	@LatencymeterPeakVelocityALL decimal(6,2),
+	@Saccades bit,
+	@SaccadesDurationLEFT decimal(6,2),
+	@SaccadesLatencyMeanLEFT decimal(6,2),
+	@SaccadesAmplitudeLEFT decimal(6,2),
+	@SaccadesPeakVelocityLEFT decimal(6,2),
+	@SaccadesDurationRIGHT decimal(6,2),
+	@SaccadesLatencyMeanRIGHT decimal(6,2),
+	@SaccadesAmplitudeRIGHT decimal(6,2),
+	@SaccadesPeakVelocityRIGHT decimal(6,2),
+	@SaccadesDurationALL decimal(6,2),
+	@SaccadesLatencyMeanALL decimal(6,2),
+	@SaccadesAmplitudeALL decimal(6,2),
+	@SaccadesPeakVelocityALL decimal(6,2),
+	@Antisaccades bit,
+	@AntisaccadesPercentOfCorrectLEFT decimal(5,2),
+	@AntisaccadesPercentOfCorrectRIGHT decimal(5,2),
+	@AntisaccadesLatencyMeanLEFT decimal(6,2),
+	@AntisaccadesLatencyMeanRIGHT decimal(6,2),
+	@AntisaccadesDurationLEFT decimal(6,2),
+	@AntisaccadesDurationRIGHT decimal(6,2),
+	@AntisaccadesAmplitudeLEFT decimal(6,2),
+	@AntisaccadesAmplitudeRIGHT decimal(6,2),
+	@AntisaccadesPeakVelocityLEFT decimal(6,2),
+	@AntisaccadesPeakVelocityRIGHT decimal(6,2),
+	@AntisaccadesPercentOfCorrectALL decimal(5,2),
+	@AntisaccadesLatencyMeanALL decimal(6,2),
+	@AntisaccadesDurationALL decimal(6,2),
+	@AntisaccadesAmplitudeALL decimal(6,2),
+	@AntisaccadesPeakVelocityALL decimal(6,2),
+	@POM_Gain_SlowSinus decimal(6,2),
+	@POM_StDev_SlowSinus decimal(6,2),
+	@POM_Gain_MediumSinus decimal(6,2),
+	@POM_StDev_MediumSinus decimal(6,2),
+	@POM_Gain_FastSinus decimal(6,2),
+	@POM_StDev_FastSinus decimal(6,2),
+	@POM_Accuracy_SlowSinus decimal(6,2),
+	@POM_Accuracy_MediumSinus decimal(6,2),
+	@POM_Accuracy_FastSinus decimal(6,2),
 	@allow_update_existing bit,
 	@actor_login varchar(50),
 	@result int OUTPUT, @variant_id int OUTPUT, @message varchar(200) OUTPUT )
@@ -1999,19 +2023,44 @@ begin
 			SchwabEnglandScale,
 			JazzNovo,
 			Wideookulograf,
-			Latencymeter,
-			LatencymeterDurationLEFT ,
-			LatencymeterLatencyLEFT ,
-			LatencymeterAmplitudeLEFT ,
-			LatencymeterPeakVelocityLEFT ,
-			LatencymeterDurationRIGHT ,
-			LatencymeterLatencyRIGHT ,
-			LatencymeterAmplitudeRIGHT ,
-			LatencymeterPeakVelocityRIGHT ,
-			LatencymeterDurationALL ,
-			LatencymeterLatencyALL ,
-			LatencymeterAmplitudeALL ,
-			LatencymeterPeakVelocityALL,
+			Saccades,
+			SaccadesLatencyMeanLEFT,
+			SaccadesLatencyMeanRIGHT,
+			SaccadesDurationLEFT,
+			SaccadesDurationRIGHT,
+			SaccadesAmplitudeLEFT,
+			SaccadesAmplitudeRIGHT,
+			SaccadesPeakVelocityLEFT,
+			SaccadesPeakVelocityRIGHT,
+			SaccadesLatencyMeanALL,
+			SaccadesDurationALL,
+			SaccadesAmplitudeALL,
+			SaccadesPeakVelocityALL,
+			Antisaccades,
+			AntisaccadesPercentOfCorrectLEFT,
+			AntisaccadesPercentOfCorrectRIGHT,
+			AntisaccadesLatencyMeanLEFT,
+			AntisaccadesLatencyMeanRIGHT,
+			AntisaccadesDurationLEFT,
+			AntisaccadesDurationRIGHT,
+			AntisaccadesAmplitudeLEFT,
+			AntisaccadesAmplitudeRIGHT,
+			AntisaccadesPeakVelocityLEFT,
+			AntisaccadesPeakVelocityRIGHT,
+			AntisaccadesPercentOfCorrectALL,
+			AntisaccadesLatencyMeanALL,
+			AntisaccadesDurationALL,
+			AntisaccadesAmplitudeALL,
+			AntisaccadesPeakVelocityALL,
+			POM_Gain_SlowSinus,
+			POM_StDev_SlowSinus,
+			POM_Gain_MediumSinus,
+			POM_StDev_MediumSinus,
+			POM_Gain_FastSinus,
+			POM_StDev_FastSinus,
+			POM_Accuracy_SlowSinus,
+			POM_Accuracy_MediumSinus,
+			POM_Accuracy_FastSinus,
 			Wprowadzil,
 			Zmodyfikowal,
 			OstatniaZmiana
@@ -2056,19 +2105,44 @@ begin
 			@SchwabEnglandScale,
 			@JazzNovo,
 			@Wideookulograf,
-			@Latencymeter,
-			@LatencymeterDurationLEFT ,
-			@LatencymeterLatencyLEFT ,
-			@LatencymeterAmplitudeLEFT ,
-			@LatencymeterPeakVelocityLEFT ,
-			@LatencymeterDurationRIGHT ,
-			@LatencymeterLatencyRIGHT ,
-			@LatencymeterAmplitudeRIGHT ,
-			@LatencymeterPeakVelocityRIGHT ,
-			@LatencymeterDurationALL ,
-			@LatencymeterLatencyALL ,
-			@LatencymeterAmplitudeALL ,
-			@LatencymeterPeakVelocityALL,
+			@Saccades,
+			@SaccadesLatencyMeanLEFT,
+			@SaccadesLatencyMeanRIGHT,
+			@SaccadesDurationLEFT,
+			@SaccadesDurationRIGHT,
+			@SaccadesAmplitudeLEFT,
+			@SaccadesAmplitudeRIGHT,
+			@SaccadesPeakVelocityLEFT,
+			@SaccadesPeakVelocityRIGHT,
+			@SaccadesLatencyMeanALL,
+			@SaccadesDurationALL,
+			@SaccadesAmplitudeALL,
+			@SaccadesPeakVelocityALL,
+			@Antisaccades,
+			@AntisaccadesPercentOfCorrectLEFT,
+			@AntisaccadesPercentOfCorrectRIGHT,
+			@AntisaccadesLatencyMeanLEFT,
+			@AntisaccadesLatencyMeanRIGHT,
+			@AntisaccadesDurationLEFT,
+			@AntisaccadesDurationRIGHT,
+			@AntisaccadesAmplitudeLEFT,
+			@AntisaccadesAmplitudeRIGHT,
+			@AntisaccadesPeakVelocityLEFT,
+			@AntisaccadesPeakVelocityRIGHT,
+			@AntisaccadesPercentOfCorrectALL,
+			@AntisaccadesLatencyMeanALL,
+			@AntisaccadesDurationALL,
+			@AntisaccadesAmplitudeALL,
+			@AntisaccadesPeakVelocityALL,
+			@POM_Gain_SlowSinus,
+			@POM_StDev_SlowSinus,
+			@POM_Gain_MediumSinus,
+			@POM_StDev_MediumSinus,
+			@POM_Gain_FastSinus,
+			@POM_StDev_FastSinus,
+			@POM_Accuracy_SlowSinus,
+			@POM_Accuracy_MediumSinus,
+			@POM_Accuracy_FastSinus,
 			@user_id,
 			@user_id, 
 			getdate() 		
@@ -2114,19 +2188,44 @@ begin
 				SchwabEnglandScale	=	@SchwabEnglandScale,
 				JazzNovo = @JazzNovo,
 				Wideookulograf = @Wideookulograf,
-				Latencymeter = @Latencymeter,
-				LatencymeterDurationLEFT = @LatencymeterDurationLEFT ,
-				LatencymeterLatencyLEFT = @LatencymeterLatencyLEFT ,
-				LatencymeterAmplitudeLEFT = @LatencymeterAmplitudeLEFT ,
-				LatencymeterPeakVelocityLEFT = @LatencymeterPeakVelocityLEFT ,
-				LatencymeterDurationRIGHT = @LatencymeterDurationRIGHT ,
-				LatencymeterLatencyRIGHT = @LatencymeterLatencyRIGHT ,
-				LatencymeterAmplitudeRIGHT = @LatencymeterAmplitudeRIGHT ,
-				LatencymeterPeakVelocityRIGHT = @LatencymeterPeakVelocityRIGHT ,
-				LatencymeterDurationALL = @LatencymeterDurationALL ,
-				LatencymeterLatencyALL = @LatencymeterLatencyALL ,
-				LatencymeterAmplitudeALL = @LatencymeterAmplitudeALL ,
-				LatencymeterPeakVelocityALL = @LatencymeterPeakVelocityALL,
+				Saccades	=	@Saccades,
+				SaccadesLatencyMeanLEFT	=	@SaccadesLatencyMeanLEFT,
+				SaccadesLatencyMeanRIGHT	=	@SaccadesLatencyMeanRIGHT,
+				SaccadesDurationLEFT	=	@SaccadesDurationLEFT,
+				SaccadesDurationRIGHT	=	@SaccadesDurationRIGHT,
+				SaccadesAmplitudeLEFT	=	@SaccadesAmplitudeLEFT,
+				SaccadesAmplitudeRIGHT	=	@SaccadesAmplitudeRIGHT,
+				SaccadesPeakVelocityLEFT	=	@SaccadesPeakVelocityLEFT,
+				SaccadesPeakVelocityRIGHT	=	@SaccadesPeakVelocityRIGHT,
+				SaccadesLatencyMeanALL	=	@SaccadesLatencyMeanALL,
+				SaccadesDurationALL	=	@SaccadesDurationALL,
+				SaccadesAmplitudeALL	=	@SaccadesAmplitudeALL,
+				SaccadesPeakVelocityALL	=	@SaccadesPeakVelocityALL,
+				Antisaccades	=	@Antisaccades,
+				AntisaccadesPercentOfCorrectLEFT	=	@AntisaccadesPercentOfCorrectLEFT,
+				AntisaccadesPercentOfCorrectRIGHT	=	@AntisaccadesPercentOfCorrectRIGHT,
+				AntisaccadesLatencyMeanLEFT	=	@AntisaccadesLatencyMeanLEFT,
+				AntisaccadesLatencyMeanRIGHT	=	@AntisaccadesLatencyMeanRIGHT,
+				AntisaccadesDurationLEFT	=	@AntisaccadesDurationLEFT,
+				AntisaccadesDurationRIGHT	=	@AntisaccadesDurationRIGHT,
+				AntisaccadesAmplitudeLEFT	=	@AntisaccadesAmplitudeLEFT,
+				AntisaccadesAmplitudeRIGHT	=	@AntisaccadesAmplitudeRIGHT,
+				AntisaccadesPeakVelocityLEFT	=	@AntisaccadesPeakVelocityLEFT,
+				AntisaccadesPeakVelocityRIGHT	=	@AntisaccadesPeakVelocityRIGHT,
+				AntisaccadesPercentOfCorrectALL	=	@AntisaccadesPercentOfCorrectALL,
+				AntisaccadesLatencyMeanALL	=	@AntisaccadesLatencyMeanALL,
+				AntisaccadesDurationALL	=	@AntisaccadesDurationALL,
+				AntisaccadesAmplitudeALL	=	@AntisaccadesAmplitudeALL,
+				AntisaccadesPeakVelocityALL	=	@AntisaccadesPeakVelocityALL,
+				POM_Gain_SlowSinus	=	@POM_Gain_SlowSinus,
+				POM_StDev_SlowSinus	=	@POM_StDev_SlowSinus,
+				POM_Gain_MediumSinus	=	@POM_Gain_MediumSinus,
+				POM_StDev_MediumSinus	=	@POM_StDev_MediumSinus,
+				POM_Gain_FastSinus	=	@POM_Gain_FastSinus,
+				POM_StDev_FastSinus	=	@POM_StDev_FastSinus,
+				POM_Accuracy_SlowSinus	=	@POM_Accuracy_SlowSinus,
+				POM_Accuracy_MediumSinus	=	@POM_Accuracy_MediumSinus,
+				POM_Accuracy_FastSinus	=	@POM_Accuracy_FastSinus,
 				Zmodyfikowal = @user_id, 
 				OstatniaZmiana = getdate() 
 			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ;
@@ -2510,9 +2609,6 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 go
 
 
--- altered: 2015-03-20
-
-
 create procedure get_database_copy
 as
 SELECT 
@@ -2688,19 +2784,44 @@ SELECT
       ,B.[SchwabEnglandScale]
       ,B.[JazzNovo]
       ,B.[Wideookulograf]
-      ,B.[Latencymeter]
-      ,B.[LatencymeterDurationLEFT]
-      ,B.[LatencymeterLatencyLEFT]
-      ,B.[LatencymeterAmplitudeLEFT]
-      ,B.[LatencymeterPeakVelocityLEFT]
-      ,B.[LatencymeterDurationRIGHT]
-      ,B.[LatencymeterLatencyRIGHT]
-      ,B.[LatencymeterAmplitudeRIGHT]
-      ,B.[LatencymeterPeakVelocityRIGHT]
-      ,B.[LatencymeterDurationALL]
-      ,B.[LatencymeterLatencyALL]
-      ,B.[LatencymeterAmplitudeALL]
-      ,B.[LatencymeterPeakVelocityALL]
+	,B.[Saccades]
+	,B.[SaccadesLatencyMeanLEFT]
+	,B.[SaccadesLatencyMeanRIGHT]
+	,B.[SaccadesDurationLEFT]
+	,B.[SaccadesDurationRIGHT]
+	,B.[SaccadesAmplitudeLEFT]
+	,B.[SaccadesAmplitudeRIGHT]
+	,B.[SaccadesPeakVelocityLEFT]
+	,B.[SaccadesPeakVelocityRIGHT]
+	,B.[SaccadesLatencyMeanALL]
+	,B.[SaccadesDurationALL]
+	,B.[SaccadesAmplitudeALL]
+	,B.[SaccadesPeakVelocityALL]
+	,B.[Antisaccades]
+	,B.[AntisaccadesPercentOfCorrectLEFT]
+	,B.[AntisaccadesPercentOfCorrectRIGHT]
+	,B.[AntisaccadesLatencyMeanLEFT]
+	,B.[AntisaccadesLatencyMeanRIGHT]
+	,B.[AntisaccadesDurationLEFT]
+	,B.[AntisaccadesDurationRIGHT]
+	,B.[AntisaccadesAmplitudeLEFT]
+	,B.[AntisaccadesAmplitudeRIGHT]
+	,B.[AntisaccadesPeakVelocityLEFT]
+	,B.[AntisaccadesPeakVelocityRIGHT]
+	,B.[AntisaccadesPercentOfCorrectALL]
+	,B.[AntisaccadesLatencyMeanALL]
+	,B.[AntisaccadesDurationALL]
+	,B.[AntisaccadesAmplitudeALL]
+	,B.[AntisaccadesPeakVelocityALL]
+	,B.[POM_Gain_SlowSinus]
+	,B.[POM_StDev_SlowSinus]
+	,B.[POM_Gain_MediumSinus]
+	,B.[POM_StDev_MediumSinus]
+	,B.[POM_Gain_FastSinus]
+	,B.[POM_StDev_FastSinus]
+	,B.[POM_Accuracy_SlowSinus]
+	,B.[POM_Accuracy_MediumSinus]
+	,B.[POM_Accuracy_FastSinus]
       ,B.[Tremorometria]
       ,B.[TremorometriaLEFT]
       ,B.[TremorometriaRIGHT]
@@ -3020,6 +3141,10 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	48,	'4 lata po DBS' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	54,	'4 i pół roku po DBS' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	60,	'5 lat po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	66,	'5 i pół roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	72,	'6 lat po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	78,	'6 i pół roku po DBS' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'RodzajWizyty',	84,	'7 lat po DBS' );
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	1,	'podstawowe' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Wyksztalcenie',	2,	'zawodowe' );
