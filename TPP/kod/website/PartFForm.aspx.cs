@@ -20,8 +20,11 @@ public partial class PartFForm : System.Web.UI.Page
     private Tuple<DropDownList[], string> variantsSchwabEnglandScale;
     private Tuple<DropDownList[], string> variantsJazzNovo;
     private Tuple<DropDownList[], string> variantsWideookulograf;
-    private Tuple<DropDownList[], string> variantsLatencymeter;
+    private Tuple<DropDownList[], string> variantsSaccades;
+    private Tuple<DropDownList[], string> variantsAntisaccades;
     private List<Tuple<TextBox[], string>> variantsPartAList = new List<Tuple<TextBox[], string>>();
+    private List<Tuple<TextBox[], string>> variantsPartAList2 = new List<Tuple<TextBox[], string>>();
+    //private List<Tuple<TextBox[], string>> variantsPartAListPercent = new List<Tuple<TextBox[], string>>();
     private List<Tuple<DropDownList[], string>> variantsPartBList = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<TextBox[], string>> variantsPartBList2 = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTremorometria;
@@ -162,20 +165,46 @@ public partial class PartFForm : System.Web.UI.Page
         dictionaryYesNo.Add(1, "tak");
         variantsJazzNovo = addVariantDropDowns("JazzNovo", tableUPDRSExtra, dictionaryYesNo);
         variantsWideookulograf = addVariantDropDowns("Wideookulograf", tableUPDRSExtra, dictionaryYesNo);
-        variantsLatencymeter = addVariantDropDowns("Latencymeter", tableUPDRSExtra, dictionaryYesNo);
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationLEFT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyLEFT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeLEFT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityLEFT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationRIGHT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyRIGHT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeRIGHT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityRIGHT", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterDurationALL", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterLatencyALL", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterAmplitudeALL", tableUPDRSExtra, true, true));
-        variantsPartAList.Add(addVariantTextBoxes("LatencymeterPeakVelocityALL", tableUPDRSExtra, true, true));
+        variantsSaccades = addVariantDropDowns("Saccades", tableUPDRSExtra, dictionaryYesNo);
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesLatencyMeanLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesLatencyMeanRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesDurationLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesDurationRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesAmplitudeLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesAmplitudeRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesPeakVelocityLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesPeakVelocityRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesLatencyMeanALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesDurationALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesAmplitudeALL", tableUPDRSExtra, true, true));
+        variantsPartAList.Add(addVariantTextBoxes("SaccadesPeakVelocityALL", tableUPDRSExtra, true, true));
 
+        variantsAntisaccades = addVariantDropDowns("Antisaccades", tableUPDRSExtra, dictionaryYesNo);
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPercentOfCorrectLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPercentOfCorrectRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesLatencyMeanLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesLatencyMeanRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesDurationLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesDurationRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesAmplitudeLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesAmplitudeRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPeakVelocityLEFT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPeakVelocityRIGHT", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPercentOfCorrectALL", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesLatencyMeanALL", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesDurationALL", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesAmplitudeALL", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("AntisaccadesPeakVelocityALL", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Gain_SlowSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_StDev_SlowSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Gain_MediumSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_StDev_MediumSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Gain_FastSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_StDev_FastSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Accuracy_SlowSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Accuracy_MediumSinus", tableUPDRSExtra, true, true));
+        variantsPartAList2.Add(addVariantTextBoxes("POM_Accuracy_FastSinus", tableUPDRSExtra, true, true));
+        
         addVariantHeader(tablePart2);
         variantsTremorometria = addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo);
         variantsTremorometriaLeft = addVariantDropDowns("TremorometriaLEFT", tablePart2, dictionaryYesNo);
@@ -524,14 +553,23 @@ public partial class PartFForm : System.Web.UI.Page
         cmd.Parameters.Add("@" + variantsSchwabEnglandScale.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(variantsSchwabEnglandScale.Item1[variant].SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@" + variantsJazzNovo.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsJazzNovo.Item1[variant].SelectedValue);
         cmd.Parameters.Add("@" + variantsWideookulograf.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsWideookulograf.Item1[variant].SelectedValue);
-        cmd.Parameters.Add("@" + variantsLatencymeter.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsLatencymeter.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsSaccades.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsSaccades.Item1[variant].SelectedValue);
+        cmd.Parameters.Add("@" + variantsAntisaccades.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getBitOrNull(variantsAntisaccades.Item1[variant].SelectedValue);
         for (int i = 0; i < variantsPartAList.Count; i++)
         {
-            SqlParameter latencymeterDecimal = new SqlParameter("@" + variantsPartAList[i].Item2, SqlDbType.Decimal);
-            latencymeterDecimal.Precision = 6;
-            latencymeterDecimal.Scale = 2;
-            latencymeterDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartAList[i].Item1[variant].Text);
-            cmd.Parameters.Add(latencymeterDecimal);
+            SqlParameter saccadesDecimal = new SqlParameter("@" + variantsPartAList[i].Item2, SqlDbType.Decimal);
+            saccadesDecimal.Precision = 6;
+            saccadesDecimal.Scale = 2;
+            saccadesDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartAList[i].Item1[variant].Text);
+            cmd.Parameters.Add(saccadesDecimal);
+        }
+        for (int i = 0; i < variantsPartAList2.Count; i++)
+        {
+            SqlParameter saccadesPercentDecimal = new SqlParameter("@" + variantsPartAList2[i].Item2, SqlDbType.Decimal);
+            saccadesPercentDecimal.Precision = 8;
+            saccadesPercentDecimal.Scale = 5;
+            saccadesPercentDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartAList2[i].Item1[variant].Text);
+            cmd.Parameters.Add(saccadesPercentDecimal);
         }
         bool update = false;
         if (ViewState["VariantIds"] != null)
@@ -962,19 +1000,44 @@ public partial class PartFForm : System.Web.UI.Page
             "SchwabEnglandScale, " +
             "JazzNovo, " +
             "Wideookulograf, " +
-            "Latencymeter, " +
-            "LatencymeterDurationLEFT, " +
-            "LatencymeterLatencyLEFT, " +
-            "LatencymeterAmplitudeLEFT, " +
-            "LatencymeterPeakVelocityLEFT, " +
-            "LatencymeterDurationRIGHT, " +
-            "LatencymeterLatencyRIGHT, " +
-            "LatencymeterAmplitudeRIGHT, " +
-            "LatencymeterPeakVelocityRIGHT, " +
-            "LatencymeterDurationALL, " +
-            "LatencymeterLatencyALL, " +
-            "LatencymeterAmplitudeALL, " +
-            "LatencymeterPeakVelocityALL " +
+            "Saccades, " +
+            "SaccadesLatencyMeanLEFT, " +
+            "SaccadesLatencyMeanRIGHT, " +
+            "SaccadesDurationLEFT, " +
+            "SaccadesDurationRIGHT, " +
+            "SaccadesAmplitudeLEFT, " +
+            "SaccadesAmplitudeRIGHT, " +
+            "SaccadesPeakVelocityLEFT, " +
+            "SaccadesPeakVelocityRIGHT, " +
+            "SaccadesLatencyMeanALL, " +
+            "SaccadesDurationALL, " +
+            "SaccadesAmplitudeALL, " +
+            "SaccadesPeakVelocityALL, " +
+            "Antisaccades, " +
+            "AntisaccadesPercentOfCorrectLEFT, " +
+            "AntisaccadesPercentOfCorrectRIGHT, " +
+            "AntisaccadesLatencyMeanLEFT, " +
+            "AntisaccadesLatencyMeanRIGHT, " +
+            "AntisaccadesDurationLEFT, " +
+            "AntisaccadesDurationRIGHT, " +
+            "AntisaccadesAmplitudeLEFT, " +
+            "AntisaccadesAmplitudeRIGHT, " +
+            "AntisaccadesPeakVelocityLEFT, " +
+            "AntisaccadesPeakVelocityRIGHT, " +
+            "AntisaccadesPercentOfCorrectALL, " +
+            "AntisaccadesLatencyMeanALL, " +
+            "AntisaccadesDurationALL, " +
+            "AntisaccadesAmplitudeALL, " +
+            "AntisaccadesPeakVelocityALL, " +
+            "POM_Gain_SlowSinus, " +
+            "POM_StDev_SlowSinus, " +
+            "POM_Gain_MediumSinus, " +
+            "POM_StDev_MediumSinus, " +
+            "POM_Gain_FastSinus, " +
+            "POM_StDev_FastSinus, " +
+            "POM_Accuracy_SlowSinus, " +
+            "POM_Accuracy_MediumSinus, " +
+            "POM_Accuracy_FastSinus " +
             "from Badanie where IdBadanie = " + variantId;
         cmd.Connection = con;
 
@@ -998,10 +1061,15 @@ public partial class PartFForm : System.Web.UI.Page
                 variantsSchwabEnglandScale.Item1[variant].SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr[variantsSchwabEnglandScale.Item2], NO_DATA.ToString());
                 variantsJazzNovo.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsJazzNovo.Item2]);
                 variantsWideookulograf.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsWideookulograf.Item2]);
-                variantsLatencymeter.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsLatencymeter.Item2]);
+                variantsSaccades.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsSaccades.Item2]);
+                variantsAntisaccades.Item1[variant].SelectedValue = DatabaseProcedures.getDropBitValue(rdr[variantsAntisaccades.Item2]);
                 for (int i = 0; i < variantsPartAList.Count; i++)
                 {
                     variantsPartAList[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartAList[i].Item2]);
+                }
+                for (int i = 0; i < variantsPartAList2.Count; i++)
+                {
+                    variantsPartAList2[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartAList2[i].Item2]);
                 }
             }
         }
@@ -1280,7 +1348,8 @@ public partial class PartFForm : System.Web.UI.Page
             variantsSchwabEnglandScale.Item1[variant].SelectedValue = NO_DATA.ToString();
             variantsJazzNovo.Item1[variant].SelectedValue = NO_DATA.ToString();
             variantsWideookulograf.Item1[variant].SelectedValue = NO_DATA.ToString();
-            variantsLatencymeter.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsSaccades.Item1[variant].SelectedValue = NO_DATA.ToString();
+            variantsAntisaccades.Item1[variant].SelectedValue = NO_DATA.ToString();
             variantsTandemPivot.Item1[variant].SelectedValue = NO_DATA.ToString();
         }
     }
@@ -1296,6 +1365,10 @@ public partial class PartFForm : System.Web.UI.Page
             disableWebControlVariants(tuple.Item1, variantList);
         }
         foreach (Tuple<TextBox[], string> tuple in variantsPartAList)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+        foreach (Tuple<TextBox[], string> tuple in variantsPartAList2)
         {
             disableWebControlVariants(tuple.Item1, variantList);
         }
@@ -1315,7 +1388,8 @@ public partial class PartFForm : System.Web.UI.Page
         disableWebControlVariants(variantsSchwabEnglandScale.Item1, variantList);
         disableWebControlVariants(variantsJazzNovo.Item1, variantList);
         disableWebControlVariants(variantsWideookulograf.Item1, variantList);
-        disableWebControlVariants(variantsLatencymeter.Item1, variantList);
+        disableWebControlVariants(variantsSaccades.Item1, variantList);
+        disableWebControlVariants(variantsAntisaccades.Item1, variantList);
 
         disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
         disableWebControlVariants(variantsTestSchodkowyWDol.Item1, variantList);

@@ -63,6 +63,12 @@
                 </asp:DropDownList>
             </td>
         </tr>
+        <tr>
+            <td>Zakończenie udziału:</td>
+            <td>
+                <asp:TextBox ID="textZakonczenieUdzialu" runat="server" Columns="50" Rows="5" TextMode="MultiLine"></asp:TextBox>
+            </td>
+        </tr>
     </table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
     <br />

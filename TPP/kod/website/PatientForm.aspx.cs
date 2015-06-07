@@ -119,6 +119,7 @@ public partial class PatientForm : System.Web.UI.Page
             cmd.Parameters.Add("@Lokalizacja", SqlDbType.VarChar, 10).Value = DBNull.Value;
         }
         cmd.Parameters.Add("@LiczbaElektrod", SqlDbType.TinyInt).Value = (byte)int.Parse(dropElectrodes.SelectedValue);
+        cmd.Parameters.Add("@ZakonczenieUdzialu", SqlDbType.VarChar, 255).Value = textZakonczenieUdzialu.Text;
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -161,7 +162,7 @@ public partial class PatientForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod from Pacjent where NumerPacjenta = @NumerPacjenta";
+        cmd.CommandText = "select NazwaGrupy, RokUrodzenia, MiesiacUrodzenia, Plec, Lokalizacja, LiczbaElektrod, ZakonczenieUdzialu from Pacjent where NumerPacjenta = @NumerPacjenta";
         cmd.Parameters.Add("@NumerPacjenta", SqlDbType.VarChar, 20).Value = patientNumber;
         cmd.Connection = con;
 
@@ -189,6 +190,7 @@ public partial class PatientForm : System.Web.UI.Page
                     dropLocation.SelectedValue = DatabaseProcedures.getTextStringValue(rdr["Lokalizacja"]);
                 }
                 dropElectrodes.SelectedValue = ((byte)rdr["LiczbaElektrod"]).ToString();
+                textZakonczenieUdzialu.Text = rdr["ZakonczenieUdzialu"].ToString();
             }
         }
         catch (SqlException ex)
