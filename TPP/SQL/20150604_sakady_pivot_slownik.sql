@@ -1,4 +1,4 @@
-﻿use TPP_test;
+﻿use TPP;
 go
 
 
@@ -1396,7 +1396,7 @@ create type KolumnyUdt as table
 go
 
 
-alter procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int)
+create procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int)
 as
 begin
 	declare @sql as nvarchar(4000);

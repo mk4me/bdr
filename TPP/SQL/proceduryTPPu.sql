@@ -2608,8 +2608,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
-
-create procedure get_database_copy
+procedure get_database_copy
 as
 SELECT 
 /* PACJENT */
@@ -2952,7 +2951,7 @@ SELECT
 	,REPLACE(W.[ToL_ReakcjeUkierunkowane],';','. ') ToL_ReakcjeUkierunkowane
 	,REPLACE(W.[InnePsychologiczne],';','. ') InnePsychologiczne
 	,REPLACE(W.[OpisBadania],';','. ') OpisBadania
-	,REPLACE(W.[Wnioski],';','. ') Wnioski
+	,REPLACE(REPLACE(REPLACE(W.[Wnioski], CHAR(13), ''), CHAR(10), ''),';','. ') Wnioski
       ,W.[Holter]
       ,W.[BadanieWechu]
       ,W.[WynikWechu]
@@ -2986,9 +2985,8 @@ SELECT
   FROM Pacjent P left join Wizyta w on P.IdPacjent = W.IdPacjent left join Badanie B on B.IdWizyta = W.IdWizyta
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
   go
-
-
--- wsparcie generowania numerow pacjenta
+  
+  -- wsparcie generowania numerow pacjenta
 
 -- created: 2013-10-31
 create procedure suggest_new_patient_number( @admission_date date, @patient_number varchar(20) OUTPUT )
