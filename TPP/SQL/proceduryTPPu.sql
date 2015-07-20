@@ -2620,7 +2620,8 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
-procedure get_database_copy
+-- modified: 2015-07-19
+create procedure get_database_copy
 as
 SELECT 
 /* PACJENT */
@@ -2643,13 +2644,13 @@ SELECT
       ,W.[Wyksztalcenie]
       ,W.[Rodzinnosc]
       ,W.[RokZachorowania]
-	  ,CAST(datediff(day, CAST( CAST((select max(RokZachorowania) from Wizyta x where x.IdPacjent = p.IdPacjent) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), W.DataPrzyjecia )/365.0 as decimal(4,2)) as CzasTrwaniaChoroby
+      ,dbo.disorder_duration_for_examination(W.IdWizyta) as CzasTrwaniaChoroby
       ,W.[PierwszyObjaw]
       ,W.[Drzenie]
       ,W.[Sztywnosc]
       ,W.[Spowolnienie]
       ,W.[ObjawyInne]
-      ,REPLACE(W.[ObjawyInneJakie],';','. ') ObjawyInneJakie
+      ,W.[ObjawyInneJakie] ObjawyInneJakie
       ,W.[CzasOdPoczObjDoWlLDopy]
       ,W.[DyskinezyObecnie]
       ,W.[DyskinezyOdLat]
@@ -2665,13 +2666,13 @@ SELECT
       ,W.[Alkohol]
       ,W.[ZabiegowWZnieczOgPrzedRozpoznaniemPD]
       ,W.[Zamieszkanie]
-	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'NarazenieNaToks' and IdWizyta = W.IdWizyta) as NarazeniaNaToks
-      ,REPLACE(W.[Uwagi],';','. ') Uwagi
+      ,dbo.multivalued_examination_attribute('NarazenieNaToks', P.IdPacjent, W.RodzajWizyty)  as NarazeniaNaToks
+      ,W.[Uwagi] Uwagi
       ,W.[Nadcisnienie]
       ,W.[BlokeryKanWapn]
       ,W.[DominujacyObjawObecnie]
-      ,REPLACE(W.[DominujacyObjawUwagi],';','. ') DominujacyObjawUwagi
-	  ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'ObjawyAutonomiczne' and IdWizyta = W.IdWizyta) as ObjawyAutonomiczne
+      ,W.[DominujacyObjawUwagi] DominujacyObjawUwagi
+	  ,dbo.multivalued_examination_attribute('ObjawyAutonomiczne', P.IdPacjent, W.RodzajWizyty) as ObjawyAutonomiczne
       ,W.[RLS]
       ,W.[ObjawyPsychotyczne]
       ,W.[Depresja]
@@ -2696,12 +2697,12 @@ SELECT
       ,W.[Cholinolityk]
       ,W.[CholinolitykObecnie]
       ,W.[LekiInne]
-      ,REPLACE(W.[LekiInneJakie],';','. ') LekiInneJakie
-      ,REPLACE(W.[L_STIMOpis],';','. ') L_STIMOpis
+      ,W.[LekiInneJakie] LekiInneJakie
+      ,W.[L_STIMOpis] L_STIMOpis
       ,W.[L_STIMAmplitude]
       ,W.[L_STIMDuration]
       ,W.[L_STIMFrequency]
-      ,REPLACE(W.[R_STIMOpis],';','. ') R_STIMOpis
+      ,W.[R_STIMOpis] R_STIMOpis
       ,W.[R_STIMAmplitude]
       ,W.[R_STIMDuration]
       ,W.[R_STIMFrequency]
@@ -2719,11 +2720,11 @@ SELECT
       ,W.[Wypis_CholinolitykObecnie]
       ,W.[Wypis_LekiInne]
       ,W.[Wypis_LekiInneJakie]
-      ,REPLACE(W.[Wypis_L_STIMOpis],';','. ') Wypis_L_STIMOpis
+      ,W.[Wypis_L_STIMOpis] Wypis_L_STIMOpis
       ,W.[Wypis_L_STIMAmplitude]
       ,W.[Wypis_L_STIMDuration]
       ,W.[Wypis_L_STIMFrequency]
-      ,REPLACE(W.[Wypis_R_STIMOpis],';','. ') Wypis_R_STIMOpis
+      ,W.[Wypis_R_STIMOpis] Wypis_R_STIMOpis
       ,W.[Wypis_R_STIMAmplitude]
       ,W.[Wypis_R_STIMDuration]
       ,W.[Wypis_R_STIMFrequency]
@@ -2902,83 +2903,83 @@ SELECT
       ,W.[Epworth]
       ,W.[CGI]
       ,W.[FSS]
-	,REPLACE(W.[TestZegara],';','. ') TestZegara
-	,REPLACE(W.[MMSE],';','. ') MMSE
-	,REPLACE(W.[CLOX1_Rysunek],';','. ') CLOX1_Rysunek
-	,REPLACE(W.[CLOX2_Kopia],';','. ') CLOX2_Kopia
-	,REPLACE(W.[AVLT_proba_1],';','. ') AVLT_proba_1
-	,REPLACE(W.[AVLT_proba_2],';','. ') AVLT_proba_2
-	,REPLACE(W.[AVLT_proba_3],';','. ') AVLT_proba_3
-	,REPLACE(W.[AVLT_proba_4],';','. ') AVLT_proba_4
-	,REPLACE(W.[AVLT_proba_5],';','. ') AVLT_proba_5
-	,REPLACE(W.[AVLT_Suma],';','. ') AVLT_Suma
-	,REPLACE(W.[AVLT_Srednia],';','. ') AVLT_Srednia
-	,REPLACE(W.[AVLT_KrotkieOdroczenie],';','. ') AVLT_KrotkieOdroczenie
-	,REPLACE(W.[AVLT_Odroczony20min],';','. ') AVLT_Odroczony20min
-	,REPLACE(W.[AVLT_Rozpoznawanie],';','. ') AVLT_Rozpoznawanie
-	,REPLACE(W.[AVLT_BledyRozpoznania],';','. ') AVLT_BledyRozpoznania
+	,W.[TestZegara] TestZegara
+	,W.[MMSE] MMSE
+	,W.[CLOX1_Rysunek] CLOX1_Rysunek
+	,W.[CLOX2_Kopia] CLOX2_Kopia
+	,W.[AVLT_proba_1] AVLT_proba_1
+	,W.[AVLT_proba_2] AVLT_proba_2
+	,W.[AVLT_proba_3] AVLT_proba_3
+	,W.[AVLT_proba_4] AVLT_proba_4
+	,W.[AVLT_proba_5] AVLT_proba_5
+	,W.[AVLT_Suma] AVLT_Suma
+	,W.[AVLT_Srednia] AVLT_Srednia
+	,W.[AVLT_KrotkieOdroczenie] AVLT_KrotkieOdroczenie
+	,W.[AVLT_Odroczony20min] AVLT_Odroczony20min
+	,W.[AVLT_Rozpoznawanie] AVLT_Rozpoznawanie
+	,W.[AVLT_BledyRozpoznania] AVLT_BledyRozpoznania
 
-	,REPLACE(W.[TestAVLTSrednia],';','. ') TestAVLTSrednia
-	,REPLACE(W.[TestAVLTOdroczony],';','. ') TestAVLTOdroczony
-	,REPLACE(W.[TestAVLTPo20min],';','. ') TestAVLTPo20min
-	,REPLACE(W.[TestAVLTRozpoznawanie],';','. ') TestAVLTRozpoznawanie
+	,W.[TestAVLTSrednia] TestAVLTSrednia
+	,W.[TestAVLTOdroczony] TestAVLTOdroczony
+	,W.[TestAVLTPo20min] TestAVLTPo20min
+	,W.[TestAVLTRozpoznawanie] TestAVLTRozpoznawanie
 
-	,REPLACE(W.[CVLT_proba_1],';','. ') CVLT_proba_1
-	,REPLACE(W.[CVLT_proba_2],';','. ') CVLT_proba_2
-	,REPLACE(W.[CVLT_proba_3],';','. ') CVLT_proba_3
-	,REPLACE(W.[CVLT_proba_4],';','. ') CVLT_proba_4
-	,REPLACE(W.[CVLT_proba_5],';','. ') CVLT_proba_5
-	,REPLACE(W.[CVLT_Suma],';','. ') CVLT_Suma
-	,REPLACE(W.[CVLT_OSKO_krotkie_odroczenie],';','. ') CVLT_OSKO_krotkie_odroczenie
-	,REPLACE(W.[CVLT_OPKO_krotkie_odroczenie_i_pomoc],';','. ') CVLT_OPKO_krotkie_odroczenie_i_pomoc
-	,REPLACE(W.[CVLT_OSDO_po20min],';','. ') CVLT_OSDO_po20min
-	,REPLACE(W.[CVLT_OPDO_po20min_i_pomoc],';','. ') CVLT_OPDO_po20min_i_pomoc
-	,REPLACE(W.[CVLT_perseweracje],';','. ') CVLT_perseweracje
-	,REPLACE(W.[CVLT_WtraceniaOdtwarzanieSwobodne],';','. ') CVLT_WtraceniaOdtwarzanieSwobodne
-	,REPLACE(W.[CVLT_wtraceniaOdtwarzanieZPomoca],';','. ') CVLT_wtraceniaOdtwarzanieZPomoca
-	,REPLACE(W.[CVLT_Rozpoznawanie],';','. ') CVLT_Rozpoznawanie
-	,REPLACE(W.[CVLT_BledyRozpoznania],';','. ') CVLT_BledyRozpoznania
-	,REPLACE(W.[Benton_JOL],';','. ') Benton_JOL
-	,REPLACE(W.[WAIS_R_Wiadomosci],';','. ') WAIS_R_Wiadomosci
-	,REPLACE(W.[WAIS_R_PowtarzanieCyfr],';','. ') WAIS_R_PowtarzanieCyfr
-	,REPLACE(W.[WAIS_R_Podobienstwa],';','. ') WAIS_R_Podobienstwa
-	,REPLACE(W.[BostonskiTestNazywaniaBMT],';','. ') BostonskiTestNazywaniaBMT
-	,REPLACE(W.[BMT_SredniCzasReakcji_sek],';','. ') BMT_SredniCzasReakcji_sek
+	,W.[CVLT_proba_1] CVLT_proba_1
+	,W.[CVLT_proba_2] CVLT_proba_2
+	,W.[CVLT_proba_3] CVLT_proba_3
+	,W.[CVLT_proba_4] CVLT_proba_4
+	,W.[CVLT_proba_5] CVLT_proba_5
+	,W.[CVLT_Suma] CVLT_Suma
+	,W.[CVLT_OSKO_krotkie_odroczenie] CVLT_OSKO_krotkie_odroczenie
+	,W.[CVLT_OPKO_krotkie_odroczenie_i_pomoc] CVLT_OPKO_krotkie_odroczenie_i_pomoc
+	,W.[CVLT_OSDO_po20min] CVLT_OSDO_po20min
+	,W.[CVLT_OPDO_po20min_i_pomoc] CVLT_OPDO_po20min_i_pomoc
+	,W.[CVLT_perseweracje] CVLT_perseweracje
+	,W.[CVLT_WtraceniaOdtwarzanieSwobodne] CVLT_WtraceniaOdtwarzanieSwobodne
+	,W.[CVLT_wtraceniaOdtwarzanieZPomoca] CVLT_wtraceniaOdtwarzanieZPomoca
+	,W.[CVLT_Rozpoznawanie] CVLT_Rozpoznawanie
+	,W.[CVLT_BledyRozpoznania] CVLT_BledyRozpoznania
+	,W.[Benton_JOL] Benton_JOL
+	,W.[WAIS_R_Wiadomosci] WAIS_R_Wiadomosci
+	,W.[WAIS_R_PowtarzanieCyfr] WAIS_R_PowtarzanieCyfr
+	,W.[WAIS_R_Podobienstwa] WAIS_R_Podobienstwa
+	,W.[BostonskiTestNazywaniaBMT] BostonskiTestNazywaniaBMT
+	,W.[BMT_SredniCzasReakcji_sek] BMT_SredniCzasReakcji_sek
 	,W.[SkalaDepresjiBecka]
 	,W.[SkalaDepresjiBeckaII]
-	,REPLACE(W.[TestFluencjiK],';','. ') TestFluencjiK
-	,REPLACE(W.[TestFluencjiP],';','. ') TestFluencjiP
-	,REPLACE(W.[TestFluencjiZwierzeta],';','. ') TestFluencjiZwierzeta
-	,REPLACE(W.[TestFluencjiOwoceWarzywa],';','. ') TestFluencjiOwoceWarzywa
-	,REPLACE(W.[TestFluencjiOstre],';','. ') TestFluencjiOstre
-	,REPLACE(W.[TestLaczeniaPunktowA],';','. ') TestLaczeniaPunktowA
-	,REPLACE(W.[TestLaczeniaPunktowB],';','. ') TestLaczeniaPunktowB
-	,REPLACE(W.[ToL_SumaRuchow],';','. ') ToL_SumaRuchow
-	,REPLACE(W.[ToL_LiczbaPrawidlowych],';','. ') ToL_LiczbaPrawidlowych
-	,REPLACE(W.[ToL_CzasInicjowania_sek],';','. ') ToL_CzasInicjowania_sek
-	,REPLACE(W.[ToL_CzasWykonania_sek],';','. ') ToL_CzasWykonania_sek
-	,REPLACE(W.[ToL_CzasCalkowity_sek],';','. ') ToL_CzasCalkowity_sek
-	,REPLACE(W.[ToL_CzasPrzekroczony],';','. ') ToL_CzasPrzekroczony
-	,REPLACE(W.[ToL_LiczbaPrzekroczenZasad],';','. ') ToL_LiczbaPrzekroczenZasad
-	,REPLACE(W.[ToL_ReakcjeUkierunkowane],';','. ') ToL_ReakcjeUkierunkowane
-	,REPLACE(W.[InnePsychologiczne],';','. ') InnePsychologiczne
-	,REPLACE(W.[OpisBadania],';','. ') OpisBadania
-	,REPLACE(REPLACE(REPLACE(W.[Wnioski], CHAR(13), ''), CHAR(10), ''),';','. ') Wnioski
+	,W.[TestFluencjiK] TestFluencjiK
+	,W.[TestFluencjiP] TestFluencjiP
+	,W.[TestFluencjiZwierzeta] TestFluencjiZwierzeta
+	,W.[TestFluencjiOwoceWarzywa] TestFluencjiOwoceWarzywa
+	,W.[TestFluencjiOstre] TestFluencjiOstre
+	,W.[TestLaczeniaPunktowA] TestLaczeniaPunktowA
+	,W.[TestLaczeniaPunktowB] TestLaczeniaPunktowB
+	,W.[ToL_SumaRuchow] ToL_SumaRuchow
+	,W.[ToL_LiczbaPrawidlowych] ToL_LiczbaPrawidlowych
+	,W.[ToL_CzasInicjowania_sek] ToL_CzasInicjowania_sek
+	,W.[ToL_CzasWykonania_sek] ToL_CzasWykonania_sek
+	,W.[ToL_CzasCalkowity_sek] ToL_CzasCalkowity_sek
+	,W.[ToL_CzasPrzekroczony] ToL_CzasPrzekroczony
+	,W.[ToL_LiczbaPrzekroczenZasad] ToL_LiczbaPrzekroczenZasad
+	,W.[ToL_ReakcjeUkierunkowane] ToL_ReakcjeUkierunkowane
+	,W.[InnePsychologiczne] InnePsychologiczne
+	,W.[OpisBadania] OpisBadania
+	,W.[Wnioski] Wnioski
       ,W.[Holter]
       ,W.[BadanieWechu]
       ,W.[WynikWechu]
       ,W.[LimitDysfagii]
       ,W.[pH_metriaPrzełyku]
       ,W.[SPECT]
-	   ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'SPECTWynik' and IdWizyta = W.IdWizyta) as SPECTWyniki
+	  ,dbo.multivalued_examination_attribute('SPECTWynik', P.IdPacjent, W.RodzajWizyty) as SPECTWyniki
       ,W.[MRI]
-      ,REPLACE(W.[MRIwynik],';','. ') MRIwynik
+      ,W.[MRIwynik] MRIwynik
       ,W.[USGsrodmozgowia]
       ,W.[USGWynik]
       ,W.[Genetyka]
-      ,REPLACE(W.[GenetykaWynik],';','. ') GenetykaWynik
+      ,W.[GenetykaWynik] GenetykaWynik
       ,W.[Surowica]
-      ,REPLACE(W.[SurowicaPozostało],';','. ')
+      ,W.[SurowicaPozostało] SurowicaPozostało
       ,W.[Ferrytyna]
       ,W.[CRP]
       ,W.[NTproCNP]
@@ -2989,7 +2990,7 @@ SELECT
       ,W.[HDL]
       ,W.[LDL]
       ,W.[olLDL]
-      ,REPLACE(W.[LaboratoryjneInne],';','. ') LaboratoryjneInne
+      ,W.[LaboratoryjneInne] LaboratoryjneInne
       ,W.[Wprowadzil] as WizyteWprowadzil
       ,W.[Zmodyfikowal] as WizyteEdytowal
       ,W.[OstatniaZmiana] as OstatniaModyfikacja
@@ -2997,6 +2998,7 @@ SELECT
   FROM Pacjent P left join Wizyta w on P.IdPacjent = W.IdPacjent left join Badanie B on B.IdWizyta = W.IdWizyta
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
   go
+
   
   -- wsparcie generowania numerow pacjenta
 
@@ -3664,6 +3666,372 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	3,	'3' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	4,	'4' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	5,	'5' );
+
+
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (1, 'P', 'NumerPacjenta');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (2, 'P', 'RokUrodzenia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (3, 'P', 'MiesiacUrodzenia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (4, 'P', 'Plec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (5, 'P', 'Lokalizacja');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (6, 'P', 'LiczbaElektrod');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (7, 'P', 'NazwaGrupy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (8, 'W', 'RodzajWizyty');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (9, 'W', 'DataPrzyjecia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (10, 'W', 'DataWypisu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (11, 'W', 'MasaCiala');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (12, 'W', 'DataOperacji');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (13, 'W', 'Wyksztalcenie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (14, 'W', 'Rodzinnosc');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (15, 'W', 'RokZachorowania');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (16, 'W', 'CzasTrwaniaChoroby');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (17, 'W', 'PierwszyObjaw');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (18, 'W', 'Drzenie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (19, 'W', 'Sztywnosc');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (20, 'W', 'Spowolnienie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (21, 'W', 'ObjawyInne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (22, 'W', 'ObjawyInneJakie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (23, 'W', 'CzasOdPoczObjDoWlLDopy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (24, 'W', 'DyskinezyObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (25, 'W', 'DyskinezyOdLat');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (26, 'W', 'FluktuacjeObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (27, 'W', 'FluktuacjeOdLat');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (28, 'W', 'CzasDyskinez');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (29, 'W', 'CzasOFF');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (30, 'W', 'PoprawaPoLDopie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (31, 'W', 'PrzebyteLeczenieOperacyjnePD');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (32, 'W', 'Papierosy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (33, 'W', 'Kawa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (34, 'W', 'ZielonaHerbata');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (35, 'W', 'Alkohol');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (36, 'W', 'ZabiegowWZnieczOgPrzedRozpoznaniemPD');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (37, 'W', 'Zamieszkanie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (38, 'W', 'NarazeniaNaToks');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (39, 'W', 'Uwagi');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (40, 'W', 'Nadcisnienie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (41, 'W', 'BlokeryKanWapn');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (42, 'W', 'DominujacyObjawObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (43, 'W', 'DominujacyObjawUwagi');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (44, 'W', 'ObjawyAutonomiczne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (45, 'W', 'RLS');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (46, 'W', 'ObjawyPsychotyczne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (47, 'W', 'Depresja');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (48, 'W', 'Otepienie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (49, 'W', 'Dyzartria');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (50, 'W', 'DysfagiaObjaw');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (51, 'W', 'RBD');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (52, 'W', 'ZaburzenieRuchomosciGalekOcznych');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (53, 'W', 'Apraksja');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (54, 'W', 'TestKlaskania');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (55, 'W', 'ZaburzeniaWechowe');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (56, 'W', 'Ldopa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (57, 'W', 'LDopaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (58, 'W', 'Agonista');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (59, 'W', 'AgonistaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (60, 'W', 'Amantadyna');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (61, 'W', 'AmantadynaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (62, 'W', 'MAOBinh');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (63, 'W', 'MAOBinhObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (64, 'W', 'COMTinh');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (65, 'W', 'COMTinhObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (66, 'W', 'Cholinolityk');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (67, 'W', 'CholinolitykObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (68, 'W', 'LekiInne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (69, 'W', 'LekiInneJakie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (70, 'W', 'L_STIMOpis');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (71, 'W', 'L_STIMAmplitude');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (72, 'W', 'L_STIMDuration');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (73, 'W', 'L_STIMFrequency');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (74, 'W', 'R_STIMOpis');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (75, 'W', 'R_STIMAmplitude');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (76, 'W', 'R_STIMDuration');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (77, 'W', 'R_STIMFrequency');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (78, 'W', 'Wypis_Ldopa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (79, 'W', 'Wypis_LDopaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (80, 'W', 'Wypis_Agonista');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (81, 'W', 'Wypis_AgonistaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (82, 'W', 'Wypis_Amantadyna');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (83, 'W', 'Wypis_AmantadynaObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (84, 'W', 'Wypis_MAOBinh');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (85, 'W', 'Wypis_MAOBinhObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (86, 'W', 'Wypis_COMTinh');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (87, 'W', 'Wypis_COMTinhObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (88, 'W', 'Wypis_Cholinolityk');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (89, 'W', 'Wypis_CholinolitykObecnie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (90, 'W', 'Wypis_LekiInne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (91, 'W', 'Wypis_LekiInneJakie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (92, 'W', 'Wypis_L_STIMOpis');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (93, 'W', 'Wypis_L_STIMAmplitude');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (94, 'W', 'Wypis_L_STIMDuration');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (95, 'W', 'Wypis_L_STIMFrequency');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (96, 'W', 'Wypis_R_STIMOpis');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (97, 'W', 'Wypis_R_STIMAmplitude');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (98, 'W', 'Wypis_R_STIMDuration');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (99, 'W', 'Wypis_R_STIMFrequency');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (100, 'W', 'WydzielanieSliny');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (101, 'W', 'Dysfagia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (102, 'W', 'DysfagiaCzestotliwosc');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (103, 'W', 'Nudnosci');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (104, 'W', 'Zaparcia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (105, 'W', 'TrudnosciWOddawaniuMoczu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (106, 'W', 'PotrzebaNaglegoOddaniaMoczu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (107, 'W', 'NiekompletneOproznieniePecherza');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (108, 'W', 'SlabyStrumienMoczu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (109, 'W', 'CzestotliwowscOddawaniaMoczu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (110, 'W', 'Nykturia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (111, 'W', 'NiekontrolowaneOddawanieMoczu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (112, 'W', 'Omdlenia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (113, 'W', 'ZaburzeniaRytmuSerca');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (114, 'W', 'ProbaPionizacyjna');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (115, 'W', 'WzrostPodtliwosciTwarzKark');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (116, 'W', 'WzrostPotliwosciRamionaDlonie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (117, 'W', 'WzrostPotliwosciBrzuchPlecy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (118, 'W', 'WzrostPotliwosciKonczynyDolneStopy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (119, 'W', 'SpadekPodtliwosciTwarzKark');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (120, 'W', 'SpadekPotliwosciRamionaDlonie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (121, 'W', 'SpadekPotliwosciBrzuchPlecy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (122, 'W', 'SpadekPotliwosciKonczynyDolneStopy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (123, 'W', 'NietolerancjaWysokichTemp');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (124, 'W', 'NietolerancjaNiskichTemp');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (125, 'W', 'Lojotok');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (126, 'W', 'SpadekLibido');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (127, 'W', 'KlopotyOsiagnieciaErekcji');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (128, 'W', 'KlopotyUtrzymaniaErekcji');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (129, 'B', 'DBS');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (130, 'B', 'BMT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (131, 'B', 'UPDRS_I');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (132, 'B', 'UPDRS_II');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (133, 'B', 'UPDRS_18');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (134, 'B', 'UPDRS_19');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (135, 'B', 'UPDRS_20_FaceLipsChin');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (136, 'B', 'UPDRS_20_RHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (137, 'B', 'UPDRS_20_LHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (138, 'B', 'UPDRS_20_RFoot');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (139, 'B', 'UPDRS_20_LFoot');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (140, 'B', 'UPDRS_21_RHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (141, 'B', 'UPDRS_21_LHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (142, 'B', 'UPDRS_22_Neck');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (143, 'B', 'UPDRS_22_RHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (144, 'B', 'UPDRS_22_LHand');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (145, 'B', 'UPDRS_22_RFoot');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (146, 'B', 'UPDRS_22_LFoot');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (147, 'B', 'UPDRS_23_R');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (148, 'B', 'UPDRS_23_L');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (149, 'B', 'UPDRS_24_R');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (150, 'B', 'UPDRS_24_L');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (151, 'B', 'UPDRS_25_R');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (152, 'B', 'UPDRS_25_L');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (153, 'B', 'UPDRS_26_R');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (154, 'B', 'UPDRS_26_L');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (155, 'B', 'UPDRS_27');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (156, 'B', 'UPDRS_28');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (157, 'B', 'UPDRS_29');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (158, 'B', 'UPDRS_30');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (159, 'B', 'UPDRS_31');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (160, 'B', 'UPDRS_III');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (161, 'B', 'UPDRS_IV');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (162, 'B', 'UPDRS_TOTAL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (163, 'B', 'HYscale');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (164, 'B', 'SchwabEnglandScale');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (165, 'B', 'JazzNovo');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (166, 'B', 'Wideookulograf');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (167, 'B', 'Saccades');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (168, 'B', 'SaccadesLatencyMeanLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (169, 'B', 'SaccadesLatencyMeanRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (170, 'B', 'SaccadesDurationLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (171, 'B', 'SaccadesDurationRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (172, 'B', 'SaccadesAmplitudeLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (173, 'B', 'SaccadesAmplitudeRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (174, 'B', 'SaccadesPeakVelocityLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (175, 'B', 'SaccadesPeakVelocityRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (176, 'B', 'SaccadesLatencyMeanALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (177, 'B', 'SaccadesDurationALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (178, 'B', 'SaccadesAmplitudeALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (179, 'B', 'SaccadesPeakVelocityALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (180, 'B', 'Antisaccades');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (181, 'B', 'AntisaccadesPercentOfCorrectLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (182, 'B', 'AntisaccadesPercentOfCorrectRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (183, 'B', 'AntisaccadesLatencyMeanLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (184, 'B', 'AntisaccadesLatencyMeanRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (185, 'B', 'AntisaccadesDurationLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (186, 'B', 'AntisaccadesDurationRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (187, 'B', 'AntisaccadesAmplitudeLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (188, 'B', 'AntisaccadesAmplitudeRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (189, 'B', 'AntisaccadesPeakVelocityLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (190, 'B', 'AntisaccadesPeakVelocityRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (191, 'B', 'AntisaccadesPercentOfCorrectALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (192, 'B', 'AntisaccadesLatencyMeanALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (193, 'B', 'AntisaccadesDurationALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (194, 'B', 'AntisaccadesAmplitudeALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (195, 'B', 'AntisaccadesPeakVelocityALL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (196, 'B', 'POM_Gain_SlowSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (197, 'B', 'POM_StDev_SlowSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (198, 'B', 'POM_Gain_MediumSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (199, 'B', 'POM_StDev_MediumSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (200, 'B', 'POM_Gain_FastSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (201, 'B', 'POM_StDev_FastSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (202, 'B', 'POM_Accuracy_SlowSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (203, 'B', 'POM_Accuracy_MediumSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (204, 'B', 'POM_Accuracy_FastSinus');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (205, 'B', 'Tremorometria');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (206, 'B', 'TremorometriaLEFT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (207, 'B', 'TremorometriaRIGHT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (208, 'B', 'TremorometriaLEFT_0_1');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (209, 'B', 'TremorometriaLEFT_1_2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (210, 'B', 'TremorometriaLEFT_2_3');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (211, 'B', 'TremorometriaLEFT_3_4');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (212, 'B', 'TremorometriaLEFT_4_5');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (213, 'B', 'TremorometriaLEFT_5_6');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (214, 'B', 'TremorometriaLEFT_6_7');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (215, 'B', 'TremorometriaLEFT_7_8');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (216, 'B', 'TremorometriaLEFT_8_9');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (217, 'B', 'TremorometriaLEFT_9_10');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (218, 'B', 'TremorometriaLEFT_23_24');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (219, 'B', 'TremorometriaRIGHT_0_1');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (220, 'B', 'TremorometriaRIGHT_1_2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (221, 'B', 'TremorometriaRIGHT_2_3');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (222, 'B', 'TremorometriaRIGHT_3_4');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (223, 'B', 'TremorometriaRIGHT_4_5');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (224, 'B', 'TremorometriaRIGHT_5_6');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (225, 'B', 'TremorometriaRIGHT_6_7');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (226, 'B', 'TremorometriaRIGHT_7_8');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (227, 'B', 'TremorometriaRIGHT_8_9');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (228, 'B', 'TremorometriaRIGHT_9_10');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (229, 'B', 'TremorometriaRIGHT_23_24');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (230, 'B', 'TestSchodkowy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (231, 'B', 'TestSchodkowyWDol');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (232, 'B', 'TestSchodkowyWGore');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (233, 'B', 'TestMarszu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (234, 'B', 'TestMarszuCzas1');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (235, 'B', 'TestMarszuCzas2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (236, 'B', 'Posturografia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (237, 'B', 'MotionAnalysis');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (238, 'B', 'Otwarte_Srednia_C_o_P_X');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (239, 'B', 'Otwarte_Srednia_C_o_P_Y');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (240, 'B', 'Otwarte_Srednia_P_T_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (241, 'B', 'Otwarte_Srednia_P_B_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (242, 'B', 'Otwarte_Perimeter_mm');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (243, 'B', 'Otwarte_PoleElipsy_mm2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (244, 'B', 'Zamkniete_Srednia_C_o_P_X');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (245, 'B', 'Zamkniete_Srednia_C_o_P_Y');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (246, 'B', 'Zamkniete_Srednia_P_T_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (247, 'B', 'Zamkniete_Srednia_P_B_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (248, 'B', 'Zamkniete_Perimeter_mm');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (249, 'B', 'Zamkniete_PoleElipsy_mm2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (250, 'B', 'WspolczynnikPerymetru_E_C_E_O_obie_stopy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (251, 'B', 'WspolczynnikPowierzchni_E_C_E_O_obie_stopy');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (252, 'B', 'Biofeedback_Srednia_C_o_P_X');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (253, 'B', 'Biofeedback_Srednia_C_o_P_Y');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (254, 'B', 'Biofeedback_Srednia_P_T_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (255, 'B', 'Biofeedback_Srednia_P_B_Predkosc_mm_sec');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (256, 'B', 'Biofeedback_Perimeter_mm');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (257, 'B', 'Biofeedback_PoleElipsy_mm2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (258, 'B', 'UpAndGo');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (259, 'B', 'UpAndGoLiczby');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (260, 'B', 'UpAndGoKubekPrawa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (261, 'B', 'UpAndGoKubekLewa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (262, 'B', 'TST');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (263, 'B', 'TandemPivot');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (264, 'B', 'WTT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (265, 'B', 'WprowadzilasWariantZapisal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (266, 'B', 'ZmodyfikowalasWariantModyfikowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (267, 'B', 'OstatniaZmianaasOstatniaEdycjaWariantu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (268, 'W', 'PDQ39');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (269, 'W', 'AIMS');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (270, 'W', 'Epworth');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (271, 'W', 'CGI');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (272, 'W', 'FSS');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (273, 'W', 'TestZegara');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (274, 'W', 'MMSE');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (275, 'W', 'CLOX1_Rysunek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (276, 'W', 'CLOX2_Kopia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (277, 'W', 'AVLT_proba_1');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (278, 'W', 'AVLT_proba_2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (279, 'W', 'AVLT_proba_3');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (280, 'W', 'AVLT_proba_4');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (281, 'W', 'AVLT_proba_5');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (282, 'W', 'AVLT_Suma');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (283, 'W', 'AVLT_Srednia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (284, 'W', 'AVLT_KrotkieOdroczenie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (285, 'W', 'AVLT_Odroczony20min');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (286, 'W', 'AVLT_Rozpoznawanie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (287, 'W', 'AVLT_BledyRozpoznania');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (288, 'W', 'TestAVLTSrednia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (289, 'W', 'TestAVLTOdroczony');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (290, 'W', 'TestAVLTPo20min');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (291, 'W', 'TestAVLTRozpoznawanie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (292, 'W', 'CVLT_proba_1');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (293, 'W', 'CVLT_proba_2');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (294, 'W', 'CVLT_proba_3');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (295, 'W', 'CVLT_proba_4');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (296, 'W', 'CVLT_proba_5');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (297, 'W', 'CVLT_Suma');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (298, 'W', 'CVLT_OSKO_krotkie_odroczenie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (299, 'W', 'CVLT_OPKO_krotkie_odroczenie_i_pomoc');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (300, 'W', 'CVLT_OSDO_po20min');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (301, 'W', 'CVLT_OPDO_po20min_i_pomoc');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (302, 'W', 'CVLT_perseweracje');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (303, 'W', 'CVLT_WtraceniaOdtwarzanieSwobodne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (304, 'W', 'CVLT_wtraceniaOdtwarzanieZPomoca');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (305, 'W', 'CVLT_Rozpoznawanie');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (306, 'W', 'CVLT_BledyRozpoznania');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (307, 'W', 'Benton_JOL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (308, 'W', 'WAIS_R_Wiadomosci');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (309, 'W', 'WAIS_R_PowtarzanieCyfr');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (310, 'W', 'WAIS_R_Podobienstwa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (311, 'W', 'BostonskiTestNazywaniaBMT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (312, 'W', 'BMT_SredniCzasReakcji_sek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (313, 'W', 'SkalaDepresjiBecka');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (314, 'W', 'SkalaDepresjiBeckaII');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (315, 'W', 'TestFluencjiK');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (316, 'W', 'TestFluencjiP');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (317, 'W', 'TestFluencjiZwierzeta');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (318, 'W', 'TestFluencjiOwoceWarzywa');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (319, 'W', 'TestFluencjiOstre');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (320, 'W', 'TestLaczeniaPunktowA');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (321, 'W', 'TestLaczeniaPunktowB');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (322, 'W', 'ToL_SumaRuchow');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (323, 'W', 'ToL_LiczbaPrawidlowych');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (324, 'W', 'ToL_CzasInicjowania_sek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (325, 'W', 'ToL_CzasWykonania_sek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (326, 'W', 'ToL_CzasCalkowity_sek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (327, 'W', 'ToL_CzasPrzekroczony');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (328, 'W', 'ToL_LiczbaPrzekroczenZasad');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (329, 'W', 'ToL_ReakcjeUkierunkowane');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (330, 'W', 'InnePsychologiczne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (331, 'W', 'OpisBadania');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (332, 'W', 'Wnioski');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (333, 'W', 'Holter');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (334, 'W', 'BadanieWechu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (335, 'W', 'WynikWechu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (336, 'W', 'LimitDysfagii');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (337, 'W', 'pH_metriaPrzełyku');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (338, 'W', 'SPECT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (339, 'W', 'SPECTWyniki');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (340, 'W', 'MRI');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (341, 'W', 'MRIwynik');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (342, 'W', 'USGsrodmozgowia');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (343, 'W', 'USGWynik');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (344, 'W', 'Genetyka');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (345, 'W', 'GenetykaWynik');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (346, 'W', 'Surowica');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (347, 'W', 'SurowicaPozostało');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (348, 'W', 'Ferrytyna');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (349, 'W', 'CRP');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (350, 'W', 'NTproCNP');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (351, 'W', 'URCA');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (352, 'W', 'WitD');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (353, 'W', 'CHOL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (354, 'W', 'TGI');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (355, 'W', 'HDL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (356, 'W', 'LDL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (357, 'W', 'olLDL');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (358, 'W', 'LaboratoryjneInne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (359, 'W', 'WprowadzilasWizyteWprowadzil');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (360, 'W', 'ZmodyfikowalasWizyteEdytowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (361, 'W', 'OstatniaZmianaasOstatniaModyfikacja');
+
+
 
 
 */

@@ -43,7 +43,8 @@ create table Kolumna (
 	IdKolumna	int	identity,
 	PozycjaDomyslna int,
 	Encja	varchar(30),
-	Nazwa	varchar(50)
+	Nazwa	varchar(50),
+	CustPodzapytanie varchar(200) NULL
 )
 go
 

@@ -736,3 +736,23 @@ CREATE INDEX X2SlownikVarchar ON SlownikVarchar (
 	Klucz
 )
 go
+
+create table Kolumna (
+	IdKolumna	int	identity,
+	PozycjaDomyslna int,
+	Encja	varchar(30),
+	Nazwa	varchar(50),
+	CustPodzapytanie varchar(200) NULL
+)
+go
+
+
+CREATE INDEX X1Kolumna ON Kolumna (
+     Nazwa
+ )
+ go
+
+CREATE INDEX X2Kolumna ON Kolumna (
+     Encja, Nazwa
+ )
+ go

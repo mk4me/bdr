@@ -1,7 +1,8 @@
 use TPP_test;
 go
 
-
+alter table Kolumna
+	add CustPodzapytanie varchar(200) NULL;
 
 -- created 2015-07-19
 create function multivalued_examination_attribute(@attrib_name varchar(50), @patient_id int, @exam_kind int)
@@ -367,7 +368,7 @@ SELECT
       ,W.[LimitDysfagii]
       ,W.[pH_metriaPrze³yku]
       ,W.[SPECT]
-	   ,(select Wartosci from AtrybutyWielowartoscioweWizyty where NazwaAtrybutu = 'SPECTWynik' and IdWizyta = W.IdWizyta) as SPECTWyniki
+	  ,dbo.multivalued_examination_attribute('SPECTWynik', P.IdPacjent, W.RodzajWizyty) as SPECTWyniki
       ,W.[MRI]
       ,W.[MRIwynik] MRIwynik
       ,W.[USGsrodmozgowia]
@@ -393,7 +394,7 @@ SELECT
 
   FROM Pacjent P left join Wizyta w on P.IdPacjent = W.IdPacjent left join Badanie B on B.IdWizyta = W.IdWizyta
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
-  go
+go
 
  
 
@@ -412,8 +413,10 @@ begin
 	declare @sql as nvarchar(max);
 	declare @current_column_name as varchar(50);
 	declare @current_column_id as int;
-
-	select CF.*, K.Encja, K.Nazwa into #Temp from @column_filter CF join Kolumna k on k.IdKolumna = CF.KolumnaID
+	declare @zero_prefix as varchar(1);
+	declare @subquery_template as varchar(150);
+	--MAX(CASE WHEN W.RodzajWizyty = 0 THEN CAST(W.DataPrzyjecia as Varchar) ELSE '' END) as DataPrzyjecia00
+	select CF.*, K.Encja, K.Nazwa, K.CustPodzapytanie into #Temp from @column_filter CF join Kolumna k on k.IdKolumna = CF.KolumnaID
 	
 	
 -- Patient basic data are always included
@@ -436,12 +439,12 @@ begin
 		set @visit_date = 0;
 		while @visit_date <= 78
 		begin
-			-- if (((@timeline_filter & POWER(2,((@visit_date / 6) + 1))) <> 0)
-			
+			set @zero_prefix = CASE WHEN @visit_date < 10 THEN '0' ELSE '' END;
+			if ((@timeline_filter & POWER(2,(@visit_date / 6) + 1)) <> 0)
 			begin
-				set @visit_date = @visit_date + 6;
+				set @sql = @sql + @zero_prefix + CAST(@visit_date as Varchar);
 			end;
-			set @sql = @sql + CAST(@visit_date as Varchar);
+			set @visit_date = @visit_date + 6;
 		end;
 		
 		delete #Temp where KolumnaID = @current_column_id;
@@ -460,7 +463,7 @@ begin
 		select @sql;
 		-- exec sp_executesql @statement = @sql;
 		
-end
+end;
 go
 
 declare @filtr as KolumnyUdt;
