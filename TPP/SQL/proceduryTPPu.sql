@@ -1,4 +1,4 @@
-﻿use TPP;
+﻿use TPP_test;
 go
 
 
@@ -241,6 +241,17 @@ end
 go
 */
 
+
+-- created 2015-07-19
+create function multivalued_examination_attribute(@attrib_name varchar(50), @patient_id int, @exam_kind int)
+returns varchar(75)
+as
+begin
+return (select Wartosci from AtrybutyWielowartoscioweWizyty aww join Wizyta w on w.IdWizyta = aww.IdWizyta 
+		where aww.NazwaAtrybutu = @attrib_name and w.IdPacjent = @patient_id and w.RodzajWizyty = @exam_kind )
+end
+go
+
 -- last rev. 2014-01-20
 create function disorder_duration_for_examination( @IdWizyta int )
 returns decimal(4,2)
@@ -252,6 +263,8 @@ return CAST(
 				(select DataPrzyjecia from Wizyta where IdWizyta = @IdWizyta) )/365.0 as decimal(4,2))
 end
 go
+
+
 
 create function validate_input_int( @table_name varchar(30), @attr_name varchar(50), @value tinyint )
 returns bit
@@ -461,7 +474,7 @@ end;
 go
 
 
--- last rev. 2014-09-25
+-- last rev. 2015-07-20
 -- @result codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
 create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty tinyint,
 	@DataPrzyjecia date,	@DataOperacji date,	@DataWypisu date, @MasaCiala decimal(4,1),
@@ -602,7 +615,7 @@ begin
 								DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat,	CzasDyskinez, CzasOFF, PoprawaPoLDopie,
 								Wprowadzil, Zmodyfikowal, OstatniaZmiana )
 					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataOperacji, @DataWypisu, @MasaCiala, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @PierwszyObjaw, 
-								@Drzenie, @Sztywnosc,@Spowolnienie, @ObjawyInne, @ObjawyInneJakie,
+								@Drzenie, @Sztywnosc,@Spowolnienie, @ObjawyInne, REPLACE(@ObjawyInneJakie,';','. '),
 								@CzasOdPoczObjDoWlLDopy, @DyskinezyObecnie,
 								@DyskinezyOdLat, @FluktuacjeObecnie, @FluktuacjeOdLat, @CzasDyskinez, @CzasOFF, @PoprawaPoLDopie,
 								@user_id, @user_id, getdate() )  set @visit_id = SCOPE_IDENTITY();
@@ -616,7 +629,7 @@ begin
 				Sztywnosc	= @Sztywnosc,
 				Spowolnienie	= @Spowolnienie,
 				ObjawyInne	= @ObjawyInne,
-				ObjawyInneJakie	= @ObjawyInneJakie,
+				ObjawyInneJakie	= REPLACE(@ObjawyInneJakie,';','. '),
 				CzasOdPoczObjDoWlLDopy = @CzasOdPoczObjDoWlLDopy, DyskinezyObecnie = @DyskinezyObecnie,
 								DyskinezyOdLat = @DyskinezyOdLat, FluktuacjeObecnie = @FluktuacjeObecnie, FluktuacjeOdLat = @FluktuacjeOdLat,
 								CzasDyskinez = @CzasDyskinez, CzasOFF = @CzasOFF,
@@ -634,7 +647,7 @@ go
 
 
 -- drop procedure update_examination_questionnaire_partB
--- last rev. 2013-10-15
+-- last rev. 2015-07-19
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partB  (@IdWizyta int,
 	@PrzebyteLeczenieOperacyjnePD tinyint,
@@ -837,11 +850,11 @@ begin
 			Alkohol = @Alkohol, 
 			ZabiegowWZnieczOgPrzedRozpoznaniemPD = @ZabiegowWZnieczOgPrzedRozpoznaniemPD,
 			Zamieszkanie = @Zamieszkanie, 
-			Uwagi = @Uwagi, 
+			Uwagi = REPLACE(@Uwagi,';','. '), 
 			Nadcisnienie  = @Nadcisnienie,
 			BlokeryKanWapn  = @BlokeryKanWapn,
 			DominujacyObjawObecnie  = @DominujacyObjawObecnie,
-			DominujacyObjawUwagi  = @DominujacyObjawUwagi,
+			DominujacyObjawUwagi  = REPLACE(@DominujacyObjawUwagi,';','. '),
 
 			RLS	= @RLS,
 			ObjawyPsychotyczne	= @ObjawyPsychotyczne,
@@ -870,7 +883,7 @@ go
 */
 
 
--- modified: 2013-09-08
+-- modified: 2015-07-19
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partC  (
 	@IdWizyta int,
@@ -960,12 +973,12 @@ begin
 			Cholinolityk = @Cholinolityk,
 			CholinolitykObecnie = @CholinolitykObecnie,
 			LekiInne = @LekiInne,
-			LekiInneJakie = @LekiInneJakie,
-			L_STIMOpis = @L_STIMOpis,
+			LekiInneJakie = REPLACE(@LekiInneJakie,';','. '),
+			L_STIMOpis = REPLACE(@L_STIMOpis,';','. '),
 			L_STIMAmplitude = @L_STIMAmplitude,
 			L_STIMDuration = @L_STIMDuration,
 			L_STIMFrequency = @L_STIMFrequency,
-			R_STIMOpis = @R_STIMOpis,
+			R_STIMOpis = REPLACE(@R_STIMOpis,';','. '),
 			R_STIMAmplitude = @R_STIMAmplitude,
 			R_STIMDuration = @R_STIMDuration,
 			R_STIMFrequency = @R_STIMFrequency,
@@ -982,12 +995,12 @@ begin
 			Wypis_Cholinolityk = @Wypis_Cholinolityk,
 			Wypis_CholinolitykObecnie = @Wypis_CholinolitykObecnie,
 			Wypis_LekiInne = @Wypis_LekiInne,
-			Wypis_LekiInneJakie = @Wypis_LekiInneJakie,
-			Wypis_L_STIMOpis = @Wypis_L_STIMOpis,
+			Wypis_LekiInneJakie = REPLACE(@Wypis_LekiInneJakie,';','. '),
+			Wypis_L_STIMOpis = REPLACE(@Wypis_L_STIMOpis,';','. '),
 			Wypis_L_STIMAmplitude = @Wypis_L_STIMAmplitude,
 			Wypis_L_STIMDuration = @Wypis_L_STIMDuration,
 			Wypis_L_STIMFrequency = @Wypis_L_STIMFrequency,
-			Wypis_R_STIMOpis = @Wypis_R_STIMOpis,
+			Wypis_R_STIMOpis = REPLACE(@Wypis_L_STIMOpis,';','. '),
 			Wypis_R_STIMAmplitude = @Wypis_R_STIMAmplitude,
 			Wypis_R_STIMDuration = @Wypis_R_STIMDuration,
 			Wypis_R_STIMFrequency = @Wypis_R_STIMFrequency,
@@ -1544,8 +1557,7 @@ go
 */
 
 
--- last rev. 2014-01-13
--- REPLACED 2015-03-20
+-- last rev. 2015-07-20
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
@@ -1641,68 +1653,68 @@ begin
 	update Wizyta
 		set 
 
-			TestZegara = @TestZegara,
-			MMSE = @MMSE,
-			CLOX1_Rysunek = @CLOX1_Rysunek,
-			CLOX2_Kopia = @CLOX2_Kopia,
-			AVLT_proba_1 = @AVLT_proba_1,
-			AVLT_proba_2 = @AVLT_proba_2,
-			AVLT_proba_3 = @AVLT_proba_3,
-			AVLT_proba_4 = @AVLT_proba_4,
-			AVLT_proba_5 = @AVLT_proba_5,
-			AVLT_Suma = @AVLT_Suma,
-			AVLT_Srednia = @AVLT_Srednia,
-			AVLT_KrotkieOdroczenie = @AVLT_KrotkieOdroczenie,
-			AVLT_Odroczony20min = @AVLT_Odroczony20min,
-			AVLT_Rozpoznawanie = @AVLT_Rozpoznawanie,
-			AVLT_BledyRozpoznania = @AVLT_BledyRozpoznania,
+			TestZegara =  REPLACE(@TestZegara,';','. '),
+			MMSE =  REPLACE(@MMSE,';','. '),
+			CLOX1_Rysunek =  REPLACE(@CLOX1_Rysunek,';','. '),
+			CLOX2_Kopia =  REPLACE(@CLOX2_Kopia,';','. '),
+			AVLT_proba_1 =  REPLACE(@AVLT_proba_1,';','. '),
+			AVLT_proba_2 =  REPLACE(@AVLT_proba_2,';','. '),
+			AVLT_proba_3 =  REPLACE(@AVLT_proba_3,';','. '),
+			AVLT_proba_4 =  REPLACE(@AVLT_proba_4,';','. '),
+			AVLT_proba_5 =  REPLACE(@AVLT_proba_5,';','. '),
+			AVLT_Suma =  REPLACE(@AVLT_Suma,';','. '),
+			AVLT_Srednia =  REPLACE(@AVLT_Srednia,';','. '),
+			AVLT_KrotkieOdroczenie =  REPLACE(@AVLT_KrotkieOdroczenie,';','. '),
+			AVLT_Odroczony20min =  REPLACE(@AVLT_Odroczony20min,';','. '),
+			AVLT_Rozpoznawanie =  REPLACE(@AVLT_Rozpoznawanie,';','. '),
+			AVLT_BledyRozpoznania =  REPLACE(@AVLT_BledyRozpoznania,';','. '),
 
-			TestAVLTSrednia = @TestAVLTSrednia,
-			TestAVLTOdroczony = @TestAVLTOdroczony,
-			TestAVLTPo20min = @TestAVLTPo20min,
-			TestAVLTRozpoznawanie = @TestAVLTRozpoznawanie,
+			TestAVLTSrednia =  REPLACE(@TestAVLTSrednia,';','. '),
+			TestAVLTOdroczony =  REPLACE(@TestAVLTOdroczony,';','. '),
+			TestAVLTPo20min =  REPLACE(@TestAVLTPo20min,';','. '),
+			TestAVLTRozpoznawanie =  REPLACE(@TestAVLTRozpoznawanie,';','. '),
 
-			CVLT_proba_1 = @CVLT_proba_1,
-			CVLT_proba_2 = @CVLT_proba_2,
-			CVLT_proba_3 = @CVLT_proba_3,
-			CVLT_proba_4 = @CVLT_proba_4,
-			CVLT_proba_5 = @CVLT_proba_5,
-			CVLT_Suma = @CVLT_Suma,
-			CVLT_OSKO_krotkie_odroczenie = @CVLT_OSKO_krotkie_odroczenie,
-			CVLT_OPKO_krotkie_odroczenie_i_pomoc = @CVLT_OPKO_krotkie_odroczenie_i_pomoc,
-			CVLT_OSDO_po20min = @CVLT_OSDO_po20min,
-			CVLT_OPDO_po20min_i_pomoc = @CVLT_OPDO_po20min_i_pomoc,
-			CVLT_perseweracje = @CVLT_perseweracje,
-			CVLT_WtraceniaOdtwarzanieSwobodne = @CVLT_WtraceniaOdtwarzanieSwobodne,
-			CVLT_wtraceniaOdtwarzanieZPomoca = @CVLT_wtraceniaOdtwarzanieZPomoca,
-			CVLT_Rozpoznawanie = @CVLT_Rozpoznawanie,
-			CVLT_BledyRozpoznania = @CVLT_BledyRozpoznania,
-			Benton_JOL = @Benton_JOL,
-			WAIS_R_Wiadomosci = @WAIS_R_Wiadomosci,
-			WAIS_R_PowtarzanieCyfr = @WAIS_R_PowtarzanieCyfr,
-			WAIS_R_Podobienstwa = @WAIS_R_Podobienstwa,
-			BostonskiTestNazywaniaBMT = @BostonskiTestNazywaniaBMT,
-			BMT_SredniCzasReakcji_sek = @BMT_SredniCzasReakcji_sek,
+			CVLT_proba_1 =  REPLACE(@CVLT_proba_1,';','. '),
+			CVLT_proba_2 =  REPLACE(@CVLT_proba_2,';','. '),
+			CVLT_proba_3 =  REPLACE(@CVLT_proba_3,';','. '),
+			CVLT_proba_4 =  REPLACE(@CVLT_proba_4,';','. '),
+			CVLT_proba_5 =  REPLACE(@CVLT_proba_5,';','. '),
+			CVLT_Suma =  REPLACE(@CVLT_Suma,';','. '),
+			CVLT_OSKO_krotkie_odroczenie =  REPLACE(@CVLT_OSKO_krotkie_odroczenie,';','. '),
+			CVLT_OPKO_krotkie_odroczenie_i_pomoc =  REPLACE(@CVLT_OPKO_krotkie_odroczenie_i_pomoc,';','. '),
+			CVLT_OSDO_po20min =  REPLACE(@CVLT_OSDO_po20min,';','. '),
+			CVLT_OPDO_po20min_i_pomoc =  REPLACE(@CVLT_OPDO_po20min_i_pomoc,';','. '),
+			CVLT_perseweracje =  REPLACE(@CVLT_perseweracje,';','. '),
+			CVLT_WtraceniaOdtwarzanieSwobodne =  REPLACE(@CVLT_WtraceniaOdtwarzanieSwobodne,';','. '),
+			CVLT_wtraceniaOdtwarzanieZPomoca =  REPLACE(@CVLT_wtraceniaOdtwarzanieZPomoca,';','. '),
+			CVLT_Rozpoznawanie =  REPLACE(@CVLT_Rozpoznawanie,';','. '),
+			CVLT_BledyRozpoznania =  REPLACE(@CVLT_BledyRozpoznania,';','. '),
+			Benton_JOL =  REPLACE(@Benton_JOL,';','. '),
+			WAIS_R_Wiadomosci =  REPLACE(@WAIS_R_Wiadomosci,';','. '),
+			WAIS_R_PowtarzanieCyfr =  REPLACE(@WAIS_R_PowtarzanieCyfr,';','. '),
+			WAIS_R_Podobienstwa =  REPLACE(@WAIS_R_Podobienstwa,';','. '),
+			BostonskiTestNazywaniaBMT =  REPLACE(@BostonskiTestNazywaniaBMT,';','. '),
+			BMT_SredniCzasReakcji_sek =  REPLACE(@BMT_SredniCzasReakcji_sek,';','. '),
 			SkalaDepresjiBecka = @SkalaDepresjiBecka,
 			SkalaDepresjiBeckaII = @SkalaDepresjiBeckaII,
-			TestFluencjiK = @TestFluencjiK,
-			TestFluencjiP = @TestFluencjiP,
-			TestFluencjiZwierzeta = @TestFluencjiZwierzeta,
-			TestFluencjiOwoceWarzywa = @TestFluencjiOwoceWarzywa,
-			TestFluencjiOstre = @TestFluencjiOstre,
-			TestLaczeniaPunktowA = @TestLaczeniaPunktowA,
-			TestLaczeniaPunktowB = @TestLaczeniaPunktowB,
-			ToL_SumaRuchow = @ToL_SumaRuchow,
-			ToL_LiczbaPrawidlowych = @ToL_LiczbaPrawidlowych,
-			ToL_CzasInicjowania_sek = @ToL_CzasInicjowania_sek,
-			ToL_CzasWykonania_sek = @ToL_CzasWykonania_sek,
-			ToL_CzasCalkowity_sek = @ToL_CzasCalkowity_sek,
-			ToL_CzasPrzekroczony = @ToL_CzasPrzekroczony,
-			ToL_LiczbaPrzekroczenZasad = @ToL_LiczbaPrzekroczenZasad,
-			ToL_ReakcjeUkierunkowane = @ToL_ReakcjeUkierunkowane,
-			InnePsychologiczne = @InnePsychologiczne,
-			OpisBadania = @OpisBadania,
-			Wnioski = @Wnioski,
+			TestFluencjiK = REPLACE(@TestFluencjiK,';','. '),
+			TestFluencjiP = REPLACE(@TestFluencjiP,';','. '),
+			TestFluencjiZwierzeta = REPLACE(@TestFluencjiZwierzeta,';','. '),
+			TestFluencjiOwoceWarzywa = REPLACE(@TestFluencjiOwoceWarzywa,';','. '),
+			TestFluencjiOstre = REPLACE(@TestFluencjiOstre,';','. '),
+			TestLaczeniaPunktowA = REPLACE(@TestLaczeniaPunktowA,';','. '),
+			TestLaczeniaPunktowB = REPLACE(@TestLaczeniaPunktowB,';','. '),
+			ToL_SumaRuchow = REPLACE(@ToL_SumaRuchow,';','. '),
+			ToL_LiczbaPrawidlowych = REPLACE(@ToL_LiczbaPrawidlowych,';','. '),
+			ToL_CzasInicjowania_sek = REPLACE(@ToL_CzasInicjowania_sek,';','. '),
+			ToL_CzasWykonania_sek = REPLACE(@ToL_CzasWykonania_sek,';','. '),
+			ToL_CzasCalkowity_sek = REPLACE(@ToL_CzasCalkowity_sek,';','. '),
+			ToL_CzasPrzekroczony = REPLACE(@ToL_CzasPrzekroczony,';','. '),
+			ToL_LiczbaPrzekroczenZasad = REPLACE(@ToL_LiczbaPrzekroczenZasad,';','. '),
+			ToL_ReakcjeUkierunkowane = REPLACE(@ToL_ReakcjeUkierunkowane,';','. '),
+			InnePsychologiczne = REPLACE(@InnePsychologiczne,';','. '),
+			OpisBadania = REPLACE(REPLACE(REPLACE(@OpisBadania, CHAR(13), ''), CHAR(10), ''),';','. '),
+			Wnioski = REPLACE(REPLACE(REPLACE(@Wnioski, CHAR(13), ''), CHAR(10), ''),';','. '),
 			Zmodyfikowal = @user_id, 
 			OstatniaZmiana = getdate() 
 		where IdWizyta = @IdWizyta;
@@ -1712,7 +1724,7 @@ end;
 go
 
 
--- updated 2013-10-14
+-- updated 2015-07-20
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partH  (
 	@IdWizyta int,
@@ -1798,13 +1810,13 @@ begin
 			pH_metriaPrzełyku = @pH_metriaPrzełyku,
 			SPECT = @SPECT,
 			MRI = @MRI,
-			MRIwynik = @MRIwynik,
+			MRIwynik = REPLACE(@MRIwynik,';','. '),
 			USGsrodmozgowia = @USGsrodmozgowia,
 			USGWynik = @USGWynik,
 			Genetyka = @Genetyka,
-			GenetykaWynik = @GenetykaWynik,
+			GenetykaWynik = REPLACE(@GenetykaWynik,';','. '),
 			Surowica = @Surowica,
-			SurowicaPozostało = @SurowicaPozostało,
+			SurowicaPozostało = REPLACE(@SurowicaPozostało,';','. '),
 			Ferrytyna = @Ferrytyna,
 			CRP = @CRP,
 			NTproCNP = @NTproCNP,
@@ -1815,7 +1827,7 @@ begin
 			HDL = @HDL,
 			LDL = @LDL,
 			olLDL = @olLDL,
-			LaboratoryjneInne = @LaboratoryjneInne,
+			LaboratoryjneInne = REPLACE(@LaboratoryjneInne,';','. '),
 			Zmodyfikowal = @user_id, 
 			OstatniaZmiana = getdate() 
 		where IdWizyta = @IdWizyta;

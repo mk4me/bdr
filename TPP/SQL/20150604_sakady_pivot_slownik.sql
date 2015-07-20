@@ -1399,7 +1399,7 @@ go
 create procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int)
 as
 begin
-	declare @sql as nvarchar(4000);
+	declare @sql as nvarchar(max);
 	set @sql = 'select ''wynik'' as Kolumna1, ''testowy'' as Kolumna2';
 		-- select @sql;
 		exec sp_executesql @statement = @sql;
