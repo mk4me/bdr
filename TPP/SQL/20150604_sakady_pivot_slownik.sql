@@ -98,13 +98,13 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (34, 'W', 'ZielonaHe
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (35, 'W', 'Alkohol');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (36, 'W', 'ZabiegowWZnieczOgPrzedRozpoznaniemPD');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (37, 'W', 'Zamieszkanie');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (38, 'W', 'NarazeniaNaToks');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (38, 'W', 'NarazeniaNaToks','dbo.multivalued_examination_attribute(''NarazenieNaToks'', P.IdPacjent, #2)  as NarazeniaNaToks');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (39, 'W', 'Uwagi');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (40, 'W', 'Nadcisnienie');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (41, 'W', 'BlokeryKanWapn');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (42, 'W', 'DominujacyObjawObecnie');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (43, 'W', 'DominujacyObjawUwagi');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (44, 'W', 'ObjawyAutonomiczne');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (44, 'W', 'ObjawyAutonomiczne', 'dbo.multivalued_examination_attribute(''ObjawyAutonomiczne'', P.IdPacjent, #2)  as ObjawyAutonomiczne');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (45, 'W', 'RLS');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (46, 'W', 'ObjawyPsychotyczne');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (47, 'W', 'Depresja');
@@ -399,7 +399,7 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (335, 'W', 'WynikWec
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (336, 'W', 'LimitDysfagii');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (337, 'W', 'pH_metriaPrzełyku');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (338, 'W', 'SPECT');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (339, 'W', 'SPECTWyniki');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (339, 'W', 'SPECTWyniki', 'dbo.multivalued_examination_attribute(''SPECTWynik'', P.IdPacjent, #2)  as SPECTWyniki');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (340, 'W', 'MRI');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (341, 'W', 'MRIwynik');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (342, 'W', 'USGsrodmozgowia');

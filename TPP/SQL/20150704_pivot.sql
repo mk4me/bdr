@@ -1,8 +1,16 @@
-use TPP_test;
+use TPP;
 go
 
 alter table Kolumna
 	add CustPodzapytanie varchar(200) NULL;
+go
+	
+update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''NarazenieNaToks'', P.IdPacjent, #2)  as NarazeniaNaToks' where  Nazwa = 'NarazeniaNaToks';
+update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''ObjawyAutonomiczne'', P.IdPacjent, #2)  as ObjawyAutonomiczne' where  Nazwa = 'ObjawyAutonomiczne';
+update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''SPECTWynik'', P.IdPacjent, #2)  as SPECTWyniki' where  Nazwa = 'SPECTWyniki';
+go
+
+
 
 -- created 2015-07-19
 create function multivalued_examination_attribute(@attrib_name varchar(50), @patient_id int, @exam_kind int)
@@ -396,6 +404,7 @@ SELECT
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
 go
 
+
  
 
 
@@ -406,18 +415,23 @@ create type KolumnyUdt as table
 )
 go
 
-alter procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int)
+alter procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int, @b_on as bit, @b_off as bit, @d_on as bit, @d_off as bit)
 as
 begin
--- TODO: timeline filter will limit the visit kinds; for now all the visits 0..84 are included;
 	declare @sql as nvarchar(max);
 	declare @current_column_name as varchar(50);
 	declare @current_column_id as int;
+	declare @current_entity_kind as varchar(1);
 	declare @zero_prefix as varchar(1);
 	declare @subquery_template as varchar(150);
-	--MAX(CASE WHEN W.RodzajWizyty = 0 THEN CAST(W.DataPrzyjecia as Varchar) ELSE '' END) as DataPrzyjecia00
-	select CF.*, K.Encja, K.Nazwa, K.CustPodzapytanie into #Temp from @column_filter CF join Kolumna k on k.IdKolumna = CF.KolumnaID
+	declare @variant_subquery_template as varchar(200);
+	declare @custom_subquery as varchar(200);
+	declare @subquery as varchar(200);
+
 	
+	set @subquery_template =', MAX(CASE WHEN W.RodzajWizyty = #2 THEN CAST(W.#1 as Varchar) ELSE '''' END) as #1';
+	set @variant_subquery_template =', MAX(CASE WHEN W.RodzajWizyty = #2 and B.BMT = #BMT and B.DBS=#DBS THEN CAST(B.#1 as Varchar) ELSE '''' END) as #1';
+	select CF.*, K.Encja, K.Nazwa, K.CustPodzapytanie into #Temp from @column_filter CF join Kolumna k on k.IdKolumna = CF.KolumnaID where K.Encja <> 'P'
 	
 -- Patient basic data are always included
 	set @sql = 'select 
@@ -428,31 +442,71 @@ begin
       ,P.[Lokalizacja]
       ,P.[LiczbaElektrod]
 	  ,P.[NazwaGrupy]';
-	-- set @sql = ', W.[DataPrzyjecia]
-
 
 	while( (select COUNT(*) from #Temp ) > 0 )
 	begin
 		declare @visit_date int;
-		select top 1 @current_column_id = KolumnaID from #Temp order by Pozycja;
-		set @sql = @sql + '#';
-		set @visit_date = 0;
+	
+		select top 1 @current_column_id = KolumnaID, @current_column_name = Nazwa, @current_entity_kind = Encja, @custom_subquery = CustPodzapytanie from #Temp order by Pozycja;
+		if(@custom_subquery is null)
+			begin
+				if(@current_entity_kind = 'W')
+					set @subquery = REPLACE(@subquery_template, '#1', @current_column_name)
+				else
+					set @subquery = REPLACE(@variant_subquery_template, '#1', @current_column_name);
+			end
+		else set @subquery = ' ,'+@custom_subquery;
+		set @visit_date = -6;
 		while @visit_date <= 78
 		begin
-			set @zero_prefix = CASE WHEN @visit_date < 10 THEN '0' ELSE '' END;
-			if ((@timeline_filter & POWER(2,(@visit_date / 6) + 1)) <> 0)
-			begin
-				set @sql = @sql + @zero_prefix + CAST(@visit_date as Varchar);
-			end;
 			set @visit_date = @visit_date + 6;
+			if ((@timeline_filter & POWER(2,@visit_date / 6)) = 0) continue;
+			set @zero_prefix = CASE WHEN @visit_date < 10 THEN '0' ELSE '' END;
+			set @subquery = REPLACE(@subquery, '#2', @visit_date)+@zero_prefix + CAST(@visit_date as Varchar);
+			
+			if(@current_entity_kind = 'B')
+			begin
+
+				if(@b_on = 1)
+				begin
+					set @subquery = REPLACE(@subquery, '#BMT', 1)+'_BMT';
+					if(@d_on = 1)
+					begin
+						set @subquery = REPLACE(@subquery, '#DBS', 1)+'_DBS';
+						set @sql = @sql + @subquery;
+					end;
+					if(@d_off = 1)
+					begin
+						set @subquery = REPLACE(@subquery, '#DBS', 0)+'_O';
+						set @sql = @sql + @subquery;
+					end;
+				end;
+				if(@b_off = 1)
+				begin
+					set @subquery = REPLACE(@subquery, '#BMT', 0)+'_O';
+					if(@d_on = 1)
+					begin
+						set @subquery = REPLACE(@subquery, '#DBS', 1)+'_DBS';
+						set @sql = @sql + @subquery;
+					end;
+					if(@d_off = 1)
+					begin
+						set @subquery = REPLACE(@subquery, '#DBS', 0)+'_O';
+						set @sql = @sql + @subquery;
+					end;
+				end;
+			end
+			else set @sql = @sql + @subquery;
+			
 		end;
 		
 		delete #Temp where KolumnaID = @current_column_id;
 		
 	end;
 	
-	set @sql = @sql + ' from Pacjent P join Wizyta W on W.IdPacjent = P.IdPacjent group by 
+	set @sql = @sql + ' from Pacjent P join Wizyta W on W.IdPacjent = P.IdPacjent join Badanie B on B.IdWizyta = W.IdWizyta group by 
 	   P.[NumerPacjenta]
+	  ,P.[IdPacjent]
       ,P.[RokUrodzenia]
       ,P.[MiesiacUrodzenia]
       ,P.[Plec]
@@ -460,33 +514,15 @@ begin
       ,P.[LiczbaElektrod]
 	  ,P.[NazwaGrupy]
 	   order by P.[NumerPacjenta]';
-		select @sql;
-		-- exec sp_executesql @statement = @sql;
+		--select @sql;
+		exec sp_executesql @statement = @sql;
 		
 end;
 go
-
+/*
 declare @filtr as KolumnyUdt;
-insert into @filtr (Pozycja, KolumnaID) values ( 1, 1 );
-insert into @filtr (Pozycja, KolumnaID)values ( 2, 2 );
+insert into @filtr (Pozycja, KolumnaID) values ( 1, 131 );
+insert into @filtr (Pozycja, KolumnaID)values ( 2, 38 );
 
-exec get_transformed_copy @filtr, 20;
-
-select * from Kolumna
-
-
-select   
-P.[NumerPacjenta]
-  ,P.[RokUrodzenia]        
-  ,P.[MiesiacUrodzenia]        
-  ,P.[Plec]        
-  ,P.[Lokalizacja]        
-  ,P.[LiczbaElektrod]     
-  ,P.[NazwaGrupy] 
-  , MAX(CASE WHEN W.RodzajWizyty = 0 THEN CAST(W.DataPrzyjecia as Varchar) ELSE '' END) as DataPrzyjecia00
-  , MAX(CASE WHEN W.RodzajWizyty = 12 THEN CAST(W.DataPrzyjecia as Varchar) ELSE '' END) as DataPrzyjecia12
-  , COUNT(W.IdPacjent) as LiczbaWizyt
- from Pacjent P join Wizyta W on W.IdPacjent = P.IdPacjent 
- group by       P.[NumerPacjenta]        ,P.[RokUrodzenia]        ,P.[MiesiacUrodzenia]        ,P.[Plec]        ,P.[Lokalizacja]        ,P.[LiczbaElektrod]     ,P.[NazwaGrupy]      order by P.[NumerPacjenta]
- 
- select * from Wizyta
+exec get_transformed_copy @filtr, 256, 1,0,1,0;
+*/
