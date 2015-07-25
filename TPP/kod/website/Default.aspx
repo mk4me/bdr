@@ -23,5 +23,10 @@
                 <a href="Overview.aspx" title="Overview.aspx">Przegląd i pobieranie</a>
             </p>
         </li>
+        <li>
+            <p>
+                <a href="Export.aspx" title="Export.aspx">Selektywny eksport</a>
+            </p>
+        </li>
     </ul>
 </asp:Content>

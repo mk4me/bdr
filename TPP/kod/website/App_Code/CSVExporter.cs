@@ -75,4 +75,56 @@ public class CSVExporter
 
         return dataTable;
     }
+
+    public static DataTable getTransformedCopy(List<Tuple<string, string>> selectedColumns, int timelineFilter, bool BMT_ON, bool BMT_OFF, bool DBS_ON, bool DBS_OFF)
+    {
+        DataTable dataTableColumns = new DataTable();
+        DataColumn dataColumn1 = new DataColumn("Pozycja", typeof(System.Int32));
+        dataTableColumns.Columns.Add(dataColumn1);
+        DataColumn dataColumn2 = new DataColumn("KolumnaID", typeof(System.Int32));
+        dataTableColumns.Columns.Add(dataColumn2);
+        for (int i = 0; i < selectedColumns.Count(); i++)
+        {
+            int columnId = DatabaseProcedures.getColumnId(selectedColumns[i].Item1, selectedColumns[i].Item2);
+            DataRow dataRow = dataTableColumns.NewRow();
+            dataRow[0] = i + 1;
+            dataRow[1] = columnId;
+            dataTableColumns.Rows.Add(dataRow);
+        }
+
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[get_transformed_copy]";
+        SqlParameter param = cmd.Parameters.AddWithValue("@column_filter", dataTableColumns);
+        cmd.Parameters.Add("@timeline_filter", SqlDbType.Int).Value = timelineFilter;
+        cmd.Parameters.Add("@b_on", SqlDbType.Bit).Value = BMT_ON;
+        cmd.Parameters.Add("@b_off", SqlDbType.Bit).Value = BMT_OFF;
+        cmd.Parameters.Add("@d_on", SqlDbType.Bit).Value = DBS_ON;
+        cmd.Parameters.Add("@d_off", SqlDbType.Bit).Value = DBS_OFF;
+        cmd.Connection = con;
+
+        DataTable dataTable = new DataTable();
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            dataTable.Load(rdr);
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+        
+        return dataTable;
+    }
 }

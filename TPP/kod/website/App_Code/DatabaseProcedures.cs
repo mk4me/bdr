@@ -14,12 +14,12 @@ public class DatabaseProcedures
 {
     public static string SERVER = "TPPServer";
 
-	public DatabaseProcedures()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    public DatabaseProcedures()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public static Dictionary<string, string> getEnumerationString(string table, string attribute)
     {
@@ -40,8 +40,8 @@ public class DatabaseProcedures
 
             while (rdr.Read())
             {
-                string value = (string) rdr["Value"];
-                string label = (string) rdr["Label"];
+                string value = (string)rdr["Value"];
+                string label = (string)rdr["Label"];
 
                 enumeration.Add(value, label);
             }
@@ -105,7 +105,7 @@ public class DatabaseProcedures
     {
         Dictionary<byte, string> dictionary = getEnumerationByte(table, attribute);
         dictionary.Add(noData, "");
-        
+
 
         return dictionary;
     }
@@ -430,5 +430,84 @@ public class DatabaseProcedures
         }
 
         return disorderDuration;
+    }
+
+    public static SortedDictionary<int, string> getExportColumns()
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select PozycjaDomyslna, Encja, Nazwa from Kolumna";
+        cmd.Connection = con;
+
+        SortedDictionary<int, string> columns = new SortedDictionary<int, string>();
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                int position = (int)rdr["PozycjaDomyslna"];
+                string tableName = (string)rdr["Encja"];
+                string columnName = (string)rdr["Nazwa"];
+
+                // Można też pominąć kolumny opisujące dane pacjenta (encja "P"), bo one są na sztywno umieszczane w generowanym wyniku, a ich wybranie mogłoby wywołać błąd generowanego zapytania.
+                if (tableName != "P")
+                {
+                    columns.Add(position, tableName + ":" + columnName);
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return columns;
+    }
+
+    public static int getColumnId(string table, string column)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select IdKolumna from Kolumna where Encja=@Encja and Nazwa=@Nazwa";
+        cmd.Parameters.Add("@Encja", SqlDbType.VarChar, 30).Value = table;
+        cmd.Parameters.Add("@Nazwa", SqlDbType.VarChar, 50).Value = column;
+        cmd.Connection = con;
+
+        int columnId = 0;
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            if (rdr.Read())
+            {
+                columnId = (int)rdr["IdKolumna"];
+            }
+        }
+        catch (SqlException ex)
+        {
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return columnId;
     }
 }

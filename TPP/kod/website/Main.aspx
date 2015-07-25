@@ -3,6 +3,9 @@
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
+<asp:ScriptManager runat="server" ID="Script1"></asp:ScriptManager>
+<asp:UpdatePanel runat="Server" ID="UpdatePanel1">
+<ContentTemplate>
     <h2>
         Pacjenci
     </h2>
@@ -57,5 +60,7 @@
         </tr>
     </table>
     <asp:Label ID="labelMessage" runat="server" Text=""></asp:Label>
+</ContentTemplate>
+</asp:UpdatePanel>
 </asp:Content>
 
