@@ -8,7 +8,32 @@ go
 update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''NarazenieNaToks'', P.IdPacjent, #2)  as NarazeniaNaToks' where  Nazwa = 'NarazeniaNaToks';
 update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''ObjawyAutonomiczne'', P.IdPacjent, #2)  as ObjawyAutonomiczne' where  Nazwa = 'ObjawyAutonomiczne';
 update Kolumna set CustPodzapytanie = 'dbo.multivalued_examination_attribute(''SPECTWynik'', P.IdPacjent, #2)  as SPECTWyniki' where  Nazwa = 'SPECTWyniki';
+update Kolumna set CustPodzapytanie = 'dbo.disorder_duration_for_patient_exam_kind(P.IdPacjent, #2)  as CzasTrwaniaChoroby' where  Nazwa = 'CzasTrwaniaChoroby';
+
 go
+
+
+update Kolumna set Nazwa='Wprowadzil' where Nazwa='WprowadzilasWizyteWprowadzil';
+update Kolumna set Nazwa='Zmodyfikowal' where Nazwa='ZmodyfikowalasWizyteEdytowal';
+update Kolumna set Nazwa='OstatniaZmiana' where Nazwa='OstatniaZmianaasOstatniaModyfikacja';
+
+update Kolumna set Nazwa='Wprowadzil' where Nazwa='WprowadzilasWariantZapisal';
+update Kolumna set Nazwa='Zmodyfikowal' where Nazwa='ZmodyfikowalasWariantModyfikowal';
+update Kolumna set Nazwa='OstatniaZmiana' where Nazwa='OstatniaZmianaasOstatniaEdycjaWariantu';
+
+
+-- last rev. 2015-07-26
+create function disorder_duration_for_patient_exam_kind( @patient_id int, @exam_kind int )
+returns decimal(4,2)
+as
+begin
+return CAST(
+	datediff(	day, 
+				CAST( CAST((select max(RokZachorowania) from Wizyta w where w.IdPacjent = @patient_id ) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), 
+				(select DataPrzyjecia from Wizyta where IdPacjent = @patient_id and RodzajWizyty = @exam_kind) )/365.0 as decimal(4,2))
+end
+go
+
 
 
 
@@ -520,9 +545,11 @@ begin
 end;
 go
 /*
+select * from Kolumna;
+
 declare @filtr as KolumnyUdt;
 insert into @filtr (Pozycja, KolumnaID) values ( 1, 131 );
 insert into @filtr (Pozycja, KolumnaID)values ( 2, 38 );
 
-exec get_transformed_copy @filtr, 256, 1,0,1,0;
+exec get_transformed_copy @filtr, 5, 1,0,1,0;
 */

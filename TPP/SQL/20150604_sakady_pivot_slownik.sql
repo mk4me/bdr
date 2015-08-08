@@ -325,9 +325,9 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (261, 'B', 'UpAndGoK
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (262, 'B', 'TST');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (263, 'B', 'TandemPivot');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (264, 'B', 'WTT');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (265, 'B', 'WprowadzilasWariantZapisal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (266, 'B', 'ZmodyfikowalasWariantModyfikowal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (267, 'B', 'OstatniaZmianaasOstatniaEdycjaWariantu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (265, 'B', 'Wprowadzil');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (266, 'B', 'Zmodyfikowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (267, 'B', 'OstatniaZmiana');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (268, 'W', 'PDQ39');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (269, 'W', 'AIMS');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (270, 'W', 'Epworth');
@@ -419,9 +419,9 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (355, 'W', 'HDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (356, 'W', 'LDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (357, 'W', 'olLDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (358, 'W', 'LaboratoryjneInne');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (359, 'W', 'WprowadzilasWizyteWprowadzil');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (360, 'W', 'ZmodyfikowalasWizyteEdytowal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (361, 'W', 'OstatniaZmianaasOstatniaModyfikacja');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (359, 'W', 'Wprowadzil');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (360, 'W', 'Zmodyfikowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (361, 'W', 'OstatniaZmiana');
 
 
 

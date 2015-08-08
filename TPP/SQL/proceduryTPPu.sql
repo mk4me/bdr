@@ -264,6 +264,19 @@ return CAST(
 end
 go
 
+-- last rev. 2015-07-26
+create function disorder_duration_for_patient_exam_kind( @patient_id int, @exam_kind int )
+returns decimal(4,2)
+as
+begin
+return CAST(
+	datediff(	day, 
+				CAST( CAST((select max(RokZachorowania) from Wizyta w where w.IdPacjent = @patient_id ) as varchar)+'-'+ CAST(1 as varchar)+'-'+ CAST(1 as varchar) as datetime), 
+				(select DataPrzyjecia from Wizyta where IdPacjent = @patient_id and RodzajWizyty = @exam_kind) )/365.0 as decimal(4,2))
+end
+go
+
+
 
 
 create function validate_input_int( @table_name varchar(30), @attr_name varchar(50), @value tinyint )
@@ -3668,7 +3681,6 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Badanie',	'TandemPivot',	5,	'5' );
 
 
-
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (1, 'P', 'NumerPacjenta');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (2, 'P', 'RokUrodzenia');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (3, 'P', 'MiesiacUrodzenia');
@@ -3933,9 +3945,9 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (261, 'B', 'UpAndGoK
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (262, 'B', 'TST');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (263, 'B', 'TandemPivot');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (264, 'B', 'WTT');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (265, 'B', 'WprowadzilasWariantZapisal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (266, 'B', 'ZmodyfikowalasWariantModyfikowal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (267, 'B', 'OstatniaZmianaasOstatniaEdycjaWariantu');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (265, 'B', 'Wprowadzil');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (266, 'B', 'Zmodyfikowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (267, 'B', 'OstatniaZmiana');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (268, 'W', 'PDQ39');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (269, 'W', 'AIMS');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (270, 'W', 'Epworth');
@@ -4027,9 +4039,9 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (355, 'W', 'HDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (356, 'W', 'LDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (357, 'W', 'olLDL');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (358, 'W', 'LaboratoryjneInne');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (359, 'W', 'WprowadzilasWizyteWprowadzil');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (360, 'W', 'ZmodyfikowalasWizyteEdytowal');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (361, 'W', 'OstatniaZmianaasOstatniaModyfikacja');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (359, 'W', 'Wprowadzil');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (360, 'W', 'Zmodyfikowal');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (361, 'W', 'OstatniaZmiana');
 
 
 

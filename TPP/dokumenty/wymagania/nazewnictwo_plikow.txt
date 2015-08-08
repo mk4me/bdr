@@ -1,0 +1,33 @@
+na ekranie PACJENCI - pokazywaæ sposób wype³nienia;
+checkbox = Dane kompletne (dla pacjenta i dla wizyty) ;
+- dwie liczby opisuj¹ce kompletnoœæ danych pacjenta;
+
+video wyrzuciæ, koordynaty zostaj¹;
+w koordynatach zamieniæ nazwisko numerem pacjenta;
+
+
+
+
+
+
+
+
+
+-------- Forwarded Message --------
+Subject: 	Re: TPP - etykiety i symbole w nazwach dla typów i ew. podtypów plików
+Date: 	Tue, 21 Jul 2015 23:05:28 +0200
+From: 	Stanis³aw Szlufik <stanislaw.szlufik@gmail.com>
+To: 	Piotr Habela <habela@pjwstk.edu.pl>
+
+
+
+
+Dobry wieczór,
+Z brakuj¹cych sufixów proponujê do tych wymienionych przez Pana dodaæ:
+- D = desktop [dotychczas stacjonarne]
+- L = laptop
+- T = tablet
+- J = Jazz novo
+Wydaje mi siê, ¿e w chwili obecnej Profesor Przybyszewski chyba nie zamierza dorzucaæ nowych kolejnych urz¹dzeñ, wiêc powinno to byc wystarczaj¹co.
+pozdrawiam,
+S. Szlufik
