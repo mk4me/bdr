@@ -515,6 +515,30 @@ create table Badanie  (
 	TestMarszuCzas2	decimal(4,2),
 	Posturografia	bit,
 	MotionAnalysis	bit,
+
+-- variant test B_0
+	Zebris_1_5_Step_width decimal(5,2) NULL,
+	Zebris_1_5_Step_length_left decimal(5,2) NULL,
+	Zebris_1_5_Step_length_right decimal(5,2) NULL,
+	Zebris_1_5_Step_time_left decimal(5,2) NULL,
+	Zebris_1_5_Step_time_right decimal(5,2) NULL,
+	Zebris_1_5_Stance_phase_left decimal(5,2) NULL,
+	Zebris_1_5_Stance_phase_right decimal(5,2) NULL,
+	Zebris_1_5_Swing_phase_left decimal(5,2) NULL,
+	Zebris_1_5_Swing_phase_right decimal(5,2) NULL,
+	Zebris_1_5_Total_Double_Support decimal(5,2) NULL,
+	Zebris_1_5_Cadence decimal(5,2) NULL,
+	Zebris_3_0_Step_width decimal(5,2) NULL,
+	Zebris_3_0_Step_length_left decimal(5,2) NULL,
+	Zebris_3_0_Step_length_right decimal(5,2) NULL,
+	Zebris_3_0_Step_time_left decimal(5,2) NULL,
+	Zebris_3_0_Step_time_right decimal(5,2) NULL,
+	Zebris_3_0_Stance_phase_left decimal(5,2) NULL,
+	Zebris_3_0_Stance_phase_right decimal(5,2) NULL,
+	Zebris_3_0_Swing_phase_left decimal(5,2) NULL,
+	Zebris_3_0_Swing_phase_right decimal(5,2) NULL,
+	Zebris_3_0_Total_Double_Support decimal(5,2) NULL,
+	Zebris_3_0_Cadence decimal(5,2) NULL,
 -- variant test B_1
 
 	Otwarte_Srednia_C_o_P_X int,				-- (wartości liczbowe - liczby całkowite od -500 do +500)
