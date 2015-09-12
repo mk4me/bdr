@@ -27,41 +27,12 @@ public partial class PartFForm : System.Web.UI.Page
     //private List<Tuple<TextBox[], string>> variantsPartAListPercent = new List<Tuple<TextBox[], string>>();
     private List<Tuple<DropDownList[], string>> variantsPartBList = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<TextBox[], string>> variantsPartBList2 = new List<Tuple<TextBox[], string>>();
-    private Tuple<DropDownList[], string> variantsTremorometria;
-    private Tuple<DropDownList[], string> variantsTremorometriaLeft;
-    private Tuple<DropDownList[], string> variantsTremorometriaRight;
 
     private List<Tuple<TextBox[], string>> variantsPartBList3 = new List<Tuple<TextBox[], string>>();
-    private Tuple<DropDownList[], string> variantsTestSchodkowy;
-    private Tuple<TextBox[], string> variantsTestSchodkowyWDol;
-    private Tuple<TextBox[], string> variantsTestSchodkowyWGore;
-    private Tuple<DropDownList[], string> variantsTestMarszu;
-    private Tuple<TextBox[], string> variantsTestMarszuCzas1;
-    private Tuple<TextBox[], string> variantsTestMarszuCzas2;
-    private Tuple<DropDownList[], string> variantsPosturografia;
-    private Tuple<DropDownList[], string> variantsMotionAnalysis;
+
+    private List<Tuple<TextBox[], string>> variantsPartB0List = new List<Tuple<TextBox[], string>>();
 
     private List<Tuple<TextBox[], string>> variantsPartB1List = new List<Tuple<TextBox[], string>>();
-    private Tuple<TextBox[], string> variantsOtwarteSredniaCoPX;
-    private Tuple<TextBox[], string> variantsOtwarteSredniaCoPY;
-    private Tuple<TextBox[], string> variantsOtwarteSredniaPTPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsOtwarteSredniaPBPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsOtwartePerimetermm;
-    private Tuple<TextBox[], string> variantsOtwartePoleElipsymm2;
-    private Tuple<TextBox[], string> variantsZamknieteSredniaCoPX;
-    private Tuple<TextBox[], string> variantsZamknieteSredniaCoPY;
-    private Tuple<TextBox[], string> variantsZamknieteSredniaPTPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsZamknieteSredniaPBPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsZamknietePerimetermm;
-    private Tuple<TextBox[], string> variantsZamknietePoleElipsymm2;
-    private Tuple<TextBox[], string> variantsWspolczynnikPerymetruECEOobiestopy;
-    private Tuple<TextBox[], string> variantsWspolczynnikPowierzchniECEOobiestopy;
-    private Tuple<TextBox[], string> variantsBiofeedbackSredniaCoPX;
-    private Tuple<TextBox[], string> variantsBiofeedbackSredniaCoPY;
-    private Tuple<TextBox[], string> variantsBiofeedbackSredniaPTPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsBiofeedbackSredniaPBPredkoscmmsec;
-    private Tuple<TextBox[], string> variantsBiofeedbackPerimetermm;
-    private Tuple<TextBox[], string> variantsBiofeedbackPoleElipsymm2;
 
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
@@ -93,6 +64,10 @@ public partial class PartFForm : System.Web.UI.Page
                     for (int i = 0; i < variantIds.Length; i++)
                     {
                         loadPartB(variantIds[i], i);
+                    }
+                    for (int i = 0; i < variantIds.Length; i++)
+                    {
+                        loadPartB0(variantIds[i], i);
                     }
                     for (int i = 0; i < variantIds.Length; i++)
                     {
@@ -206,9 +181,6 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartAList2.Add(addVariantTextBoxes("POM_Accuracy_FastSinus", tableUPDRSExtra, true, true));
         
         addVariantHeader(tablePart2);
-        variantsTremorometria = addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo);
-        variantsTremorometriaLeft = addVariantDropDowns("TremorometriaLEFT", tablePart2, dictionaryYesNo);
-        variantsTremorometriaRight = addVariantDropDowns("TremorometriaRIGHT", tablePart2, dictionaryYesNo);
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true, false));
@@ -231,67 +203,64 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_8_9", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_9_10", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true, false));
-        variantsTestSchodkowy = addVariantDropDowns("TestSchodkowy", tablePart2, dictionaryYesNo);
-        variantsTestSchodkowyWDol = addVariantTextBoxes("TestSchodkowyWDol", tablePart2, true, true);
-        variantsTestSchodkowyWGore = addVariantTextBoxes("TestSchodkowyWGore", tablePart2, true, true);
-        variantsTestMarszu = addVariantDropDowns("TestMarszu", tablePart2, dictionaryYesNo);
-        variantsTestMarszuCzas1 = addVariantTextBoxes("TestMarszuCzas1", tablePart2, true, true);
-        variantsTestMarszuCzas2 = addVariantTextBoxes("TestMarszuCzas2", tablePart2, true, true);
-        variantsPosturografia = addVariantDropDowns("Posturografia", tablePart2, dictionaryYesNo);
-        variantsMotionAnalysis = addVariantDropDowns("MotionAnalysis", tablePart2, dictionaryYesNo);
-        variantsPartBList.Add(variantsTremorometria);
-        variantsPartBList.Add(variantsTremorometriaLeft);
-        variantsPartBList.Add(variantsTremorometriaRight);
-        variantsPartBList.Add(variantsTestSchodkowy);
-        variantsPartBList.Add(variantsTestMarszu);
-        variantsPartBList.Add(variantsPosturografia);
-        variantsPartBList.Add(variantsMotionAnalysis);
-        variantsPartBList2.Add(variantsTestSchodkowyWDol);
-        variantsPartBList2.Add(variantsTestSchodkowyWGore);
-        variantsPartBList2.Add(variantsTestMarszuCzas1);
-        variantsPartBList2.Add(variantsTestMarszuCzas2);
+        variantsPartBList.Add(addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("TremorometriaLEFT", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("TremorometriaRIGHT", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("TestSchodkowy", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("TestMarszu", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("Posturografia", tablePart2, dictionaryYesNo));
+        variantsPartBList.Add(addVariantDropDowns("MotionAnalysis", tablePart2, dictionaryYesNo));
+        variantsPartBList2.Add(addVariantTextBoxes("TestSchodkowyWDol", tablePart2, true, true));
+        variantsPartBList2.Add(addVariantTextBoxes("TestSchodkowyWGore", tablePart2, true, true));
+        variantsPartBList2.Add(addVariantTextBoxes("TestMarszuCzas1", tablePart2, true, true));
+        variantsPartBList2.Add(addVariantTextBoxes("TestMarszuCzas2", tablePart2, true, true));
+
+        addVariantHeader(tablePart5);
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Step_width", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Step_length_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Step_length_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Step_time_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Step_time_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Stance_phase_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Stance_phase_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Swing_phase_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Swing_phase_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Total_Double_Support", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_1_5_Cadence", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Step_width", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Step_length_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Step_length_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Step_time_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Step_time_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Stance_phase_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Stance_phase_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Swing_phase_left", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Swing_phase_right", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Total_Double_Support", tablePart5, true, true));
+        variantsPartB0List.Add(addVariantTextBoxes("Zebris_3_0_Cadence", tablePart5, true, true));
+
 
         addVariantHeader(tablePart4);
-        variantsOtwarteSredniaCoPX = addVariantTextBoxes("Otwarte_Srednia_C_o_P_X", tablePart4, true, true);
-        variantsOtwarteSredniaCoPY = addVariantTextBoxes("Otwarte_Srednia_C_o_P_Y", tablePart4, true, true);
-        variantsOtwarteSredniaPTPredkoscmmsec = addVariantTextBoxes("Otwarte_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true);
-        variantsOtwarteSredniaPBPredkoscmmsec = addVariantTextBoxes("Otwarte_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true);
-        variantsOtwartePerimetermm = addVariantTextBoxes("Otwarte_Perimeter_mm", tablePart4, true, true);
-        variantsOtwartePoleElipsymm2 = addVariantTextBoxes("Otwarte_PoleElipsy_mm2", tablePart4, true, true);
-        variantsZamknieteSredniaCoPX = addVariantTextBoxes("Zamkniete_Srednia_C_o_P_X", tablePart4, true, true);
-        variantsZamknieteSredniaCoPY = addVariantTextBoxes("Zamkniete_Srednia_C_o_P_Y", tablePart4, true, true);
-        variantsZamknieteSredniaPTPredkoscmmsec = addVariantTextBoxes("Zamkniete_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true);
-        variantsZamknieteSredniaPBPredkoscmmsec = addVariantTextBoxes("Zamkniete_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true);
-        variantsZamknietePerimetermm = addVariantTextBoxes("Zamkniete_Perimeter_mm", tablePart4, true, true);
-        variantsZamknietePoleElipsymm2 = addVariantTextBoxes("Zamkniete_PoleElipsy_mm2", tablePart4, true, true);
-        variantsWspolczynnikPerymetruECEOobiestopy = addVariantTextBoxes("WspolczynnikPerymetru_E_C_E_O_obie_stopy", tablePart4, true, true);
-        variantsWspolczynnikPowierzchniECEOobiestopy = addVariantTextBoxes("WspolczynnikPowierzchni_E_C_E_O_obie_stopy", tablePart4, true, true);
-        variantsBiofeedbackSredniaCoPX = addVariantTextBoxes("Biofeedback_Srednia_C_o_P_X", tablePart4, true, true);
-        variantsBiofeedbackSredniaCoPY = addVariantTextBoxes("Biofeedback_Srednia_C_o_P_Y", tablePart4, true, true);
-        variantsBiofeedbackSredniaPTPredkoscmmsec = addVariantTextBoxes("Biofeedback_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true);
-        variantsBiofeedbackSredniaPBPredkoscmmsec = addVariantTextBoxes("Biofeedback_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true);
-        variantsBiofeedbackPerimetermm = addVariantTextBoxes("Biofeedback_Perimeter_mm", tablePart4, true, true);
-        variantsBiofeedbackPoleElipsymm2 = addVariantTextBoxes("Biofeedback_PoleElipsy_mm2", tablePart4, true, true);
-        variantsPartB1List.Add(variantsOtwarteSredniaCoPX);
-        variantsPartB1List.Add(variantsOtwarteSredniaCoPY);
-        variantsPartB1List.Add(variantsOtwarteSredniaPTPredkoscmmsec);
-        variantsPartB1List.Add(variantsOtwarteSredniaPBPredkoscmmsec);
-        variantsPartB1List.Add(variantsOtwartePerimetermm);
-        variantsPartB1List.Add(variantsOtwartePoleElipsymm2);
-        variantsPartB1List.Add(variantsZamknieteSredniaCoPX);
-        variantsPartB1List.Add(variantsZamknieteSredniaCoPY);
-        variantsPartB1List.Add(variantsZamknieteSredniaPTPredkoscmmsec);
-        variantsPartB1List.Add(variantsZamknieteSredniaPBPredkoscmmsec);
-        variantsPartB1List.Add(variantsZamknietePerimetermm);
-        variantsPartB1List.Add(variantsZamknietePoleElipsymm2);
-        variantsPartB1List.Add(variantsWspolczynnikPerymetruECEOobiestopy);
-        variantsPartB1List.Add(variantsWspolczynnikPowierzchniECEOobiestopy);
-        variantsPartB1List.Add(variantsBiofeedbackSredniaCoPX);
-        variantsPartB1List.Add(variantsBiofeedbackSredniaCoPY);
-        variantsPartB1List.Add(variantsBiofeedbackSredniaPTPredkoscmmsec);
-        variantsPartB1List.Add(variantsBiofeedbackSredniaPBPredkoscmmsec);
-        variantsPartB1List.Add(variantsBiofeedbackPerimetermm);
-        variantsPartB1List.Add(variantsBiofeedbackPoleElipsymm2);
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_Srednia_C_o_P_X", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_Srednia_C_o_P_Y", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_Perimeter_mm", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Otwarte_PoleElipsy_mm2", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_Srednia_C_o_P_X", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_Srednia_C_o_P_Y", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_Perimeter_mm", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Zamkniete_PoleElipsy_mm2", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("WspolczynnikPerymetru_E_C_E_O_obie_stopy", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("WspolczynnikPowierzchni_E_C_E_O_obie_stopy", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_Srednia_C_o_P_X", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_Srednia_C_o_P_Y", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_Srednia_P_T_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_Srednia_P_B_Predkosc_mm_sec", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_Perimeter_mm", tablePart4, true, true));
+        variantsPartB1List.Add(addVariantTextBoxes("Biofeedback_PoleElipsy_mm2", tablePart4, true, true));
 
         addVariantHeader(tablePart3);
         variantsPartCList.Add(addVariantTextBoxes("UpAndGo", tablePart3, true, true));
@@ -648,6 +617,60 @@ public partial class PartFForm : System.Web.UI.Page
             tremorometriaDecimal.Scale = 2;
             tremorometriaDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartBList3[i].Item1[variant].Text);
             cmd.Parameters.Add(tremorometriaDecimal);
+        }
+
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
+        cmd.Parameters.Add("@result", SqlDbType.Int);
+        cmd.Parameters["@result"].Direction = ParameterDirection.Output;
+        cmd.Parameters.Add("@message", SqlDbType.VarChar, 200);
+        cmd.Parameters["@message"].Direction = ParameterDirection.Output;
+        cmd.Connection = con;
+
+        int success = 0;
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+            success = (int)cmd.Parameters["@result"].Value;
+
+            if (success == 0)
+            {
+                labelSavePartB.Text = "Dane zapisane";
+            }
+            else
+            {
+                labelMessage.Text = (string)cmd.Parameters["@message"].Value;
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    private void saveVariantPartB0(int examinationId, int variant)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[update_variant_examination_data_partB_0]";
+        cmd.Parameters.Add("@IdBadanie", SqlDbType.Int).Value = examinationId;
+
+        for (int i = 0; i < variantsPartB0List.Count; i++)
+        {
+            SqlParameter zebrisDecimal = new SqlParameter("@" + variantsPartB0List[i].Item2, SqlDbType.Decimal);
+            zebrisDecimal.Precision = 5;
+            zebrisDecimal.Scale = 2;
+            zebrisDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartB0List[i].Item1[variant].Text);
+            cmd.Parameters.Add(zebrisDecimal);
         }
 
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
@@ -1160,6 +1183,63 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
+    private void loadPartB0(int variantId, int variant)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.Text;
+        cmd.CommandText = "select " +
+            "Zebris_1_5_Step_width, " +
+            "Zebris_1_5_Step_length_left, " +
+            "Zebris_1_5_Step_length_right, " +
+            "Zebris_1_5_Step_time_left, " +
+            "Zebris_1_5_Step_time_right, " +
+            "Zebris_1_5_Stance_phase_left, " +
+            "Zebris_1_5_Stance_phase_right, " +
+            "Zebris_1_5_Swing_phase_left, " +
+            "Zebris_1_5_Swing_phase_right, " +
+            "Zebris_1_5_Total_Double_Support, " +
+            "Zebris_1_5_Cadence, " +
+            "Zebris_3_0_Step_width, " +
+            "Zebris_3_0_Step_length_left, " +
+            "Zebris_3_0_Step_length_right, " +
+            "Zebris_3_0_Step_time_left, " +
+            "Zebris_3_0_Step_time_right, " +
+            "Zebris_3_0_Stance_phase_left, " +
+            "Zebris_3_0_Stance_phase_right, " +
+            "Zebris_3_0_Swing_phase_left, " +
+            "Zebris_3_0_Swing_phase_right, " +
+            "Zebris_3_0_Total_Double_Support, " +
+            "Zebris_3_0_Cadence " +
+            "from Badanie where IdBadanie = " + variantId;
+        cmd.Connection = con;
+
+        try
+        {
+            con.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                for (int i = 0; i < variantsPartB0List.Count; i++)
+                {
+                    variantsPartB0List[i].Item1[variant].Text = DatabaseProcedures.getTextDecimalValue(rdr[variantsPartB0List[i].Item2]);
+                }
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
     private void loadPartB1(int variantId, int variant)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
@@ -1391,14 +1471,11 @@ public partial class PartFForm : System.Web.UI.Page
         disableWebControlVariants(variantsSaccades.Item1, variantList);
         disableWebControlVariants(variantsAntisaccades.Item1, variantList);
 
-        disableWebControlVariants(variantsTestSchodkowy.Item1, variantList);
-        disableWebControlVariants(variantsTestSchodkowyWDol.Item1, variantList);
-        disableWebControlVariants(variantsTestSchodkowyWGore.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszu.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszuCzas1.Item1, variantList);
-        disableWebControlVariants(variantsTestMarszuCzas2.Item1, variantList);
-        disableWebControlVariants(variantsPosturografia.Item1, variantList);
-        disableWebControlVariants(variantsMotionAnalysis.Item1, variantList);
+        foreach (Tuple<TextBox[], string> tuple in variantsPartB0List)
+        {
+            disableWebControlVariants(tuple.Item1, variantList);
+        }
+
         foreach (Tuple<TextBox[], string> tuple in variantsPartB1List)
         {
             disableWebControlVariants(tuple.Item1, variantList);
@@ -1469,6 +1546,18 @@ public partial class PartFForm : System.Web.UI.Page
             for (int i = 0; i < variantIds.Length; i++)
             {
                 saveVariantPartB(variantIds[i], i);
+            }
+        }
+    }
+
+    protected void buttonSavePartB0_Click(object sender, EventArgs e)
+    {
+        int[] variantIds = (int[])ViewState["VariantIds"];
+        if (variantIds != null)
+        {
+            for (int i = 0; i < variantIds.Length; i++)
+            {
+                saveVariantPartB0(variantIds[i], i);
             }
         }
     }
