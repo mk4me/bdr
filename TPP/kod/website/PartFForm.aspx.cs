@@ -27,13 +27,9 @@ public partial class PartFForm : System.Web.UI.Page
     //private List<Tuple<TextBox[], string>> variantsPartAListPercent = new List<Tuple<TextBox[], string>>();
     private List<Tuple<DropDownList[], string>> variantsPartBList = new List<Tuple<DropDownList[], string>>();
     private List<Tuple<TextBox[], string>> variantsPartBList2 = new List<Tuple<TextBox[], string>>();
-
     private List<Tuple<TextBox[], string>> variantsPartBList3 = new List<Tuple<TextBox[], string>>();
-
     private List<Tuple<TextBox[], string>> variantsPartB0List = new List<Tuple<TextBox[], string>>();
-
     private List<Tuple<TextBox[], string>> variantsPartB1List = new List<Tuple<TextBox[], string>>();
-
     private List<Tuple<TextBox[], string>> variantsPartCList = new List<Tuple<TextBox[], string>>();
     private Tuple<DropDownList[], string> variantsTandemPivot;
     private List<Tuple<TextBox[], FileUpload[]>> variantFileUploadList = new List<Tuple<TextBox[], FileUpload[]>>();
@@ -273,7 +269,10 @@ public partial class PartFForm : System.Web.UI.Page
 
         addVariantHeader(tableFiles);
         variantFileUploadList.Add(addVariantFiles("Coordinates", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("Video", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Video-desktop", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Video-laptop", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Video-tablet", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Video-jazznovo", tableFiles));
         variantFileUploadList.Add(addVariantFiles("EyeTrackingExcel", tableFiles));
         variantFileUploadList.Add(addVariantFiles("EyeTrackingGraph", tableFiles));
         variantFileList = addVariantFileLists("Pliki:", tableFiles);
@@ -386,6 +385,7 @@ public partial class PartFForm : System.Web.UI.Page
             row2.Controls.Add(cellFile);
             FileUpload fileUpload = new FileUpload();
             fileUpload.Width = new Unit(240);
+            fileUpload.Style.Add("margin-bottom", "10px");
             cellFile.Controls.Add(fileUpload);
 
             textBox.Text = label;
