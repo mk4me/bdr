@@ -440,6 +440,7 @@ create type KolumnyUdt as table
 )
 go
 
+-- modified 2015-09-22
 alter procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int, @b_on as bit, @b_off as bit, @d_on as bit, @d_off as bit)
 as
 begin
@@ -451,7 +452,9 @@ begin
 	declare @subquery_template as varchar(150);
 	declare @variant_subquery_template as varchar(200);
 	declare @custom_subquery as varchar(200);
-	declare @subquery as varchar(200);
+	declare @subquery as varchar(200);			-- determines attribute name
+	declare @subqueryVisitNo as varchar(200);	-- determines visit number
+	declare @subqueryVariant as varchar(200);	-- determines variant
 
 	
 	set @subquery_template =', MAX(CASE WHEN W.RodzajWizyty = #2 THEN CAST(W.#1 as Varchar) ELSE '''' END) as #1';
@@ -487,41 +490,38 @@ begin
 			set @visit_date = @visit_date + 6;
 			if ((@timeline_filter & POWER(2,@visit_date / 6)) = 0) continue;
 			set @zero_prefix = CASE WHEN @visit_date < 10 THEN '0' ELSE '' END;
-			set @subquery = REPLACE(@subquery, '#2', @visit_date)+@zero_prefix + CAST(@visit_date as Varchar);
+			set @subqueryVisitNo = REPLACE(@subquery, '#2', @visit_date)+@zero_prefix + CAST(@visit_date as Varchar);
 			
 			if(@current_entity_kind = 'B')
 			begin
 
 				if(@b_on = 1)
 				begin
-					set @subquery = REPLACE(@subquery, '#BMT', 1)+'_BMT';
+					set @subqueryVariant = REPLACE(@subqueryVisitNo, '#BMT', 1)+'_BMT';
 					if(@d_on = 1)
 					begin
-						set @subquery = REPLACE(@subquery, '#DBS', 1)+'_DBS';
-						set @sql = @sql + @subquery;
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 1)+'_DBS';
 					end;
 					if(@d_off = 1)
 					begin
-						set @subquery = REPLACE(@subquery, '#DBS', 0)+'_O';
-						set @sql = @sql + @subquery;
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 0)+'_O';
 					end;
 				end;
 				if(@b_off = 1)
 				begin
-					set @subquery = REPLACE(@subquery, '#BMT', 0)+'_O';
+					set @subqueryVariant = REPLACE(@subqueryVisitNo, '#BMT', 0)+'_O';
 					if(@d_on = 1)
 					begin
-						set @subquery = REPLACE(@subquery, '#DBS', 1)+'_DBS';
-						set @sql = @sql + @subquery;
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 1)+'_DBS';
 					end;
 					if(@d_off = 1)
 					begin
-						set @subquery = REPLACE(@subquery, '#DBS', 0)+'_O';
-						set @sql = @sql + @subquery;
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 0)+'_O';
 					end;
 				end;
+				
 			end
-			else set @sql = @sql + @subquery;
+			else set @sql = @sql + @subqueryVisitNo;
 			
 		end;
 		
@@ -551,5 +551,5 @@ declare @filtr as KolumnyUdt;
 insert into @filtr (Pozycja, KolumnaID) values ( 1, 131 );
 insert into @filtr (Pozycja, KolumnaID)values ( 2, 38 );
 
-exec get_transformed_copy @filtr, 5, 1,0,1,0;
+exec get_transformed_copy @filtr, 5, 1,1,1,1;
 */

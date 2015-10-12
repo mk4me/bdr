@@ -617,9 +617,8 @@ CREATE TABLE Plik (
     Plik 		varbinary(max) not null,
 	rowguid		uniqueidentifier rowguidcol not null unique default NEWSEQUENTIALID(),
 	NazwaPliku 	varchar(255) null,
-	-- Sciezka 	varchar(100) null,
-	-- OstatniaZmiana datetime default getdate() not null,
-	-- Zmieniony datetime
+	PodRodzajPliku varchar(2),
+	NazwaEksportowaPliku varchar(50)
 )
 go
  

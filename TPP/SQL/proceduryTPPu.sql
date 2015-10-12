@@ -3117,6 +3117,111 @@ SELECT
   order by P.NumerPacjenta, W.RodzajWizyty, B.BMT, B.DBS
   go
 
+
+-- modified 2015-09-22
+create procedure get_transformed_copy(@column_filter as KolumnyUdt readonly, @timeline_filter int, @b_on as bit, @b_off as bit, @d_on as bit, @d_off as bit)
+as
+begin
+	declare @sql as nvarchar(max);
+	declare @current_column_name as varchar(50);
+	declare @current_column_id as int;
+	declare @current_entity_kind as varchar(1);
+	declare @zero_prefix as varchar(1);
+	declare @subquery_template as varchar(150);
+	declare @variant_subquery_template as varchar(200);
+	declare @custom_subquery as varchar(200);
+	declare @subquery as varchar(200);			-- determines attribute name
+	declare @subqueryVisitNo as varchar(200);	-- determines visit number
+	declare @subqueryVariant as varchar(200);	-- determines variant
+
+	
+	set @subquery_template =', MAX(CASE WHEN W.RodzajWizyty = #2 THEN CAST(W.#1 as Varchar) ELSE '''' END) as #1';
+	set @variant_subquery_template =', MAX(CASE WHEN W.RodzajWizyty = #2 and B.BMT = #BMT and B.DBS=#DBS THEN CAST(B.#1 as Varchar) ELSE '''' END) as #1';
+	select CF.*, K.Encja, K.Nazwa, K.CustPodzapytanie into #Temp from @column_filter CF join Kolumna k on k.IdKolumna = CF.KolumnaID where K.Encja <> 'P'
+	
+-- Patient basic data are always included
+	set @sql = 'select 
+	   P.[NumerPacjenta]
+      ,P.[RokUrodzenia]
+      ,P.[MiesiacUrodzenia]
+      ,P.[Plec]
+      ,P.[Lokalizacja]
+      ,P.[LiczbaElektrod]
+	  ,P.[NazwaGrupy]';
+
+	while( (select COUNT(*) from #Temp ) > 0 )
+	begin
+		declare @visit_date int;
+	
+		select top 1 @current_column_id = KolumnaID, @current_column_name = Nazwa, @current_entity_kind = Encja, @custom_subquery = CustPodzapytanie from #Temp order by Pozycja;
+		if(@custom_subquery is null)
+			begin
+				if(@current_entity_kind = 'W')
+					set @subquery = REPLACE(@subquery_template, '#1', @current_column_name)
+				else
+					set @subquery = REPLACE(@variant_subquery_template, '#1', @current_column_name);
+			end
+		else set @subquery = ' ,'+@custom_subquery;
+		set @visit_date = -6;
+		while @visit_date <= 78
+		begin
+			set @visit_date = @visit_date + 6;
+			if ((@timeline_filter & POWER(2,@visit_date / 6)) = 0) continue;
+			set @zero_prefix = CASE WHEN @visit_date < 10 THEN '0' ELSE '' END;
+			set @subqueryVisitNo = REPLACE(@subquery, '#2', @visit_date)+@zero_prefix + CAST(@visit_date as Varchar);
+			
+			if(@current_entity_kind = 'B')
+			begin
+
+				if(@b_on = 1)
+				begin
+					set @subqueryVariant = REPLACE(@subqueryVisitNo, '#BMT', 1)+'_BMT';
+					if(@d_on = 1)
+					begin
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 1)+'_DBS';
+					end;
+					if(@d_off = 1)
+					begin
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 0)+'_O';
+					end;
+				end;
+				if(@b_off = 1)
+				begin
+					set @subqueryVariant = REPLACE(@subqueryVisitNo, '#BMT', 0)+'_O';
+					if(@d_on = 1)
+					begin
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 1)+'_DBS';
+					end;
+					if(@d_off = 1)
+					begin
+						set @sql = @sql + REPLACE(@subqueryVariant, '#DBS', 0)+'_O';
+					end;
+				end;
+				
+			end
+			else set @sql = @sql + @subqueryVisitNo;
+			
+		end;
+		
+		delete #Temp where KolumnaID = @current_column_id;
+		
+	end;
+	
+	set @sql = @sql + ' from Pacjent P join Wizyta W on W.IdPacjent = P.IdPacjent join Badanie B on B.IdWizyta = W.IdWizyta group by 
+	   P.[NumerPacjenta]
+	  ,P.[IdPacjent]
+      ,P.[RokUrodzenia]
+      ,P.[MiesiacUrodzenia]
+      ,P.[Plec]
+      ,P.[Lokalizacja]
+      ,P.[LiczbaElektrod]
+	  ,P.[NazwaGrupy]
+	   order by P.[NumerPacjenta]';
+		--select @sql;
+		exec sp_executesql @statement = @sql;
+		
+end;
+go
   
   -- wsparcie generowania numerow pacjenta
 
@@ -3158,29 +3263,41 @@ go
 
 
 -- podglad zestawu danych i plikow
--- updated: 2015-01-22
+-- updated: 2015-10-12
 create procedure get_database_and_file_overview
 as
 select 
 	   P.[NumerPacjenta]
       ,W.[RodzajWizyty]
       ,max(PBDC.IdPlik) as BMT_DBS_Coord
-      ,max(PBDV.IdPlik) as BMT_DBS_Video
+     , STUFF((SELECT N';' + CAST(p.IdPlik AS VARCHAR(MAX)) +':' + p.PodRodzajPliku
+				FROM Plik p join Badanie x on p.IdBadanie = x.IdBadanie and x.BMT = 1 and x.DBS = 1 and p.OpisPliku like '%Video%'
+				WHERE x.IdWizyta = W.IdWizyta
+				FOR XML PATH(N'')), 1, 1, N'') as BMT_DBS_Video
       ,max(PBDTE.IdPlik) as BMT_DBS_ET_Excel
       ,max(PBDTG.IdPlik) as BMT_DBS_ET_Graph
       
       ,max(PBC.IdPlik) as BMT_O_Coord
-      ,max(PBV.IdPlik) as BMT_O_Video
+      , STUFF((SELECT N';' + CAST(p.IdPlik AS VARCHAR(MAX)) +':' + p.PodRodzajPliku
+				FROM Plik p join Badanie x on p.IdBadanie = x.IdBadanie and x.BMT = 1 and x.DBS = 0 and p.OpisPliku like '%Video%'
+				WHERE x.IdWizyta = W.IdWizyta
+				FOR XML PATH(N'')), 1, 1, N'') as BMT_O_Video
       ,max(PBTE.IdPlik) as BMT_O_ET_Excel
       ,max(PBTG.IdPlik) as BMT_O_ET_Graph
 
       ,max(PDC.IdPlik) as O_DBS_Coord
-      ,max(PDV.IdPlik) as O_DBS_Video
+      , STUFF((SELECT N';' + CAST(p.IdPlik AS VARCHAR(MAX)) +':' + p.PodRodzajPliku
+				FROM Plik p join Badanie x on p.IdBadanie = x.IdBadanie and x.BMT = 0 and x.DBS = 1 and p.OpisPliku like '%Video%'
+				WHERE x.IdWizyta = W.IdWizyta
+				FOR XML PATH(N'')), 1, 1, N'') as O_DBS_Video
       ,max(PDTE.IdPlik) as O_DBS_ET_Excel
       ,max(PDTG.IdPlik) as O_DBS_ET_Graph
 
       ,max(PC.IdPlik) as O_O_Coord
-      ,max(PV.IdPlik) as O_O_Video
+      , STUFF((SELECT N';' + CAST(p.IdPlik AS VARCHAR(MAX)) +':' + p.PodRodzajPliku
+				FROM Plik p join Badanie x on p.IdBadanie = x.IdBadanie and x.BMT = 0 and x.DBS = 0 and p.OpisPliku like '%Video%'
+				WHERE x.IdWizyta = W.IdWizyta
+				FOR XML PATH(N'')), 1, 1, N'') as O_O_Video
       ,max(PTE.IdPlik) as O_O_ET_Excel
       ,max(PTG.IdPlik) as O_O_ET_Graph
 
@@ -3189,27 +3306,38 @@ select
   Pacjent P join Wizyta w on P.IdPacjent = W.IdPacjent join Badanie B on B.IdWizyta = W.IdWizyta
   
   left join Plik PBDC on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDC.OpisPliku = 'Coordinates'
-  left join Plik PBDV on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'Video'
-  left join Plik PBDTE on B.IdBadanie = PBDC.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTE.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PBDTG on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTG.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PBDV on B.IdBadanie = PBDV.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDV.OpisPliku = 'Video' --
+  left join Plik PBDTE on B.IdBadanie = PBDTE.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBDTG on B.IdBadanie = PBDTG.IdBadanie and B.BMT = 1 and B.DBS = 1 and PBDTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PBC on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBC.OpisPliku = 'Coordinates'
   left join Plik PBV on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBV.OpisPliku = 'Video'
-  left join Plik PBTE on B.IdBadanie = PBC.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTE.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PBTG on B.IdBadanie = PBV.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTG.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PBTE on B.IdBadanie = PBTE.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PBTG on B.IdBadanie = PBTG.IdBadanie and B.BMT = 1 and B.DBS = 0 and PBTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PDC on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDC.OpisPliku = 'Coordinates'
   left join Plik PDV on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDV.OpisPliku = 'Video'
-  left join Plik PDTE on B.IdBadanie = PDC.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTE.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PDTG on B.IdBadanie = PDV.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTG.OpisPliku = 'EyeTrackingGraph'
+  left join Plik PDTE on B.IdBadanie = PDTE.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PDTG on B.IdBadanie = PDTG.IdBadanie and B.BMT = 0 and B.DBS = 1 and PDTG.OpisPliku = 'EyeTrackingGraph'
   
   left join Plik PC on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PC.OpisPliku = 'Coordinates'
   left join Plik PV on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PV.OpisPliku = 'Video' 
-  left join Plik PTE on B.IdBadanie = PC.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTE.OpisPliku = 'EyeTrackingExcel'
-  left join Plik PTG on B.IdBadanie = PV.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTG.OpisPliku = 'EyeTrackingGraph' 		
-  group by P.NumerPacjenta, W.RodzajWizyty	
+  left join Plik PTE on B.IdBadanie = PTE.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTE.OpisPliku = 'EyeTrackingExcel'
+  left join Plik PTG on B.IdBadanie = PTG.IdBadanie and B.BMT = 0 and B.DBS = 0 and PTG.OpisPliku = 'EyeTrackingGraph' 		
+  group by P.NumerPacjenta, W.RodzajWizyty, W.IdWizyta	
   order by P.NumerPacjenta, W.RodzajWizyty
   go
+
+-- created: 2015-10-12
+create trigger tr_Plik_Update on Plik
+for update, insert
+as
+begin
+	update Plik
+	set NazwaEksportowaPliku = dbo.generate_file_name(p.IdPlik)
+	from inserted i join Plik p on i.IdPlik = p.IdPlik
+end
+go
 
 -- updated: 2015-09-11
 create function generate_file_name( @file_id int )
