@@ -58,12 +58,16 @@ public partial class Overview : System.Web.UI.Page
                     TableCell cellFile = new TableCell();
                     //cellFile.HorizontalAlign = HorizontalAlign.Center;
                     row.Cells.Add(cellFile);
-                    FileLink fileLink = overview.getFileLink(column);
-                    if (fileLink != null)
+                    List<FileLink> fileLinks = overview.getFileLinks(column);
+                    if (fileLinks.Count != 0)
                     {
-                        cellFile.Controls.Add(fileLink.check);
-                        fileLink.check.Width = 28;
-                        cellFile.Controls.Add(fileLink.link);
+                        foreach (FileLink fileLink in fileLinks)
+                        {
+                            cellFile.Controls.Add(fileLink.check);
+                            fileLink.check.Width = 28;
+                            cellFile.Controls.Add(fileLink.link);
+                            cellFile.Controls.Add(new LiteralControl("<br />"));
+                        }
                     }
                 }
 
@@ -99,8 +103,29 @@ public partial class Overview : System.Web.UI.Page
                     object value = rdr[column];
                     if (value != DBNull.Value)
                     {
-                        fileLinks.Add(new FileLink((int)value, column));
+                        int fileId;
+                        if (int.TryParse(value.ToString(), out fileId))
+                        {
+                            fileLinks.Add(new FileLink(fileId, column, "pobierz"));
+                        }
+                        else
+                        {
+                            string[] fileIdCodes = value.ToString().Split(';');
+                            foreach (string fileIdCode in fileIdCodes)
+                            {
+                                string[] fileIds = fileIdCode.Split(':');
+                                if (int.TryParse(fileIds[0], out fileId))
+                                {
+                                    fileLinks.Add(new FileLink(fileId, column, "video:" + fileIds[1]));
+                                }
+                            }
+                        }
                     }
+                    /*
+                    if (value != DBNull.Value)
+                    {
+                        fileLinks.Add(new FileLink((int)value, column));
+                    }*/
                 }
                 OverviewSelection overview = new OverviewSelection(
                     (string)rdr["NumerPacjenta"],
@@ -143,17 +168,18 @@ public partial class Overview : System.Web.UI.Page
             this.linkList = linkList;
         }
 
-        public FileLink getFileLink(string column)
+        public List<FileLink> getFileLinks(string column)
         {
+            List<FileLink> fileLinks = new List<FileLink>();
             foreach (FileLink fileLink in linkList)
             {
                 if (fileLink.column.Equals(column))
                 {
-                    return fileLink;
+                    fileLinks.Add(fileLink);
                 }
             }
 
-            return null;
+            return fileLinks;
         }
     }
 
@@ -164,11 +190,11 @@ public partial class Overview : System.Web.UI.Page
         public LinkButton link = new LinkButton();
         public CheckBox check = new CheckBox();
 
-        public FileLink(int fileId, string column)
+        public FileLink(int fileId, string column, string linkName)
         {
             this.fileId = fileId;
             this.column = column;
-            link.Text = "pobierz";
+            link.Text = linkName;
             link.Click += new System.EventHandler(fileLink_Click);
         }
 
@@ -193,11 +219,11 @@ public partial class Overview : System.Web.UI.Page
             SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "select dbo.generate_file_name(@file_id)";
-            cmd.Parameters.Add("@file_id", SqlDbType.Int).Value = fileId;
+            cmd.CommandText = "select NazwaEksportowaPliku from Plik where IdPlik = @fileId";
+            cmd.Parameters.Add("@fileId", SqlDbType.Int).Value = fileId;
             cmd.Connection = con;
 
-            String fileName = "";
+            string fileName = "";
 
             try
             {

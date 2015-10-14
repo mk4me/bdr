@@ -268,13 +268,13 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartCList.Add(addVariantTextBoxes("WTT", tablePart3, true, true));
 
         addVariantHeader(tableFiles);
-        variantFileUploadList.Add(addVariantFiles("Coordinates", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("Video-desktop", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("Video-laptop", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("Video-tablet", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("Video-jazznovo", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("EyeTrackingExcel", tableFiles));
-        variantFileUploadList.Add(addVariantFiles("EyeTrackingGraph", tableFiles));
+        variantFileUploadList.Add(addVariantFiles("Coordinates", tableFiles, ""));
+        variantFileUploadList.Add(addVariantFiles("Video-jazznovo", tableFiles, "J"));
+        variantFileUploadList.Add(addVariantFiles("Video-desktop", tableFiles, "D"));
+        variantFileUploadList.Add(addVariantFiles("Video-laptop", tableFiles, "L"));
+        variantFileUploadList.Add(addVariantFiles("Video-tablet", tableFiles, "T"));
+        variantFileUploadList.Add(addVariantFiles("EyeTrackingExcel", tableFiles, ""));
+        variantFileUploadList.Add(addVariantFiles("EyeTrackingGraph", tableFiles, ""));
         variantFileList = addVariantFileLists("Pliki:", tableFiles);
 
         // Jedyne aktywne kolumny - (BMT ON, DBS OFF) oraz (BMT OFF, DBS OFF) dla wizyty przedoperacyjnej lub pacjentow z grupy BMT
@@ -359,10 +359,11 @@ public partial class PartFForm : System.Web.UI.Page
         return tuple;
     }
 
-    private Tuple<TextBox[], FileUpload[]> addVariantFiles(String label, Table table)
+    private Tuple<TextBox[], FileUpload[]> addVariantFiles(String label, Table table, string fileCode)
     {
         TableRow row1 = new TableRow();
         TableRow row2 = new TableRow();
+        Utils.colorRow(table, row1);
         TableCell cell1 = new TableCell();
         TableCell cell2 = new TableCell();
         cell1.Controls.Add(new LiteralControl("Opis:"));
@@ -389,6 +390,7 @@ public partial class PartFForm : System.Web.UI.Page
             cellFile.Controls.Add(fileUpload);
 
             textBox.Text = label;
+            textBox.ToolTip = fileCode;
             textBox.Enabled = false;
 
             textBoxes[i] = textBox;
@@ -865,16 +867,24 @@ public partial class PartFForm : System.Web.UI.Page
         }
     }
 
-    private bool saveVariantFile(int examinationId, string fileName, byte[] fileBytes, TextBox fileDescription)
+    private bool saveVariantFile(int examinationId, string fileName, string fileCode, byte[] fileBytes, TextBox fileDescription)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "update Plik set IdBadanie = @IdBadanie, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku where IdBadanie = @IdBadanie and OpisPliku = @OpisPliku;";
+        cmd.CommandText = "update Plik set IdBadanie = @IdBadanie, OpisPliku = @OpisPliku, Plik = @Plik, NazwaPliku = @NazwaPliku, PodRodzajPliku = @PodRodzajPliku where IdBadanie = @IdBadanie and OpisPliku = @OpisPliku;";
         cmd.Parameters.Add("@IdBadanie", SqlDbType.Int).Value = examinationId;
         cmd.Parameters.Add("@OpisPliku", SqlDbType.VarChar, 100).Value = DatabaseProcedures.getStringOrNull(fileDescription.Text);
         cmd.Parameters.Add("@Plik", SqlDbType.VarBinary).Value = fileBytes;
         cmd.Parameters.Add("@NazwaPliku", SqlDbType.VarChar, 255).Value = fileName;
+        if (fileCode == "")
+        {
+            cmd.Parameters.Add("@PodRodzajPliku", SqlDbType.VarChar, 2).Value = DBNull.Value;
+        }
+        else
+        {
+            cmd.Parameters.Add("@PodRodzajPliku", SqlDbType.VarChar, 2).Value = fileCode;
+        }
         cmd.Connection = con;
 
         bool success = false;
@@ -884,7 +894,7 @@ public partial class PartFForm : System.Web.UI.Page
             int rows = cmd.ExecuteNonQuery();
             if (rows == 0)
             {
-                cmd.CommandText = "insert into Plik (IdBadanie, OpisPliku, Plik, NazwaPliku) values (@IdBadanie, @OpisPliku, @Plik, @NazwaPliku);";
+                cmd.CommandText = "insert into Plik (IdBadanie, OpisPliku, Plik, NazwaPliku, PodRodzajPliku) values (@IdBadanie, @OpisPliku, @Plik, @NazwaPliku, @PodRodzajPliku);";
                 rows = cmd.ExecuteNonQuery();
             }
 
@@ -1599,7 +1609,7 @@ public partial class PartFForm : System.Web.UI.Page
                 {
                     if (variantFiles.Item2[i].HasFile)
                     {
-                        if (saveVariantFile(variantIds[i], variantFiles.Item2[i].FileName, variantFiles.Item2[i].FileBytes, variantFiles.Item1[i]))
+                        if (saveVariantFile(variantIds[i], variantFiles.Item2[i].FileName, variantFiles.Item1[i].ToolTip, variantFiles.Item2[i].FileBytes, variantFiles.Item1[i]))
                         {
                             savedFiles++;
                         }
