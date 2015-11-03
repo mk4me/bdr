@@ -799,8 +799,7 @@ namespace MotionDBWebServices
             relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString()+rnd.Next(100);
             try
             {
-                // TO DO: generowanie losowej nazwy katalogu
-                // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
+
 
                 OpenConnection();
                 cmd.CommandText = @"select Plik, Nazwa_pliku, Sciezka from Plik where IdPlik = @file_id";
@@ -884,6 +883,7 @@ namespace MotionDBWebServices
 
             // >>>>>>>>>>>>>>>>>>>>>> TO BE IMPLEMENTED <<<<<<<<<<<<<<<<<<<<<< //
 
+            // UWAGA! analogicznie, jak w RetrieveFiles - chcemy zapisywać fakt udostępnienia w tabel Plik_udostepniony //
 
             fData.FileLocation = relativePath + "/" + fileName;
             fData.SubdirPath = filePath;
