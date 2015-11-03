@@ -46,6 +46,10 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
+        FileData RetrieveFiles(int[] fileID);
+
+        [OperationContract]
+        [FaultContract(typeof(FileAccessServiceException))]
         string GetShallowCopy();
 
         [OperationContract]
@@ -79,6 +83,6 @@ namespace MotionDBWebServices
 
         [OperationContract]
         [FaultContract(typeof(FileAccessServiceException))]
-        void StoreFileByteData(int fileID, FileByteData fileByteData, bool update);
+        void StoreFileByteData(int fileID, FileByteData fileByteData, bool update); 
     }
 }

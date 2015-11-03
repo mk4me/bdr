@@ -759,15 +759,22 @@ namespace MotionDBWebServices
 
                 cmd.CommandText = @"delete from Plik_udostepniony 
                                         where IdPlik_udostepniony = @file_id and Lokalizacja = @file_path";
-                cmd.ExecuteNonQuery();
                 if (Directory.Exists(baseLocalFilePath + fileLocation))
                     Directory.Delete(baseLocalFilePath + fileLocation, true);
+
+                cmd.ExecuteNonQuery();
+
             }
             catch (SqlException ex)
             {
-                FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
-                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("DownloadComplete")));
+                FileAccessServiceException exc = new FileAccessServiceException("database", "Database access failed");
+                throw new FaultException<FileAccessServiceException>(exc, "Database operation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("DownloadComplete")));
 
+            }
+            catch (IOException ex1 )
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("IO", "File operation failed");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("DownloadComplete")));
             }
             finally
             {
@@ -788,7 +795,8 @@ namespace MotionDBWebServices
 
             fileData = null;
             fileName = "";
-            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString();
+            Random rnd = new Random();
+            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString()+rnd.Next(100);
             try
             {
                 // TO DO: generowanie losowej nazwy katalogu
@@ -857,6 +865,31 @@ namespace MotionDBWebServices
             fData.SubdirPath = filePath;
             return fData;
         }
+
+
+        public FileData RetrieveFiles(int[] fileID)
+        {
+            string relativePath = "";
+            string fileName = "NOT_FOUND";
+            string filePath = "";
+            string fileLocation = "";
+            FileData fData = new FileData();
+            bool found = false;
+            object pathObject;
+
+            fileData = null;
+            fileName = "";
+            Random rnd = new Random();
+            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString() + rnd.Next(100);
+
+            // >>>>>>>>>>>>>>>>>>>>>> TO BE IMPLEMENTED <<<<<<<<<<<<<<<<<<<<<< //
+
+
+            fData.FileLocation = relativePath + "/" + fileName;
+            fData.SubdirPath = filePath;
+            return fData;
+        }
+
 
 
         public string GetShallowCopy()
@@ -1363,6 +1396,12 @@ namespace MotionDBWebServices
             {
                 FileAccessServiceException exc = new FileAccessServiceException("Wrong file name", "Subdirectory symbol detected in: '" + fileByteData.FileName + "'. Must be a simple file name.");
                 throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+            }
+            if (update)
+            {
+                FileAccessServiceException exc = new FileAccessServiceException("Not supported", "Overwriting existing files not supported yet. Use update = false.");
+                throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("ReplaceFile")));
+
             }
 
             try

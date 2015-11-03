@@ -110,8 +110,6 @@ namespace MotionDBWebServices
 
             try
             {
-                // TO DO: generowanie losowej nazwy katalogu
-                // TO DO: jeśli plik jest juz wystawiony - zamiast pobierac z bazy - odzyskac lokalizacje i odswiezyc date
 
                 OpenConnection();
                 cmd.CommandText = @"get_my_user_group_memberships";
