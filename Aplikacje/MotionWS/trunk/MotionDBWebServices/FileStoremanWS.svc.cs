@@ -11,6 +11,7 @@ using System.IO;
 using System.Xml;
 using System.Security.Permissions;
 using MotionDBCommons;
+using Ionic.Zip;
 
 
 
@@ -868,25 +869,80 @@ namespace MotionDBWebServices
 
         public FileData RetrieveFiles(int[] fileID)
         {
-            string relativePath = "";
-            string fileName = "NOT_FOUND";
-            string filePath = "";
-            string fileLocation = "";
-            FileData fData = new FileData();
-            bool found = false;
-            object pathObject;
-
-            fileData = null;
-            fileName = "";
-            Random rnd = new Random();
-            relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString() + rnd.Next(100);
-
-            // >>>>>>>>>>>>>>>>>>>>>> TO BE IMPLEMENTED <<<<<<<<<<<<<<<<<<<<<< //
-
             // UWAGA! analogicznie, jak w RetrieveFiles - chcemy zapisywać fakt udostępnienia w tabel Plik_udostepniony //
+            Random rnd = new Random();
+            string relativePath = localReadDirSuffix + DateTime.Now.Ticks.ToString() + rnd.Next(100);
+            String fileNameZip = DateTime.Now.ToString("yyyy-MM-dd");
+            ZipFile zip = new ZipFile(baseLocalFilePath + relativePath + @"\" + fileNameZip + ".zip");
+            
+            for (int i = 0; i < fileID.Length; i++)
+            {
+                fileData = null;
+                string fileName = "";
+                string filePath = "";
 
-            fData.FileLocation = relativePath + "/" + fileName;
-            fData.SubdirPath = filePath;
+                try
+                {
+                    OpenConnection();
+                    cmd.CommandText = @"select Plik, Nazwa_pliku, Sciezka from Plik where IdPlik = @file_id";
+                    cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                    cmd.Parameters["@file_id"].Value = fileID[i];
+                    fileReader = cmd.ExecuteReader();
+
+                    bool found = false;
+                    while (fileReader.Read())
+                    {
+                        fileData = (byte[])fileReader.GetValue(0);
+                        fileName = (string)fileReader.GetValue(1);
+                        object pathObject = fileReader.GetValue(2);
+                        if (pathObject != DBNull.Value) filePath = (string)fileReader.GetValue(2);
+                        found = true;
+                    }
+
+                    if (!found)
+                    {
+                        FileAccessServiceException exc = new FileAccessServiceException("not found", "File does not exist or not permitted to retrieve");
+                        throw new FaultException<FileAccessServiceException>(exc, "Cannot retrieve this file", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+                    }
+
+                    fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
+                    fileName = fileName.Substring(fileName.LastIndexOf('/') + 1);
+
+                    zip.AddEntry(filePath + @"\" + fileName, fileData);
+
+                    fileReader.Close();
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = @"insert into Plik_udostepniony ( IdPlik_udostepniony, Data_udostepnienia, Lokalizacja )
+                                        values ( @file_id, getdate(), @relative_path)";
+                    cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                    cmd.Parameters.Add("@relative_path", SqlDbType.VarChar, 80);
+
+                    // can be used for recoring of several files
+                    cmd.Parameters["@file_id"].Value = fileID[i];
+                    cmd.Parameters["@relative_path"].Value = relativePath;
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    // log the exception
+                    FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
+                    throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+                }
+                finally
+                {
+                    CloseConnection();
+                }
+            }
+
+            if (!Directory.Exists(baseLocalFilePath + relativePath))
+                Directory.CreateDirectory(baseLocalFilePath + relativePath);
+
+            zip.ParallelDeflateThreshold = -1;  // workaround for CRC error for files with sizes of multiples of 128k: dotnetzip.codeplex.com/workitem/14087
+            zip.Save();
+
+            FileData fData = new FileData();
+            fData.FileLocation = relativePath + "/" + fileNameZip;
+            fData.SubdirPath = "";
             return fData;
         }
 

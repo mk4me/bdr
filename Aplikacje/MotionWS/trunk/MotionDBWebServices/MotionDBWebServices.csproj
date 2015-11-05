@@ -55,6 +55,10 @@
     <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -81,6 +85,7 @@
     <Content Include="AccountActivation.aspx" />
     <Content Include="AccountFactoryWS.svc" />
     <Content Include="BasicQueriesWS.svc" />
+    <Content Include="bin\Ionic.Zip.dll" />
     <Content Include="Download.aspx" />
     <Content Include="UserAccountCreation.aspx" />
     <Content Include="UserAccountUpdate.aspx" />
