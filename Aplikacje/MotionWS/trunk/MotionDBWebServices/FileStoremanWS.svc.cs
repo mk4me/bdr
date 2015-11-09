@@ -912,21 +912,27 @@ namespace MotionDBWebServices
 
                     fileReader.Close();
                     cmd.Parameters.Clear();
-                    cmd.CommandText = @"insert into Plik_udostepniony ( IdPlik_udostepniony, Data_udostepnienia, Lokalizacja )
+                    /*
+                    if (i == 0)
+                    {
+                        cmd.CommandText = @"insert into Plik_udostepniony ( IdPlik_udostepniony, Data_udostepnienia, Lokalizacja )
                                         values ( @file_id, getdate(), @relative_path)";
-                    cmd.Parameters.Add("@file_id", SqlDbType.Int);
-                    cmd.Parameters.Add("@relative_path", SqlDbType.VarChar, 80);
+                        cmd.Parameters.Add("@file_id", SqlDbType.Int);
+                        cmd.Parameters.Add("@relative_path", SqlDbType.VarChar, 80);
 
-                    // can be used for recoring of several files
-                    cmd.Parameters["@file_id"].Value = fileID[i];
-                    cmd.Parameters["@relative_path"].Value = relativePath;
-                    cmd.ExecuteNonQuery();
+                        // can be used for recoring of several files
+                        cmd.Parameters["@file_id"].Value = 0;
+                        cmd.Parameters["@relative_path"].Value = relativePath + "/" + fileNameZip;
+                        cmd.ExecuteNonQuery();
+                    }
+                     */
+                     
                 }
                 catch (SqlException ex)
                 {
                     // log the exception
                     FileAccessServiceException exc = new FileAccessServiceException("unknown", "File operation failed");
-                    throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFile")));
+                    throw new FaultException<FileAccessServiceException>(exc, "File acccess invocation failed", FaultCode.CreateReceiverFaultCode(new FaultCode("RetrieveFiles")));
                 }
                 finally
                 {
