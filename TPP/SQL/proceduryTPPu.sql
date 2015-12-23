@@ -1570,11 +1570,12 @@ go
 */
 
 
--- last rev. 2015-07-20
+-- last rev. 2015-12-23
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
 	@TestZegara bit,	-- juz bylo; niezmienione
+	@TestZegaraACE_III tinyint, -- dodane 2015-12-23
 	@MMSE tinyint,	-- juz bylo; niezmienione
 	@CLOX1_Rysunek tinyint, -- dodane 2015-03-20
 	@CLOX2_Kopia tinyint, -- dodane 2015-03-20
@@ -1611,10 +1612,11 @@ create procedure update_examination_questionnaire_partG  (
 	@CVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
 	@CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
 	@Benton_JOL tinyint,-- dodane 2015-03-20
+	@TFZ_ReyaLubInny tinyint, -- dodane 2015-12-23
 	@WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
 	@WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
-	@BostonskiTestNazywaniaBMT tinyint, -- dodane 2015-03-20
+	@BostonskiTestNazywaniaBNT tinyint, -- dodane 2015-03-20
 	@BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
 	@SkalaDepresjiBecka decimal(4,1),-- zmiana na decimal;
 	@SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
@@ -1626,6 +1628,8 @@ create procedure update_examination_questionnaire_partG  (
 	@TestFluencjiOstre tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
 	@TestLaczeniaPunktowA varchar(40), -- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
 	@TestLaczeniaPunktowB varchar(40),-- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	@TestLaczeniaPunktowA_maly varchar(40), -- dodano 2015-12-23
+	@TestLaczeniaPunktowB_maly varchar(40), -- dodano 2015-12-13
 	@ToL_SumaRuchow int, -- dodane 2015-03-20
 	@ToL_LiczbaPrawidlowych tinyint, -- dodane 2015-03-20
 	@ToL_CzasInicjowania_sek int, -- dodane 2015-03-20
@@ -1665,8 +1669,8 @@ begin
 
 	update Wizyta
 		set 
-
 			TestZegara =  REPLACE(@TestZegara,';','. '),
+			TestZegaraACE_III = @TestZegaraACE_III,
 			MMSE =  REPLACE(@MMSE,';','. '),
 			CLOX1_Rysunek =  REPLACE(@CLOX1_Rysunek,';','. '),
 			CLOX2_Kopia =  REPLACE(@CLOX2_Kopia,';','. '),
@@ -1703,10 +1707,11 @@ begin
 			CVLT_Rozpoznawanie =  REPLACE(@CVLT_Rozpoznawanie,';','. '),
 			CVLT_BledyRozpoznania =  REPLACE(@CVLT_BledyRozpoznania,';','. '),
 			Benton_JOL =  REPLACE(@Benton_JOL,';','. '),
+			TFZ_ReyaLubInny = @TFZ_ReyaLubInny,
 			WAIS_R_Wiadomosci =  REPLACE(@WAIS_R_Wiadomosci,';','. '),
 			WAIS_R_PowtarzanieCyfr =  REPLACE(@WAIS_R_PowtarzanieCyfr,';','. '),
 			WAIS_R_Podobienstwa =  REPLACE(@WAIS_R_Podobienstwa,';','. '),
-			BostonskiTestNazywaniaBMT =  REPLACE(@BostonskiTestNazywaniaBMT,';','. '),
+			BostonskiTestNazywaniaBNT =  REPLACE(@BostonskiTestNazywaniaBNT,';','. '),
 			BMT_SredniCzasReakcji_sek =  REPLACE(@BMT_SredniCzasReakcji_sek,';','. '),
 			SkalaDepresjiBecka = @SkalaDepresjiBecka,
 			SkalaDepresjiBeckaII = @SkalaDepresjiBeckaII,
@@ -1717,6 +1722,8 @@ begin
 			TestFluencjiOstre = REPLACE(@TestFluencjiOstre,';','. '),
 			TestLaczeniaPunktowA = REPLACE(@TestLaczeniaPunktowA,';','. '),
 			TestLaczeniaPunktowB = REPLACE(@TestLaczeniaPunktowB,';','. '),
+			TestLaczeniaPunktowA_maly = REPLACE(@TestLaczeniaPunktowA_maly,';','. '),
+			TestLaczeniaPunktowB_maly = REPLACE(@TestLaczeniaPunktowB_maly,';','. '),
 			ToL_SumaRuchow = REPLACE(@ToL_SumaRuchow,';','. '),
 			ToL_LiczbaPrawidlowych = REPLACE(@ToL_LiczbaPrawidlowych,';','. '),
 			ToL_CzasInicjowania_sek = REPLACE(@ToL_CzasInicjowania_sek,';','. '),
@@ -2261,34 +2268,34 @@ go
 
 
 
--- last rev. 2014-09-25
+-- last rev. 2015-12-23
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit, 
 	@TremorometriaLEFT bit, 
 	@TremorometriaRIGHT bit, 
-	@TremorometriaLEFT_0_1 decimal(7,2),
-	@TremorometriaLEFT_1_2 decimal(7,2),
-	@TremorometriaLEFT_2_3 decimal(7,2),
-	@TremorometriaLEFT_3_4 decimal(7,2),
-	@TremorometriaLEFT_4_5 decimal(7,2),
-	@TremorometriaLEFT_5_6 decimal(7,2),
-	@TremorometriaLEFT_6_7 decimal(7,2),
-	@TremorometriaLEFT_7_8 decimal(7,2),
-	@TremorometriaLEFT_8_9 decimal(7,2),
-	@TremorometriaLEFT_9_10 decimal(7,2),
-	@TremorometriaLEFT_23_24 decimal(7,2),
-	@TremorometriaRIGHT_0_1 decimal(7,2),
-	@TremorometriaRIGHT_1_2 decimal(7,2),
-	@TremorometriaRIGHT_2_3 decimal(7,2),
-	@TremorometriaRIGHT_3_4 decimal(7,2),
-	@TremorometriaRIGHT_4_5 decimal(7,2),
-	@TremorometriaRIGHT_5_6 decimal(7,2),
-	@TremorometriaRIGHT_6_7 decimal(7,2),
-	@TremorometriaRIGHT_7_8 decimal(7,2),
-	@TremorometriaRIGHT_8_9 decimal(7,2),
-	@TremorometriaRIGHT_9_10 decimal(7,2),
-	@TremorometriaRIGHT_23_24 decimal(7,2),	
+	@TremorometriaLEFT_0_1 decimal(11,5),
+	@TremorometriaLEFT_1_2 decimal(11,5),
+	@TremorometriaLEFT_2_3 decimal(11,5),
+	@TremorometriaLEFT_3_4 decimal(11,5),
+	@TremorometriaLEFT_4_5 decimal(11,5),
+	@TremorometriaLEFT_5_6 decimal(11,5),
+	@TremorometriaLEFT_6_7 decimal(11,5),
+	@TremorometriaLEFT_7_8 decimal(11,5),
+	@TremorometriaLEFT_8_9 decimal(11,5),
+	@TremorometriaLEFT_9_10 decimal(11,5),
+	@TremorometriaLEFT_23_24 decimal(11,5),
+	@TremorometriaRIGHT_0_1 decimal(11,5),
+	@TremorometriaRIGHT_1_2 decimal(11,5),
+	@TremorometriaRIGHT_2_3 decimal(11,5),
+	@TremorometriaRIGHT_3_4 decimal(11,5),
+	@TremorometriaRIGHT_4_5 decimal(11,5),
+	@TremorometriaRIGHT_5_6 decimal(11,5),
+	@TremorometriaRIGHT_6_7 decimal(11,5),
+	@TremorometriaRIGHT_7_8 decimal(11,5),
+	@TremorometriaRIGHT_8_9 decimal(11,5),
+	@TremorometriaRIGHT_9_10 decimal(11,5),
+	@TremorometriaRIGHT_23_24 decimal(11,5),	
 	@TestSchodkowy bit,
 	@TestSchodkowyWDol decimal(4,2),
 	@TestSchodkowyWGore decimal(4,2),
@@ -3022,6 +3029,7 @@ SELECT
       ,W.[CGI]
       ,W.[FSS]
 	,W.[TestZegara] TestZegara
+	,W.[TestZegaraACE_III] TestZegaraACE_III
 	,W.[MMSE] MMSE
 	,W.[CLOX1_Rysunek] CLOX1_Rysunek
 	,W.[CLOX2_Kopia] CLOX2_Kopia
@@ -4254,7 +4262,7 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	329	,	'W', 'Benton
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	330	,	'W', 'WAIS_R_Wiadomosci');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	331	,	'W', 'WAIS_R_PowtarzanieCyfr');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	332	,	'W', 'WAIS_R_Podobienstwa');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	333	,	'W', 'BostonskiTestNazywaniaBMT');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	333	,	'W', 'BostonskiTestNazywaniaBNT');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	334	,	'W', 'BMT_SredniCzasReakcji_sek');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	335	,	'W', 'SkalaDepresjiBecka');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	336	,	'W', 'SkalaDepresjiBeckaII');
@@ -4307,6 +4315,36 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	382	,	'W', 'Zmodyf
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	383	,	'W', 'OstatniaZmiana');
 
 
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 1
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'W' and Nazwa = 'TestZegara');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna, 'W', 'TestZegaraACE_III' from Kolumna where Encja = 'W' and Nazwa = 'TestZegara';
+go
+
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 2
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'W' and Nazwa = 'TestLaczeniaPunktowB');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+1, 'W', 'TestLaczeniaPunktowA_maly' from Kolumna where Encja = 'W' and Nazwa = 'TestLaczeniaPunktowB';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+2, 'W', 'TestLaczeniaPunktowB_maly' from Kolumna where Encja = 'W' and Nazwa = 'TestLaczeniaPunktowB';
+go
+
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 1
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'W' and Nazwa = 'Benton_JOL');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+1, 'W', 'TFZ_ReyaLubInny' from Kolumna where Encja = 'W' and Nazwa = 'Benton_JOL';
+go
 
 
 

@@ -274,6 +274,7 @@ create table Wizyta (
 	FSS	decimal(3,1),
 -- Psycholog (część G)
 	TestZegara bit,	-- juz bylo; niezmienione
+	TestZegaraACE_III tinyint, -- dodane 2015-12-13
 	MMSE tinyint,	-- juz bylo; niezmienione
 	CLOX1_Rysunek tinyint, -- dodane 2015-03-20
 	CLOX2_Kopia tinyint, -- dodane 2015-03-20
@@ -310,10 +311,11 @@ create table Wizyta (
 	CVLT_Rozpoznawanie tinyint,-- dodane 2015-03-20
 	CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
 	Benton_JOL tinyint,-- dodane 2015-03-20
+	TFZ_ReyaLubInny tinyint, -- dodane 2015-12-23
 	WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
 	WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
-	BostonskiTestNazywaniaBMT tinyint, -- dodane 2015-03-20
+	BostonskiTestNazywaniaBNT tinyint, -- dodane 2015-03-20
 	BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
 	SkalaDepresjiBecka decimal(4,1),-- juz bylo; zmieniono z tinyint na decimal
 	SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
@@ -324,6 +326,8 @@ create table Wizyta (
 	TestFluencjiOstre tinyint, -- bylo; ale zmiana z varchar(40) na tinyint
 	TestLaczeniaPunktowA varchar(40), -- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
 	TestLaczeniaPunktowB varchar(40),-- bylo; poniewaz wystepuja liczby > 50, nie zmienialem typu
+	TestLaczeniaPunktowA_maly varchar(40), -- dodano 2015-12-23
+	TestLaczeniaPunktowB_maly varchar(40), -- dodano 2015-12-23
 	ToL_SumaRuchow int, -- dodane 2015-03-20
 	ToL_LiczbaPrawidlowych tinyint, -- dodane 2015-03-20
 	ToL_CzasInicjowania_sek int, -- dodane 2015-03-20
@@ -485,28 +489,28 @@ create table Badanie  (
 	Tremorometria	bit,
 	TremorometriaLEFT bit,
 	TremorometriaRIGHT bit,
-	TremorometriaLEFT_0_1 decimal(7,2),
-	TremorometriaLEFT_1_2 decimal(7,2),
-	TremorometriaLEFT_2_3 decimal(7,2),
-	TremorometriaLEFT_3_4 decimal(7,2),
-	TremorometriaLEFT_4_5 decimal(7,2),
-	TremorometriaLEFT_5_6 decimal(7,2),
-	TremorometriaLEFT_6_7 decimal(7,2),
-	TremorometriaLEFT_7_8 decimal(7,2),
-	TremorometriaLEFT_8_9 decimal(7,2),
-	TremorometriaLEFT_9_10 decimal(7,2),
-	TremorometriaLEFT_23_24 decimal(7,2),
-	TremorometriaRIGHT_0_1 decimal(7,2),
-	TremorometriaRIGHT_1_2 decimal(7,2),
-	TremorometriaRIGHT_2_3 decimal(7,2),
-	TremorometriaRIGHT_3_4 decimal(7,2),
-	TremorometriaRIGHT_4_5 decimal(7,2),
-	TremorometriaRIGHT_5_6 decimal(7,2),
-	TremorometriaRIGHT_6_7 decimal(7,2),
-	TremorometriaRIGHT_7_8 decimal(7,2),
-	TremorometriaRIGHT_8_9 decimal(7,2),
-	TremorometriaRIGHT_9_10 decimal(7,2),
-	TremorometriaRIGHT_23_24 decimal(7,2),	
+	TremorometriaLEFT_0_1 decimal(11,5),
+	TremorometriaLEFT_1_2 decimal(11,5),
+	TremorometriaLEFT_2_3 decimal(11,5),
+	TremorometriaLEFT_3_4 decimal(11,5),
+	TremorometriaLEFT_4_5 decimal(11,5),
+	TremorometriaLEFT_5_6 decimal(11,5),
+	TremorometriaLEFT_6_7 decimal(11,5),
+	TremorometriaLEFT_7_8 decimal(11,5),
+	TremorometriaLEFT_8_9 decimal(11,5),
+	TremorometriaLEFT_9_10 decimal(11,5),
+	TremorometriaLEFT_23_24 decimal(11,5),
+	TremorometriaRIGHT_0_1 decimal(11,5),
+	TremorometriaRIGHT_1_2 decimal(11,5),
+	TremorometriaRIGHT_2_3 decimal(11,5),
+	TremorometriaRIGHT_3_4 decimal(11,5),
+	TremorometriaRIGHT_4_5 decimal(11,5),
+	TremorometriaRIGHT_5_6 decimal(11,5),
+	TremorometriaRIGHT_6_7 decimal(11,5),
+	TremorometriaRIGHT_7_8 decimal(11,5),
+	TremorometriaRIGHT_8_9 decimal(11,5),
+	TremorometriaRIGHT_9_10 decimal(11,5),
+	TremorometriaRIGHT_23_24 decimal(11,5),	
 	TestSchodkowy	bit,
 	TestSchodkowyWDol	decimal(4,2),
 	TestSchodkowyWGore	decimal(4,2),
