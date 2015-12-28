@@ -1,4 +1,4 @@
-use TPP_test;
+use TPP;
 go
 
 
@@ -72,11 +72,18 @@ go
 EXEC sp_RENAME 'Wizyta.BostonskiTestNazywaniaBMT' , 'BostonskiTestNazywaniaBNT', 'COLUMN'
 go
 
+EXEC sp_RENAME 'Wizyta.BMT_SredniCzasReakcji_sek' , 'BNT_SredniCzasReakcji_sek', 'COLUMN'
+go
+
 update Kolumna
 set Nazwa = 'BostonskiTestNazywaniaBNT'
 where Nazwa = 'BostonskiTestNazywaniaBMT';
 go
 
+update Kolumna
+set Nazwa = 'BNT_SredniCzasReakcji_sek'
+where Nazwa = 'BMT_SredniCzasReakcji_sek';
+go
 
 
 -- last rev. 2015-12-23
@@ -231,7 +238,7 @@ alter procedure update_examination_questionnaire_partG  (
 	@WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
 	@BostonskiTestNazywaniaBNT tinyint, -- dodane 2015-03-20
-	@BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
+	@BNT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
 	@SkalaDepresjiBecka decimal(4,1),-- zmiana na decimal;
 	@SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
 
@@ -326,7 +333,7 @@ begin
 			WAIS_R_PowtarzanieCyfr =  REPLACE(@WAIS_R_PowtarzanieCyfr,';','. '),
 			WAIS_R_Podobienstwa =  REPLACE(@WAIS_R_Podobienstwa,';','. '),
 			BostonskiTestNazywaniaBNT =  REPLACE(@BostonskiTestNazywaniaBNT,';','. '),
-			BMT_SredniCzasReakcji_sek =  REPLACE(@BMT_SredniCzasReakcji_sek,';','. '),
+			BNT_SredniCzasReakcji_sek =  REPLACE(@BNT_SredniCzasReakcji_sek,';','. '),
 			SkalaDepresjiBecka = @SkalaDepresjiBecka,
 			SkalaDepresjiBeckaII = @SkalaDepresjiBeckaII,
 			TestFluencjiK = REPLACE(@TestFluencjiK,';','. '),
@@ -707,7 +714,7 @@ SELECT
 	,W.[WAIS_R_PowtarzanieCyfr] WAIS_R_PowtarzanieCyfr
 	,W.[WAIS_R_Podobienstwa] WAIS_R_Podobienstwa
 	,W.[BostonskiTestNazywaniaBNT] BostonskiTestNazywaniaBNT
-	,W.[BMT_SredniCzasReakcji_sek] BMT_SredniCzasReakcji_sek
+	,W.[BNT_SredniCzasReakcji_sek] BNT_SredniCzasReakcji_sek
 	,W.[SkalaDepresjiBecka]
 	,W.[SkalaDepresjiBeckaII]
 	,W.[TestFluencjiK] TestFluencjiK
@@ -717,8 +724,8 @@ SELECT
 	,W.[TestFluencjiOstre] TestFluencjiOstre
 	,W.[TestLaczeniaPunktowA] TestLaczeniaPunktowA
 	,W.[TestLaczeniaPunktowB] TestLaczeniaPunktowB
-	,W.[TestLaczeniaPunktowA_maly] TestLaczeniaPunktowA_maly,
-	,W.[TestLaczeniaPunktowB_maly] TestLaczeniaPunktowB_maly,
+	,W.[TestLaczeniaPunktowA_maly] TestLaczeniaPunktowA_maly
+	,W.[TestLaczeniaPunktowB_maly] TestLaczeniaPunktowB_maly
 	,W.[ToL_SumaRuchow] ToL_SumaRuchow
 	,W.[ToL_LiczbaPrawidlowych] ToL_LiczbaPrawidlowych
 	,W.[ToL_CzasInicjowania_sek] ToL_CzasInicjowania_sek

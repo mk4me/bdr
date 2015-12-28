@@ -316,7 +316,7 @@ create table Wizyta (
 	WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
 	BostonskiTestNazywaniaBNT tinyint, -- dodane 2015-03-20
-	BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
+	BNT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
 	SkalaDepresjiBecka decimal(4,1),-- juz bylo; zmieniono z tinyint na decimal
 	SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
 	TestFluencjiK tinyint, -- bylo; ale zmiana z varchar(40) na tinyint

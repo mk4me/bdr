@@ -1617,7 +1617,7 @@ create procedure update_examination_questionnaire_partG  (
 	@WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
 	@BostonskiTestNazywaniaBNT tinyint, -- dodane 2015-03-20
-	@BMT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
+	@BNT_SredniCzasReakcji_sek int, -- dodane 2015-03-20
 	@SkalaDepresjiBecka decimal(4,1),-- zmiana na decimal;
 	@SkalaDepresjiBeckaII decimal(4,1),-- dodane 2015-03-20
 
@@ -1712,7 +1712,7 @@ begin
 			WAIS_R_PowtarzanieCyfr =  REPLACE(@WAIS_R_PowtarzanieCyfr,';','. '),
 			WAIS_R_Podobienstwa =  REPLACE(@WAIS_R_Podobienstwa,';','. '),
 			BostonskiTestNazywaniaBNT =  REPLACE(@BostonskiTestNazywaniaBNT,';','. '),
-			BMT_SredniCzasReakcji_sek =  REPLACE(@BMT_SredniCzasReakcji_sek,';','. '),
+			BNT_SredniCzasReakcji_sek =  REPLACE(@BNT_SredniCzasReakcji_sek,';','. '),
 			SkalaDepresjiBecka = @SkalaDepresjiBecka,
 			SkalaDepresjiBeckaII = @SkalaDepresjiBeckaII,
 			TestFluencjiK = REPLACE(@TestFluencjiK,';','. '),
@@ -2723,7 +2723,7 @@ GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
 
--- modified: 2015-09-11
+-- modified: 2015-12-23
 create procedure get_database_copy
 as
 SELECT 
@@ -3066,11 +3066,12 @@ SELECT
 	,W.[CVLT_Rozpoznawanie] CVLT_Rozpoznawanie
 	,W.[CVLT_BledyRozpoznania] CVLT_BledyRozpoznania
 	,W.[Benton_JOL] Benton_JOL
+	,W.[TFZ_ReyaLubInny] TFZ_ReyaLubInny
 	,W.[WAIS_R_Wiadomosci] WAIS_R_Wiadomosci
 	,W.[WAIS_R_PowtarzanieCyfr] WAIS_R_PowtarzanieCyfr
 	,W.[WAIS_R_Podobienstwa] WAIS_R_Podobienstwa
-	,W.[BostonskiTestNazywaniaBMT] BostonskiTestNazywaniaBMT
-	,W.[BMT_SredniCzasReakcji_sek] BMT_SredniCzasReakcji_sek
+	,W.[BostonskiTestNazywaniaBNT] BostonskiTestNazywaniaBNT
+	,W.[BNT_SredniCzasReakcji_sek] BNT_SredniCzasReakcji_sek
 	,W.[SkalaDepresjiBecka]
 	,W.[SkalaDepresjiBeckaII]
 	,W.[TestFluencjiK] TestFluencjiK
@@ -3080,6 +3081,8 @@ SELECT
 	,W.[TestFluencjiOstre] TestFluencjiOstre
 	,W.[TestLaczeniaPunktowA] TestLaczeniaPunktowA
 	,W.[TestLaczeniaPunktowB] TestLaczeniaPunktowB
+	,W.[TestLaczeniaPunktowA_maly] TestLaczeniaPunktowA_maly
+	,W.[TestLaczeniaPunktowB_maly] TestLaczeniaPunktowB_maly
 	,W.[ToL_SumaRuchow] ToL_SumaRuchow
 	,W.[ToL_LiczbaPrawidlowych] ToL_LiczbaPrawidlowych
 	,W.[ToL_CzasInicjowania_sek] ToL_CzasInicjowania_sek
@@ -4263,7 +4266,7 @@ insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	330	,	'W', 'WAIS_R
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	331	,	'W', 'WAIS_R_PowtarzanieCyfr');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	332	,	'W', 'WAIS_R_Podobienstwa');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	333	,	'W', 'BostonskiTestNazywaniaBNT');
-insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	334	,	'W', 'BMT_SredniCzasReakcji_sek');
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	334	,	'W', 'BNT_SredniCzasReakcji_sek');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	335	,	'W', 'SkalaDepresjiBecka');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	336	,	'W', 'SkalaDepresjiBeckaII');
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) values (	337	,	'W', 'TestFluencjiK');
