@@ -28,6 +28,12 @@
             </td>
         </tr>
         <tr>
+            <td>Test zegara ACE-III:</td>
+            <td>
+                <asp:TextBox ID="textTestZegaraACE_III" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td>CLOX 1-rysunek:</td>
             <td>
                 <asp:TextBox ID="textCLOX1_Rysunek" runat="server"></asp:TextBox>
@@ -235,6 +241,12 @@
             </td>
         </tr>
         <tr>
+            <td>TFZ Reya lub inny:</td>
+            <td>
+	            <asp:TextBox ID="textTFZ_ReyaLubInny" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -283,6 +295,18 @@
             </td>
         </tr>
         <tr>
+            <td>Test łączenia punktów A mały:</td>
+            <td>
+                <asp:TextBox ID="textTestLaczeniaPunktowA_maly" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
+            <td>Test łączenia punktów B mały:</td>
+            <td>
+                <asp:TextBox ID="textTestLaczeniaPunktowB_maly" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -310,7 +334,7 @@
             </td>
         </tr>
         <tr>
-            <td>oL - czas całkowity [sek]:</td>
+            <td>ToL - czas całkowity [sek]:</td>
             <td>
                 <asp:TextBox ID="textToL_CzasCalkowity_sek" runat="server"></asp:TextBox>
             </td>
@@ -358,15 +382,15 @@
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td>Bostoński Test Nazywania BMT:</td>
+            <td>Bostoński Test Nazywania BNT:</td>
             <td>
-                <asp:TextBox ID="textBostonskiTestNazywaniaBMT" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textBostonskiTestNazywaniaBNT" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>
-            <td>BMT - średni czas reakcji [sek]:</td>
+            <td>BNT - średni czas reakcji [sek]:</td>
             <td>
-                <asp:TextBox ID="textBMT_SredniCzasReakcji_sek" runat="server"></asp:TextBox>
+                <asp:TextBox ID="textBNT_SredniCzasReakcji_sek" runat="server"></asp:TextBox>
             </td>
         </tr>
         <tr>

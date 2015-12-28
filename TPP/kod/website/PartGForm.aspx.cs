@@ -35,6 +35,7 @@ public partial class PartGForm : System.Web.UI.Page
         cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
         cmd.Parameters.Add("@TestZegara", SqlDbType.Bit).Value = DatabaseProcedures.getBitOrNull(dropTestZegara.SelectedValue);
         cmd.Parameters.Add("@MMSE", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textMMSE.Text);
+        cmd.Parameters.Add("@TestZegaraACE_III", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTestZegaraACE_III.Text);
         cmd.Parameters.Add("@CLOX1_Rysunek", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCLOX1_Rysunek.Text);
         cmd.Parameters.Add("@CLOX2_Kopia", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCLOX2_Kopia.Text);
         cmd.Parameters.Add("@AVLT_proba_1", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textAVLT_proba_1.Text);
@@ -84,11 +85,12 @@ public partial class PartGForm : System.Web.UI.Page
         cmd.Parameters.Add("@CVLT_Rozpoznawanie", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCVLT_Rozpoznawanie.Text);
         cmd.Parameters.Add("@CVLT_BledyRozpoznania", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCVLT_BledyRozpoznania.Text);
         cmd.Parameters.Add("@Benton_JOL", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBenton_JOL.Text);
+        cmd.Parameters.Add("@TFZ_ReyaLubInny", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTFZ_ReyaLubInny.Text);
         cmd.Parameters.Add("@WAIS_R_Wiadomosci", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_Wiadomosci.Text);
         cmd.Parameters.Add("@WAIS_R_PowtarzanieCyfr", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_PowtarzanieCyfr.Text);
         cmd.Parameters.Add("@WAIS_R_Podobienstwa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_Podobienstwa.Text);
-        cmd.Parameters.Add("@BostonskiTestNazywaniaBMT", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBostonskiTestNazywaniaBMT.Text);
-        cmd.Parameters.Add("@BMT_SredniCzasReakcji_sek", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBMT_SredniCzasReakcji_sek.Text);
+        cmd.Parameters.Add("@BostonskiTestNazywaniaBNT", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBostonskiTestNazywaniaBNT.Text);
+        cmd.Parameters.Add("@BNT_SredniCzasReakcji_sek", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBNT_SredniCzasReakcji_sek.Text);
         SqlParameter SkalaDepresjiBeckaDecimal = new SqlParameter("@SkalaDepresjiBecka", SqlDbType.Decimal);
         SkalaDepresjiBeckaDecimal.Precision = 4;
         SkalaDepresjiBeckaDecimal.Scale = 1;
@@ -106,6 +108,8 @@ public partial class PartGForm : System.Web.UI.Page
         cmd.Parameters.Add("@TestFluencjiOstre", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTestFluencjiOstre.Text);
         cmd.Parameters.Add("@TestLaczeniaPunktowA", SqlDbType.VarChar, 40).Value = DatabaseProcedures.getStringOrNull(textTestLaczeniaPunktowA.Text);
         cmd.Parameters.Add("@TestLaczeniaPunktowB", SqlDbType.VarChar, 40).Value = DatabaseProcedures.getStringOrNull(textTestLaczeniaPunktowB.Text);
+        cmd.Parameters.Add("@TestLaczeniaPunktowA_maly", SqlDbType.VarChar, 40).Value = DatabaseProcedures.getStringOrNull(textTestLaczeniaPunktowA_maly.Text);
+        cmd.Parameters.Add("@TestLaczeniaPunktowB_maly", SqlDbType.VarChar, 40).Value = DatabaseProcedures.getStringOrNull(textTestLaczeniaPunktowB_maly.Text);
         cmd.Parameters.Add("@ToL_SumaRuchow", SqlDbType.Int).Value = DatabaseProcedures.getIntOrNull(textToL_SumaRuchow.Text);
         cmd.Parameters.Add("@ToL_LiczbaPrawidlowych", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textToL_LiczbaPrawidlowych.Text);
         cmd.Parameters.Add("@ToL_CzasInicjowania_sek", SqlDbType.Int).Value = DatabaseProcedures.getIntOrNull(textToL_CzasInicjowania_sek.Text);
@@ -159,13 +163,13 @@ public partial class PartGForm : System.Web.UI.Page
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
-        cmd.CommandText = "select TestZegara, MMSE, CLOX1_Rysunek, CLOX2_Kopia, " +
+        cmd.CommandText = "select TestZegara, MMSE, TestZegaraACE_III, CLOX1_Rysunek, CLOX2_Kopia, " +
             "AVLT_proba_1, AVLT_proba_2, AVLT_proba_3, AVLT_proba_4, AVLT_proba_5, AVLT_Suma, AVLT_Srednia, AVLT_KrotkieOdroczenie, AVLT_Odroczony20min, AVLT_Rozpoznawanie, AVLT_BledyRozpoznania, " +
             "TestAVLTSrednia, TestAVLTOdroczony, TestAVLTPo20min, TestAVLTRozpoznawanie, " +
             "CVLT_proba_1, CVLT_proba_2, CVLT_proba_3, CVLT_proba_4, CVLT_proba_5, CVLT_Suma, CVLT_OSKO_krotkie_odroczenie, CVLT_OPKO_krotkie_odroczenie_i_pomoc, " +
             "CVLT_OSDO_po20min, CVLT_OPDO_po20min_i_pomoc, CVLT_perseweracje, CVLT_WtraceniaOdtwarzanieSwobodne, CVLT_wtraceniaOdtwarzanieZPomoca, CVLT_Rozpoznawanie, CVLT_BledyRozpoznania, " +
-            "Benton_JOL, WAIS_R_Wiadomosci, WAIS_R_PowtarzanieCyfr, WAIS_R_Podobienstwa, BostonskiTestNazywaniaBMT, BMT_SredniCzasReakcji_sek, SkalaDepresjiBecka, SkalaDepresjiBeckaII, " +
-            "TestFluencjiK, TestFluencjiP, TestFluencjiZwierzeta, TestFluencjiOwoceWarzywa, TestFluencjiOstre, TestLaczeniaPunktowA, TestLaczeniaPunktowB, " +
+            "Benton_JOL, TFZ_ReyaLubInny, WAIS_R_Wiadomosci, WAIS_R_PowtarzanieCyfr, WAIS_R_Podobienstwa, BostonskiTestNazywaniaBNT, BNT_SredniCzasReakcji_sek, SkalaDepresjiBecka, SkalaDepresjiBeckaII, " +
+            "TestFluencjiK, TestFluencjiP, TestFluencjiZwierzeta, TestFluencjiOwoceWarzywa, TestFluencjiOstre, TestLaczeniaPunktowA, TestLaczeniaPunktowB, TestLaczeniaPunktowA_maly, TestLaczeniaPunktowB_maly, " +
             "ToL_SumaRuchow, ToL_LiczbaPrawidlowych, ToL_CzasInicjowania_sek, ToL_CzasWykonania_sek, ToL_CzasCalkowity_sek, ToL_CzasPrzekroczony, ToL_LiczbaPrzekroczenZasad, ToL_ReakcjeUkierunkowane, " +
             "InnePsychologiczne, OpisBadania, Wnioski " +
             "from Wizyta where IdWizyta = @IdWizyta";
@@ -180,6 +184,7 @@ public partial class PartGForm : System.Web.UI.Page
             {
                 dropTestZegara.SelectedValue = DatabaseProcedures.getDropBitValue(rdr["TestZegara"]);
                 textMMSE.Text = DatabaseProcedures.getTextByteValue(rdr["MMSE"]);
+                textTestZegaraACE_III.Text = DatabaseProcedures.getTextByteValue(rdr["TestZegaraACE_III"]);
                 textCLOX1_Rysunek.Text = DatabaseProcedures.getTextByteValue(rdr["CLOX1_Rysunek"]);
                 textCLOX2_Kopia.Text = DatabaseProcedures.getTextByteValue(rdr["CLOX2_Kopia"]);
                 textAVLT_proba_1.Text = DatabaseProcedures.getTextByteValue(rdr["AVLT_proba_1"]);
@@ -213,11 +218,12 @@ public partial class PartGForm : System.Web.UI.Page
                 textCVLT_Rozpoznawanie.Text = DatabaseProcedures.getTextByteValue(rdr["CVLT_Rozpoznawanie"]);
                 textCVLT_BledyRozpoznania.Text = DatabaseProcedures.getTextByteValue(rdr["CVLT_BledyRozpoznania"]);
                 textBenton_JOL.Text = DatabaseProcedures.getTextByteValue(rdr["Benton_JOL"]);
+                textTFZ_ReyaLubInny.Text = DatabaseProcedures.getTextByteValue(rdr["TFZ_ReyaLubInny"]);
                 textWAIS_R_Wiadomosci.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_Wiadomosci"]);
                 textWAIS_R_PowtarzanieCyfr.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_PowtarzanieCyfr"]);
                 textWAIS_R_Podobienstwa.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_Podobienstwa"]);
-                textBostonskiTestNazywaniaBMT.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_PowtarzanieCyfr"]);
-                textBMT_SredniCzasReakcji_sek.Text = DatabaseProcedures.getTextIntValue(rdr["BMT_SredniCzasReakcji_sek"]);
+                textBostonskiTestNazywaniaBNT.Text = DatabaseProcedures.getTextByteValue(rdr["BostonskiTestNazywaniaBNT"]);
+                textBNT_SredniCzasReakcji_sek.Text = DatabaseProcedures.getTextIntValue(rdr["BNT_SredniCzasReakcji_sek"]);
                 textSkalaDepresjiBecka.Text = DatabaseProcedures.getTextDecimalValue(rdr["SkalaDepresjiBecka"]);
                 textSkalaDepresjiBeckaII.Text = DatabaseProcedures.getTextDecimalValue(rdr["SkalaDepresjiBeckaII"]);
                 textTestFluencjiK.Text = DatabaseProcedures.getTextByteValue(rdr["TestFluencjiK"]);
@@ -227,6 +233,8 @@ public partial class PartGForm : System.Web.UI.Page
                 textTestFluencjiOstre.Text = DatabaseProcedures.getTextByteValue(rdr["TestFluencjiOstre"]);
                 textTestLaczeniaPunktowA.Text = DatabaseProcedures.getTextStringValue(rdr["TestLaczeniaPunktowA"]);
                 textTestLaczeniaPunktowB.Text = DatabaseProcedures.getTextStringValue(rdr["TestLaczeniaPunktowB"]);
+                textTestLaczeniaPunktowA_maly.Text = DatabaseProcedures.getTextStringValue(rdr["TestLaczeniaPunktowA_maly"]);
+                textTestLaczeniaPunktowB_maly.Text = DatabaseProcedures.getTextStringValue(rdr["TestLaczeniaPunktowB_maly"]);
                 textToL_SumaRuchow.Text = DatabaseProcedures.getTextIntValue(rdr["ToL_SumaRuchow"]);
                 textToL_LiczbaPrawidlowych.Text = DatabaseProcedures.getTextByteValue(rdr["ToL_LiczbaPrawidlowych"]);
                 textToL_CzasInicjowania_sek.Text = DatabaseProcedures.getTextIntValue(rdr["ToL_CzasInicjowania_sek"]);
