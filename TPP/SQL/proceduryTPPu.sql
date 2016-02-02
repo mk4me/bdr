@@ -1570,7 +1570,7 @@ go
 */
 
 
--- last rev. 2015-12-23
+-- last rev. 2016-02-02
 -- @result codes: 0 = OK, 3 = visit of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_examination_questionnaire_partG  (
 	@IdWizyta int,
@@ -1613,6 +1613,7 @@ create procedure update_examination_questionnaire_partG  (
 	@CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
 	@Benton_JOL tinyint,-- dodane 2015-03-20
 	@TFZ_ReyaLubInny tinyint, -- dodane 2015-12-23
+	@TFZ_ReyaLubInny2 tinyint, -- dodane 2016-02-02
 	@WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
 	@WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	@WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
@@ -1708,6 +1709,7 @@ begin
 			CVLT_BledyRozpoznania =  REPLACE(@CVLT_BledyRozpoznania,';','. '),
 			Benton_JOL =  REPLACE(@Benton_JOL,';','. '),
 			TFZ_ReyaLubInny = @TFZ_ReyaLubInny,
+			TFZ_ReyaLubInny2 = @TFZ_ReyaLubInny2,
 			WAIS_R_Wiadomosci =  REPLACE(@WAIS_R_Wiadomosci,';','. '),
 			WAIS_R_PowtarzanieCyfr =  REPLACE(@WAIS_R_PowtarzanieCyfr,';','. '),
 			WAIS_R_Podobienstwa =  REPLACE(@WAIS_R_Podobienstwa,';','. '),
@@ -2268,7 +2270,7 @@ go
 
 
 
--- last rev. 2015-12-23
+-- last rev. 2016-02-02
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@Tremorometria bit, 
@@ -2284,6 +2286,10 @@ create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@TremorometriaLEFT_7_8 decimal(11,5),
 	@TremorometriaLEFT_8_9 decimal(11,5),
 	@TremorometriaLEFT_9_10 decimal(11,5),
+	@TremorometriaLEFT_10_11 decimal(11,5),
+	@TremorometriaLEFT_11_12 decimal(11,5),
+	@TremorometriaLEFT_12_13 decimal(11,5),
+	@TremorometriaLEFT_13_14 decimal(11,5),
 	@TremorometriaLEFT_23_24 decimal(11,5),
 	@TremorometriaRIGHT_0_1 decimal(11,5),
 	@TremorometriaRIGHT_1_2 decimal(11,5),
@@ -2295,6 +2301,10 @@ create procedure update_variant_examination_data_partB  (	@IdBadanie int,
 	@TremorometriaRIGHT_7_8 decimal(11,5),
 	@TremorometriaRIGHT_8_9 decimal(11,5),
 	@TremorometriaRIGHT_9_10 decimal(11,5),
+	@TremorometriaRIGHT_10_11 decimal(11,5),
+	@TremorometriaRIGHT_11_12 decimal(11,5),
+	@TremorometriaRIGHT_12_13 decimal(11,5),
+	@TremorometriaRIGHT_13_14 decimal(11,5),
 	@TremorometriaRIGHT_23_24 decimal(11,5),	
 	@TestSchodkowy bit,
 	@TestSchodkowyWDol decimal(4,2),
@@ -2344,6 +2354,10 @@ begin
 			TremorometriaLEFT_7_8 = @TremorometriaLEFT_7_8,
 			TremorometriaLEFT_8_9 = @TremorometriaLEFT_8_9,
 			TremorometriaLEFT_9_10 = @TremorometriaLEFT_9_10,
+			TremorometriaLEFT_10_11 = @TremorometriaLEFT_10_11,
+			TremorometriaLEFT_11_12 = @TremorometriaLEFT_11_12,
+			TremorometriaLEFT_12_13 = @TremorometriaLEFT_12_13,
+			TremorometriaLEFT_13_14 = @TremorometriaLEFT_13_14,
 			TremorometriaLEFT_23_24 = @TremorometriaLEFT_23_24,
 			TremorometriaRIGHT_0_1 = @TremorometriaRIGHT_0_1,
 			TremorometriaRIGHT_1_2 = @TremorometriaRIGHT_1_2,
@@ -2355,6 +2369,10 @@ begin
 			TremorometriaRIGHT_7_8 = @TremorometriaRIGHT_7_8,
 			TremorometriaRIGHT_8_9 = @TremorometriaRIGHT_8_9,
 			TremorometriaRIGHT_9_10 = @TremorometriaRIGHT_9_10,
+			TremorometriaRIGHT_10_11 = @TremorometriaRIGHT_10_11,
+			TremorometriaRIGHT_11_12 = @TremorometriaRIGHT_11_12,
+			TremorometriaRIGHT_12_13 = @TremorometriaRIGHT_12_13,
+			TremorometriaRIGHT_13_14 = @TremorometriaRIGHT_13_14,			
 			TremorometriaRIGHT_23_24 = @TremorometriaRIGHT_23_24,
 			TestSchodkowy	= @TestSchodkowy,
 			TestSchodkowyWDol	= @TestSchodkowyWDol,
@@ -2373,186 +2391,16 @@ end;
 go
 
 
--- last rev. 2015-09-10
--- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_variant_examination_data_partB_0  (	@IdBadanie int,
-	@Zebris_1_5_Step_width decimal(5,2),
-	@Zebris_1_5_Step_length_left decimal(5,2),
-	@Zebris_1_5_Step_length_right decimal(5,2),
-	@Zebris_1_5_Step_time_left decimal(5,2),
-	@Zebris_1_5_Step_time_right decimal(5,2),
-	@Zebris_1_5_Stance_phase_left decimal(5,2),
-	@Zebris_1_5_Stance_phase_right decimal(5,2),
-	@Zebris_1_5_Swing_phase_left decimal(5,2),
-	@Zebris_1_5_Swing_phase_right decimal(5,2),
-	@Zebris_1_5_Total_Double_Support decimal(5,2),
-	@Zebris_1_5_Cadence decimal(5,2),
-	@Zebris_3_0_Step_width decimal(5,2),
-	@Zebris_3_0_Step_length_left decimal(5,2),
-	@Zebris_3_0_Step_length_right decimal(5,2),
-	@Zebris_3_0_Step_time_left decimal(5,2),
-	@Zebris_3_0_Step_time_right decimal(5,2),
-	@Zebris_3_0_Stance_phase_left decimal(5,2),
-	@Zebris_3_0_Stance_phase_right decimal(5,2),
-	@Zebris_3_0_Swing_phase_left decimal(5,2),
-	@Zebris_3_0_Swing_phase_right decimal(5,2),
-	@Zebris_3_0_Total_Double_Support decimal(5,2),
-	@Zebris_3_0_Cadence decimal(5,2),
-	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
-as
-begin
-	
-	declare @user_id int;
-	set @user_id = 0;
-
-	set @result = 0;
-
-	select @user_id = dbo.identify_user(@actor_login);
-	if(@user_id = 0)
-	begin
-		set @result = 4;
-		set @message = 'user of this login not found';
-		return;
-	end;
-
-
-	if(not exists(select * from Badanie where IdBadanie = @IdBadanie ) )
-	begin
-		set @result = 3;
-		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
-		return;
-	end;
-
-	update Badanie
-		set 
-			Zebris_1_5_Step_width = @Zebris_1_5_Step_width,
-			Zebris_1_5_Step_length_left = @Zebris_1_5_Step_length_left,
-			Zebris_1_5_Step_length_right = @Zebris_1_5_Step_length_right,
-			Zebris_1_5_Step_time_left = @Zebris_1_5_Step_time_left,
-			Zebris_1_5_Step_time_right = @Zebris_1_5_Step_time_right,
-			Zebris_1_5_Stance_phase_left = @Zebris_1_5_Stance_phase_left,
-			Zebris_1_5_Stance_phase_right = @Zebris_1_5_Stance_phase_right,
-			Zebris_1_5_Swing_phase_left = @Zebris_1_5_Swing_phase_left,
-			Zebris_1_5_Swing_phase_right = @Zebris_1_5_Swing_phase_right,
-			Zebris_1_5_Total_Double_Support = @Zebris_1_5_Total_Double_Support,
-			Zebris_1_5_Cadence = @Zebris_1_5_Cadence,
-			Zebris_3_0_Step_width = @Zebris_3_0_Step_width,
-			Zebris_3_0_Step_length_left = @Zebris_3_0_Step_length_left,
-			Zebris_3_0_Step_length_right = @Zebris_3_0_Step_length_right,
-			Zebris_3_0_Step_time_left = @Zebris_3_0_Step_time_left,
-			Zebris_3_0_Step_time_right = @Zebris_3_0_Step_time_right,
-			Zebris_3_0_Stance_phase_left = @Zebris_3_0_Stance_phase_left,
-			Zebris_3_0_Stance_phase_right = @Zebris_3_0_Stance_phase_right,
-			Zebris_3_0_Swing_phase_left = @Zebris_3_0_Swing_phase_left,
-			Zebris_3_0_Swing_phase_right = @Zebris_3_0_Swing_phase_right,
-			Zebris_3_0_Total_Double_Support = @Zebris_3_0_Total_Double_Support,
-			Zebris_3_0_Cadence = @Zebris_3_0_Cadence,
-			Zmodyfikowal = @user_id, 
-			OstatniaZmiana = getdate() 
-		where IdBadanie = @IdBadanie;
-
-	return;
-end;
-go
-
-
--- last rev. 2015-03-01
--- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
-create procedure update_variant_examination_data_partB_1  (	@IdBadanie int,
-
-	@Otwarte_Srednia_C_o_P_X int,				
-	@Otwarte_Srednia_C_o_P_Y int,				
-	@Otwarte_Srednia_P_T_Predkosc_mm_sec int,	
-	@Otwarte_Srednia_P_B_Predkosc_mm_sec int,	
-	@Otwarte_Perimeter_mm int,					
-	@Otwarte_PoleElipsy_mm2 int,					
-
-	@Zamkniete_Srednia_C_o_P_X int,				
-	@Zamkniete_Srednia_C_o_P_Y int,				
-	@Zamkniete_Srednia_P_T_Predkosc_mm_sec int,	
-	@Zamkniete_Srednia_P_B_Predkosc_mm_sec int,	
-	@Zamkniete_Perimeter_mm int,					
-	@Zamkniete_PoleElipsy_mm2 int,				
-
-	@WspolczynnikPerymetru_E_C_E_O_obie_stopy int,		
-	@WspolczynnikPowierzchni_E_C_E_O_obie_stopy int,	
-
-	@Biofeedback_Srednia_C_o_P_X int,				
-	@Biofeedback_Srednia_C_o_P_Y int,				
-	@Biofeedback_Srednia_P_T_Predkosc_mm_sec int,	
-	@Biofeedback_Srednia_P_B_Predkosc_mm_sec int,	
-	@Biofeedback_Perimeter_mm int,					
-	@Biofeedback_PoleElipsy_mm2 int,					
-
-
-	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
-as
-begin
-	
-	declare @user_id int;
-	set @user_id = 0;
-
-	set @result = 0;
-
-	select @user_id = dbo.identify_user(@actor_login);
-	if(@user_id = 0)
-	begin
-		set @result = 4;
-		set @message = 'user of this login not found';
-		return;
-	end;
-
-
-	if(not exists(select * from Badanie where IdBadanie = @IdBadanie ) )
-	begin
-		set @result = 3;
-		set @message = 'variant of this ID ='+ CAST(@IdBadanie as varchar)+' not found';
-		return;
-	end;
-
-	update Badanie
-		set 
-			Otwarte_Srednia_C_o_P_X = @Otwarte_Srednia_C_o_P_X,				
-			Otwarte_Srednia_C_o_P_Y = @Otwarte_Srednia_C_o_P_Y,				
-			Otwarte_Srednia_P_T_Predkosc_mm_sec = @Otwarte_Srednia_P_T_Predkosc_mm_sec,	
-			Otwarte_Srednia_P_B_Predkosc_mm_sec = @Otwarte_Srednia_P_B_Predkosc_mm_sec,	
-			Otwarte_Perimeter_mm = @Otwarte_Perimeter_mm,					
-			Otwarte_PoleElipsy_mm2 = @Otwarte_PoleElipsy_mm2,					
-
-			Zamkniete_Srednia_C_o_P_X = @Zamkniete_Srednia_C_o_P_X,				
-			Zamkniete_Srednia_C_o_P_Y = @Zamkniete_Srednia_C_o_P_Y,				
-			Zamkniete_Srednia_P_T_Predkosc_mm_sec = @Zamkniete_Srednia_P_T_Predkosc_mm_sec,	
-			Zamkniete_Srednia_P_B_Predkosc_mm_sec = @Zamkniete_Srednia_P_B_Predkosc_mm_sec,	
-			Zamkniete_Perimeter_mm = @Zamkniete_Perimeter_mm,					
-			Zamkniete_PoleElipsy_mm2 = @Zamkniete_PoleElipsy_mm2,				
-
-			WspolczynnikPerymetru_E_C_E_O_obie_stopy = @WspolczynnikPerymetru_E_C_E_O_obie_stopy,		
-			WspolczynnikPowierzchni_E_C_E_O_obie_stopy = @WspolczynnikPowierzchni_E_C_E_O_obie_stopy,	
-
-			Biofeedback_Srednia_C_o_P_X = @Biofeedback_Srednia_C_o_P_X,				
-			Biofeedback_Srednia_C_o_P_Y = @Biofeedback_Srednia_C_o_P_Y,				
-			Biofeedback_Srednia_P_T_Predkosc_mm_sec = @Biofeedback_Srednia_P_T_Predkosc_mm_sec,	
-			Biofeedback_Srednia_P_B_Predkosc_mm_sec = @Biofeedback_Srednia_P_B_Predkosc_mm_sec,	
-			Biofeedback_Perimeter_mm = @Biofeedback_Perimeter_mm,					
-			Biofeedback_PoleElipsy_mm2 = @Biofeedback_PoleElipsy_mm2,	
-			Zmodyfikowal = @user_id, 
-			OstatniaZmiana = getdate() 
-		where IdBadanie = @IdBadanie;
-
-	return;
-end;
-go
-
-
+-- updated 2016-02-02
 -- @result codes: 0 = OK, 3 = variant of this ID not found, exist 2 = validation failed - see message, 4 = user login unknown
 create procedure update_variant_examination_data_partC  (	@IdBadanie int,
-	@UpAndGo	decimal(3,1),
-	@UpAndGoLiczby	decimal(3,1),
-	@UpAndGoKubekPrawa	decimal(3,1),
-	@UpAndGoKubekLewa	decimal(3,1),
-	@TST	decimal(3,1),
+	@UpAndGo	decimal(5,2),
+	@UpAndGoLiczby	decimal(5,2),
+	@UpAndGoKubekPrawa	decimal(5,2),
+	@UpAndGoKubekLewa	decimal(5,2),
+	@TST	decimal(5,2),
 	@TandemPivot	tinyint,
-	@WTT	decimal(3,1),
+	@WTT	decimal(5,2),
 	@actor_login varchar(50), @result int OUTPUT, @message varchar(200) OUTPUT )
 as
 begin
@@ -2722,8 +2570,7 @@ FROM    WartoscAtrybutuWizytyInt t join Atrybut a on t.IdAtrybut = a.IdAtrybut
 GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
-
--- modified: 2015-12-23
+-- modified: 2016-02-02
 create procedure get_database_copy
 as
 SELECT 
@@ -2950,6 +2797,10 @@ SELECT
       ,B.[TremorometriaLEFT_7_8]
       ,B.[TremorometriaLEFT_8_9]
       ,B.[TremorometriaLEFT_9_10]
+	  ,B.[TremorometriaLEFT_10_11] 
+	  ,B.[TremorometriaLEFT_11_12] 
+	  ,B.[TremorometriaLEFT_12_13] 
+	  ,B.[TremorometriaLEFT_13_14]       
       ,B.[TremorometriaLEFT_23_24]
       ,B.[TremorometriaRIGHT_0_1]
       ,B.[TremorometriaRIGHT_1_2]
@@ -2961,6 +2812,10 @@ SELECT
       ,B.[TremorometriaRIGHT_7_8]
       ,B.[TremorometriaRIGHT_8_9]
       ,B.[TremorometriaRIGHT_9_10]
+	  ,B.[TremorometriaRIGHT_10_11] 
+	  ,B.[TremorometriaRIGHT_11_12] 
+	  ,B.[TremorometriaRIGHT_12_13] 
+	  ,B.[TremorometriaRIGHT_13_14]       
       ,B.[TremorometriaRIGHT_23_24]
       ,B.[TestSchodkowy]
       ,B.[TestSchodkowyWDol]
@@ -3067,6 +2922,7 @@ SELECT
 	,W.[CVLT_BledyRozpoznania] CVLT_BledyRozpoznania
 	,W.[Benton_JOL] Benton_JOL
 	,W.[TFZ_ReyaLubInny] TFZ_ReyaLubInny
+	,W.[TFZ_ReyaLubInny2] TFZ_ReyaLubInny2
 	,W.[WAIS_R_Wiadomosci] WAIS_R_Wiadomosci
 	,W.[WAIS_R_PowtarzanieCyfr] WAIS_R_PowtarzanieCyfr
 	,W.[WAIS_R_Podobienstwa] WAIS_R_Podobienstwa
@@ -4348,6 +4204,66 @@ go
 insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
 select PozycjaDomyslna+1, 'W', 'TFZ_ReyaLubInny' from Kolumna where Encja = 'W' and Nazwa = 'Benton_JOL';
 go
+
+
+
+-- Dodanie TFZ_ReyaLubInny2
+
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 1
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'W' and Nazwa = 'TFZ_ReyaLubInny');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+1, 'W', 'TFZ_ReyaLubInny2' from Kolumna where Encja = 'W' and Nazwa = 'TFZ_ReyaLubInny';
+go
+
+
+
+
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 4
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaLEFT_9_10');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+1, 'B', 'TremorometriaLEFT_10_11' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaLEFT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+2, 'B', 'TremorometriaLEFT_11_12' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaLEFT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+3, 'B', 'TremorometriaLEFT_12_13' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaLEFT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+4, 'B', 'TremorometriaLEFT_13_14' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaLEFT_9_10';
+go
+
+
+update Kolumna 
+set PozycjaDomyslna = PozycjaDomyslna + 4
+where PozycjaDomyslna > (select PozycjaDomyslna from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaRIGHT_9_10');
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+1, 'B', 'TremorometriaRIGHT_10_11' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaRIGHT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+2, 'B', 'TremorometriaRIGHT_11_12' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaRIGHT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+3, 'B', 'TremorometriaRIGHT_12_13' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaRIGHT_9_10';
+go
+
+insert into Kolumna ( PozycjaDomyslna, Encja, Nazwa) 
+select PozycjaDomyslna+4, 'B', 'TremorometriaRIGHT_13_14' from Kolumna where Encja = 'B' and Nazwa = 'TremorometriaRIGHT_9_10';
+go
+
 
 
 

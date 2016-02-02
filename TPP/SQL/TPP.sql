@@ -312,6 +312,7 @@ create table Wizyta (
 	CVLT_BledyRozpoznania tinyint,-- dodane 2015-03-20
 	Benton_JOL tinyint,-- dodane 2015-03-20
 	TFZ_ReyaLubInny tinyint, -- dodane 2015-12-23
+	TFZ_ReyaLubInny2 tinyint, -- dodane 2016-02-02
 	WAIS_R_Wiadomosci tinyint,-- juz bylo; niezmienione
 	WAIS_R_PowtarzanieCyfr tinyint,-- juz bylo; niezmienione
 	WAIS_R_Podobienstwa tinyint, -- dodane 2015-03-20
@@ -499,6 +500,10 @@ create table Badanie  (
 	TremorometriaLEFT_7_8 decimal(11,5),
 	TremorometriaLEFT_8_9 decimal(11,5),
 	TremorometriaLEFT_9_10 decimal(11,5),
+	TremorometriaLEFT_10_11 decimal(11,5),
+	TremorometriaLEFT_11_12 decimal(11,5),
+	TremorometriaLEFT_12_13 decimal(11,5),
+	TremorometriaLEFT_13_14 decimal(11,5),
 	TremorometriaLEFT_23_24 decimal(11,5),
 	TremorometriaRIGHT_0_1 decimal(11,5),
 	TremorometriaRIGHT_1_2 decimal(11,5),
@@ -510,6 +515,10 @@ create table Badanie  (
 	TremorometriaRIGHT_7_8 decimal(11,5),
 	TremorometriaRIGHT_8_9 decimal(11,5),
 	TremorometriaRIGHT_9_10 decimal(11,5),
+	TremorometriaRIGHT_10_11 decimal(11,5),
+	TremorometriaRIGHT_11_12 decimal(11,5),
+	TremorometriaRIGHT_12_13 decimal(11,5),
+	TremorometriaRIGHT_13_14 decimal(11,5),
 	TremorometriaRIGHT_23_24 decimal(11,5),	
 	TestSchodkowy	bit,
 	TestSchodkowyWDol	decimal(4,2),
@@ -570,13 +579,13 @@ create table Badanie  (
 	Biofeedback_PoleElipsy_mm2 int,					-- (wartości liczbowe - liczby całkowite od 0 do 10 000)
 
 -- variant tests C
-	UpAndGo	decimal(3,1),
-	UpAndGoLiczby	decimal(3,1),
-	UpAndGoKubekPrawa	decimal(3,1),
-	UpAndGoKubekLewa	decimal(3,1),
-	TST	decimal(3,1),
+	UpAndGo	decimal(5,2),
+	UpAndGoLiczby	decimal(5,2),
+	UpAndGoKubekPrawa	decimal(5,2),
+	UpAndGoKubekLewa	decimal(5,2),
+	TST	decimal(5,2),
 	TandemPivot	tinyint,
-	WTT	decimal(3,1),
+	WTT	decimal(5,2),
 	Wprowadzil	int not null,
 	Zmodyfikowal int not null,
 	OstatniaZmiana datetime not null	
