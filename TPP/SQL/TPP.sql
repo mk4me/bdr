@@ -152,6 +152,7 @@ create table Wizyta (
 	CzasDyskinez decimal(3,1), -- h/dobe
 	CzasOFF decimal(3,1), -- h/dobe
 	PoprawaPoLDopie	tinyint,
+	Lateralizacja tinyint,
 
 
 

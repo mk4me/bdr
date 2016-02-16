@@ -487,7 +487,7 @@ end;
 go
 
 
--- last rev. 2015-07-20
+-- last rev. 2016-02-16
 -- @result codes: 0 = OK, 1 = visit already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = patient of this number not found, 4 = user login unknown
 create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar(20), @RodzajWizyty tinyint,
 	@DataPrzyjecia date,	@DataOperacji date,	@DataWypisu date, @MasaCiala decimal(4,1),
@@ -499,7 +499,7 @@ create procedure update_examination_questionnaire_partA  (@NumerPacjenta varchar
 	@ObjawyInne	tinyint,
 	@ObjawyInneJakie	varchar(80),
 	@CzasOdPoczObjDoWlLDopy	tinyint, @DyskinezyObecnie	tinyint, @DyskinezyOdLat	decimal(3,1), @FluktuacjeObecnie tinyint, @FluktuacjeOdLat	decimal(3,1), 
-	@CzasDyskinez decimal(3,1), @CzasOFF decimal(3,1), @PoprawaPoLDopie tinyint,
+	@CzasDyskinez decimal(3,1), @CzasOFF decimal(3,1), @PoprawaPoLDopie tinyint, @Lateralizacja tinyint,
 	@allow_update_existing bit,
 	@actor_login varchar(50),
 	@result int OUTPUT, @visit_id int OUTPUT, @message varchar(200) OUTPUT )
@@ -569,6 +569,8 @@ begin
 		return;
 	end;
 	
+	
+	
 	if( dbo.validate_ext_bit( @Drzenie) = 0 )
 	begin
 		set @result = 2;
@@ -618,6 +620,13 @@ begin
 		return;
 	end;
 
+	if dbo.validate_input_int('Wizyta', 'Lateralizacja', @Lateralizacja) = 0
+	begin
+		set @result = 2;
+		set @message = 'Invalid value for attribute Lateralizacja';
+		return;
+	end;
+
 	-- /validations
 	-- depending on update
 	if(@update = 0)
@@ -626,11 +635,13 @@ begin
 								Drzenie, Sztywnosc,	Spowolnienie, ObjawyInne, ObjawyInneJakie,
 								CzasOdPoczObjDoWlLDopy, DyskinezyObecnie,
 								DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat,	CzasDyskinez, CzasOFF, PoprawaPoLDopie,
+								Lateralizacja,
 								Wprowadzil, Zmodyfikowal, OstatniaZmiana )
 					values (	@RodzajWizyty, @patient_id, @DataPrzyjecia, @DataOperacji, @DataWypisu, @MasaCiala, @Wyksztalcenie,	@Rodzinnosc, @RokZachorowania, @PierwszyObjaw, 
 								@Drzenie, @Sztywnosc,@Spowolnienie, @ObjawyInne, REPLACE(@ObjawyInneJakie,';','. '),
 								@CzasOdPoczObjDoWlLDopy, @DyskinezyObecnie,
 								@DyskinezyOdLat, @FluktuacjeObecnie, @FluktuacjeOdLat, @CzasDyskinez, @CzasOFF, @PoprawaPoLDopie,
+								@Lateralizacja,
 								@user_id, @user_id, getdate() )  set @visit_id = SCOPE_IDENTITY();
 		end;
 	else
@@ -647,6 +658,7 @@ begin
 								DyskinezyOdLat = @DyskinezyOdLat, FluktuacjeObecnie = @FluktuacjeObecnie, FluktuacjeOdLat = @FluktuacjeOdLat,
 								CzasDyskinez = @CzasDyskinez, CzasOFF = @CzasOFF,
 								PoprawaPoLDopie	= @PoprawaPoLDopie,
+								Lateralizacja = @Lateralizacja,
 								Zmodyfikowal = @user_id, OstatniaZmiana = getdate() 
 		where RodzajWizyty = @RodzajWizyty and IdPacjent = @patient_id;
 		end;
@@ -2570,7 +2582,7 @@ FROM    WartoscAtrybutuWizytyInt t join Atrybut a on t.IdAtrybut = a.IdAtrybut
 GROUP BY t.IdWizyta, t.IdAtrybut, a.Nazwa
 )
 go
--- modified: 2016-02-02
+-- modified: 2016-02-16
 create procedure get_database_copy
 as
 SELECT 
@@ -2609,6 +2621,7 @@ SELECT
       ,W.[CzasDyskinez]
       ,W.[CzasOFF]
       ,W.[PoprawaPoLDopie]
+      ,W.[Lateralizacja]
       ,W.[PrzebyteLeczenieOperacyjnePD]
       ,W.[Papierosy]
       ,W.[Kawa]
@@ -3292,6 +3305,11 @@ insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	6,	'dyskinezy i fluktuacje' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	7,	'objawy autonomiczne' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'PierwszyObjaw',	8,	'inne' );
+
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Lateralizacja',	0,	'brak' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Lateralizacja',	1,	'lewa' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Lateralizacja',	2,	'prawa' );
+insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Lateralizacja',	3,	'obustronna' );
 
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Papierosy',	1,	'nigdy' );
 insert into SlownikInt ( Tabela, Atrybut, Klucz, Definicja ) values ( 'Wizyta',	'Papierosy',	2,	'w przeszłości' );
