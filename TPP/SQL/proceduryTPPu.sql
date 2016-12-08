@@ -1,4 +1,4 @@
-﻿use TPP_test;
+﻿use TPP;
 go
 
 
@@ -1871,7 +1871,7 @@ end;
 go
 
 
--- altered 2015-06-05
+-- replaced 2016-12-07 (divided into _1 and _2) / altered 2015-06-05
 -- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
 create procedure update_variant_examination_data_partA  (@IdWizyta int, @DBS tinyint, @BMT bit,
 	@UPDRS_I	tinyint,
@@ -2279,6 +2279,501 @@ begin
 	return;
 end;
 go
+
+
+-- created 2016-12-07
+-- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
+create procedure update_variant_examination_data_partA_1  (@IdWizyta int, @DBS tinyint, @BMT bit,
+	@UPDRS_I	tinyint,
+	@UPDRS_II	tinyint,
+	@UPDRS_18	tinyint,
+	@UPDRS_19 	tinyint,
+	@UPDRS_20_FaceLipsChin	tinyint,
+	@UPDRS_20_RHand	tinyint,
+	@UPDRS_20_LHand	tinyint,
+	@UPDRS_20_RFoot	tinyint,
+	@UPDRS_20_LFoot	tinyint,
+	@UPDRS_21_RHand	tinyint,
+	@UPDRS_21_LHand	tinyint,
+	@UPDRS_22_Neck	tinyint,
+	@UPDRS_22_RHand	tinyint,
+	@UPDRS_22_LHand	tinyint,
+	@UPDRS_22_RFoot	tinyint,
+	@UPDRS_22_LFoot	tinyint,
+	@UPDRS_23_R	tinyint,
+	@UPDRS_23_L	tinyint,
+	@UPDRS_24_R	tinyint,
+	@UPDRS_24_L	tinyint,
+	@UPDRS_25_R	tinyint,
+	@UPDRS_25_L	tinyint,
+	@UPDRS_26_R	tinyint,
+	@UPDRS_26_L	tinyint,
+	@UPDRS_27	tinyint,
+	@UPDRS_28	tinyint,
+	@UPDRS_29	tinyint,
+	@UPDRS_30	tinyint,
+	@UPDRS_31	tinyint,
+	@UPDRS_III	tinyint,
+	@UPDRS_IV	tinyint,
+	@UPDRS_TOTAL	tinyint,
+	@allow_update_existing bit,
+	@actor_login varchar(50),
+	@result int OUTPUT, @variant_id int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	declare @user_id int;
+	declare @update int;
+	set @result = 0;
+	set @message = '';
+	set @update = 0;
+
+	
+	if( not exists (select * from Wizyta where IdWizyta = @IdWizyta) )
+	begin
+		set @result = 3;
+		set @message = 'visit of this number not found';
+		return;
+	end;
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
+
+
+	if (select count(*) from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ) > 0 
+	begin
+		if (@allow_update_existing = 0)
+			begin
+				set @result = 1;
+				return;
+			end;
+		set @update = 1;
+		select @variant_id = IdBadanie from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT;
+	end;
+
+	-- validations
+
+	-- TODO!
+	if dbo.validate_input_int('Badanie', 'DBS', @DBS) = 0	begin	set @result = 2;	set @message = 'Invalid value for attribute DBS';	return;	end;
+
+	if dbo.validate_input_int('Badanie', 'UPDRS_I', @UPDRS_I) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_I'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_II', @UPDRS_II) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_II'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_18', @UPDRS_18) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_18'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_19', @UPDRS_19) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_19'; return; end; 
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_FaceLipsChin', @UPDRS_20_FaceLipsChin) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_FaceLipsChin'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_RHand', @UPDRS_20_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_LHand', @UPDRS_20_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_RFoot', @UPDRS_20_RFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_RFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_20_LFoot', @UPDRS_20_LFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_20_LFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_21_RHand', @UPDRS_21_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_21_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_21_LHand', @UPDRS_21_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_21_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_Neck', @UPDRS_22_Neck) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_Neck'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_RHand', @UPDRS_22_RHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_RHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_LHand', @UPDRS_22_LHand) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_LHand'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_RFoot', @UPDRS_22_RFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_RFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_22_LFoot', @UPDRS_22_LFoot) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_22_LFoot'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_23_R', @UPDRS_23_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_23_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_23_L', @UPDRS_23_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_23_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_24_R', @UPDRS_24_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_24_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_24_L', @UPDRS_24_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_24_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_25_R', @UPDRS_25_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_25_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_25_L', @UPDRS_25_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_25_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_26_R', @UPDRS_26_R) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_26_R'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_26_L', @UPDRS_26_L) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_26_L'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_27', @UPDRS_27) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_27'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_28', @UPDRS_28) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_28'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_29', @UPDRS_29) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_29'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_30', @UPDRS_30) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_30'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_31', @UPDRS_31) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_31'; return; end;
+	if dbo.validate_input_int('Badanie', 'UPDRS_IV', @UPDRS_IV) = 0 begin set @result = 2; set @message = 'Invalid value for attribute UPDRS_IV'; return; end;
+
+	-- /validations
+	-- depending on update
+	if(@update = 0)
+		begin
+		insert into Badanie (
+			IdWizyta,
+			DBS,
+			BMT,
+			UPDRS_I,
+			UPDRS_II,
+			UPDRS_18,
+			UPDRS_19 ,
+			UPDRS_20_FaceLipsChin,
+			UPDRS_20_RHand,
+			UPDRS_20_LHand,
+			UPDRS_20_RFoot,
+			UPDRS_20_LFoot,
+			UPDRS_21_RHand,
+			UPDRS_21_LHand,
+			UPDRS_22_Neck,
+			UPDRS_22_RHand,
+			UPDRS_22_LHand,
+			UPDRS_22_RFoot,
+			UPDRS_22_LFoot,
+			UPDRS_23_R,
+			UPDRS_23_L,
+			UPDRS_24_R,
+			UPDRS_24_L,
+			UPDRS_25_R,
+			UPDRS_25_L,
+			UPDRS_26_R,
+			UPDRS_26_L,
+			UPDRS_27,
+			UPDRS_28,
+			UPDRS_29,
+			UPDRS_30,
+			UPDRS_31,
+			UPDRS_III,
+			UPDRS_IV,
+			UPDRS_TOTAL,
+			Wprowadzil,
+			Zmodyfikowal,
+			OstatniaZmiana
+		 )
+		values (
+			@IdWizyta,
+			@DBS,
+			@BMT,
+			@UPDRS_I,
+			@UPDRS_II,
+			@UPDRS_18,
+			@UPDRS_19 ,
+			@UPDRS_20_FaceLipsChin,
+			@UPDRS_20_RHand,
+			@UPDRS_20_LHand,
+			@UPDRS_20_RFoot,
+			@UPDRS_20_LFoot,
+			@UPDRS_21_RHand,
+			@UPDRS_21_LHand,
+			@UPDRS_22_Neck,
+			@UPDRS_22_RHand,
+			@UPDRS_22_LHand,
+			@UPDRS_22_RFoot,
+			@UPDRS_22_LFoot,
+			@UPDRS_23_R,
+			@UPDRS_23_L,
+			@UPDRS_24_R,
+			@UPDRS_24_L,
+			@UPDRS_25_R,
+			@UPDRS_25_L,
+			@UPDRS_26_R,
+			@UPDRS_26_L,
+			@UPDRS_27,
+			@UPDRS_28,
+			@UPDRS_29,
+			@UPDRS_30,
+			@UPDRS_31,
+			@UPDRS_III,
+			@UPDRS_IV,
+			@UPDRS_TOTAL,
+			@user_id,
+			@user_id, 
+			getdate() 		
+		)  set @variant_id = SCOPE_IDENTITY();
+		end;
+	else
+		begin
+			update Badanie
+			set 
+				UPDRS_I	=	@UPDRS_I,
+				UPDRS_II	=	@UPDRS_II,
+				UPDRS_18	=	@UPDRS_18,
+				UPDRS_19 	=	@UPDRS_19,
+				UPDRS_20_FaceLipsChin	=	@UPDRS_20_FaceLipsChin,
+				UPDRS_20_RHand	=	@UPDRS_20_RHand,
+				UPDRS_20_LHand	=	@UPDRS_20_LHand,
+				UPDRS_20_RFoot	=	@UPDRS_20_RFoot,
+				UPDRS_20_LFoot	=	@UPDRS_20_LFoot,
+				UPDRS_21_RHand	=	@UPDRS_21_RHand,
+				UPDRS_21_LHand	=	@UPDRS_21_LHand,
+				UPDRS_22_Neck	=	@UPDRS_22_Neck,
+				UPDRS_22_RHand	=	@UPDRS_22_RHand,
+				UPDRS_22_LHand	=	@UPDRS_22_LHand,
+				UPDRS_22_RFoot	=	@UPDRS_22_RFoot,
+				UPDRS_22_LFoot	=	@UPDRS_22_LFoot,
+				UPDRS_23_R	=	@UPDRS_23_R,
+				UPDRS_23_L	=	@UPDRS_23_L,
+				UPDRS_24_R	=	@UPDRS_24_R,
+				UPDRS_24_L	=	@UPDRS_24_L,
+				UPDRS_25_R	=	@UPDRS_25_R,
+				UPDRS_25_L	=	@UPDRS_25_L,
+				UPDRS_26_R	=	@UPDRS_26_R,
+				UPDRS_26_L	=	@UPDRS_26_L,
+				UPDRS_27	=	@UPDRS_27,
+				UPDRS_28	=	@UPDRS_28,
+				UPDRS_29	=	@UPDRS_29,
+				UPDRS_30	=	@UPDRS_30,
+				UPDRS_31	=	@UPDRS_31,
+				UPDRS_III	=	@UPDRS_III,
+				UPDRS_IV	=	@UPDRS_IV,
+				UPDRS_TOTAL	=	@UPDRS_TOTAL,
+				Zmodyfikowal = @user_id, 
+				OstatniaZmiana = getdate() 
+			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ;
+		end;
+	return;
+end;
+go
+
+
+-- created 2016-12-07
+-- @result codes: 0 = OK, 1 = variant already exists while run in no-update mode,  exist 2 = validation failed - see message, 3 = visit of this ID not found, 4 = user login unknown
+create procedure update_variant_examination_data_partA_2  (@IdWizyta int, @DBS tinyint, @BMT bit,
+	@HYscale	decimal(2,1),
+	@SchwabEnglandScale	tinyint,
+	@JazzNovo bit,
+	@Wideookulograf bit,
+	@Saccades bit,
+	@SaccadesDurationLEFT decimal(6,2),
+	@SaccadesLatencyMeanLEFT decimal(6,2),
+	@SaccadesAmplitudeLEFT decimal(6,2),
+	@SaccadesPeakVelocityLEFT decimal(6,2),
+	@SaccadesDurationRIGHT decimal(6,2),
+	@SaccadesLatencyMeanRIGHT decimal(6,2),
+	@SaccadesAmplitudeRIGHT decimal(6,2),
+	@SaccadesPeakVelocityRIGHT decimal(6,2),
+	@SaccadesDurationALL decimal(6,2),
+	@SaccadesLatencyMeanALL decimal(6,2),
+	@SaccadesAmplitudeALL decimal(6,2),
+	@SaccadesPeakVelocityALL decimal(6,2),
+	@Antisaccades bit,
+	@AntisaccadesPercentOfCorrectLEFT decimal(8,5),
+	@AntisaccadesPercentOfCorrectRIGHT decimal(8,5),
+	@AntisaccadesLatencyMeanLEFT decimal(8,5),
+	@AntisaccadesLatencyMeanRIGHT decimal(8,5),
+	@AntisaccadesDurationLEFT decimal(8,5),
+	@AntisaccadesDurationRIGHT decimal(8,5),
+	@AntisaccadesAmplitudeLEFT decimal(8,5),
+	@AntisaccadesAmplitudeRIGHT decimal(8,5),
+	@AntisaccadesPeakVelocityLEFT decimal(8,5),
+	@AntisaccadesPeakVelocityRIGHT decimal(8,5),
+	@AntisaccadesPercentOfCorrectALL decimal(8,5),
+	@AntisaccadesLatencyMeanALL decimal(8,5),
+	@AntisaccadesDurationALL decimal(8,5),
+	@AntisaccadesAmplitudeALL decimal(8,5),
+	@AntisaccadesPeakVelocityALL decimal(8,5),
+	@POM_Gain_SlowSinus decimal(8,5),
+	@POM_StDev_SlowSinus decimal(8,5),
+	@POM_Gain_MediumSinus decimal(8,5),
+	@POM_StDev_MediumSinus decimal(8,5),
+	@POM_Gain_FastSinus decimal(8,5),
+	@POM_StDev_FastSinus decimal(8,5),
+	@POM_Accuracy_SlowSinus decimal(8,5),
+	@POM_Accuracy_MediumSinus decimal(8,5),
+	@POM_Accuracy_FastSinus decimal(8,5),
+	@allow_update_existing bit,
+	@actor_login varchar(50),
+	@result int OUTPUT, @variant_id int OUTPUT, @message varchar(200) OUTPUT )
+as
+begin
+	declare @user_id int;
+	declare @update int;
+	set @result = 0;
+	set @message = '';
+	set @update = 0;
+
+	
+	if( not exists (select * from Wizyta where IdWizyta = @IdWizyta) )
+	begin
+		set @result = 3;
+		set @message = 'visit of this number not found';
+		return;
+	end;
+	select @user_id = dbo.identify_user(@actor_login);
+	if(@user_id = 0)
+	begin
+		set @result = 4;
+		set @message = 'user of this login not found';
+		return;
+	end;
+
+
+	if (select count(*) from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ) > 0 
+	begin
+		if (@allow_update_existing = 0)
+			begin
+				set @result = 1;
+				return;
+			end;
+		set @update = 1;
+		select @variant_id = IdBadanie from Badanie where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT;
+	end;
+
+	-- validations
+
+	-- TODO!
+	if dbo.validate_input_int('Badanie', 'DBS', @DBS) = 0	begin	set @result = 2;	set @message = 'Invalid value for attribute DBS';	return;	end;
+
+	if dbo.validate_input_int('Badanie', 'SchwabEnglandScale', @SchwabEnglandScale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute SchwabEnglandScale'; return; end;
+	if dbo.validate_input_decimal('Badanie', 'HYscale', @HYscale) = 0 begin set @result = 2; set @message = 'Invalid value for attribute HYscale'; return; end;
+
+	-- /validations
+	-- depending on update
+	if(@update = 0)
+		begin
+		insert into Badanie (
+			IdWizyta,
+			DBS,
+			BMT,
+			HYscale,
+			SchwabEnglandScale,
+			JazzNovo,
+			Wideookulograf,
+			Saccades,
+			SaccadesLatencyMeanLEFT,
+			SaccadesLatencyMeanRIGHT,
+			SaccadesDurationLEFT,
+			SaccadesDurationRIGHT,
+			SaccadesAmplitudeLEFT,
+			SaccadesAmplitudeRIGHT,
+			SaccadesPeakVelocityLEFT,
+			SaccadesPeakVelocityRIGHT,
+			SaccadesLatencyMeanALL,
+			SaccadesDurationALL,
+			SaccadesAmplitudeALL,
+			SaccadesPeakVelocityALL,
+			Antisaccades,
+			AntisaccadesPercentOfCorrectLEFT,
+			AntisaccadesPercentOfCorrectRIGHT,
+			AntisaccadesLatencyMeanLEFT,
+			AntisaccadesLatencyMeanRIGHT,
+			AntisaccadesDurationLEFT,
+			AntisaccadesDurationRIGHT,
+			AntisaccadesAmplitudeLEFT,
+			AntisaccadesAmplitudeRIGHT,
+			AntisaccadesPeakVelocityLEFT,
+			AntisaccadesPeakVelocityRIGHT,
+			AntisaccadesPercentOfCorrectALL,
+			AntisaccadesLatencyMeanALL,
+			AntisaccadesDurationALL,
+			AntisaccadesAmplitudeALL,
+			AntisaccadesPeakVelocityALL,
+			POM_Gain_SlowSinus,
+			POM_StDev_SlowSinus,
+			POM_Gain_MediumSinus,
+			POM_StDev_MediumSinus,
+			POM_Gain_FastSinus,
+			POM_StDev_FastSinus,
+			POM_Accuracy_SlowSinus,
+			POM_Accuracy_MediumSinus,
+			POM_Accuracy_FastSinus,
+			Wprowadzil,
+			Zmodyfikowal,
+			OstatniaZmiana
+		 )
+		values (
+			@IdWizyta,
+			@DBS,
+			@BMT,
+			@HYscale,
+			@SchwabEnglandScale,
+			@JazzNovo,
+			@Wideookulograf,
+			@Saccades,
+			@SaccadesLatencyMeanLEFT,
+			@SaccadesLatencyMeanRIGHT,
+			@SaccadesDurationLEFT,
+			@SaccadesDurationRIGHT,
+			@SaccadesAmplitudeLEFT,
+			@SaccadesAmplitudeRIGHT,
+			@SaccadesPeakVelocityLEFT,
+			@SaccadesPeakVelocityRIGHT,
+			@SaccadesLatencyMeanALL,
+			@SaccadesDurationALL,
+			@SaccadesAmplitudeALL,
+			@SaccadesPeakVelocityALL,
+			@Antisaccades,
+			@AntisaccadesPercentOfCorrectLEFT,
+			@AntisaccadesPercentOfCorrectRIGHT,
+			@AntisaccadesLatencyMeanLEFT,
+			@AntisaccadesLatencyMeanRIGHT,
+			@AntisaccadesDurationLEFT,
+			@AntisaccadesDurationRIGHT,
+			@AntisaccadesAmplitudeLEFT,
+			@AntisaccadesAmplitudeRIGHT,
+			@AntisaccadesPeakVelocityLEFT,
+			@AntisaccadesPeakVelocityRIGHT,
+			@AntisaccadesPercentOfCorrectALL,
+			@AntisaccadesLatencyMeanALL,
+			@AntisaccadesDurationALL,
+			@AntisaccadesAmplitudeALL,
+			@AntisaccadesPeakVelocityALL,
+			@POM_Gain_SlowSinus,
+			@POM_StDev_SlowSinus,
+			@POM_Gain_MediumSinus,
+			@POM_StDev_MediumSinus,
+			@POM_Gain_FastSinus,
+			@POM_StDev_FastSinus,
+			@POM_Accuracy_SlowSinus,
+			@POM_Accuracy_MediumSinus,
+			@POM_Accuracy_FastSinus,
+			@user_id,
+			@user_id, 
+			getdate() 		
+		)  set @variant_id = SCOPE_IDENTITY();
+		end;
+	else
+		begin
+			update Badanie
+			set 
+				HYscale	=	@HYscale,
+				SchwabEnglandScale	=	@SchwabEnglandScale,
+				JazzNovo = @JazzNovo,
+				Wideookulograf = @Wideookulograf,
+				Saccades	=	@Saccades,
+				SaccadesLatencyMeanLEFT	=	@SaccadesLatencyMeanLEFT,
+				SaccadesLatencyMeanRIGHT	=	@SaccadesLatencyMeanRIGHT,
+				SaccadesDurationLEFT	=	@SaccadesDurationLEFT,
+				SaccadesDurationRIGHT	=	@SaccadesDurationRIGHT,
+				SaccadesAmplitudeLEFT	=	@SaccadesAmplitudeLEFT,
+				SaccadesAmplitudeRIGHT	=	@SaccadesAmplitudeRIGHT,
+				SaccadesPeakVelocityLEFT	=	@SaccadesPeakVelocityLEFT,
+				SaccadesPeakVelocityRIGHT	=	@SaccadesPeakVelocityRIGHT,
+				SaccadesLatencyMeanALL	=	@SaccadesLatencyMeanALL,
+				SaccadesDurationALL	=	@SaccadesDurationALL,
+				SaccadesAmplitudeALL	=	@SaccadesAmplitudeALL,
+				SaccadesPeakVelocityALL	=	@SaccadesPeakVelocityALL,
+				Antisaccades	=	@Antisaccades,
+				AntisaccadesPercentOfCorrectLEFT	=	@AntisaccadesPercentOfCorrectLEFT,
+				AntisaccadesPercentOfCorrectRIGHT	=	@AntisaccadesPercentOfCorrectRIGHT,
+				AntisaccadesLatencyMeanLEFT	=	@AntisaccadesLatencyMeanLEFT,
+				AntisaccadesLatencyMeanRIGHT	=	@AntisaccadesLatencyMeanRIGHT,
+				AntisaccadesDurationLEFT	=	@AntisaccadesDurationLEFT,
+				AntisaccadesDurationRIGHT	=	@AntisaccadesDurationRIGHT,
+				AntisaccadesAmplitudeLEFT	=	@AntisaccadesAmplitudeLEFT,
+				AntisaccadesAmplitudeRIGHT	=	@AntisaccadesAmplitudeRIGHT,
+				AntisaccadesPeakVelocityLEFT	=	@AntisaccadesPeakVelocityLEFT,
+				AntisaccadesPeakVelocityRIGHT	=	@AntisaccadesPeakVelocityRIGHT,
+				AntisaccadesPercentOfCorrectALL	=	@AntisaccadesPercentOfCorrectALL,
+				AntisaccadesLatencyMeanALL	=	@AntisaccadesLatencyMeanALL,
+				AntisaccadesDurationALL	=	@AntisaccadesDurationALL,
+				AntisaccadesAmplitudeALL	=	@AntisaccadesAmplitudeALL,
+				AntisaccadesPeakVelocityALL	=	@AntisaccadesPeakVelocityALL,
+				POM_Gain_SlowSinus	=	@POM_Gain_SlowSinus,
+				POM_StDev_SlowSinus	=	@POM_StDev_SlowSinus,
+				POM_Gain_MediumSinus	=	@POM_Gain_MediumSinus,
+				POM_StDev_MediumSinus	=	@POM_StDev_MediumSinus,
+				POM_Gain_FastSinus	=	@POM_Gain_FastSinus,
+				POM_StDev_FastSinus	=	@POM_StDev_FastSinus,
+				POM_Accuracy_SlowSinus	=	@POM_Accuracy_SlowSinus,
+				POM_Accuracy_MediumSinus	=	@POM_Accuracy_MediumSinus,
+				POM_Accuracy_FastSinus	=	@POM_Accuracy_FastSinus,
+				Zmodyfikowal = @user_id, 
+				OstatniaZmiana = getdate() 
+			where IdWizyta = @IdWizyta and DBS = @DBS and BMT = @BMT ;
+		end;
+	return;
+end;
+go
+
+
+
+
+
 
 
 
@@ -4545,6 +5040,7 @@ insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'm.tomaszewski', HashBytes('SHA1','mt4tpp'), 'Michał', 'Tomaszewski', 'tomaszew@pjwstk.edu.pl', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'a.szymanski', HashBytes('SHA1','4722tpp'), 'Artur', 'Szymański', 's10248@pjwstk.edu.pl', 1 )
 insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'a.sledzianowski', HashBytes('SHA1','tpE587yt'), 'Albert', 'Śledzianowski', 'asledzianowski@gmail.com', 1 )
+insert into Uzytkownik ( Login, Haslo, Imie, Nazwisko, Email, Status ) values ( 'm.szypke', HashBytes('SHA1','pdF841mr'), 'Mikołaj', 'Szypke', 'mszypke@gmail.com', 1 )
 */
 
 
