@@ -86,6 +86,7 @@ public partial class PartGForm : System.Web.UI.Page
         cmd.Parameters.Add("@CVLT_BledyRozpoznania", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textCVLT_BledyRozpoznania.Text);
         cmd.Parameters.Add("@Benton_JOL", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textBenton_JOL.Text);
         cmd.Parameters.Add("@TFZ_ReyaLubInny", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTFZ_ReyaLubInny.Text);
+        cmd.Parameters.Add("@TFZ_ReyaLubInny2", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textTFZ_ReyaLubInny2.Text);
         cmd.Parameters.Add("@WAIS_R_Wiadomosci", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_Wiadomosci.Text);
         cmd.Parameters.Add("@WAIS_R_PowtarzanieCyfr", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_PowtarzanieCyfr.Text);
         cmd.Parameters.Add("@WAIS_R_Podobienstwa", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(textWAIS_R_Podobienstwa.Text);
@@ -168,7 +169,7 @@ public partial class PartGForm : System.Web.UI.Page
             "TestAVLTSrednia, TestAVLTOdroczony, TestAVLTPo20min, TestAVLTRozpoznawanie, " +
             "CVLT_proba_1, CVLT_proba_2, CVLT_proba_3, CVLT_proba_4, CVLT_proba_5, CVLT_Suma, CVLT_OSKO_krotkie_odroczenie, CVLT_OPKO_krotkie_odroczenie_i_pomoc, " +
             "CVLT_OSDO_po20min, CVLT_OPDO_po20min_i_pomoc, CVLT_perseweracje, CVLT_WtraceniaOdtwarzanieSwobodne, CVLT_wtraceniaOdtwarzanieZPomoca, CVLT_Rozpoznawanie, CVLT_BledyRozpoznania, " +
-            "Benton_JOL, TFZ_ReyaLubInny, WAIS_R_Wiadomosci, WAIS_R_PowtarzanieCyfr, WAIS_R_Podobienstwa, BostonskiTestNazywaniaBNT, BNT_SredniCzasReakcji_sek, SkalaDepresjiBecka, SkalaDepresjiBeckaII, " +
+            "Benton_JOL, TFZ_ReyaLubInny, TFZ_ReyaLubInny2, WAIS_R_Wiadomosci, WAIS_R_PowtarzanieCyfr, WAIS_R_Podobienstwa, BostonskiTestNazywaniaBNT, BNT_SredniCzasReakcji_sek, SkalaDepresjiBecka, SkalaDepresjiBeckaII, " +
             "TestFluencjiK, TestFluencjiP, TestFluencjiZwierzeta, TestFluencjiOwoceWarzywa, TestFluencjiOstre, TestLaczeniaPunktowA, TestLaczeniaPunktowB, TestLaczeniaPunktowA_maly, TestLaczeniaPunktowB_maly, " +
             "ToL_SumaRuchow, ToL_LiczbaPrawidlowych, ToL_CzasInicjowania_sek, ToL_CzasWykonania_sek, ToL_CzasCalkowity_sek, ToL_CzasPrzekroczony, ToL_LiczbaPrzekroczenZasad, ToL_ReakcjeUkierunkowane, " +
             "InnePsychologiczne, OpisBadania, Wnioski " +
@@ -219,6 +220,7 @@ public partial class PartGForm : System.Web.UI.Page
                 textCVLT_BledyRozpoznania.Text = DatabaseProcedures.getTextByteValue(rdr["CVLT_BledyRozpoznania"]);
                 textBenton_JOL.Text = DatabaseProcedures.getTextByteValue(rdr["Benton_JOL"]);
                 textTFZ_ReyaLubInny.Text = DatabaseProcedures.getTextByteValue(rdr["TFZ_ReyaLubInny"]);
+                textTFZ_ReyaLubInny2.Text = DatabaseProcedures.getTextByteValue(rdr["TFZ_ReyaLubInny2"]);
                 textWAIS_R_Wiadomosci.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_Wiadomosci"]);
                 textWAIS_R_PowtarzanieCyfr.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_PowtarzanieCyfr"]);
                 textWAIS_R_Podobienstwa.Text = DatabaseProcedures.getTextByteValue(rdr["WAIS_R_Podobienstwa"]);

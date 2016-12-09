@@ -247,6 +247,12 @@
             </td>
         </tr>
         <tr>
+            <td>TFZ Reya lub inny 2:</td>
+            <td>
+	            <asp:TextBox ID="textTFZ_ReyaLubInny2" runat="server"></asp:TextBox>
+            </td>
+        </tr>
+        <tr>
             <td>&nbsp;</td>
         </tr>
         <tr>

@@ -82,6 +82,11 @@ public partial class AppointmentForm : System.Web.UI.Page
         dropSymptom.DataValueField = "Key";
         dropSymptom.DataBind();
 
+        dropLateralizacja.DataSource = DatabaseProcedures.getEnumerationByteWithNoData("Wizyta", "Lateralizacja", NO_DATA);
+        dropLateralizacja.DataTextField = "Value";
+        dropLateralizacja.DataValueField = "Key";
+        dropLateralizacja.DataBind();
+
         // Wizyta inna niz pierwsza - wygasic ponizsze atrybuty. Dla POP pierwsza wizyta jest po pol roku.
         if ((Session["PatientNumber"].ToString().Contains(Consts.PATIENT_POP) == false && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_0.ToString()) ||
             (Session["PatientNumber"].ToString().Contains(Consts.PATIENT_POP) == true && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_0.ToString() && Session["AppointmentType"].ToString() != Consts.APPOINTMENT_6.ToString()))
@@ -160,7 +165,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         SqlParameter czasDyskinezDecimal = new SqlParameter("@CzasDyskinez", SqlDbType.Decimal);
         czasDyskinezDecimal.Precision = 3;
         czasDyskinezDecimal.Scale = 1;
-        czasDyskinezDecimal.Value = DatabaseProcedures.getDecimalOrNull(textCzasOFF.Text);
+        czasDyskinezDecimal.Value = DatabaseProcedures.getDecimalOrNull(textCzasDyskinez.Text);
         cmd.Parameters.Add(czasDyskinezDecimal);
         SqlParameter czasOFFDecimal = new SqlParameter("@CzasOFF", SqlDbType.Decimal);
         czasOFFDecimal.Precision = 3;
@@ -168,6 +173,7 @@ public partial class AppointmentForm : System.Web.UI.Page
         czasOFFDecimal.Value = DatabaseProcedures.getDecimalOrNull(textCzasOFF.Text);
         cmd.Parameters.Add(czasOFFDecimal);
         cmd.Parameters.Add("@PoprawaPoLDopie", SqlDbType.TinyInt).Value = byte.Parse(dropPoprawa.SelectedValue);
+        cmd.Parameters.Add("@Lateralizacja", SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNullWithNoData(dropLateralizacja.SelectedValue, NO_DATA.ToString());
         cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
         cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
         cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -232,7 +238,8 @@ public partial class AppointmentForm : System.Web.UI.Page
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.Text;
         cmd.CommandText = "select DataPrzyjecia, DataOperacji, DataWypisu, Wyksztalcenie, MasaCiala, Rodzinnosc, RokZachorowania, " +
-            "PierwszyObjaw, Drzenie, Sztywnosc, Spowolnienie, ObjawyInne, ObjawyInneJakie, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat, CzasDyskinez, CzasOFF, PoprawaPoLDopie " +
+            "PierwszyObjaw, Drzenie, Sztywnosc, Spowolnienie, ObjawyInne, ObjawyInneJakie, CzasOdPoczObjDoWlLDopy, DyskinezyObecnie, " +
+            "DyskinezyOdLat, FluktuacjeObecnie, FluktuacjeOdLat, CzasDyskinez, CzasOFF, PoprawaPoLDopie, Lateralizacja " +
             " from Wizyta where IdWizyta = @IdWizyta";
         cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = appointmentId;
         cmd.Connection = con;
@@ -285,6 +292,7 @@ public partial class AppointmentForm : System.Web.UI.Page
                 textCzasDyskinez.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasDyskinez"]);
                 textCzasOFF.Text = DatabaseProcedures.getTextDecimalValue(rdr["CzasOFF"]);
                 dropPoprawa.SelectedValue = DatabaseProcedures.getDropYesNoValue(rdr["PoprawaPoLDopie"]);
+                dropLateralizacja.SelectedValue = DatabaseProcedures.getDropMultiValueWithNoData(rdr["Lateralizacja"], NO_DATA.ToString());
             }
         }
         catch (SqlException ex)
@@ -305,6 +313,7 @@ public partial class AppointmentForm : System.Web.UI.Page
     {
         dropEducation.SelectedValue = NO_DATA.ToString();
         dropSymptom.SelectedValue = NO_DATA.ToString();
+        dropLateralizacja.SelectedValue = NO_DATA.ToString();
         textTimeDiskinesia.Enabled = false;
         //RequiredFieldValidator2.Enabled = false;
         textYearsFluctuations.Enabled = false;

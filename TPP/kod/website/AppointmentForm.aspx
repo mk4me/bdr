@@ -275,6 +275,13 @@
                             </asp:DropDownList>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Lateralizacja:</td>
+                        <td>
+                            <asp:DropDownList ID="dropLateralizacja" runat="server">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td align="center" valign="top" style="padding-left: 100px;">

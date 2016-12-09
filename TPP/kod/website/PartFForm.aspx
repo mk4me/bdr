@@ -44,12 +44,17 @@
                     onclick="buttonCalculate_Click" />
     <br />
     <br />
+    <asp:Button ID="buttonSavePartA_1" runat="server" Text="Zatwierdź" 
+                    onclick="buttonSavePartA_1_Click" />
+    <asp:Label ID="labelSavePartA_1" runat="server" Text=""></asp:Label>
+    <br />
+    <br />
     <asp:Table ID="tableUPDRSExtra" runat="server">
     </asp:Table>
     <br />
-    <asp:Button ID="buttonSavePartA" runat="server" Text="Zatwierdź" 
-                    onclick="buttonSavePartA_Click" />
-    <asp:Label ID="labelSavePartA" runat="server" Text=""></asp:Label>
+    <asp:Button ID="buttonSavePartA_2" runat="server" Text="Zatwierdź" 
+                    onclick="buttonSavePartA_2_Click" />
+    <asp:Label ID="labelSavePartA_2" runat="server" Text=""></asp:Label>
     <br />
     <br />
     <asp:Table ID="tableFiles" runat="server">

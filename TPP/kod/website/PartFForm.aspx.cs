@@ -179,7 +179,7 @@ public partial class PartFForm : System.Web.UI.Page
         addVariantHeader(tablePart2);
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_0_1", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_1_2", tablePart2, true, false));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_2_3", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_3_4", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_4_5", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_5_6", tablePart2, true, true));
@@ -187,10 +187,14 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_7_8", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_8_9", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_9_10", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_10_11", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_11_12", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_12_13", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_13_14", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaLEFT_23_24", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_0_1", tablePart2, true, false));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_1_2", tablePart2, true, false));
-        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_2_3", tablePart2, true, false));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_2_3", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_3_4", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_4_5", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_5_6", tablePart2, true, true));
@@ -198,6 +202,10 @@ public partial class PartFForm : System.Web.UI.Page
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_7_8", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_8_9", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_9_10", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_10_11", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_11_12", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_12_13", tablePart2, true, true));
+        variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_13_14", tablePart2, true, true));
         variantsPartBList3.Add(addVariantTextBoxes("TremorometriaRIGHT_23_24", tablePart2, true, false));
         variantsPartBList.Add(addVariantDropDowns("Tremorometria", tablePart2, dictionaryYesNo));
         variantsPartBList.Add(addVariantDropDowns("TremorometriaLEFT", tablePart2, dictionaryYesNo));
@@ -496,13 +504,13 @@ public partial class PartFForm : System.Web.UI.Page
 
         return sum;
     }
-
-    private int saveVariantPartA(byte DBS, bool BMT, int variant)
+    
+    private int saveVariantPartA_1(byte DBS, bool BMT, int variant)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
         SqlCommand cmd = new SqlCommand();
         cmd.CommandType = CommandType.StoredProcedure;
-        cmd.CommandText = "[dbo].[update_variant_examination_data_partA]";
+        cmd.CommandText = "[dbo].[update_variant_examination_data_partA_1]";
         cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
         cmd.Parameters.Add("@DBS", SqlDbType.TinyInt).Value = DBS;
         cmd.Parameters.Add("@BMT", SqlDbType.Bit).Value = BMT;
@@ -516,6 +524,64 @@ public partial class PartFForm : System.Web.UI.Page
         }
         cmd.Parameters.Add("@" + UPDRSListCalculated1.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated1.Item1[variant].Text);
         cmd.Parameters.Add("@" + UPDRSListCalculated2.Item2, SqlDbType.TinyInt).Value = DatabaseProcedures.getByteOrNull(UPDRSListCalculated2.Item1[variant].Text);
+        bool update = false;
+        if (ViewState["VariantIds"] != null)
+        {
+            update = true;
+        }
+        cmd.Parameters.Add("@allow_update_existing", SqlDbType.Bit).Value = update;
+        cmd.Parameters.Add("@actor_login", SqlDbType.VarChar, 50).Value = User.Identity.Name;
+        cmd.Parameters.Add("@result", SqlDbType.Int);
+        cmd.Parameters["@result"].Direction = ParameterDirection.Output;
+        cmd.Parameters.Add("@variant_id", SqlDbType.Int);
+        cmd.Parameters["@variant_id"].Direction = ParameterDirection.Output;
+        cmd.Parameters.Add("@message", SqlDbType.VarChar, 200);
+        cmd.Parameters["@message"].Direction = ParameterDirection.Output;
+        cmd.Connection = con;
+
+        int success = 0;
+        int variantId = 0;
+        try
+        {
+            con.Open();
+            cmd.ExecuteNonQuery();
+            success = (int)cmd.Parameters["@result"].Value;
+            variantId = (int)cmd.Parameters["@variant_id"].Value;
+
+            if (success == 0)
+            {
+                labelSavePartA_1.Text = "Dane zapisane";
+            }
+            else
+            {
+                labelMessage.Text = (string)cmd.Parameters["@message"].Value;
+            }
+        }
+        catch (SqlException ex)
+        {
+            labelMessage.Text = ex.Message;
+        }
+        finally
+        {
+            cmd.Dispose();
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+        return variantId;
+    }
+
+    private int saveVariantPartA_2(byte DBS, bool BMT, int variant)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings[DatabaseProcedures.SERVER].ToString());
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "[dbo].[update_variant_examination_data_partA_2]";
+        cmd.Parameters.Add("@IdWizyta", SqlDbType.Int).Value = int.Parse(Session["AppointmentId"].ToString());
+        cmd.Parameters.Add("@DBS", SqlDbType.TinyInt).Value = DBS;
+        cmd.Parameters.Add("@BMT", SqlDbType.Bit).Value = BMT;
         SqlParameter HYscaleDecimal = new SqlParameter("@" + variantsHYscale.Item2, SqlDbType.Decimal);
         HYscaleDecimal.Precision = 2;
         HYscaleDecimal.Scale = 1;
@@ -568,7 +634,7 @@ public partial class PartFForm : System.Web.UI.Page
 
             if (success == 0)
             {
-                labelSavePartA.Text = "Dane zapisane";
+                labelSavePartA_2.Text = "Dane zapisane";
             }
             else
             {
@@ -771,8 +837,8 @@ public partial class PartFForm : System.Web.UI.Page
         for (int i = 0; i < variantsPartCList.Count; i++)
         {
             SqlParameter UpAndGoDecimal = new SqlParameter("@" + variantsPartCList[i].Item2, SqlDbType.Decimal);
-            UpAndGoDecimal.Precision = 3;
-            UpAndGoDecimal.Scale = 1;
+            UpAndGoDecimal.Precision = 5;
+            UpAndGoDecimal.Scale = 2;
             UpAndGoDecimal.Value = DatabaseProcedures.getDecimalOrNull(variantsPartCList[i].Item1[variant].Text);
             cmd.Parameters.Add(UpAndGoDecimal);
         }
@@ -1136,6 +1202,10 @@ public partial class PartFForm : System.Web.UI.Page
             "TremorometriaLEFT_7_8, " +
             "TremorometriaLEFT_8_9, " +
             "TremorometriaLEFT_9_10, " +
+            "TremorometriaLEFT_10_11, " +
+            "TremorometriaLEFT_11_12, " +
+            "TremorometriaLEFT_12_13, " +
+            "TremorometriaLEFT_13_14, " +
             "TremorometriaLEFT_23_24, " +
             "TremorometriaRIGHT_0_1, " +
             "TremorometriaRIGHT_1_2, " +
@@ -1147,6 +1217,10 @@ public partial class PartFForm : System.Web.UI.Page
             "TremorometriaRIGHT_7_8, " +
             "TremorometriaRIGHT_8_9, " +
             "TremorometriaRIGHT_9_10, " +
+            "TremorometriaRIGHT_10_11, " +
+            "TremorometriaRIGHT_11_12, " +
+            "TremorometriaRIGHT_12_13, " +
+            "TremorometriaRIGHT_13_14, " +
             "TremorometriaRIGHT_23_24, " +
             "TestSchodkowy, " +
             "TestSchodkowyWDol, " +
@@ -1526,8 +1600,8 @@ public partial class PartFForm : System.Web.UI.Page
     {
         Response.Redirect("~/AppointmentForm.aspx");
     }
-
-    protected void buttonSavePartA_Click(object sender, EventArgs e)
+    
+    protected void buttonSavePartA_1_Click(object sender, EventArgs e)
     {
         calculateUPDRS();
         int[] variantIds = new int[VARIANTS];
@@ -1535,16 +1609,31 @@ public partial class PartFForm : System.Web.UI.Page
         {
             bool BMT = true;
             int variant = getVariantColumn(DBS, BMT);
-            variantIds[variant] = saveVariantPartA(DBS, BMT, variant);
+            variantIds[variant] = saveVariantPartA_1(DBS, BMT, variant);
             i++;
             BMT = false;
             variant = getVariantColumn(DBS, BMT);
-            variantIds[variant] = saveVariantPartA(DBS, BMT, variant);
+            variantIds[variant] = saveVariantPartA_1(DBS, BMT, variant);
         }
         if (variantIds.Length > 0)
         {
             ViewState["VariantIds"] = variantIds;
             toggleButtons(true);
+        }
+    }
+
+    protected void buttonSavePartA_2_Click(object sender, EventArgs e)
+    {
+        int[] variantIds = new int[VARIANTS];
+        for (byte DBS = 0, i = 0; i < VARIANTS; DBS++, i++)
+        {
+            bool BMT = true;
+            int variant = getVariantColumn(DBS, BMT);
+            variantIds[variant] = saveVariantPartA_2(DBS, BMT, variant);
+            i++;
+            BMT = false;
+            variant = getVariantColumn(DBS, BMT);
+            variantIds[variant] = saveVariantPartA_2(DBS, BMT, variant);
         }
     }
 
@@ -1631,6 +1720,7 @@ public partial class PartFForm : System.Web.UI.Page
 
     private void toggleButtons(bool enable)
     {
+        buttonSavePartA_2.Enabled = enable;
         buttonSavePartB.Enabled = enable;
         buttonSavePartB1.Enabled = enable;
         buttonSavePartC.Enabled = enable;
