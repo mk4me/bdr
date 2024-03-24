@@ -240,6 +240,8 @@ as specializations of the Asset concept, at the level of which the
 generic attribute mechanism is provided. These concepts are presented in
 the UML diagram below.
 
+![ ](images/bdr-1.png)
+
 Architectural layers or frame
 =============================
 
@@ -265,6 +267,9 @@ distinguish the layers (listed from the innermost ones):
 
 The following diagram illustrates the general architecture diagram.
 
+![ ](images/bdr-2.png)
+
+
 Architectural perspectives
 ==========================
 
@@ -280,12 +285,17 @@ patients, information about detected diseases and examinations, and a
 general part of the BDR. These concepts are presented in the UML diagram
 below.
 
+![ ](images/bdr-3.png)
+
+
 Operational perspective
 -----------------------
 
 The figure below shows the implementation diagram of the BDR server part
 along with the dependencies between the components. The implementation
 of the medical part of the base has an analogous form.
+
+![ ](images/bdr-4.png)
 
 Use Case Perspective
 --------------------
