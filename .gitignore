@@ -1,0 +1,5 @@
+# ignore documentation directory structure
+dokumentacja/
+
+# and log files
+*.log
