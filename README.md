@@ -3,6 +3,12 @@ Motion Database (BDR) - server component
 
 This repository implements a server component for a Motion Database (BDR) system. It utilizes web services (SOAP, WSDL) for communication and stores data in a relational database with functionalities for access control and data management. (Keywords: BDR, motion data, web services, database, XML, API)
 
+Cite this paper
+---------------
+
+Filipowicz, W., Habela, P., Kaczmarski, K., Kulbacki, M. (2010). A Generic Approach to Design and Querying of Multi-purpose Human Motion Database. In: Bolc, L., Tadeusiewicz, R., Chmielewski, L.J., Wojciechowski, K. (eds) Computer Vision and Graphics. ICCVG 2010. Lecture Notes in Computer Science, vol 6374. Springer, Berlin, Heidelberg. https://doi.org/10.1007/978-3-642-15910-7_12
+
+
 
 Architecture Document
 =====================
