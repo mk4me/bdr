@@ -1,5 +1,9 @@
 Motion Database (BDR) - server component
 ===============================================
+
+This repository implements a server component for a Motion Database (BDR) system. It utilizes web services (SOAP, WSDL) for communication and stores data in a relational database with functionalities for access control and data management. (Keywords: BDR, motion data, web services, database, XML, API)
+
+
 Architecture Document
 =====================
 There is guidance within this template that appears in a style named
