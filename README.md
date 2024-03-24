@@ -1,7 +1,7 @@
 Motion Database (BDR) - server component
-
+===============================================
 Architecture Document
-
+=====================
 There is guidance within this template that appears in a style named
 InfoBlue. This style has a hidden font attribute that allows you to
 toggle whether it is visible or hidden in this template. Use the
